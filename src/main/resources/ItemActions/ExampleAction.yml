@@ -1,0 +1,57 @@
+# 物品ID
+ExampleItem:
+  # 消耗选项
+  consume:
+    # 冷却时间(单位是ms)
+    cooldown: 3000
+    # 每次消耗物品数量
+    amount: 1
+    # 左键行为是否消耗物品
+    left: true
+    # 右键行为是否消耗物品
+    right: true
+  # 左键执行指令
+  left:
+  # 后台执行
+  - "console: say He's name is %player_name%"
+  # 玩家执行
+  - "command: say My name is %player_name%"
+  # 右键执行指令
+  right: 
+  - "console: say He's name is %player_name%"
+  - "command: say My name is %player_name%"
+  # 左/右键都会执行的指令
+  all: 
+  - "console: say He's name is %player_name%"
+  - "command: say My name is %player_name%"
+ExampleItem2:
+  consume:
+    cooldown: 3000
+    amount: 10
+    left: true
+    right: true
+  all: 
+  - "console: say He's name is %player_name%"
+  - "command: say My name is %player_name%"
+ExampleItem3:
+  # 物品使用冷却
+  cooldown: 3000
+  all: 
+  - "console: say He's name is %player_name%"
+  - "command: say My name is %player_name%"
+ExampleItem4:
+  consume:
+    cooldown: 3000
+    amount: 1
+    left: true
+    right: true
+  all: 
+  - "console: say He's name is %player_name%"
+  - "command: say My name is %player_name%"
+actionTest:
+  all: 
+  - "console: say 名为test1的NBT的值为: <nbt::test1>"
+  - "console: say 名为test2.test3的NBT的值为: <nbt::test2.test3>"
+  - "console: say 名为test4.0的NBT的值为: <nbt::test4.0>"
+  - "console: say 名为test4.1的NBT的值为: <nbt::test4.1>"
+  - "console: say 名为test的节点的值为: <data::test>"

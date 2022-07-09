@@ -1,0 +1,54 @@
+Main:
+  NeigeItemManagerCommand: ni
+  MMItemsPath: MMItems.yml
+  Debug: false
+Messages:
+  invalidPlayer: §e[NI] §6玩家不在线或不存在
+  successInfo: §e[NI] §6成功给予 §f{player} §a{amount} §6个 §f{name}
+  givenInfo: §e[NI] §6你得到了 §a{amount} §6个 §f{name}
+  dropSuccessInfo: §e[NI] §6成功在 §a{world} §6的 §a{x},{y},{z} §6掉落了 §a{amount} §6个 §f{name}
+  unknownItem: §e[NI] §6找不到ID为 §a{itemID} §6的物品
+  existedKey: §e[NI] §6已存在ID为 §a{itemID} §6的物品
+  invalidPaser: §e[NI] §6不能针对后台解析物品, 请指定一个玩家
+  successSaveInfo: §e[NI] §6成功将 §f{name} §6以ID §a{itemID} §6保存至 §a{path}
+  mMImportSuccessInfo: §e[NI] §6成功将所有MM物品保存至 §a{path}
+  airItem: §e[NI] §6请不要试图保存空气, 谢谢合作
+  invalidAmount: §e[NI] §6无效数字
+  invalidWorld: §e[NI] §6无效世界
+  invalidLocation: §e[NI] §6无效坐标
+  insufficientPermissions: §e[NI] §6权限不足
+  reloadedMessage: §e[NI] §6重载完毕
+  invalidNBT: §6[NI] §cNBT加载失败, 请勿在列表型NBT中混用键值对, 数字及字符串
+  invalidItem: '§6[NI] §c物品加载失败, 物品可能缺损数据, 物品ID: §6{itemID}'
+  failureInfo: '§e[NI] §6物品给予失败, 可能原因: 物品未配置材质/玩家已下线'
+  invalidPlugin: '§e[NI] §6未发现前置插件: {plugin}'
+  invalidParser: §e[NI] §6不能针对后台解析物品, 请指定一个玩家
+  itemCooldown: §e物品冷却中! 请等待{time}秒
+  clickGiveMessage: §e点击获取该物品
+  helpMessages:
+  - §6====================§eNeigeItems§6====================
+  - §6==================[]为必填, ()为选填==================
+  - §e/ni §flist (页码) §7> 查看所有NI物品
+  - §e/ni §fget [物品ID] (数量) (是否反复随机) (指向数据) §7> 根据ID获取NI物品
+  - §e/ni §fgive [玩家ID] [物品ID] (数量) (是否反复随机) (指向数据) §7> 根据ID给予NI物品
+  - §e/ni §fgiveAll [物品ID] (数量) (是否反复随机) (指向数据) §7> 根据ID给予所有人NI物品
+  - §e/ni §fdrop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] (是否反复随机) (物品解析对象) (指向数据) §7>
+    于指定位置掉落NI物品
+  - §e/ni §fsave [物品ID] (保存路径) §7> 将手中物品以对应ID保存至对应路径
+  - §e/ni §fcover [物品ID] (保存路径) §7> 将手中物品以对应ID覆盖至对应路径
+  - §e/ni §fmm load [物品ID] (保存路径) §7> 将对应ID的MM物品保存为NI物品
+  - §e/ni §fmm cover [物品ID] (保存路径) §7> 将对应ID的MM物品覆盖为NI物品
+  - §e/ni §fmm loadAll (保存路径) §7> 将全部MM物品转化为NI物品
+  - §e/ni §fmm get [物品ID] (数量) §7> 根据ID获取MM物品
+  - §e/ni §fmm give [玩家ID] [物品ID] (数量) §7> 根据ID给予MM物品
+  - §e/ni §fmm giveAll [物品ID] (数量) §7> 根据ID给予所有人MM物品
+  - §e/ni §freload §7> 重新加载NI物品
+  - §e/ni §fhelp §7> 查看帮助信息
+  - §6=================================================
+ItemList:
+  Prefix: §6===========§eNeigeItems§6===========
+  Suffix: §6======<< §e{prev} §f{current}§e/§f{total} §e{next} §6>>======
+  ItemAmount: 10
+  ItemFormat: §6{index}. §a{ID} §6- §f{name}
+  Prev: 上一页
+  Next: 下一页

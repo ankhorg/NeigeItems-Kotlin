@@ -6,14 +6,28 @@ plugins {
 }
 
 taboolib {
-    install("common")
-    install("common-5")
-    install("module-chat")
-    install("module-kether")
-    install("module-metrics")
-    install("module-nms")
-    install("module-nms-util")
-    install("platform-bukkit")
+    description {
+        contributors {
+            name("Neige")
+        }
+        dependencies {
+            name("MythicMobs").with("bukkit").optional(true).loadafter(true)
+            name("ProtocolLib").with("bukkit").optional(true).loadafter(true)
+            name("Vault").with("bukkit").optional(true).loadafter(true)
+        }
+    }
+    install(
+        "common",
+        "common-5",
+        "module-chat",
+        "module-configuration",
+        "module-kether",
+        "module-metrics",
+        "module-nms",
+        "module-nms-util",
+        "platform-bukkit",
+        "expansion-javascript"
+    )
     classifier = null
     version = "6.0.9-25"
 }
