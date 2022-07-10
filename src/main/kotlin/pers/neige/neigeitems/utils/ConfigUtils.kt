@@ -2,16 +2,14 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
-import pers.neige.neigeitems.item.ItemConfig
-import pers.neige.neigeitems.manager.ItemManager
 import taboolib.common.platform.function.getDataFolder
 import java.io.File
 
 object ConfigUtils {
     // 获取文件夹内所有文件
     @JvmStatic
-    fun getAllFiles(dir: File): MutableList<File> {
-        val list: MutableList<File> = mutableListOf<File>()
+    fun getAllFiles(dir: File): ArrayList<File> {
+        val list: ArrayList<File> = ArrayList<File>()
         val files = dir.listFiles() ?: arrayOf<File>()
         for (file: File in files) {
             if (file.isDirectory) {
@@ -25,7 +23,7 @@ object ConfigUtils {
 
     // 获取文件夹内所有文件
     @JvmStatic
-    fun getAllFiles(dir: String): MutableList<File> {
+    fun getAllFiles(dir: String): ArrayList<File> {
         return getAllFiles(File(getDataFolder(), File.separator + dir))
     }
 
@@ -41,24 +39,63 @@ object ConfigUtils {
 
     // 获取文件中所有ConfigurationSection
     @JvmStatic
-    fun loadItemConfigs(file: File): MutableList<ConfigurationSection> {
-        val list: MutableList<ConfigurationSection> = mutableListOf<ConfigurationSection>()
+    fun loadConfigSections(file: File): ArrayList<ConfigurationSection> {
+        val list: ArrayList<ConfigurationSection> = ArrayList<ConfigurationSection>()
         val config = YamlConfiguration.loadConfiguration(file)
         config.getKeys(false).forEach { key ->
-            config.getConfigurationSection(key)?.let { configSection ->
-                list.add(configSection)
-            }
+            config.getConfigurationSection(key)?.let { list.add(it) }
         }
         return list
     }
 
     // 获取文件中所有ConfigurationSection
     @JvmStatic
-    fun loadItemConfigs(files: MutableList<File>): MutableList<ConfigurationSection> {
-        val list: MutableList<ConfigurationSection> = mutableListOf<ConfigurationSection>()
+    fun loadConfigSections(files: ArrayList<File>): ArrayList<ConfigurationSection> {
+        val list: ArrayList<ConfigurationSection> = ArrayList<ConfigurationSection>()
         for (file: File in files) {
-            list.addAll(loadItemConfigs(file))
+            list.addAll(loadConfigSections(file))
         }
         return list
+    }
+
+    // 用于将ConfigurationSection转换为HashMap
+    @JvmStatic
+    fun toMap(data: Any?): Any? {
+        when (data) {
+            is ConfigurationSection -> {
+                val map = HashMap<String, Any>()
+                data.getKeys(false).forEach { key ->
+                    toMap(data.get(key))?.let { value -> map[key] = value}
+                }
+                return map
+            }
+            is Map<*, *> -> {
+                val map = HashMap<String, Any>()
+                for ((key, value) in data) {
+                    toMap(value)?.let { map[key as String] = it}
+                }
+                return map
+            }
+            is List<*> -> {
+                val list = ArrayList<Any>()
+                for (value in data) {
+                    toMap(value)?.let { list.add(it)}
+                }
+                return list
+            }
+            else -> {
+                return data
+            }
+        }
+    }
+
+    // 将ConfigurationSection转换为HashMap
+    @JvmStatic
+    fun ConfigurationSection.toMap(): HashMap<String, Any> {
+        val map = HashMap<String, Any>()
+        this.getKeys(false).forEach { key ->
+            toMap(this.get(key))?.let { value -> map[key] = value}
+        }
+        return map
     }
 }

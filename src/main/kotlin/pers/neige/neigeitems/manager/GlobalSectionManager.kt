@@ -1,17 +1,15 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.item.ItemConfig
-import pers.neige.neigeitems.utils.ConfigUtils
-import pers.neige.neigeitems.utils.ConfigUtils.loadItemConfigs
+import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
+import pers.neige.neigeitems.utils.ConfigUtils.loadConfigSections
 import java.io.File
-import java.util.concurrent.ConcurrentHashMap
 
 object GlobalSectionManager {
     // 加载全部节点文件
-    private val files: MutableList<File> = ConfigUtils.getAllFiles("GlobalSections")
+    private val files: ArrayList<File> = getAllFiles("GlobalSections")
     // 获取所有全局节点配置文件
-    val configs: MutableList<ConfigurationSection> = loadItemConfigs(files)
+    val configs: MutableList<ConfigurationSection> = loadConfigSections(files)
     // {config, [id]}
     val globalSections: MutableMap<ConfigurationSection, MutableList<String>> = mutableMapOf<ConfigurationSection, MutableList<String>>()
     // 每个全局节点配置文件的文件名(转为YamlConfiguration后文件路径莫名其妙莫得了, 只能另开记录)
@@ -25,7 +23,7 @@ object GlobalSectionManager {
             // 获取当前全局节点配置文件
             var list = mutableListOf<String>()
             // 获取当前文件内所有全局节点
-            var configSections = loadItemConfigs(config)
+            var configSections = loadConfigSections(config)
             // 记录节点ID
             configSections.forEach { section ->
                 list.add(section.getName())

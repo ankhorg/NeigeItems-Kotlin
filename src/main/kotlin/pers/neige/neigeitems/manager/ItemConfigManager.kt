@@ -8,10 +8,10 @@ import java.util.concurrent.ConcurrentHashMap
 
 open class ItemConfigManager {
     // 加载全部物品文件
-    val files: MutableList<File> = getAllFiles("Items")
+    val files: ArrayList<File> = getAllFiles("Items")
     // 加载全部物品
     val itemConfigs: ConcurrentHashMap<String, ItemConfig> = ConcurrentHashMap<String, ItemConfig>()
-    val itemIds: MutableList<String> = mutableListOf<String>()
+    val itemIds: ArrayList<String> = ArrayList<String>()
     init {
         loadItemConfigs()
     }
