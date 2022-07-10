@@ -2,7 +2,8 @@ plugins {
     `java-library`
     `maven-publish`
     id("io.izzel.taboolib") version "1.40"
-    id("org.jetbrains.kotlin.jvm") version "1.5.10"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.serialization") version "1.6.10"
 }
 
 taboolib {
@@ -42,6 +43,9 @@ dependencies {
     compileOnly("ink.ptms.core:v11900:11900-minimize:universal")
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs"))
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+    compileOnly("com.alibaba:fastjson:+")
+
 }
 
 tasks.withType<JavaCompile> {

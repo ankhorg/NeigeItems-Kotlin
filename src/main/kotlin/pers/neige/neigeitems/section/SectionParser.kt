@@ -2,8 +2,6 @@ package pers.neige.neigeitems.section
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.section.impl.StringsParser
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 abstract class SectionParser {
     /**

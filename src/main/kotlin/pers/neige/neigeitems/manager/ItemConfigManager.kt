@@ -11,7 +11,7 @@ open class ItemConfigManager {
     val files: ArrayList<File> = getAllFiles("Items")
     // 加载全部物品
     val itemConfigs: ConcurrentHashMap<String, ItemConfig> = ConcurrentHashMap<String, ItemConfig>()
-    val itemIds: ArrayList<String> = ArrayList<String>()
+    val itemIds = ArrayList<String>()
     init {
         loadItemConfigs()
     }

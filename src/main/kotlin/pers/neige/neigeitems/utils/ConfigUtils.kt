@@ -2,6 +2,7 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.plugin.Plugin
 import taboolib.common.platform.function.getDataFolder
 import java.io.File
 
@@ -9,7 +10,7 @@ object ConfigUtils {
     // 获取文件夹内所有文件
     @JvmStatic
     fun getAllFiles(dir: File): ArrayList<File> {
-        val list: ArrayList<File> = ArrayList<File>()
+        val list = ArrayList<File>()
         val files = dir.listFiles() ?: arrayOf<File>()
         for (file: File in files) {
             if (file.isDirectory) {
@@ -27,6 +28,12 @@ object ConfigUtils {
         return getAllFiles(File(getDataFolder(), File.separator + dir))
     }
 
+    // 获取文件夹内所有文件
+    @JvmStatic
+    fun getAllFiles(plugin: Plugin, dir: String): ArrayList<File> {
+        return getAllFiles(File(plugin.dataFolder, File.separator + dir))
+    }
+
     // 克隆ConfigurationSection
     @JvmStatic
     fun ConfigurationSection.clone(): ConfigurationSection {
@@ -39,9 +46,9 @@ object ConfigUtils {
 
     // 获取文件中所有ConfigurationSection
     @JvmStatic
-    fun loadConfigSections(file: File): ArrayList<ConfigurationSection> {
-        val list: ArrayList<ConfigurationSection> = ArrayList<ConfigurationSection>()
-        val config = YamlConfiguration.loadConfiguration(file)
+    fun File.getConfigSections(): ArrayList<ConfigurationSection> {
+        val list = ArrayList<ConfigurationSection>()
+        val config = YamlConfiguration.loadConfiguration(this)
         config.getKeys(false).forEach { key ->
             config.getConfigurationSection(key)?.let { list.add(it) }
         }
@@ -50,10 +57,10 @@ object ConfigUtils {
 
     // 获取文件中所有ConfigurationSection
     @JvmStatic
-    fun loadConfigSections(files: ArrayList<File>): ArrayList<ConfigurationSection> {
-        val list: ArrayList<ConfigurationSection> = ArrayList<ConfigurationSection>()
-        for (file: File in files) {
-            list.addAll(loadConfigSections(file))
+    fun ArrayList<File>.getConfigSections(): ArrayList<ConfigurationSection> {
+        val list = ArrayList<ConfigurationSection>()
+        for (file: File in this) {
+            list.addAll(file.getConfigSections())
         }
         return list
     }
@@ -97,5 +104,21 @@ object ConfigUtils {
             toMap(this.get(key))?.let { value -> map[key] = value}
         }
         return map
+    }
+
+    // 将ConfigurationSection转换为String
+    @JvmStatic
+    fun ConfigurationSection.saveToString(): String {
+        val tempConfigSection = YamlConfiguration()
+        tempConfigSection.set(this.name, this)
+        return tempConfigSection.saveToString()
+    }
+
+    // 将String转换为ConfigurationSection
+    @JvmStatic
+    fun String.loadFromString(id: String): ConfigurationSection? {
+        val tempConfigSection = YamlConfiguration()
+        tempConfigSection.loadFromString(this)
+        return tempConfigSection.getConfigurationSection(id)
     }
 }
