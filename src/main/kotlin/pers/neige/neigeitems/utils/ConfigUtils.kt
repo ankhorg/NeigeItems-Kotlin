@@ -65,7 +65,28 @@ object ConfigUtils {
         return list
     }
 
-    // 用于将ConfigurationSection转换为HashMap
+    // 获取文件中所有ConfigurationSection
+    @JvmStatic
+    fun File.getContents(): ArrayList<Any> {
+        val list = ArrayList<Any>()
+        val config = YamlConfiguration.loadConfiguration(this)
+        config.getKeys(false).forEach { key ->
+            config.get(key)?.let { list.add(it) }
+        }
+        return list
+    }
+
+    // 获取文件中所有ConfigurationSection
+    @JvmStatic
+    fun ArrayList<File>.getContents(): ArrayList<Any> {
+        val list = ArrayList<Any>()
+        for (file: File in this) {
+            list.addAll(file.getContents())
+        }
+        return list
+    }
+
+    // ConfigurationSection 转 HashMap
     @JvmStatic
     fun toMap(data: Any?): Any? {
         when (data) {
@@ -96,7 +117,7 @@ object ConfigUtils {
         }
     }
 
-    // 将ConfigurationSection转换为HashMap
+    // ConfigurationSection 转 HashMap
     @JvmStatic
     fun ConfigurationSection.toMap(): HashMap<String, Any> {
         val map = HashMap<String, Any>()
@@ -106,7 +127,7 @@ object ConfigUtils {
         return map
     }
 
-    // 将ConfigurationSection转换为String
+    // ConfigurationSection 转 String
     @JvmStatic
     fun ConfigurationSection.saveToString(): String {
         val tempConfigSection = YamlConfiguration()
@@ -114,11 +135,17 @@ object ConfigUtils {
         return tempConfigSection.saveToString()
     }
 
-    // 将String转换为ConfigurationSection
+    // String 转 ConfigurationSection
     @JvmStatic
     fun String.loadFromString(id: String): ConfigurationSection? {
         val tempConfigSection = YamlConfiguration()
         tempConfigSection.loadFromString(this)
         return tempConfigSection.getConfigurationSection(id)
+    }
+
+    // File 转 YamlConfiguration
+    @JvmStatic
+    fun File.loadConfiguration(): YamlConfiguration {
+        return YamlConfiguration.loadConfiguration(this)
     }
 }

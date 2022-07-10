@@ -90,7 +90,7 @@ object SectionUtils {
                         val section = sections.getConfigurationSection(this)
                         // 简单节点
                         if (section == null) {
-                            val result = sections.getString(this) ?: "<$this>"
+                            val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
                             cache?.put(this, result)
                             return result
                         }

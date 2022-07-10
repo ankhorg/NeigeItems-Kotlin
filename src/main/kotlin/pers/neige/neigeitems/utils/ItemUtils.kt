@@ -4,15 +4,13 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.MemorySection
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.SectionManager
-import pers.neige.neigeitems.utils.ConfigUtils.clone
-import pers.neige.neigeitems.utils.ItemUtils.inherit
 
 object ItemUtils {
     // 进行模板继承
     @JvmStatic
     fun ConfigurationSection.inherit(originConfigSection: ConfigurationSection): ConfigurationSection {
         // 检测是否需要进行继承
-        if (originConfigSection?.contains("inherit") == true) {
+        if (originConfigSection.contains("inherit") == true) {
             // 检测进行全局继承/部分继承
             when (val inheritInfo = originConfigSection.get("inherit")) {
                 is MemorySection -> {
@@ -59,8 +57,8 @@ object ItemUtils {
             }
         }
         // 覆盖物品配置
-        originConfigSection?.getKeys(true)?.forEach { key ->
-            val value = originConfigSection?.get(key)
+        originConfigSection.getKeys(true).forEach { key ->
+            val value = originConfigSection.get(key)
             if (value !is MemorySection) {
                 this.set(key, originConfigSection.get(key))
             }
@@ -77,17 +75,17 @@ object ItemUtils {
             val globalSectionIds = this.getStringList("globalsections")
             // 针对每个试图调用的全局节点
             globalSectionIds.forEach {
-                when (val sections = SectionManager.globalSectionMap[it]) {
+                when (val values = SectionManager.globalSectionMap[it]) {
                     // 对于节点调用
                     null -> {
-                        SectionManager.globalSections[it]?.let { section ->
-                            this.set("sections.$it", section)
+                        SectionManager.globalSections[it]?.let { value ->
+                            this.set("sections.$it", value)
                         }
                     }
                     // 对于节点文件调用
                     else -> {
-                        for (section in sections) {
-                            this.set("sections.$it", section)
+                        for (value in values) {
+                            this.set("sections.$it", value)
                         }
                     }
                 }
