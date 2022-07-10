@@ -33,8 +33,4 @@ object ItemManager : ItemConfigManager() {
         }
         return null
     }
-
-    fun hasItem(id: String): Boolean {
-        return itemConfigs.containsKey(id)
-    }
 }

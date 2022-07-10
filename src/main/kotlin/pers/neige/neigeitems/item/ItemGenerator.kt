@@ -23,6 +23,13 @@ class ItemGenerator (private val itemConfig: ItemConfig) {
 
     // 进行模板继承
     private fun inherit() {
+        // 初始化物品配置
+        originConfigSection.getKeys(true).forEach { key ->
+            val value = originConfigSection.get(key)
+            if (value !is MemorySection) {
+                configSection.set(key, originConfigSection.get(key))
+            }
+        }
         // 检测是否需要进行继承
         if (originConfigSection?.contains("inherit") == true) {
             // 检测进行全局继承/部分继承
@@ -67,13 +74,6 @@ class ItemGenerator (private val itemConfig: ItemConfig) {
                             }
                         }
                     }
-                }
-            }
-            // 覆盖其余物品配置
-            originConfigSection.getKeys(true).forEach { key ->
-                val value = originConfigSection.get(key)
-                if (value !is MemorySection) {
-                    configSection.set(key, originConfigSection.get(key))
                 }
             }
         }
