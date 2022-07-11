@@ -1,94 +1,93 @@
 package pers.neige.neigeitems.utils
 
-import org.bukkit.configuration.ConfigurationSection
-import org.bukkit.configuration.MemorySection
-import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.manager.SectionManager
+import taboolib.module.nms.ItemTag
+import taboolib.module.nms.ItemTagData
+import taboolib.module.nms.ItemTagData.translateList
+import taboolib.module.nms.ItemTagList
+import taboolib.module.nms.ItemTagType
+
 
 object ItemUtils {
-    // 进行模板继承
+    // HashMap 转 ItemTag
     @JvmStatic
-    fun ConfigurationSection.inherit(originConfigSection: ConfigurationSection): ConfigurationSection {
-        // 检测是否需要进行继承
-        if (originConfigSection.contains("inherit") == true) {
-            // 检测进行全局继承/部分继承
-            when (val inheritInfo = originConfigSection.get("inherit")) {
-                is MemorySection -> {
-                    /**
-                     * 指定多个ID, 进行部分继承
-                     * @variable key String 要进行继承的节点ID
-                     * @variable value String 用于获取继承值的模板ID
-                     */
-                    inheritInfo.getKeys(true).forEach { key ->
-                        // 获取模板ID
-                        val value = inheritInfo.get(key)
-                        // 检测当前键是否为末级键
-                        if (value is String) {
-                            // 获取模板
-                            val currentSection = ItemManager.getConfig(value)
-                            // 如果存在对应模板且模板存在对应键, 进行继承
-                            if (currentSection != null && currentSection.contains(key)) {
-                                this.set(key, currentSection.get(key))
-                            }
-                        }
-                    }
-                }
-                is String -> {
-                    // 仅指定单个模板ID，进行全局继承
-                    val inheritConfigSection = ItemManager.getConfig(inheritInfo)
-                    inheritConfigSection?.getKeys(false)?.forEach { key ->
-                        this.set(key, inheritConfigSection.get(key))
-                    }
-                }
-                is List<*> -> {
-                    // 顺序继承, 按顺序进行覆盖式继承
-                    for (templateId in inheritInfo) {
-                        // 逐个获取模板
-                        val currentSection = ItemManager.getConfig(templateId as String)
-                        // 进行模板覆盖
-                        currentSection?.getKeys(true)?.forEach { key ->
-                            val value = currentSection.get(key)
-                            if (value !is MemorySection) {
-                                this.set(key, currentSection.get(key))
-                            }
-                        }
-                    }
-                }
-            }
+    fun HashMap<*, *>.toItemTag(): ItemTag {
+        val itemTag = ItemTag()
+        for ((key, value) in this) {
+            itemTag[key as String] = value.toItemTagData()
         }
-        // 覆盖物品配置
-        originConfigSection.getKeys(true).forEach { key ->
-            val value = originConfigSection.get(key)
-            if (value !is MemorySection) {
-                this.set(key, originConfigSection.get(key))
-            }
-        }
-        return this
+        return itemTag
     }
 
-    // 全局节点加载
+    // 类型强制转换
     @JvmStatic
-    fun ConfigurationSection.loadGlobalSections(): ConfigurationSection {
-        // 如果调用了全局节点
-        if (this.contains("globalsections")) {
-            // 获取全局节点ID
-            val globalSectionIds = this.getStringList("globalsections")
-            // 针对每个试图调用的全局节点
-            globalSectionIds.forEach {
-                when (val values = SectionManager.globalSectionMap[it]) {
-                    // 对于节点调用
-                    null -> {
-                        SectionManager.globalSections[it]?.let { value ->
-                            this.set("sections.$it", value)
-                        }
-                    }
-                    // 对于节点文件调用
-                    else -> {
-                        for (value in values) {
-                            this.set("sections.$it", value)
-                        }
-                    }
+    fun String.cast(): Any {
+        return when {
+            this.startsWith("(Byte) ") -> this.substring(7, this.length).toByte()
+            this.startsWith("(Short) ") -> this.substring(8, this.length).toShort()
+            this.startsWith("(Int) ") -> this.substring(6, this.length).toInt()
+            this.startsWith("(Long) ") -> this.substring(7, this.length).toLong()
+            this.startsWith("(Float) ") -> this.substring(8, this.length).toFloat()
+            this.startsWith("(Double) ") -> this.substring(9, this.length).toDouble()
+            else -> this
+        }
+    }
+
+    // 类型强制转换
+    @JvmStatic
+    fun Any.cast(): Any {
+        return when (this) {
+            is String -> this.cast()
+            else -> this
+        }
+    }
+
+    // 转 ItemTagData
+    @JvmStatic
+    fun Any.toItemTagData(): ItemTagData {
+        return when (this) {
+            is ItemTagData -> this
+            is Byte -> ItemTagData(this)
+            is Short -> ItemTagData(this)
+            is Int -> ItemTagData(this)
+            is Long -> ItemTagData(this)
+            is Float -> ItemTagData(this)
+            is Double -> ItemTagData(this)
+            is ByteArray -> ItemTagData(this)
+            is IntArray -> ItemTagData(this)
+            is String -> this.cast().toItemTagData()
+            is List<*> -> {
+                this.map { it?.cast() ?: it }
+                when {
+                    this.all { it is Byte } -> ByteArray(this.size){ this[it] as Byte }.toItemTagData()
+                    this.all { it is Int } -> IntArray(this.size){ this[it] as Int }.toItemTagData()
+                    else -> translateList(ItemTagList(), this)
                 }
+            }
+            is HashMap<*, *> -> ItemTagData(this.toItemTag())
+            else -> ItemTagData("nm的你塞了个什么东西进来，我给你一拖鞋")
+        }
+    }
+
+    // ItemTag 合并(后者覆盖前者)
+    @JvmStatic
+    fun ItemTag.coverWith(itemTag: ItemTag): ItemTag {
+        // 遍历附加NBT
+        for ((key, value) in itemTag) {
+            // 如果二者包含相同键
+            val overrideValue = this[key]
+            if (overrideValue != null) {
+                // 如果二者均为COMPOUND
+                if (overrideValue.type == ItemTagType.COMPOUND
+                    && value.type == ItemTagType.COMPOUND) {
+                    // 合并
+                    this[key] = overrideValue.asCompound().coverWith(value.asCompound())
+                } else {
+                    // 覆盖
+                    this[key] = value
+                }
+            } else {
+                // 添加
+                this[key] = value
             }
         }
         return this

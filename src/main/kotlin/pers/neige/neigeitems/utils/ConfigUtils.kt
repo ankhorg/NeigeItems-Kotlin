@@ -3,7 +3,10 @@ package pers.neige.neigeitems.utils
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
+import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import taboolib.common.platform.function.getDataFolder
+import taboolib.module.nms.ItemTag
+import taboolib.module.nms.ItemTagType
 import java.io.File
 
 object ConfigUtils {
@@ -129,9 +132,9 @@ object ConfigUtils {
 
     // ConfigurationSection 转 String
     @JvmStatic
-    fun ConfigurationSection.saveToString(): String {
+    fun ConfigurationSection.saveToString(name: String): String {
         val tempConfigSection = YamlConfiguration()
-        tempConfigSection.set(this.name, this)
+        tempConfigSection.set(name, this)
         return tempConfigSection.saveToString()
     }
 
@@ -147,5 +150,31 @@ object ConfigUtils {
     @JvmStatic
     fun File.loadConfiguration(): YamlConfiguration {
         return YamlConfiguration.loadConfiguration(this)
+    }
+
+    // ConfigurationSection 合并(后者覆盖前者)
+    @JvmStatic
+    fun ConfigurationSection.coverWith(configSection: ConfigurationSection): ConfigurationSection {
+        // 遍历附加NBT
+        configSection.getKeys(false).forEach { key ->
+            val value = configSection.get(key)
+            // 如果二者包含相同键
+            val overrideValue = this.get(key)
+            if (overrideValue != null) {
+                // 如果二者均为ConfigurationSection
+                if (overrideValue is ConfigurationSection
+                    && value is ConfigurationSection) {
+                    // 合并
+                    this.set(key, overrideValue.coverWith(value))
+                } else {
+                    // 覆盖
+                    this.set(key, value)
+                }
+            } else {
+                // 添加
+                this.set(key, value)
+            }
+        }
+        return this
     }
 }

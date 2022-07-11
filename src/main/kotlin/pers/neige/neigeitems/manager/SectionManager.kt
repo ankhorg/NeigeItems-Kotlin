@@ -1,14 +1,17 @@
 package pers.neige.neigeitems.manager
 
 import pers.neige.neigeitems.section.SectionParser
+import pers.neige.neigeitems.section.impl.CalculationParser
+import pers.neige.neigeitems.section.impl.NumberParser
 import pers.neige.neigeitems.section.impl.StringsParser
-import pers.neige.neigeitems.utils.ConfigUtils
+import pers.neige.neigeitems.section.impl.WeightParser
+import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import pers.neige.neigeitems.utils.ConfigUtils.loadConfiguration
 import java.io.File
 
 object SectionManager {
     // 全部全局节点文件
-    val files: ArrayList<File> = ConfigUtils.getAllFiles("GlobalSections")
+    val files: ArrayList<File> by lazy { getAllFiles("GlobalSections") }
     val globalSectionMap = HashMap<String, ArrayList<Any>>()
     val globalSections = HashMap<String, Any>()
     // 加载节点解析器
@@ -28,5 +31,8 @@ object SectionManager {
         }
         // 加载默认节点解析器
         sectionParsers["strings"] = StringsParser
+        sectionParsers["number"] = NumberParser
+        sectionParsers["weight"] = WeightParser
+        sectionParsers["calculation"] = CalculationParser
     }
 }

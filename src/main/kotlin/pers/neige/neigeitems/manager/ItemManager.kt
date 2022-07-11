@@ -1,36 +1,36 @@
 package pers.neige.neigeitems.manager
 
+import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.item.ItemConfig
+import pers.neige.neigeitems.item.ItemGenerator
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 
 object ItemManager : ItemConfigManager() {
+    val items: ConcurrentHashMap<String, ItemGenerator> = ConcurrentHashMap<String, ItemGenerator>()
     val itemAmount = itemIds.size
+    init {
+        loadItems()
+    }
 
+    private fun loadItems() {
+        for ((id, itemConfig) in itemConfigs) {
+            items[id] = ItemGenerator(itemConfig)
+        }
+    }
 //    fun getPageAmount(): Int {
 //        return Math.ceil(this.itemIds.length/config_NI.listItemAmount)
 //    }
 
-//    fun getItem(id) {
-//        return items[id]
-//    }
-//
-//    fun getItemStack(id, player, data, sender) {
-//        if (this.items.containsKey(id)) {
-//            return this.items[id].getItemStack(player, data, sender)
-//        }
-//    }
-
-    fun getfile(id: String): File? {
-        if (itemConfigs.containsKey(id)) {
-            return itemConfigs[id]?.file
-        }
-        return null
+    // 获取物品生成器
+    fun getItem(id: String): ItemGenerator? {
+        return items[id]
     }
 
-    fun getConfig(id: String): ConfigurationSection? {
-        if (itemConfigs.containsKey(id)) {
-            return itemConfigs[id]?.configSection
-        }
-        return null
+    // 获取物品
+    fun getItemStack(id: String, player: OfflinePlayer?, data: String?): ItemStack? {
+        return items[id]?.getItemStack(player, data)
     }
 }

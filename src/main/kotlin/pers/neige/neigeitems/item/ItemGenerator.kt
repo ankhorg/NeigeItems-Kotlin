@@ -6,6 +6,7 @@ import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
@@ -13,14 +14,17 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
+import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
 import pers.neige.neigeitems.utils.ConfigUtils.clone
+import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
-import pers.neige.neigeitems.utils.ItemUtils.inherit
-import pers.neige.neigeitems.utils.ItemUtils.loadGlobalSections
-import pers.neige.neigeitems.utils.JsonUtils.asString
-import pers.neige.neigeitems.utils.JsonUtils.toMap
+import pers.neige.neigeitems.utils.ConfigUtils.toMap
+import pers.neige.neigeitems.utils.GsonUtils.gson
+import pers.neige.neigeitems.utils.ItemUtils.coverWith
+import pers.neige.neigeitems.utils.ItemUtils.toItemTag
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
@@ -30,7 +34,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 // 物品ID
-class ItemGenerator (private val itemConfig: ItemConfig) {
+class ItemGenerator (itemConfig: ItemConfig) {
     // 物品ID
     val id = itemConfig.id
     // 物品所在文件
@@ -38,11 +42,91 @@ class ItemGenerator (private val itemConfig: ItemConfig) {
     // 物品原配置
     val originConfigSection = itemConfig.configSection?.clone() ?: YamlConfiguration() as ConfigurationSection
     // 解析后配置
-    var configSection = (YamlConfiguration() as ConfigurationSection).inherit(originConfigSection).loadGlobalSections()
+    var configSection = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), originConfigSection))
     // 物品配置文本
-    val configString = configSection.saveToString()
+    val configString = configSection.saveToString(id)
     // 物品配置文本哈希值
     val hashCode = configString.hashCode()
+
+    private fun inherit(configSection: ConfigurationSection, originConfigSection: ConfigurationSection): ConfigurationSection {
+        // 检测是否需要进行继承
+        if (originConfigSection.contains("inherit") == true) {
+            // 检测进行全局继承/部分继承
+            when (val inheritInfo = originConfigSection.get("inherit")) {
+                is MemorySection -> {
+                    /**
+                     * 指定多个ID, 进行部分继承
+                     * @variable key String 要进行继承的节点ID
+                     * @variable value String 用于获取继承值的模板ID
+                     */
+                    inheritInfo.getKeys(true).forEach { key ->
+                        // 获取模板ID
+                        val value = inheritInfo.get(key)
+                        // 检测当前键是否为末级键
+                        if (value is String) {
+                            // 获取模板
+                            val currentSection = ItemManager.getItem(value)?.originConfigSection
+                            // 如果存在对应模板且模板存在对应键, 进行继承
+                            if (currentSection != null && currentSection.contains(key)) {
+                                configSection.set(key, currentSection.get(key))
+                            }
+                        }
+                    }
+                }
+                is String -> {
+                    // 仅指定单个模板ID，进行全局继承
+                    val inheritConfigSection = ItemManager.getItem(inheritInfo)?.originConfigSection
+                    inheritConfigSection?.getKeys(false)?.forEach { key ->
+                        configSection.set(key, inheritConfigSection.get(key))
+                    }
+                }
+                is List<*> -> {
+                    // 顺序继承, 按顺序进行覆盖式继承
+                    for (templateId in inheritInfo) {
+                        // 逐个获取模板
+                        val currentSection = ItemManager.getItem(templateId as String)?.originConfigSection
+                        // 进行模板覆盖
+                        currentSection?.getKeys(true)?.forEach { key ->
+                            val value = currentSection.get(key)
+                            if (value !is MemorySection) {
+                                configSection.set(key, currentSection.get(key))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // 覆盖物品配置
+        configSection.coverWith(originConfigSection)
+        return configSection
+    }
+
+    // 全局节点加载
+    private fun loadGlobalSections(configSection: ConfigurationSection): ConfigurationSection {
+        // 如果调用了全局节点
+        if (configSection.contains("globalsections")) {
+            // 获取全局节点ID
+            val globalSectionIds = configSection.getStringList("globalsections")
+            // 针对每个试图调用的全局节点
+            globalSectionIds.forEach {
+                when (val values = SectionManager.globalSectionMap[it]) {
+                    // 对于节点调用
+                    null -> {
+                        SectionManager.globalSections[it]?.let { value ->
+                            configSection.set("sections.$it", value)
+                        }
+                    }
+                    // 对于节点文件调用
+                    else -> {
+                        for (value in values) {
+                            configSection.set("sections.$it", value)
+                        }
+                    }
+                }
+            }
+        }
+        return configSection
+    }
 
     fun getItemStack(player: OfflinePlayer?, data: String?): ItemStack? {
         var configString = this.configString
@@ -56,8 +140,8 @@ class ItemGenerator (private val itemConfig: ItemConfig) {
 
         // 加载缓存
         val cache = when (data) {
-            null -> HashMap<String, String>()
-            else -> data.toMap()
+            null -> HashMap()
+            else -> gson.fromJson(data, HashMap::class.java) as HashMap<String, String>
         }
 
         // 获取私有节点配置
@@ -74,20 +158,20 @@ class ItemGenerator (private val itemConfig: ItemConfig) {
                 }
                 // 私有节点
                 else -> {
-                    (value as String).parseSection(cache, player, sections)
+                    value.toString().parseSection(cache, player, sections)
                 }
             }
         }
         // 对文本化配置进行全局节点解析
         configString = configSection
-            .saveToString()
+            .saveToString(id)
             .parseSection(cache, player, sections)
             .replace("\\<", "<")
             .replace("\\>", ">")
         if (player != null) {
             configString = PlaceholderAPI.setPlaceholders(player, configString)
         }
-//        if (config_NI.Debug) print(configString)
+        // if (config_NI.Debug) print(configString)
         configSection = configString.loadFromString(id) ?: YamlConfiguration()
         // 构建物品
         if (configSection.contains("material")) {
@@ -157,7 +241,7 @@ class ItemGenerator (private val itemConfig: ItemConfig) {
                         var color = configSection.get("color")
                         color = when (color) {
                             is String -> color.toInt(16)
-                            else -> (color as String).toInt()
+                            else -> color.toString().toInt()
                         }
                         color = 0.coerceAtLeast(color).coerceAtMost(0xFFFFFF)
                         when (itemMeta) {
@@ -172,7 +256,7 @@ class ItemGenerator (private val itemConfig: ItemConfig) {
                 val itemTag = itemStack.getItemTag()
                 val neigeItems = ItemTag()
                 neigeItems["id"] = ItemTagData(id)
-                neigeItems["data"] = ItemTagData(cache.asString())
+                neigeItems["data"] = ItemTagData(gson.toJson(cache))
                 neigeItems["hashCode"] = ItemTagData(hashCode)
                 // 设置物品使用次数
                 if (configSection.contains("options.charge")) {
@@ -187,8 +271,9 @@ class ItemGenerator (private val itemConfig: ItemConfig) {
                             ChatColor.valueOf(it)
                             neigeItems["color"] = ItemTagData(it)
                         }
-                    } catch (error: Throwable) {
+                    } catch (error: Throwable) {}
                 }
+                // 设置掉落执行技能
                 if (configSection.contains("options.dropskill")) {
                     neigeItems["dropSkill"] = ItemTagData(configSection.getString("options.dropskill") ?: "")
                 }
@@ -196,27 +281,14 @@ class ItemGenerator (private val itemConfig: ItemConfig) {
                 // 设置物品NBT
                 if (configSection.contains("nbt")) {
                     // 获取配置NBT
-                    let itemNBT = toItemTagNBT_NI(toHashMap_NI(configSection.get("nbt")))
-                    itemTag = mergeItemTag(itemTag, itemNBT)
+                    val itemNBT = configSection.getConfigurationSection("nbt")?.toMap()?.toItemTag()
+                    // NBT覆盖
+                    itemNBT?.let {itemTag.coverWith(it)}
                 }
-                try {
-                    itemTag.saveTo(itemStack)
-                } catch (e) {
-                    let invalidItemMessage = invalidItem.replace(/{itemID}/, configSection.getName())
-                    if (sender) {
-                        sender.sendMessage(invalidNBT)
-                        sender.sendMessage(invalidItemMessage)
-                    } else {
-                        bukkitServer.getConsoleSender().sendMessage(invalidNBT)
-                        bukkitServer.getConsoleSender().sendMessage(invalidItemMessage)
-                    }
-                }
-                // 删除节点缓存
-                delete sectionData
-                        return itemStack
+                itemTag.saveTo(itemStack)
+                return itemStack
             }
-        } else {
-            return null
         }
+        return null
     }
 }

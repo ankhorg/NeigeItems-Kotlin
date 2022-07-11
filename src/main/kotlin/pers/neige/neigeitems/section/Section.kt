@@ -4,6 +4,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.utils.ConfigUtils.toMap
+import taboolib.common.platform.function.info
 
 class Section(configSection: ConfigurationSection) {
     val id = configSection.name
@@ -22,6 +23,7 @@ class Section(configSection: ConfigurationSection) {
             cache?.put(id, it)
             return it
         }
+        info("$type 节点 $id 无法获取解析值")
         return null
     }
 
@@ -33,6 +35,10 @@ class Section(configSection: ConfigurationSection) {
      * @return 解析值
      */
     fun get(cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String? {
-        return SectionManager.sectionParsers[type]?.onRequest(data, cache, player, sections)
+        SectionManager.sectionParsers[type]?.onRequest(data, cache, player, sections)?.let {
+            return it
+        }
+        info("$type 节点 $id 无法获取解析值")
+        return null
     }
 }

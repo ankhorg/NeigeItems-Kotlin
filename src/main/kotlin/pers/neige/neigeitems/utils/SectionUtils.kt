@@ -27,11 +27,11 @@ object SectionUtils {
         val end = ArrayList<Int>()
         this.forEachIndexed { index, char ->
             // 如果是待识别的左括号
-            if (char == '<' && (this[index - 1] != '\\')) {
+            if (char == '<' && (this[0.coerceAtLeast(index - 1)] != '\\')) {
                 // 压栈
                 stack.push(index)
                 // 如果是右括号
-            } else if (char == '>' && this[index + 1] != '\\') {
+            } else if (char == '>' && this[(this.length-1).coerceAtMost(index + 1)] != '\\') {
                 // 前面有左括号了
                 if (!stack.isEmpty()) {
                     // 还不止一个
@@ -58,7 +58,7 @@ object SectionUtils {
             )
 
             if (index+1 != start.size) {
-                listString.append(this.substring(end[index]+1, start[index+1]))
+                listString.append(this.substring(end[index]+1, start[(start.size-1).coerceAtMost(index+1)]))
             } else {
                 listString.append(this.substring(end[index]+1, this.length))
             }
