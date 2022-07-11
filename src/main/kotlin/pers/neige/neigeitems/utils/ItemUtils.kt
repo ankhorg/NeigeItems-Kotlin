@@ -2,7 +2,6 @@ package pers.neige.neigeitems.utils
 
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.ItemTagData.translateList
 import taboolib.module.nms.ItemTagList
 import taboolib.module.nms.ItemTagType
 
@@ -60,8 +59,6 @@ object ItemUtils {
     fun Any.toItemTagData(): ItemTagData {
         return when (this) {
             is ItemTagData -> this
-            is ItemTagList -> this
-            is ItemTag -> this
             is Byte -> ItemTagData(this)
             is Short -> ItemTagData(this)
             is Int -> ItemTagData(this)

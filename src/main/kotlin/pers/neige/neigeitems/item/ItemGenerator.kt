@@ -203,12 +203,12 @@ class ItemGenerator (itemConfig: ItemConfig) {
                 // 设置CustomModelData
                 if (configSection.contains("custommodeldata")) {
                     try {
-                        itemMeta.setCustomModelData(configSection.getInt("custommodeldata"))
+                        itemMeta?.setCustomModelData(configSection.getInt("custommodeldata"))
                     } catch (error: NoSuchMethodError) {}
                 }
                 // 设置物品名
                 if (configSection.contains("name")) {
-                    itemMeta.setDisplayName(configSection.getString("name")
+                    itemMeta?.setDisplayName(configSection.getString("name")
                         ?.let { ChatColor.translateAlternateColorCodes('&', it) })
                 }
                 // 设置Lore
@@ -219,11 +219,11 @@ class ItemGenerator (itemConfig: ItemConfig) {
                         val lores = ChatColor.translateAlternateColorCodes('&', originLores[i]).split("\n")
                         finalLores.addAll(lores)
                     }
-                    itemMeta.setLore(finalLores)
+                    itemMeta?.setLore(finalLores)
                 }
                 // 设置是否无法破坏
                 if (configSection.contains("unbreakable")) {
-                    itemMeta.isUnbreakable = configSection.getBoolean("unbreakable")
+                    itemMeta?.isUnbreakable = configSection.getBoolean("unbreakable")
                 }
                 // 设置ItemFlags
                 if (configSection.contains("hideflags")) {
@@ -231,7 +231,7 @@ class ItemGenerator (itemConfig: ItemConfig) {
                     for (value in flags) {
                         try {
                             val itemFlag = ItemFlag.valueOf(value)
-                            itemMeta.addItemFlags(itemFlag)
+                            itemMeta?.addItemFlags(itemFlag)
                         } catch (error: Throwable) {}
                     }
                 }

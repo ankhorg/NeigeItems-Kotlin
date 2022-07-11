@@ -1,11 +1,8 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.OfflinePlayer
-import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
-import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
 object ItemManager : ItemConfigManager() {

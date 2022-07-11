@@ -3,10 +3,7 @@ package pers.neige.neigeitems.utils
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
-import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import taboolib.common.platform.function.getDataFolder
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.ItemTagType
 import java.io.File
 
 object ConfigUtils {

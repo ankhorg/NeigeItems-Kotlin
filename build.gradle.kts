@@ -11,8 +11,9 @@ taboolib {
             name("Neige")
         }
         dependencies {
-            name("MythicMobs").with("bukkit").optional(true).loadafter(true)
             name("ProtocolLib").with("bukkit").optional(true).loadafter(true)
+            name("PlaceholderAPI").with("bukkit").optional(true).loadafter(true)
+            name("MythicMobs").with("bukkit").optional(true).loadafter(true)
             name("Vault").with("bukkit").optional(true).loadafter(true)
         }
     }
@@ -33,7 +34,14 @@ taboolib {
 }
 
 repositories {
+    mavenLocal()
+    maven { url = uri("https://repo.tabooproject.org/storages/public/releases") }
     mavenCentral()
+    maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/public") }
+    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
+    maven { url = uri("https://repo.dmulloy2.net/repository/public/") }
+    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
+    maven { url = uri("https://mvn.lumine.io/repository/maven-public") }
 }
 
 dependencies {
@@ -42,8 +50,13 @@ dependencies {
     compileOnly("ink.ptms.core:v11900:11900-minimize:universal")
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs"))
-    implementation("com.alibaba:fastjson:+")
-
+    compileOnly("org.openjdk.nashorn:nashorn-core:15.4")
+    compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
+    compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
+    compileOnly("me.clip:placeholderapi:2.10.9")
+    compileOnly("io.lumine.xikage:MythicMobs:4.7.2")
+    compileOnly("io.lumine:Mythic-Dist:5.1.0-SNAPSHOT")
 }
 
 tasks.withType<JavaCompile> {
