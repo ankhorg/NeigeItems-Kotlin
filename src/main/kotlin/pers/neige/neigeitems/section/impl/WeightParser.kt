@@ -6,6 +6,8 @@ import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 object WeightParser : SectionParser() {
+    override val id: String = "weight"
+
     override fun onRequest(data: HashMap<String, *>, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String? {
         // 加载字符串组
         val strings = ArrayList<String>()
@@ -18,7 +20,7 @@ object WeightParser : SectionParser() {
                             strings.add(value)
                         }
                         else -> {
-                            val weight = value.substring(0, index).toInt()
+                            val weight = value.substring(0, index).toIntOrNull() ?: 1
                             val string = value.substring(index+2, value.length)
                             for (i in 0..weight) strings.add(string)
                         }

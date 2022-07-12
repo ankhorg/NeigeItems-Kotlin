@@ -30,8 +30,6 @@ import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 // 物品ID
 class ItemGenerator (itemConfig: ItemConfig) {
@@ -240,10 +238,10 @@ class ItemGenerator (itemConfig: ItemConfig) {
                     try {
                         var color = configSection.get("color")
                         color = when (color) {
-                            is String -> color.toInt(16)
-                            else -> color.toString().toInt()
+                            is String -> color.toIntOrNull(16) ?: 0
+                            else -> color.toString().toIntOrNull() ?: 0
                         }
-                        color = 0.coerceAtLeast(color).coerceAtMost(0xFFFFFF)
+                        color = color.coerceAtLeast(0).coerceAtMost(0xFFFFFF)
                         when (itemMeta) {
                             is LeatherArmorMeta -> itemMeta.setColor(Color.fromRGB(color))
                             is MapMeta -> itemMeta.color = Color.fromRGB(color)

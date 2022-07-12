@@ -21,12 +21,12 @@ object ItemUtils {
     @JvmStatic
     fun String.cast(): Any {
         return when {
-            this.startsWith("(Byte) ") -> this.substring(7, this.length).toByte()
-            this.startsWith("(Short) ") -> this.substring(8, this.length).toShort()
-            this.startsWith("(Int) ") -> this.substring(6, this.length).toInt()
-            this.startsWith("(Long) ") -> this.substring(7, this.length).toLong()
-            this.startsWith("(Float) ") -> this.substring(8, this.length).toFloat()
-            this.startsWith("(Double) ") -> this.substring(9, this.length).toDouble()
+            this.startsWith("(Byte) ") -> this.substring(7, this.length).toByteOrNull() ?: this
+            this.startsWith("(Short) ") -> this.substring(8, this.length).toShortOrNull() ?: this
+            this.startsWith("(Int) ") -> this.substring(6, this.length).toIntOrNull() ?: this
+            this.startsWith("(Long) ") -> this.substring(7, this.length).toLongOrNull() ?: this
+            this.startsWith("(Float) ") -> this.substring(8, this.length).toFloatOrNull() ?: this
+            this.startsWith("(Double) ") -> this.substring(9, this.length).toDoubleOrNull() ?: this
             else -> this
         }
     }
@@ -44,12 +44,30 @@ object ItemUtils {
     @JvmStatic
     fun String.castToItemTagData(): ItemTagData {
         return when {
-            this.startsWith("(Byte) ") -> ItemTagData(this.substring(7, this.length).toByte())
-            this.startsWith("(Short) ") -> ItemTagData(this.substring(8, this.length).toShort())
-            this.startsWith("(Int) ") -> ItemTagData(this.substring(6, this.length).toInt())
-            this.startsWith("(Long) ") -> ItemTagData(this.substring(7, this.length).toLong())
-            this.startsWith("(Float) ") -> ItemTagData(this.substring(8, this.length).toFloat())
-            this.startsWith("(Double) ") -> ItemTagData(this.substring(9, this.length).toDouble())
+            this.startsWith("(Byte) ") -> {
+                this.substring(7, this.length).toByteOrNull()?.let { ItemTagData(it) }
+                ItemTagData(this)
+            }
+            this.startsWith("(Short) ") -> {
+                this.substring(8, this.length).toShortOrNull()?.let { ItemTagData(it) }
+                ItemTagData(this)
+            }
+            this.startsWith("(Int) ") -> {
+                this.substring(6, this.length).toIntOrNull()?.let { ItemTagData(it) }
+                ItemTagData(this)
+            }
+            this.startsWith("(Long) ") -> {
+                this.substring(7, this.length).toLongOrNull()?.let { ItemTagData(it) }
+                ItemTagData(this)
+            }
+            this.startsWith("(Float) ") -> {
+                this.substring(8, this.length).toFloatOrNull()?.let { ItemTagData(it) }
+                ItemTagData(this)
+            }
+            this.startsWith("(Double) ") -> {
+                this.substring(9, this.length).toDoubleOrNull()?.let { ItemTagData(it) }
+                ItemTagData(this)
+            }
             else -> ItemTagData(this)
         }
     }

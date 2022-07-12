@@ -8,8 +8,6 @@ import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
 import java.awt.Color
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 object SectionUtils {
     /**
@@ -66,6 +64,16 @@ object SectionUtils {
         return listString.toString()
     }
 
+    @JvmStatic
+    fun String.parseSection(): String {
+        return this.parseSection(null, null, null)
+    }
+
+    @JvmStatic
+    fun String.parseSection(player: OfflinePlayer?): String {
+        return this.parseSection(null, player, null)
+    }
+
     /**
      * 对节点内容进行解析 (已经去掉 <>)
      * @param cache 解析值缓存
@@ -100,8 +108,9 @@ object SectionUtils {
                     if (this.startsWith("#")) {
                         try {
                             try {
-                                var hex = this.substring(1).toInt(16)
-                                hex = Math.min(Math.max(hex, 0), 0xFFFFFF)
+                                val hex = (this.substring(1).toIntOrNull(16) ?: 0)
+                                    .coerceAtLeast(0)
+                                    .coerceAtMost(0xFFFFFF)
                                 val color = Color(hex)
                                 return ChatColor.of(color).toString()
                             } catch (error: NumberFormatException) {}

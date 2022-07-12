@@ -6,6 +6,8 @@ import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 object StringsParser : SectionParser() {
+    override val id: String = "strings"
+
     override fun onRequest(data: HashMap<String, *>, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String? {
         // 加载字符串组
         when (val strings = data["values"]) {

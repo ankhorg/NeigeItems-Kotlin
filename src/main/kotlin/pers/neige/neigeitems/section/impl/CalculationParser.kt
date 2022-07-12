@@ -7,6 +7,8 @@ import pers.neige.neigeitems.utils.ScriptUtils.eval
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 object CalculationParser : SectionParser() {
+    override val id: String = "calculation"
+
     override fun onRequest(data: HashMap<String, *>, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String? {
         // 如果配置了数字范围
         try {
@@ -23,7 +25,7 @@ object CalculationParser : SectionParser() {
                 result = it.coerceAtMost(result as Double)
             }
             // 获取取整位数
-            val fixed = data["fixed"]?.toString()?.parseSection(cache, player, sections)?.toInt() ?: 0
+            val fixed = data["fixed"]?.toString()?.parseSection(cache, player, sections)?.toIntOrNull() ?: 0
             // 加载结果
             return "%.${fixed}f".format(result)
         } catch (error: Throwable) {
@@ -39,6 +41,6 @@ object CalculationParser : SectionParser() {
         if (size > 1) data["fixed"] = args[1]
         if (size > 2) data["min"] = args[2]
         if (size > 3) data["max"] = args[3]
-        return onRequest(data, cache, player, sections) ?: "<number::${args.joinToString("_")}>"
+        return onRequest(data, cache, player, sections) ?: "<calculation::${args.joinToString("_")}>"
     }
 }

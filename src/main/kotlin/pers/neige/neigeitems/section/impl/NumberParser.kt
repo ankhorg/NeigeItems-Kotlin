@@ -6,6 +6,8 @@ import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 object NumberParser : SectionParser() {
+    override val id: String = "number"
+
     override fun onRequest(data: HashMap<String, *>, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String? {
         // 如果配置了数字范围
         try {
@@ -13,7 +15,7 @@ object NumberParser : SectionParser() {
             val min = data["min"]?.toString()?.parseSection(cache, player, sections)?.toDouble()
             val max = data["max"]?.toString()?.parseSection(cache, player, sections)?.toDouble()
             // 获取取整位数
-            val fixed = data["fixed"]?.toString()?.parseSection(cache, player, sections)?.toInt() ?: 0
+            val fixed = data["fixed"]?.toString()?.parseSection(cache, player, sections)?.toIntOrNull() ?: 0
             // 加载随机数
             if (min != null && max != null) {
                 return "%.${fixed}f".format(min+(Math.random()*(max-min)))

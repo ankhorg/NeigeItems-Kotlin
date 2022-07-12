@@ -4,6 +4,8 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 
 abstract class SectionParser {
+    abstract val id: String
+
     /**
      * 用于私有节点解析
      * @param data 节点内容

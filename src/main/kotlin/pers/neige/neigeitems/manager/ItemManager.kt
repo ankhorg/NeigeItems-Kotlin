@@ -30,4 +30,9 @@ object ItemManager : ItemConfigManager() {
     fun getItemStack(id: String, player: OfflinePlayer?, data: String?): ItemStack? {
         return items[id]?.getItemStack(player, data)
     }
+
+    // 获取物品
+    fun hasItem(id: String): Boolean {
+        return items.contains(id)
+    }
 }
