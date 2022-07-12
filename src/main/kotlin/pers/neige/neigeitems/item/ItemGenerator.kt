@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.item
 
-import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.ChatColor
 import org.bukkit.Color
 import org.bukkit.Material
@@ -14,6 +13,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
+import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
@@ -130,9 +130,7 @@ class ItemGenerator (itemConfig: ItemConfig) {
         var configString = this.configString
 
         // 进行一次papi解析
-        if (player != null) {
-            configString = PlaceholderAPI.setPlaceholders(player, configString)
-        }
+        player?.let { configString = papiHooker.papi(player, configString) }
         // 加载回YamlConfiguration
         var configSection = configString.loadFromString(id) ?: YamlConfiguration()
 
@@ -166,9 +164,7 @@ class ItemGenerator (itemConfig: ItemConfig) {
             .parseSection(cache, player, sections)
             .replace("\\<", "<")
             .replace("\\>", ">")
-        if (player != null) {
-            configString = PlaceholderAPI.setPlaceholders(player, configString)
-        }
+        player?.let { configString = papiHooker.papi(player, configString) }
         // if (config_NI.Debug) print(configString)
         configSection = configString.loadFromString(id) ?: YamlConfiguration()
         // 构建物品

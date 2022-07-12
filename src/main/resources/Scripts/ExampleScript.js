@@ -1,8 +1,8 @@
 function main() {
     if (typeof player != "undefined") {
-        return vars("strings-1") + player.getName()
+        return vars("<strings-1>") + player.getName()
     } else {
-        return vars("strings-1")
+        return vars("<strings-1>")
     }
 }
 
