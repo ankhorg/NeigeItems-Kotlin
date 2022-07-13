@@ -8,10 +8,11 @@ import java.util.concurrent.ConcurrentHashMap
 
 open class ItemConfigManager {
     // 加载全部物品文件
-    val files: ArrayList<File> by lazy { getAllFiles("Items") }
+    val files: ArrayList<File> = getAllFiles("Items")
     // 加载全部物品
     val itemConfigs: ConcurrentHashMap<String, ItemConfig> = ConcurrentHashMap<String, ItemConfig>()
     val itemIds = ArrayList<String>()
+
     init {
         loadItemConfigs()
     }
@@ -25,5 +26,13 @@ open class ItemConfigManager {
                 itemIds.add(it)
             }
         }
+    }
+
+    fun reloadItemConfigs() {
+        files.clear()
+        itemConfigs.clear()
+        itemIds.clear()
+        files.addAll(getAllFiles("Items"))
+        loadItemConfigs()
     }
 }

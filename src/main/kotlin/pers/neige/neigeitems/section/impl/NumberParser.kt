@@ -32,6 +32,6 @@ object NumberParser : SectionParser() {
         if (size > 0) data["min"] = args[0]
         if (size > 1) data["max"] = args[1]
         if (size > 2) data["fixed"] = args[2]
-        return onRequest(data, cache, player, sections) ?: "<number::${args.joinToString("_")}>"
+        return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
     }
 }

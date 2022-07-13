@@ -23,6 +23,6 @@ object StringsParser : SectionParser() {
     override fun onRequest(args: List<String>, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String {
         val data = HashMap<String, Any>()
         data["values"] = args
-        return onRequest(data, cache, player, sections) ?: "<strings::${args.joinToString("_")}>"
+        return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
     }
 }

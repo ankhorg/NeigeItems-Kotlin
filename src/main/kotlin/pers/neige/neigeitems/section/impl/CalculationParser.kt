@@ -41,6 +41,6 @@ object CalculationParser : SectionParser() {
         if (size > 1) data["fixed"] = args[1]
         if (size > 2) data["min"] = args[2]
         if (size > 3) data["max"] = args[3]
-        return onRequest(data, cache, player, sections) ?: "<calculation::${args.joinToString("_")}>"
+        return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
     }
 }

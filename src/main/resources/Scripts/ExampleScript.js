@@ -5,6 +5,3 @@ function main() {
         return vars("<strings-1>")
     }
 }
-
-load = function() {return this}
-load()

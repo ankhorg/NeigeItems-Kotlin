@@ -7,7 +7,8 @@ import java.util.concurrent.ConcurrentHashMap
 
 object ItemManager : ItemConfigManager() {
     val items: ConcurrentHashMap<String, ItemGenerator> = ConcurrentHashMap<String, ItemGenerator>()
-    val itemAmount = itemIds.size
+    val itemAmount get() = itemIds.size
+
     init {
         loadItems()
     }
@@ -16,6 +17,13 @@ object ItemManager : ItemConfigManager() {
         for ((id, itemConfig) in itemConfigs) {
             items[id] = ItemGenerator(itemConfig)
         }
+    }
+
+    // 重载物品管理器
+    fun reload() {
+        reloadItemConfigs()
+        items.clear()
+        loadItems()
     }
 //    fun getPageAmount(): Int {
 //        return Math.ceil(this.itemIds.length/config_NI.listItemAmount)
@@ -33,6 +41,6 @@ object ItemManager : ItemConfigManager() {
 
     // 获取物品
     fun hasItem(id: String): Boolean {
-        return items.contains(id)
+        return items.containsKey(id)
     }
 }

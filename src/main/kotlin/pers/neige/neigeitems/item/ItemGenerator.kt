@@ -29,6 +29,7 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
+import taboolib.platform.BukkitPlugin
 import java.util.*
 
 // 物品ID
@@ -165,7 +166,7 @@ class ItemGenerator (itemConfig: ItemConfig) {
             .replace("\\<", "<")
             .replace("\\>", ">")
         player?.let { configString = papiHooker.papi(player, configString) }
-        // if (config_NI.Debug) print(configString)
+        if (BukkitPlugin.getInstance().config.getBoolean("Main.Debug")) print(configString)
         configSection = configString.loadFromString(id) ?: YamlConfiguration()
         // 构建物品
         if (configSection.contains("material")) {

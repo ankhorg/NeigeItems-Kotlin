@@ -6,7 +6,6 @@ import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ScriptManager
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import java.util.function.BiFunction
 
 object JavascriptParser : SectionParser() {
     override val id: String = "js"
@@ -35,6 +34,6 @@ object JavascriptParser : SectionParser() {
         if (args.isNotEmpty()) data["path"] = args[0]
         args.drop(1)
         if (args.isNotEmpty()) data["args"] = args
-        return onRequest(data, cache, player, sections) ?: "<js::${args.joinToString("_")}>"
+        return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
     }
 }

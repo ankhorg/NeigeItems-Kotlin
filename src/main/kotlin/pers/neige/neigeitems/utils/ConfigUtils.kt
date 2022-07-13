@@ -152,24 +152,26 @@ object ConfigUtils {
     // ConfigurationSection 合并(后者覆盖前者)
     @JvmStatic
     fun ConfigurationSection.coverWith(configSection: ConfigurationSection): ConfigurationSection {
-        // 遍历附加NBT
+        // 遍历所有键
         configSection.getKeys(false).forEach { key ->
-            val value = configSection.get(key)
+            // 用于覆盖的值
+            val coverValue = configSection.get(key)
+            // 原有值
+            val value = this.get(key)
             // 如果二者包含相同键
-            val overrideValue = this.get(key)
-            if (overrideValue != null) {
+            if (value != null) {
                 // 如果二者均为ConfigurationSection
-                if (overrideValue is ConfigurationSection
-                    && value is ConfigurationSection) {
+                if (value is ConfigurationSection
+                    && coverValue is ConfigurationSection) {
                     // 合并
-                    this.set(key, overrideValue.coverWith(value))
+                    this.set(key, value.coverWith(coverValue))
                 } else {
                     // 覆盖
-                    this.set(key, value)
+                    this.set(key, coverValue)
                 }
             } else {
                 // 添加
-                this.set(key, value)
+                this.set(key, coverValue)
             }
         }
         return this

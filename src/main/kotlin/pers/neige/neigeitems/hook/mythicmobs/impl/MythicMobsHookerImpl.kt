@@ -1,25 +1,42 @@
 package pers.neige.neigeitems.hook.mythicmobs.impl
 
+import io.lumine.mythic.core.config.MythicConfigImpl
 import io.lumine.mythic.bukkit.BukkitAdapter
 import io.lumine.mythic.bukkit.MythicBukkit
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent
 import io.lumine.mythic.bukkit.events.MythicMobSpawnEvent
 import io.lumine.mythic.core.items.ItemExecutor
 import io.lumine.mythic.core.items.MythicItem
+import org.bukkit.Bukkit
+import org.bukkit.Material
+import org.bukkit.OfflinePlayer
+import org.bukkit.entity.Entity
+import org.bukkit.entity.Item
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.bukkit.util.Vector
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.manager.ItemManager.hasItem
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
+import taboolib.platform.BukkitPlugin
 import java.util.*
+import java.util.concurrent.Callable
+import kotlin.math.cos
+import kotlin.math.sin
 
 class MythicMobsHookerImpl : MythicMobsHooker() {
     private val itemManager: ItemExecutor = MythicBukkit.inst().itemManager
+
+    private val apiHelper = MythicBukkit.inst().apiHelper
+
+    private val pluginManager = Bukkit.getPluginManager()
 
     override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.LOWEST, false) {
         submit(async = true) {
@@ -57,11 +74,9 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
 
                     if (args.size > 1) {
                         val probability = args[1].toDoubleOrNull()
-                        if (!ItemManager.hasItem(args[0])
-                            || (probability != null && Math.random() > probability)) {
-                            continue
-                        }
+                        if (probability != null && Math.random() > probability) continue
                     }
+                    if (!hasItem(args[0])) continue
 
                     try {
                         ItemManager.getItemStack(args[0], null, data)?.let { itemStack ->
@@ -92,7 +107,216 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
 
     override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java, EventPriority.NORMAL, false) {
         submit(async = true) {
+            // 获取MM怪物配置
+            val mythicMob = it.mobType
+            // 获取MM怪物ID
+            val mythicId = mythicMob.internalName
+            // 获取对应MythicConfig
+            val mythicConfig = mythicMob.config as MythicConfigImpl
+            // 获取MM怪物的ConfigurationSection
+            val configSection = mythicConfig.fileConfiguration.getConfigurationSection(mythicId)
 
+            // 如果怪物配置了NeigeItems相关信息
+            if (configSection.contains("NeigeItems")) {
+                // 获取被击杀的MM怪物
+                val entity = it.entity as LivingEntity
+                // 获取击杀者
+                val player = it.killer
+                // 获取MM怪物身上的装备
+                val entityEquipment = entity.equipment
+                // 一个个的全掏出来, 等会儿挨个康康
+                val equipments = ArrayList<ItemStack>()
+                entityEquipment?.helmet?.clone()?.let { equipments.add(it) }
+                entityEquipment?.chestplate?.clone()?.let { equipments.add(it) }
+                entityEquipment?.leggings?.clone()?.let { equipments.add(it) }
+                entityEquipment?.boots?.clone()?.let { equipments.add(it) }
+                entityEquipment?.itemInMainHand?.clone()?.let { equipments.add(it) }
+                entityEquipment?.itemInOffHand?.clone()?.let { equipments.add(it) }
+
+                // 预定于掉落物列表
+                val dropItems = ArrayList<ItemStack>()
+                // 遍历怪物身上的装备, 看看哪个是生成时自带的需要掉落的NI装备
+                for (itemStack in equipments) {
+                    if (itemStack.type != Material.AIR) {
+                        val itemTag = itemStack.getItemTag()
+
+                        itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                            neigeItems["dropChance"]?.asDouble()?.let {
+                                if (Math.random() <= it) {
+                                    // 真要掉那得先把特殊NBT移除
+                                    neigeItems.remove("dropChance")
+                                    itemTag["NeigeItems"] = neigeItems
+                                    itemTag.saveTo(itemStack)
+                                    // 丢进待掉落列表里
+                                    dropItems.add(itemStack)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 获取NeigeItems相关配置项
+                val neigeItems = configSection.getConfigurationSection("NeigeItems")
+                // 判断是否是玩家击杀
+                if (player is Player) {
+                    // 如果配置了掉落相关信息
+                    if (neigeItems.contains("Drops")) {
+                        // 获取掉落相关的配置项
+                        val drops = neigeItems.getStringList("Drops")
+
+                        // 遍历相关配置
+                        for (drop in drops) {
+                            val args = drop.parseSection(player).split(" ")
+
+                            val data: String? = when {
+                                args.size > 4 -> args.slice(4..args.size).joinToString(" ")
+                                else -> null
+                            }
+
+                            // 获取概率并进行概率随机
+                            if (args.size > 2) {
+                                val probability = args[2].toDoubleOrNull()
+                                if (probability != null && Math.random() > probability) continue
+                            }
+                            if (!hasItem(args[0])) continue
+
+                            // 获取掉落数量
+                            var amount = 1
+                            if (args.size > 1) {
+                                if (args[1].contains("-")) {
+                                    val index = args[1].indexOf("-")
+                                    val min = args[1].substring(0, index).toIntOrNull()
+                                    val max = args[1].substring(index+1, args[1].length).toIntOrNull()
+                                    if (min != null && max != null) {
+                                        amount = (min + Math.round(Math.random()*(max-min))).toInt()
+                                    }
+                                } else {
+                                    args[1].toIntOrNull()?.let {
+                                        amount = it
+                                    }
+                                }
+                            }
+                            // 看看需不需要每次都随机生成
+                            if (args.size > 2 && args[3] == "false") {
+                                // 真只随机一次啊?那嗯怼吧
+                                ItemManager.getItemStack(args[0], player, data)?.let { itemStack ->
+                                    val maxStackSize = itemStack.maxStackSize
+                                    itemStack.amount = maxStackSize
+                                    var givenAmt = 0
+                                    while ((givenAmt + maxStackSize) <= amount) {
+                                        dropItems.add(itemStack.clone())
+                                        givenAmt += maxStackSize
+                                    }
+                                    if (givenAmt < amount) {
+                                        itemStack.amount = amount - givenAmt
+                                        dropItems.add(itemStack.clone())
+                                    }
+                                }
+                            } else {
+                                // 随机生成, 那疯狂造就完事儿了
+                                for (index in 0..amount) {
+                                    ItemManager.getItemStack(args[0], player, data)?.let { itemStack ->
+                                        dropItems.add(itemStack)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 如果配置了多彩掉落信息
+                if (neigeItems.contains("FancyDrop")) {
+                    // 获取多彩掉落相关信息
+                    val fancyDrop = neigeItems.getConfigurationSection("FancyDrop")
+                    // 获取掉落偏移信息
+                    val offset = fancyDrop.getConfigurationSection("offset")
+                    // 获取横向偏移量
+                    val offsetX: Double
+                    val offsetXString = offset.getString("x").parseSection(player?.let { it as OfflinePlayer })
+                    if (offsetXString.contains("-")) {
+                        val index = offsetXString.indexOf("-")
+                        val min = offsetXString.substring(0, index).toDoubleOrNull()
+                        val max = offsetXString.substring(index+1).toDoubleOrNull()
+                        offsetX = when {
+                            min != null && max != null -> min + Math.random()*(max-min)
+                            else -> 0.1
+                        }
+                    } else {
+                        offsetX = offsetXString.toDoubleOrNull() ?: 0.1
+                    }
+                    // 获取纵向偏移量
+                    val offsetY: Double
+                    val offsetYString = offset.getString("y").parseSection(player as OfflinePlayer)
+                    if (offsetYString.contains("-")) {
+                        val index = offsetYString.indexOf("-")
+                        val min = offsetYString.substring(0, index).toDoubleOrNull()
+                        val max = offsetYString.substring(index+1).toDoubleOrNull()
+                        offsetY = when {
+                            min != null && max != null -> min + Math.random()*(max-min)
+                            else -> 0.1
+                        }
+                    } else {
+                        offsetY = offsetYString.toDoubleOrNull() ?: 0.1
+                    }
+                    // 获取发射角度类型
+                    val angleType = fancyDrop.getString("angle.type").parseSection(player as OfflinePlayer)
+                    // 获取怪物死亡位置
+                    val location = entity.location
+                    // 开始掉落
+                    for ((index, itemStack) in dropItems.withIndex()) {
+                        Bukkit.getScheduler().callSyncMethod(BukkitPlugin.getInstance() , Callable<Item?> {
+                            location.world?.dropItem(location, itemStack)
+                        }).get()?.let { item ->
+                            val vector = Vector(offsetX, offsetY, 0.0)
+                            if (angleType == "random") {
+                                val angleCos = cos(Math.PI * 2 * Math.random())
+                                val angleSin = sin(Math.PI * 2 * Math.random())
+                                val x = angleCos * vector.x + angleSin * vector.z
+                                val z = -angleSin * vector.x + angleCos * vector.z
+                                vector.setX(x).z = z
+                            } else if (angleType == "round") {
+                                val angleCos = cos(Math.PI * 2 * index/dropItems.size)
+                                val angleSin = sin(Math.PI * 2 * index/dropItems.size)
+                                val x = angleCos * vector.x + angleSin * vector.z
+                                val z = -angleSin * vector.x + angleCos * vector.z
+                                vector.setX(x).z = z
+                            }
+                            item.velocity = vector
+
+                            val itemTag = itemStack.getItemTag()
+                            itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                                if (neigeItems.containsKey("dropSkill")) {
+                                    neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                                        if (pluginManager.isPluginEnabled("MythicMobs")) {
+                                            castSkill(item, dropSkill)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    // 普通掉落
+                    for (itemStack in dropItems) {
+                        val location = entity.location
+
+                        Bukkit.getScheduler().callSyncMethod(BukkitPlugin.getInstance(), Callable<Item?> {
+                            location.world?.dropItem(location, itemStack)
+                        }).get()?.let { item ->
+                            val itemTag = itemStack.getItemTag()
+                            itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                                if (neigeItems.containsKey("dropSkill")) {
+                                    neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                                        if (pluginManager.isPluginEnabled("MythicMobs")) {
+                                            castSkill(item, dropSkill)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -102,5 +326,9 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
             maybeItem.isPresent -> BukkitAdapter.adapt((maybeItem.get()).generateItemStack(1))
             else -> null
         }
+    }
+
+    override fun castSkill(entity: Entity, skill: String) {
+        apiHelper.castSkill(entity, skill)
     }
 }
