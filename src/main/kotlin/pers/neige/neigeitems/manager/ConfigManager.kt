@@ -5,6 +5,9 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.common.platform.Platform
+import taboolib.module.metrics.Metrics
+import taboolib.module.metrics.charts.SingleLineChart
 import taboolib.platform.BukkitPlugin
 import java.io.File
 import java.io.InputStreamReader
@@ -13,6 +16,8 @@ object ConfigManager {
     // 默认Config
     private val originConfig: FileConfiguration =
         BukkitPlugin.getInstance().getResource("config.yml")?.let { YamlConfiguration.loadConfiguration(InputStreamReader(it, "UTF-8")) } ?: YamlConfiguration()
+
+    val config get() = BukkitPlugin.getInstance().config
 
     // 加载默认配置文件
     @Awake(LifeCycle.INIT)
@@ -23,6 +28,19 @@ object ConfigManager {
         BukkitPlugin.getInstance().saveResource("Items${File.separator}ExampleItem.yml", false)
         BukkitPlugin.getInstance().saveResource("Scripts${File.separator}ExampleScript.js", false)
         BukkitPlugin.getInstance().saveDefaultConfig()
+        val metrics = Metrics(15750, BukkitPlugin.getInstance().description.version, Platform.BUKKIT)
+        metrics.addCustomChart(SingleLineChart("items") {
+            ItemManager.itemIds.size
+        })
+        metrics.addCustomChart(SingleLineChart("sections") {
+            SectionManager.globalSections.size
+        })
+        metrics.addCustomChart(SingleLineChart("custom-sections") {
+            SectionManager.sectionParsers.size - 7
+        })
+        metrics.addCustomChart(SingleLineChart("scripts") {
+            ScriptManager.compiledScripts.size
+        })
     }
 
     // 对当前Config查缺补漏

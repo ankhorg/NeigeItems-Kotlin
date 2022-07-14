@@ -26,8 +26,10 @@ taboolib {
         "module-metrics",
         "module-nms",
         "module-nms-util",
+        "module-metrics",
         "platform-bukkit",
-        "expansion-javascript"
+        "expansion-javascript",
+        "expansion-command-helper"
     )
     classifier = null
     version = "6.0.9-31"

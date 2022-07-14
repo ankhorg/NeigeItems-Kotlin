@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
+import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.SectionManager
@@ -39,7 +40,7 @@ class ItemGenerator (itemConfig: ItemConfig) {
     // 物品所在文件
     val file = itemConfig.file
     // 物品原配置
-    val originConfigSection = itemConfig.configSection?.clone() ?: YamlConfiguration() as ConfigurationSection
+    val originConfigSection = itemConfig.configSection ?: YamlConfiguration() as ConfigurationSection
     // 解析后配置
     var configSection = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), originConfigSection))
     // 物品配置文本
@@ -64,7 +65,7 @@ class ItemGenerator (itemConfig: ItemConfig) {
                         // 检测当前键是否为末级键
                         if (value is String) {
                             // 获取模板
-                            val currentSection = ItemManager.getItem(value)?.originConfigSection
+                            val currentSection = ItemManager.getOriginConfig(value)
                             // 如果存在对应模板且模板存在对应键, 进行继承
                             if (currentSection != null && currentSection.contains(key)) {
                                 configSection.set(key, currentSection.get(key))
@@ -74,22 +75,17 @@ class ItemGenerator (itemConfig: ItemConfig) {
                 }
                 is String -> {
                     // 仅指定单个模板ID，进行全局继承
-                    val inheritConfigSection = ItemManager.getItem(inheritInfo)?.originConfigSection
-                    inheritConfigSection?.getKeys(false)?.forEach { key ->
-                        configSection.set(key, inheritConfigSection.get(key))
+                    ItemManager.getOriginConfig(inheritInfo)?.let { inheritConfigSection ->
+                        configSection.coverWith(inheritConfigSection)
                     }
                 }
                 is List<*> -> {
                     // 顺序继承, 按顺序进行覆盖式继承
                     for (templateId in inheritInfo) {
                         // 逐个获取模板
-                        val currentSection = ItemManager.getItem(templateId as String)?.originConfigSection
-                        // 进行模板覆盖
-                        currentSection?.getKeys(true)?.forEach { key ->
-                            val value = currentSection.get(key)
-                            if (value !is MemorySection) {
-                                configSection.set(key, currentSection.get(key))
-                            }
+                        ItemManager.getOriginConfig(templateId as String)?.let { currentSection ->
+                            // 进行模板覆盖
+                            configSection.coverWith(currentSection)
                         }
                     }
                 }
@@ -117,8 +113,8 @@ class ItemGenerator (itemConfig: ItemConfig) {
                     }
                     // 对于节点文件调用
                     else -> {
-                        for (value in values) {
-                            configSection.set("sections.$it", value)
+                        values.getKeys(false).forEach {
+                            configSection.set("sections.$it", values.get(it))
                         }
                     }
                 }
@@ -166,7 +162,7 @@ class ItemGenerator (itemConfig: ItemConfig) {
             .replace("\\<", "<")
             .replace("\\>", ">")
         player?.let { configString = papiHooker.papi(player, configString) }
-        if (BukkitPlugin.getInstance().config.getBoolean("Main.Debug")) print(configString)
+        if (config.getBoolean("Main.Debug")) print(configString)
         configSection = configString.loadFromString(id) ?: YamlConfiguration()
         // 构建物品
         if (configSection.contains("material")) {

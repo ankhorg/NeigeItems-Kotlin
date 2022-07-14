@@ -10,8 +10,9 @@ Messages:
   unknownItem: §e[NI] §6找不到ID为 §a{itemID} §6的物品
   existedKey: §e[NI] §6已存在ID为 §a{itemID} §6的物品
   invalidPaser: §e[NI] §6不能针对后台解析物品, 请指定一个玩家
+  onlyPlayer: §e[NI] §6该指令仅可玩家使用
   successSaveInfo: §e[NI] §6成功将 §f{name} §6以ID §a{itemID} §6保存至 §a{path}
-  mMImportSuccessInfo: §e[NI] §6成功将所有MM物品保存至 §a{path}
+  mmImportSuccessInfo: §e[NI] §6成功将所有MM物品保存至 §a{path}
   airItem: §e[NI] §6请不要试图保存空气, 谢谢合作
   invalidAmount: §e[NI] §6无效数字
   invalidWorld: §e[NI] §6无效世界

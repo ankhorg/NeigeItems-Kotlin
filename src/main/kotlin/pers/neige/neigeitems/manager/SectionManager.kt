@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.manager
 
+import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.section.impl.*
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
@@ -9,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 object SectionManager {
     // <文件名, 该文件中的所有节点>
-    val globalSectionMap = HashMap<String, ArrayList<Any>>()
+    val globalSectionMap = HashMap<String, ConfigurationSection>()
     // <节点ID, 节点>
     val globalSections = HashMap<String, Any>()
     // 所有节点解析器
@@ -40,12 +41,11 @@ object SectionManager {
     private fun loadGlobalSections() {
         for (file in getAllFiles("GlobalSections")) {
             val fileName = file.name
-            globalSectionMap[fileName] = ArrayList()
             val config = file.loadConfiguration()
+            globalSectionMap[fileName] = config
             for (key in config.getKeys(false)) {
                 config.get(key)?.let {
                     globalSections[key] = it
-                    globalSectionMap[fileName]?.add(it)
                 }
             }
         }
@@ -64,6 +64,7 @@ object SectionManager {
     // 加载基础节点
     private fun loadBasicParser() {
         loadParser(CalculationParser)
+        loadParser(InheritParser)
         loadParser(JavascriptParser)
         loadParser(NumberParser)
         loadParser(StringsParser)

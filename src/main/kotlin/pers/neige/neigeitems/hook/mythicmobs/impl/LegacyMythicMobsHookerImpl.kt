@@ -73,11 +73,9 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
 
                     if (args.size > 1) {
                         val probability = args[1].toDoubleOrNull()
-                        if (!hasItem(args[0])
-                            || (probability != null && Math.random() > probability)) {
-                            continue
-                        }
+                        if (probability != null && Math.random() > probability) continue
                     }
+                    if (!hasItem(args[0])) continue
 
                     try {
                         getItemStack(args[0], null, data)?.let { itemStack ->
@@ -233,7 +231,7 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                     val offset = fancyDrop.getConfigurationSection("offset")
                     // 获取横向偏移量
                     val offsetX: Double
-                    val offsetXString = offset.getString("x").parseSection(player as OfflinePlayer)
+                    val offsetXString = offset.getString("x").parseSection(player?.let { it as OfflinePlayer })
                     if (offsetXString.contains("-")) {
                         val index = offsetXString.indexOf("-")
                         val min = offsetXString.substring(0, index).toDoubleOrNull()
@@ -247,7 +245,7 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                     }
                     // 获取纵向偏移量
                     val offsetY: Double
-                    val offsetYString = offset.getString("y").parseSection(player as OfflinePlayer)
+                    val offsetYString = offset.getString("y").parseSection(player?.let { it as OfflinePlayer })
                     if (offsetYString.contains("-")) {
                         val index = offsetYString.indexOf("-")
                         val min = offsetYString.substring(0, index).toDoubleOrNull()
@@ -260,7 +258,7 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                         offsetY = offsetYString.toDoubleOrNull() ?: 0.1
                     }
                     // 获取发射角度类型
-                    val angleType = fancyDrop.getString("angle.type").parseSection(player as OfflinePlayer)
+                    val angleType = fancyDrop.getString("angle.type").parseSection(player?.let { it as OfflinePlayer })
                     // 获取怪物死亡位置
                     val location = entity.location
                     // 开始掉落
@@ -286,11 +284,9 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
 
                             val itemTag = itemStack.getItemTag()
                             itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                                if (neigeItems.containsKey("dropSkill")) {
-                                    neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
-                                        if (pluginManager.isPluginEnabled("MythicMobs")) {
-                                            castSkill(item, dropSkill)
-                                        }
+                                neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                                    if (pluginManager.isPluginEnabled("MythicMobs")) {
+                                        castSkill(item, dropSkill)
                                     }
                                 }
                             }
@@ -306,11 +302,9 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                         }).get()?.let { item ->
                             val itemTag = itemStack.getItemTag()
                             itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                                if (neigeItems.containsKey("dropSkill")) {
-                                    neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
-                                        if (pluginManager.isPluginEnabled("MythicMobs")) {
-                                            castSkill(item, dropSkill)
-                                        }
+                                neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                                    if (pluginManager.isPluginEnabled("MythicMobs")) {
+                                        castSkill(item, dropSkill)
                                     }
                                 }
                             }
