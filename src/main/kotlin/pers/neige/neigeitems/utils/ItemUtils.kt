@@ -1,9 +1,14 @@
 package pers.neige.neigeitems.utils
 
+import org.bukkit.Location
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.ItemTagList
 import taboolib.module.nms.ItemTagType
+import taboolib.platform.util.giveItem
+import kotlin.math.floor
 
 
 object ItemUtils {
@@ -128,5 +133,22 @@ object ItemUtils {
             }
         }
         return this
+    }
+
+    @JvmStatic
+    fun Location.dropItems(itemStack: ItemStack, amount: Int? = null) {
+        amount?.let {
+            val maxStackSize = itemStack.maxStackSize
+            itemStack.amount = maxStackSize
+            val leftAmount = amount % maxStackSize
+            val repeat = floor((amount / maxStackSize).toDouble()).toInt()
+            repeat(repeat) {
+                this.world?.dropItem(this, itemStack)
+            }
+            if (leftAmount != 0) {
+                itemStack.amount = leftAmount
+                this.world?.dropItem(this, itemStack)
+            }
+        } ?: this.world?.dropItem(this, itemStack)
     }
 }
