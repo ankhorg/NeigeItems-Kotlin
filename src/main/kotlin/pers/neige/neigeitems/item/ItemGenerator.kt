@@ -17,8 +17,6 @@ import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.SectionManager
-import pers.neige.neigeitems.section.Section
-import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
@@ -30,7 +28,6 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
-import taboolib.platform.BukkitPlugin
 import java.util.*
 
 // 物品ID
@@ -127,7 +124,7 @@ class ItemGenerator (itemConfig: ItemConfig) {
         var configString = this.configString
 
         // 进行一次papi解析
-        player?.let { configString = papiHooker.papi(player, configString) }
+        player?.let { configString = papiHooker?.papi(player, configString) ?: configString }
         // 加载回YamlConfiguration
         var configSection = configString.loadFromString(id) ?: YamlConfiguration()
 
@@ -138,30 +135,27 @@ class ItemGenerator (itemConfig: ItemConfig) {
         }
 
         // 获取私有节点配置
-        val sections = when {
-            configSection.contains("sections") -> configSection.getConfigurationSection("sections")
-            else -> null
-        }
-        // 如果当前物品包含预声明节点
-        sections?.getKeys(false)?.forEach {
-            when (val value = sections.get(it)) {
-                // 正儿八经预声明节点
-                is ConfigurationSection -> {
-                    Section(value).load(cache, player, sections)
-                }
-                // 私有节点
-                else -> {
-                    value.toString().parseSection(cache, player, sections)
-                }
-            }
-        }
+        val sections = configSection.getConfigurationSection("sections")
+//        // 如果当前物品包含预声明节点
+//        sections?.getKeys(false)?.forEach {
+//            when (val value = sections.get(it)) {
+//                // 正儿八经预声明节点
+//                is ConfigurationSection -> {
+//                    Section(value).load(cache, player, sections)
+//                }
+//                // 即时节点
+//                else -> {
+//                    value.toString().parseSection(cache, player, sections)
+//                }
+//            }
+//        }
         // 对文本化配置进行全局节点解析
         configString = configSection
             .saveToString(id)
             .parseSection(cache, player, sections)
             .replace("\\<", "<")
             .replace("\\>", ">")
-        player?.let { configString = papiHooker.papi(player, configString) }
+        player?.let { configString = papiHooker?.papi(player, configString) ?: configString }
         if (config.getBoolean("Main.Debug")) print(configString)
         configSection = configString.loadFromString(id) ?: YamlConfiguration()
         // 构建物品

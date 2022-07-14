@@ -14,7 +14,7 @@ abstract class SectionParser {
      * @param sections 节点池
      * @return 解析值
      */
-    open fun onRequest(data: HashMap<String, *>, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String? {
+    open fun onRequest(data: ConfigurationSection, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String? {
         return null
     }
 

@@ -1,12 +1,10 @@
 package pers.neige.neigeitems.hook.mythicmobs.impl
 
-import io.lumine.mythic.core.config.MythicConfigImpl
-import io.lumine.mythic.bukkit.BukkitAdapter
 import io.lumine.mythic.bukkit.MythicBukkit
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent
 import io.lumine.mythic.bukkit.events.MythicMobSpawnEvent
+import io.lumine.mythic.core.config.MythicConfigImpl
 import io.lumine.mythic.core.items.ItemExecutor
-import io.lumine.mythic.core.items.MythicItem
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
@@ -317,11 +315,7 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
     }
 
     override fun getItemStack(id: String): ItemStack? {
-        val maybeItem: Optional<MythicItem> = itemManager.getItem(id)
-        return when {
-            maybeItem.isPresent -> BukkitAdapter.adapt((maybeItem.get()).generateItemStack(1))
-            else -> null
-        }
+        return itemManager.getItemStack(id)
     }
 
     override fun castSkill(entity: Entity, skill: String) {

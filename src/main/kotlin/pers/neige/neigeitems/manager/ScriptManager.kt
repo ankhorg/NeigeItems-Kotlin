@@ -1,12 +1,8 @@
 package pers.neige.neigeitems.manager
 
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
-import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
 import taboolib.common.platform.Schedule
-import java.io.File
 import java.io.FileReader
 import java.util.concurrent.ConcurrentHashMap
 import javax.script.CompiledScript

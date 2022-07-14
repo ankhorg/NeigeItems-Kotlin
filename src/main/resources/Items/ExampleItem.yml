@@ -167,3 +167,16 @@ actionTest:
     - "999"
   sections:
     test: "000"
+customSection:
+  material: STONE
+  lore:
+    - '自定义节点测试: <test-1>'
+    - '自定义节点测试: <test::test_test_test>'
+  sections:
+    test-1:
+      type: test
+      values:
+        - test
+        - test
+        - test
+        - test

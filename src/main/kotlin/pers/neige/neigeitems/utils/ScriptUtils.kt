@@ -1,17 +1,9 @@
 package pers.neige.neigeitems.utils
 
-import org.bukkit.OfflinePlayer
-import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.manager.HookerManager.papiHooker
-import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ScriptManager.cache
 import pers.neige.neigeitems.manager.ScriptManager.realCache
 import pers.neige.neigeitems.manager.ScriptManager.scriptEngine
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import javax.script.Bindings
 import javax.script.Compilable
-import javax.script.ScriptContext
-import javax.script.SimpleScriptContext
 
 object ScriptUtils {
     @JvmStatic

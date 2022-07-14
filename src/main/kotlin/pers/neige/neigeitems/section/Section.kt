@@ -3,13 +3,12 @@ package pers.neige.neigeitems.section
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
-import pers.neige.neigeitems.utils.ConfigUtils.toMap
 import taboolib.common.platform.function.info
 
 class Section(configSection: ConfigurationSection) {
     val id = configSection.name
     val type = configSection.getString("type")
-    val data: HashMap<String, Any> = configSection.toMap()
+    val data: ConfigurationSection = configSection
 
     /**
      * 获取节点解析值

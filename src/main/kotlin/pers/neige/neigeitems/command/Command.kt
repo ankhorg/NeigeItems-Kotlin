@@ -4,9 +4,11 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.manager.ScriptManager
+import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
 import taboolib.common.platform.command.CommandBody
@@ -230,7 +232,7 @@ object Command {
                                         arrayListOf("true", "false")
                                     }
                                     // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机] [物品解析对象]
-                                    dynamic(commit = "player") {
+                                    dynamic(commit = "data") {
                                         suggestion<CommandSender>(uncheck = true) { _, _ ->
                                             Bukkit.getOnlinePlayers().map { it.name }
                                         }
@@ -244,7 +246,6 @@ object Command {
                                             }
                                             execute<CommandSender> { sender, context, argument ->
                                                 dropCommandAsync(sender, context.argument(-8), context.argument(-7), context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument)
-
                                             }
                                         }
                                     }
@@ -254,6 +255,13 @@ object Command {
                     }
                 }
             }
+        }
+    }
+
+    @CommandBody
+    val reload = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            reloadCommand(sender)
         }
     }
 
@@ -379,6 +387,16 @@ object Command {
             // 未知解析对象
         } ?: let {
             sender.sendMessage(config.getString("Messages.invalidParser"))
+        }
+    }
+
+    private fun reloadCommand(sender: CommandSender) {
+        submit(async = true) {
+            ConfigManager.reload()
+            ItemManager.reload()
+            ScriptManager.reload()
+            SectionManager.reload()
+            sender.sendMessage(config.getString("Messages.reloadedMessage"))
         }
     }
 }
