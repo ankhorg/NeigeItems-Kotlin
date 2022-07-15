@@ -4,9 +4,12 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.manager.ItemManager.saveItem
 import pers.neige.neigeitems.manager.ScriptManager
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
@@ -18,7 +21,11 @@ import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.common.util.sync
 import taboolib.expansion.createHelper
+import taboolib.platform.BukkitPlugin
 import taboolib.platform.util.giveItem
+import java.io.File
+import java.util.*
+import java.util.concurrent.Callable
 
 @CommandHeader(name = "NeigeItems", aliases = ["ni"])
 object Command {
@@ -259,6 +266,29 @@ object Command {
     }
 
     @CommandBody
+    // ni save [物品ID] (保存路径) > 将手中物品以对应ID保存至对应路径
+    val save = subCommand {
+        // ni save [物品ID]
+        dynamic(commit = "id") {
+            suggestion<Player>(uncheck = true) { _, _ ->
+                arrayListOf("id")
+            }
+            execute<Player> { sender, _, argument ->
+                saveItem(sender.inventory.itemInMainHand, argument, "$argument.yml", false)
+            }
+            // ni save [物品ID] (保存路径)
+            dynamic(commit = "path") {
+                suggestion<Player>(uncheck = true) { _, _ ->
+                    ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
+                }
+                execute<Player> { sender, context, argument ->
+                    saveItem(sender.inventory.itemInMainHand, context.argument(-1), argument, false)
+                }
+            }
+        }
+    }
+
+    @CommandBody
     val reload = subCommand {
         execute<CommandSender> { sender, _, _ ->
             reloadCommand(sender)
@@ -286,33 +316,37 @@ object Command {
     private fun giveCommand(sender: CommandSender, player: Player?, id: String, amount: Int?, random: String?, data: String?) {
         player?.let {
             when (random) {
-                null, "true", "1" -> {
+                "false", "0" -> {
                     // 获取数量
                     amount?.let {
                         // 给物品
-                        repeat(amount.coerceAtLeast(1)) {
-                            ItemManager.getItemStack(id, player, data)?.let { itemStack ->
-                                sync { player.giveItem(itemStack) }
-                                // 未知物品ID
-                            } ?: let {
-                                sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
-                                return@repeat
-                            }
+                        ItemManager.getItemStack(id, player, data)?.let { itemStack ->
+                            bukkitScheduler.callSyncMethod(plugin, Callable {
+                                player.giveItems(itemStack, amount.coerceAtLeast(1))
+                            })
+                            // 未知物品ID
+                        } ?: let {
+                            sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
                         }
                         // 无效数字
                     } ?: let {
                         sender.sendMessage(config.getString("Messages.invalidAmount"))
                     }
                 }
-                "false", "0" -> {
+                else -> {
                     // 获取数量
                     amount?.let {
                         // 给物品
-                        ItemManager.getItemStack(id, player, data)?.let { itemStack ->
-                            sync { player.giveItems(itemStack, amount.coerceAtLeast(1)) }
-                            // 未知物品ID
-                        } ?: let {
-                            sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+                        repeat(amount.coerceAtLeast(1)) {
+                            ItemManager.getItemStack(id, player, data)?.let { itemStack ->
+                                bukkitScheduler.callSyncMethod(plugin, Callable {
+                                    player.giveItem(itemStack)
+                                })
+                                // 未知物品ID
+                            } ?: let {
+                                sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+                                return@repeat
+                            }
                         }
                         // 无效数字
                     } ?: let {
@@ -350,33 +384,37 @@ object Command {
     private fun dropCommand(sender: CommandSender, id: String, amount: Int?, location: Location?, random: String, parser: Player?, data: String?) {
         parser?.let {
             when (random) {
-                "true", "1" -> {
+                "false", "0" -> {
                     // 获取数量
                     amount?.let {
                         // 掉物品
-                        repeat(amount.coerceAtLeast(1)) {
-                            ItemManager.getItemStack(id, parser, data)?.let { itemStack ->
-                                sync { location?.dropItems(itemStack) }
-                                // 未知物品ID
-                            } ?: let {
-                                sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
-                                return@repeat
-                            }
+                        ItemManager.getItemStack(id, parser, data)?.let { itemStack ->
+                            bukkitScheduler.callSyncMethod(plugin, Callable {
+                                location?.dropItems(itemStack, amount.coerceAtLeast(1))
+                            })
+                            // 未知物品ID
+                        } ?: let {
+                            sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
                         }
                         // 无效数字
                     } ?: let {
                         sender.sendMessage(config.getString("Messages.invalidAmount"))
                     }
                 }
-                "false", "0" -> {
+                else -> {
                     // 获取数量
                     amount?.let {
                         // 掉物品
-                        ItemManager.getItemStack(id, parser, data)?.let { itemStack ->
-                            sync { location?.dropItems(itemStack, amount.coerceAtLeast(1)) }
-                            // 未知物品ID
-                        } ?: let {
-                            sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+                        repeat(amount.coerceAtLeast(1)) {
+                            ItemManager.getItemStack(id, parser, data)?.let { itemStack ->
+                                bukkitScheduler.callSyncMethod(plugin, Callable {
+                                    location?.dropItems(itemStack)
+                                })
+                                // 未知物品ID
+                            } ?: let {
+                                sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+                                return@repeat
+                            }
                         }
                         // 无效数字
                     } ?: let {

@@ -3,6 +3,7 @@ package pers.neige.neigeitems.manager
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
+import pers.neige.neigeitems.NeigeItems.plugin
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
@@ -15,20 +16,20 @@ import java.io.InputStreamReader
 object ConfigManager {
     // 默认Config
     private val originConfig: FileConfiguration =
-        BukkitPlugin.getInstance().getResource("config.yml")?.let { YamlConfiguration.loadConfiguration(InputStreamReader(it, "UTF-8")) } ?: YamlConfiguration()
+        plugin.getResource("config.yml")?.let { YamlConfiguration.loadConfiguration(InputStreamReader(it, "UTF-8")) } ?: YamlConfiguration()
 
-    val config get() = BukkitPlugin.getInstance().config
+    val config get() = plugin.config
 
     // 加载默认配置文件
     @Awake(LifeCycle.INIT)
     fun saveResource() {
-        BukkitPlugin.getInstance().saveResource("CustomSections${File.separator}CustomSection.js", false)
-        BukkitPlugin.getInstance().saveResource("GlobalSections${File.separator}ExampleSection.yml", false)
-        BukkitPlugin.getInstance().saveResource("ItemActions${File.separator}ExampleAction.yml", false)
-        BukkitPlugin.getInstance().saveResource("Items${File.separator}ExampleItem.yml", false)
-        BukkitPlugin.getInstance().saveResource("Scripts${File.separator}ExampleScript.js", false)
-        BukkitPlugin.getInstance().saveDefaultConfig()
-        val metrics = Metrics(15750, BukkitPlugin.getInstance().description.version, Platform.BUKKIT)
+        plugin.saveResource("CustomSections${File.separator}CustomSection.js", false)
+        plugin.saveResource("GlobalSections${File.separator}ExampleSection.yml", false)
+        plugin.saveResource("ItemActions${File.separator}ExampleAction.yml", false)
+        plugin.saveResource("Items${File.separator}ExampleItem.yml", false)
+        plugin.saveResource("Scripts${File.separator}ExampleScript.js", false)
+        plugin.saveDefaultConfig()
+        val metrics = Metrics(15750, plugin.description.version, Platform.BUKKIT)
         metrics.addCustomChart(SingleLineChart("items") {
             ItemManager.itemIds.size
         })
@@ -47,24 +48,24 @@ object ConfigManager {
     @Awake(LifeCycle.LOAD)
     fun loadConfig() {
         originConfig.getKeys(true).forEach { key ->
-            if (!BukkitPlugin.getInstance().config.contains(key)) {
-                BukkitPlugin.getInstance().config.set(key, ConfigManager.originConfig.get(key))
+            if (!plugin.config.contains(key)) {
+                plugin.config.set(key, ConfigManager.originConfig.get(key))
             } else {
                 val completeValue = ConfigManager.originConfig.get(key)
-                val value = BukkitPlugin.getInstance().config.get(key)
+                val value = plugin.config.get(key)
                 if (completeValue is ConfigurationSection && value !is ConfigurationSection) {
-                    BukkitPlugin.getInstance().config.set(key, completeValue)
+                    plugin.config.set(key, completeValue)
                 } else {
-                    BukkitPlugin.getInstance().config.set(key, value)
+                    plugin.config.set(key, value)
                 }
             }
         }
-        BukkitPlugin.getInstance().saveConfig()
+        plugin.saveConfig()
     }
 
     // 重载配置管理器
     fun reload() {
-        BukkitPlugin.getInstance().reloadConfig()
+        plugin.reloadConfig()
         loadConfig()
     }
 }

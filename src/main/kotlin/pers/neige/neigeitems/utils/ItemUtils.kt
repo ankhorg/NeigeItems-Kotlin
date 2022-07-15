@@ -2,6 +2,7 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.Location
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.utils.ItemUtils.toItemTag
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.ItemTagList
@@ -10,6 +11,8 @@ import kotlin.math.floor
 
 
 object ItemUtils {
+    private val invalidNBT by lazy { arrayListOf("Enchantments","VARIABLES_DATA","ench","Damage","HideFlags","Unbreakable", "CustomModelData") }
+
     // HashMap 转 ItemTag
     @JvmStatic
     fun HashMap<*, *>.toItemTag(): ItemTag {
@@ -48,28 +51,22 @@ object ItemUtils {
     fun String.castToItemTagData(): ItemTagData {
         return when {
             this.startsWith("(Byte) ") -> {
-                this.substring(7, this.length).toByteOrNull()?.let { ItemTagData(it) }
-                ItemTagData(this)
+                this.substring(7, this.length).toByteOrNull()?.let { ItemTagData(it) } ?: ItemTagData(this)
             }
             this.startsWith("(Short) ") -> {
-                this.substring(8, this.length).toShortOrNull()?.let { ItemTagData(it) }
-                ItemTagData(this)
+                this.substring(8, this.length).toShortOrNull()?.let { ItemTagData(it) } ?: ItemTagData(this)
             }
             this.startsWith("(Int) ") -> {
-                this.substring(6, this.length).toIntOrNull()?.let { ItemTagData(it) }
-                ItemTagData(this)
+                this.substring(6, this.length).toIntOrNull()?.let { ItemTagData(it) } ?: ItemTagData(this)
             }
             this.startsWith("(Long) ") -> {
-                this.substring(7, this.length).toLongOrNull()?.let { ItemTagData(it) }
-                ItemTagData(this)
+                this.substring(7, this.length).toLongOrNull()?.let { ItemTagData(it) } ?: ItemTagData(this)
             }
             this.startsWith("(Float) ") -> {
-                this.substring(8, this.length).toFloatOrNull()?.let { ItemTagData(it) }
-                ItemTagData(this)
+                this.substring(8, this.length).toFloatOrNull()?.let { ItemTagData(it) } ?: ItemTagData(this)
             }
             this.startsWith("(Double) ") -> {
-                this.substring(9, this.length).toDoubleOrNull()?.let { ItemTagData(it) }
-                ItemTagData(this)
+                this.substring(9, this.length).toDoubleOrNull()?.let { ItemTagData(it) } ?: ItemTagData(this)
             }
             else -> ItemTagData(this)
         }
@@ -105,6 +102,37 @@ object ItemUtils {
             }
             is HashMap<*, *> -> ItemTagData(this.toItemTag())
             else -> ItemTagData("nm的你塞了个什么东西进来，我给你一拖鞋")
+        }
+    }
+
+    // ItemTag 转 HashMap
+    @JvmStatic
+    fun ItemTag.toMap(): HashMap<String, Any> {
+        val hashMap = HashMap<String, Any>()
+        for ((key, value) in this) {
+            if (!invalidNBT.contains(key)) {
+                hashMap[key] = value.parseValue()
+            }
+        }
+        return hashMap
+    }
+
+    // ItemTagData 解析
+    @JvmStatic
+    fun ItemTagData.parseValue(): Any {
+        return when (this.type) {
+            ItemTagType.BYTE -> "(Byte) ${this.asString()}"
+            ItemTagType.SHORT ->  "(Short) ${this.asString()}"
+            ItemTagType.INT ->  "(Int) ${this.asString()}"
+            ItemTagType.LONG ->  "(Long) ${this.asString()}"
+            ItemTagType.FLOAT ->  "(Float) ${this.asString()}"
+            ItemTagType.DOUBLE ->  "(Double) ${this.asString()}"
+            ItemTagType.STRING ->  this.asString()
+            ItemTagType.BYTE_ARRAY -> this.asByteArray().toList().map { "(Byte) $it" }
+            ItemTagType.INT_ARRAY -> this.asIntArray().toList().map { "(Int) $it" }
+            ItemTagType.COMPOUND -> this.asCompound().toMap()
+            ItemTagType.LIST -> this.asList().map { it.parseValue() }
+            else -> this.asString()
         }
     }
 

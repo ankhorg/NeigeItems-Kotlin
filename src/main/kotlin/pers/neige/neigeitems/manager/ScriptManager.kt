@@ -3,6 +3,7 @@ package pers.neige.neigeitems.manager
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import taboolib.common.platform.Schedule
+import java.io.File
 import java.io.FileReader
 import java.util.concurrent.ConcurrentHashMap
 import javax.script.CompiledScript
@@ -20,7 +21,7 @@ object ScriptManager {
     private fun loadScripts() {
         // 加载全部脚本
         for (file in getAllFiles("Scripts")) {
-            compiledScripts[file.name] = pers.neige.neigeitems.script.CompiledScript(FileReader(file))
+            compiledScripts[file.path.replace("plugins${File.separator}NeigeItems${File.separator}Scripts${File.separator}", "")] = pers.neige.neigeitems.script.CompiledScript(FileReader(file))
         }
     }
 

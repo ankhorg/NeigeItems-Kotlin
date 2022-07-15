@@ -1,5 +1,4 @@
 Main:
-  NeigeItemManagerCommand: ni
   MMItemsPath: MMItems.yml
   Debug: false
 Messages:

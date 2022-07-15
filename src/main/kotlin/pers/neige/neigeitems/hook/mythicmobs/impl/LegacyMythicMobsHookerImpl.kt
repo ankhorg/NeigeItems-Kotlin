@@ -13,6 +13,9 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
+import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.NeigeItems.bukkitScheduler
+import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.hasItem
@@ -261,7 +264,7 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                     val location = entity.location
                     // 开始掉落
                     for ((index, itemStack) in dropItems.withIndex()) {
-                        Bukkit.getScheduler().callSyncMethod(BukkitPlugin.getInstance() , Callable<Item?> {
+                        bukkitScheduler.callSyncMethod(plugin , Callable<Item?> {
                             location.world?.dropItem(location, itemStack)
                         }).get()?.let { item ->
                             val vector = Vector(offsetX, offsetY, 0.0)
@@ -295,7 +298,7 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                     for (itemStack in dropItems) {
                         val location = entity.location
 
-                        Bukkit.getScheduler().callSyncMethod(BukkitPlugin.getInstance(), Callable<Item?> {
+                        bukkitScheduler.callSyncMethod(plugin, Callable<Item?> {
                             location.world?.dropItem(location, itemStack)
                         }).get()?.let { item ->
                             val itemTag = itemStack.getItemTag()

@@ -5,6 +5,7 @@ import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.section.impl.*
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import pers.neige.neigeitems.utils.ConfigUtils.loadConfiguration
+import java.io.File
 import java.io.FileReader
 import java.util.concurrent.ConcurrentHashMap
 
@@ -40,7 +41,7 @@ object SectionManager {
     // 加载全部全局节点
     private fun loadGlobalSections() {
         for (file in getAllFiles("GlobalSections")) {
-            val fileName = file.name
+            val fileName = file.path.replace("plugins${File.separator}NeigeItems${File.separator}GlobalSections${File.separator}", "")
             val config = file.loadConfiguration()
             globalSectionMap[fileName] = config
             for (key in config.getKeys(false)) {

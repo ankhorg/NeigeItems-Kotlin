@@ -31,7 +31,7 @@ import taboolib.module.nms.getItemTag
 import java.util.*
 
 // 物品ID
-class ItemGenerator (itemConfig: ItemConfig) {
+class ItemGenerator (val itemConfig: ItemConfig) {
     // 物品ID
     val id = itemConfig.id
     // 物品所在文件
@@ -120,7 +120,7 @@ class ItemGenerator (itemConfig: ItemConfig) {
         return configSection
     }
 
-    fun getItemStack(player: OfflinePlayer?, data: String?): ItemStack? {
+    fun getItemStack(player: OfflinePlayer? = null, data: String? = null): ItemStack? {
         var configString = this.configString
 
         // 进行一次papi解析
