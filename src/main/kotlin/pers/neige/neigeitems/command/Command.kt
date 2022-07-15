@@ -21,6 +21,7 @@ import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.common.util.sync
 import taboolib.expansion.createHelper
+import taboolib.module.nms.getName
 import taboolib.platform.BukkitPlugin
 import taboolib.platform.util.giveItem
 import java.io.File
@@ -215,7 +216,7 @@ object Command {
                 }
                 // ni drop [物品ID] [数量] [世界名]
                 dynamic(commit = "world") {
-                    suggestion<Player>(uncheck = true) { _, _ ->
+                    suggestion<CommandSender>(uncheck = true) { _, _ ->
                         Bukkit.getWorlds().map { it.name }
                     }
                     // ni drop [物品ID] [数量] [世界名] [X坐标]
@@ -274,7 +275,21 @@ object Command {
                 arrayListOf("id")
             }
             execute<Player> { sender, _, argument ->
-                saveItem(sender.inventory.itemInMainHand, argument, "$argument.yml", false)
+                submit(async = true) {
+                    when (saveItem(sender.inventory.itemInMainHand, argument, "$argument.yml", false)) {
+                        // 保存成功
+                        1 -> {
+                            sender.sendMessage(config.getString("Messages.successSaveInfo")
+                                ?.replace("{name}", sender.inventory.itemInMainHand.getName())
+                                ?.replace("{itemID}", argument)
+                                ?.replace("{path}", "$argument.yml"))
+                        }
+                        // 已存在对应ID物品
+                        0 -> sender.sendMessage(config.getString("Messages.existedKey")?.replace("{itemID}", argument))
+                        // 你保存了个空气
+                        else -> sender.sendMessage(config.getString("Messages.airItem"))
+                    }
+                }
             }
             // ni save [物品ID] (保存路径)
             dynamic(commit = "path") {
@@ -282,8 +297,83 @@ object Command {
                     ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
                 }
                 execute<Player> { sender, context, argument ->
-                    saveItem(sender.inventory.itemInMainHand, context.argument(-1), argument, false)
+                    submit(async = true) {
+                        when (saveItem(sender.inventory.itemInMainHand, context.argument(-1), argument, false)) {
+                            // 保存成功
+                            1 -> {
+                                sender.sendMessage(config.getString("Messages.successSaveInfo")
+                                    ?.replace("{name}", sender.inventory.itemInMainHand.getName())
+                                    ?.replace("{itemID}", context.argument(-1))
+                                    ?.replace("{path}", argument))
+                            }
+                            // 已存在对应ID物品
+                            0 -> sender.sendMessage(config.getString("Messages.existedKey")?.replace("{itemID}", context.argument(-1)))
+                            // 你保存了个空气
+                            else -> sender.sendMessage(config.getString("Messages.airItem"))
+                        }
+                    }
                 }
+            }
+        }
+    }
+
+    @CommandBody
+    // ni cover [物品ID] (保存路径) > 将手中物品以对应ID覆盖至对应路径
+    val cover = subCommand {
+        // ni cover [物品ID]
+        dynamic(commit = "id") {
+            suggestion<Player>(uncheck = true) { _, _ ->
+                arrayListOf("id")
+            }
+            execute<Player> { sender, _, argument ->
+                submit(async = true) {
+                    when (saveItem(sender.inventory.itemInMainHand, argument, "$argument.yml", true)) {
+                        // 你保存了个空气
+                        2 -> sender.sendMessage(config.getString("Messages.airItem"))
+                        // 保存成功
+                        else -> {
+                            sender.sendMessage(config.getString("Messages.successSaveInfo")
+                                ?.replace("{name}", sender.inventory.itemInMainHand.getName())
+                                ?.replace("{itemID}", argument)
+                                ?.replace("{path}", "$argument.yml"))
+                        }
+                    }
+                }
+            }
+            // ni cover [物品ID] (保存路径)
+            dynamic(commit = "path") {
+                suggestion<Player>(uncheck = true) { _, _ ->
+                    ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
+                }
+                execute<Player> { sender, context, argument ->
+                    submit(async = true) {
+                        when (saveItem(sender.inventory.itemInMainHand, context.argument(-1), argument, true)) {
+                            // 你保存了个空气
+                            2 -> sender.sendMessage(config.getString("Messages.airItem"))
+                            // 保存成功
+                            else -> {
+                                sender.sendMessage(config.getString("Messages.successSaveInfo")
+                                    ?.replace("{name}", sender.inventory.itemInMainHand.getName())
+                                    ?.replace("{itemID}", context.argument(-1))
+                                    ?.replace("{path}", argument))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @CommandBody
+    val mm = subCommand {
+        dynamic(commit = "load") {
+            execute<CommandSender> { _, _, _ ->
+                println(1)
+            }
+        }
+        dynamic(commit = "cover") {
+            execute<CommandSender> { _, _, _ ->
+                println(2)
             }
         }
     }
@@ -295,13 +385,43 @@ object Command {
         }
     }
 
-    private fun giveCommandAsync(sender: CommandSender, player: Player?, id: String, amount: String? = null, random: String? = null, data: String? = null) {
+    private fun giveCommand(
+        // 行为发起人, 用于接收反馈信息
+        sender: CommandSender,
+        // 物品接收者
+        player: Player?,
+        // 待给予物品ID
+        id: String,
+        // 给予数量
+        amount: String?,
+        // 是否反复随机
+        random: String?,
+        // 指向数据
+        data: String?
+    ) {
+        giveCommand(sender, player, id, amount?.toIntOrNull(), random, data)
+    }
+
+    private fun giveCommandAsync(
+        sender: CommandSender,
+        player: Player?,
+        id: String,
+        amount: String? = null,
+        random: String? = null,
+        data: String? = null
+    ) {
         submit(async = true) {
             giveCommand(sender, player, id, amount, random, data)
         }
     }
 
-    private fun giveAllCommandAsync(sender: CommandSender, id: String, amount: String? = null, random: String? = null, data: String? = null) {
+    private fun giveAllCommandAsync(
+        sender: CommandSender,
+        id: String,
+        amount: String? = null,
+        random: String? = null,
+        data: String? = null
+    ) {
         submit(async = true) {
             Bukkit.getOnlinePlayers().forEach { player ->
                 giveCommand(sender, player, id, amount, random, data)
@@ -309,11 +429,14 @@ object Command {
         }
     }
 
-    private fun giveCommand(sender: CommandSender, player: Player?, id: String, amount: String?, random: String?, data: String?) {
-        giveCommand(sender, player, id, amount?.toIntOrNull(), random, data)
-    }
-
-    private fun giveCommand(sender: CommandSender, player: Player?, id: String, amount: Int?, random: String?, data: String?) {
+    private fun giveCommand(
+        sender: CommandSender,
+        player: Player?,
+        id: String,
+        amount: Int?,
+        random: String?,
+        data: String?
+    ) {
         player?.let {
             when (random) {
                 "false", "0" -> {
@@ -324,6 +447,13 @@ object Command {
                             bukkitScheduler.callSyncMethod(plugin, Callable {
                                 player.giveItems(itemStack, amount.coerceAtLeast(1))
                             })
+                            sender.sendMessage(config.getString("Messages.successInfo")
+                                ?.replace("{player}", player.name)
+                                ?.replace("{amount}", amount.toString())
+                                ?.replace("{name}", itemStack.getName()))
+                            player.sendMessage(config.getString("Messages.givenInfo")
+                                ?.replace("{amount}", amount.toString())
+                                ?.replace("{name}", itemStack.getName()))
                             // 未知物品ID
                         } ?: let {
                             sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
@@ -336,17 +466,28 @@ object Command {
                 else -> {
                     // 获取数量
                     amount?.let {
+                        val dropData = HashMap<String, Int>()
                         // 给物品
                         repeat(amount.coerceAtLeast(1)) {
                             ItemManager.getItemStack(id, player, data)?.let { itemStack ->
                                 bukkitScheduler.callSyncMethod(plugin, Callable {
                                     player.giveItem(itemStack)
                                 })
+                                dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
                                 // 未知物品ID
                             } ?: let {
                                 sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
                                 return@repeat
                             }
+                        }
+                        for ((name, amt) in dropData) {
+                            sender.sendMessage(config.getString("Messages.successInfo")
+                                ?.replace("{player}", player.name)
+                                ?.replace("{amount}", amt.toString())
+                                ?.replace("{name}", name))
+                            player.sendMessage(config.getString("Messages.givenInfo")
+                                ?.replace("{amount}", amt.toString())
+                                ?.replace("{name}", name))
                         }
                         // 无效数字
                     } ?: let {
@@ -360,13 +501,28 @@ object Command {
         }
     }
 
-    private fun dropCommandAsync(sender: CommandSender, id: String, amount: String, worldName: String, xString: String, yString: String, zString: String, random: String, parser: String, data: String? = null) {
-        submit(async = true) {
-            dropCommand(sender, id, amount, worldName, xString, yString, zString, random, parser, data)
-        }
-    }
-
-    private fun dropCommand(sender: CommandSender, id: String, amount: String, worldName: String, xString: String, yString: String, zString: String, random: String, parser: String, data: String?) {
+    private fun dropCommand(
+        // 行为发起人, 用于接收反馈信息
+        sender: CommandSender,
+        // 待掉落物品ID
+        id: String,
+        // 掉落数量
+        amount: String,
+        // 掉落世界名
+        worldName: String,
+        // 掉落世界x坐标
+        xString: String,
+        // 掉落世界y坐标
+        yString: String,
+        // 掉落世界z坐标
+        zString: String,
+        // 是否反复随机
+        random: String,
+        // 物品解析对象, 用于生成物品
+        parser: String,
+        // 指向数据
+        data: String?
+    ) {
         Bukkit.getWorld(worldName)?.let { world ->
             val x = xString.toDoubleOrNull()
             val y = yString.toDoubleOrNull()
@@ -381,7 +537,32 @@ object Command {
         }
     }
 
-    private fun dropCommand(sender: CommandSender, id: String, amount: Int?, location: Location?, random: String, parser: Player?, data: String?) {
+    private fun dropCommandAsync(
+        sender: CommandSender,
+        id: String,
+        amount: String,
+        worldName: String,
+        xString: String,
+        yString: String,
+        zString: String,
+        random: String,
+        parser: String,
+        data: String? = null
+    ) {
+        submit(async = true) {
+            dropCommand(sender, id, amount, worldName, xString, yString, zString, random, parser, data)
+        }
+    }
+
+    private fun dropCommand(
+        sender: CommandSender,
+        id: String,
+        amount: Int?,
+        location: Location?,
+        random: String,
+        parser: Player?,
+        data: String?
+    ) {
         parser?.let {
             when (random) {
                 "false", "0" -> {
@@ -392,6 +573,13 @@ object Command {
                             bukkitScheduler.callSyncMethod(plugin, Callable {
                                 location?.dropItems(itemStack, amount.coerceAtLeast(1))
                             })
+                            sender.sendMessage(config.getString("Messages.dropSuccessInfo")
+                                ?.replace("{world}", location?.world?.name ?: "")
+                                ?.replace("{x}", location?.x.toString())
+                                ?.replace("{y}", location?.y.toString())
+                                ?.replace("{z}", location?.z.toString())
+                                ?.replace("{amount}", amount.toString())
+                                ?.replace("{name}", itemStack.getName()))
                             // 未知物品ID
                         } ?: let {
                             sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
@@ -404,17 +592,28 @@ object Command {
                 else -> {
                     // 获取数量
                     amount?.let {
+                        val dropData = HashMap<String, Int>()
                         // 掉物品
                         repeat(amount.coerceAtLeast(1)) {
                             ItemManager.getItemStack(id, parser, data)?.let { itemStack ->
                                 bukkitScheduler.callSyncMethod(plugin, Callable {
                                     location?.dropItems(itemStack)
                                 })
+                                dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
                                 // 未知物品ID
                             } ?: let {
                                 sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
                                 return@repeat
                             }
+                        }
+                        for((name, amt) in dropData) {
+                            sender.sendMessage(config.getString("Messages.dropSuccessInfo")
+                                ?.replace("{world}", location?.world?.name ?: "")
+                                ?.replace("{x}", location?.x.toString())
+                                ?.replace("{y}", location?.y.toString())
+                                ?.replace("{z}", location?.z.toString())
+                                ?.replace("{amount}", amt.toString())
+                                ?.replace("{name}", name))
                         }
                         // 无效数字
                     } ?: let {

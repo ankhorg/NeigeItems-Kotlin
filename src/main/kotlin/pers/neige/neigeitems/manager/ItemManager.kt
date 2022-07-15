@@ -71,7 +71,15 @@ object ItemManager : ItemConfigManager() {
         return items.containsKey(id)
     }
 
-    fun saveItem(itemStack: ItemStack, id: String, path: String = "$id.yml", cover: Boolean) {
+    /**
+     * 保存物品
+     * @param itemStack 保存物品
+     * @param id 物品ID
+     * @param path 保存路径
+     * @param cover 是否覆盖
+     * @return 1 保存成功; 0 ID冲突; 2 你保存了个空气
+     */
+    fun saveItem(itemStack: ItemStack, id: String, path: String = "$id.yml", cover: Boolean): Int {
         // 检测是否为空气
         if (itemStack.type != Material.AIR) {
             // 获取路径文件
@@ -137,7 +145,11 @@ object ItemManager : ItemConfigManager() {
                 config.save(file)
                 // 物品保存好了, 信息加进ItemManager里
                 addItem(ItemGenerator(ItemConfig(id, file)))
+                if (cover) return 0
+                return 1
             }
+            return 0
         }
+        return 2
     }
 }

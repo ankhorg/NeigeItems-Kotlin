@@ -18,7 +18,11 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
-    fun String.parseSection(cache: HashMap<String, String>? = null, player: OfflinePlayer? = null, sections: ConfigurationSection? = null): String {
+    fun String.parseSection(
+        cache: HashMap<String, String>? = null,
+        player: OfflinePlayer? = null,
+        sections: ConfigurationSection? = null
+    ): String {
         // 定位最外层 <> 包裹的字符串
         val stack = LinkedList<Int>()
         val start = ArrayList<Int>()
@@ -82,7 +86,11 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
-    fun String.getSection(cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String {
+    fun String.getSection(
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?
+    ): String {
         when (val index = this.indexOf("::")) {
             // 私有节点调用
             -1 -> {

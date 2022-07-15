@@ -9,7 +9,12 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 object NumberParser : SectionParser() {
     override val id: String = "number"
 
-    override fun onRequest(data: ConfigurationSection, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String? {
+    override fun onRequest(
+        data: ConfigurationSection,
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?
+    ): String? {
         // 如果配置了数字范围
         try {
             // 获取大小范围
@@ -27,7 +32,12 @@ object NumberParser : SectionParser() {
         return null
     }
 
-    override fun onRequest(args: List<String>, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String {
+    override fun onRequest(
+        args: List<String>,
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?
+    ): String {
         val data = YamlConfiguration()
         val size = args.size
         if (size > 0) data.set("min", args[0])

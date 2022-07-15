@@ -9,7 +9,12 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 object WeightParser : SectionParser() {
     override val id: String = "weight"
 
-    override fun onRequest(data: ConfigurationSection, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String? {
+    override fun onRequest(
+        data: ConfigurationSection,
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?, sections:
+        ConfigurationSection?
+    ): String? {
         // 加载字符串组
         val strings = ArrayList<String>()
         data.getStringList("values").forEach {
@@ -25,10 +30,18 @@ object WeightParser : SectionParser() {
                 }
             }
         }
-        return strings[(0 until strings.size).random()].parseSection(cache, player, sections)
+        return when {
+            strings.isEmpty() -> null
+            else -> strings[(0 until strings.size).random()].parseSection(cache, player, sections)
+        }
     }
 
-    override fun onRequest(args: List<String>, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String {
+    override fun onRequest(
+        args: List<String>,
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?, sections:
+        ConfigurationSection?
+    ): String {
         val data = YamlConfiguration()
         data.set("values", args)
         return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"

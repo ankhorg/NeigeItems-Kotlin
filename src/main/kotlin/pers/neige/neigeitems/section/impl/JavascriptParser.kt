@@ -12,7 +12,12 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 object JavascriptParser : SectionParser() {
     override val id: String = "js"
 
-    override fun onRequest(data: ConfigurationSection, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String? {
+    override fun onRequest(
+        data: ConfigurationSection,
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?
+    ): String? {
         data.getString("path")?.let {
             val array = it.split("::")
             val path = array[0]
@@ -30,7 +35,12 @@ object JavascriptParser : SectionParser() {
         return null
     }
 
-    override fun onRequest(args: List<String>, cache: HashMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?): String {
+    override fun onRequest(
+        args: List<String>,
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?
+    ): String {
         val data = YamlConfiguration()
         if (args.isNotEmpty()) data.set("path", args[0])
         args.drop(1)
