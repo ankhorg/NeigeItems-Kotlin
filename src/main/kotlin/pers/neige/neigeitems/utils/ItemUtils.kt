@@ -2,7 +2,6 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.Location
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.utils.ItemUtils.toItemTag
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.ItemTagList

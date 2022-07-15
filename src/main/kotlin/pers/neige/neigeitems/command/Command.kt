@@ -4,34 +4,39 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import pers.neige.neigeitems.NeigeItems.plugin
+import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
+import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ConfigManager.config
+import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemManager.saveItem
 import pers.neige.neigeitems.manager.ScriptManager
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
+import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.CommandBody
 import taboolib.common.platform.command.CommandHeader
 import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.common.util.sync
 import taboolib.expansion.createHelper
 import taboolib.module.nms.getName
-import taboolib.platform.BukkitPlugin
 import taboolib.platform.util.giveItem
 import java.io.File
-import java.util.*
 import java.util.concurrent.Callable
 
 @CommandHeader(name = "NeigeItems", aliases = ["ni"])
 object Command {
     @CommandBody
     val main = mainCommand {
+        execute<Player> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
         createHelper()
         incorrectSender { sender, _ ->
             config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
@@ -39,9 +44,7 @@ object Command {
         incorrectCommand { sender, _, index, _ ->
             when (index) {
                 1 -> {
-                    config.getStringList("Messages.helpMessages").forEach {
-                        sender.sendMessage(it)
-                    }
+                    help(sender)
                 }
             }
         }
@@ -76,6 +79,11 @@ object Command {
     @CommandBody
     // ni get [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID获取NI物品
     val get = subCommand {
+        execute<Player> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
         // ni get [物品ID]
         dynamic(commit = "item") {
             suggestion<Player>(uncheck = true) { _, _ ->
@@ -117,9 +125,19 @@ object Command {
     @CommandBody
     // ni give [玩家ID] [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予NI物品
     val give = subCommand {
+        execute<Player> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
         dynamic(commit = "player") {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 Bukkit.getOnlinePlayers().map { it.name }
+            }
+            execute<Player> { sender, _, _ ->
+                submit(async = true) {
+                    help(sender)
+                }
             }
             // ni give [玩家ID] [物品ID]
             dynamic(commit = "item") {
@@ -163,6 +181,11 @@ object Command {
     @CommandBody
     // ni giveAll [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予所有人NI物品
     val giveAll = subCommand {
+        execute<Player> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
         // ni giveAll [物品ID]
         dynamic(commit = "item") {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
@@ -209,35 +232,70 @@ object Command {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 ItemManager.items.keys.toList()
             }
+            execute<Player> { sender, _, _ ->
+                submit(async = true) {
+                    help(sender)
+                }
+            }
             // ni drop [物品ID] [数量]
             dynamic(commit = "amount") {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                     arrayListOf("amount")
+                }
+                execute<Player> { sender, _, _ ->
+                    submit(async = true) {
+                        help(sender)
+                    }
                 }
                 // ni drop [物品ID] [数量] [世界名]
                 dynamic(commit = "world") {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                         Bukkit.getWorlds().map { it.name }
                     }
+                    execute<Player> { sender, _, _ ->
+                        submit(async = true) {
+                            help(sender)
+                        }
+                    }
                     // ni drop [物品ID] [数量] [世界名] [X坐标]
                     dynamic(commit = "x") {
                         suggestion<CommandSender>(uncheck = true) { _, _ ->
                             arrayListOf("x")
+                        }
+                        execute<Player> { sender, _, _ ->
+                            submit(async = true) {
+                                help(sender)
+                            }
                         }
                         // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标]
                         dynamic(commit = "y") {
                             suggestion<CommandSender>(uncheck = true) { _, _ ->
                                 arrayListOf("y")
                             }
+                            execute<Player> { sender, _, _ ->
+                                submit(async = true) {
+                                    help(sender)
+                                }
+                            }
                             // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标]
                             dynamic(commit = "z") {
                                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                                     arrayListOf("z")
                                 }
+                                execute<Player> { sender, _, _ ->
+                                    submit(async = true) {
+                                        help(sender)
+                                    }
+                                }
                                 // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机]
                                 dynamic(commit = "random") {
                                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                                         arrayListOf("true", "false")
+                                    }
+                                    execute<Player> { sender, _, _ ->
+                                        submit(async = true) {
+                                            help(sender)
+                                        }
                                     }
                                     // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机] [物品解析对象]
                                     dynamic(commit = "data") {
@@ -269,6 +327,11 @@ object Command {
     @CommandBody
     // ni save [物品ID] (保存路径) > 将手中物品以对应ID保存至对应路径
     val save = subCommand {
+        execute<Player> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
         // ni save [物品ID]
         dynamic(commit = "id") {
             suggestion<Player>(uncheck = true) { _, _ ->
@@ -320,6 +383,11 @@ object Command {
     @CommandBody
     // ni cover [物品ID] (保存路径) > 将手中物品以对应ID覆盖至对应路径
     val cover = subCommand {
+        execute<Player> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
         // ni cover [物品ID]
         dynamic(commit = "id") {
             suggestion<Player>(uncheck = true) { _, _ ->
@@ -366,14 +434,236 @@ object Command {
 
     @CommandBody
     val mm = subCommand {
-        dynamic(commit = "load") {
-            execute<CommandSender> { _, _, _ ->
-                println(1)
+        dynamic(commit = "action") {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                arrayListOf("load", "cover", "loadAll", "get", "give", "giveAll")
             }
-        }
-        dynamic(commit = "cover") {
-            execute<CommandSender> { _, _, _ ->
-                println(2)
+            execute<CommandSender> { sender, _, argument ->
+                submit(async = true) {
+                    mythicMobsHooker?.let {
+                        when (argument) {
+                            // ni mm loadAll
+                            "loadAll" -> {
+                                mythicMobsHooker.getItemIds().forEach { id ->
+                                    mythicMobsHooker.getItemStackSync(id)?.let { itemStack ->
+                                        when (saveItem(itemStack, id, config.getString("Main.MMItemsPath") ?: "MMItems.yml", false)) {
+                                            // 保存成功
+                                            1 -> {
+                                                sender.sendMessage(config.getString("Messages.successSaveInfo")
+                                                    ?.replace("{name}", itemStack.getName())
+                                                    ?.replace("{itemID}", id)
+                                                    ?.replace("{path}", config.getString("Main.MMItemsPath") ?: "MMItems.yml"))
+                                            }
+                                            // 已存在对应ID物品
+                                            0 -> sender.sendMessage(config.getString("Messages.existedKey")?.replace("{itemID}", id))
+                                        }
+                                    }
+                                }
+                            }
+                            else -> help(sender)
+                        }
+                    } ?: sender.sendMessage(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
+                }
+            }
+            dynamic(commit = "action") {
+                suggestion<CommandSender>(uncheck = true) { _, context ->
+                    mythicMobsHooker?.let {
+                        when (context.argument(-1)) {
+                            // ni mm load [物品ID]
+                            "load" -> mythicMobsHooker.getItemIds()
+                            // ni mm cover [物品ID]
+                            "cover" -> mythicMobsHooker.getItemIds()
+                            // ni mm loadAll (保存路径)
+                            "loadAll" -> ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
+                            // ni mm get [物品ID]
+                            "get" -> mythicMobsHooker.getItemIds()
+                            // ni mm give [玩家ID]
+                            "give" -> Bukkit.getOnlinePlayers().map { it.name }
+                            // ni mm giveAll [物品ID]
+                            "giveAll" -> mythicMobsHooker.getItemIds()
+                            else -> arrayListOf()
+                        }
+                    } ?: arrayListOf()
+                }
+                execute<CommandSender> { sender, context, argument ->
+                    submit(async = true) {
+                        mythicMobsHooker?.let {
+                            when (context.argument(-1)) {
+                                // ni mm load [物品ID]
+                                "load" -> {
+                                    mythicMobsHooker.getItemStackSync(argument)?.let { itemStack ->
+                                        when (saveItem(itemStack, argument, "$argument.yml", false)) {
+                                            // 保存成功
+                                            1 -> {
+                                                sender.sendMessage(config.getString("Messages.successSaveInfo")
+                                                    ?.replace("{name}", itemStack.getName())
+                                                    ?.replace("{itemID}", argument)
+                                                    ?.replace("{path}", "$argument.yml"))
+                                            }
+                                            // 已存在对应ID物品
+                                            0 -> sender.sendMessage(config.getString("Messages.existedKey")?.replace("{itemID}", argument))
+                                        }
+                                        // 未知物品
+                                    } ?: let {
+                                        sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", argument))
+                                    }
+                                }
+                                // ni mm cover [物品ID]
+                                "cover" -> {
+                                    mythicMobsHooker.getItemStackSync(argument)?.let { itemStack ->
+                                        if (saveItem(itemStack, argument, "$argument.yml", true) != 2) {
+                                            // 保存成功
+                                            sender.sendMessage(config.getString("Messages.successSaveInfo")
+                                                ?.replace("{name}", itemStack.getName())
+                                                ?.replace("{itemID}", argument)
+                                                ?.replace("{path}", "$argument.yml"))
+                                        }
+                                        // 未知物品
+                                    } ?: let {
+                                        sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", argument))
+                                    }
+                                }
+                                // ni mm loadAll (保存路径)
+                                "loadAll" -> {
+                                    mythicMobsHooker.getItemIds().forEach { id ->
+                                        mythicMobsHooker.getItemStackSync(id)?.let { itemStack ->
+                                            when (saveItem(itemStack, id, argument, false)) {
+                                                // 保存成功
+                                                1 -> {
+                                                    sender.sendMessage(config.getString("Messages.successSaveInfo")
+                                                        ?.replace("{name}", itemStack.getName())
+                                                        ?.replace("{itemID}", id)
+                                                        ?.replace("{path}", argument))
+                                                }
+                                                // 已存在对应ID物品
+                                                0 -> sender.sendMessage(config.getString("Messages.existedKey")?.replace("{itemID}", id))
+                                            }
+                                        }
+                                    }
+                                }
+                                // ni mm get [物品ID]
+                                "get" -> {
+                                    if (sender is Player) {
+                                        giveAddonCommand( sender, sender, argument, mythicMobsHooker.getItemStackSync(argument), 1)
+                                    } else {
+                                        config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
+                                    }
+                                }
+                                // ni mm giveAll [物品ID]
+                                "giveAll" -> {
+                                    Bukkit.getOnlinePlayers().forEach { player ->
+                                        giveAddonCommand( sender, player, argument, mythicMobsHooker.getItemStackSync(argument), 1)
+                                    }
+                                }
+                                else -> help(sender)
+                            }
+                        } ?: sender.sendMessage(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
+                    }
+                }
+                dynamic(commit = "action") {
+                    suggestion<CommandSender>(uncheck = true) { _, context ->
+                        mythicMobsHooker?.let {
+                            when (context.argument(-2)) {
+                                // ni mm load [物品ID] (保存路径)
+                                "load" -> ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
+                                // ni mm cover [物品ID] (保存路径)
+                                "cover" -> ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
+                                // ni mm get [物品ID] (数量)
+                                "get" -> arrayListOf("amount")
+                                // ni mm give [玩家ID] [物品ID]
+                                "give" -> mythicMobsHooker.getItemIds()
+                                // ni mm giveAll [物品ID] (数量)
+                                "giveAll" -> arrayListOf("amount")
+                                else -> arrayListOf()
+                            }
+                        } ?: arrayListOf()
+                    }
+                    execute<CommandSender> { sender, context, argument ->
+                        submit(async = true) {
+                            mythicMobsHooker?.let {
+                                when (context.argument(-2)) {
+                                    // ni mm load [物品ID] (保存路径)
+                                    "load" -> {
+                                        mythicMobsHooker.getItemStackSync(context.argument(-1))?.let { itemStack ->
+                                            when (saveItem(itemStack, context.argument(-1), argument, false)) {
+                                                // 保存成功
+                                                1 -> {
+                                                    sender.sendMessage(config.getString("Messages.successSaveInfo")
+                                                        ?.replace("{name}", itemStack.getName())
+                                                        ?.replace("{itemID}", context.argument(-1))
+                                                        ?.replace("{path}", argument))
+                                                }
+                                                // 已存在对应ID物品
+                                                0 -> sender.sendMessage(config.getString("Messages.existedKey")?.replace("{itemID}", context.argument(-1)))
+                                            }
+                                            // 未知物品
+                                        } ?: let {
+                                            sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", context.argument(-1)))
+                                        }
+                                    }
+                                    // ni mm cover [物品ID] (保存路径)
+                                    "cover" -> {
+                                        mythicMobsHooker.getItemStackSync(context.argument(-1))?.let { itemStack ->
+                                            if (saveItem(itemStack, context.argument(-1), argument, true) != 2) {
+                                                // 保存成功
+                                                sender.sendMessage(config.getString("Messages.successSaveInfo")
+                                                    ?.replace("{name}", itemStack.getName())
+                                                    ?.replace("{itemID}", context.argument(-1))
+                                                    ?.replace("{path}", argument))
+                                            }
+                                            // 未知物品
+                                        } ?: let {
+                                            sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", context.argument(-1)))
+                                        }
+                                    }
+                                    // ni mm get [物品ID] (数量)
+                                    "get" -> {
+                                        if (sender is Player) {
+                                            giveAddonCommand( sender, sender, context.argument(-1), mythicMobsHooker.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
+                                        } else {
+                                            config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
+                                        }
+                                    }
+                                    // ni mm give [玩家ID] [物品ID]
+                                    "give" -> {
+                                        giveAddonCommand( sender, Bukkit.getPlayerExact(context.argument(-1)), argument, mythicMobsHooker.getItemStackSync(argument), 1)
+                                    }
+                                    // ni mm giveAll [物品ID] (数量)
+                                    "giveAll" -> {
+                                        Bukkit.getOnlinePlayers().forEach { player ->
+                                            giveAddonCommand( sender, player, context.argument(-1), mythicMobsHooker.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
+                                        }
+                                    }
+                                    else -> help(sender)
+                                }
+                            } ?: sender.sendMessage(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
+                        }
+                    }
+                    dynamic(commit = "action") {
+                        suggestion<CommandSender>(uncheck = true) { _, context ->
+                            mythicMobsHooker?.let {
+                                when (context.argument(-3)) {
+                                    // ni mm give [玩家ID] [物品ID] (数量)
+                                    "give" -> mythicMobsHooker.getItemIds()
+                                    else -> arrayListOf()
+                                }
+                            } ?: arrayListOf()
+                        }
+                        execute<CommandSender> { sender, context, argument ->
+                            submit(async = true) {
+                                mythicMobsHooker?.let {
+                                    when (context.argument(-3)) {
+                                        // ni mm give [玩家ID] [物品ID] (数量)
+                                        "give" -> {
+                                            giveAddonCommand( sender, Bukkit.getPlayerExact(context.argument(-2)), context.argument(-1), mythicMobsHooker.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
+                                        }
+                                        else -> help(sender)
+                                    }
+                                } ?: sender.sendMessage(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -382,6 +672,13 @@ object Command {
     val reload = subCommand {
         execute<CommandSender> { sender, _, _ ->
             reloadCommand(sender)
+        }
+    }
+
+    @CommandBody
+    val help = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            help(sender)
         }
     }
 
@@ -498,6 +795,44 @@ object Command {
             // 无效玩家
         } ?: let {
             sender.sendMessage(config.getString("Messages.invalidPlayer"))
+        }
+    }
+
+    private fun giveAddonCommand(
+        sender: CommandSender,
+        player: Player?,
+        id: String,
+        itemStack: ItemStack?,
+        amount: Int?
+    ) {
+        submit (async = true) {
+            player?.let {
+                // 获取数量
+                amount?.let {
+                    // 给物品
+                    itemStack?.let {
+                        bukkitScheduler.callSyncMethod(plugin, Callable {
+                            player.giveItems(itemStack, amount.coerceAtLeast(1))
+                        })
+                        sender.sendMessage(config.getString("Messages.successInfo")
+                            ?.replace("{player}", player.name)
+                            ?.replace("{amount}", amount.toString())
+                            ?.replace("{name}", itemStack.getName()))
+                        player.sendMessage(config.getString("Messages.givenInfo")
+                            ?.replace("{amount}", amount.toString())
+                            ?.replace("{name}", itemStack.getName()))
+                        // 未知物品ID
+                    } ?: let {
+                        sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+                    }
+                    // 无效数字
+                } ?: let {
+                    sender.sendMessage(config.getString("Messages.invalidAmount"))
+                }
+                // 无效玩家
+            } ?: let {
+                sender.sendMessage(config.getString("Messages.invalidPlayer"))
+            }
         }
     }
 
@@ -634,6 +969,18 @@ object Command {
             ScriptManager.reload()
             SectionManager.reload()
             sender.sendMessage(config.getString("Messages.reloadedMessage"))
+        }
+    }
+
+    private fun help(sender: CommandSender) {
+        config.getStringList("Messages.helpMessages").forEach {
+            sender.sendMessage(it)
+        }
+    }
+
+    private fun help(sender: ProxyCommandSender) {
+        config.getStringList("Messages.helpMessages").forEach {
+            sender.sendMessage(it)
         }
     }
 }

@@ -9,7 +9,6 @@ import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.module.metrics.Metrics
 import taboolib.module.metrics.charts.SingleLineChart
-import taboolib.platform.BukkitPlugin
 import java.io.File
 import java.io.InputStreamReader
 

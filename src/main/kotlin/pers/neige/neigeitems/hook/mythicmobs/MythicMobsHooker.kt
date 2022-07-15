@@ -11,5 +11,9 @@ abstract class MythicMobsHooker {
 
     abstract fun getItemStack(id: String): ItemStack?
 
+    abstract fun getItemStackSync(id: String): ItemStack?
+
     abstract fun castSkill(entity: Entity, skill: String)
+
+    abstract fun getItemIds(): List<String>
 }

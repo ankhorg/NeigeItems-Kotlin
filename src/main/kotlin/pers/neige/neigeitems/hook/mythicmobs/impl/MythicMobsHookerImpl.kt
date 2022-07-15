@@ -15,6 +15,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
@@ -25,7 +26,6 @@ import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
-import taboolib.platform.BukkitPlugin
 import java.util.*
 import java.util.concurrent.Callable
 import kotlin.math.cos
@@ -320,7 +320,17 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
         return itemManager.getItemStack(id)
     }
 
+    override fun getItemStackSync(id: String): ItemStack? {
+        return bukkitScheduler.callSyncMethod(plugin, Callable {
+            itemManager.getItemStack(id)
+        }).get()
+    }
+
     override fun castSkill(entity: Entity, skill: String) {
         apiHelper.castSkill(entity, skill)
+    }
+
+    override fun getItemIds(): List<String> {
+        return itemManager.itemNames.toList()
     }
 }

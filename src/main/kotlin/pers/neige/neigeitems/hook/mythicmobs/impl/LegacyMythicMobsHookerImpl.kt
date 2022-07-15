@@ -13,7 +13,6 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
@@ -25,7 +24,6 @@ import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
-import taboolib.platform.BukkitPlugin
 import java.util.*
 import java.util.concurrent.Callable
 import kotlin.math.cos
@@ -199,7 +197,7 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                             // 看看需不需要每次都随机生成
                             if (args.size > 2 && args[3] == "false") {
                                 // 真只随机一次啊?那嗯怼吧
-                                pers.neige.neigeitems.manager.ItemManager.getItemStack(args[0], player, data)?.let { itemStack ->
+                                getItemStack(args[0], player, data)?.let { itemStack ->
                                     val maxStackSize = itemStack.maxStackSize
                                     itemStack.amount = maxStackSize
                                     var givenAmt = 0
@@ -215,7 +213,7 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                             } else {
                                 // 随机生成, 那疯狂造就完事儿了
                                 for (index in 0..amount) {
-                                    pers.neige.neigeitems.manager.ItemManager.getItemStack(args[0], player, data)?.let { itemStack ->
+                                    getItemStack(args[0], player, data)?.let { itemStack ->
                                         dropItems.add(itemStack)
                                     }
                                 }
@@ -320,7 +318,17 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
         return itemManager.getItemStack(id)
     }
 
+    override fun getItemStackSync(id: String): ItemStack? {
+        return bukkitScheduler.callSyncMethod(plugin, Callable {
+            itemManager.getItemStack(id)
+        }).get()
+    }
+
     override fun castSkill(entity: Entity, skill: String) {
         apiHelper.castSkill(entity, skill)
+    }
+
+    override fun getItemIds(): List<String> {
+        return itemManager.itemNames.toList()
     }
 }
