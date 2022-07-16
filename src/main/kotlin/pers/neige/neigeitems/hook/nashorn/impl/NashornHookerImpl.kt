@@ -12,7 +12,7 @@ import javax.script.ScriptEngine
 @RuntimeDependencies(
     RuntimeDependency(
         "!org.openjdk.nashorn:nashorn-core:15.4",
-        test = "!org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory"
+        test = "!jdk.nashorn.api.scripting.NashornScriptEngineFactory"
     )
 )
 class NashornHookerImpl : NashornHooker() {

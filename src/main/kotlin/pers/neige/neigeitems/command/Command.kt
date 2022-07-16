@@ -22,7 +22,6 @@ import taboolib.common.platform.command.CommandHeader
 import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.expansion.createHelper
 import taboolib.module.nms.getName
 import taboolib.platform.util.giveItem
 import java.io.File
@@ -32,21 +31,17 @@ import java.util.concurrent.Callable
 object Command {
     @CommandBody
     val main = mainCommand {
-        execute<Player> { sender, _, _ ->
+        execute<CommandSender> { sender, _, _ ->
             submit(async = true) {
                 help(sender)
             }
         }
-        createHelper()
+//        createHelper()
         incorrectSender { sender, _ ->
             config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
         }
         incorrectCommand { sender, _, index, _ ->
-            when (index) {
-                1 -> {
-                    help(sender)
-                }
-            }
+            help(sender)
         }
     }
 
