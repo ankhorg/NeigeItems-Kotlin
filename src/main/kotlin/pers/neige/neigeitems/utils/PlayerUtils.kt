@@ -12,7 +12,7 @@ object PlayerUtils {
             val maxStackSize = itemStack.maxStackSize
             itemStack.amount = maxStackSize
             val leftAmount = amount % maxStackSize
-            val repeat = floor((amount / maxStackSize).toDouble()).toInt()
+            val repeat = amount / maxStackSize
             giveItem(itemStack, repeat)
             if (leftAmount != 0) {
                 itemStack.amount = leftAmount
