@@ -9,14 +9,11 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
-import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.neigeitems.manager.*
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
-import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.saveItem
-import pers.neige.neigeitems.manager.ScriptManager
-import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
 import taboolib.common.platform.ProxyCommandSender
@@ -1095,6 +1092,7 @@ object Command {
             ItemManager.reload()
             ScriptManager.reload()
             SectionManager.reload()
+            ActionManager.reload()
             sender.sendMessage(config.getString("Messages.reloadedMessage"))
         }
     }

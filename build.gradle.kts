@@ -42,6 +42,7 @@ repositories {
     maven { url = uri("https://repo.dmulloy2.net/repository/public/") }
     maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
     maven { url = uri("https://mvn.lumine.io/repository/maven-public") }
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
@@ -56,6 +57,8 @@ dependencies {
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("io.lumine:Mythic-Dist:5.1.0-SNAPSHOT")
+    compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
 }
 
 tasks.withType<JavaCompile> {

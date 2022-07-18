@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.item
 
+import com.alibaba.fastjson2.parseObject
+import com.alibaba.fastjson2.toJSONString
 import org.bukkit.ChatColor
 import org.bukkit.Color
 import org.bukkit.Material
@@ -21,15 +23,22 @@ import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ConfigUtils.toMap
-import pers.neige.neigeitems.utils.GsonUtils.gson
 import pers.neige.neigeitems.utils.ItemUtils.coverWith
 import pers.neige.neigeitems.utils.ItemUtils.toItemTag
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
+import taboolib.common.env.RuntimeDependencies
+import taboolib.common.env.RuntimeDependency
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import java.util.*
 
+@RuntimeDependencies(
+    RuntimeDependency(
+        "!com.alibaba.fastjson2:fastjson2-kotlin:2.0.9",
+        test = "!com.alibaba.fastjson2.parseObject"
+    )
+)
 // 物品ID
 class ItemGenerator (val itemConfig: ItemConfig) {
     // 物品ID
@@ -130,8 +139,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
 
         // 加载缓存
         val cache = when (data) {
-            null -> HashMap()
-            else -> gson.fromJson(data, HashMap::class.java) as HashMap<String, String>
+            null -> HashMap<String, String>()
+            else -> data.parseObject<HashMap<String, String>>()
         }
 
         // 获取私有节点配置
@@ -236,12 +245,12 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                         }
                     } catch (error: Throwable) {}
                 }
-                itemStack.setItemMeta(itemMeta)
+                itemStack.itemMeta = itemMeta
                 // 设置物品NBT
                 val itemTag = itemStack.getItemTag()
                 val neigeItems = ItemTag()
                 neigeItems["id"] = ItemTagData(id)
-                neigeItems["data"] = ItemTagData(gson.toJson(cache))
+                neigeItems["data"] = ItemTagData(cache.toJSONString())
                 neigeItems["hashCode"] = ItemTagData(hashCode)
                 // 设置物品使用次数
                 if (configSection.contains("options.charge")) {

@@ -1,11 +1,16 @@
 package pers.neige.neigeitems.utils
 
+import com.alibaba.fastjson2.parseObject
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
+import pers.neige.neigeitems.utils.SectionUtils.getSection
+import taboolib.module.nms.ItemTag
+import taboolib.module.nms.ItemTagData
+import taboolib.module.nms.ItemTagType
 import java.awt.Color
 import java.util.*
 
@@ -136,6 +141,88 @@ object SectionUtils {
                 // 获取参数
                 val args = this.substring(index+2).split("_")
                 return SectionManager.sectionParsers[type]?.onRequest(args, cache, player, sections) ?: "<$this>"
+            }
+        }
+    }
+
+    /**
+     * 对文本进行物品节点解析
+     * @param itemTag 物品NBT
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.parseItemSection(itemTag: ItemTag): String {
+        // 定位最外层 <> 包裹的字符串
+        val stack = LinkedList<Int>()
+        val start = ArrayList<Int>()
+        val end = ArrayList<Int>()
+        this.forEachIndexed { index, char ->
+            // 如果是待识别的左括号
+            if (char == '<' && (this[0.coerceAtLeast(index - 1)] != '\\')) {
+                // 压栈
+                stack.push(index)
+                // 如果是右括号
+            } else if (char == '>' && this[(this.length-1).coerceAtMost(index + 1)] != '\\') {
+                // 前面有左括号了
+                if (!stack.isEmpty()) {
+                    // 还不止一个
+                    if (stack.size > 1) {
+                        // 出栈
+                        stack.pop()
+                        // 只有一个
+                    } else {
+                        // 记录并出栈
+                        start.add(stack.poll())
+                        end.add(index)
+                    }
+                }
+            }}
+        if (start.size == 0) return this
+        // 对 <> 包裹的文本进行节点解析
+        val listString = StringBuilder(this.substring(0, start[0]))
+        for (index in 0 until start.size) {
+            // 解析目标文本
+            listString.append(
+                this.substring(start[index]+1, end[index])
+                    .parseItemSection(itemTag)
+                    .getItemSection(itemTag)
+            )
+
+            if (index+1 != start.size) {
+                listString.append(this.substring(end[index]+1, start[(start.size-1).coerceAtMost(index+1)]))
+            } else {
+                listString.append(this.substring(end[index]+1, this.length))
+            }
+        }
+        return listString.toString()
+    }
+
+    /**
+     * 对物品节点内容进行解析 (已经去掉 <>)
+     * @param itemTag 物品NBT
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.getItemSection(itemTag: ItemTag): String {
+        when (val index = this.indexOf("::")) {
+            -1 -> {
+                return "<$this>"
+            }
+            else -> {
+                val name = this.substring(0, index)
+                val args = this.substring(index + 2)
+                return when (name.lowercase(Locale.getDefault())) {
+                    "nbt" -> {
+                        itemTag.getDeepOrElse(args, ItemTagData("<$this>")).asString()
+                    }
+                    "data" -> {
+                        itemTag["NeigeItems"]?.asCompound()?.get("data")?.asString().let {
+                            it.parseObject<HashMap<String, String>>()[args] ?: "<$this>"
+                        }
+                        "<$this>"
+                    }
+                    else -> "<$this>"
+                }
             }
         }
     }

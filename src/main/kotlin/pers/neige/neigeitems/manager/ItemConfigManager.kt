@@ -19,11 +19,9 @@ open class ItemConfigManager {
 
     private fun loadItemConfigs() {
         for (file: File in files) {
-            val config = YamlConfiguration.loadConfiguration(file)
-            val ids = config.getKeys(false)
-            ids.forEach {
-                itemConfigs[it] = ItemConfig(it, file)
-                itemIds.add(it)
+            YamlConfiguration.loadConfiguration(file).getKeys(false).forEach { id ->
+                itemConfigs[id] = ItemConfig(id, file)
+                itemIds.add(id)
             }
         }
     }

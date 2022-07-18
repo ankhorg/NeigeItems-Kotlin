@@ -10,6 +10,8 @@ import pers.neige.neigeitems.hook.nashorn.impl.NashornHookerImpl
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker
 import pers.neige.neigeitems.hook.placeholderapi.impl.LegacyPapiHookerImpl
 import pers.neige.neigeitems.hook.placeholderapi.impl.PapiHookerImpl
+import pers.neige.neigeitems.hook.vault.VaultHooker
+import pers.neige.neigeitems.hook.vault.impl.VaultHookerImpl
 import pers.neige.neigeitems.manager.ConfigManager.config
 
 object HookerManager {
@@ -42,6 +44,18 @@ object HookerManager {
             }
         } else {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "PlaceholderAPI"))
+            null
+        }
+
+    val vaultHooker: VaultHooker? =
+        if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+            try {
+                VaultHookerImpl()
+            } catch (error: Throwable) {
+                null
+            }
+        } else {
+            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "Vault"))
             null
         }
 }
