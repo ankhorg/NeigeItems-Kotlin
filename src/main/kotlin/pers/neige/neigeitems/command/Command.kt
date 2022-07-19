@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.*
+import pers.neige.neigeitems.manager.ActionManager.runAction
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
@@ -69,6 +70,37 @@ object Command {
                             }
                         } ?: let {
                             sender.sendMessage(config.getString("Messages.invalidAmount"))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @CommandBody
+    val action = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
+        dynamic(commit = "player") {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                Bukkit.getOnlinePlayers().map { it.name }
+            }
+            execute<CommandSender> { sender, _, _ ->
+                submit(async = true) {
+                    help(sender)
+                }
+            }
+            dynamic(commit = "action") {
+                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                    arrayListOf("action")
+                }
+                execute<CommandSender> { _, context, argument ->
+                    submit(async = true) {
+                        Bukkit.getPlayerExact(context.argument(-1))?.let { player ->
+                            runAction(player, argument)
                         }
                     }
                 }
@@ -140,7 +172,7 @@ object Command {
     @CommandBody
     // ni give [玩家ID] [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予NI物品
     val give = subCommand {
-        execute<Player> { sender, _, _ ->
+        execute<CommandSender> { sender, _, _ ->
             submit(async = true) {
                 help(sender)
             }
@@ -149,7 +181,7 @@ object Command {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 Bukkit.getOnlinePlayers().map { it.name }
             }
-            execute<Player> { sender, _, _ ->
+            execute<CommandSender> { sender, _, _ ->
                 submit(async = true) {
                     help(sender)
                 }
@@ -196,7 +228,7 @@ object Command {
     @CommandBody
     // ni giveAll [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予所有人NI物品
     val giveAll = subCommand {
-        execute<Player> { sender, _, _ ->
+        execute<CommandSender> { sender, _, _ ->
             submit(async = true) {
                 help(sender)
             }
@@ -247,7 +279,7 @@ object Command {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 ItemManager.items.keys.toList()
             }
-            execute<Player> { sender, _, _ ->
+            execute<CommandSender> { sender, _, _ ->
                 submit(async = true) {
                     help(sender)
                 }
@@ -257,7 +289,7 @@ object Command {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                     arrayListOf("amount")
                 }
-                execute<Player> { sender, _, _ ->
+                execute<CommandSender> { sender, _, _ ->
                     submit(async = true) {
                         help(sender)
                     }
@@ -267,7 +299,7 @@ object Command {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                         Bukkit.getWorlds().map { it.name }
                     }
-                    execute<Player> { sender, _, _ ->
+                    execute<CommandSender> { sender, _, _ ->
                         submit(async = true) {
                             help(sender)
                         }
@@ -277,7 +309,7 @@ object Command {
                         suggestion<CommandSender>(uncheck = true) { _, _ ->
                             arrayListOf("x")
                         }
-                        execute<Player> { sender, _, _ ->
+                        execute<CommandSender> { sender, _, _ ->
                             submit(async = true) {
                                 help(sender)
                             }
@@ -287,7 +319,7 @@ object Command {
                             suggestion<CommandSender>(uncheck = true) { _, _ ->
                                 arrayListOf("y")
                             }
-                            execute<Player> { sender, _, _ ->
+                            execute<CommandSender> { sender, _, _ ->
                                 submit(async = true) {
                                     help(sender)
                                 }
@@ -297,7 +329,7 @@ object Command {
                                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                                     arrayListOf("z")
                                 }
-                                execute<Player> { sender, _, _ ->
+                                execute<CommandSender> { sender, _, _ ->
                                     submit(async = true) {
                                         help(sender)
                                     }
@@ -307,7 +339,7 @@ object Command {
                                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                                         arrayListOf("true", "false")
                                     }
-                                    execute<Player> { sender, _, _ ->
+                                    execute<CommandSender> { sender, _, _ ->
                                         submit(async = true) {
                                             help(sender)
                                         }

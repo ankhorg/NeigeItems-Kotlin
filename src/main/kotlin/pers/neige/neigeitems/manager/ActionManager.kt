@@ -24,11 +24,13 @@ import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
 import java.io.File
+import java.io.FileReader
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
 
 object ActionManager {
+    // 拥有动作的物品
     val itemActions: ConcurrentHashMap<String, ItemAction> = ConcurrentHashMap<String, ItemAction>()
 
     val actions = HashMap<String, BiFunction<Player, String, Boolean>>()
@@ -36,11 +38,25 @@ object ActionManager {
     init {
         loadItemActions()
         loadBasicActions()
+        loadCustomActions()
     }
 
     fun reload() {
         itemActions.clear()
+        actions.clear()
         loadItemActions()
+        loadBasicActions()
+        loadCustomActions()
+    }
+
+    // 加载自定义动作
+    private fun loadCustomActions() {
+        for (file in ConfigUtils.getAllFiles("CustomActions")) {
+            // 没有main这个函数就会报错
+            try {
+                pers.neige.neigeitems.script.CompiledScript(FileReader(file)).invokeFunction("main", null)
+            } catch (error: NoSuchMethodException) {}
+        }
     }
 
     fun runAction(player: Player, action: List<String>, itemTag: ItemTag? = null) {
@@ -96,12 +112,16 @@ object ActionManager {
         }
         // 强制玩家发送消息
         addAction("chat") { player, string ->
-            player.chat(papi(player, string))
+            bukkitScheduler.callSyncMethod(plugin) {
+                player.chat(papi(player, string))
+            }
             true
         }
         // 强制玩家发送消息(将&解析为颜色符号)
         addAction("chatWithColor") { player, string ->
-            player.chat(papiColor(player, string))
+            bukkitScheduler.callSyncMethod(plugin) {
+                player.chat(papiColor(player, string))
+            }
             true
         }
         // 强制玩家执行指令

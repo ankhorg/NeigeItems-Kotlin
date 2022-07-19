@@ -10,7 +10,7 @@ class CompiledScript(reader: Reader) {
 
     val scriptEngine: ScriptEngine = compiledScript.engine
 
-    fun invokeFunction(function: String, map: HashMap<String, Any>?, vararg args: Any): Any {
+    fun invokeFunction(function: String, map: HashMap<String, Any>?, vararg args: Any): Any? {
         map?.forEach { (key, value) -> scriptEngine.put(key, value) }
         compiledScript.eval(scriptEngine.context)
         return (scriptEngine as Invocable).invokeFunction(function, *args)

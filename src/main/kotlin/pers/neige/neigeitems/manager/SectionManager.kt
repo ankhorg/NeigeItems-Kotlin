@@ -58,7 +58,7 @@ object SectionManager {
             // 没有main这个函数就会报错
             try {
                 pers.neige.neigeitems.script.CompiledScript(FileReader(file)).invokeFunction("main", null)
-            } catch (error: Throwable) {}
+            } catch (error: NoSuchMethodException) {}
         }
     }
 

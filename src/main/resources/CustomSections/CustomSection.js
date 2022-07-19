@@ -4,6 +4,7 @@ function main() {
     // 导入相应的类, 这两行看不懂的话直接抄就行
     const SectionManager = Packages.pers.neige.neigeitems.manager.SectionManager.INSTANCE
     const CustomSection = Packages.pers.neige.neigeitems.section.impl.CustomSection
+    const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
 
     // 创建自定义节点
     const customSection = new CustomSection(
@@ -18,7 +19,10 @@ function main() {
          * @return 解析值
          */
         function(data, cache, player, sections) {
-            if (data.contains("values")) return data.getStringList("values").size() + ""
+            if (data.contains("values")) {
+                // SectionUtils.parseSection("待解析字符串", cache, player, sections)用于解析节点内容
+                return SectionUtils.parseSection("<number::0_1_2>", cache, player, sections)
+            }
             return null
         },
         /**
@@ -30,7 +34,7 @@ function main() {
          * @return 解析值
          */
         function(args, cache, player, sections) {
-            return args.length + ""
+            return SectionUtils.parseSection("<number::0_1_2>", cache, player, sections)
         })
     // 节点注册
     SectionManager.loadParser(customSection)
