@@ -4,7 +4,6 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import pers.neige.neigeitems.manager.HookerManager.papi
-import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.manager.ScriptManager
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -41,8 +40,8 @@ object JavascriptParser : SectionParser() {
     ): String {
         val data = YamlConfiguration()
         if (args.isNotEmpty()) data.set("path", args[0])
-        args.drop(1)
-        if (args.isNotEmpty()) data.set("args", args)
+        val param = args.drop(1)
+        if (param.isNotEmpty()) data.set("args", param)
         return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
     }
 }

@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.command
 
-import net.bytebuddy.implementation.bytecode.Throw
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -22,7 +21,6 @@ import taboolib.common.platform.command.CommandHeader
 import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.common.util.asList
 import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.getName
 import taboolib.platform.BukkitAdapter
@@ -31,7 +29,6 @@ import taboolib.platform.util.hoverItem
 import java.io.File
 import java.util.*
 import java.util.concurrent.Callable
-import kotlin.collections.HashMap
 import kotlin.math.ceil
 
 @CommandHeader(name = "NeigeItems", aliases = ["ni"])

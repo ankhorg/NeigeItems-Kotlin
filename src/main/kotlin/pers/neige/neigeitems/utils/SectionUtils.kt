@@ -7,7 +7,6 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
-import pers.neige.neigeitems.utils.SectionUtils.getSection
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.ItemTagType

@@ -1,15 +1,9 @@
 package pers.neige.neigeitems.item
 
-import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
-import org.bukkit.event.block.Action
-import org.bukkit.event.player.PlayerInteractEvent
 import pers.neige.neigeitems.manager.ActionManager
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
-import taboolib.module.nms.getItemTag
 
 class ItemAction(val id: String, val config: ConfigurationSection) {
     // 物品消耗信息
@@ -35,12 +29,6 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
 
     // 捡起物品
     val pick = config.get("pick")
-
-    // 使用物品破坏方块
-    val destroy = config.get("destroy")
-
-    // 物品损坏
-    val broken = config.get("broken")
 
     // 运行某个动作
     fun run(player: Player, action: Any?, itemTag: ItemTag?) {

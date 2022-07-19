@@ -14,6 +14,7 @@ import pers.neige.neigeitems.hook.placeholderapi.impl.LegacyPapiHookerImpl
 import pers.neige.neigeitems.hook.placeholderapi.impl.PapiHookerImpl
 import pers.neige.neigeitems.hook.vault.VaultHooker
 import pers.neige.neigeitems.hook.vault.impl.VaultHookerImpl
+import pers.neige.neigeitems.item.ItemPlaceholder
 import pers.neige.neigeitems.manager.ConfigManager.config
 
 object HookerManager {
@@ -60,6 +61,17 @@ object HookerManager {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "Vault"))
             null
         }
+
+    val itemPlaceholder: ItemPlaceholder? = if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
+        try {
+            ItemPlaceholder()
+        } catch (error: Throwable) {
+            null
+        }
+    } else {
+        Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "ProtocolLib"))
+        null
+    }
 
     @JvmStatic
     fun papi(player: OfflinePlayer, string: String): String {

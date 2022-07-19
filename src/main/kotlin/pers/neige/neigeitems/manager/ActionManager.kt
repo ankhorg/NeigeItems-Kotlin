@@ -1,43 +1,30 @@
 package pers.neige.neigeitems.manager
 
-import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.Material
-import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
+import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
-import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemAction
-import pers.neige.neigeitems.item.ItemConfig
-import pers.neige.neigeitems.manager.ConfigManager.config
+import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.HookerManager.papiColor
-import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.manager.HookerManager.vaultHooker
 import pers.neige.neigeitems.utils.ActionUtils.consume
 import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
-import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
-import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.getItemTag
-import taboolib.platform.util.actionBar
-import taboolib.platform.util.giveItem
 import java.io.File
-import java.text.DecimalFormat
 import java.util.*
-import java.util.concurrent.Callable
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
 
@@ -98,136 +85,142 @@ object ActionManager {
 
     private fun loadBasicActions() {
         // 向玩家发送消息
-        addAction("tell", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("tell") { player, string ->
             player.sendMessage(papiColor(player, string))
             true
-        })
+        }
         // 向玩家发送消息(不将&解析为颜色符号)
-        addAction("tellNoColor", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("tellNoColor") { player, string ->
             player.sendMessage(papi(player, string))
             true
-        })
+        }
         // 强制玩家发送消息
-        addAction("chat", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("chat") { player, string ->
             player.chat(papi(player, string))
             true
-        })
+        }
         // 强制玩家发送消息(将&解析为颜色符号)
-        addAction("chatWithColor", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("chatWithColor") { player, string ->
             player.chat(papiColor(player, string))
             true
-        })
+        }
         // 强制玩家执行指令
-        addAction("command", BiFunction<Player, String, Boolean> { player, string ->
-            bukkitScheduler.callSyncMethod(plugin, Callable {
+        addAction("command") { player, string ->
+            bukkitScheduler.callSyncMethod(plugin) {
                 Bukkit.dispatchCommand(player, papiColor(player, string))
-            })
+            }
             true
-        })
+        }
         // 强制玩家执行指令
         actions["command"]?.let { addAction("player", it) }
         // 强制玩家执行指令(不将&解析为颜色符号)
-        addAction("commandNoColor", BiFunction<Player, String, Boolean> { player, string ->
-            bukkitScheduler.callSyncMethod(plugin, Callable {
+        addAction("commandNoColor") { player, string ->
+            bukkitScheduler.callSyncMethod(plugin) {
                 Bukkit.dispatchCommand(player, papi(player, string))
-            })
+            }
             true
-        })
+        }
         // 后台执行指令
-        addAction("console", BiFunction<Player, String, Boolean> { player, string ->
-            bukkitScheduler.callSyncMethod(plugin, Callable {
+        addAction("console") { player, string ->
+            bukkitScheduler.callSyncMethod(plugin) {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papiColor(player, string))
-            })
+            }
             true
-        })
+        }
         // 后台执行指令(不将&解析为颜色符号)
-        addAction("consoleNoColor", BiFunction<Player, String, Boolean> { player, string ->
-            bukkitScheduler.callSyncMethod(plugin, Callable {
+        addAction("consoleNoColor") { player, string ->
+            bukkitScheduler.callSyncMethod(plugin) {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papi(player, string))
-            })
+            }
             true
-        })
+        }
         // 给予玩家金钱
-        addAction("giveMoney", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("giveMoney") { player, string ->
             vaultHooker?.giveMoney(player, papi(player, string).toDoubleOrNull() ?: 0.toDouble())
             true
-        })
+        }
         // 扣除玩家金钱
-        addAction("takeMoney", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("takeMoney") { player, string ->
             vaultHooker?.takeMoney(player, papi(player, string).toDoubleOrNull() ?: 0.toDouble())
             true
-        })
+        }
         // 给予玩家经验
-        addAction("giveExp", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("giveExp") { player, string ->
             player.giveExp(papi(player, string).toIntOrNull() ?: 0)
             true
-        })
+        }
         // 扣除玩家经验
-        addAction("takeExp", BiFunction<Player, String, Boolean> { player, string ->
-            player.giveExp((papi(player, string).toIntOrNull() ?: 0)*-1)
+        addAction("takeExp") { player, string ->
+            player.giveExp((papi(player, string).toIntOrNull() ?: 0) * -1)
             true
-        })
+        }
         // 设置玩家经验
-        addAction("setExp", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("setExp") { player, string ->
             player.exp = papi(player, string).toFloatOrNull() ?: 0.toFloat()
             true
-        })
+        }
         // 给予玩家经验等级
-        addAction("giveLevel", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("giveLevel") { player, string ->
             player.giveExpLevels(papi(player, string).toIntOrNull() ?: 0)
             true
-        })
+        }
         // 扣除玩家经验等级
-        addAction("takeLevel", BiFunction<Player, String, Boolean> { player, string ->
-            player.giveExpLevels((papi(player, string).toIntOrNull() ?: 0)*-1)
+        addAction("takeLevel") { player, string ->
+            player.giveExpLevels((papi(player, string).toIntOrNull() ?: 0) * -1)
             true
-        })
+        }
         // 设置玩家经验等级
-        addAction("setLevel", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("setLevel") { player, string ->
             player.level = papi(player, string).toIntOrNull() ?: 0
             true
-        })
+        }
         // 给予玩家饱食度
-        addAction("giveFood", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("giveFood") { player, string ->
             player.foodLevel = player.foodLevel + (papi(player, string).toIntOrNull() ?: 0)
             true
-        })
+        }
         // 扣除玩家饱食度
-        addAction("takeFood", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("takeFood") { player, string ->
             player.foodLevel = player.foodLevel - (papi(player, string).toIntOrNull() ?: 0)
             true
-        })
+        }
         // 设置玩家饱食度
-        addAction("setFood", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("setFood") { player, string ->
             player.foodLevel = papi(player, string).toIntOrNull() ?: 0
             true
-        })
+        }
         // 给予玩家生命
-        addAction("giveHealth", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("giveHealth") { player, string ->
             player.health = (player.health + (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtMost(player.maxHealth)
             true
-        })
+        }
         // 扣除玩家生命
-        addAction("takeHealth", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("takeHealth") { player, string ->
             player.health = (player.health - (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtLeast(0.toDouble())
             true
-        })
+        }
         // 设置玩家生命
-        addAction("setHealth", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("setHealth") { player, string ->
             player.health = (papi(player, string).toDoubleOrNull() ?: 0.toDouble()).coerceAtLeast(0.toDouble()).coerceAtMost(player.maxHealth)
             true
-        })
-        // 延迟(单位是tick)
-        addAction("delay", BiFunction<Player, String, Boolean> { player, string ->
-            Thread.sleep((papi(player, string).toLongOrNull() ?: 0)*50)
+        }
+        // 释放MM技能
+        addAction("castSkill") { player, string ->
+            mythicMobsHooker?.castSkill(player, string)
             true
-        })
+        }
+        // 延迟(单位是tick)
+        addAction("delay") { player, string ->
+            Thread.sleep((papi(player, string).toLongOrNull() ?: 0) * 50)
+            true
+        }
         // 终止
-        addAction("return", BiFunction<Player, String, Boolean> { player, string ->
+        addAction("return") { _, _ ->
             false
-        })
+        }
     }
 
+    // 物品左右键交互
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun listener(event: PlayerInteractEvent) {
         // 获取玩家
@@ -297,6 +290,7 @@ object ActionManager {
         }
     }
 
+    // 吃或饮用
     @SubscribeEvent(priority = EventPriority.LOWEST)
     fun listener(event: PlayerItemConsumeEvent) {
         // 获取玩家
@@ -351,6 +345,111 @@ object ActionManager {
                 if (itemAction.isCoolDown(player)) return@Runnable
                 // 执行动作
                 itemAction.run(player, itemAction.eat, itemTag)
+            })
+        }
+    }
+
+    // 丢弃物品
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    fun listener(event: PlayerDropItemEvent) {
+        // 获取玩家
+        val player = event.player
+        // 获取掉落物品
+        val itemStack = event.itemDrop.itemStack
+        // 物品NBT
+        val itemTag: ItemTag
+        // NI物品数据
+        val neigeItems: ItemTag
+        // NI物品id
+        val id: String
+        when (val itemInfo = itemStack.isNiItem()) {
+            null -> return
+            else -> {
+                itemTag = itemInfo.itemTag
+                neigeItems = itemInfo.neigeItems
+                id = itemInfo.id
+            }
+        }
+        // 获取物品动作
+        val itemAction = itemActions[id] ?: let { return }
+        itemAction.drop ?: let { return }
+        // 获取物品消耗信息
+        val consume =  itemAction.consume
+        // 如果该物品需要被消耗
+        if (consume != null && consume.getBoolean("drop", false)) {
+            // 检测冷却
+            if (consume.isCoolDown(player, id)) {
+                // 获取待消耗数量
+                val amount: Int = consume.getInt("amount", 1)
+                // 消耗物品
+                if (itemStack.consume(player, amount, itemTag, neigeItems)) {
+                    // 执行动作
+                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                        itemAction.run(player, itemAction.drop, itemTag)
+                    })
+                }
+            } else {
+                event.isCancelled = true
+            }
+        } else {
+            // 检测冷却
+            if (!itemAction.isCoolDown(player)) {
+                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                    // 执行动作
+                    itemAction.run(player, itemAction.drop, itemTag)
+                })
+            } else {
+                event.isCancelled = true
+            }
+        }
+    }
+
+    // 拾取物品
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    fun listener(event: EntityPickupItemEvent) {
+        // 获取玩家
+        val player = event.entity
+        if (player !is Player) return
+        // 获取拾取物品
+        val itemStack = event.item.itemStack
+        // 物品NBT
+        val itemTag: ItemTag
+        // NI物品数据
+        val neigeItems: ItemTag
+        // NI物品id
+        val id: String
+        when (val itemInfo = itemStack.isNiItem()) {
+            null -> return
+            else -> {
+                itemTag = itemInfo.itemTag
+                neigeItems = itemInfo.neigeItems
+                id = itemInfo.id
+            }
+        }
+        // 获取物品动作
+        val itemAction = itemActions[id] ?: let { return }
+        itemAction.pick ?: let { return }
+        // 获取物品消耗信息
+        val consume =  itemAction.consume
+        // 如果该物品需要被消耗
+        if (consume != null && consume.getBoolean("pick", false)) {
+            // 检测冷却
+            if (consume.isCoolDown(player, id)) return
+            // 获取待消耗数量
+            val amount: Int = consume.getInt("amount", 1)
+            // 消耗物品
+            if (itemStack.consume(player, amount, itemTag, neigeItems)) {
+                // 执行动作
+                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                    itemAction.run(player, itemAction.pick, itemTag)
+                })
+            }
+        } else {
+            bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                // 检测冷却
+                if (!itemAction.isCoolDown(player)) return@Runnable
+                // 执行动作
+                itemAction.run(player, itemAction.pick, itemTag)
             })
         }
     }

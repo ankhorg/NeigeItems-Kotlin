@@ -3,7 +3,6 @@ package pers.neige.neigeitems.section.impl
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.HookerManager.papi
-import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.section.SectionParser
 
 object PapiParser : SectionParser() {

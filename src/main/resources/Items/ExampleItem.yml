@@ -181,3 +181,15 @@ customSection:
         - test
         - test
         - test
+eatTest:
+  material: APPLE
+eatTest2:
+  material: APPLE
+  options:
+    charge: 10
+dropTest:
+  material: STONE
+dropTest2:
+  material: STONE
+  options:
+    charge: 3

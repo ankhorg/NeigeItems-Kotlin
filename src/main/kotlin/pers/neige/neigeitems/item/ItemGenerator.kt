@@ -17,7 +17,6 @@ import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.papi
-import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith

@@ -56,3 +56,25 @@ actionTest:
   - "console: say 名为test4.1的NBT的值为: <nbt::test4.1>"
   - "console: say 名为test的节点的值为: <data::test>"
   - "console: say 随机数尝试: <number::0_10_2>"
+eatTest:
+  eat:
+    - "giveFood: 5"
+    - "giveHealth: 5"
+eatTest2:
+  consume:
+    cooldown: 3000
+    amount: 1
+    eat: true
+  eat:
+    - "giveFood: 5"
+    - "giveHealth: 5"
+dropTest:
+  drop:
+    - "castSkill: SkillTest"
+dropTest2:
+  consume:
+    cooldown: 3000
+    amount: 1
+    drop: true
+  drop:
+    - "castSkill: SkillTest"
