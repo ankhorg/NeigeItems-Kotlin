@@ -23,6 +23,7 @@ import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.chat.TellrawJson
+import taboolib.module.nms.getItemTag
 import taboolib.module.nms.getName
 import taboolib.platform.BukkitAdapter
 import taboolib.platform.util.giveItem
@@ -62,7 +63,7 @@ object Command {
                     submit(async = true) {
                         argument.toIntOrNull()?.let { amount ->
                             repeat(amount.coerceAtLeast(1)) {
-                                ItemManager.getItemStack(context.argument(-1), sender) ?: let {
+                                getItemStack(context.argument(-1), sender) ?: let {
                                     sender.sendMessage(
                                         config.getString("Messages.unknownItem")?.replace("{itemID}", argument)
                                     )
@@ -893,7 +894,7 @@ object Command {
                     // 获取数量
                     amount?.let {
                         // 给物品
-                        ItemManager.getItemStack(id, player, data)?.let { itemStack ->
+                        getItemStack(id, player, data)?.let { itemStack ->
                             bukkitScheduler.callSyncMethod(plugin, Callable {
                                 player.giveItems(itemStack, amount.coerceAtLeast(1))
                             })
@@ -919,7 +920,7 @@ object Command {
                         val dropData = HashMap<String, Int>()
                         // 给物品
                         repeat(amount.coerceAtLeast(1)) {
-                            ItemManager.getItemStack(id, player, data)?.let { itemStack ->
+                            getItemStack(id, player, data)?.let { itemStack ->
                                 bukkitScheduler.callSyncMethod(plugin, Callable {
                                     player.giveItem(itemStack)
                                 })
@@ -1057,10 +1058,18 @@ object Command {
                     // 获取数量
                     amount?.let {
                         // 掉物品
-                        ItemManager.getItemStack(id, parser, data)?.let { itemStack ->
-                            bukkitScheduler.callSyncMethod(plugin, Callable {
+                        getItemStack(id, parser, data)?.let { itemStack ->
+                            val items = bukkitScheduler.callSyncMethod(plugin) {
                                 location?.dropItems(itemStack, amount.coerceAtLeast(1))
-                            })
+                            }.get()
+                            items?.forEach { item ->
+                                val itemTag = itemStack.getItemTag()
+                                itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                                    neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                                        mythicMobsHooker?.castSkill(item, dropSkill)
+                                    }
+                                }
+                            }
                             sender.sendMessage(config.getString("Messages.dropSuccessInfo")
                                 ?.replace("{world}", location?.world?.name ?: "")
                                 ?.replace("{x}", location?.x.toString())
@@ -1083,7 +1092,7 @@ object Command {
                         val dropData = HashMap<String, Int>()
                         // 掉物品
                         repeat(amount.coerceAtLeast(1)) {
-                            ItemManager.getItemStack(id, parser, data)?.let { itemStack ->
+                            getItemStack(id, parser, data)?.let { itemStack ->
                                 bukkitScheduler.callSyncMethod(plugin, Callable {
                                     location?.dropItems(itemStack)
                                 })
