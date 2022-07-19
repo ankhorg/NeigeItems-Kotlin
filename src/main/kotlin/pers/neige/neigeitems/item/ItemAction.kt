@@ -2,10 +2,13 @@ package pers.neige.neigeitems.item
 
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import pers.neige.neigeitems.manager.ActionManager
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
 
 class ItemAction(val id: String, val config: ConfigurationSection) {
@@ -38,4 +41,15 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
 
     // 物品损坏
     val broken = config.get("broken")
+
+    // 运行某个动作
+    fun run(player: Player, action: Any?, itemTag: ItemTag?) {
+        action?.let {
+            when (action) {
+                is String -> ActionManager.runAction(player, action, itemTag)
+                is List<*> -> ActionManager.runAction(player, action.map { value -> value.toString() }, itemTag)
+                else -> return
+            }
+        }
+    }
 }

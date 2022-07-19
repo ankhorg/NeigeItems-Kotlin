@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
 import pers.neige.neigeitems.manager.ConfigManager.config
+import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.SectionManager
@@ -133,7 +134,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         var configString = this.configString
 
         // 进行一次papi解析
-        player?.let { configString = papiHooker?.papi(player, configString) ?: configString }
+        player?.let { configString = papi(player, configString) }
         // 加载回YamlConfiguration
         var configSection = configString.loadFromString(id) ?: YamlConfiguration()
 
@@ -164,7 +165,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
             .parseSection(cache, player, sections)
             .replace("\\<", "<")
             .replace("\\>", ">")
-        player?.let { configString = papiHooker?.papi(player, configString) ?: configString }
+        player?.let { configString = papi(player, configString) }
         if (config.getBoolean("Main.Debug")) print(configString)
         configSection = configString.loadFromString(id) ?: YamlConfiguration()
         // 构建物品

@@ -2,6 +2,7 @@ package pers.neige.neigeitems.section.impl
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.section.SectionParser
 
@@ -14,6 +15,6 @@ object PapiParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        return player?.let { papiHooker?.papi(player, "%${args.joinToString("_")}%") } ?: "<$id::${args.joinToString("_")}>"
+        return player?.let { papi(player, "%${args.joinToString("_")}%") } ?: "<$id::${args.joinToString("_")}>"
     }
 }

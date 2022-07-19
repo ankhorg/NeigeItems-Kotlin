@@ -29,30 +29,9 @@ object SectionUtils {
         sections: ConfigurationSection? = null
     ): String {
         // 定位最外层 <> 包裹的字符串
-        val stack = LinkedList<Int>()
         val start = ArrayList<Int>()
         val end = ArrayList<Int>()
-        this.forEachIndexed { index, char ->
-            // 如果是待识别的左括号
-            if (char == '<' && (this[0.coerceAtLeast(index - 1)] != '\\')) {
-                // 压栈
-                stack.push(index)
-                // 如果是右括号
-            } else if (char == '>' && this[(this.length-1).coerceAtMost(index + 1)] != '\\') {
-                // 前面有左括号了
-                if (!stack.isEmpty()) {
-                    // 还不止一个
-                    if (stack.size > 1) {
-                        // 出栈
-                        stack.pop()
-                    // 只有一个
-                    } else {
-                        // 记录并出栈
-                        start.add(stack.poll())
-                        end.add(index)
-                    }
-                }
-            }}
+        load(this, start, end)
         if (start.size == 0) return this
         // 对 <> 包裹的文本进行节点解析
         val listString = StringBuilder(this.substring(0, start[0]))
@@ -151,32 +130,11 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
-    fun String.parseItemSection(itemTag: ItemTag): String {
+    fun String.parseItemSection(itemTag: ItemTag, player: OfflinePlayer): String {
         // 定位最外层 <> 包裹的字符串
-        val stack = LinkedList<Int>()
         val start = ArrayList<Int>()
         val end = ArrayList<Int>()
-        this.forEachIndexed { index, char ->
-            // 如果是待识别的左括号
-            if (char == '<' && (this[0.coerceAtLeast(index - 1)] != '\\')) {
-                // 压栈
-                stack.push(index)
-                // 如果是右括号
-            } else if (char == '>' && this[(this.length-1).coerceAtMost(index + 1)] != '\\') {
-                // 前面有左括号了
-                if (!stack.isEmpty()) {
-                    // 还不止一个
-                    if (stack.size > 1) {
-                        // 出栈
-                        stack.pop()
-                        // 只有一个
-                    } else {
-                        // 记录并出栈
-                        start.add(stack.poll())
-                        end.add(index)
-                    }
-                }
-            }}
+        load(this, start, end)
         if (start.size == 0) return this
         // 对 <> 包裹的文本进行节点解析
         val listString = StringBuilder(this.substring(0, start[0]))
@@ -184,8 +142,8 @@ object SectionUtils {
             // 解析目标文本
             listString.append(
                 this.substring(start[index]+1, end[index])
-                    .parseItemSection(itemTag)
-                    .getItemSection(itemTag)
+                    .parseItemSection(itemTag, player)
+                    .getItemSection(itemTag, player)
             )
 
             if (index+1 != start.size) {
@@ -203,7 +161,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
-    fun String.getItemSection(itemTag: ItemTag): String {
+    fun String.getItemSection(itemTag: ItemTag, player: OfflinePlayer): String {
         when (val index = this.indexOf("::")) {
             -1 -> {
                 return "<$this>"
@@ -213,17 +171,60 @@ object SectionUtils {
                 val args = this.substring(index + 2)
                 return when (name.lowercase(Locale.getDefault())) {
                     "nbt" -> {
-                        itemTag.getDeepOrElse(args, ItemTagData("<$this>")).asString()
+                        var value: ItemTagData = itemTag
+                        val argsArray: Array<String> = args.split(".").toTypedArray()
+
+                        argsArray.forEach { key ->
+                            when (value.type) {
+                                ItemTagType.LIST -> {
+                                    key.toIntOrNull()?.let { index ->
+                                        val list = value.asList()
+                                        if (list.size > index) {
+                                            value.asList()[index.coerceAtLeast(0)].also { value = it } ?: let { value = ItemTagData("<$this>") }
+                                        } else { value = ItemTagData("<$this>") }
+                                    } ?: let { value = ItemTagData("<$this>") }
+                                }
+                                ItemTagType.COMPOUND -> value.asCompound()[key]?.also { value = it } ?: let { value = ItemTagData("<$this>") }
+                                else -> let { value = ItemTagData("<$this>") }
+                            }
+                        }
+
+                        return value.asString()
                     }
                     "data" -> {
-                        itemTag["NeigeItems"]?.asCompound()?.get("data")?.asString().let {
-                            it.parseObject<HashMap<String, String>>()[args] ?: "<$this>"
-                        }
-                        "<$this>"
+                        val data = itemTag["NeigeItems"]?.asCompound()?.get("data")?.asString()
+                        data?.parseObject<HashMap<String, String>>()?.get(args) ?: "<$this>"
                     }
-                    else -> "<$this>"
+                    else -> {
+                        return SectionManager.sectionParsers[name]?.onRequest(args.split("_"), null, player) ?: "<$this>"
+                    }
                 }
             }
         }
+    }
+
+    private fun load(string: String, start: ArrayList<Int>, end: ArrayList<Int>) {
+        val stack = LinkedList<Int>()
+        string.forEachIndexed { index, char ->
+            // 如果是待识别的左括号
+            if (char == '<' && (string[0.coerceAtLeast(index - 1)] != '\\')) {
+                // 压栈
+                stack.push(index)
+                // 如果是右括号
+            } else if (char == '>' && string[(string.length-1).coerceAtMost(index + 1)] != '\\') {
+                // 前面有左括号了
+                if (!stack.isEmpty()) {
+                    // 还不止一个
+                    if (stack.size > 1) {
+                        // 出栈
+                        stack.pop()
+                        // 只有一个
+                    } else {
+                        // 记录并出栈
+                        start.add(stack.poll())
+                        end.add(index)
+                    }
+                }
+            }}
     }
 }

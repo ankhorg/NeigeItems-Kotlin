@@ -1,11 +1,10 @@
 package pers.neige.neigeitems.utils
 
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.ItemTagList
-import taboolib.module.nms.ItemTagType
+import pers.neige.neigeitems.item.ItemInfo
+import taboolib.module.nms.*
 import kotlin.math.floor
 
 
@@ -175,5 +174,19 @@ object ItemUtils {
                 this.world?.dropItem(this, itemStack)
             }
         } ?: this.world?.dropItem(this, itemStack)
+    }
+
+    @JvmStatic
+    fun ItemStack.isNiItem(): ItemInfo? {
+        if (this.type != Material.AIR) {
+            // 获取物品NBT
+            val itemTag = this.getItemTag()
+            // 如果为非NI物品则终止操作
+            val neigeItems = itemTag["NeigeItems"]?.asCompound() ?: let { return null }
+            // 获取物品id
+            val id = neigeItems["id"]?.asString() ?: let { return null }
+            return ItemInfo(itemTag, neigeItems, id)
+        }
+        return null
     }
 }

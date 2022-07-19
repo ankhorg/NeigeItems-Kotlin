@@ -3,6 +3,7 @@ package pers.neige.neigeitems.section.impl
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
+import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.manager.ScriptManager
 import pers.neige.neigeitems.section.SectionParser
@@ -24,9 +25,7 @@ object JavascriptParser : SectionParser() {
             val map = HashMap<String, Any>()
             player?.let {
                 map["player"] = player
-                papiHooker?.let {
-                    map["papi"] = java.util.function.Function<String, String> { string -> papiHooker.papi(player, string) }
-                }
+                map["papi"] = java.util.function.Function<String, String> { string -> papi(player, string) }
             }
             map["vars"] = java.util.function.Function<String, String> { string -> string.parseSection(cache, player, sections) }
             return ScriptManager.compiledScripts[path]?.invokeFunction(func, map, args = data.getStringList("args").toTypedArray())?.toString()

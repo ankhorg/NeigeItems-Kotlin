@@ -1,6 +1,8 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
+import org.bukkit.OfflinePlayer
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.hook.mythicmobs.impl.LegacyMythicMobsHookerImpl
 import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl
@@ -58,4 +60,20 @@ object HookerManager {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "Vault"))
             null
         }
+
+    @JvmStatic
+    fun papi(player: OfflinePlayer, string: String): String {
+        return when (papiHooker) {
+            null -> string
+            else -> papiHooker.papi(player, string)
+        }
+    }
+
+    @JvmStatic
+    fun papiColor(player: OfflinePlayer, string: String): String {
+        return when (papiHooker) {
+            null -> ChatColor.translateAlternateColorCodes('&', string)
+            else -> papiHooker.papi(player, ChatColor.translateAlternateColorCodes('&', string))
+        }
+    }
 }

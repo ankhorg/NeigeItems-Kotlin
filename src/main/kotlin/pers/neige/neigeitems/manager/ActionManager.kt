@@ -4,19 +4,26 @@ import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemAction
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.manager.ConfigManager.config
+import pers.neige.neigeitems.manager.HookerManager.papi
+import pers.neige.neigeitems.manager.HookerManager.papiColor
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.manager.HookerManager.vaultHooker
+import pers.neige.neigeitems.utils.ActionUtils.consume
+import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
+import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
@@ -56,18 +63,16 @@ object ActionManager {
     }
 
     fun runAction(player: Player, action: String, itemTag: ItemTag? = null): Boolean {
-        var actionString: String = ""
-        itemTag?.let {
-            actionString = action.parseItemSection(itemTag).replace("\\<", "<").replace("\\>", ">")
-        } ?: let {
-            actionString = action
+        val actionString = when (itemTag) {
+            null -> action
+            else -> action.parseItemSection(itemTag, player).replace("\\<", "<").replace("\\>", ">")
         }
-        var actionType = action.lowercase(Locale.getDefault())
+        var actionType = actionString.lowercase(Locale.getDefault())
         var actionContent = ""
-        val index = action.indexOf(": ")
+        val index = actionString.indexOf(": ")
         if (index != -1) {
-            actionType = action.substring(0, index).lowercase(Locale.getDefault())
-            actionContent = action.substring(index+2, action.length)
+            actionType = actionString.substring(0, index).lowercase(Locale.getDefault())
+            actionContent = actionString.substring(index+2, actionString.length)
         }
         actions[actionType]?.let {
             val actionFunction: BiFunction<Player, String, Boolean> = it
@@ -94,48 +99,28 @@ object ActionManager {
     private fun loadBasicActions() {
         // 向玩家发送消息
         addAction("tell", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                player.sendMessage(papiHooker.papi(player, ChatColor.translateAlternateColorCodes('&', string)))
-            } ?: let {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', string))
-            }
+            player.sendMessage(papiColor(player, string))
             true
         })
         // 向玩家发送消息(不将&解析为颜色符号)
         addAction("tellNoColor", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                player.sendMessage(papiHooker.papi(player, string))
-            } ?: let {
-                player.sendMessage(string)
-            }
+            player.sendMessage(papi(player, string))
             true
         })
         // 强制玩家发送消息
         addAction("chat", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                player.chat(papiHooker.papi(player, string))
-            } ?: let {
-                player.chat(string)
-            }
+            player.chat(papi(player, string))
             true
         })
         // 强制玩家发送消息(将&解析为颜色符号)
         addAction("chatWithColor", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                player.chat(papiHooker.papi(player, ChatColor.translateAlternateColorCodes('&', string)))
-            } ?: let {
-                player.chat(ChatColor.translateAlternateColorCodes('&', string))
-            }
+            player.chat(papiColor(player, string))
             true
         })
         // 强制玩家执行指令
         addAction("command", BiFunction<Player, String, Boolean> { player, string ->
             bukkitScheduler.callSyncMethod(plugin, Callable {
-                papiHooker?.let {
-                    Bukkit.dispatchCommand(player, papiHooker.papi(player, ChatColor.translateAlternateColorCodes('&', string)))
-                } ?: let {
-                    Bukkit.dispatchCommand(player, ChatColor.translateAlternateColorCodes('&', string))
-                }
+                Bukkit.dispatchCommand(player, papiColor(player, string))
             })
             true
         })
@@ -144,115 +129,97 @@ object ActionManager {
         // 强制玩家执行指令(不将&解析为颜色符号)
         addAction("commandNoColor", BiFunction<Player, String, Boolean> { player, string ->
             bukkitScheduler.callSyncMethod(plugin, Callable {
-                papiHooker?.let {
-                    Bukkit.dispatchCommand(player, papiHooker.papi(player, string))
-                } ?: let {
-                    Bukkit.dispatchCommand(player, string)
-                }
+                Bukkit.dispatchCommand(player, papi(player, string))
             })
             true
         })
         // 后台执行指令
         addAction("console", BiFunction<Player, String, Boolean> { player, string ->
             bukkitScheduler.callSyncMethod(plugin, Callable {
-                papiHooker?.let {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papiHooker.papi(player, ChatColor.translateAlternateColorCodes('&', string)))
-                } ?: let {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', string))
-                }
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papiColor(player, string))
             })
             true
         })
         // 后台执行指令(不将&解析为颜色符号)
         addAction("consoleNoColor", BiFunction<Player, String, Boolean> { player, string ->
             bukkitScheduler.callSyncMethod(plugin, Callable {
-                papiHooker?.let {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papiHooker.papi(player, string))
-                } ?: let {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), string)
-                }
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papi(player, string))
             })
             true
         })
         // 给予玩家金钱
         addAction("giveMoney", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                vaultHooker?.giveMoney(player, papiHooker.papi(player, string).toDoubleOrNull() ?: 0.toDouble())
-            } ?: let {
-                vaultHooker?.giveMoney(player, string.toDoubleOrNull() ?: 0.toDouble())
-            }
+            vaultHooker?.giveMoney(player, papi(player, string).toDoubleOrNull() ?: 0.toDouble())
             true
         })
         // 扣除玩家金钱
         addAction("takeMoney", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                vaultHooker?.takeMoney(player, papiHooker.papi(player, string).toDoubleOrNull() ?: 0.toDouble())
-            } ?: let {
-                vaultHooker?.takeMoney(player, string.toDoubleOrNull() ?: 0.toDouble())
-            }
+            vaultHooker?.takeMoney(player, papi(player, string).toDoubleOrNull() ?: 0.toDouble())
             true
         })
         // 给予玩家经验
         addAction("giveExp", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                player.giveExp(papiHooker.papi(player, string).toIntOrNull() ?: 0)
-            } ?: let {
-                player.giveExp(string.toIntOrNull() ?: 0)
-            }
+            player.giveExp(papi(player, string).toIntOrNull() ?: 0)
             true
         })
         // 扣除玩家经验
         addAction("takeExp", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                player.giveExp((papiHooker.papi(player, string).toIntOrNull() ?: 0)*-1)
-            } ?: let {
-                player.giveExp((string.toIntOrNull() ?: 0)*-1)
-            }
+            player.giveExp((papi(player, string).toIntOrNull() ?: 0)*-1)
             true
         })
         // 设置玩家经验
         addAction("setExp", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                player.exp = papiHooker.papi(player, string).toFloatOrNull() ?: 0.toFloat()
-            } ?: let {
-                player.exp = string.toFloatOrNull() ?: 0.toFloat()
-            }
+            player.exp = papi(player, string).toFloatOrNull() ?: 0.toFloat()
             true
         })
         // 给予玩家经验等级
         addAction("giveLevel", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                player.giveExpLevels(papiHooker.papi(player, string).toIntOrNull() ?: 0)
-            } ?: let {
-                player.giveExpLevels(string.toIntOrNull() ?: 0)
-            }
+            player.giveExpLevels(papi(player, string).toIntOrNull() ?: 0)
             true
         })
         // 扣除玩家经验等级
         addAction("takeLevel", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                player.giveExpLevels((papiHooker.papi(player, string).toIntOrNull() ?: 0)*-1)
-            } ?: let {
-                player.giveExpLevels((string.toIntOrNull() ?: 0)*-1)
-            }
+            player.giveExpLevels((papi(player, string).toIntOrNull() ?: 0)*-1)
             true
         })
         // 设置玩家经验等级
         addAction("setLevel", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                player.level = papiHooker.papi(player, string).toIntOrNull() ?: 0
-            } ?: let {
-                player.level = string.toIntOrNull() ?: 0
-            }
+            player.level = papi(player, string).toIntOrNull() ?: 0
+            true
+        })
+        // 给予玩家饱食度
+        addAction("giveFood", BiFunction<Player, String, Boolean> { player, string ->
+            player.foodLevel = player.foodLevel + (papi(player, string).toIntOrNull() ?: 0)
+            true
+        })
+        // 扣除玩家饱食度
+        addAction("takeFood", BiFunction<Player, String, Boolean> { player, string ->
+            player.foodLevel = player.foodLevel - (papi(player, string).toIntOrNull() ?: 0)
+            true
+        })
+        // 设置玩家饱食度
+        addAction("setFood", BiFunction<Player, String, Boolean> { player, string ->
+            player.foodLevel = papi(player, string).toIntOrNull() ?: 0
+            true
+        })
+        // 给予玩家生命
+        addAction("giveHealth", BiFunction<Player, String, Boolean> { player, string ->
+            player.health = (player.health + (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtMost(player.maxHealth)
+            true
+        })
+        // 扣除玩家生命
+        addAction("takeHealth", BiFunction<Player, String, Boolean> { player, string ->
+            player.health = (player.health - (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtLeast(0.toDouble())
+            true
+        })
+        // 设置玩家生命
+        addAction("setHealth", BiFunction<Player, String, Boolean> { player, string ->
+            player.health = (papi(player, string).toDoubleOrNull() ?: 0.toDouble()).coerceAtLeast(0.toDouble()).coerceAtMost(player.maxHealth)
             true
         })
         // 延迟(单位是tick)
         addAction("delay", BiFunction<Player, String, Boolean> { player, string ->
-            papiHooker?.let {
-                Thread.sleep((papiHooker.papi(player, string).toLongOrNull() ?: 0)*50)
-            } ?: let {
-                Thread.sleep((string.toLongOrNull() ?: 0)*50)
-            }
+            Thread.sleep((papi(player, string).toLongOrNull() ?: 0)*50)
             true
         })
         // 终止
@@ -261,113 +228,58 @@ object ActionManager {
         })
     }
 
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     fun listener(event: PlayerInteractEvent) {
         // 获取玩家
         val player = event.player
-        // 获取手持物品
+        // 获取操作物品
         val itemStack = event.item
-        if (itemStack == null || itemStack.type == Material.AIR) return
+        // 物品NBT
+        val itemTag: ItemTag
+        // NI物品数据
+        val neigeItems: ItemTag
+        // NI物品id
+        val id: String
+        when (val itemInfo = itemStack?.isNiItem()) {
+            null -> return
+            else -> {
+                itemTag = itemInfo.itemTag
+                neigeItems = itemInfo.neigeItems
+                id = itemInfo.id
+            }
+        }
+        // 获取物品动作
+        val itemAction = itemActions[id] ?: let { return }
+        if (itemAction.left == null && itemAction.right == null && itemAction.all == null) return
+        // 获取物品消耗信息
+        val consume =  itemAction.consume
         // 获取交互类型
         val action = event.action
         val leftAction = (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
         val rightAction = (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
-        // 获取物品NBT
-        val itemTag = itemStack.getItemTag()
-        // 如果为非NI物品则终止操作
-        val neigeItems = itemTag["NeigeItems"]?.asCompound() ?: let { return }
-        // 获取物品id
-        val id = neigeItems["id"]?.asString() ?: let { return }
-        // 获取物品动作
-        val itemAction = itemActions[id] ?: let { return }
-        // 获取物品消耗信息
-        val consume =  itemAction.consume
         // 如果物品配置了消耗事件
         if (consume != null) {
-            // 获取待消耗数量
-            val amount: Int = consume.getInt("amount", 1)
-            // 获取物品使用次数
-            val charge = neigeItems["charge"]
-            // 检测数量是否充足/是否存在使用次数
-            if (itemStack.amount >= amount || charge != null) {
-                // 获取左键是否消耗
-                val left = (leftAction && consume.getBoolean("left", false))
-                // 获取右键是否消耗
-                val right = (rightAction && consume.getBoolean("right", false))
-                // 获取右键是否消耗
-                val all = ((leftAction || rightAction) && consume.getBoolean("all", false))
-                // 如果该物品需要被消耗
-                if (left || right) {
-                    // 取消交互事件
-                    event.isCancelled = true
-                    // 获取冷却
-                    val cooldown = consume.getLong("cooldown", 0)
-                    // 如果冷却存在且大于0
-                    if (cooldown > 0) {
-                        // 获取当前时间
-                        val time = Date().time
-                        // 获取上次使用时间
-                        val lastTime = player.getMetadataEZ("NI-Consume-CD-$id", "Long", 0.toLong()) as Long
-                        // 如果仍处于冷却时间
-                        if ((lastTime + cooldown) > time) {
-                            config.getString("Messages.itemCooldown")?.let {
-                                val message = it.replace("{time}", DecimalFormat("0.#").format((lastTime + cooldown - time)/1000))
-                                player.actionBar(message)
-                            }
-                            // 终止操作
-                            return
-                        }
-                        player.setMetadataEZ("NI-Consume-CD-$id", time)
-                    }
-                    // 如果物品存在使用次数
-                    if (charge != null) {
-                        var itemClone: ItemStack? = null
-                        // 拆分物品
-                        if (itemStack.amount != 1) {
-                            itemClone = itemStack.clone()
-                            itemClone.amount = itemClone.amount - 1
-                            itemStack.amount = 1
-                        }
-                        // 更新次数
-                        val chargeInt = charge.asInt()
-                        if (chargeInt == 1) {
-                            itemStack.amount = 0
-                        } else {
-                            neigeItems["charge"] = ItemTagData(chargeInt - 1)
-                            itemTag.saveTo(itemStack)
-                        }
-                        if (itemClone != null) player.giveItem(itemClone)
-                    } else {
-                        // 消耗物品
-                        itemStack.amount = itemStack.amount - amount
-                    }
-                    // 执行动作
+            // 获取左键是否消耗
+            val left = (leftAction && consume.getBoolean("left", false))
+            // 获取右键是否消耗
+            val right = (rightAction && consume.getBoolean("right", false))
+            // 获取左右键是否消耗
+            val all = ((leftAction || rightAction) && consume.getBoolean("all", false))
+            // 如果该物品需要被消耗
+            if (left || right || all) {
+                // 取消交互事件
+                event.isCancelled = true
+                // 检测冷却
+                if (consume.isCoolDown(player, id)) return
+                // 获取待消耗数量
+                val amount: Int = consume.getInt("amount", 1)
+                // 消耗物品
+                if (itemStack.consume(player, amount, itemTag, neigeItems)) {
+                    // 消耗成功, 执行动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        itemAction.all?.let {
-                            when (it) {
-                                is String -> runAction(player, it, itemTag)
-                                is List<*> -> runAction(player, it as List<String>, itemTag)
-                                else -> return@Runnable
-                            }
-                        }
-                        if (left) {
-                            itemAction.left?.let {
-                                when (it) {
-                                    is String -> runAction(player, it, itemTag)
-                                    is List<*> -> runAction(player, it as List<String>, itemTag)
-                                    else -> return@Runnable
-                                }
-                            }
-                        }
-                        if (right) {
-                            itemAction.right?.let {
-                                when (it) {
-                                    is String -> runAction(player, it, itemTag)
-                                    is List<*> -> runAction(player, it as List<String>, itemTag)
-                                    else -> return@Runnable
-                                }
-                            }
-                        }
+                        itemAction.run(player, itemAction.all, itemTag)
+                        if (left) itemAction.run(player, itemAction.left, itemTag)
+                        if (right) itemAction.run(player, itemAction.right, itemTag)
                     })
                 }
             }
@@ -375,51 +287,70 @@ object ActionManager {
             // 取消交互事件
             event.isCancelled = true
             bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                // 获取冷却
-                val cooldown = itemAction.cooldown
-                // 如果冷却存在且大于0
-                if (cooldown > 0) {
-                    // 获取当前时间
-                    val time = Date().time
-                    // 获取上次使用时间
-                    val lastTime = player.getMetadataEZ("NI-CD-$id", "Long", 0.toLong()) as Long
-                    // 如果仍处于冷却时间
-                    if ((lastTime + cooldown) > time) {
-                        config.getString("Messages.itemCooldown")?.let {
-                            val message = it.replace("{time}", DecimalFormat("0.#").format((lastTime + cooldown - time)/1000))
-                            player.actionBar(message)
-                        }
-                        // 终止操作
-                        return@Runnable
-                    }
-                    player.setMetadataEZ("NI-CD-$id", time)
+                // 检测冷却
+                if (itemAction.isCoolDown(player)) return@Runnable
+                // 执行动作
+                itemAction.run(player, itemAction.all, itemTag)
+                if (leftAction) itemAction.run(player, itemAction.left, itemTag)
+                if (rightAction) itemAction.run(player, itemAction.right, itemTag)
+            })
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    fun listener(event: PlayerItemConsumeEvent) {
+        // 获取玩家
+        val player = event.player
+        // 获取手持物品
+        val itemStack = event.item
+        // 物品NBT
+        val itemTag: ItemTag
+        // NI物品数据
+        val neigeItems: ItemTag
+        // NI物品id
+        val id: String
+        when (val itemInfo = itemStack.isNiItem()) {
+            null -> return
+            else -> {
+                itemTag = itemInfo.itemTag
+                neigeItems = itemInfo.neigeItems
+                id = itemInfo.id
+            }
+        }
+        // 获取物品动作
+        val itemAction = itemActions[id] ?: let { return }
+        itemAction.eat ?: let { return }
+        // 获取物品消耗信息
+        val consume =  itemAction.consume
+        // 如果该物品需要被消耗
+        if (consume != null && consume.getBoolean("eat", false)) {
+            // 取消交互事件
+            event.isCancelled = true
+            // 检测冷却
+            if (consume.isCoolDown(player, id)) return
+            // 获取待消耗数量
+            val amount: Int = consume.getInt("amount", 1)
+            // 消耗物品
+            if (itemStack.consume(player, amount, itemTag, neigeItems)) {
+                // 设置物品
+                if (event.item == player.inventory.itemInMainHand) {
+                    player.inventory.setItemInMainHand(itemStack)
+                } else {
+                    player.inventory.setItemInOffHand(itemStack)
                 }
                 // 执行动作
-                itemAction.all?.let {
-                    when (it) {
-                        is String -> runAction(player, it, itemTag)
-                        is List<*> -> runAction(player, it as List<String>, itemTag)
-                        else -> return@Runnable
-                    }
-                }
-                if (leftAction) {
-                    itemAction.left?.let {
-                        when (it) {
-                            is String -> runAction(player, it, itemTag)
-                            is List<*> -> runAction(player, it as List<String>, itemTag)
-                            else -> return@Runnable
-                        }
-                    }
-                }
-                if (rightAction) {
-                    itemAction.right?.let {
-                        when (it) {
-                            is String -> runAction(player, it, itemTag)
-                            is List<*> -> runAction(player, it as List<String>, itemTag)
-                            else -> return@Runnable
-                        }
-                    }
-                }
+                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                    itemAction.run(player, itemAction.eat, itemTag)
+                })
+            }
+        } else {
+            // 取消交互事件
+            event.isCancelled = true
+            bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                // 检测冷却
+                if (itemAction.isCoolDown(player)) return@Runnable
+                // 执行动作
+                itemAction.run(player, itemAction.eat, itemTag)
             })
         }
     }
