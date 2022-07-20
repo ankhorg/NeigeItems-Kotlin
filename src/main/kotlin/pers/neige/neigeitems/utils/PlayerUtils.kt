@@ -3,6 +3,7 @@ package pers.neige.neigeitems.utils
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
+import org.bukkit.metadata.Metadatable
 import pers.neige.neigeitems.NeigeItems.plugin
 import taboolib.platform.util.giveItem
 
@@ -26,7 +27,7 @@ object PlayerUtils {
 
     // 获取玩家Metadata
     @JvmStatic
-    fun Player.getMetadataEZ(key: String, type: String, def: Any): Any? {
+    fun Metadatable.getMetadataEZ(key: String, type: String, def: Any): Any? {
         if(!this.hasMetadata(key)) {
             this.setMetadataEZ(key, def)
             return def
@@ -46,7 +47,7 @@ object PlayerUtils {
 
     // 设置玩家Metadata
     @JvmStatic
-    fun Player.setMetadataEZ(key: String, value: Any) {
+    fun Metadatable.setMetadataEZ(key: String, value: Any) {
         this.setMetadata(key, FixedMetadataValue(plugin, value))
     }
 }

@@ -16,10 +16,12 @@ object InheritParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
+        // 获取继承模板ID
         data.getString("template")?.let { inheritId ->
+            // 获取继承模板
             val result = when (val section = sections?.getConfigurationSection(inheritId)) {
                 null -> sections?.getString(inheritId)?.parseSection(cache, player, sections)
-                else -> Section(section).load(cache, player, sections)
+                else -> Section(section).get(cache, player, sections)
             }
             return result
         }

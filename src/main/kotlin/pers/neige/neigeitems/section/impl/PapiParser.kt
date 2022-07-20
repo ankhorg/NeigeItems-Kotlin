@@ -4,6 +4,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.section.SectionParser
+import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 object PapiParser : SectionParser() {
     override val id: String = "papi"
@@ -14,6 +15,6 @@ object PapiParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        return player?.let { papi(player, "%${args.joinToString("_")}%") } ?: "<$id::${args.joinToString("_")}>"
+        return player?.let { papi(player, "%${args.joinToString("_")}%").parseSection(cache, player, sections) } ?: "<$id::${args.joinToString("_")}>"
     }
 }
