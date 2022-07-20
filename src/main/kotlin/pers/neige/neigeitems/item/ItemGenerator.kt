@@ -257,10 +257,6 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                     neigeItems["charge"] = ItemTagData(configSection.getInt("options.charge"))
                     neigeItems["maxCharge"] = ItemTagData(configSection.getInt("options.charge"))
                 }
-                // 首次掉落归属
-                if (configSection.contains("options.owner")) {
-                    neigeItems["owner"] = ItemTagData(configSection.getString("options.owner"))
-                }
                 // 设置掉落物闪光颜色
                 if (configSection.contains("options.color")) {
                     try {
