@@ -17,18 +17,14 @@ object NumberParser : SectionParser() {
         sections: ConfigurationSection?
     ): String? {
         // 如果配置了数字范围
-        try {
-            // 获取大小范围
-            val min = data.getString("min")?.parseSection(cache, player, sections)?.toDouble()
-            val max = data.getString("max")?.parseSection(cache, player, sections)?.toDouble()
-            // 获取取整位数
-            val fixed = data.getString("fixed")?.parseSection(cache, player, sections)?.toIntOrNull() ?: 0
-            // 加载随机数
-            if (min != null && max != null) {
-                return "%.${fixed}f".format(min+(Math.random()*(max-min)))
-            }
-        } catch (error: Throwable) {
-            error.printStackTrace()
+        // 获取大小范围
+        val min = data.getString("min")?.parseSection(cache, player, sections)?.toDoubleOrNull()
+        val max = data.getString("max")?.parseSection(cache, player, sections)?.toDoubleOrNull()
+        // 获取取整位数
+        val fixed = data.getString("fixed")?.parseSection(cache, player, sections)?.toIntOrNull() ?: 0
+        // 加载随机数
+        if (min != null && max != null) {
+            return "%.${fixed}f".format(min+(Math.random()*(max-min)))
         }
         return null
     }

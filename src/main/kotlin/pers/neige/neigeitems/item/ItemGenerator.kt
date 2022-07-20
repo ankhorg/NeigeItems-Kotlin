@@ -213,24 +213,22 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                         try {
                             val itemFlag = ItemFlag.valueOf(value)
                             itemMeta?.addItemFlags(itemFlag)
-                        } catch (error: Throwable) {}
+                        } catch (error: IllegalArgumentException) {}
                     }
                 }
                 // 设置物品颜色
                 if (configSection.contains("color")) {
-                    try {
-                        var color = configSection.get("color")
-                        color = when (color) {
-                            is String -> color.toIntOrNull(16) ?: 0
-                            else -> color.toString().toIntOrNull() ?: 0
-                        }
-                        color = color.coerceAtLeast(0).coerceAtMost(0xFFFFFF)
-                        when (itemMeta) {
-                            is LeatherArmorMeta -> itemMeta.setColor(Color.fromRGB(color))
-                            is MapMeta -> itemMeta.color = Color.fromRGB(color)
-                            is PotionMeta -> itemMeta.color = Color.fromRGB(color)
-                        }
-                    } catch (error: Throwable) {}
+                    var color = configSection.get("color")
+                    color = when (color) {
+                        is String -> color.toIntOrNull(16) ?: 0
+                        else -> color.toString().toIntOrNull() ?: 0
+                    }
+                    color = color.coerceAtLeast(0).coerceAtMost(0xFFFFFF)
+                    when (itemMeta) {
+                        is LeatherArmorMeta -> itemMeta.setColor(Color.fromRGB(color))
+                        is MapMeta -> itemMeta.color = Color.fromRGB(color)
+                        is PotionMeta -> itemMeta.color = Color.fromRGB(color)
+                    }
                 }
                 itemStack.itemMeta = itemMeta
                 // 设置物品NBT
@@ -256,7 +254,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                             ChatColor.valueOf(it)
                             neigeItems["color"] = ItemTagData(it)
                         }
-                    } catch (error: Throwable) {}
+                    } catch (error: IllegalArgumentException) {}
                 }
                 // 设置掉落执行技能
                 if (configSection.contains("options.dropskill")) {

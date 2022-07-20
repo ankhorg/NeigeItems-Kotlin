@@ -16,6 +16,7 @@ import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.HookerManager.papiColor
 import pers.neige.neigeitems.manager.HookerManager.vaultHooker
 import pers.neige.neigeitems.utils.ActionUtils.consume
+import pers.neige.neigeitems.utils.ActionUtils.consumeAndReturn
 import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
@@ -23,6 +24,7 @@ import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
+import taboolib.platform.util.giveItem
 import java.io.File
 import java.io.FileReader
 import java.util.*
@@ -349,28 +351,30 @@ object ActionManager {
         val consume =  itemAction.consume
         // 如果该物品需要被消耗
         if (consume != null && consume.getBoolean("eat", false)) {
-            // 取消交互事件
-            event.isCancelled = true
             // 检测冷却
             if (consume.isCoolDown(player, id)) return
             // 获取待消耗数量
             val amount: Int = consume.getInt("amount", 1)
             // 消耗物品
-            if (itemStack.consume(player, amount, itemTag, neigeItems)) {
-                // 设置物品
-                if (event.item == player.inventory.itemInMainHand) {
-                    player.inventory.setItemInMainHand(itemStack)
-                } else {
-                    player.inventory.setItemInOffHand(itemStack)
+            when (val itemStacks = itemStack.consumeAndReturn(amount, itemTag, neigeItems)) {
+                null -> event.isCancelled = true
+                else -> {
+                    // 设置物品
+                    event.setItem(itemStacks[0])
+                    if (itemStacks.size > 1) {
+                        bukkitScheduler.runTaskLater(plugin, Runnable {
+                            player.giveItem(itemStacks[1])
+                        }, 1)
+                    }
+                    // 执行动作
+                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                        itemAction.run(player, itemAction.eat, itemTag)
+                    })
                 }
-                // 执行动作
-                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    itemAction.run(player, itemAction.eat, itemTag)
-                })
             }
         } else {
-            // 取消交互事件
-            event.isCancelled = true
+            // 不准吃掉
+            event.setItem(event.item)
             bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
                 // 检测冷却
                 if (itemAction.isCoolDown(player)) return@Runnable

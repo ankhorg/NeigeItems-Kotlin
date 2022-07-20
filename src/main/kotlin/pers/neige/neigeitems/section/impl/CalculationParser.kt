@@ -19,8 +19,9 @@ object CalculationParser : SectionParser() {
     ): String? {
         // 如果配置了数字范围
         try {
-            // 计算结果
+            // 加载公式
             data.getString("formula")?.parseSection(cache, player, sections)?.let {
+                // 计算结果
                 var result = it.eval().toString().toDouble()
                 // 获取大小范围
                 data.getString("min")?.parseSection(cache, player, sections)?.toDouble()?.let { min ->

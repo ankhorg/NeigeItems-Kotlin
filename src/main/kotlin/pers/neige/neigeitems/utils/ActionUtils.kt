@@ -111,4 +111,48 @@ object ActionUtils {
         }
         return false
     }
+
+    /**
+     * 消耗一定数量物品, 返回操作后的物品数组
+     * @param amount 消耗数
+     * @param itemTag 物品NBT
+     * @param neigeItems NI特殊NBT
+     * @param charge 物品使用次数NBT, 不填则主动生成
+     * @return 操作后的物品数组, 消耗失败返回空值
+     */
+    @JvmStatic
+    fun ItemStack.consumeAndReturn(amount: Int,
+        itemTag: ItemTag,
+        neigeItems: ItemTag,
+        charge: ItemTagData? = neigeItems["charge"]
+    ): Array<ItemStack>? {
+        if (charge != null) {
+            // 获取剩余使用次数
+            val chargeInt = charge.asInt()
+            if (chargeInt >= amount) {
+                var itemClone: ItemStack? = null
+                // 拆分物品
+                if (this.amount != 1) {
+                    itemClone = this.clone()
+                    itemClone.amount = itemClone.amount - 1
+                    this.amount = 1
+                }
+                // 更新次数
+                if (chargeInt == amount) {
+                    this.amount = 0
+                } else {
+                    neigeItems["charge"] = ItemTagData(chargeInt - amount)
+                    itemTag.saveTo(this)
+                }
+                if (itemClone != null) return arrayOf(this, itemClone)
+                return arrayOf(this)
+            }
+        } else {
+            if (this.amount >= amount) {
+                this.amount = this.amount - amount
+                return arrayOf(this)
+            }
+        }
+        return null
+    }
 }
