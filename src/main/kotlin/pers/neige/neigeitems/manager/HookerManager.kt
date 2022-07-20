@@ -20,6 +20,8 @@ import pers.neige.neigeitems.item.ItemPlaceholder
 import pers.neige.neigeitems.manager.ConfigManager.config
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.util.*
+import java.util.function.BiFunction
 
 object HookerManager {
     val nashornHooker: NashornHooker =
@@ -92,6 +94,7 @@ object HookerManager {
         null
     }
 
+    // 解析papi变量, 不解析颜色代码
     @JvmStatic
     fun papi(player: OfflinePlayer, string: String): String {
         return when (papiHooker) {
@@ -100,6 +103,7 @@ object HookerManager {
         }
     }
 
+    // 解析papi变量的同时解析颜色代码
     @JvmStatic
     fun papiColor(player: OfflinePlayer, string: String): String {
         return when (papiHooker) {
@@ -108,11 +112,24 @@ object HookerManager {
         }
     }
 
+    // 解析物品变量
     @JvmStatic
     fun parseItemPlaceholder(itemStack: ItemStack, string: String): String {
         return when (itemPlaceholder) {
             null -> string
             else -> itemPlaceholder.parse(itemStack, string)
         }
+    }
+
+    // 解析物品名和物品Lore中的物品变量
+    @JvmStatic
+    fun parseItemPlaceholders(itemStack: ItemStack) {
+        itemPlaceholder?.let { itemPlaceholder.itemParse(itemStack) }
+    }
+
+    // 添加物品变量附属
+    @JvmStatic
+    fun addItemPlaceholderExpansion(id: String, function: BiFunction<ItemStack, String, String?>) {
+        itemPlaceholder?.let { itemPlaceholder.addExpansion(id, function) }
     }
 }

@@ -25,7 +25,7 @@ object PlayerUtils {
         } ?: giveItem(itemStack)
     }
 
-    // 获取玩家Metadata
+    // 获取Metadata
     @JvmStatic
     fun Metadatable.getMetadataEZ(key: String, type: String, def: Any): Any? {
         if(!this.hasMetadata(key)) {
@@ -45,7 +45,7 @@ object PlayerUtils {
         }
     }
 
-    // 设置玩家Metadata
+    // 设置Metadata
     @JvmStatic
     fun Metadatable.setMetadataEZ(key: String, value: Any) {
         this.setMetadata(key, FixedMetadataValue(plugin, value))

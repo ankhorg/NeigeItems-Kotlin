@@ -15,6 +15,7 @@ import java.text.DecimalFormat
 import java.util.*
 
 object ActionUtils {
+    // 通过配置信息判断玩家是否处于消耗冷却(消耗物品触发物品动作的冷却时间)
     @JvmStatic
     fun ConfigurationSection.isCoolDown(player: Player, id: String): Boolean {
         // 获取冷却
@@ -39,6 +40,7 @@ object ActionUtils {
         return false
     }
 
+    // 通过动作信息判断玩家是否处于动作冷却(无消耗触发物品动作的冷却时间)
     @JvmStatic
     fun ItemAction.isCoolDown(player: Player): Boolean {
         // 获取冷却
@@ -63,8 +65,23 @@ object ActionUtils {
         return false
     }
 
+    /**
+     * 消耗一定数量物品
+     * @param player 物品持有者, 用于接收拆分出的物品
+     * @param amount 消耗数
+     * @param itemTag 物品NBT
+     * @param neigeItems NI特殊NBT
+     * @param charge 物品使用次数NBT, 不填则主动生成
+     * @return 是否消耗成功
+     */
     @JvmStatic
-    fun ItemStack.consume(player: Player, amount: Int, itemTag: ItemTag, neigeItems: ItemTag, charge: ItemTagData? = neigeItems["charge"]): Boolean {
+    fun ItemStack.consume(
+        player: Player,
+        amount: Int,
+        itemTag: ItemTag,
+        neigeItems: ItemTag,
+        charge: ItemTagData? = neigeItems["charge"]
+    ): Boolean {
         if (charge != null) {
             // 获取剩余使用次数
             val chargeInt = charge.asInt()

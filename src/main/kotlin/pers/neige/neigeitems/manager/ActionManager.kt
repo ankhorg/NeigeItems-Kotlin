@@ -29,18 +29,24 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
 
+// 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
 object ActionManager {
-    // 拥有动作的物品
+    // 拥有动作的物品及相关动作
     val itemActions: ConcurrentHashMap<String, ItemAction> = ConcurrentHashMap<String, ItemAction>()
 
+    // 物品动作实现函数
     val actions = HashMap<String, BiFunction<Player, String, Boolean>>()
 
     init {
+        // 加载所有拥有动作的物品及相关动作
         loadItemActions()
+        // 加载基础物品动作
         loadBasicActions()
+        // 加载自定义动作
         loadCustomActions()
     }
 
+    // 重载物品动作管理器
     fun reload() {
         itemActions.clear()
         actions.clear()
@@ -49,22 +55,14 @@ object ActionManager {
         loadCustomActions()
     }
 
-    // 加载自定义动作
-    private fun loadCustomActions() {
-        for (file in ConfigUtils.getAllFiles("CustomActions")) {
-            // 没有main这个函数就会报错
-            try {
-                pers.neige.neigeitems.script.CompiledScript(FileReader(file)).invokeFunction("main", null)
-            } catch (error: NoSuchMethodException) {}
-        }
-    }
-
+    // 执行物品动作
     fun runAction(player: Player, action: List<String>, itemTag: ItemTag? = null) {
         for (value in action) {
             if (!runAction(player, value, itemTag)) break
         }
     }
 
+    // 执行物品动作
     fun runAction(player: Player, action: String, itemTag: ItemTag? = null): Boolean {
         val actionString = when (itemTag) {
             null -> action
@@ -84,6 +82,12 @@ object ActionManager {
         return true
     }
 
+    // 添加物品动作
+    fun addAction(id: String, function: BiFunction<Player, String, Boolean>) {
+        actions[id.lowercase(Locale.getDefault())] = function
+    }
+
+    // 加载所有拥有动作的物品及相关动作
     private fun loadItemActions() {
         for (file: File in ConfigUtils.getAllFiles("ItemActions")) {
             val config = YamlConfiguration.loadConfiguration(file)
@@ -95,10 +99,17 @@ object ActionManager {
         }
     }
 
-    fun addAction(id: String, function: BiFunction<Player, String, Boolean>) {
-        actions[id.lowercase(Locale.getDefault())] = function
+    // 加载自定义动作
+    private fun loadCustomActions() {
+        for (file in ConfigUtils.getAllFiles("CustomActions")) {
+            // 没有main这个函数就会报错
+            try {
+                pers.neige.neigeitems.script.CompiledScript(FileReader(file)).invokeFunction("main", null)
+            } catch (error: NoSuchMethodException) {}
+        }
     }
 
+    // 加载基础物品动作
     private fun loadBasicActions() {
         // 向玩家发送消息
         addAction("tell") { player, string ->

@@ -202,6 +202,7 @@ object SectionUtils {
         }
     }
 
+    // 加载字符串最外层<>位置
     private fun load(string: String, start: ArrayList<Int>, end: ArrayList<Int>) {
         val stack = LinkedList<Int>()
         string.forEachIndexed { index, char ->

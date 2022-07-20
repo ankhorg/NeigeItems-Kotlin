@@ -165,6 +165,7 @@ object ItemUtils {
     }
 
 
+    // 掉落指定数量NI物品并触发掉落技能及掉落归属
     @JvmStatic
     fun Location.dropNiItems(itemStack: ItemStack, amount: Int? = null) {
         amount?.let {
@@ -182,6 +183,7 @@ object ItemUtils {
         } ?: this.dropNiItem(itemStack)
     }
 
+    // 掉落NI物品并触发掉落技能及掉落归属
     @JvmStatic
     fun Location.dropNiItem(itemStack: ItemStack) {
         val itemTag = itemStack.getItemTag()
@@ -203,25 +205,7 @@ object ItemUtils {
         }
     }
 
-    @JvmStatic
-    fun Location.dropItems(itemStack: ItemStack, amount: Int? = null): ArrayList<Item> {
-        val item = ArrayList<Item>()
-        amount?.let {
-            val maxStackSize = itemStack.maxStackSize
-            itemStack.amount = maxStackSize
-            val leftAmount = amount % maxStackSize
-            val repeat = floor((amount / maxStackSize).toDouble()).toInt()
-            repeat(repeat) {
-                this.world?.dropItem(this, itemStack)?.let { item.add(it) }
-            }
-            if (leftAmount != 0) {
-                itemStack.amount = leftAmount
-                this.world?.dropItem(this, itemStack)?.let { item.add(it) }
-            }
-        } ?: this.world?.dropItem(this, itemStack)?.let { item.add(it) }
-        return item
-    }
-
+    // 判断ItemStack是否为NI物品并返回NI物品信息
     @JvmStatic
     fun ItemStack.isNiItem(): ItemInfo? {
         if (this.type != Material.AIR) {

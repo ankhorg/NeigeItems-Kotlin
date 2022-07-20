@@ -238,32 +238,30 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                     // 获取掉落偏移信息
                     val offset = fancyDrop.getConfigurationSection("offset")
                     // 获取横向偏移量
-                    val offsetX: Double
                     val offsetXString = offset.getString("x").parseSection(player?.let { it as OfflinePlayer })
-                    if (offsetXString.contains("-")) {
+                    val offsetX: Double = if (offsetXString.contains("-")) {
                         val index = offsetXString.indexOf("-")
                         val min = offsetXString.substring(0, index).toDoubleOrNull()
                         val max = offsetXString.substring(index+1).toDoubleOrNull()
-                        offsetX = when {
+                        when {
                             min != null && max != null -> min + Math.random()*(max-min)
                             else -> 0.1
                         }
                     } else {
-                        offsetX = offsetXString.toDoubleOrNull() ?: 0.1
+                        offsetXString.toDoubleOrNull() ?: 0.1
                     }
                     // 获取纵向偏移量
-                    val offsetY: Double
                     val offsetYString = offset.getString("y").parseSection(player?.let { it as OfflinePlayer })
-                    if (offsetYString.contains("-")) {
+                    val offsetY: Double = if (offsetYString.contains("-")) {
                         val index = offsetYString.indexOf("-")
                         val min = offsetYString.substring(0, index).toDoubleOrNull()
                         val max = offsetYString.substring(index+1).toDoubleOrNull()
-                        offsetY = when {
+                        when {
                             min != null && max != null -> min + Math.random()*(max-min)
                             else -> 0.1
                         }
                     } else {
-                        offsetY = offsetYString.toDoubleOrNull() ?: 0.1
+                        offsetYString.toDoubleOrNull() ?: 0.1
                     }
                     // 获取发射角度类型
                     val angleType = fancyDrop.getString("angle.type").parseSection(player?.let { it as OfflinePlayer })
@@ -340,10 +338,9 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
         return itemManager.getItemStack(id)
     }
 
+    // 这个版本并不需要同步获取物品
     override fun getItemStackSync(id: String): ItemStack? {
-        return bukkitScheduler.callSyncMethod(plugin, Callable {
-            itemManager.getItemStack(id)
-        }).get()
+        return itemManager.getItemStack(id)
     }
 
     override fun castSkill(entity: Entity, skill: String) {

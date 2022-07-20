@@ -14,14 +14,19 @@ import taboolib.module.nms.getItemTag
 import java.util.*
 import java.util.function.BiFunction
 
+// 用于实现物品变量功能
+// 本部分的相关API暴露于HookManager
 class ItemPlaceholder {
+    // 类似papi的实现, 物品变量由众多附属构成
     val expansions = HashMap<String, BiFunction<ItemStack, String, String?>>()
 
+    // 用于添加附属
     fun addExpansion(id: String, function: BiFunction<ItemStack, String, String?>) {
         expansions[id.lowercase(Locale.getDefault())] = function
     }
 
-    private fun itemParse(itemStack: ItemStack) {
+    // 用于解析物品名和物品Lore中的物品变量
+    fun itemParse(itemStack: ItemStack) {
         itemStack.itemMeta?.let { itemMeta ->
             if (itemMeta.hasDisplayName()) {
                 itemMeta.setDisplayName(parse(itemStack, itemMeta.displayName))

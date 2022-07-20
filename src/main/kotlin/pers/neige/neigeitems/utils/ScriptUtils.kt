@@ -6,6 +6,7 @@ import pers.neige.neigeitems.manager.ScriptManager.scriptEngine
 import javax.script.Compilable
 
 object ScriptUtils {
+    // 快速解析js脚本
     @JvmStatic
     fun String.eval(): Any {
         val hashCode = this.hashCode()

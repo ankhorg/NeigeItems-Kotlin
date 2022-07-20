@@ -16,19 +16,24 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 object ItemManager : ItemConfigManager() {
+    // 所有物品生成器
     val items: ConcurrentHashMap<String, ItemGenerator> = ConcurrentHashMap<String, ItemGenerator>()
+    // 物品总数
     val itemAmount get() = itemIds.size
 
     init {
+        // 初始化所有物品生成器
         loadItems()
     }
 
+    // 初始化所有物品生成器
     private fun loadItems() {
         for ((id, itemConfig) in itemConfigs) {
             items[id] = ItemGenerator(itemConfig)
         }
     }
 
+    // 添加物品
     private fun addItem(itemGenerator: ItemGenerator) {
         itemConfigs[itemGenerator.id] = itemGenerator.itemConfig
         itemIds.add(itemGenerator.id)
@@ -41,9 +46,6 @@ object ItemManager : ItemConfigManager() {
         items.clear()
         loadItems()
     }
-//    fun getPageAmount(): Int {
-//        return Math.ceil(this.itemIds.length/config_NI.listItemAmount)
-//    }
 
     // 获取物品
     fun getOriginConfig(id: String): ConfigurationSection? {

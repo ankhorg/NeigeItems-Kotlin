@@ -39,7 +39,7 @@ import java.util.*
         test = "!com.alibaba.fastjson2.parseObject"
     )
 )
-// 物品ID
+// 物品生成器
 class ItemGenerator (val itemConfig: ItemConfig) {
     // 物品ID
     val id = itemConfig.id
@@ -145,19 +145,6 @@ class ItemGenerator (val itemConfig: ItemConfig) {
 
         // 获取私有节点配置
         val sections = configSection.getConfigurationSection("sections")
-//        // 如果当前物品包含预声明节点
-//        sections?.getKeys(false)?.forEach {
-//            when (val value = sections.get(it)) {
-//                // 正儿八经预声明节点
-//                is ConfigurationSection -> {
-//                    Section(value).load(cache, player, sections)
-//                }
-//                // 即时节点
-//                else -> {
-//                    value.toString().parseSection(cache, player, sections)
-//                }
-//            }
-//        }
         // 对文本化配置进行全局节点解析
         configString = configSection
             .saveToString(id)

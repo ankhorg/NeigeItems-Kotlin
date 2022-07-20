@@ -12,11 +12,13 @@ import taboolib.module.metrics.charts.SingleLineChart
 import java.io.File
 import java.io.InputStreamReader
 
+// 配置文件管理器, 用于管理config.yml文件, 对其中缺少的配置项进行主动补全, 同时释放默认配置文件
 object ConfigManager {
     // 默认Config
     private val originConfig: FileConfiguration =
         plugin.getResource("config.yml")?.let { YamlConfiguration.loadConfiguration(InputStreamReader(it, "UTF-8")) } ?: YamlConfiguration()
 
+    // 用于获取配置文件
     val config get() = plugin.config
 
     // 加载默认配置文件
@@ -28,6 +30,7 @@ object ConfigManager {
         plugin.saveResource("Items${File.separator}ExampleItem.yml", false)
         plugin.saveResource("Scripts${File.separator}ExampleScript.js", false)
         plugin.saveDefaultConfig()
+        // 加载bstats
         val metrics = Metrics(15750, plugin.description.version, Platform.BUKKIT)
         metrics.addCustomChart(SingleLineChart("items") {
             ItemManager.itemIds.size

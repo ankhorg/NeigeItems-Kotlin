@@ -5,6 +5,7 @@ import org.bukkit.entity.Player
 import pers.neige.neigeitems.manager.ActionManager
 import taboolib.module.nms.ItemTag
 
+// 用于记录物品的物品动作信息
 class ItemAction(val id: String, val config: ConfigurationSection) {
     // 物品消耗信息
     val consume: ConfigurationSection? = config.getConfigurationSection("consume")

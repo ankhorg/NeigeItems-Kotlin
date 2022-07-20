@@ -9,6 +9,7 @@ import java.io.File
 import java.io.FileReader
 import java.util.concurrent.ConcurrentHashMap
 
+// 全局节点&节点解析器管理器
 object SectionManager {
     // <文件名, 该文件中的所有节点>
     val globalSectionMap = HashMap<String, ConfigurationSection>()
@@ -18,8 +19,11 @@ object SectionManager {
     val sectionParsers = ConcurrentHashMap<String, SectionParser>()
 
     init {
+        // 加载全部全局节点
         loadGlobalSections()
+        // 加载基础节点解析器
         loadBasicParser()
+        // 加载自定义节点解析器
         loadCustomSections()
     }
 
@@ -52,17 +56,7 @@ object SectionManager {
         }
     }
 
-    // 加载自定义节点
-    private fun loadCustomSections() {
-        for (file in getAllFiles("CustomSections")) {
-            // 没有main这个函数就会报错
-            try {
-                pers.neige.neigeitems.script.CompiledScript(FileReader(file)).invokeFunction("main", null)
-            } catch (error: NoSuchMethodException) {}
-        }
-    }
-
-    // 加载基础节点
+    // 加载基础节点解析器
     private fun loadBasicParser() {
         loadParser(CalculationParser)
         loadParser(InheritParser)
@@ -71,5 +65,15 @@ object SectionManager {
         loadParser(StringsParser)
         loadParser(WeightParser)
         loadParser(PapiParser)
+    }
+
+    // 加载自定义节点解析器
+    private fun loadCustomSections() {
+        for (file in getAllFiles("CustomSections")) {
+            // 没有main这个函数就会报错
+            try {
+                pers.neige.neigeitems.script.CompiledScript(FileReader(file)).invokeFunction("main", null)
+            } catch (error: NoSuchMethodException) {}
+        }
     }
 }

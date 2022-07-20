@@ -7,10 +7,6 @@ import taboolib.platform.BukkitPlugin
 
 object NeigeItems : Plugin() {
     val plugin by lazy { BukkitPlugin.getInstance() }
-
+    
     val bukkitScheduler by lazy { Bukkit.getScheduler() }
-
-    override fun onLoad() {
-        info("Successfully running ExamplePlugin!")
-    }
 }

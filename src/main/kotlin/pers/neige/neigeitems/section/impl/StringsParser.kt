@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
+// 字符串节点解析器
 object StringsParser : SectionParser() {
     override val id: String = "strings"
 
@@ -17,6 +18,7 @@ object StringsParser : SectionParser() {
     ): String? {
         // 加载字符串组
         val values = data.getStringList("values")
+        // 随机抽一个
         return when {
             values.isEmpty() -> null
             else -> values[(0 until values.size).random()].toString().parseSection(cache, player, sections)

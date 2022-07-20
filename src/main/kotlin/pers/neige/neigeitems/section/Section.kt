@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
 import taboolib.common.platform.function.info
 
+// 用于对节点的ConfigurationSection进行包装, 方便地获取或缓存解析值
 class Section(configSection: ConfigurationSection) {
     val id = configSection.name
     val type = configSection.getString("type")
