@@ -78,3 +78,6 @@ dropTest2:
     drop: true
   drop:
     - "castSkill: SkillTest"
+CustomAction:
+  all:
+    - "test"

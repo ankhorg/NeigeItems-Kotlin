@@ -52,6 +52,11 @@ object SectionUtils {
     }
 
     @JvmStatic
+    fun String.parseSection(): String {
+        return this.parseSection(null, null, null)
+    }
+
+    @JvmStatic
     fun String.parseSection(player: OfflinePlayer?): String {
         return this.parseSection(null, player, null)
     }

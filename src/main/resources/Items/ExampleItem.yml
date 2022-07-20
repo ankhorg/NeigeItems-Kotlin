@@ -202,3 +202,5 @@ ownerTest:
     # 首次拾取后将不再有掉落物归属效果
     # 服务器重启后效果重置(掉了, 关服了, 再次开服, 谁都能捡)
     owner: Neige
+CustomAction:
+  material: STONE

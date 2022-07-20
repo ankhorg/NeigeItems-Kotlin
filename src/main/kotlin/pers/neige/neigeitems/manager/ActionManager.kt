@@ -58,10 +58,18 @@ object ActionManager {
     }
 
     // 执行物品动作
-    fun runAction(player: Player, action: List<String>, itemTag: ItemTag? = null) {
+    fun runAction(player: Player, action: List<String>, itemTag: ItemTag?) {
         for (value in action) {
             if (!runAction(player, value, itemTag)) break
         }
+    }
+
+    fun runAction(player: Player, action: List<String>) {
+        runAction(player, action, null)
+    }
+
+    fun runAction(player: Player, action: String) {
+        runAction(player, action, null)
     }
 
     // 执行物品动作

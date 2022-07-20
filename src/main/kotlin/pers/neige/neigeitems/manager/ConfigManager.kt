@@ -24,6 +24,7 @@ object ConfigManager {
     // 加载默认配置文件
     @Awake(LifeCycle.INIT)
     fun saveResource() {
+        plugin.saveResource("CustomActions${File.separator}CustomAction.js", false)
         plugin.saveResource("CustomSections${File.separator}CustomSection.js", false)
         plugin.saveResource("GlobalSections${File.separator}ExampleSection.yml", false)
         plugin.saveResource("ItemActions${File.separator}ExampleAction.yml", false)
