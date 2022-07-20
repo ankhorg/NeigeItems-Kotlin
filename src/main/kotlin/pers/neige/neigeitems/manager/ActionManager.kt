@@ -374,7 +374,7 @@ object ActionManager {
             }
         } else {
             // 不准吃掉
-            event.setItem(event.item)
+            event.isCancelled = true
             bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
                 // 检测冷却
                 if (itemAction.isCoolDown(player)) return@Runnable
