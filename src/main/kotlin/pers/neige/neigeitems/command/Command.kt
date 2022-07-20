@@ -14,7 +14,6 @@ import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.saveItem
-import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItem
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
@@ -25,14 +24,12 @@ import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.chat.TellrawJson
-import taboolib.module.nms.getItemTag
 import taboolib.module.nms.getName
 import taboolib.platform.BukkitAdapter
 import taboolib.platform.util.giveItem
 import taboolib.platform.util.hoverItem
 import java.io.File
 import java.util.*
-import java.util.concurrent.Callable
 import kotlin.math.ceil
 
 @CommandHeader(name = "NeigeItems", aliases = ["ni"])
