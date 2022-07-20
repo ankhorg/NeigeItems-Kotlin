@@ -122,7 +122,7 @@ class ItemPlaceholder {
         )
     }
 
-    private fun parse(itemStack: ItemStack, text: String): String {
+    fun parse(itemStack: ItemStack, text: String): String {
         val chars = text.toCharArray()
         val builder = StringBuilder(text.length)
 

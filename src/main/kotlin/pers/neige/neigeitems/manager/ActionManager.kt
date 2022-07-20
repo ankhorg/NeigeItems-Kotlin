@@ -425,7 +425,7 @@ object ActionManager {
     }
 
     // 拾取物品
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOW)
     fun listener(event: EntityPickupItemEvent) {
         // 获取玩家
         val player = event.entity

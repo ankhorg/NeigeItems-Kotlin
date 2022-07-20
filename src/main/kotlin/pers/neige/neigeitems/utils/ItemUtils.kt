@@ -8,6 +8,7 @@ import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
+import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import taboolib.module.nms.*
 import kotlin.math.floor
 
@@ -184,10 +185,17 @@ object ItemUtils {
     @JvmStatic
     fun Location.dropNiItem(itemStack: ItemStack) {
         val itemTag = itemStack.getItemTag()
+        val neigeItems = itemTag["NeigeItems"]?.asCompound()
         bukkitScheduler.callSyncMethod(plugin) {
-            this.world?.dropItem(this, itemStack)
+            this.world?.dropItem(this, itemStack) { item ->
+                neigeItems?.let {
+                    neigeItems["owner"]?.asString()?.let { owner ->
+                        item.setMetadataEZ("NI-Owner", owner)
+                    }
+                }
+            }
         }.get()?.let { item ->
-            itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+            neigeItems?.let {
                 neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
                     mythicMobsHooker?.castSkill(item, dropSkill)
                 }

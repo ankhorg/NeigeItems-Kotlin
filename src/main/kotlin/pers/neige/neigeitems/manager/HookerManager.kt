@@ -3,6 +3,7 @@ package pers.neige.neigeitems.manager
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
+import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.hook.mythicmobs.impl.LegacyMythicMobsHookerImpl
 import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl
@@ -86,6 +87,14 @@ object HookerManager {
         return when (papiHooker) {
             null -> ChatColor.translateAlternateColorCodes('&', string)
             else -> papiHooker.papi(player, ChatColor.translateAlternateColorCodes('&', string))
+        }
+    }
+
+    @JvmStatic
+    fun parseItemPlaceholder(itemStack: ItemStack, string: String): String {
+        return when (itemPlaceholder) {
+            null -> string
+            else -> itemPlaceholder.parse(itemStack, string)
         }
     }
 }

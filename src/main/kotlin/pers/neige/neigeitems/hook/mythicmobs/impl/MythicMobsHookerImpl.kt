@@ -20,6 +20,7 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemManager.hasItem
+import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
@@ -264,9 +265,17 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                     val location = entity.location
                     // 开始掉落
                     for ((index, itemStack) in dropItems.withIndex()) {
-                        NeigeItems.bukkitScheduler.callSyncMethod(plugin , Callable<Item?> {
-                            location.world?.dropItem(location, itemStack)
-                        }).get()?.let { item ->
+                        val itemTag = itemStack.getItemTag()
+
+                        bukkitScheduler.callSyncMethod(plugin) {
+                            location.world?.dropItem(location, itemStack) { item ->
+                                itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                                    neigeItems["owner"]?.asString()?.let { owner ->
+                                        item.setMetadataEZ("NI-Owner", owner)
+                                    }
+                                }
+                            }
+                        }.get()?.let { item ->
                             val vector = Vector(offsetX, offsetY, 0.0)
                             if (angleType == "random") {
                                 val angleCos = cos(Math.PI * 2 * Math.random())
@@ -283,7 +292,6 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                             }
                             item.velocity = vector
 
-                            val itemTag = itemStack.getItemTag()
                             itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
                                 neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
                                     if (pluginManager.isPluginEnabled("MythicMobs")) {
@@ -297,11 +305,17 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                     // 普通掉落
                     for (itemStack in dropItems) {
                         val location = entity.location
+                        val itemTag = itemStack.getItemTag()
 
-                        NeigeItems.bukkitScheduler.callSyncMethod(plugin, Callable<Item?> {
-                            location.world?.dropItem(location, itemStack)
-                        }).get()?.let { item ->
-                            val itemTag = itemStack.getItemTag()
+                        bukkitScheduler.callSyncMethod(plugin) {
+                            location.world?.dropItem(location, itemStack) { item ->
+                                itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                                    neigeItems["owner"]?.asString()?.let { owner ->
+                                        item.setMetadataEZ("NI-Owner", owner)
+                                    }
+                                }
+                            }
+                        }.get()?.let { item ->
                             itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
                                 neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
                                     if (pluginManager.isPluginEnabled("MythicMobs")) {

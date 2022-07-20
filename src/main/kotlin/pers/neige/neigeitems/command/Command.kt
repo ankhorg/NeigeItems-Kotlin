@@ -15,6 +15,8 @@ import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.saveItem
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
+import pers.neige.neigeitems.utils.ItemUtils.dropNiItem
+import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.CommandBody
@@ -1059,17 +1061,7 @@ object Command {
                     amount?.let {
                         // 掉物品
                         getItemStack(id, parser, data)?.let { itemStack ->
-                            val items = bukkitScheduler.callSyncMethod(plugin) {
-                                location?.dropItems(itemStack, amount.coerceAtLeast(1))
-                            }.get()
-                            items?.forEach { item ->
-                                val itemTag = itemStack.getItemTag()
-                                itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                                    neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
-                                        mythicMobsHooker?.castSkill(item, dropSkill)
-                                    }
-                                }
-                            }
+                            location?.dropNiItems(itemStack, amount.coerceAtLeast(1))
                             sender.sendMessage(config.getString("Messages.dropSuccessInfo")
                                 ?.replace("{world}", location?.world?.name ?: "")
                                 ?.replace("{x}", location?.x.toString())
@@ -1093,9 +1085,7 @@ object Command {
                         // 掉物品
                         repeat(amount.coerceAtLeast(1)) {
                             getItemStack(id, parser, data)?.let { itemStack ->
-                                bukkitScheduler.callSyncMethod(plugin) {
-                                    location?.dropItems(itemStack)
-                                }
+                                location?.dropNiItem(itemStack)
                                 dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
                                 // 未知物品ID
                             } ?: let {
