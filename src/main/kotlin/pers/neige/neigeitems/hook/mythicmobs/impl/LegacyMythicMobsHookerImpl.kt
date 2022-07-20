@@ -116,8 +116,10 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
             val mythicId = mythicMob.internalName
             // 获取对应MythicConfig
             val mythicConfig: MythicConfig = mythicMob.config
+            val fc = mythicConfig::class.java.getDeclaredField("fc")
+            fc.isAccessible = true
             // 获取MM怪物的ConfigurationSection
-            val fileConfiguration: FileConfiguration = mythicConfig.fileConfiguration
+            val fileConfiguration: FileConfiguration = fc.get(mythicConfig) as FileConfiguration
             val configSection = fileConfiguration.getConfigurationSection(mythicId)
 
             // 如果怪物配置了NeigeItems相关信息
