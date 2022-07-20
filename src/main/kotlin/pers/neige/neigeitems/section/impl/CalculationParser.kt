@@ -29,7 +29,7 @@ object CalculationParser : SectionParser() {
                     result = max.coerceAtMost(result)
                 }
                 // 获取取整位数
-                val fixed = data["fixed"]?.toString()?.parseSection(cache, player, sections)?.toIntOrNull() ?: 0
+                val fixed = data.getString("fixed")?.parseSection(cache, player, sections)?.toIntOrNull() ?: 0
                 // 加载结果
                 return "%.${fixed}f".format(result)
             }

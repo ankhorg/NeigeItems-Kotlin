@@ -895,9 +895,9 @@ object Command {
                     amount?.let {
                         // 给物品
                         getItemStack(id, player, data)?.let { itemStack ->
-                            bukkitScheduler.callSyncMethod(plugin, Callable {
+                            bukkitScheduler.callSyncMethod(plugin) {
                                 player.giveItems(itemStack, amount.coerceAtLeast(1))
-                            })
+                            }
                             sender.sendMessage(config.getString("Messages.successInfo")
                                 ?.replace("{player}", player.name)
                                 ?.replace("{amount}", amount.toString())
@@ -921,9 +921,9 @@ object Command {
                         // 给物品
                         repeat(amount.coerceAtLeast(1)) {
                             getItemStack(id, player, data)?.let { itemStack ->
-                                bukkitScheduler.callSyncMethod(plugin, Callable {
+                                bukkitScheduler.callSyncMethod(plugin) {
                                     player.giveItem(itemStack)
-                                })
+                                }
                                 dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
                                 // 未知物品ID
                             } ?: let {
@@ -965,9 +965,9 @@ object Command {
                 amount?.let {
                     // 给物品
                     itemStack?.let {
-                        bukkitScheduler.callSyncMethod(plugin, Callable {
+                        bukkitScheduler.callSyncMethod(plugin) {
                             player.giveItems(itemStack, amount.coerceAtLeast(1))
-                        })
+                        }
                         sender.sendMessage(config.getString("Messages.successInfo")
                             ?.replace("{player}", player.name)
                             ?.replace("{amount}", amount.toString())

@@ -4,7 +4,11 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Item
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.item.ItemInfo
+import pers.neige.neigeitems.manager.HookerManager
+import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
 import taboolib.module.nms.*
 import kotlin.math.floor
 
@@ -158,6 +162,37 @@ object ItemUtils {
             }
         }
         return this
+    }
+
+    @JvmStatic
+    fun Location.dropNiItems(itemStack: ItemStack, amount: Int? = null) {
+        amount?.let {
+            val maxStackSize = itemStack.maxStackSize
+            itemStack.amount = maxStackSize
+            val leftAmount = amount % maxStackSize
+            val repeat = floor((amount / maxStackSize).toDouble()).toInt()
+            repeat(repeat) {
+                this.dropNiItem(itemStack)
+            }
+            if (leftAmount != 0) {
+                itemStack.amount = leftAmount
+                this.dropNiItem(itemStack)
+            }
+        } ?: this.dropNiItem(itemStack)
+    }
+
+    @JvmStatic
+    fun Location.dropNiItem(itemStack: ItemStack) {
+        val itemTag = itemStack.getItemTag()
+        bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
+            this.world?.dropItem(this, itemStack)
+        }.get()?.let { item ->
+            itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                    HookerManager.mythicMobsHooker?.castSkill(item, dropSkill)
+                }
+            }
+        }
     }
 
     @JvmStatic
