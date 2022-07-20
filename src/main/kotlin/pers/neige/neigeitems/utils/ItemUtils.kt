@@ -187,13 +187,13 @@ object ItemUtils {
         val itemTag = itemStack.getItemTag()
         val neigeItems = itemTag["NeigeItems"]?.asCompound()
         bukkitScheduler.callSyncMethod(plugin) {
-            this.world?.dropItem(this, itemStack) { item ->
-                neigeItems?.let {
-                    neigeItems["owner"]?.asString()?.let { owner ->
-                        item.setMetadataEZ("NI-Owner", owner)
-                    }
+            val item = this.world?.dropItem(this, itemStack)
+            neigeItems?.let {
+                neigeItems["owner"]?.asString()?.let { owner ->
+                    item?.setMetadataEZ("NI-Owner", owner)
                 }
             }
+            item
         }.get()?.let { item ->
             neigeItems?.let {
                 neigeItems["dropSkill"]?.asString()?.let { dropSkill ->

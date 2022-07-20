@@ -3,6 +3,7 @@ package pers.neige.neigeitems.hook.mythicmobs.impl
 import io.lumine.xikage.mythicmobs.MythicMobs
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
+import io.lumine.xikage.mythicmobs.io.MythicConfig
 import io.lumine.xikage.mythicmobs.items.ItemManager
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -267,13 +268,13 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                         val itemTag = itemStack.getItemTag()
 
                         bukkitScheduler.callSyncMethod(plugin) {
-                            location.world?.dropItem(location, itemStack) { item ->
-                                itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                                    neigeItems["owner"]?.asString()?.let { owner ->
-                                        item.setMetadataEZ("NI-Owner", owner)
-                                    }
+                            val item = location.world?.dropItem(location, itemStack)
+                            itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                                neigeItems["owner"]?.asString()?.let { owner ->
+                                    item?.setMetadataEZ("NI-Owner", owner)
                                 }
                             }
+                            item
                         }.get()?.let { item ->
                             val vector = Vector(offsetX, offsetY, 0.0)
                             if (angleType == "random") {
@@ -307,13 +308,13 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                         val itemTag = itemStack.getItemTag()
 
                         bukkitScheduler.callSyncMethod(plugin) {
-                            location.world?.dropItem(location, itemStack) { item ->
-                                itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                                    neigeItems["owner"]?.asString()?.let { owner ->
-                                        item.setMetadataEZ("NI-Owner", owner)
-                                    }
+                            val item = location.world?.dropItem(location, itemStack)
+                            itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                                neigeItems["owner"]?.asString()?.let { owner ->
+                                    item?.setMetadataEZ("NI-Owner", owner)
                                 }
                             }
+                            item
                         }.get()?.let { item ->
                             itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
                                 neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
