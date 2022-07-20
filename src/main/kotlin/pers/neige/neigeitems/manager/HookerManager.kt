@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.hook.mythicmobs.impl.LegacyMythicMobsHookerImpl
 import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl
+import pers.neige.neigeitems.hook.mythicmobs.impl.NewMythicMobsHookerImpl
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
 import pers.neige.neigeitems.hook.nashorn.impl.LegacyNashornHookerImpl
 import pers.neige.neigeitems.hook.nashorn.impl.NashornHookerImpl
@@ -29,12 +30,20 @@ object HookerManager {
         }
 
     // 某些情况下 MythicMobs 的 ItemManager 加载顺序很奇怪，因此写成 by lazy, 然后在 active 阶段主动调用
+    // 没事儿改包名很爽吗, 写MM的, 你妈死了
     val mythicMobsHooker: MythicMobsHooker? by lazy {
         try {
             try {
+                // 4.7.2-
                 LegacyMythicMobsHookerImpl()
             } catch (error: Throwable) {
-                MythicMobsHookerImpl()
+                try {
+                    // 5.0.0-
+                    MythicMobsHookerImpl()
+                } catch (error: Throwable) {
+                    // 5.0.0+
+                    NewMythicMobsHookerImpl()
+                }
             }
         } catch (error: Throwable) {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))

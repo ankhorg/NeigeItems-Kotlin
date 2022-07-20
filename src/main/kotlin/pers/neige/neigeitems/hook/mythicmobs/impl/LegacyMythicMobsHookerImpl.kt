@@ -1,15 +1,16 @@
 package pers.neige.neigeitems.hook.mythicmobs.impl
 
+import io.lumine.xikage.mythicmobs.io.MythicConfig
+import io.lumine.utils.config.file.FileConfiguration
+import io.lumine.utils.config.file.YamlConfiguration
 import io.lumine.xikage.mythicmobs.MythicMobs
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
-import io.lumine.xikage.mythicmobs.io.MythicConfig
 import io.lumine.xikage.mythicmobs.items.ItemManager
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Entity
-import org.bukkit.entity.Item
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -32,6 +33,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
+    private val test = YamlConfiguration()
+
     private val itemManager: ItemManager = MythicMobs.inst().itemManager
 
     private val apiHelper = MythicMobs.inst().apiHelper
@@ -112,9 +115,10 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
             // 获取MM怪物ID
             val mythicId = mythicMob.internalName
             // 获取对应MythicConfig
-            val mythicConfig = mythicMob.config
+            val mythicConfig: MythicConfig = mythicMob.config
             // 获取MM怪物的ConfigurationSection
-            val configSection = mythicConfig.fileConfiguration.getConfigurationSection(mythicId)
+            val fileConfiguration: FileConfiguration = mythicConfig.fileConfiguration
+            val configSection = fileConfiguration.getConfigurationSection(mythicId)
 
             // 如果怪物配置了NeigeItems相关信息
             if (configSection.contains("NeigeItems")) {

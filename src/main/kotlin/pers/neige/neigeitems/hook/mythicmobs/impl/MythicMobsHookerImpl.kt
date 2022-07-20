@@ -1,24 +1,23 @@
 package pers.neige.neigeitems.hook.mythicmobs.impl
 
-import io.lumine.mythic.bukkit.MythicBukkit
-import io.lumine.mythic.bukkit.events.MythicMobDeathEvent
-import io.lumine.mythic.bukkit.events.MythicMobSpawnEvent
-import io.lumine.mythic.core.config.MythicConfigImpl
-import io.lumine.mythic.core.items.ItemExecutor
+import io.lumine.xikage.mythicmobs.MythicMobs
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
+import io.lumine.xikage.mythicmobs.io.MythicConfig
+import io.lumine.xikage.mythicmobs.items.ItemManager
+import io.lumine.xikage.mythicmobs.utils.config.file.FileConfiguration
+import io.lumine.xikage.mythicmobs.utils.config.file.YamlConfiguration
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Entity
-import org.bukkit.entity.Item
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
-import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.hasItem
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
@@ -34,9 +33,11 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class MythicMobsHookerImpl : MythicMobsHooker() {
-    private val itemManager: ItemExecutor = MythicBukkit.inst().itemManager
+    private val test = YamlConfiguration()
 
-    private val apiHelper = MythicBukkit.inst().apiHelper
+    private val itemManager: ItemManager = MythicMobs.inst().itemManager
+
+    private val apiHelper = MythicMobs.inst().apiHelper
 
     private val pluginManager = Bukkit.getPluginManager()
 
@@ -114,9 +115,12 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
             // 获取MM怪物ID
             val mythicId = mythicMob.internalName
             // 获取对应MythicConfig
-            val mythicConfig = mythicMob.config as MythicConfigImpl
+            val mythicConfig: MythicConfig = mythicMob.config
+            val fc = mythicConfig::class.java.getDeclaredField("fc")
+            fc.isAccessible = true
             // 获取MM怪物的ConfigurationSection
-            val configSection = mythicConfig.fileConfiguration.getConfigurationSection(mythicId)
+            val fileConfiguration: FileConfiguration = fc.get(mythicConfig) as FileConfiguration
+            val configSection = fileConfiguration.getConfigurationSection(mythicId)
 
             // 如果怪物配置了NeigeItems相关信息
             if (configSection.contains("NeigeItems")) {
@@ -270,13 +274,13 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                         val itemTag = itemStack.getItemTag()
 
                         bukkitScheduler.callSyncMethod(plugin) {
-                            location.world?.dropItem(location, itemStack) { item ->
-                                itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                                    neigeItems["owner"]?.asString()?.let { owner ->
-                                        item.setMetadataEZ("NI-Owner", owner)
-                                    }
+                            val item = location.world?.dropItem(location, itemStack)
+                            itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                                neigeItems["owner"]?.asString()?.let { owner ->
+                                    item?.setMetadataEZ("NI-Owner", owner)
                                 }
                             }
+                            item
                         }.get()?.let { item ->
                             val vector = Vector(offsetX, offsetY, 0.0)
                             if (angleType == "random") {
@@ -310,13 +314,13 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                         val itemTag = itemStack.getItemTag()
 
                         bukkitScheduler.callSyncMethod(plugin) {
-                            location.world?.dropItem(location, itemStack) { item ->
-                                itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                                    neigeItems["owner"]?.asString()?.let { owner ->
-                                        item.setMetadataEZ("NI-Owner", owner)
-                                    }
+                            val item = location.world?.dropItem(location, itemStack)
+                            itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                                neigeItems["owner"]?.asString()?.let { owner ->
+                                    item?.setMetadataEZ("NI-Owner", owner)
                                 }
                             }
+                            item
                         }.get()?.let { item ->
                             itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
                                 neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
