@@ -494,8 +494,8 @@ object Command {
                         when (argument) {
                             // ni mm loadAll
                             "loadAll" -> {
-                                mythicMobsHooker.getItemIds().forEach { id ->
-                                    mythicMobsHooker.getItemStackSync(id)?.let { itemStack ->
+                                mythicMobsHooker!!.getItemIds().forEach { id ->
+                                    mythicMobsHooker!!.getItemStackSync(id)?.let { itemStack ->
                                         when (saveItem(itemStack, id, config.getString("Main.MMItemsPath") ?: "MMItems.yml", false)) {
                                             // 保存成功
                                             1 -> {
@@ -520,17 +520,17 @@ object Command {
                     mythicMobsHooker?.let {
                         when (context.argument(-1)) {
                             // ni mm load [物品ID]
-                            "load" -> mythicMobsHooker.getItemIds()
+                            "load" -> mythicMobsHooker!!.getItemIds()
                             // ni mm cover [物品ID]
-                            "cover" -> mythicMobsHooker.getItemIds()
+                            "cover" -> mythicMobsHooker!!.getItemIds()
                             // ni mm loadAll (保存路径)
                             "loadAll" -> ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
                             // ni mm get [物品ID]
-                            "get" -> mythicMobsHooker.getItemIds()
+                            "get" -> mythicMobsHooker!!.getItemIds()
                             // ni mm give [玩家ID]
                             "give" -> Bukkit.getOnlinePlayers().map { it.name }
                             // ni mm giveAll [物品ID]
-                            "giveAll" -> mythicMobsHooker.getItemIds()
+                            "giveAll" -> mythicMobsHooker!!.getItemIds()
                             else -> arrayListOf()
                         }
                     } ?: arrayListOf()
@@ -541,7 +541,7 @@ object Command {
                             when (context.argument(-1)) {
                                 // ni mm load [物品ID]
                                 "load" -> {
-                                    mythicMobsHooker.getItemStackSync(argument)?.let { itemStack ->
+                                    mythicMobsHooker!!.getItemStackSync(argument)?.let { itemStack ->
                                         when (saveItem(itemStack, argument, "$argument.yml", false)) {
                                             // 保存成功
                                             1 -> {
@@ -560,7 +560,7 @@ object Command {
                                 }
                                 // ni mm cover [物品ID]
                                 "cover" -> {
-                                    mythicMobsHooker.getItemStackSync(argument)?.let { itemStack ->
+                                    mythicMobsHooker!!.getItemStackSync(argument)?.let { itemStack ->
                                         if (saveItem(itemStack, argument, "$argument.yml", true) != 2) {
                                             // 保存成功
                                             sender.sendMessage(config.getString("Messages.successSaveInfo")
@@ -575,8 +575,8 @@ object Command {
                                 }
                                 // ni mm loadAll (保存路径)
                                 "loadAll" -> {
-                                    mythicMobsHooker.getItemIds().forEach { id ->
-                                        mythicMobsHooker.getItemStackSync(id)?.let { itemStack ->
+                                    mythicMobsHooker!!.getItemIds().forEach { id ->
+                                        mythicMobsHooker!!.getItemStackSync(id)?.let { itemStack ->
                                             when (saveItem(itemStack, id, argument, false)) {
                                                 // 保存成功
                                                 1 -> {
@@ -594,7 +594,7 @@ object Command {
                                 // ni mm get [物品ID]
                                 "get" -> {
                                     if (sender is Player) {
-                                        giveAddonCommand( sender, sender, argument, mythicMobsHooker.getItemStackSync(argument), 1)
+                                        giveAddonCommand( sender, sender, argument, mythicMobsHooker!!.getItemStackSync(argument), 1)
                                     } else {
                                         config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
                                     }
@@ -602,7 +602,7 @@ object Command {
                                 // ni mm giveAll [物品ID]
                                 "giveAll" -> {
                                     Bukkit.getOnlinePlayers().forEach { player ->
-                                        giveAddonCommand( sender, player, argument, mythicMobsHooker.getItemStackSync(argument), 1)
+                                        giveAddonCommand( sender, player, argument, mythicMobsHooker!!.getItemStackSync(argument), 1)
                                     }
                                 }
                                 else -> help(sender)
@@ -621,7 +621,7 @@ object Command {
                                 // ni mm get [物品ID] (数量)
                                 "get" -> arrayListOf("amount")
                                 // ni mm give [玩家ID] [物品ID]
-                                "give" -> mythicMobsHooker.getItemIds()
+                                "give" -> mythicMobsHooker!!.getItemIds()
                                 // ni mm giveAll [物品ID] (数量)
                                 "giveAll" -> arrayListOf("amount")
                                 else -> arrayListOf()
@@ -634,7 +634,7 @@ object Command {
                                 when (context.argument(-2)) {
                                     // ni mm load [物品ID] (保存路径)
                                     "load" -> {
-                                        mythicMobsHooker.getItemStackSync(context.argument(-1))?.let { itemStack ->
+                                        mythicMobsHooker!!.getItemStackSync(context.argument(-1))?.let { itemStack ->
                                             when (saveItem(itemStack, context.argument(-1), argument, false)) {
                                                 // 保存成功
                                                 1 -> {
@@ -653,7 +653,7 @@ object Command {
                                     }
                                     // ni mm cover [物品ID] (保存路径)
                                     "cover" -> {
-                                        mythicMobsHooker.getItemStackSync(context.argument(-1))?.let { itemStack ->
+                                        mythicMobsHooker!!.getItemStackSync(context.argument(-1))?.let { itemStack ->
                                             if (saveItem(itemStack, context.argument(-1), argument, true) != 2) {
                                                 // 保存成功
                                                 sender.sendMessage(config.getString("Messages.successSaveInfo")
@@ -669,19 +669,19 @@ object Command {
                                     // ni mm get [物品ID] (数量)
                                     "get" -> {
                                         if (sender is Player) {
-                                            giveAddonCommand( sender, sender, context.argument(-1), mythicMobsHooker.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
+                                            giveAddonCommand( sender, sender, context.argument(-1), mythicMobsHooker!!.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
                                         } else {
                                             config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
                                         }
                                     }
                                     // ni mm give [玩家ID] [物品ID]
                                     "give" -> {
-                                        giveAddonCommand( sender, Bukkit.getPlayerExact(context.argument(-1)), argument, mythicMobsHooker.getItemStackSync(argument), 1)
+                                        giveAddonCommand( sender, Bukkit.getPlayerExact(context.argument(-1)), argument, mythicMobsHooker!!.getItemStackSync(argument), 1)
                                     }
                                     // ni mm giveAll [物品ID] (数量)
                                     "giveAll" -> {
                                         Bukkit.getOnlinePlayers().forEach { player ->
-                                            giveAddonCommand( sender, player, context.argument(-1), mythicMobsHooker.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
+                                            giveAddonCommand( sender, player, context.argument(-1), mythicMobsHooker!!.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
                                         }
                                     }
                                     else -> help(sender)
@@ -694,7 +694,7 @@ object Command {
                             mythicMobsHooker?.let {
                                 when (context.argument(-3)) {
                                     // ni mm give [玩家ID] [物品ID] (数量)
-                                    "give" -> mythicMobsHooker.getItemIds()
+                                    "give" -> mythicMobsHooker!!.getItemIds()
                                     else -> arrayListOf()
                                 }
                             } ?: arrayListOf()
@@ -705,7 +705,7 @@ object Command {
                                     when (context.argument(-3)) {
                                         // ni mm give [玩家ID] [物品ID] (数量)
                                         "give" -> {
-                                            giveAddonCommand( sender, Bukkit.getPlayerExact(context.argument(-2)), context.argument(-1), mythicMobsHooker.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
+                                            giveAddonCommand( sender, Bukkit.getPlayerExact(context.argument(-2)), context.argument(-1), mythicMobsHooker!!.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
                                         }
                                         else -> help(sender)
                                     }

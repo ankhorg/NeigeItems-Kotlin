@@ -17,6 +17,8 @@ import pers.neige.neigeitems.hook.vault.VaultHooker
 import pers.neige.neigeitems.hook.vault.impl.VaultHookerImpl
 import pers.neige.neigeitems.item.ItemPlaceholder
 import pers.neige.neigeitems.manager.ConfigManager.config
+import taboolib.common.LifeCycle
+import taboolib.common.platform.Awake
 
 object HookerManager {
     val nashornHooker: NashornHooker =
@@ -26,17 +28,24 @@ object HookerManager {
             NashornHookerImpl()
         }
 
-    val mythicMobsHooker: MythicMobsHooker? =
-        if (Bukkit.getPluginManager().isPluginEnabled("MythicMobs")) {
+    // 某些情况下 MythicMobs 的 ItemManager 加载顺序很奇怪，因此写成 by lazy, 然后在 active 阶段主动调用
+    val mythicMobsHooker: MythicMobsHooker? by lazy {
+        try {
             try {
                 LegacyMythicMobsHookerImpl()
             } catch (error: Throwable) {
                 MythicMobsHookerImpl()
             }
-        } else {
+        } catch (error: Throwable) {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
             null
         }
+    }
+
+    @Awake(LifeCycle.ACTIVE)
+    fun loadMythicMobsHooker() {
+        mythicMobsHooker
+    }
 
     // papi中间有一些兼容版本存在, 先构建新版的Hooker实现, 解析效率更高
     val papiHooker: PapiHooker? =

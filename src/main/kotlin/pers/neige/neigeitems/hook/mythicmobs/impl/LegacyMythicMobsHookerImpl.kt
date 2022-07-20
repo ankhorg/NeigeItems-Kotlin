@@ -142,12 +142,13 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                         itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
                             neigeItems["dropChance"]?.asDouble()?.let {
                                 if (Math.random() <= it) {
-                                    // 真要掉那得先把特殊NBT移除
-                                    neigeItems.remove("dropChance")
-                                    itemTag["NeigeItems"] = neigeItems
-                                    itemTag.saveTo(itemStack)
-                                    // 丢进待掉落列表里
-                                    dropItems.add(itemStack)
+                                    val id = neigeItems["id"]?.asString()
+                                    if (id != null) {
+                                        getItemStack(id, player as OfflinePlayer, neigeItems["data"]?.asString())?.let {
+                                            // 丢进待掉落列表里
+                                            dropItems.add(it)
+                                        }
+                                    }
                                 }
                             }
                         }

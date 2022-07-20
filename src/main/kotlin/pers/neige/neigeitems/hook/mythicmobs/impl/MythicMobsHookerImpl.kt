@@ -19,6 +19,7 @@ import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.hasItem
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -80,7 +81,7 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                     if (!hasItem(args[0])) continue
 
                     try {
-                        ItemManager.getItemStack(args[0], null, data)?.let { itemStack ->
+                        getItemStack(args[0], null, data)?.let { itemStack ->
                             dropChance[slot]?.let { chance ->
                                 val itemTag = itemStack.getItemTag()
                                 itemTag["NeigeItems"]?.asCompound()?.set("dropChance", ItemTagData(chance))
@@ -144,12 +145,13 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                         itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
                             neigeItems["dropChance"]?.asDouble()?.let {
                                 if (Math.random() <= it) {
-                                    // 真要掉那得先把特殊NBT移除
-                                    neigeItems.remove("dropChance")
-                                    itemTag["NeigeItems"] = neigeItems
-                                    itemTag.saveTo(itemStack)
-                                    // 丢进待掉落列表里
-                                    dropItems.add(itemStack)
+                                    val id = neigeItems["id"]?.asString()
+                                    if (id != null) {
+                                        getItemStack(id, player as OfflinePlayer, neigeItems["data"]?.asString())?.let {
+                                            // 丢进待掉落列表里
+                                            dropItems.add(it)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -200,7 +202,7 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                             // 看看需不需要每次都随机生成
                             if (args.size > 2 && args[3] == "false") {
                                 // 真只随机一次啊?那嗯怼吧
-                                ItemManager.getItemStack(args[0], player, data)?.let { itemStack ->
+                                getItemStack(args[0], player, data)?.let { itemStack ->
                                     val maxStackSize = itemStack.maxStackSize
                                     itemStack.amount = maxStackSize
                                     var givenAmt = 0
@@ -216,7 +218,7 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                             } else {
                                 // 随机生成, 那疯狂造就完事儿了
                                 for (index in 0..amount) {
-                                    ItemManager.getItemStack(args[0], player, data)?.let { itemStack ->
+                                    getItemStack(args[0], player, data)?.let { itemStack ->
                                         dropItems.add(itemStack)
                                     }
                                 }
