@@ -102,9 +102,11 @@ object ItemManager : ItemConfigManager() {
                     val display = itemNBT["display"]
                     itemNBT.remove("display")
                     // 设置CustomModelData
-                    if (itemMeta?.hasCustomModelData() == true) {
-                        configSection.set("custommodeldata", itemMeta.customModelData)
-                    }
+                    try {
+                        if (itemMeta?.hasCustomModelData() == true) {
+                            configSection.set("custommodeldata", itemMeta.customModelData)
+                        }
+                    } catch (error: NoSuchMethodError) {}
                     // 设置子ID/损伤值
                     if (itemStack.durability > 0) {
                         configSection.set("damage", itemStack.durability)
