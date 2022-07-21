@@ -337,7 +337,7 @@ object ActionManager {
         // 获取玩家
         val player = event.player
         // 获取手持物品
-        val itemStack = event.item
+        val itemStack = event.item.clone()
         // 物品NBT
         val itemTag: ItemTag
         // NI物品数据
@@ -357,7 +357,6 @@ object ActionManager {
         itemAction.eat ?: let { return }
         // 获取物品消耗信息
         val consume =  itemAction.consume
-        // 取消事件
         event.isCancelled = true
         // 如果该物品需要被消耗
         if (consume != null && consume.getBoolean("eat", false)) {
@@ -366,22 +365,22 @@ object ActionManager {
             // 获取待消耗数量
             val amount: Int = consume.getInt("amount", 1)
             // 消耗物品
-            when (val itemStacks = itemStack.consumeAndReturn(amount, itemTag, neigeItems)) {
-                null -> return
-                else -> {
-                    event.isCancelled = false
-                    // 设置物品
-                    event.setItem(itemStacks[0])
-                    if (itemStacks.size > 1) {
-                        bukkitScheduler.runTaskLater(plugin, Runnable {
-                            player.giveItem(itemStacks[1])
-                        }, 1)
-                    }
-                    // 执行动作
-                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        itemAction.run(player, itemAction.eat, itemTag)
-                    })
+            itemStack.consumeAndReturn(amount, itemTag, neigeItems)?.let { itemStacks ->
+                // 设置物品
+                if (event.item == player.inventory.itemInMainHand) {
+                    player.inventory.setItemInMainHand(itemStacks[0])
+                } else {
+                    player.inventory.setItemInOffHand(itemStacks[0])
                 }
+                if (itemStacks.size > 1) {
+                    bukkitScheduler.runTaskLater(plugin, Runnable {
+                        player.giveItem(itemStacks[1])
+                    }, 1)
+                }
+                // 执行动作
+                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                    itemAction.run(player, itemAction.eat, itemTag)
+                })
             }
         } else {
             bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
