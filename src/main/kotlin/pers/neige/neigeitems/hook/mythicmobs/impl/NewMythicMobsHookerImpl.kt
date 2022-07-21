@@ -197,7 +197,7 @@ class NewMythicMobsHookerImpl : MythicMobsHooker() {
                                 }
                             }
                             // 看看需不需要每次都随机生成
-                            if (args.size > 2 && args[3] == "false") {
+                            if (args.size > 3 && args[3] == "false") {
                                 // 真只随机一次啊?那嗯怼吧
                                 getItemStack(args[0], player, data)?.let { itemStack ->
                                     val maxStackSize = itemStack.maxStackSize
@@ -332,9 +332,9 @@ class NewMythicMobsHookerImpl : MythicMobsHooker() {
     }
 
     override fun getItemStackSync(id: String): ItemStack? {
-        return bukkitScheduler.callSyncMethod(plugin, Callable {
+        return bukkitScheduler.callSyncMethod(plugin) {
             itemManager.getItemStack(id)
-        }).get()
+        }.get()
     }
 
     override fun castSkill(entity: Entity, skill: String) {

@@ -203,7 +203,7 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                                 }
                             }
                             // 看看需不需要每次都随机生成
-                            if (args.size > 2 && args[3] == "false") {
+                            if (args.size > 3 && args[3] == "false") {
                                 // 真只随机一次啊?那嗯怼吧
                                 getItemStack(args[0], player, data)?.let { itemStack ->
                                     val maxStackSize = itemStack.maxStackSize
