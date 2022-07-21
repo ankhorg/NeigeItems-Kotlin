@@ -61,8 +61,10 @@ object Command {
                 execute<Player> { sender, context, argument ->
                     submit(async = true) {
                         val time = Date().time
-                        giveCommand(sender, sender, context.argument(-1), argument, null, null)
-                        println(Date().time - time)
+                        repeat(argument.toIntOrNull() ?: 1) {
+                            getItemStack(context.argument(-1), sender)
+                        }
+                        println("耗时: ${Date().time - time}ms")
                     }
                 }
             }

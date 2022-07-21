@@ -318,16 +318,18 @@ object ActionManager {
                 }
             }
         } else {
-            // 取消交互事件
-            event.isCancelled = true
-            bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                // 检测冷却
-                if (itemAction.isCoolDown(player)) return@Runnable
-                // 执行动作
-                itemAction.run(player, itemAction.all, itemTag)
-                if (leftAction) itemAction.run(player, itemAction.left, itemTag)
-                if (rightAction) itemAction.run(player, itemAction.right, itemTag)
-            })
+            if ((leftAction && itemAction.left != null) || (rightAction && itemAction.right != null)) {
+                // 取消交互事件
+                event.isCancelled = true
+                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                    // 检测冷却
+                    if (itemAction.isCoolDown(player)) return@Runnable
+                    // 执行动作
+                    itemAction.run(player, itemAction.all, itemTag)
+                    if (leftAction) itemAction.run(player, itemAction.left, itemTag)
+                    if (rightAction) itemAction.run(player, itemAction.right, itemTag)
+                })
+            }
         }
     }
 
