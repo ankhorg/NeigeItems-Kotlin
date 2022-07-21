@@ -369,6 +369,7 @@ object ActionManager {
             when (val itemStacks = itemStack.consumeAndReturn(amount, itemTag, neigeItems)) {
                 null -> return
                 else -> {
+                    event.isCancelled = false
                     // 设置物品
                     event.setItem(itemStacks[0])
                     if (itemStacks.size > 1) {
