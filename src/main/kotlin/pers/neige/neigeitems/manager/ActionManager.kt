@@ -357,6 +357,8 @@ object ActionManager {
         itemAction.eat ?: let { return }
         // 获取物品消耗信息
         val consume =  itemAction.consume
+        // 取消事件
+        event.isCancelled = true
         // 如果该物品需要被消耗
         if (consume != null && consume.getBoolean("eat", false)) {
             // 检测冷却
@@ -365,7 +367,7 @@ object ActionManager {
             val amount: Int = consume.getInt("amount", 1)
             // 消耗物品
             when (val itemStacks = itemStack.consumeAndReturn(amount, itemTag, neigeItems)) {
-                null -> event.isCancelled = true
+                null -> return
                 else -> {
                     // 设置物品
                     event.setItem(itemStacks[0])
@@ -381,8 +383,6 @@ object ActionManager {
                 }
             }
         } else {
-            // 不准吃掉
-            event.isCancelled = true
             bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
                 // 检测冷却
                 if (itemAction.isCoolDown(player)) return@Runnable
