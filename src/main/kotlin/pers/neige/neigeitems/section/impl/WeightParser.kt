@@ -18,7 +18,7 @@ object WeightParser : SectionParser() {
         ConfigurationSection?
     ): String? {
         val info = HashMap<String, BigDecimal>()
-        val total = BigDecimal(0)
+        var total = BigDecimal(0)
         // 加载所有参数并遍历
         data.getStringList("values").forEach {
             val value = it.toString().parseSection(cache, player, sections)
@@ -26,15 +26,19 @@ object WeightParser : SectionParser() {
             when (val index = value.indexOf("::")) {
                 // 无权重, 直接记录
                 -1 -> {
-                    info[value]?.add(BigDecimal(1)) ?: let { info[value] = BigDecimal(1) }
-                    total.add(BigDecimal(1))
+                    info[value]?.let {
+                        info[value] = it.add(BigDecimal(1))
+                    } ?: let { info[value] = BigDecimal(1) }
+                    total = total.add(BigDecimal(1))
                 }
                 // 有权重, 根据权重大小进行记录
                 else -> {
                     val weight = value.substring(0, index).toLongOrNull() ?: 1
                     val string = value.substring(index+2, value.length)
-                    info[string]?.add(BigDecimal(weight)) ?: let { info[string] = BigDecimal(weight) }
-                    total.add(BigDecimal(weight))
+                    info[string]?.let {
+                        info[string] = it.add(BigDecimal(weight))
+                    } ?: let { info[string] = BigDecimal(weight) }
+                    total = total.add(BigDecimal(weight))
                 }
             }
         }
@@ -43,10 +47,10 @@ object WeightParser : SectionParser() {
             info.isEmpty() -> null
             else -> {
                 val random = BigDecimal(Math.random().toString()).multiply(total)
-                val current = BigDecimal(0)
+                var current = BigDecimal(0)
                 var result: String? = null
                 for ((key, value) in info) {
-                    current.add(value)
+                    current = current.add(value)
                     if (random <= current) {
                         result = key.parseSection(cache, player, sections)
                         break

@@ -60,17 +60,9 @@ object Command {
             dynamic(optional = true, commit = "amount") {
                 execute<Player> { sender, context, argument ->
                     submit(async = true) {
-                        argument.toIntOrNull()?.let { amount ->
-                            repeat(amount.coerceAtLeast(1)) {
-                                getItemStack(context.argument(-1), sender) ?: let {
-                                    sender.sendMessage(
-                                        config.getString("Messages.unknownItem")?.replace("{itemID}", argument)
-                                    )
-                                }
-                            }
-                        } ?: let {
-                            sender.sendMessage(config.getString("Messages.invalidAmount"))
-                        }
+                        val time = Date().time
+                        giveCommand(sender, sender, context.argument(-1), argument, null, null)
+                        println(Date().time - time)
                     }
                 }
             }
