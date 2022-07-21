@@ -99,7 +99,7 @@ object SectionUtils {
                             return result
                         }
                         // 加载节点
-                        return Section(section).load(cache, player, sections) ?: "<$this>"
+                        return Section(section, this).load(cache, player, sections) ?: "<$this>"
                     }
                     if (this.startsWith("#")) {
                         try {

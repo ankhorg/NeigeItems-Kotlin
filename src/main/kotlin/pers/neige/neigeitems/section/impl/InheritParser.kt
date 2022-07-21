@@ -21,8 +21,10 @@ object InheritParser : SectionParser() {
         data.getString("template")?.let { inheritId ->
             // 获取继承模板
             val result = when (val section = sections?.getConfigurationSection(inheritId)) {
+                // 继承简单节点
                 null -> sections?.getString(inheritId)?.parseSection(cache, player, sections)
-                else -> Section(section).get(cache, player, sections)
+                // 继承私有节点
+                else -> Section(section, inheritId).get(cache, player, sections)
             }
             return result
         }
