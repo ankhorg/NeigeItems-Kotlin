@@ -9,6 +9,7 @@ import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
+import taboolib.module.nms.getItemTag
 import taboolib.platform.util.actionBar
 import taboolib.platform.util.giveItem
 import java.text.DecimalFormat
@@ -25,17 +26,17 @@ object ActionUtils {
             // 获取当前时间
             val time = Date().time
             // 获取上次使用时间
-            val lastTime = player.getMetadataEZ("NI-Consume-CD-$id", "Long", 0.toLong()) as Long
+            val lastTime = player.getMetadataEZ("NI-Consume-CD-${this.getString("group", id)}", "Long", 0.toLong()) as Long
             // 如果仍处于冷却时间
-            if ((lastTime + cooldown) > time) {
+            if (lastTime > time) {
                 ConfigManager.config.getString("Messages.itemCooldown")?.let {
-                    val message = it.replace("{time}", DecimalFormat("0.#").format((lastTime + cooldown - time)/1000))
+                    val message = it.replace("{time}", DecimalFormat("0.#").format((lastTime - time)/1000))
                     player.actionBar(message)
                 }
                 // 冷却中
                 return true
             }
-            player.setMetadataEZ("NI-Consume-CD-$id", time)
+            player.setMetadataEZ("NI-Consume-CD-${this.getString("group", id)}", time + cooldown)
         }
         return false
     }
@@ -50,17 +51,17 @@ object ActionUtils {
             // 获取当前时间
             val time = Date().time
             // 获取上次使用时间
-            val lastTime = player.getMetadataEZ("NI-CD-$id", "Long", 0.toLong()) as Long
+            val lastTime = player.getMetadataEZ("NI-CD-$group", "Long", 0.toLong()) as Long
             // 如果仍处于冷却时间
-            if ((lastTime + cooldown) > time) {
+            if (lastTime > time) {
                 ConfigManager.config.getString("Messages.itemCooldown")?.let {
-                    val message = it.replace("{time}", DecimalFormat("0.#").format((lastTime + cooldown - time)/1000))
+                    val message = it.replace("{time}", DecimalFormat("0.#").format((lastTime - time)/1000))
                     player.actionBar(message)
                 }
                 // 冷却中
                 return true
             }
-            player.setMetadataEZ("NI-CD-$id", time)
+            player.setMetadataEZ("NI-CD-$group", time + cooldown)
         }
         return false
     }
@@ -117,18 +118,15 @@ object ActionUtils {
      * @param amount 消耗数
      * @param itemTag 物品NBT
      * @param neigeItems NI特殊NBT
-     * @param charge 物品使用次数NBT, 不填则主动生成
      * @return 操作后的物品数组, 消耗失败返回空值
      */
     @JvmStatic
-    fun ItemStack.consumeAndReturn(amount: Int,
+    fun ItemStack.consumeAndReturn(
+        amount: Int,
         itemTag: ItemTag,
-        neigeItems: ItemTag,
-        charge: ItemTagData? = neigeItems["charge"]
+        neigeItems: ItemTag
     ): Array<ItemStack>? {
-        if (charge != null) {
-            // 获取剩余使用次数
-            val chargeInt = charge.asInt()
+        neigeItems["charge"]?.asInt()?.let { chargeInt ->
             if (chargeInt >= amount) {
                 var itemClone: ItemStack? = null
                 // 拆分物品
@@ -147,7 +145,7 @@ object ActionUtils {
                 if (itemClone != null) return arrayOf(this, itemClone)
                 return arrayOf(this)
             }
-        } else {
+        } ?: let {
             if (this.amount >= amount) {
                 this.amount = this.amount - amount
                 return arrayOf(this)

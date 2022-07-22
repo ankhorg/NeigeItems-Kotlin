@@ -4,6 +4,8 @@ ExampleItem:
   consume:
     # 冷却时间(单位是ms)
     cooldown: 3000
+    # 冷却组, 同一冷却组的物品共享冷却时间
+    group: test1
     # 每次消耗物品数量
     amount: 1
     # 左键行为是否消耗物品
@@ -36,6 +38,8 @@ ExampleItem2:
 ExampleItem3:
   # 物品使用冷却
   cooldown: 3000
+  # 冷却组, 同一冷却组的物品共享冷却时间
+  group: test2
   all: 
   - "console: say He's name is %player_name%"
   - "command: say My name is %player_name%"

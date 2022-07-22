@@ -11,7 +11,10 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
     val consume: ConfigurationSection? = config.getConfigurationSection("consume")
 
     // 物品使用冷却
-    val cooldown = config.getInt("cooldown", 0)
+    val cooldown = config.getLong("cooldown", 0)
+
+    // 冷却组ID
+    val group = config.getString("group", id)
 
     // 使用物品左键交互
     val left = config.get("left")
