@@ -15,7 +15,8 @@ object ItemColor {
         submit(async = true) {
             val item = event.entity
             val itemStack = item.itemStack
-            if (itemStack.type != Material.AIR) {
+            // 1.12.2情况下可能为null
+            if (itemStack != null && itemStack.type != Material.AIR) {
                 val itemTag = itemStack.getItemTag()
 
                 // 检测物品是否有用于标记光效颜色的特殊NBT
