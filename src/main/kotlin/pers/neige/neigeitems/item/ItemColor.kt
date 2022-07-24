@@ -7,6 +7,7 @@ import pers.neige.neigeitems.manager.TeamManager.teams
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.getItemTag
+import taboolib.module.nms.nmsGeneric
 
 // 用于实现掉落物光效功能
 object ItemColor {
@@ -16,8 +17,8 @@ object ItemColor {
             val item = event.entity
             val itemStack = item.itemStack
             if (itemStack.type != Material.AIR) {
-                // 由于是异步操作, 此步骤可能报错(还没获取NBT就被玩家捡走了), 不影响使用
-                val itemTag = itemStack.getItemTag()
+                // 由于是异步操作, 物品仍可能为空气(还没获取NBT就被玩家捡走了), 所以直接使用nmsGeneric.getItemTag
+                val itemTag = nmsGeneric.getItemTag(itemStack)
 
                 // 检测物品是否有用于标记光效颜色的特殊NBT
                 itemTag["NeigeItems"]?.asCompound()?.get("color")?.asString()?.let {

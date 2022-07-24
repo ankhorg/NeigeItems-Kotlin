@@ -291,6 +291,7 @@ object ActionManager {
         val action = event.action
         val leftAction = (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
         val rightAction = (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
+        val allAction = (leftAction || rightAction)
         // 如果物品配置了消耗事件
         if (consume != null) {
             // 获取左键是否消耗
@@ -298,7 +299,7 @@ object ActionManager {
             // 获取右键是否消耗
             val right = (rightAction && consume.getBoolean("right", false))
             // 获取左右键是否消耗
-            val all = ((leftAction || rightAction) && consume.getBoolean("all", false))
+            val all = (allAction && consume.getBoolean("all", false))
             // 如果该物品需要被消耗
             if (left || right || all) {
                 // 取消交互事件
@@ -311,21 +312,34 @@ object ActionManager {
                 if (itemStack.consume(player, amount, itemTag, neigeItems)) {
                     // 消耗成功, 执行动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        itemAction.run(player, itemAction.all, itemTag)
+                        if (all) itemAction.run(player, itemAction.all, itemTag)
                         if (left) itemAction.run(player, itemAction.left, itemTag)
                         if (right) itemAction.run(player, itemAction.right, itemTag)
                     })
                 }
             }
-        } else {
-            if ((leftAction && itemAction.left != null) || (rightAction && itemAction.right != null)) {
+            // 消耗检测完毕, 检测不消耗情况
+            if ((leftAction && !left) || (rightAction && !right) || (allAction && !all)) {
                 // 取消交互事件
                 event.isCancelled = true
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
                     // 检测冷却
                     if (itemAction.isCoolDown(player)) return@Runnable
                     // 执行动作
-                    itemAction.run(player, itemAction.all, itemTag)
+                    if (allAction && !all) itemAction.run(player, itemAction.all, itemTag)
+                    if (leftAction && !left) itemAction.run(player, itemAction.left, itemTag)
+                    if (rightAction && !right) itemAction.run(player, itemAction.right, itemTag)
+                })
+            }
+        } else {
+            if ((leftAction && itemAction.left != null) || (rightAction && itemAction.right != null) || (allAction && itemAction.all != null)) {
+                // 取消交互事件
+                event.isCancelled = true
+                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                    // 检测冷却
+                    if (itemAction.isCoolDown(player)) return@Runnable
+                    // 执行动作
+                    if (allAction) itemAction.run(player, itemAction.all, itemTag)
                     if (leftAction) itemAction.run(player, itemAction.left, itemTag)
                     if (rightAction) itemAction.run(player, itemAction.right, itemTag)
                 })
