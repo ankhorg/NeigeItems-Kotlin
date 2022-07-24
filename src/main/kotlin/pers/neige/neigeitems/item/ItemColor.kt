@@ -15,8 +15,8 @@ object ItemColor {
         submit(async = true) {
             val item = event.entity
             val itemStack = item.itemStack
-            // 1.12.2情况下可能为null
-            if (itemStack != null && itemStack.type != Material.AIR) {
+            if (itemStack.type != Material.AIR) {
+                // 由于是异步操作, 此步骤可能报错(还没获取NBT就被玩家捡走了), 不影响使用
                 val itemTag = itemStack.getItemTag()
 
                 // 检测物品是否有用于标记光效颜色的特殊NBT
