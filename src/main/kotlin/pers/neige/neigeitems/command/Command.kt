@@ -585,15 +585,17 @@ object Command {
                                 // ni mm get [物品ID]
                                 "get" -> {
                                     if (sender is Player) {
-                                        giveAddonCommand( sender, sender, argument, mythicMobsHooker!!.getItemStackSync(argument), 1)
+                                        giveAddonCommandAsync( sender, sender, argument, mythicMobsHooker!!.getItemStackSync(argument), 1)
                                     } else {
                                         config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
                                     }
                                 }
                                 // ni mm giveAll [物品ID]
                                 "giveAll" -> {
-                                    Bukkit.getOnlinePlayers().forEach { player ->
-                                        giveAddonCommand( sender, player, argument, mythicMobsHooker!!.getItemStackSync(argument), 1)
+                                    submit(async = true) {
+                                        Bukkit.getOnlinePlayers().forEach { player ->
+                                            giveAddonCommand( sender, player, argument, mythicMobsHooker!!.getItemStackSync(argument), 1)
+                                        }
                                     }
                                 }
                                 else -> help(sender)
@@ -660,19 +662,21 @@ object Command {
                                     // ni mm get [物品ID] (数量)
                                     "get" -> {
                                         if (sender is Player) {
-                                            giveAddonCommand( sender, sender, context.argument(-1), mythicMobsHooker!!.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
+                                            giveAddonCommandAsync( sender, sender, context.argument(-1), mythicMobsHooker!!.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
                                         } else {
                                             config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
                                         }
                                     }
                                     // ni mm give [玩家ID] [物品ID]
                                     "give" -> {
-                                        giveAddonCommand( sender, Bukkit.getPlayerExact(context.argument(-1)), argument, mythicMobsHooker!!.getItemStackSync(argument), 1)
+                                        giveAddonCommandAsync( sender, Bukkit.getPlayerExact(context.argument(-1)), argument, mythicMobsHooker!!.getItemStackSync(argument), 1)
                                     }
                                     // ni mm giveAll [物品ID] (数量)
                                     "giveAll" -> {
-                                        Bukkit.getOnlinePlayers().forEach { player ->
-                                            giveAddonCommand( sender, player, context.argument(-1), mythicMobsHooker!!.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
+                                        submit(async = true) {
+                                            Bukkit.getOnlinePlayers().forEach { player ->
+                                                giveAddonCommand( sender, player, context.argument(-1), mythicMobsHooker!!.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
+                                            }
                                         }
                                     }
                                     else -> help(sender)
@@ -696,7 +700,7 @@ object Command {
                                     when (context.argument(-3)) {
                                         // ni mm give [玩家ID] [物品ID] (数量)
                                         "give" -> {
-                                            giveAddonCommand( sender, Bukkit.getPlayerExact(context.argument(-2)), context.argument(-1), mythicMobsHooker!!.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
+                                            giveAddonCommandAsync( sender, Bukkit.getPlayerExact(context.argument(-2)), context.argument(-1), mythicMobsHooker!!.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
                                         }
                                         else -> help(sender)
                                     }
@@ -945,7 +949,7 @@ object Command {
         }
     }
 
-    private fun giveAddonCommand(
+    private fun giveAddonCommandAsync(
         sender: CommandSender,
         player: Player?,
         id: String,
@@ -953,33 +957,43 @@ object Command {
         amount: Int?
     ) {
         submit (async = true) {
-            player?.let {
-                // 获取数量
-                amount?.let {
-                    // 给物品
-                    itemStack?.let {
-                        bukkitScheduler.callSyncMethod(plugin) {
-                            player.giveItems(itemStack, amount.coerceAtLeast(1))
-                        }
-                        sender.sendMessage(config.getString("Messages.successInfo")
-                            ?.replace("{player}", player.name)
-                            ?.replace("{amount}", amount.toString())
-                            ?.replace("{name}", itemStack.getName()))
-                        player.sendMessage(config.getString("Messages.givenInfo")
-                            ?.replace("{amount}", amount.toString())
-                            ?.replace("{name}", itemStack.getName()))
-                        // 未知物品ID
-                    } ?: let {
-                        sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+            giveAddonCommand(sender, player, id, itemStack, amount)
+        }
+    }
+
+    private fun giveAddonCommand(
+        sender: CommandSender,
+        player: Player?,
+        id: String,
+        itemStack: ItemStack?,
+        amount: Int?
+    ) {
+        player?.let {
+            // 获取数量
+            amount?.let {
+                // 给物品
+                itemStack?.let {
+                    bukkitScheduler.callSyncMethod(plugin) {
+                        player.giveItems(itemStack, amount.coerceAtLeast(1))
                     }
-                    // 无效数字
+                    sender.sendMessage(config.getString("Messages.successInfo")
+                        ?.replace("{player}", player.name)
+                        ?.replace("{amount}", amount.toString())
+                        ?.replace("{name}", itemStack.getName()))
+                    player.sendMessage(config.getString("Messages.givenInfo")
+                        ?.replace("{amount}", amount.toString())
+                        ?.replace("{name}", itemStack.getName()))
+                    // 未知物品ID
                 } ?: let {
-                    sender.sendMessage(config.getString("Messages.invalidAmount"))
+                    sender.sendMessage(config.getString("Messages.unknownItem")?.replace("{itemID}", id))
                 }
-                // 无效玩家
+                // 无效数字
             } ?: let {
-                sender.sendMessage(config.getString("Messages.invalidPlayer"))
+                sender.sendMessage(config.getString("Messages.invalidAmount"))
             }
+            // 无效玩家
+        } ?: let {
+            sender.sendMessage(config.getString("Messages.invalidPlayer"))
         }
     }
 
