@@ -3,6 +3,8 @@ package pers.neige.neigeitems.item
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.event.entity.ItemSpawnEvent
+import pers.neige.neigeitems.NeigeItems.bukkitScheduler
+import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.TeamManager.teams
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
@@ -25,11 +27,14 @@ object ItemColor {
                     // 颜色违规就会报错(一般情况不会违规, 物品生成时已进行过相关检查), 所以catch一下
                     try {
                         val color = ChatColor.valueOf(it)
-                        // 挪入相关颜色的Team
-                        teams[color.toString()]?.addEntry(item.uniqueId.toString())
-                        // 设置物品发光
-                        item.isGlowing = true
-                    } catch (error: Throwable) {}
+                        // 有关Team存储用的是HashMap, 这玩意儿异步不得
+                        bukkitScheduler.callSyncMethod(plugin) {
+                            // 挪入相关颜色的Team
+                            teams[color.toString()]?.addEntry(item.uniqueId.toString())
+                            // 设置物品发光
+                            item.isGlowing = true
+                        }
+                    } catch (error: IllegalArgumentException) {}
                 }
             }
         }
