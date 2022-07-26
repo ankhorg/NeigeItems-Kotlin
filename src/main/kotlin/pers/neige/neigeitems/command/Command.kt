@@ -767,12 +767,21 @@ object Command {
                                 .hoverText(config.getString("Messages.clickGiveMessage")?:"")
                         )
                         if (i+1 != listItemMessageList.size) {
-                            listItemRaw.append(
+                            // 在1.12.2版本, hoverItem难以应对诸如BRICK(砖块)这种物品, 不得已捕获一下报错
+                            kotlin.runCatching {
                                 TellrawJson()
                                     .append(itemStack.getName())
                                     .hoverItem(itemStack)
                                     .runCommand("/ni get $id")
-                            )
+                            }.getOrNull()?.let {
+                                listItemRaw.append(it)
+                            } ?: let {
+                                listItemRaw.append(
+                                    TellrawJson()
+                                        .append(itemStack.getName())
+                                        .runCommand("/ni get $id")
+                                )
+                            }
                         }
                     }
                     listItemRaw.sendTo(bukkitAdapter.adaptCommandSender(sender))
