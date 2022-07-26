@@ -184,7 +184,8 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                                 val probability = args[2].toDoubleOrNull()
                                 if (probability != null && Math.random() > probability) continue
                             }
-                            if (!hasItem(args[0])) continue
+                            // 如果NI和MM都不存在对应物品就跳过去
+                            if (!hasItem(args[0]) && !itemManager.getItem(args[0]).isPresent) continue
 
                             // 获取掉落数量
                             var amount = 1
@@ -223,6 +224,10 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                                 for (index in 0..amount) {
                                     getItemStack(args[0], player, data)?.let { itemStack ->
                                         dropItems.add(itemStack)
+                                    } ?: let {
+                                        itemManager.getItemStack(args[0])?.let { itemStack ->
+                                            dropItems.add(itemStack)
+                                        }
                                     }
                                 }
                             }
