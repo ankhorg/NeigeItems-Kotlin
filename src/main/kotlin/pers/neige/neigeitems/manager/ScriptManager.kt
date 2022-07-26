@@ -40,15 +40,16 @@ object ScriptManager {
         return nashornHooker.getNashornEngine()
     }
 
-    // 一级缓存, 用于记录被解析的公式, 五分钟清空一次
-    val cache = ConcurrentHashMap<Int, CompiledScript>()
-
-    // 二级缓存, 用于记录被重复解析过的公式, 持久化存储(预编译js脚本可以大大提升性能, 只缓存经过重复解析的脚本, 节省内存空间)
-    val realCache = ConcurrentHashMap<Int, CompiledScript>()
-
-    // 五分钟清空一次一级缓存
-    @Schedule(delay = (20 * 60 * 5).toLong(), period = (20 * 60 * 5).toLong(), async = true)
-    private fun clear() {
-        cache.clear()
-    }
+    // 测试表明, nashorn会自动进行相关优化
+//    // 一级缓存, 用于记录被解析的公式, 五分钟清空一次
+//    val cache = ConcurrentHashMap<Int, CompiledScript>()
+//
+//    // 二级缓存, 用于记录被重复解析过的公式, 持久化存储(预编译js脚本可以大大提升性能, 只缓存经过重复解析的脚本, 节省内存空间)
+//    val realCache = ConcurrentHashMap<Int, CompiledScript>()
+//
+//    // 五分钟清空一次一级缓存
+//    @Schedule(delay = (20 * 60 * 5).toLong(), period = (20 * 60 * 5).toLong(), async = true)
+//    private fun clear() {
+//        cache.clear()
+//    }
 }
