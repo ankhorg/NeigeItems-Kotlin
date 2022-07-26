@@ -1,9 +1,6 @@
 package pers.neige.neigeitems.utils
 
-import pers.neige.neigeitems.manager.ScriptManager.cache
-import pers.neige.neigeitems.manager.ScriptManager.realCache
 import pers.neige.neigeitems.manager.ScriptManager.scriptEngine
-import javax.script.Compilable
 
 object ScriptUtils {
     // 快速解析js脚本

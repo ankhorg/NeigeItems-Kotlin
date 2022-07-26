@@ -9,7 +9,6 @@ import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.getItemTag
 import taboolib.platform.util.actionBar
 import taboolib.platform.util.giveItem
 import java.text.DecimalFormat

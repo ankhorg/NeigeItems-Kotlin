@@ -8,7 +8,6 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.TeamManager.teams
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
-import taboolib.module.nms.getItemTag
 import taboolib.module.nms.nmsGeneric
 
 // 用于实现掉落物光效功能
