@@ -2,6 +2,7 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
@@ -9,6 +10,7 @@ import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import taboolib.module.nms.*
+import taboolib.platform.util.giveItem
 import kotlin.math.floor
 
 
@@ -217,5 +219,27 @@ object ItemUtils {
             return ItemInfo(itemTag, neigeItems, id)
         }
         return null
+    }
+
+    // 根据数量将物品超级加倍, 返回一个列表
+    @JvmStatic
+    fun ItemStack.getItems(amount: Int? = null): ArrayList<ItemStack> {
+        val list = ArrayList<ItemStack>()
+        amount?.let {
+            val item = this.clone()
+            val maxStackSize = item.maxStackSize
+            item.amount = maxStackSize
+            val leftAmount = amount % maxStackSize
+            val repeat = amount / maxStackSize
+            repeat(repeat) {
+                list.add(item)
+            }
+            if (leftAmount != 0) {
+                val itemLeft = this.clone()
+                itemLeft.amount = leftAmount
+                list.add(itemLeft)
+            }
+        } ?: list.add(this)
+        return list
     }
 }

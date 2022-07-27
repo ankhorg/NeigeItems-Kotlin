@@ -20,6 +20,7 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.hasItem
+import pers.neige.neigeitems.utils.ItemUtils.getItems
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.EventPriority
@@ -221,13 +222,16 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                                 }
                             } else {
                                 // 随机生成, 那疯狂造就完事儿了
-                                for (index in 0..amount) {
-                                    getItemStack(args[0], player, data)?.let { itemStack ->
-                                        dropItems.add(itemStack)
-                                    } ?: let {
-                                        itemManager.getItemStack(args[0])?.let { itemStack ->
-                                            dropItems.add(itemStack)
+                                when {
+                                    hasItem(args[0]) -> {
+                                        repeat(amount) {
+                                            getItemStack(args[0], player, data)?.let { itemStack ->
+                                                dropItems.add(itemStack)
+                                            }
                                         }
+                                    }
+                                    else -> {
+                                        itemManager.getItemStack(args[0])?.getItems(amount)?.forEach { dropItems.add(it) }
                                     }
                                 }
                             }
