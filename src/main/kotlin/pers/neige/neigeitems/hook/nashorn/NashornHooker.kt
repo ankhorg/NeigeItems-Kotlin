@@ -13,4 +13,15 @@ abstract class NashornHooker {
 
     // 编译一段js脚本
     abstract fun compile(reader: Reader): CompiledScript
+
+    /**
+     * 调用脚本中的某个函数
+     * 因为内部涉及ScriptObjectMirror的使用, 所以放入nashornHooker
+     * @param compiledScript 待调用脚本
+     * @param function 待调用函数名
+     * @param map 顶级变量
+     * @param vararg 传入函数的参数
+     * @return 返回值
+     */
+    abstract fun invoke(compiledScript: pers.neige.neigeitems.script.CompiledScript, function: String, map: HashMap<String, Any>?, vararg args: Any): Any?
 }

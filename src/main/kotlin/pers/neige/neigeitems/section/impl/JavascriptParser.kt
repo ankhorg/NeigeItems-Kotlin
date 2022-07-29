@@ -28,7 +28,7 @@ object JavascriptParser : SectionParser() {
                 map["papi"] = java.util.function.Function<String, String> { string -> papi(player, string) }
             }
             map["vars"] = java.util.function.Function<String, String> { string -> string.parseSection(cache, player, sections) }
-            return ScriptManager.compiledScripts[path]?.invokeFunction(func, map, args = data.getStringList("args").toTypedArray())?.toString()?.parseSection(cache, player, sections)
+            return ScriptManager.compiledScripts[path]?.invoke(func, map, *(data.getStringList("args").toTypedArray()))?.toString()?.parseSection(cache, player, sections)
         }
         return null
     }

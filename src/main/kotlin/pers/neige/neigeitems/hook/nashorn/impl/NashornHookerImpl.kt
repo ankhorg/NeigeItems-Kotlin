@@ -1,12 +1,14 @@
 package pers.neige.neigeitems.hook.nashorn.impl
 
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
 import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
 import java.io.Reader
 import javax.script.Compilable
 import javax.script.CompiledScript
+import javax.script.Invocable
 import javax.script.ScriptEngine
 
 @RuntimeDependencies(
@@ -28,5 +30,11 @@ class NashornHookerImpl : NashornHooker() {
 
     override fun compile(reader: Reader): CompiledScript {
         return (engineFactory.getScriptEngine(arrayOf("-Dnashorn.args=--language=es6"), this::class.java.classLoader) as Compilable).compile(reader)
+    }
+
+    override fun invoke(compiledScript: pers.neige.neigeitems.script.CompiledScript, function: String, map: HashMap<String, Any>?, vararg args: Any): Any? {
+        val newObject: ScriptObjectMirror = (compiledScript.scriptEngine as Invocable).invokeFunction("newObject") as ScriptObjectMirror
+        map?.forEach { (key, value) -> newObject[key] = value }
+        return newObject.callMember(function, *args)
     }
 }

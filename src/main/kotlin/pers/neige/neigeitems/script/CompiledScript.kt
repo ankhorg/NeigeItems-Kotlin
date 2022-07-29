@@ -14,15 +14,23 @@ class CompiledScript(reader: Reader) {
     val scriptEngine: ScriptEngine = compiledScript.engine
 
     /**
-     * 执行脚本中的指定方法
-     * @param function 方法名
+     * 执行脚本中的指定函数
+     * @param function 函数名
      * @param map 传入的默认对象
      * @param args 传入对应方法的参数
      * @return 解析值
      */
-    fun invokeFunction(function: String, map: HashMap<String, Any>?, vararg args: Any): Any? {
-        map?.forEach { (key, value) -> scriptEngine.put(key, value) }
-        compiledScript.eval(scriptEngine.context)
-        return (scriptEngine as Invocable).invokeFunction(function, *args)
+    fun invoke(function: String, map: HashMap<String, Any>?, vararg args: Any): Any? {
+        return nashornHooker.invoke(this, function, map, *args)
+    }
+
+    init {
+        // 一段不可言说的代码, 将为脚本带来令人着迷的性能与高并发稳定性
+        compiledScript.eval()
+        scriptEngine.eval("""
+            function NeigeItemsNumberOne() {}
+            NeigeItemsNumberOne.prototype = this
+            function newObject() { return new NeigeItemsNumberOne() }
+        """)
     }
 }
