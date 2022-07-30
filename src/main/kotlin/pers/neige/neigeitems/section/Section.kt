@@ -28,6 +28,7 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
                     return it
                 }
                 info("$type 节点 $id 无法获取解析值")
+                return null
             }
             info("$id 拥有未知节点类型 $type")
         }

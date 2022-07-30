@@ -133,7 +133,9 @@ object ItemManager : ItemConfigManager() {
                         }
                     }
                     // 设置ItemFlags
-                    configSection.set("hideflags", itemMeta?.itemFlags?.map { it.name })
+                    itemMeta?.itemFlags?.let{
+                        configSection.set("hideflags", it.map { flag -> flag.name })
+                    }
                     // 设置物品颜色
                     display?.asCompound()?.let {
                         it["color"]?.asInt()?.let { color ->
