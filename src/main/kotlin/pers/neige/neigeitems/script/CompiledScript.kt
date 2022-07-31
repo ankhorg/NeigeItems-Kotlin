@@ -5,7 +5,6 @@ import pers.neige.neigeitems.utils.FileUtils
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
-import java.io.Reader
 import javax.script.ScriptEngine
 
 // 对已编译的js脚本进行包装, 便于调用其中的指定函数

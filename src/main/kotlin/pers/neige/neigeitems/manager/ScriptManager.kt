@@ -3,7 +3,6 @@ package pers.neige.neigeitems.manager
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import java.io.File
-import java.io.FileReader
 import javax.script.ScriptEngine
 
 // 脚本文件管理器, 用于管理所有js节点的脚本文件, 同时提供公用ScriptEngine用于解析公式节点内容

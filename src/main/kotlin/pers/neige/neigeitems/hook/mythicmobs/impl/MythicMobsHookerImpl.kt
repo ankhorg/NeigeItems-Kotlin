@@ -151,7 +151,7 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                                 if (Math.random() <= it) {
                                     val id = neigeItems["id"]?.asString()
                                     if (id != null) {
-                                        getItemStack(id, player as OfflinePlayer, neigeItems["data"]?.asString())?.let {
+                                        getItemStack(id, player?.let { it as OfflinePlayer }, neigeItems["data"]?.asString())?.let {
                                             // 丢进待掉落列表里
                                             dropItems.add(it)
                                         }

@@ -26,7 +26,6 @@ import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
 import taboolib.platform.util.giveItem
 import java.io.File
-import java.io.FileReader
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction

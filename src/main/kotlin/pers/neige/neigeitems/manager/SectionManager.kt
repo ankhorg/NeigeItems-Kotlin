@@ -6,7 +6,6 @@ import pers.neige.neigeitems.section.impl.*
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import pers.neige.neigeitems.utils.ConfigUtils.loadConfiguration
 import java.io.File
-import java.io.FileReader
 import java.util.concurrent.ConcurrentHashMap
 
 // 全局节点&节点解析器管理器
