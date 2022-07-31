@@ -1,14 +1,17 @@
 package pers.neige.neigeitems.script
 
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
+import pers.neige.neigeitems.utils.FileUtils
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStreamReader
 import java.io.Reader
-import javax.script.Invocable
 import javax.script.ScriptEngine
 
 // 对已编译的js脚本进行包装, 便于调用其中的指定函数
-class CompiledScript(reader: Reader) {
+class CompiledScript(file: File) {
     // 已编译脚本
-    val compiledScript = nashornHooker.compile(reader)
+    val compiledScript = nashornHooker.compile(InputStreamReader(FileInputStream(file), FileUtils.charset(file)))
 
     // 该脚本对应的ScriptEngine
     val scriptEngine: ScriptEngine = compiledScript.engine

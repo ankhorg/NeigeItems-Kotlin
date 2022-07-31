@@ -22,7 +22,7 @@ object ScriptManager {
     // 加载全部脚本
     private fun loadScripts() {
         for (file in getAllFiles("Scripts")) {
-            compiledScripts[file.path.replace("plugins${File.separator}NeigeItems${File.separator}Scripts${File.separator}", "")] = pers.neige.neigeitems.script.CompiledScript(FileReader(file))
+            compiledScripts[file.path.replace("plugins${File.separator}NeigeItems${File.separator}Scripts${File.separator}", "")] = pers.neige.neigeitems.script.CompiledScript(file)
         }
     }
 

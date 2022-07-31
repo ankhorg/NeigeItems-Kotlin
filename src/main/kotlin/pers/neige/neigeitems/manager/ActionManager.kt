@@ -114,7 +114,7 @@ object ActionManager {
         for (file in ConfigUtils.getAllFiles("CustomActions")) {
             // 没有main这个函数就会报错
             try {
-                pers.neige.neigeitems.script.CompiledScript(FileReader(file)).invoke("main", null)
+                pers.neige.neigeitems.script.CompiledScript(file).invoke("main", null)
             } catch (error: NoSuchMethodException) {}
         }
     }

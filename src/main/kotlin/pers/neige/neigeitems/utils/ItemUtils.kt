@@ -2,7 +2,6 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
@@ -10,7 +9,6 @@ import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import taboolib.module.nms.*
-import taboolib.platform.util.giveItem
 import kotlin.math.floor
 
 
