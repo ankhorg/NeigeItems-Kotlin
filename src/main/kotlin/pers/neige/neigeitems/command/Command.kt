@@ -17,6 +17,7 @@ import pers.neige.neigeitems.manager.ItemManager.saveItem
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItem
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
+import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.CommandBody
 import taboolib.common.platform.command.CommandHeader
@@ -94,7 +95,7 @@ object Command {
                 execute<CommandSender> { _, context, argument ->
                     submit(async = true) {
                         Bukkit.getPlayerExact(context.argument(-1))?.let { player ->
-                            runAction(player, argument)
+                            runAction(player, argument.parseSection(player))
                         }
                     }
                 }

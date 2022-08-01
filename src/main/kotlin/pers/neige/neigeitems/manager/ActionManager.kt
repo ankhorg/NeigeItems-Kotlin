@@ -111,10 +111,10 @@ object ActionManager {
     // 加载自定义动作
     private fun loadCustomActions() {
         for (file in ConfigUtils.getAllFiles("CustomActions")) {
-            // 没有main这个函数就会报错
+            // 防止某个脚本出错导致加载中断
             try {
                 pers.neige.neigeitems.script.CompiledScript(file).invoke("main", null)
-            } catch (error: NoSuchMethodException) {}
+            } catch (error: Throwable) {}
         }
     }
 
