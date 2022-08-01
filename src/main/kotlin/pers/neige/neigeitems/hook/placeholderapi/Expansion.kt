@@ -2,7 +2,6 @@ package pers.neige.neigeitems.hook.placeholderapi
 
 import org.bukkit.entity.Player
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import taboolib.common.platform.function.pluginId
 import taboolib.platform.compat.PlaceholderExpansion
 
 object Expansion : PlaceholderExpansion {

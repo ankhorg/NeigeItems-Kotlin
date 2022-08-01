@@ -759,7 +759,7 @@ object Command {
                 .replace("{ID}", id)
             // 构建信息及物品
             if (sender is Player) {
-                getItemStack(id, sender)?.let { itemStack ->
+                kotlin.runCatching { getItemStack(id, sender) }.getOrNull()?.let { itemStack ->
                     val listItemMessageList = listItemMessage.split("{name}")
                     val listItemRaw = TellrawJson()
                     for ((i, it) in listItemMessageList.withIndex()) {
@@ -794,11 +794,9 @@ object Command {
             } else {
                 // 在不传入玩家变量的情况下尝试构建物品获取物品名
                 // 如果用户在js节点中调用了玩家对象, 这样搞就会报错
-                try {
-                    getItemStack(id)?.let { itemStack ->
-                        sender.sendMessage(listItemMessage.replace("{name}", itemStack.getName()))
-                    }
-                } catch (error: Throwable) {
+                kotlin.runCatching { getItemStack(id) }.getOrNull()?.let { itemStack ->
+                    sender.sendMessage(listItemMessage.replace("{name}", itemStack.getName()))
+                } ?: let {
                     val itemKeySection = ItemManager.getOriginConfig(id)
                     val itemName = when {
                         itemKeySection?.contains("name") == true -> itemKeySection.getString("name")
