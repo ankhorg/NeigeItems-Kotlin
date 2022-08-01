@@ -17,11 +17,28 @@ object WeightParser : SectionParser() {
         player: OfflinePlayer?, sections:
         ConfigurationSection?
     ): String? {
+        return handler(cache, player, sections, true, data.getStringList("values"))
+    }
+
+    override fun onRequest(
+        args: List<String>,
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?
+    ): String {
+        return handler(cache, player, sections, false, args) ?: "<${StringsParser.id}::${args.joinToString("_")}>"
+    }
+
+    private fun handler(cache: HashMap<String, String>?,
+                        player: OfflinePlayer?,
+                        sections: ConfigurationSection?,
+                        parse: Boolean,
+                        values: List<String>): String? {
         val info = HashMap<String, BigDecimal>()
         var total = BigDecimal(0)
         // 加载所有参数并遍历
-        data.getStringList("values").forEach {
-            val value = it.toString().parseSection(cache, player, sections)
+        values.forEach {
+            val value = it.toString().parseSection(parse, cache, player, sections)
             // 检测权重
             when (val index = value.indexOf("::")) {
                 // 无权重, 直接记录
@@ -52,23 +69,12 @@ object WeightParser : SectionParser() {
                 for ((key, value) in info) {
                     current = current.add(value)
                     if (random <= current) {
-                        result = key.parseSection(cache, player, sections)
+                        result = key.parseSection(parse, cache, player, sections)
                         break
                     }
                 }
                 result
             }
         }
-    }
-
-    override fun onRequest(
-        args: List<String>,
-        cache: HashMap<String, String>?,
-        player: OfflinePlayer?, sections:
-        ConfigurationSection?
-    ): String {
-        val data = YamlConfiguration()
-        data.set("values", args)
-        return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
     }
 }

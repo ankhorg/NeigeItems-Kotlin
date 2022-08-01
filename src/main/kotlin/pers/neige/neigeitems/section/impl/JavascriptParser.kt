@@ -18,19 +18,7 @@ object JavascriptParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
-        data.getString("path")?.let {
-            val array = it.split("::")
-            val path = array[0]
-            val func = array[1]
-            val map = HashMap<String, Any>()
-            player?.let {
-                map["player"] = player
-                map["papi"] = java.util.function.Function<String, String> { string -> papi(player, string) }
-            }
-            map["vars"] = java.util.function.Function<String, String> { string -> string.parseSection(cache, player, sections) }
-            return ScriptManager.compiledScripts[path]?.invoke(func, map, *(data.getStringList("args").toTypedArray()))?.toString()?.parseSection(cache, player, sections)
-        }
-        return null
+        return handler(cache, player, sections, true, data.getString("path"), data.getStringList("args"))
     }
 
     override fun onRequest(
@@ -39,10 +27,27 @@ object JavascriptParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        val data = YamlConfiguration()
-        if (args.isNotEmpty()) data.set("path", args[0])
-        val param = args.drop(1)
-        if (param.isNotEmpty()) data.set("args", param)
-        return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
+        return handler(cache, player, sections, false, args.getOrNull(0), if (args.isNotEmpty()) args.drop(1) else mutableListOf()) ?: "<$id::${args.joinToString("_")}>"
+    }
+
+    private fun handler(cache: HashMap<String, String>?,
+                        player: OfflinePlayer?,
+                        sections: ConfigurationSection?,
+                        parse: Boolean,
+                        info: String?,
+                        args: List<String>): String? {
+        info?.let {
+            val array = it.split("::")
+            val path = array[0]
+            val func = array[1]
+            val map = HashMap<String, Any>()
+            player?.let {
+                map["player"] = player
+                map["papi"] = java.util.function.Function<String, String> { string -> papi(player, string) }
+            }
+            map["vars"] = java.util.function.Function<String, String> { string -> string.parseSection(parse, cache, player, sections) }
+            return ScriptManager.compiledScripts[path]?.invoke(func, map, *args.toTypedArray())?.toString()?.parseSection(parse, cache, player, sections)
+        }
+        return null
     }
 }

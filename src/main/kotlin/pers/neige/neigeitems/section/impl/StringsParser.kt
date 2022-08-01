@@ -16,13 +16,7 @@ object StringsParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
-        // 加载字符串组
-        val values = data.getStringList("values")
-        // 随机抽一个
-        return when {
-            values.isEmpty() -> null
-            else -> values[(0 until values.size).random()].toString().parseSection(cache, player, sections)
-        }
+        return handler(cache, player, sections, true, data.getStringList("values"))
     }
 
     override fun onRequest(
@@ -31,8 +25,17 @@ object StringsParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        val data = YamlConfiguration()
-        data.set("values", args)
-        return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
+        return handler(cache, player, sections, false, args) ?: "<$id::${args.joinToString("_")}>"
+    }
+
+    private fun handler(cache: HashMap<String, String>?,
+                        player: OfflinePlayer?,
+                        sections: ConfigurationSection?,
+                        parse: Boolean,
+                        values: List<String>): String? {
+        return when {
+            values.isEmpty() -> null
+            else -> values[(values.indices).random()].parseSection(parse, cache, player, sections)
+        }
     }
 }

@@ -17,18 +17,7 @@ object InheritParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
-        // 获取继承模板ID
-        data.getString("template")?.let { inheritId ->
-            // 获取继承模板
-            val result = when (val section = sections?.getConfigurationSection(inheritId)) {
-                // 继承简单节点
-                null -> sections?.getString(inheritId)?.parseSection(cache, player, sections)
-                // 继承私有节点
-                else -> Section(section, inheritId).get(cache, player, sections)
-            }
-            return result
-        }
-        return null
+        return handler(cache, player, sections, true, data.getString("template"))
     }
 
     override fun onRequest(
@@ -37,8 +26,27 @@ object InheritParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        val data = YamlConfiguration()
-        data.set("template", args.joinToString("_"))
-        return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
+        return handler(cache, player, sections, false, args.joinToString("_")) ?: "<$id::${args.joinToString("_")}>"
+    }
+
+    private fun handler(cache: HashMap<String, String>?,
+                        player: OfflinePlayer?,
+                        sections: ConfigurationSection?,
+                        parse: Boolean,
+                        template: String?): String? {
+        // 获取继承模板ID
+        template?.let { inheritId ->
+            // 获取继承模板
+            val result = when (val section = sections?.getConfigurationSection(inheritId)) {
+                // 继承简单节点
+                null -> {
+                    sections?.getString(inheritId)?.parseSection(parse, cache, player, sections)
+                }
+                // 继承私有节点
+                else -> Section(section, inheritId).get(cache, player, sections)
+            }
+            return result
+        }
+        return null
     }
 }

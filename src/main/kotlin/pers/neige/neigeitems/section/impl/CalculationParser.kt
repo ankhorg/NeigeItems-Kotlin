@@ -17,28 +17,7 @@ object CalculationParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
-        // 如果配置了数字范围
-        try {
-            // 加载公式
-            data.getString("formula")?.parseSection(cache, player, sections)?.let {
-                // 计算结果
-                var result = it.eval().toString().toDouble()
-                // 获取大小范围
-                data.getString("min")?.parseSection(cache, player, sections)?.toDouble()?.let { min ->
-                    result = min.coerceAtLeast(result)
-                }
-                data.getString("max")?.parseSection(cache, player, sections)?.toDouble()?.let { max ->
-                    result = max.coerceAtMost(result)
-                }
-                // 获取取整位数
-                val fixed = data.getString("fixed")?.parseSection(cache, player, sections)?.toIntOrNull() ?: 0
-                // 加载结果
-                return "%.${fixed}f".format(result)
-            }
-        } catch (error: Throwable) {
-            error.printStackTrace()
-        }
-        return null
+        return handler(cache, player, sections, true, data.getString("formula"), data.getString("fixed"), data.getString("min"), data.getString("max"))
     }
 
     override fun onRequest(
@@ -47,12 +26,34 @@ object CalculationParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        val data = YamlConfiguration()
-        val size = args.size
-        if (size > 0) data.set("formula", args[0])
-        if (size > 1) data.set("fixed", args[1])
-        if (size > 2) data.set("min", args[2])
-        if (size > 3) data.set("max", args[3])
-        return onRequest(data, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
+        return handler(cache, player, sections, false, *args.toTypedArray()) ?: "<$id::${args.joinToString("_")}>"
+    }
+
+    private fun handler(cache: HashMap<String, String>?,
+                        player: OfflinePlayer?,
+                        sections: ConfigurationSection?,
+                        parse: Boolean,
+                        vararg args: String?): String? {
+        try {
+            // 加载公式
+            args.getOrNull(0)?.parseSection(parse, cache, player, sections)?.let {
+                // 计算结果
+                var result = it.eval().toString().toDouble()
+                // 获取大小范围
+                args.getOrNull(2)?.parseSection(parse, cache, player, sections)?.toDouble()?.let { min ->
+                    result = min.coerceAtLeast(result)
+                }
+                args.getOrNull(3)?.parseSection(parse, cache, player, sections)?.toDouble()?.let { max ->
+                    result = max.coerceAtMost(result)
+                }
+                // 获取取整位数
+                val fixed = args.getOrNull(1)?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 0
+                // 加载结果
+                return "%.${fixed}f".format(result)
+            }
+        } catch (error: Throwable) {
+            error.printStackTrace()
+        }
+        return null
     }
 }

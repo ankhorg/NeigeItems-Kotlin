@@ -66,6 +66,19 @@ object SectionUtils {
         return this.parseSection(cache, null, sections)
     }
 
+    @JvmStatic
+    fun String.parseSection(
+        parse: Boolean,
+        cache: HashMap<String, String>? = null,
+        player: OfflinePlayer? = null,
+        sections: ConfigurationSection? = null
+    ): String {
+        return when {
+            parse -> this.parseSection(cache, player, sections)
+            else -> this
+        }
+    }
+
     /**
      * 对节点内容进行解析 (已经去掉 <>)
      * @param cache 解析值缓存
