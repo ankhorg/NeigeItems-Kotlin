@@ -6,7 +6,7 @@ import taboolib.common.platform.function.pluginId
 import taboolib.platform.compat.PlaceholderExpansion
 
 object Expansion : PlaceholderExpansion {
-    override val identifier = pluginId
+    override val identifier = "ni"
 
     override fun onPlaceholderRequest(player: Player?, params: String): String {
         val args = params.split("_")

@@ -12,6 +12,8 @@ import pers.neige.neigeitems.manager.*
 import pers.neige.neigeitems.manager.ActionManager.runAction
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
+import pers.neige.neigeitems.manager.HookerManager.parseItemPlaceholder
+import pers.neige.neigeitems.manager.HookerManager.parseItemPlaceholders
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.saveItem
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItem
@@ -770,8 +772,10 @@ object Command {
                         if (i+1 != listItemMessageList.size) {
                             // 在1.12.2版本, hoverItem难以应对诸如BRICK(砖块)这种物品, 不得已捕获一下报错
                             kotlin.runCatching {
+                                // 解析物品变量
+                                parseItemPlaceholders(itemStack)
                                 TellrawJson()
-                                    .append(itemStack.getName())
+                                    .append(parseItemPlaceholder(itemStack, itemStack.getName()))
                                     .hoverItem(itemStack)
                                     .runCommand("/ni get $id")
                             }.getOrNull()?.let {
@@ -779,7 +783,7 @@ object Command {
                             } ?: let {
                                 listItemRaw.append(
                                     TellrawJson()
-                                        .append(itemStack.getName())
+                                        .append(parseItemPlaceholder(itemStack, itemStack.getName()))
                                         .runCommand("/ni get $id")
                                 )
                             }
