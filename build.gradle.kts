@@ -42,6 +42,7 @@ repositories {
     maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
     maven { url = uri("https://mvn.lumine.io/repository/maven-public") }
     maven { url = uri("https://jitpack.io") }
+    // taboo的仓库有时候github自动构建连不上, 丢到最后防止自动构建发生意外
     maven { url = uri("https://repo.tabooproject.org/storages/public/releases") }
 }
 

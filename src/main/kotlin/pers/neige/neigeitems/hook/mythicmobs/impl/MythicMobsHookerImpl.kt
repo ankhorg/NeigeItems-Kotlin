@@ -180,7 +180,7 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                             val args = drop.parseSection(player).split(" ")
 
                             val data: String? = when {
-                                args.size > 4 -> args.slice(4..args.size).joinToString(" ")
+                                args.size > 4 -> args.subList(4, args.size).joinToString(" ")
                                 else -> null
                             }
 
