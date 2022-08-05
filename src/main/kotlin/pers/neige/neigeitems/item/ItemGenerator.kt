@@ -270,6 +270,10 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 }
                 itemTag.saveTo(itemStack)
                 return itemStack
+            } else {
+                println(config.getString("Messages.invalidMaterial")
+                    ?.replace("{itemID}", id)
+                    ?.replace("{material}", configSection.getString("material") ?: ""))
             }
         }
         return null

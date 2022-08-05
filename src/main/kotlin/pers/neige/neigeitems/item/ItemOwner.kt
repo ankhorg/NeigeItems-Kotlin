@@ -31,7 +31,10 @@ object ItemOwner {
                 event.isCancelled = true
                 // 通过actionbar进行对应提示
                 config.getString("Messages.invalidOwnerMessage")?.let {
-                    player.actionBar(it.replace("{name}", owner))
+                    when (config.getString("ItemOwner.messageType")) {
+                        "actionbar" -> player.actionBar(it.replace("{name}", owner))
+                        "message" -> player.sendMessage(it.replace("{name}", owner))
+                    }
                 }
             }
         }

@@ -22,6 +22,7 @@ Messages:
   invalidItem: '§6[NI] §c物品加载失败, 物品可能缺损数据, 物品ID: §6{itemID}'
   failureInfo: '§e[NI] §6物品给予失败, 可能原因: 物品未配置材质/玩家已下线'
   invalidPlugin: '§e[NI] §6未发现前置插件: {plugin}'
+  invalidMaterial: '§e[NI] §6物品 {itemID} 使用了未知的材质 {material}'
   invalidParser: §e[NI] §6不能针对后台解析物品, 请指定一个玩家
   itemCooldown: §e物品冷却中! 请等待{time}秒
   clickGiveMessage: §e点击获取该物品
@@ -54,3 +55,6 @@ ItemList:
   ItemFormat: §6{index}. §a{ID} §6- §f{name}
   Prev: 上一页
   Next: 下一页
+ItemOwner:
+  # actionbar / message
+  messageType: actionbar
