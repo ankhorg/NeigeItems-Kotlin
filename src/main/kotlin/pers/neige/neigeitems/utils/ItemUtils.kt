@@ -3,13 +3,18 @@ package pers.neige.neigeitems.utils
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
+import org.bukkit.util.Vector
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.NeigeItems.pluginManager
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import taboolib.module.nms.*
+import kotlin.math.cos
 import kotlin.math.floor
+import kotlin.math.sin
 
 
 object ItemUtils {
@@ -239,5 +244,110 @@ object ItemUtils {
             }
         } ?: list.add(this)
         return list
+    }
+
+    /**
+     * 根据信息进行物品掉落
+     * @param dropItems 掉落物列表
+     * @param location 掉落位置
+     * @param offsetXString 发射横向偏移量
+     * @param offsetYString 发射纵向偏移量
+     * @param angleType 发射角度类型
+     */
+    @JvmStatic
+    fun dropItems(
+        dropItems: ArrayList<ItemStack>,
+        location: Location,
+        offsetXString: String? = null,
+        offsetYString: String? = null,
+        angleType: String? = null
+    ) {
+        // 如果配置了多彩掉落信息
+        if (offsetXString != null && offsetYString != null && angleType != null) {
+            val offsetX: Double = if (offsetXString.contains("-")) {
+                val index = offsetXString.indexOf("-")
+                val min = offsetXString.substring(0, index).toDoubleOrNull()
+                val max = offsetXString.substring(index+1).toDoubleOrNull()
+                when {
+                    min != null && max != null -> min + Math.random()*(max-min)
+                    else -> 0.1
+                }
+            } else {
+                offsetXString.toDoubleOrNull() ?: 0.1
+            }
+            // 获取纵向偏移量
+            val offsetY: Double = if (offsetYString.contains("-")) {
+                val index = offsetYString.indexOf("-")
+                val min = offsetYString.substring(0, index).toDoubleOrNull()
+                val max = offsetYString.substring(index+1).toDoubleOrNull()
+                when {
+                    min != null && max != null -> min + Math.random()*(max-min)
+                    else -> 0.1
+                }
+            } else {
+                offsetYString.toDoubleOrNull() ?: 0.1
+            }
+            // 开始掉落
+            for ((index, itemStack) in dropItems.withIndex()) {
+                val itemTag = itemStack.getItemTag()
+
+                NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
+                    location.world?.dropItem(location, itemStack) { item ->
+                        itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                            neigeItems["owner"]?.asString()?.let { owner ->
+                                item.setMetadataEZ("NI-Owner", owner)
+                            }
+                        }
+                    }
+                }.get()?.let { item ->
+                    val vector = Vector(offsetX, offsetY, 0.0)
+                    if (angleType == "random") {
+                        val angleCos = cos(Math.PI * 2 * Math.random())
+                        val angleSin = sin(Math.PI * 2 * Math.random())
+                        val x = angleCos * vector.x + angleSin * vector.z
+                        val z = -angleSin * vector.x + angleCos * vector.z
+                        vector.setX(x).z = z
+                    } else if (angleType == "round") {
+                        val angleCos = cos(Math.PI * 2 * index/dropItems.size)
+                        val angleSin = sin(Math.PI * 2 * index/dropItems.size)
+                        val x = angleCos * vector.x + angleSin * vector.z
+                        val z = -angleSin * vector.x + angleCos * vector.z
+                        vector.setX(x).z = z
+                    }
+                    item.velocity = vector
+
+                    itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                        neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                            if (pluginManager.isPluginEnabled("MythicMobs")) {
+                                mythicMobsHooker?.castSkill(item, dropSkill)
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            // 普通掉落
+            for (itemStack in dropItems) {
+                val itemTag = itemStack.getItemTag()
+
+                NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
+                    location.world?.dropItem(location, itemStack) { item ->
+                        itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                            neigeItems["owner"]?.asString()?.let { owner ->
+                                item.setMetadataEZ("NI-Owner", owner)
+                            }
+                        }
+                    }
+                }.get()?.let { item ->
+                    itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
+                        neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                            if (pluginManager.isPluginEnabled("MythicMobs")) {
+                                mythicMobsHooker?.castSkill(item, dropSkill)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

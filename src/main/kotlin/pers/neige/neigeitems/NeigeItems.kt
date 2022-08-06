@@ -8,4 +8,6 @@ object NeigeItems : Plugin() {
     val plugin by lazy { BukkitPlugin.getInstance() }
 
     val bukkitScheduler by lazy { Bukkit.getScheduler() }
+
+    val pluginManager by lazy { Bukkit.getPluginManager() }
 }
