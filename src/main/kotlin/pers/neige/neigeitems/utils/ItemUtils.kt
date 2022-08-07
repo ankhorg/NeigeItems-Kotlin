@@ -313,6 +313,13 @@ object ItemUtils {
                         itemStack.amount = amount - givenAmt
                         dropItems.add(itemStack.clone())
                     }
+                    // 对于MM物品, 这个配置项不代表是否随机生成, 代表物品是否合并
+                } ?: let {
+                    mythicMobsHooker?.getItemStackSync(args[0])?.let { itemStack ->
+                        repeat(amount) {
+                            dropItems.add(itemStack)
+                        }
+                    }
                 }
             } else {
                 // 随机生成, 那疯狂造就完事儿了
@@ -324,6 +331,7 @@ object ItemUtils {
                             }
                         }
                     }
+                    // 对于MM物品, 这个配置项不代表是否随机生成, 代表物品是否合并
                     else -> {
                         mythicMobsHooker?.getItemStackSync(args[0])?.getItems(amount)?.forEach { dropItems.add(it) }
                     }
