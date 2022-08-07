@@ -19,6 +19,7 @@ import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.hasItem
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
+import pers.neige.neigeitems.utils.ItemUtils.loadDrops
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.EventPriority

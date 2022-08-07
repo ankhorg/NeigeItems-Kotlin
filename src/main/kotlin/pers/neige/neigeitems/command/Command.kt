@@ -16,8 +16,12 @@ import pers.neige.neigeitems.manager.HookerManager.parseItemPlaceholder
 import pers.neige.neigeitems.manager.HookerManager.parseItemPlaceholders
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.saveItem
+import pers.neige.neigeitems.manager.ItemPackManager.itemPacks
+import pers.neige.neigeitems.utils.ItemUtils
+import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItem
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
+import pers.neige.neigeitems.utils.ItemUtils.loadDrops
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.ProxyCommandSender
@@ -1131,12 +1135,141 @@ object Command {
         }
     }
 
+    private fun dropPackCommand(
+        // 行为发起人, 用于接收反馈信息
+        sender: CommandSender,
+        // 待掉落物品组ID
+        id: String,
+        // 掉落世界名
+        worldName: String,
+        // 掉落世界x坐标
+        xString: String,
+        // 掉落世界y坐标
+        yString: String,
+        // 掉落世界z坐标
+        zString: String,
+        // 物品解析对象, 用于生成物品
+        parser: String,
+        // 重复次数
+        repeat: String?
+    ) {
+        Bukkit.getWorld(worldName)?.let { world ->
+            val x = xString.toDoubleOrNull()
+            val y = yString.toDoubleOrNull()
+            val z = zString.toDoubleOrNull()
+            if (x != null && y != null && z != null) {
+                dropPackCommand(sender, id, Location(world, x, y, z), Bukkit.getPlayerExact(parser), repeat?.toIntOrNull())
+            } else {
+                sender.sendMessage(config.getString("Messages.invalidLocation"))
+            }
+        } ?: let {
+            sender.sendMessage(config.getString("Messages.invalidWorld"))
+        }
+    }
+
+    private fun dropPackCommandAsync(
+        sender: CommandSender,
+        id: String,
+        worldName: String,
+        xString: String,
+        yString: String,
+        zString: String,
+        parser: String,
+        repeat: String?
+    ) {
+        submit(async = true) {
+            dropPackCommandAsync(sender, id, worldName, xString, yString, zString, parser, repeat)
+        }
+    }
+
+    private fun dropPackCommand(
+        sender: CommandSender,
+        id: String,
+        location: Location?,
+        parser: Player?,
+        repeat: Int?
+    ) {
+        parser?.let {
+            itemPacks[id]?.let { itemPack ->
+                repeat(repeat ?: 1) {
+                    // 预定于掉落物列表
+                    val dropItems = ArrayList<ItemStack>()
+                    // 加载掉落信息
+                    loadDrops(dropItems, itemPack.items, parser)
+                    location?.let { location ->
+                        if (itemPack.fancyDrop) {
+                            dropItems(dropItems, location, itemPack.offsetXString, itemPack.offsetYString, itemPack.angleType)
+                        } else {
+                            dropItems(dropItems, location)
+                        }
+                    }
+                }
+                // 未知物品包
+            } ?: let {
+                sender.sendMessage(config.getString("Messages.unknownItemPack")?.replace("{packID}", id))
+            }
+            // 未知解析对象
+        } ?: let {
+            sender.sendMessage(config.getString("Messages.invalidParser"))
+        }
+    }
+
+    private fun givePackCommand(
+        // 行为发起人, 用于接收反馈信息
+        sender: CommandSender,
+        // 给予对象
+        player: String,
+        // 待给予物品组ID
+        id: String,
+        // 重复次数
+        repeat: String?
+    ) {
+        givePackCommand(sender, Bukkit.getPlayerExact(player), id, repeat?.toIntOrNull())
+    }
+
+    private fun givePackCommandAsync(
+        sender: CommandSender,
+        player: String,
+        id: String,
+        repeat: String?
+    ) {
+        submit(async = true) {
+            givePackCommandAsync(sender, player, id, repeat)
+        }
+    }
+
+    private fun givePackCommand(
+        sender: CommandSender,
+        player: Player?,
+        id: String,
+        repeat: Int?
+    ) {
+        player?.let {
+            itemPacks[id]?.let { itemPack ->
+                repeat(repeat ?: 1) {
+                    // 预定于掉落物列表
+                    val dropItems = ArrayList<ItemStack>()
+                    // 加载掉落信息
+                    loadDrops(dropItems, itemPack.items, player)
+                    player.giveItem(dropItems)
+                }
+                // 未知物品包
+            } ?: let {
+                sender.sendMessage(config.getString("Messages.unknownItemPack")?.replace("{packID}", id))
+            }
+            // 未知解析对象
+        } ?: let {
+            sender.sendMessage(config.getString("Messages.invalidParser"))
+        }
+    }
+
     private fun reloadCommand(sender: CommandSender) {
         submit(async = true) {
             ConfigManager.reload()
             ItemManager.reload()
             ScriptManager.reload()
             SectionManager.reload()
+            ItemPackManager.reload()
             ActionManager.reload()
             sender.sendMessage(config.getString("Messages.reloadedMessage"))
         }

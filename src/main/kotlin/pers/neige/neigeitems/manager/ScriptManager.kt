@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.manager
 
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
+import pers.neige.neigeitems.script.CompiledScript
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import java.io.File
 import javax.script.ScriptEngine
@@ -11,7 +12,7 @@ object ScriptManager {
     val scriptEngine = nashornHooker.getNashornEngine()
 
     // 所有已编译的js脚本文件
-    val compiledScripts = HashMap<String, pers.neige.neigeitems.script.CompiledScript>()
+    val compiledScripts = HashMap<String, CompiledScript>()
 
     init {
         // 加载全部脚本

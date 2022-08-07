@@ -29,6 +29,7 @@ object ConfigManager {
         plugin.saveResource("CustomSections${File.separator}DefaultSection.js", false)
         plugin.saveResource("GlobalSections${File.separator}ExampleSection.yml", false)
         plugin.saveResource("ItemActions${File.separator}ExampleAction.yml", false)
+//        plugin.saveResource("ItemPacks${File.separator}ExampleItemPack.yml", false)
         plugin.saveResource("Items${File.separator}ExampleItem.yml", false)
         plugin.saveResource("Scripts${File.separator}ExampleScript.js", false)
         plugin.saveDefaultConfig()

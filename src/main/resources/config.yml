@@ -7,6 +7,7 @@ Messages:
   givenInfo: §e[NI] §6你得到了 §a{amount} §6个 §f{name}
   dropSuccessInfo: §e[NI] §6成功在 §a{world} §6的 §a{x},{y},{z} §6掉落了 §a{amount} §6个 §f{name}
   unknownItem: §e[NI] §6找不到ID为 §a{itemID} §6的物品
+  unknownItemPack: §e[NI] §6找不到ID为 §a{packID} §6的物品包
   existedKey: §e[NI] §6已存在ID为 §a{itemID} §6的物品
   invalidPaser: §e[NI] §6不能针对后台解析物品, 请指定一个玩家
   onlyPlayer: §e[NI] §6该指令仅可玩家使用

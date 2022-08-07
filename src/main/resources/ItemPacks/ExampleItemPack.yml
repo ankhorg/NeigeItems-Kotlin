@@ -1,0 +1,9 @@
+Example:
+  Items:
+  - ExampleItem 1-5 0.5
+  FancyDrop:
+    offset:
+      x: 0.1
+      y: 0.8
+    angle:
+      type: round

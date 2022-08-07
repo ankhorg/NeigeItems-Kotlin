@@ -19,7 +19,9 @@ taboolib {
     }
     install(
         "common",
+        "common-5",
         "module-chat",
+        "module-configuration",
         "module-metrics",
         "module-nms",
         "module-nms-util",
