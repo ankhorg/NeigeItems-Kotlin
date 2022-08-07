@@ -99,7 +99,7 @@ class MythicMobsHookerImpl : MythicMobsHooker() {
                             }
                         }
                     } catch (error: Throwable) {
-                        print("§e[NI] §6在尝试给ID为 §f${it.mobType.internalName}§6 的MM怪物穿戴ID为 §f${args[0]}§6 的NI物品时发生了错误.")
+                        println("§e[NI] §6在尝试给ID为 §f${it.mobType.internalName}§6 的MM怪物穿戴ID为 §f${args[0]}§6 的NI物品时发生了错误.")
                         error.printStackTrace()
                     }
                 }

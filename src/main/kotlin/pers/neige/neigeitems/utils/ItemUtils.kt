@@ -2,6 +2,7 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
@@ -193,10 +194,12 @@ object ItemUtils {
 
     // 掉落NI物品并触发掉落技能及掉落归属
     @JvmStatic
-    fun Location.dropNiItem(itemStack: ItemStack) {
-        val itemTag = itemStack.getItemTag()
-        val neigeItems = itemTag["NeigeItems"]?.asCompound()
-        bukkitScheduler.callSyncMethod(plugin) {
+    fun Location.dropNiItem(
+        itemStack: ItemStack,
+        itemTag: ItemTag = itemStack.getItemTag(),
+        neigeItems: ItemTag? = itemTag["NeigeItems"]?.asCompound()
+    ): Item? {
+        return bukkitScheduler.callSyncMethod(plugin) {
             val item = this.world?.dropItem(this, itemStack)
             neigeItems?.let {
                 neigeItems["owner"]?.asString()?.let { owner ->
@@ -210,6 +213,7 @@ object ItemUtils {
                     mythicMobsHooker?.castSkill(item, dropSkill)
                 }
             }
+            item
         }
     }
 
@@ -276,7 +280,7 @@ object ItemUtils {
                 if (probability != null && Math.random() > probability) continue
             }
             // 如果NI和MM都不存在对应物品就跳过去
-            if (!ItemManager.hasItem(args[0]) && mythicMobsHooker?.getItemStackSync(args[0]) != null) continue
+            if (!ItemManager.hasItem(args[0]) && mythicMobsHooker?.getItemStackSync(args[0]) == null) continue
 
             // 获取掉落数量
             var amount = 1
@@ -372,16 +376,7 @@ object ItemUtils {
             // 开始掉落
             for ((index, itemStack) in dropItems.withIndex()) {
                 val itemTag = itemStack.getItemTag()
-
-                NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
-                    location.world?.dropItem(location, itemStack) { item ->
-                        itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                            neigeItems["owner"]?.asString()?.let { owner ->
-                                item.setMetadataEZ("NI-Owner", owner)
-                            }
-                        }
-                    }
-                }.get()?.let { item ->
+                location.dropNiItem(itemStack, itemTag)?.let { item ->
                     val vector = Vector(offsetX, offsetY, 0.0)
                     if (angleType == "random") {
                         val angleCos = cos(Math.PI * 2 * Math.random())
@@ -397,38 +392,13 @@ object ItemUtils {
                         vector.setX(x).z = z
                     }
                     item.velocity = vector
-
-                    itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                        neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
-                            if (pluginManager.isPluginEnabled("MythicMobs")) {
-                                mythicMobsHooker?.castSkill(item, dropSkill)
-                            }
-                        }
-                    }
                 }
             }
         } else {
             // 普通掉落
             for (itemStack in dropItems) {
                 val itemTag = itemStack.getItemTag()
-
-                NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
-                    location.world?.dropItem(location, itemStack) { item ->
-                        itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                            neigeItems["owner"]?.asString()?.let { owner ->
-                                item.setMetadataEZ("NI-Owner", owner)
-                            }
-                        }
-                    }
-                }.get()?.let { item ->
-                    itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                        neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
-                            if (pluginManager.isPluginEnabled("MythicMobs")) {
-                                mythicMobsHooker?.castSkill(item, dropSkill)
-                            }
-                        }
-                    }
-                }
+                location.dropNiItem(itemStack, itemTag)
             }
         }
     }
