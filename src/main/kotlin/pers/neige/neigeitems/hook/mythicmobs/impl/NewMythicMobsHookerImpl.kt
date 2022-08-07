@@ -16,6 +16,7 @@ import org.bukkit.util.Vector
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.hasItem
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
@@ -36,7 +37,7 @@ class NewMythicMobsHookerImpl : MythicMobsHooker() {
 
     private val apiHelper = MythicBukkit.inst().apiHelper
 
-    override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.LOWEST, false) {
+    override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.HIGH, false) {
         submit(async = true) {
             val entity = it.entity as LivingEntity
             val config = it.mobType.config.getNestedConfig("NeigeItems")
@@ -95,7 +96,11 @@ class NewMythicMobsHookerImpl : MythicMobsHooker() {
                             }
                         }
                     } catch (error: Throwable) {
-                        println("§e[NI] §6在尝试给ID为 §f${it.mobType.internalName}§6 的MM怪物穿戴ID为 §f${args[0]}§6 的NI物品时发生了错误.")
+                        ConfigManager.config.getString("Messages.equipFailed")?.let { message ->
+                            println(message
+                                .replace("{mobID}", it.mobType.internalName)
+                                .replace("{itemID}", args[0]))
+                        }
                         error.printStackTrace()
                     }
                 }

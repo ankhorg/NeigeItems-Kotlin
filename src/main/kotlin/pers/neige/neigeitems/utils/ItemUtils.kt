@@ -13,12 +13,14 @@ import pers.neige.neigeitems.NeigeItems.pluginManager
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.ItemUtils.dropNiItem
 import pers.neige.neigeitems.utils.ItemUtils.getItems
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.*
 import kotlin.math.cos
 import kotlin.math.floor
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
 
@@ -177,19 +179,7 @@ object ItemUtils {
     // 掉落指定数量NI物品并触发掉落技能及掉落归属
     @JvmStatic
     fun Location.dropNiItems(itemStack: ItemStack, amount: Int? = null) {
-        amount?.let {
-            val maxStackSize = itemStack.maxStackSize
-            itemStack.amount = maxStackSize
-            val leftAmount = amount % maxStackSize
-            val repeat = floor((amount / maxStackSize).toDouble()).toInt()
-            repeat(repeat) {
-                this.dropNiItem(itemStack)
-            }
-            if (leftAmount != 0) {
-                itemStack.amount = leftAmount
-                this.dropNiItem(itemStack)
-            }
-        } ?: this.dropNiItem(itemStack)
+        itemStack.getItems(amount).forEach { item -> this.dropNiItem(item) }
     }
 
     // 掉落NI物品并触发掉落技能及掉落归属
@@ -217,7 +207,10 @@ object ItemUtils {
         }
     }
 
-    // 判断ItemStack是否为NI物品并返回NI物品信息
+    /**
+     * 判断ItemStack是否为NI物品并返回NI物品信息
+     * @return NI物品信息?
+     */
     @JvmStatic
     fun ItemStack.isNiItem(): ItemInfo? {
         if (this.type != Material.AIR) {
@@ -232,7 +225,11 @@ object ItemUtils {
         return null
     }
 
-    // 根据数量将物品超级加倍, 返回一个列表
+    /**
+     * 根据数量将物品超级加倍, 返回一个列表
+     * @param amount 需要的物品数量
+     * @return 物品列表
+     */
     @JvmStatic
     fun ItemStack.getItems(amount: Int? = null): ArrayList<ItemStack> {
         val list = ArrayList<ItemStack>()
@@ -290,7 +287,7 @@ object ItemUtils {
                     val min = args[1].substring(0, index).toIntOrNull()
                     val max = args[1].substring(index+1, args[1].length).toIntOrNull()
                     if (min != null && max != null) {
-                        amount = (min + Math.round(Math.random()*(max-min))).toInt()
+                        amount = min + (Math.random() * (max - min)).roundToInt()
                     }
                 } else {
                     args[1].toIntOrNull()?.let {
@@ -301,20 +298,7 @@ object ItemUtils {
             // 看看需不需要每次都随机生成
             if (args.size > 3 && args[3] == "false") {
                 // 真只随机一次啊?那嗯怼吧
-                ItemManager.getItemStack(args[0], player, data)?.let { itemStack ->
-                    val maxStackSize = itemStack.maxStackSize
-                    itemStack.amount = maxStackSize
-                    var givenAmt = 0
-                    while ((givenAmt + maxStackSize) <= amount) {
-                        dropItems.add(itemStack.clone())
-                        givenAmt += maxStackSize
-                    }
-                    if (givenAmt < amount) {
-                        itemStack.amount = amount - givenAmt
-                        dropItems.add(itemStack.clone())
-                    }
-                    // 对于MM物品, 这个配置项不代表是否随机生成, 代表物品是否合并
-                } ?: let {
+                ItemManager.getItemStack(args[0], player, data)?.getItems(amount)?.forEach { dropItems.add(it) } ?: let {
                     mythicMobsHooker?.getItemStackSync(args[0])?.let { itemStack ->
                         repeat(amount) {
                             dropItems.add(itemStack)

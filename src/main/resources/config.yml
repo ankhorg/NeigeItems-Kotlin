@@ -20,6 +20,7 @@ Messages:
   insufficientPermissions: §e[NI] §6权限不足
   reloadedMessage: §e[NI] §6重载完毕
   invalidNBT: §6[NI] §cNBT加载失败, 请勿在列表型NBT中混用键值对, 数字及字符串
+  equipFailed: §e[NI] §6在尝试给ID为 §f{mobID}§6 的MM怪物穿戴ID为 §f{itemID}§6 的NI物品时发生了错误.
   invalidItem: '§6[NI] §c物品加载失败, 物品可能缺损数据, 物品ID: §6{itemID}'
   failureInfo: '§e[NI] §6物品给予失败, 可能原因: 物品未配置材质/玩家已下线'
   invalidPlugin: '§e[NI] §6未发现前置插件: {plugin}'
