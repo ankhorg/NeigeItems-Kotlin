@@ -6,20 +6,15 @@ import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
-import pers.neige.neigeitems.NeigeItems.pluginManager
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.utils.ItemUtils.dropNiItem
-import pers.neige.neigeitems.utils.ItemUtils.getItems
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.*
 import kotlin.math.cos
-import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
@@ -252,19 +247,19 @@ object ItemUtils {
     }
 
     /**
-     * 根据掉落信息加载掉落物品
-     * @param dropItems 用于存储待掉落物品
-     * @param drops 掉落信息
+     * 根据信息加载物品
+     * @param items 用于存储待生成物品
+     * @param itemInfos 物品信息
      * @param player 用于解析物品的玩家
      */
     @JvmStatic
-    fun loadDrops(
-        dropItems: ArrayList<ItemStack>,
-        drops: List<String>,
+    fun loadItems(
+        items: ArrayList<ItemStack>,
+        itemInfos: List<String>,
         player: Player? = null
     ) {
-        for (drop in drops) {
-            val args = drop.parseSection(player).split(" ")
+        for (info in itemInfos) {
+            val args = info.parseSection(player).split(" ")
 
             val data: String? = when {
                 args.size > 4 -> args.subList(4, args.size).joinToString(" ")
@@ -298,10 +293,10 @@ object ItemUtils {
             // 看看需不需要每次都随机生成
             if (args.size > 3 && args[3] == "false") {
                 // 真只随机一次啊?那嗯怼吧
-                ItemManager.getItemStack(args[0], player, data)?.getItems(amount)?.forEach { dropItems.add(it) } ?: let {
+                ItemManager.getItemStack(args[0], player, data)?.getItems(amount)?.forEach { items.add(it) } ?: let {
                     mythicMobsHooker?.getItemStackSync(args[0])?.let { itemStack ->
                         repeat(amount) {
-                            dropItems.add(itemStack)
+                            items.add(itemStack)
                         }
                     }
                 }
@@ -311,13 +306,13 @@ object ItemUtils {
                     ItemManager.hasItem(args[0]) -> {
                         repeat(amount) {
                             ItemManager.getItemStack(args[0], player, data)?.let { itemStack ->
-                                dropItems.add(itemStack)
+                                items.add(itemStack)
                             }
                         }
                     }
                     // 对于MM物品, 这个配置项不代表是否随机生成, 代表物品是否合并
                     else -> {
-                        mythicMobsHooker?.getItemStackSync(args[0])?.getItems(amount)?.forEach { dropItems.add(it) }
+                        mythicMobsHooker?.getItemStackSync(args[0])?.getItems(amount)?.forEach { items.add(it) }
                     }
                 }
             }

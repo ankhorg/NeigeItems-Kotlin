@@ -7,23 +7,16 @@ import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
 import io.lumine.xikage.mythicmobs.io.MythicConfig
 import io.lumine.xikage.mythicmobs.items.ItemManager
-import org.bukkit.Bukkit
-import org.bukkit.Material
-import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.util.Vector
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.hasItem
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
-import pers.neige.neigeitems.utils.ItemUtils.loadDrops
-import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
+import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
@@ -31,8 +24,6 @@ import taboolib.common.platform.function.submit
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import java.util.*
-import kotlin.math.cos
-import kotlin.math.sin
 
 class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
     private val test = YamlConfiguration()
@@ -146,7 +137,7 @@ class LegacyMythicMobsHookerImpl : MythicMobsHooker() {
                         // 获取掉落相关的配置项
                         val drops = neigeItems.getStringList("Drops")
                         // 加载掉落信息
-                        loadDrops(dropItems, drops, player)
+                        loadItems(dropItems, drops, player)
                     }
                 }
 

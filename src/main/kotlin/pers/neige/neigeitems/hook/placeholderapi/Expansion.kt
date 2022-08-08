@@ -7,10 +7,10 @@ import taboolib.platform.compat.PlaceholderExpansion
 object Expansion : PlaceholderExpansion {
     override val identifier = "ni"
 
-    override fun onPlaceholderRequest(player: Player?, params: String): String {
-        val args = params.split("_")
-        return when (args[0].lowercase()) {
-            "parse" -> args.subList(1, args.size).joinToString("_").parseSection(player)
+    override fun onPlaceholderRequest(player: Player?, args: String): String {
+        val params = args.split("_")
+        return when (params[0].lowercase()) {
+            "parse" -> params.subList(1, params.size).joinToString("_").parseSection(player)
             else -> ""
         }
     }

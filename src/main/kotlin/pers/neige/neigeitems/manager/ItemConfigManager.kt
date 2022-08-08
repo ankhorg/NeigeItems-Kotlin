@@ -16,7 +16,7 @@ open class ItemConfigManager {
     // 全部物品
     val itemConfigs: ConcurrentHashMap<String, ItemConfig> = ConcurrentHashMap<String, ItemConfig>()
     // 全部物品ID
-    val itemIds = Vector<String>()
+    val itemIds get() = itemConfigs.keys.toList()
 
     init {
         // 初始化物品配置
@@ -28,7 +28,6 @@ open class ItemConfigManager {
         for (file: File in files) {
             YamlConfiguration.loadConfiguration(file).getKeys(false).forEach { id ->
                 itemConfigs[id] = ItemConfig(id, file)
-                itemIds.add(id)
             }
         }
     }
@@ -37,7 +36,6 @@ open class ItemConfigManager {
     fun reloadItemConfigs() {
         files.clear()
         itemConfigs.clear()
-        itemIds.clear()
         files.addAll(getAllFiles("Items"))
         loadItemConfigs()
     }

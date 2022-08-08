@@ -17,11 +17,10 @@ import pers.neige.neigeitems.manager.HookerManager.parseItemPlaceholders
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.saveItem
 import pers.neige.neigeitems.manager.ItemPackManager.itemPacks
-import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItem
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
-import pers.neige.neigeitems.utils.ItemUtils.loadDrops
+import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.ProxyCommandSender
@@ -227,6 +226,44 @@ object Command {
     }
 
     @CommandBody
+    // ni givePack [玩家ID] [物品包ID] (数量) > 根据ID给予NI物品包
+    val givePack = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
+        dynamic(commit = "player") {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                Bukkit.getOnlinePlayers().map { it.name }
+            }
+            execute<CommandSender> { sender, _, _ ->
+                submit(async = true) {
+                    help(sender)
+                }
+            }
+            // ni givePack [玩家ID] [物品包ID]
+            dynamic(commit = "item") {
+                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                    ItemPackManager.itemPackIds
+                }
+                execute<CommandSender> { sender, context, argument ->
+                    givePackCommandAsync(sender, context.argument(-1), argument, "1")
+                }
+                // ni givePack [玩家ID] [物品包ID] (数量)
+                dynamic(optional = true, commit = "amount") {
+                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                        arrayListOf("amount")
+                    }
+                    execute<CommandSender> { sender, context, argument ->
+                        givePackCommandAsync(sender, context.argument(-2), context.argument(-1), argument)
+                    }
+                }
+            }
+        }
+    }
+
+    @CommandBody
     // ni giveAll [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予所有人NI物品
     val giveAll = subCommand {
         execute<CommandSender> { sender, _, _ ->
@@ -346,7 +383,7 @@ object Command {
                                         }
                                     }
                                     // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机] [物品解析对象]
-                                    dynamic(commit = "data") {
+                                    dynamic(commit = "player") {
                                         suggestion<CommandSender>(uncheck = true) { _, _ ->
                                             Bukkit.getOnlinePlayers().map { it.name }
                                         }
@@ -354,7 +391,7 @@ object Command {
                                             dropCommandAsync(sender, context.argument(-7), context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument)
                                         }
                                         // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机] [物品解析对象] (指向数据)
-                                        dynamic(optional = true, commit = "player") {
+                                        dynamic(optional = true, commit = "data") {
                                             suggestion<CommandSender>(uncheck = true) { _, _ ->
                                                 arrayListOf("data")
                                             }
@@ -362,6 +399,86 @@ object Command {
                                                 dropCommandAsync(sender, context.argument(-8), context.argument(-7), context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument)
                                             }
                                         }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @CommandBody
+    // ni dropPack [物品包ID] (数量) [世界名] [X坐标] [Y坐标] [Z坐标] (物品解析对象) > 于指定位置掉落NI物品包
+    val dropPack = subCommand {
+        // ni dropPack [物品包ID]
+        dynamic(commit = "item") {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                ItemPackManager.itemPackIds
+            }
+            execute<CommandSender> { sender, _, _ ->
+                submit(async = true) {
+                    help(sender)
+                }
+            }
+            // ni dropPack [物品包ID] [数量]
+            dynamic(commit = "amount") {
+                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                    arrayListOf("amount")
+                }
+                execute<CommandSender> { sender, _, _ ->
+                    submit(async = true) {
+                        help(sender)
+                    }
+                }
+                // ni dropPack [物品包ID] [数量] [世界名]
+                dynamic(commit = "world") {
+                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                        Bukkit.getWorlds().map { it.name }
+                    }
+                    execute<CommandSender> { sender, _, _ ->
+                        submit(async = true) {
+                            help(sender)
+                        }
+                    }
+                    // ni dropPack [物品包ID] [数量] [世界名] [X坐标]
+                    dynamic(commit = "x") {
+                        suggestion<CommandSender>(uncheck = true) { _, _ ->
+                            arrayListOf("x")
+                        }
+                        execute<CommandSender> { sender, _, _ ->
+                            submit(async = true) {
+                                help(sender)
+                            }
+                        }
+                        // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标]
+                        dynamic(commit = "y") {
+                            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                                arrayListOf("y")
+                            }
+                            execute<CommandSender> { sender, _, _ ->
+                                submit(async = true) {
+                                    help(sender)
+                                }
+                            }
+                            // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标]
+                            dynamic(commit = "z") {
+                                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                                    arrayListOf("z")
+                                }
+                                execute<CommandSender> { sender, _, _ ->
+                                    submit(async = true) {
+                                        help(sender)
+                                    }
+                                }
+                                // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象]
+                                dynamic(commit = "random") {
+                                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                                        Bukkit.getOnlinePlayers().map { it.name }
+                                    }
+                                    execute<CommandSender> { sender, context, argument ->
+                                        dropPackCommandAsync(sender, context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument)
                                     }
                                 }
                             }
@@ -731,6 +848,14 @@ object Command {
     val help = subCommand {
         execute<CommandSender> { sender, _, _ ->
             help(sender)
+        }
+        dynamic(commit = "page") {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                (1..commandsPages).toList().map { it.toString() }
+            }
+            execute<CommandSender> { sender, _, argument ->
+                help(sender, argument.toIntOrNull()?:1)
+            }
         }
     }
     private fun listCommandAsync (sender: CommandSender, page: Int) {
@@ -1140,6 +1265,8 @@ object Command {
         sender: CommandSender,
         // 待掉落物品组ID
         id: String,
+        // 重复次数
+        repeat: String?,
         // 掉落世界名
         worldName: String,
         // 掉落世界x坐标
@@ -1149,16 +1276,14 @@ object Command {
         // 掉落世界z坐标
         zString: String,
         // 物品解析对象, 用于生成物品
-        parser: String,
-        // 重复次数
-        repeat: String?
+        parser: String
     ) {
         Bukkit.getWorld(worldName)?.let { world ->
             val x = xString.toDoubleOrNull()
             val y = yString.toDoubleOrNull()
             val z = zString.toDoubleOrNull()
             if (x != null && y != null && z != null) {
-                dropPackCommand(sender, id, Location(world, x, y, z), Bukkit.getPlayerExact(parser), repeat?.toIntOrNull())
+                dropPackCommand(sender, id, repeat?.toIntOrNull(), Location(world, x, y, z), Bukkit.getPlayerExact(parser))
             } else {
                 sender.sendMessage(config.getString("Messages.invalidLocation"))
             }
@@ -1170,24 +1295,24 @@ object Command {
     private fun dropPackCommandAsync(
         sender: CommandSender,
         id: String,
+        repeat: String?,
         worldName: String,
         xString: String,
         yString: String,
         zString: String,
-        parser: String,
-        repeat: String?
+        parser: String
     ) {
         submit(async = true) {
-            dropPackCommandAsync(sender, id, worldName, xString, yString, zString, parser, repeat)
+            dropPackCommand(sender, id, repeat, worldName, xString, yString, zString, parser)
         }
     }
 
     private fun dropPackCommand(
         sender: CommandSender,
         id: String,
+        repeat: Int?,
         location: Location?,
-        parser: Player?,
-        repeat: Int?
+        parser: Player?
     ) {
         parser?.let {
             itemPacks[id]?.let { itemPack ->
@@ -1195,7 +1320,7 @@ object Command {
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
-                    loadDrops(dropItems, itemPack.items, parser)
+                    loadItems(dropItems, itemPack.items, parser)
                     location?.let { location ->
                         if (itemPack.fancyDrop) {
                             dropItems(dropItems, location, itemPack.offsetXString, itemPack.offsetYString, itemPack.angleType)
@@ -1204,6 +1329,13 @@ object Command {
                         }
                     }
                 }
+                sender.sendMessage(config.getString("Messages.dropPackSuccessInfo")
+                    ?.replace("{world}", location?.world?.name ?: "")
+                    ?.replace("{x}", location?.x.toString())
+                    ?.replace("{y}", location?.y.toString())
+                    ?.replace("{z}", location?.z.toString())
+                    ?.replace("{amount}", repeat.toString())
+                    ?.replace("{name}", id))
                 // 未知物品包
             } ?: let {
                 sender.sendMessage(config.getString("Messages.unknownItemPack")?.replace("{packID}", id))
@@ -1234,7 +1366,7 @@ object Command {
         repeat: String?
     ) {
         submit(async = true) {
-            givePackCommandAsync(sender, player, id, repeat)
+            givePackCommand(sender, player, id, repeat)
         }
     }
 
@@ -1250,8 +1382,23 @@ object Command {
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
-                    loadDrops(dropItems, itemPack.items, player)
-                    player.giveItem(dropItems)
+                    loadItems(dropItems, itemPack.items, player)
+                    val dropData = HashMap<String, Int>()
+                    dropItems.forEach { itemStack ->
+                        bukkitScheduler.callSyncMethod(plugin) {
+                            player.giveItem(itemStack)
+                        }
+                        dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
+                    }
+                    for ((name, amt) in dropData) {
+                        sender.sendMessage(config.getString("Messages.successInfo")
+                            ?.replace("{player}", player.name)
+                            ?.replace("{amount}", amt.toString())
+                            ?.replace("{name}", name))
+                        player.sendMessage(config.getString("Messages.givenInfo")
+                            ?.replace("{amount}", amt.toString())
+                            ?.replace("{name}", name))
+                    }
                 }
                 // 未知物品包
             } ?: let {
@@ -1275,15 +1422,141 @@ object Command {
         }
     }
 
-    private fun help(sender: CommandSender) {
-        config.getStringList("Messages.helpMessages").forEach {
-            sender.sendMessage(it)
+    private fun help(
+        sender: CommandSender,
+        page: Int = 1
+    ) {
+        // 获取帮助信息中的指令信息部分
+        config.getConfigurationSection("Help.commands")?.let { commandsSection ->
+            // 获取所有指令
+            val commands = commandsSection.getKeys(false).toMutableList()
+            // 获取每一页展示几条指令
+            val amount = config.getInt("Help.amount")
+            // 获取总页数
+            val pageAmount = ceil(commands.size.toDouble()/amount.toDouble()).toInt()
+            // 确定当前需要打开的页数
+            val realPage = page.coerceAtMost(pageAmount).coerceAtLeast(1)
+            // 发送前缀
+            config.getString("Help.prefix")?.let { sender.sendMessage(it) }
+            // 获取指令帮助格式
+            val format = config.getString("Help.format") ?: ""
+            // 获取当前序号
+            val prevCommandAmount = ((realPage-1)*amount)
+            // 遍历指令并发送
+            for (index in prevCommandAmount..(prevCommandAmount + amount)) {
+                if (index == commands.size) break
+                val command = commands[index]
+                // 替换信息内变量并发送
+                sender.sendMessage(format
+                    .replace("{command}", commandsSection.getString("$command.command") ?: "")
+                    .replace("{description}", commandsSection.getString("$command.description") ?: ""))
+            }
+            val prevRaw = TellrawJson()
+                .append(config.getString("Help.prev")?:"")
+            if (realPage != 1) {
+                prevRaw
+                    .hoverText((config.getString("Help.prev")?:"") + ": " + (realPage-1).toString())
+                    .runCommand("/ni help ${realPage-1}")
+            }
+            val nextRaw = TellrawJson()
+                .append(config.getString("Help.next")?:"")
+            if (realPage != pageAmount) {
+                nextRaw.hoverText((config.getString("Help.next")?:"") + ": " + (realPage+1))
+                nextRaw.runCommand("/ni help ${realPage+1}")
+            }
+            var listSuffixMessage = (config.getString("Help.suffix")?:"")
+                .replace("{current}", realPage.toString())
+                .replace("{total}", pageAmount.toString())
+            val listMessage = TellrawJson()
+            if (sender is Player) {
+                listSuffixMessage = listSuffixMessage
+                    .replace("{prev}", "!@#$%{prev}!@#$%")
+                    .replace("{next}", "!@#$%{next}!@#$%")
+                val listSuffixMessageList = listSuffixMessage.split("!@#$%")
+                listSuffixMessageList.forEach { value ->
+                    when (value) {
+                        "{prev}" -> listMessage.append(prevRaw)
+                        "{next}" -> listMessage.append(nextRaw)
+                        else -> listMessage.append(value)
+                    }
+                }
+                // 向玩家发送信息
+                listMessage.sendTo(bukkitAdapter.adaptCommandSender(sender))
+            } else {
+                sender.sendMessage(listSuffixMessage
+                    .replace("{prev}", config.getString("ItemList.Prev")?:"")
+                    .replace("{next}", config.getString("ItemList.Next")?:""))
+            }
         }
     }
 
-    private fun help(sender: ProxyCommandSender) {
-        config.getStringList("Messages.helpMessages").forEach {
-            sender.sendMessage(it)
+    val commandsPages by lazy { config.getConfigurationSection("Help.commands")?.getKeys(false)?.size ?: 1 }
+
+    private fun help(
+        sender: ProxyCommandSender,
+        page: Int = 1
+    ) {
+        // 获取帮助信息中的指令信息部分
+        config.getConfigurationSection("Help.commands")?.let { commandsSection ->
+            // 获取所有指令
+            val commands = commandsSection.getKeys(false).toMutableList()
+            // 获取每一页展示几条指令
+            val amount = config.getInt("Help.amount")
+            // 获取总页数
+            val pageAmount = ceil(commands.size.toDouble()/amount.toDouble()).toInt()
+            // 确定当前需要打开的页数
+            val realPage = page.coerceAtMost(pageAmount).coerceAtLeast(1)
+            // 发送前缀
+            config.getString("Help.prefix")?.let { sender.sendMessage(it) }
+            // 获取指令帮助格式
+            val format = config.getString("Help.format") ?: ""
+            // 获取当前序号
+            val prevCommandAmount = ((realPage-1)*amount)
+            // 遍历指令并发送
+            for (index in prevCommandAmount..(prevCommandAmount + amount)) {
+                if (index == commands.size) break
+                val command = commands[index]
+                // 替换信息内变量并发送
+                sender.sendMessage(format
+                    .replace("{command}", commandsSection.getString("$command.command") ?: "")
+                    .replace("{description}", commandsSection.getString("$command.description") ?: ""))
+            }
+            val prevRaw = TellrawJson()
+                .append(config.getString("Help.prev")?:"")
+            if (realPage != 1) {
+                prevRaw
+                    .hoverText((config.getString("Help.prev")?:"") + ": " + (realPage-1).toString())
+                    .runCommand("/ni help ${realPage-1}")
+            }
+            val nextRaw = TellrawJson()
+                .append(config.getString("Help.next")?:"")
+            if (realPage != pageAmount) {
+                nextRaw.hoverText((config.getString("Help.next")?:"") + ": " + (realPage+1))
+                nextRaw.runCommand("/ni help ${realPage+1}")
+            }
+            var listSuffixMessage = (config.getString("Help.suffix")?:"")
+                .replace("{current}", realPage.toString())
+                .replace("{total}", pageAmount.toString())
+            val listMessage = TellrawJson()
+            if (sender is Player) {
+                listSuffixMessage = listSuffixMessage
+                    .replace("{prev}", "!@#$%{prev}!@#$%")
+                    .replace("{next}", "!@#$%{next}!@#$%")
+                val listSuffixMessageList = listSuffixMessage.split("!@#$%")
+                listSuffixMessageList.forEach { value ->
+                    when (value) {
+                        "{prev}" -> listMessage.append(prevRaw)
+                        "{next}" -> listMessage.append(nextRaw)
+                        else -> listMessage.append(value)
+                    }
+                }
+                // 向玩家发送信息
+                listMessage.sendTo(bukkitAdapter.adaptCommandSender(sender))
+            } else {
+                sender.sendMessage(listSuffixMessage
+                    .replace("{prev}", config.getString("ItemList.Prev")?:"")
+                    .replace("{next}", config.getString("ItemList.Next")?:""))
+            }
         }
     }
 }

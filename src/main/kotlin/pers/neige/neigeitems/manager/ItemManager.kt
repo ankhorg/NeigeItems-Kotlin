@@ -36,7 +36,6 @@ object ItemManager : ItemConfigManager() {
     // 添加物品
     private fun addItem(itemGenerator: ItemGenerator) {
         itemConfigs[itemGenerator.id] = itemGenerator.itemConfig
-        itemIds.add(itemGenerator.id)
         items[itemGenerator.id] = itemGenerator
     }
 
