@@ -145,7 +145,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
                     // 获取物品包信息
                     val drops = neigeItems.getStringList("DropPacks")
                     drops.forEach { id ->
-                        itemPacks[id]?.let { itemPack ->
+                        itemPacks[id.parseSection(if (player is Player) player else null)]?.let { itemPack ->
                             // 尝试加载多彩掉落
                             if (itemPack.fancyDrop) {
                                 fancy = true

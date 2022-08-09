@@ -15,7 +15,7 @@ import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.hasItem
-import pers.neige.neigeitems.manager.ItemPackManager
+import pers.neige.neigeitems.manager.ItemPackManager.itemPacks
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -142,7 +142,7 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
                     // 获取物品包信息
                     val drops = neigeItems.getStringList("DropPacks")
                     drops.forEach { id ->
-                        ItemPackManager.itemPacks[id]?.let { itemPack ->
+                        itemPacks[id.parseSection(if (player is Player) player else null)]?.let { itemPack ->
                             // 尝试加载多彩掉落
                             if (itemPack.fancyDrop) {
                                 fancy = true
