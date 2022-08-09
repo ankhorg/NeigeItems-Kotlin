@@ -5,9 +5,10 @@ import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
-import pers.neige.neigeitems.hook.mythicmobs.impl.LegacyMythicMobsHookerImpl
-import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl
-import pers.neige.neigeitems.hook.mythicmobs.impl.NewMythicMobsHookerImpl
+import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl459
+import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl490
+import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl502
+import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
 import pers.neige.neigeitems.hook.nashorn.impl.LegacyNashornHookerImpl
 import pers.neige.neigeitems.hook.nashorn.impl.NashornHookerImpl
@@ -25,8 +26,10 @@ import java.util.function.BiFunction
 object HookerManager {
     val nashornHooker: NashornHooker =
         try {
+            // jdk自带nashorn
             LegacyNashornHookerImpl()
         } catch (error: Throwable) {
+            // 主动下载nashorn
             NashornHookerImpl()
         }
 
@@ -36,14 +39,19 @@ object HookerManager {
         try {
             try {
                 // 4.7.2-
-                LegacyMythicMobsHookerImpl()
+                MythicMobsHookerImpl459()
             } catch (error: Throwable) {
                 try {
                     // 5.0.0-
-                    MythicMobsHookerImpl()
+                    MythicMobsHookerImpl490()
                 } catch (error: Throwable) {
-                    // 5.0.0+
-                    NewMythicMobsHookerImpl()
+                    try {
+                        // 5.0.3-
+                        MythicMobsHookerImpl502()
+                    } catch (error: Throwable) {
+                        // 5.0.3+
+                        MythicMobsHookerImpl510()
+                    }
                 }
             }
         } catch (error: Throwable) {

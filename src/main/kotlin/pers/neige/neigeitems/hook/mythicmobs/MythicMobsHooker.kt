@@ -1,23 +1,13 @@
 package pers.neige.neigeitems.hook.mythicmobs
 
-import org.bukkit.Bukkit
-import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.util.Vector
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.utils.ItemUtils.getItems
-import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.ProxyListener
 import taboolib.module.nms.getItemTag
-import kotlin.math.cos
-import kotlin.math.sin
 
 abstract class MythicMobsHooker {
     // MM怪物生成事件监听器, 一般不用操作, 放着就行

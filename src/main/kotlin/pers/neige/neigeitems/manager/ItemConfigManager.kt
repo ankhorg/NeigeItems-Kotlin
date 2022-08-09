@@ -4,9 +4,7 @@ import org.bukkit.configuration.file.YamlConfiguration
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import java.io.File
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.collections.ArrayList
 
 // 物品加载是分两段进行的, 先加载全部基础配置, 再逐个进行继承和全局节点加载
 // 所以要有ItemConfig和ItemConfigManager
