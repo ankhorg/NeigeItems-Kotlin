@@ -38,19 +38,19 @@ object HookerManager {
     val mythicMobsHooker: MythicMobsHooker? by lazy {
         try {
             try {
-                // 4.7.2-
-                MythicMobsHookerImpl459()
+                // 5.0.3+
+                MythicMobsHookerImpl510()
             } catch (error: Throwable) {
                 try {
-                    // 5.0.0-
-                    MythicMobsHookerImpl490()
+                    // 5.0.3-
+                    MythicMobsHookerImpl502()
                 } catch (error: Throwable) {
                     try {
-                        // 5.0.3-
-                        MythicMobsHookerImpl502()
+                        // 5.0.0-
+                        MythicMobsHookerImpl490()
                     } catch (error: Throwable) {
-                        // 5.0.3+
-                        MythicMobsHookerImpl510()
+                        // 4.7.2-
+                        MythicMobsHookerImpl459()
                     }
                 }
             }

@@ -15,6 +15,7 @@ import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.hasItem
+import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -130,6 +131,33 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
 
                 // 获取NeigeItems相关配置项
                 val neigeItems = configSection.getConfigurationSection("NeigeItems")
+
+                var fancy = false
+                var offsetXString: String? = null
+                var offsetYString: String? = null
+                var angleType: String? = null
+
+                // 如果配置了掉落物品包
+                if (neigeItems.contains("DropPacks")) {
+                    // 获取物品包信息
+                    val drops = neigeItems.getStringList("DropPacks")
+                    drops.forEach { id ->
+                        ItemPackManager.itemPacks[id]?.let { itemPack ->
+                            // 尝试加载多彩掉落
+                            if (itemPack.fancyDrop) {
+                                fancy = true
+                                offsetXString = itemPack.offsetXString
+                                offsetYString = itemPack.offsetYString
+                                angleType = itemPack.angleType
+                            }
+                            // 如果是玩家
+                            if (player is Player) {
+                                // 加载物品掉落信息
+                                loadItems(dropItems, itemPack.items, player)
+                            }
+                        }
+                    }
+                }
                 // 判断是否是玩家击杀
                 if (player is Player) {
                     // 如果配置了掉落相关信息
@@ -149,6 +177,10 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
                     val offset = fancyDrop.getConfigurationSection("offset")
                     // 多彩掉落
                     dropItems(dropItems, entity.location, offset.getString("x"), offset.getString("y"), fancyDrop.getString("angle.type"))
+                // 如果物品包中含有多彩掉落信息
+                } else if (fancy) {
+                    // 多彩掉落
+                    dropItems(dropItems, entity.location, offsetXString, offsetYString, angleType)
                 } else {
                     // 普通掉落
                     dropItems(dropItems, entity.location)
