@@ -3,6 +3,13 @@ plugins {
     `maven-publish`
     id("io.izzel.taboolib") version "1.40"
     id("org.jetbrains.kotlin.jvm") version "1.6.10"
+    id("org.jetbrains.dokka") version "1.6.10"
+}
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(File("G:\\GitHub\\NI-Javadoc"))
+    suppressObviousFunctions.set(false)
+    suppressInheritedMembers.set(true)
 }
 
 taboolib {
@@ -46,6 +53,7 @@ repositories {
 }
 
 dependencies {
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.6.10")
     compileOnly(fileTree("libs"))
     compileOnly("ink.ptms:nms-all:1.0.0")
     compileOnly("ink.ptms.core:v11900:11900-minimize:mapped")

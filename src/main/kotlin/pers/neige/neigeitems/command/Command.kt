@@ -1379,25 +1379,41 @@ object Command {
         player?.let {
             itemPacks[id]?.let { itemPack ->
                 repeat(repeat ?: 1) {
+                    val messageType = config.getString("Messages.type.givePackMessage")
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
                     loadItems(dropItems, itemPack.items, player)
-                    val dropData = HashMap<String, Int>()
+                    val dropData = when (messageType) {
+                    "Pack" -> HashMap<String, Int>()
+                    else -> null
+                }
                     dropItems.forEach { itemStack ->
                         bukkitScheduler.callSyncMethod(plugin) {
                             player.giveItem(itemStack)
                         }
-                        dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
+                        dropData?.let {
+                            dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
+                        }
                     }
-                    for ((name, amt) in dropData) {
-                        sender.sendMessage(config.getString("Messages.successInfo")
+                    dropData?.let {
+                        for ((name, amt) in dropData) {
+                            sender.sendMessage(config.getString("Messages.successInfo")
+                                ?.replace("{player}", player.name)
+                                ?.replace("{amount}", amt.toString())
+                                ?.replace("{name}", name))
+                            player.sendMessage(config.getString("Messages.givenInfo")
+                                ?.replace("{amount}", amt.toString())
+                                ?.replace("{name}", name))
+                        }
+                    } ?: let {
+                        sender.sendMessage(config.getString("Messages.successPackInfo")
                             ?.replace("{player}", player.name)
-                            ?.replace("{amount}", amt.toString())
-                            ?.replace("{name}", name))
-                        player.sendMessage(config.getString("Messages.givenInfo")
-                            ?.replace("{amount}", amt.toString())
-                            ?.replace("{name}", name))
+                            ?.replace("{amount}", repeat.toString())
+                            ?.replace("{name}", id))
+                        player.sendMessage(config.getString("Messages.givenPackInfo")
+                            ?.replace("{amount}", repeat.toString())
+                            ?.replace("{name}", id))
                     }
                 }
                 // 未知物品包

@@ -13,13 +13,18 @@ import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.nmsGeneric
 
-// 用于实现掉落物光效功能
+/**
+ * 用于实现掉落物光效功能
+ */
 class ItemColorVanilla : ItemColor() {
     override val mode = "Vanilla"
 
     private val teams = HashMap<String, Team>()
 
-    fun loadTeams() {
+    /**
+     * 在主计分板初始化Team
+     */
+    private fun loadTeams() {
         for ((id, color) in colors) {
             // 注册Team
             var team = Bukkit.getServer().scoreboardManager?.mainScoreboard?.getTeam("NI-$color")
