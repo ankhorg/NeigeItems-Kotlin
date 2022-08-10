@@ -20,12 +20,19 @@ class ItemPlaceholder {
     // 类似papi的实现, 物品变量由众多附属构成
     val expansions = HashMap<String, BiFunction<ItemStack, String, String?>>()
 
-    // 用于添加附属
+    /**
+     * 用于添加物品变量附属
+     * @param id 变量ID
+     * @param function 操作函数
+     */
     fun addExpansion(id: String, function: BiFunction<ItemStack, String, String?>) {
         expansions[id.lowercase(Locale.getDefault())] = function
     }
 
-    // 用于解析物品名和物品Lore中的物品变量
+    /**
+     * 解析物品名和物品Lore中的物品变量
+     * @param itemStack 待解析物品
+     */
     fun itemParse(itemStack: ItemStack) {
         itemStack.itemMeta?.let { itemMeta ->
             if (itemMeta.hasDisplayName()) {
@@ -127,6 +134,12 @@ class ItemPlaceholder {
         )
     }
 
+    /**
+     * 解析物品变量
+     * @param itemStack 用于解析变量的物品
+     * @param text 待解析文本
+     * @return 解析后文本
+     */
     fun parse(itemStack: ItemStack, text: String): String {
         val chars = text.toCharArray()
         val builder = StringBuilder(text.length)

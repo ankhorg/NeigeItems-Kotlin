@@ -16,7 +16,9 @@ object ItemPackManager {
         loadItemPacks()
     }
 
-    // 加载全部物品包
+    /**
+     * 加载全部物品包
+     */
     private fun loadItemPacks() {
         for (file in ConfigUtils.getAllFiles("ItemPacks")) {
             val config = YamlConfiguration.loadConfiguration(file)
@@ -33,7 +35,9 @@ object ItemPackManager {
         }
     }
 
-    // 重载物品包管理器
+    /**
+     * 重载物品包管理器
+     */
     fun reload() {
         itemPacks.clear()
         loadItemPacks()

@@ -26,48 +26,106 @@ object ItemManager : ItemConfigManager() {
         loadItems()
     }
 
-    // 初始化所有物品生成器
+    /**
+     * 初始化所有物品生成器
+     */
     private fun loadItems() {
         for ((id, itemConfig) in itemConfigs) {
             items[id] = ItemGenerator(itemConfig)
         }
     }
 
-    // 添加物品
+    /**
+     * 添加物品生成器
+     * @param itemGenerator 待添加物品生成器
+     */
     private fun addItem(itemGenerator: ItemGenerator) {
         itemConfigs[itemGenerator.id] = itemGenerator.itemConfig
         items[itemGenerator.id] = itemGenerator
     }
 
-    // 重载物品管理器
+    /**
+     * 重载物品管理器
+     */
     fun reload() {
         reloadItemConfigs()
         items.clear()
         loadItems()
     }
 
-    // 获取物品
+    /**
+     * 获取物品原始Config的克隆
+     * @param id 物品ID
+     * @return 物品原始Config的克隆
+     */
     fun getOriginConfig(id: String): ConfigurationSection? {
         return itemConfigs[id]?.configSection?.clone()
     }
 
-    // 获取物品
+    /**
+     * 获取物品原始Config
+     * @param id 物品ID
+     * @return 物品原始Config
+     */
     fun getRealOriginConfig(id: String): ConfigurationSection? {
         return itemConfigs[id]?.configSection
     }
 
-    // 获取物品生成器
+    /**
+     * 获取物品生成器
+     * @param id 物品ID
+     * @return 物品生成器
+     */
     fun getItem(id: String): ItemGenerator? {
         return items[id]
     }
 
-    // 获取物品
-    fun getItemStack(id: String, player: OfflinePlayer? = null, data: String? = null): ItemStack? {
+    /**
+     * 获取物品
+     * @param id 物品ID
+     * @return 物品
+     */
+    fun getItemStack(id: String): ItemStack? {
+        return getItemStack(id, null, null)
+    }
+
+    /**
+     * 获取物品
+     * @param id 物品ID
+     * @param player 用于解析物品的玩家
+     * @return 物品
+     */
+    fun getItemStack(id: String, player: OfflinePlayer?): ItemStack? {
+        return getItemStack(id, player, null)
+    }
+
+    /**
+     * 获取物品
+     * @param id 物品ID
+     * @param data 用于解析物品的指向数据
+     * @return 物品
+     */
+    fun getItemStack(id: String, data: String?): ItemStack? {
+        return getItemStack(id, null, data)
+    }
+
+    /**
+     * 获取物品
+     * @param id 物品ID
+     * @param player 用于解析物品的玩家
+     * @param data 用于解析物品的指向数据
+     * @return 物品
+     */
+    fun getItemStack(id: String, player: OfflinePlayer?, data: String?): ItemStack? {
         return items[id]?.getItemStack(player, data)
     }
 
 
-    // 获取物品
+    /**
+     * 是否存在对应ID的物品
+     * @param id 物品ID
+     * @return 是否存在对应ID的物品
+     */
     fun hasItem(id: String): Boolean {
         return items.containsKey(id)
     }

@@ -16,9 +16,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
 import pers.neige.neigeitems.item.color.ItemColor
-import pers.neige.neigeitems.item.color.impl.ItemColorProtocol
 import pers.neige.neigeitems.manager.ConfigManager.config
-import pers.neige.neigeitems.manager.HookerManager.itemColor
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.SectionManager
@@ -39,7 +37,7 @@ import java.util.*
 @RuntimeDependencies(
     RuntimeDependency(
         "!com.alibaba.fastjson2:fastjson2-kotlin:2.0.9",
-        test = "!com.alibaba.fastjson2.parseObject"
+        test = "!com.alibaba.fastjson2.filter.Filter"
     )
 )
 // 物品生成器

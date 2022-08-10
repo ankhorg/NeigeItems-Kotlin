@@ -51,21 +51,54 @@ object SectionUtils {
         return listString.toString()
     }
 
+    /**
+     * 对文本进行节点解析
+     * @return 解析值
+     */
     @JvmStatic
     fun String.parseSection(): String {
         return this.parseSection(null, null, null)
     }
 
+    /**
+     * 对文本进行节点解析
+     * @param cache 解析值缓存
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.parseSection(cache: HashMap<String, String>?): String {
+        return this.parseSection(cache, null, null)
+    }
+
+    /**
+     * 对文本进行节点解析
+     * @param player 待解析玩家
+     * @return 解析值
+     */
     @JvmStatic
     fun String.parseSection(player: OfflinePlayer?): String {
         return this.parseSection(null, player, null)
     }
 
+    /**
+     * 对文本进行节点解析
+     * @param cache 解析值缓存
+     * @param sections 节点池
+     * @return 解析值
+     */
     @JvmStatic
-    fun String.parseSection(cache: HashMap<String, String>? = null, sections: ConfigurationSection? = null): String {
+    fun String.parseSection(cache: HashMap<String, String>?, sections: ConfigurationSection?): String {
         return this.parseSection(cache, null, sections)
     }
 
+    /**
+     * 对文本进行节点解析
+     * @param parse 是否对文本进行节点解析
+     * @param cache 解析值缓存
+     * @param player 待解析玩家
+     * @param sections 节点池
+     * @return 解析值
+     */
     @JvmStatic
     fun String.parseSection(
         parse: Boolean,
@@ -220,7 +253,12 @@ object SectionUtils {
         }
     }
 
-    // 加载字符串最外层<>位置
+    /**
+     * 加载字符串最外层<>位置
+     * @param string 待加载文本
+     * @param start 用于存储<位置
+     * @param end 用于存储>位置
+     */
     private fun load(string: String, start: ArrayList<Int>, end: ArrayList<Int>) {
         val stack = LinkedList<Int>()
         string.forEachIndexed { index, char ->

@@ -5,13 +5,24 @@ import javax.script.CompiledScript
 import javax.script.ScriptEngine
 
 abstract class NashornHooker {
-    // 获取一个新的Nashorn引擎
+    /**
+     * 获取一个新的Nashorn引擎
+     * @return 一个新的Nashorn引擎
+     */
     abstract fun getNashornEngine(): ScriptEngine
 
-    // 编译一段js脚本
+    /**
+     * 编译一段js脚本
+     * @param string 待编译脚本文本
+     * @return 已编译JS脚本
+     */
     abstract fun compile(string: String): CompiledScript
 
-    // 编译一段js脚本
+    /**
+     * 编译一段js脚本
+     * @param string 待编译脚本文件
+     * @return 已编译JS脚本
+     */
     abstract fun compile(reader: Reader): CompiledScript
 
     /**

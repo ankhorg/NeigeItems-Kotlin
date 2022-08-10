@@ -16,17 +16,31 @@ abstract class MythicMobsHooker {
     // MM怪物死亡事件监听器, 一般不用操作, 放着就行
     abstract val deathListener: ProxyListener
 
-    // 获取MM物品
+    /**
+     * 获取MM物品
+     * @param id MM物品ID
+     * @return MM物品(不存在则为空)
+     */
     abstract fun getItemStack(id: String): ItemStack?
 
-    // 同步获取MM物品(在5.1.0左右的版本中, MM物品的获取强制同步)
-    // 不一定真的同步获取, 只在必要时同步(指高版本)
+    /**
+     * 同步获取MM物品(在5.1.0左右的版本中, MM物品的获取强制同步)
+     * 不一定真的同步获取, 只在必要时同步(指高版本)
+     * @param id MM物品ID
+     * @return MM物品(不存在则为空)
+     */
     abstract fun getItemStackSync(id: String): ItemStack?
 
-    // 释放MM技能
+    /**
+     * 释放MM技能
+     * @param entity 技能释放者
+     * @param skill 技能ID
+     */
     abstract fun castSkill(entity: Entity, skill: String)
 
-    // 获取所有MM物品ID
+    /**
+     * 获取所有MM物品ID
+     */
     abstract fun getItemIds(): List<String>
 
     /**

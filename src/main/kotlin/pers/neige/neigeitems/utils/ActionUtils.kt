@@ -15,7 +15,12 @@ import java.text.DecimalFormat
 import java.util.*
 
 object ActionUtils {
-    // 通过配置信息判断玩家是否处于消耗冷却(消耗物品触发物品动作的冷却时间)
+    /**
+     * 通过配置信息判断玩家是否处于消耗冷却(消耗物品触发物品动作的冷却时间)
+     * @param player 消耗物品的玩家
+     * @param id 待消耗物品ID/组ID
+     * @return 是否处于冷却时间
+     */
     @JvmStatic
     fun ConfigurationSection.isCoolDown(player: Player, id: String): Boolean {
         // 获取冷却
@@ -40,7 +45,11 @@ object ActionUtils {
         return false
     }
 
-    // 通过动作信息判断玩家是否处于动作冷却(无消耗触发物品动作的冷却时间)
+    /**
+     * 通过动作信息判断玩家是否处于动作冷却(无消耗触发物品动作的冷却时间)
+     * @param player 消耗物品的玩家
+     * @return 是否处于冷却时间
+     */
     @JvmStatic
     fun ItemAction.isCoolDown(player: Player): Boolean {
         // 获取冷却

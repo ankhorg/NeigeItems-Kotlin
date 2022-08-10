@@ -25,7 +25,13 @@ object PlayerUtils {
         } ?: giveItem(itemStack)
     }
 
-    // 获取Metadata
+    /**
+     * 获取Metadata, 不含对应Metadata将设置并返回默认值
+     * @param key Metadata键
+     * @param type Metadata类型
+     * @param def 默认值
+     * @return Metadata值
+     */
     @JvmStatic
     fun Metadatable.getMetadataEZ(key: String, type: String, def: Any): Any? {
         if(!this.hasMetadata(key)) {
@@ -45,7 +51,11 @@ object PlayerUtils {
         }
     }
 
-    // 设置Metadata
+    /**
+     * 设置Metadata
+     * @param key Metadata键
+     * @param value Metadata值
+     */
     @JvmStatic
     fun Metadatable.setMetadataEZ(key: String, value: Any) {
         this.setMetadata(key, FixedMetadataValue(plugin, value))

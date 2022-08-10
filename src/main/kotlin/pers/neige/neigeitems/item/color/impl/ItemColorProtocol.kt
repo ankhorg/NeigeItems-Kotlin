@@ -42,8 +42,22 @@ class ItemColorProtocol : ItemColor() {
         })
     }
 
+    /**
+     * 根据玩家当前计分板进行Team初始化
+     * 玩家的计分板不一定一成不变,
+     * 可能刚进服时玩家是主计分板,
+     * 过一段时间其他插件又根据需要切换了玩家的计分板.
+     * 这样就需要重新向玩家发送Team数据包,
+     * 不然玩家的客户端将认为之前的Team与玩家无关,
+     * 从而导致掉落物只发出白色光效.
+     * @param player 待操作玩家
+     */
     fun initTeam(player: Player) {
+        // 每次发包后会通过Metadata记录玩家当前所处计分板,
+        // 没有相关Metadata说明从未初始化, Metadata不符说明计分板发生了切换, 都需要重新进行Team初始化.
+        // 直接scoreboard.toString()可以暴露当前Scoreboard的指针, 从而正确判断是否为同一个计分板.
         if (!player.hasMetadata("NI-TeamScoreboard") || (player.getMetadataEZ("NI-TeamScoreboard", "String", "") as String) != player.scoreboard.toString()) {
+            // 初始化前通过Metadata记录当前计分板
             player.setMetadataEZ("NI-TeamScoreboard", player.scoreboard.toString())
             for ((id, color) in colors) {
                 // 创建Team数据包

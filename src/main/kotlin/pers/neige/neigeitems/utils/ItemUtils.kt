@@ -22,7 +22,10 @@ import kotlin.math.sin
 object ItemUtils {
     private val invalidNBT by lazy { arrayListOf("Enchantments","VARIABLES_DATA","ench","Damage","HideFlags","Unbreakable", "CustomModelData") }
 
-    // HashMap 转 ItemTag
+    /**
+     * HashMap 转 ItemTag
+     * @return 转换结果
+     */
     @JvmStatic
     fun HashMap<*, *>.toItemTag(): ItemTag {
         val itemTag = ItemTag()
@@ -32,7 +35,11 @@ object ItemUtils {
         return itemTag
     }
 
-    // 类型强制转换
+    /**
+     * 类型强制转换
+     * 用于解析 NeigeItems 物品 NBT 配置中的类型强制转换
+     * @return 转换结果
+     */
     @JvmStatic
     fun String.cast(): Any {
         return when {
@@ -46,7 +53,11 @@ object ItemUtils {
         }
     }
 
-    // 类型强制转换
+    /**
+     * 类型强制转换
+     * 用于解析 NeigeItems 物品 NBT 配置中的类型强制转换
+     * @return 转换结果
+     */
     @JvmStatic
     fun Any.cast(): Any {
         return when (this) {
@@ -55,7 +66,11 @@ object ItemUtils {
         }
     }
 
-    // 类型强制转换
+    /**
+     * 类型强制转换
+     * 用于解析 NeigeItems 物品 NBT 配置中的类型强制转换
+     * @return 转换结果
+     */
     @JvmStatic
     fun String.castToItemTagData(): ItemTagData {
         return when {
@@ -81,7 +96,10 @@ object ItemUtils {
         }
     }
 
-    // 转 ItemTagData
+    /**
+     * 转 ItemTagData
+     * @return 转换结果
+     */
     @JvmStatic
     fun Any.toItemTagData(): ItemTagData {
         return when (this) {
@@ -114,7 +132,10 @@ object ItemUtils {
         }
     }
 
-    // ItemTag 转 HashMap
+    /**
+     * ItemTag 转 HashMap
+     * @return 转换结果
+     */
     @JvmStatic
     fun ItemTag.toMap(): HashMap<String, Any> {
         val hashMap = HashMap<String, Any>()
@@ -126,7 +147,10 @@ object ItemUtils {
         return hashMap
     }
 
-    // ItemTagData 解析
+    /**
+     * ItemTagData 解析
+     * @return 解析结果
+     */
     @JvmStatic
     fun ItemTagData.parseValue(): Any {
         return when (this.type) {
@@ -145,7 +169,11 @@ object ItemUtils {
         }
     }
 
-    // ItemTag 合并(后者覆盖前者)
+    /**
+     * ItemTag 合并(后者覆盖前者)
+     * @param itemTag 用于合并覆盖
+     * @return 合并结果
+     */
     @JvmStatic
     fun ItemTag.coverWith(itemTag: ItemTag): ItemTag {
         // 遍历附加NBT
@@ -170,14 +198,32 @@ object ItemUtils {
         return this
     }
 
-
-    // 掉落指定数量NI物品并触发掉落技能及掉落归属
+    /**
+     * 掉落指定数量NI物品并触发掉落技能及掉落归属
+     * @param itemStack 待掉落物品
+     */
     @JvmStatic
-    fun Location.dropNiItems(itemStack: ItemStack, amount: Int? = null) {
+    fun Location.dropNiItems(itemStack: ItemStack) {
+        this.dropNiItems(itemStack, null)
+    }
+
+    /**
+     * 掉落指定数量NI物品并触发掉落技能及掉落归属
+     * @param itemStack 待掉落物品
+     * @param amount 掉落数量
+     */
+    @JvmStatic
+    fun Location.dropNiItems(itemStack: ItemStack, amount: Int?) {
         itemStack.getItems(amount).forEach { item -> this.dropNiItem(item) }
     }
 
-    // 掉落NI物品并触发掉落技能及掉落归属
+    /**
+     * 掉落NI物品并触发掉落技能及掉落归属
+     * @param itemStack 待掉落物品
+     * @param itemTag 物品NBT, 用于解析NI物品数据
+     * @param neigeItems NI物品NBT
+     * @return 掉落物品
+     */
     @JvmStatic
     fun Location.dropNiItem(
         itemStack: ItemStack,
@@ -226,7 +272,7 @@ object ItemUtils {
      * @return 物品列表
      */
     @JvmStatic
-    fun ItemStack.getItems(amount: Int? = null): ArrayList<ItemStack> {
+    fun ItemStack.getItems(amount: Int?): ArrayList<ItemStack> {
         val list = ArrayList<ItemStack>()
         amount?.let {
             val item = this.clone()

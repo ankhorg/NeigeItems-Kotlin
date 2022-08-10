@@ -7,7 +7,11 @@ import taboolib.common.platform.function.getDataFolder
 import java.io.File
 
 object ConfigUtils {
-    // 获取文件夹内所有文件
+    /**
+     * 获取文件夹内所有文件
+     * @param dir 待获取文件夹
+     * @return 文件夹内所有文件
+     */
     @JvmStatic
     fun getAllFiles(dir: File): ArrayList<File> {
         val list = ArrayList<File>()
@@ -22,19 +26,31 @@ object ConfigUtils {
         return list
     }
 
-    // 获取文件夹内所有文件
+    /**
+     * 获取文件夹内所有文件
+     * @param dir 待获取文件夹路径
+     * @return 文件夹内所有文件
+     */
     @JvmStatic
     fun getAllFiles(dir: String): ArrayList<File> {
         return getAllFiles(File(getDataFolder(), File.separator + dir))
     }
 
-    // 获取文件夹内所有文件
+    /**
+     * 获取文件夹内所有文件
+     * @param plugin 待获取文件夹归属插件
+     * @param dir 待获取文件夹路径
+     * @return 文件夹内所有文件
+     */
     @JvmStatic
     fun getAllFiles(plugin: Plugin, dir: String): ArrayList<File> {
         return getAllFiles(File(plugin.dataFolder, File.separator + dir))
     }
 
-    // 克隆ConfigurationSection
+    /**
+     * 克隆ConfigurationSection
+     * @return 对应ConfigurationSection的克隆
+     */
     @JvmStatic
     fun ConfigurationSection.clone(): ConfigurationSection {
         val tempConfigSection = YamlConfiguration() as ConfigurationSection
@@ -44,7 +60,10 @@ object ConfigUtils {
         return tempConfigSection
     }
 
-    // 获取文件中所有ConfigurationSection
+    /**
+     * 获取文件中所有ConfigurationSection
+     * @return 文件中所有ConfigurationSection
+     */
     @JvmStatic
     fun File.getConfigSections(): ArrayList<ConfigurationSection> {
         val list = ArrayList<ConfigurationSection>()
@@ -55,7 +74,10 @@ object ConfigUtils {
         return list
     }
 
-    // 获取文件中所有ConfigurationSection
+    /**
+     * 获取所有文件中所有ConfigurationSection
+     * @return 文件中所有ConfigurationSection
+     */
     @JvmStatic
     fun ArrayList<File>.getConfigSections(): ArrayList<ConfigurationSection> {
         val list = ArrayList<ConfigurationSection>()
@@ -65,7 +87,10 @@ object ConfigUtils {
         return list
     }
 
-    // 获取文件中所有ConfigurationSection
+    /**
+     * 获取文件中所有顶级节点内容
+     * @return 文件中所有顶级节点内容
+     */
     @JvmStatic
     fun File.getContents(): ArrayList<Any> {
         val list = ArrayList<Any>()
@@ -76,7 +101,10 @@ object ConfigUtils {
         return list
     }
 
-    // 获取文件中所有ConfigurationSection
+    /**
+     * 获取文件中所有顶级节点内容
+     * @return 文件中所有顶级节点内容
+     */
     @JvmStatic
     fun ArrayList<File>.getContents(): ArrayList<Any> {
         val list = ArrayList<Any>()
@@ -86,7 +114,14 @@ object ConfigUtils {
         return list
     }
 
-    // ConfigurationSection 转 HashMap
+    /**
+     * 用于 ConfigurationSection 转 HashMap
+     * ConfigurationSection 中可能包含 Map, List, ConfigurationSection 及任意值
+     * 所有值的处理都放在这个方法里循环调用了,
+     * 所以参数和返回值都是Any
+     * @param data 待转换内容
+     * @return 转换结果
+     */
     @JvmStatic
     fun toMap(data: Any?): Any? {
         when (data) {
@@ -117,7 +152,10 @@ object ConfigUtils {
         }
     }
 
-    // ConfigurationSection 转 HashMap
+    /**
+     * ConfigurationSection 转 HashMap
+     * @return 转换结果
+     */
     @JvmStatic
     fun ConfigurationSection.toMap(): HashMap<String, Any> {
         val map = HashMap<String, Any>()
@@ -127,15 +165,23 @@ object ConfigUtils {
         return map
     }
 
-    // ConfigurationSection 转 String
+    /**
+     * ConfigurationSection 转 String
+     * @param id 转换后呈现的节点ID, 一般可以为this.name(针对MemorySection)
+     * @return 转换结果
+     */
     @JvmStatic
-    fun ConfigurationSection.saveToString(name: String): String {
+    fun ConfigurationSection.saveToString(id: String): String {
         val tempConfigSection = YamlConfiguration()
-        tempConfigSection.set(name, this)
+        tempConfigSection.set(id, this)
         return tempConfigSection.saveToString()
     }
 
-    // String 转 ConfigurationSection
+    /**
+     * String 转 ConfigurationSection
+     * @param id 转换前使用的节点ID
+     * @return 转换结果
+     */
     @JvmStatic
     fun String.loadFromString(id: String): ConfigurationSection? {
         val tempConfigSection = YamlConfiguration()
@@ -143,13 +189,20 @@ object ConfigUtils {
         return tempConfigSection.getConfigurationSection(id)
     }
 
-    // File 转 YamlConfiguration
+    /**
+     * File 转 YamlConfiguration
+     * @return 转换结果
+     */
     @JvmStatic
     fun File.loadConfiguration(): YamlConfiguration {
         return YamlConfiguration.loadConfiguration(this)
     }
 
-    // ConfigurationSection 合并(后者覆盖前者)
+    /**
+     * ConfigurationSection 合并(后者覆盖前者)
+     * @param configSection 用于合并覆盖
+     * @return 合并结果
+     */
     @JvmStatic
     fun ConfigurationSection.coverWith(configSection: ConfigurationSection): ConfigurationSection {
         // 遍历所有键

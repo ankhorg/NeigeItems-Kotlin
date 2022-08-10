@@ -63,6 +63,9 @@ object HookerManager {
         }
     }
 
+    /**
+     * 加载MM挂钩功能
+     */
     @Awake(LifeCycle.ACTIVE)
     fun loadMythicMobsHooker() {
         mythicMobsHooker
@@ -116,21 +119,34 @@ object HookerManager {
         }
     }
 
+    /**
+     * 掉落物光效功能
+     */
     @Awake(LifeCycle.ACTIVE)
     fun loadItemColor() {
         itemColor
     }
 
-    // 解析papi变量, 不解析颜色代码
+    /**
+     * 解析papi变量, 不解析颜色代码
+     * @param player 用于解析PAPI变量的玩家对象
+     * @param text 待解析文本
+     * @return 解析后文本
+     */
     @JvmStatic
-    fun papi(player: OfflinePlayer, string: String): String {
+    fun papi(player: OfflinePlayer, text: String): String {
         return when (papiHooker) {
-            null -> string
-            else -> papiHooker.papi(player, string)
+            null -> text
+            else -> papiHooker.papi(player, text)
         }
     }
 
-    // 解析papi变量的同时解析颜色代码
+    /**
+     * 解析papi变量的同时解析颜色代码
+     * @param player 用于解析PAPI变量的玩家对象
+     * @param text 待解析文本
+     * @return 解析后文本
+     */
     @JvmStatic
     fun papiColor(player: OfflinePlayer, string: String): String {
         return when (papiHooker) {
@@ -139,22 +155,34 @@ object HookerManager {
         }
     }
 
-    // 解析物品变量
+    /**
+     * 解析物品变量
+     * @param itemStack 用于解析变量的物品
+     * @param text 待解析文本
+     * @return 解析后文本
+     */
     @JvmStatic
-    fun parseItemPlaceholder(itemStack: ItemStack, string: String): String {
+    fun parseItemPlaceholder(itemStack: ItemStack, text: String): String {
         return when (itemPlaceholder) {
-            null -> string
-            else -> itemPlaceholder.parse(itemStack, string)
+            null -> text
+            else -> itemPlaceholder.parse(itemStack, text)
         }
     }
 
-    // 解析物品名和物品Lore中的物品变量
+    /**
+     * 解析物品名和物品Lore中的物品变量
+     * @param itemStack 待解析物品
+     */
     @JvmStatic
     fun parseItemPlaceholders(itemStack: ItemStack) {
         itemPlaceholder?.let { itemPlaceholder.itemParse(itemStack) }
     }
 
-    // 添加物品变量附属
+    /**
+     * 添加物品变量附属
+     * @param id 变量ID
+     * @param function 操作函数
+     */
     @JvmStatic
     fun addItemPlaceholderExpansion(id: String, function: BiFunction<ItemStack, String, String?>) {
         itemPlaceholder?.let { itemPlaceholder.addExpansion(id, function) }

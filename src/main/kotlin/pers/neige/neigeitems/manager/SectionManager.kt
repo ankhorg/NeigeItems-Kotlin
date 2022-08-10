@@ -26,12 +26,17 @@ object SectionManager {
         loadCustomSections()
     }
 
-    // 用于加载节点解析器
+    /**
+     * 用于加载节点解析器
+     * @param sectionParser 节点解析器
+     */
     fun loadParser(sectionParser: SectionParser) {
         sectionParsers[sectionParser.id] = sectionParser
     }
 
-    // 重载节点管理器
+    /**
+     * 重载节点管理器
+     */
     fun reload() {
         globalSectionMap.clear()
         globalSections.clear()
@@ -41,7 +46,9 @@ object SectionManager {
         loadCustomSections()
     }
 
-    // 加载全部全局节点
+    /**
+     * 加载全部全局节点
+     */
     private fun loadGlobalSections() {
         for (file in getAllFiles("GlobalSections")) {
             val fileName = file.path.replace("plugins${File.separator}NeigeItems${File.separator}GlobalSections${File.separator}", "")
@@ -55,7 +62,9 @@ object SectionManager {
         }
     }
 
-    // 加载基础节点解析器
+    /**
+     * 加载基础节点解析器
+     */
     private fun loadBasicParser() {
         loadParser(CalculationParser)
         loadParser(InheritParser)
@@ -66,7 +75,9 @@ object SectionManager {
         loadParser(PapiParser)
     }
 
-    // 加载自定义节点解析器
+    /**
+     * 加载自定义节点解析器
+     */
     private fun loadCustomSections() {
         for (file in getAllFiles("CustomSections")) {
             // 防止某个脚本出错导致加载中断

@@ -49,7 +49,9 @@ object ConfigManager {
         })
     }
 
-    // 对当前Config查缺补漏
+    /**
+     * 对当前Config查缺补漏
+     */
     @Awake(LifeCycle.LOAD)
     fun loadConfig() {
         originConfig.getKeys(true).forEach { key ->
@@ -68,7 +70,9 @@ object ConfigManager {
         plugin.saveConfig()
     }
 
-    // 重载配置管理器
+    /**
+     * 重载配置管理器
+     */
     fun reload() {
         plugin.reloadConfig()
         loadConfig()

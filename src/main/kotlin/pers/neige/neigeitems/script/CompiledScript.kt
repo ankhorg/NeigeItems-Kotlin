@@ -27,7 +27,7 @@ class CompiledScript(file: File) {
     }
 
     init {
-        // 一段不可言说的代码, 将为脚本带来令人着迷的性能与高并发稳定性
+        // 此段代码用于解决js脚本的高并发调用问题, 只可意会不可言传
         compiledScript.eval()
         scriptEngine.eval("""
             function NeigeItemsNumberOne() {}

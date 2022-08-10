@@ -21,7 +21,9 @@ open class ItemConfigManager {
         loadItemConfigs()
     }
 
-    // 初始化物品配置
+    /**
+     * 初始化物品配置
+     */
     private fun loadItemConfigs() {
         for (file: File in files) {
             YamlConfiguration.loadConfiguration(file).getKeys(false).forEach { id ->
@@ -30,7 +32,9 @@ open class ItemConfigManager {
         }
     }
 
-    // 重载物品配置
+    /**
+     * 重载物品配置
+     */
     fun reloadItemConfigs() {
         files.clear()
         itemConfigs.clear()

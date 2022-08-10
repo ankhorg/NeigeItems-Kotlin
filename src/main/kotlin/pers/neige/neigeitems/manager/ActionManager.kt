@@ -47,7 +47,9 @@ object ActionManager {
         loadCustomActions()
     }
 
-    // 重载物品动作管理器
+    /**
+     * 重载物品动作管理器
+     */
     fun reload() {
         itemActions.clear()
         actions.clear()
@@ -56,22 +58,44 @@ object ActionManager {
         loadCustomActions()
     }
 
-    // 执行物品动作
+    /**
+     * 执行物品动作
+     * @param player 执行玩家
+     * @param action 动作文本
+     * @param itemTag 用于解析nbt及data, 可为空
+     */
     fun runAction(player: Player, action: List<String>, itemTag: ItemTag?) {
         for (value in action) {
             if (!runAction(player, value, itemTag)) break
         }
     }
 
+    /**
+     * 执行物品动作
+     * @param player 执行玩家
+     * @param action 动作文本
+     */
     fun runAction(player: Player, action: List<String>) {
         runAction(player, action, null)
     }
 
-    fun runAction(player: Player, action: String) {
-        runAction(player, action, null)
+    /**
+     * 执行物品动作
+     * @param player 执行玩家
+     * @param action 动作文本
+     * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
+     */
+    fun runAction(player: Player, action: String): Boolean {
+        return runAction(player, action, null)
     }
 
-    // 执行物品动作
+    /**
+     * 执行物品动作
+     * @param player 执行玩家
+     * @param action 动作文本
+     * @param itemTag 用于解析nbt及data, 可为空
+     * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
+     */
     fun runAction(player: Player, action: String, itemTag: ItemTag? = null): Boolean {
         val actionString = when (itemTag) {
             null -> action
@@ -91,12 +115,18 @@ object ActionManager {
         return true
     }
 
-    // 添加物品动作
+    /**
+     * 添加物品动作
+     * @param id 动作ID
+     * @param function 动作执行函数
+     */
     fun addAction(id: String, function: BiFunction<Player, String, Boolean>) {
         actions[id.lowercase(Locale.getDefault())] = function
     }
 
-    // 加载所有拥有动作的物品及相关动作
+    /**
+     * 加载所有拥有动作的物品及相关动作
+     */
     private fun loadItemActions() {
         for (file: File in ConfigUtils.getAllFiles("ItemActions")) {
             val config = YamlConfiguration.loadConfiguration(file)
@@ -108,7 +138,9 @@ object ActionManager {
         }
     }
 
-    // 加载自定义动作
+    /**
+     * 加载自定义动作
+     */
     private fun loadCustomActions() {
         for (file in ConfigUtils.getAllFiles("CustomActions")) {
             // 防止某个脚本出错导致加载中断
@@ -118,7 +150,9 @@ object ActionManager {
         }
     }
 
-    // 加载基础物品动作
+    /**
+     * 加载基础物品动作
+     */
     private fun loadBasicActions() {
         // 向玩家发送消息
         addAction("tell") { player, string ->
