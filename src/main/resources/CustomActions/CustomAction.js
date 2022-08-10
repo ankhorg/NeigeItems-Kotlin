@@ -15,7 +15,7 @@ function main() {
             ActionManager.runAction(player, "tell: 123")
             ActionManager.runAction(player, "tell: 456")
             player.sendMessage(SectionUtils.parseSection("<number::0_10_2>"))
-            // 每个动作都一定要返回一个布尔量(true或false)
+            // 每个动作都一定要返回一个布尔量(true或false), 返回false相当于终止一连串动作的执行
             return true
         })
 }

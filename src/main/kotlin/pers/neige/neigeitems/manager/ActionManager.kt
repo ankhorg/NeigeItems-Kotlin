@@ -196,7 +196,7 @@ object ActionManager {
         }
         // 设置玩家经验
         addAction("setExp") { player, string ->
-            player.exp = papi(player, string).toFloatOrNull() ?: 0.toFloat()
+            player.totalExperience = papi(player, string).toIntOrNull() ?: 0
             true
         }
         // 给予玩家经验等级
