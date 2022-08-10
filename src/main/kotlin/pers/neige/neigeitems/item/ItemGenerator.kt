@@ -15,7 +15,10 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
+import pers.neige.neigeitems.item.color.ItemColor
+import pers.neige.neigeitems.item.color.impl.ItemColorProtocol
 import pers.neige.neigeitems.manager.ConfigManager.config
+import pers.neige.neigeitems.manager.HookerManager.itemColor
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.SectionManager
@@ -248,13 +251,12 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 }
                 // 设置掉落物闪光颜色
                 if (configSection.contains("options.color")) {
-                    try {
-                        configSection.getString("options.color")?.uppercase(Locale.getDefault())?.let {
-                            // 判断你这颜色保不保熟
-                            ChatColor.valueOf(it)
+                    configSection.getString("options.color")?.uppercase(Locale.getDefault())?.let {
+                        // 判断你这颜色保不保熟
+                        if (ItemColor.colors.containsKey(it)) {
                             neigeItems["color"] = ItemTagData(it)
                         }
-                    } catch (error: IllegalArgumentException) {}
+                    }
                 }
                 // 设置掉落执行技能
                 if (configSection.contains("options.dropskill")) {

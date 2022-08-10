@@ -14,7 +14,7 @@ open class ItemConfigManager {
     // 全部物品
     val itemConfigs: ConcurrentHashMap<String, ItemConfig> = ConcurrentHashMap<String, ItemConfig>()
     // 全部物品ID
-    val itemIds get() = itemConfigs.keys.toList()
+    val itemIds get() = itemConfigs.keys.toList().sorted()
 
     init {
         // 初始化物品配置

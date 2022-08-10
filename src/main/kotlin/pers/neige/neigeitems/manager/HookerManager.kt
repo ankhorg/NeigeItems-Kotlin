@@ -18,6 +18,9 @@ import pers.neige.neigeitems.hook.placeholderapi.impl.PapiHookerImpl
 import pers.neige.neigeitems.hook.vault.VaultHooker
 import pers.neige.neigeitems.hook.vault.impl.VaultHookerImpl
 import pers.neige.neigeitems.item.ItemPlaceholder
+import pers.neige.neigeitems.item.color.ItemColor
+import pers.neige.neigeitems.item.color.impl.ItemColorProtocol
+import pers.neige.neigeitems.item.color.impl.ItemColorVanilla
 import pers.neige.neigeitems.manager.ConfigManager.config
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -99,6 +102,23 @@ object HookerManager {
     } else {
         Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "ProtocolLib"))
         null
+    }
+
+    val itemColor: ItemColor? by lazy {
+        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
+            try {
+                ItemColorProtocol()
+            } catch (error: Throwable) {
+                ItemColorVanilla()
+            }
+        } else {
+            ItemColorVanilla()
+        }
+    }
+
+    @Awake(LifeCycle.ACTIVE)
+    fun loadItemColor() {
+        itemColor
     }
 
     // 解析papi变量, 不解析颜色代码
