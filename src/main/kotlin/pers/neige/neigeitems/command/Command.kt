@@ -1378,16 +1378,16 @@ object Command {
     ) {
         player?.let {
             itemPacks[id]?.let { itemPack ->
+                // 如果是按物品提示, 就建立map存储信息
+                val dropData = when (config.getString("Messages.type.givePackMessage")) {
+                    "Items" -> HashMap<String, Int>()
+                    else -> null
+                }
                 repeat(repeat?.coerceAtLeast(1) ?: 1) {
-                    val messageType = config.getString("Messages.type.givePackMessage")
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
                     loadItems(dropItems, itemPack.items, player)
-                    val dropData = when (messageType) {
-                        "Items" -> HashMap<String, Int>()
-                        else -> null
-                    }
                     dropItems.forEach { itemStack ->
                         bukkitScheduler.callSyncMethod(plugin) {
                             player.giveItem(itemStack)
@@ -1396,25 +1396,26 @@ object Command {
                             dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
                         }
                     }
-                    dropData?.let {
-                        for ((name, amt) in dropData) {
-                            sender.sendMessage(config.getString("Messages.successInfo")
-                                ?.replace("{player}", player.name)
-                                ?.replace("{amount}", amt.toString())
-                                ?.replace("{name}", name))
-                            player.sendMessage(config.getString("Messages.givenInfo")
-                                ?.replace("{amount}", amt.toString())
-                                ?.replace("{name}", name))
-                        }
-                    } ?: let {
-                        sender.sendMessage(config.getString("Messages.successPackInfo")
+                }
+                // 信息提示
+                dropData?.let {
+                    for ((name, amt) in dropData) {
+                        sender.sendMessage(config.getString("Messages.successInfo")
                             ?.replace("{player}", player.name)
-                            ?.replace("{amount}", repeat.toString())
-                            ?.replace("{name}", id))
-                        player.sendMessage(config.getString("Messages.givenPackInfo")
-                            ?.replace("{amount}", repeat.toString())
-                            ?.replace("{name}", id))
+                            ?.replace("{amount}", amt.toString())
+                            ?.replace("{name}", name))
+                        player.sendMessage(config.getString("Messages.givenInfo")
+                            ?.replace("{amount}", amt.toString())
+                            ?.replace("{name}", name))
                     }
+                } ?: let {
+                    sender.sendMessage(config.getString("Messages.successPackInfo")
+                        ?.replace("{player}", player.name)
+                        ?.replace("{amount}", repeat.toString())
+                        ?.replace("{name}", id))
+                    player.sendMessage(config.getString("Messages.givenPackInfo")
+                        ?.replace("{amount}", repeat.toString())
+                        ?.replace("{name}", id))
                 }
                 // 未知物品包
             } ?: let {

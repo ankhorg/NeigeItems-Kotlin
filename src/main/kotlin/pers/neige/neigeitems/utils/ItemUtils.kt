@@ -375,7 +375,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun dropItems(
-        dropItems: ArrayList<ItemStack>,
+        dropItems: List<ItemStack>,
         location: Location,
         offsetXString: String? = null,
         offsetYString: String? = null,
