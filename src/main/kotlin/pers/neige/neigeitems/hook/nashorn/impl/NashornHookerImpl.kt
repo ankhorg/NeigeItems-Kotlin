@@ -17,6 +17,11 @@ import javax.script.ScriptEngine
         test = "!jdk.nashorn.api.scripting.NashornScriptEngineFactory"
     )
 )
+/**
+ * openjdk nashorn挂钩
+ *
+ * @constructor 启用openjdk nashorn挂钩
+ */
 class NashornHookerImpl : NashornHooker() {
     private val engineFactory = NashornScriptEngineFactory()
 

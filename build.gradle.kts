@@ -6,12 +6,6 @@ plugins {
     id("org.jetbrains.dokka") version "1.6.10"
 }
 
-tasks.dokkaHtml.configure {
-    outputDirectory.set(File("G:\\GitHub\\NI-Javadoc"))
-    suppressObviousFunctions.set(false)
-    suppressInheritedMembers.set(true)
-}
-
 taboolib {
     description {
         contributors {

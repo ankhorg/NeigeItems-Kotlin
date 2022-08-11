@@ -2,10 +2,19 @@ package pers.neige.neigeitems.item.color
 
 import org.bukkit.ChatColor
 
+/**
+ * 掉落物光效系统
+ */
 abstract class ItemColor {
+    /**
+     * 获取物品光效实现模式(Vanilla/Protocol)
+     */
     abstract val mode: String
 
     companion object {
+        /**
+         * 获取物品光效颜色对应Map
+         */
         val colors = let {
             val hashMap = HashMap<String, ChatColor>()
             hashMap["AQUA"] = ChatColor.AQUA

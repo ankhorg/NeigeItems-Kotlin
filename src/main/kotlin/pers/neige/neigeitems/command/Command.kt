@@ -1378,16 +1378,16 @@ object Command {
     ) {
         player?.let {
             itemPacks[id]?.let { itemPack ->
-                repeat(repeat ?: 1) {
+                repeat(repeat?.coerceAtLeast(1) ?: 1) {
                     val messageType = config.getString("Messages.type.givePackMessage")
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
                     loadItems(dropItems, itemPack.items, player)
                     val dropData = when (messageType) {
-                    "Pack" -> HashMap<String, Int>()
-                    else -> null
-                }
+                        "Items" -> HashMap<String, Int>()
+                        else -> null
+                    }
                     dropItems.forEach { itemStack ->
                         bukkitScheduler.callSyncMethod(plugin) {
                             player.giveItem(itemStack)

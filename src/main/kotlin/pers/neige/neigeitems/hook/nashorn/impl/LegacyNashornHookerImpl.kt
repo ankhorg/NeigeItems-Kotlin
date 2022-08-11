@@ -9,6 +9,11 @@ import javax.script.CompiledScript
 import javax.script.Invocable
 import javax.script.ScriptEngine
 
+/**
+ * jdk自带nashorn挂钩
+ *
+ * @constructor 启用jdk自带nashorn挂钩
+ */
 class LegacyNashornHookerImpl : NashornHooker() {
     private val engineFactory = NashornScriptEngineFactory()
 

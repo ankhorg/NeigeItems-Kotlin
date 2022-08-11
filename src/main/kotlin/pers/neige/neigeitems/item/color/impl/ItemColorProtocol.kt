@@ -27,6 +27,11 @@ import kotlin.collections.ArrayList
 import kotlin.experimental.or
 
 
+/**
+ * 基于ProtocolLib功能实现的掉落物光效系统
+ *
+ * @constructor 启用基于ProtocolLib功能实现的掉落物光效系统
+ */
 class ItemColorProtocol : ItemColor() {
     override val mode = "Protocol"
 
@@ -35,12 +40,6 @@ class ItemColorProtocol : ItemColor() {
     private val protocolManager: ProtocolManager = ProtocolLibrary.getProtocolManager()
 
     private var legacy = !MinecraftVersion.getCurrentVersion().isAtLeast(MinecraftVersion.AQUATIC_UPDATE)
-
-    val listener = registerBukkitListener(PlayerJoinEvent::class.java, EventPriority.NORMAL, false) {
-        bukkitScheduler.runTaskAsynchronously(NeigeItems.plugin, Runnable {
-            initTeam(it.player)
-        })
-    }
 
     /**
      * 根据玩家当前计分板进行Team初始化
@@ -82,6 +81,13 @@ class ItemColorProtocol : ItemColor() {
     }
 
     init {
+        // 玩家登录时根据玩家当前计分板进行Team初始化
+        registerBukkitListener(PlayerJoinEvent::class.java, EventPriority.NORMAL, false) {
+            bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                initTeam(it.player)
+            })
+        }
+
         // 用于设置物品发光颜色
         protocolManager.addPacketListener(object :
             PacketAdapter(

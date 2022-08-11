@@ -8,7 +8,14 @@ import taboolib.common.platform.function.info
 // 用于对节点的ConfigurationSection进行包装, 方便地获取或缓存解析值
 // configSection.name只能获得末级ID, 难以解决形似a.b.c的多级调用
 class Section(configSection: ConfigurationSection, val id: String = configSection.name) {
+    /**
+     * 获取节点类型
+     */
     val type = configSection.getString("type")
+
+    /**
+     * 获取节点内容
+     */
     val data: ConfigurationSection = configSection
 
     /**

@@ -26,6 +26,11 @@ import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import java.util.*
 
+/**
+ * 4.9.0版本MM挂钩
+ *
+ * @constructor 启用4.9.0版本MM挂钩
+ */
 class MythicMobsHookerImpl490 : MythicMobsHooker() {
     private val test = YamlConfiguration()
 

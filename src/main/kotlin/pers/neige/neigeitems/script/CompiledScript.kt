@@ -9,10 +9,14 @@ import javax.script.ScriptEngine
 
 // 对已编译的js脚本进行包装, 便于调用其中的指定函数
 class CompiledScript(file: File) {
-    // 已编译脚本
+    /**
+     * 获取已编译脚本
+     */
     val compiledScript = nashornHooker.compile(InputStreamReader(FileInputStream(file), FileUtils.charset(file)))
 
-    // 该脚本对应的ScriptEngine
+    /**
+     * 获取该脚本对应的ScriptEngine
+     */
     val scriptEngine: ScriptEngine = compiledScript.engine
 
     /**

@@ -9,6 +9,9 @@ import pers.neige.neigeitems.manager.ItemManager
 import taboolib.common.platform.event.ProxyListener
 import taboolib.module.nms.getItemTag
 
+/**
+ * MM挂钩
+ */
 abstract class MythicMobsHooker {
     // MM怪物生成事件监听器, 一般不用操作, 放着就行
     abstract val spawnListener: ProxyListener

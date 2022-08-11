@@ -14,7 +14,9 @@ import taboolib.common.platform.function.submit
 import taboolib.module.nms.nmsGeneric
 
 /**
- * 用于实现掉落物光效功能
+ * 基于Bukkit功能实现的掉落物光效系统
+ *
+ * @constructor 启用基于Bukkit功能实现的掉落物光效系统
  */
 class ItemColorVanilla : ItemColor() {
     override val mode = "Vanilla"
