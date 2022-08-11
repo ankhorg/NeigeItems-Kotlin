@@ -5,11 +5,26 @@ import pers.neige.neigeitems.item.ItemPack
 import pers.neige.neigeitems.utils.ConfigUtils
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * 物品包管理器
+ *
+ * @constructor 构建物品包管理器
+ */
 object ItemPackManager {
-    // 所有物品包
+    /**
+     * 获取所有物品包
+     */
     val itemPacks = ConcurrentHashMap<String, ItemPack>()
-    // 全部物品包ID
-    val itemPackIds get() = itemPacks.keys.toList()
+
+    /**
+     * 全部物品包ID(已排序)
+     */
+    val itemPackIds get() = itemPacks.keys.toList().sorted()
+
+    /**
+     * 全部物品包ID(未排序)
+     */
+    val itemPackIdsRaw get() = itemPacks.keys.toList()
 
     init {
         // 加载全部物品包

@@ -5,9 +5,13 @@ import java.io.File
 import java.io.FileInputStream
 
 
+/**
+ * 文件相关工具类
+ */
 object FileUtils {
     /**
      * 解析文件编码
+     *
      * @param file 待解析文件
      * @return 编码类型
      */

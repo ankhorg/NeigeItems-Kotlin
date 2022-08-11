@@ -5,28 +5,28 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.metadata.Metadatable
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.utils.ItemUtils.getItems
 import taboolib.platform.util.giveItem
 
+/**
+ * 玩家相关工具类
+ */
 object PlayerUtils {
-
-    // 给予玩家一定数量的物品
+    /**
+     * 给予玩家一定数量的物品
+     * @param itemStack 待给予物品
+     * @param amount 给予数量
+     */
     @JvmStatic
-    fun Player.giveItems(itemStack: ItemStack, amount: Int? = null) {
-        amount?.let {
-            val maxStackSize = itemStack.maxStackSize
-            itemStack.amount = maxStackSize
-            val leftAmount = amount % maxStackSize
-            val repeat = amount / maxStackSize
-            giveItem(itemStack, repeat)
-            if (leftAmount != 0) {
-                itemStack.amount = leftAmount
-                giveItem(itemStack)
-            }
-        } ?: giveItem(itemStack)
+    fun Player.giveItems(itemStack: ItemStack, amount: Int?) {
+        itemStack.getItems(amount).forEach {
+            giveItem(it)
+        }
     }
 
     /**
      * 获取Metadata, 不含对应Metadata将设置并返回默认值
+     *
      * @param key Metadata键
      * @param type Metadata类型
      * @param def 默认值
@@ -53,6 +53,7 @@ object PlayerUtils {
 
     /**
      * 设置Metadata
+     *
      * @param key Metadata键
      * @param value Metadata值
      */

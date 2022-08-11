@@ -20,6 +20,7 @@ import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.SectionManager
+import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
@@ -40,19 +41,41 @@ import java.util.*
         test = "!com.alibaba.fastjson2.filter.Filter"
     )
 )
-// 物品生成器
+/**
+ * 物品生成器
+ *
+ * @property itemConfig 物品基础配置
+ * @constructor 根据物品基础配置构建物品生成器
+ */
 class ItemGenerator (val itemConfig: ItemConfig) {
-    // 物品ID
+    /**
+     * 获取物品ID
+     */
     val id = itemConfig.id
-    // 物品所在文件
+
+    /**
+     * 获取物品所在文件
+     */
     val file = itemConfig.file
-    // 物品原配置
+
+    /**
+     * 获取物品原配置
+     */
     val originConfigSection = itemConfig.configSection ?: YamlConfiguration() as ConfigurationSection
-    // 解析后配置
+
+    /**
+     * 获取物品解析后配置
+     */
     var configSection = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), originConfigSection))
-    // 物品配置文本
+
+    /**
+     * 获取解析后物品配置文本
+     */
     val configString = configSection.saveToString(id)
-    // 物品配置文本哈希值
+
+    /**
+     * 获取解析后物品配置文本哈希值
+     */
     val hashCode = configString.hashCode()
 
     private fun inherit(configSection: ConfigurationSection, originConfigSection: ConfigurationSection): ConfigurationSection {
@@ -130,7 +153,13 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         return configSection
     }
 
-    fun getItemStack(player: OfflinePlayer? = null, data: String? = null): ItemStack? {
+    /**
+     * 生成物品, 生成失败则返回null
+     * @param player 用于解析内容的玩家
+     * @param data 指向数据
+     * @return 生成的物品, 生成失败则返回null
+     */
+    fun getItemStack(player: OfflinePlayer?, data: String?): ItemStack? {
         var configString = this.configString
 
         // 进行一次papi解析

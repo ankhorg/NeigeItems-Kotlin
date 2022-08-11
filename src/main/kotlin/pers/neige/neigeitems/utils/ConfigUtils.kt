@@ -6,9 +6,13 @@ import org.bukkit.plugin.Plugin
 import taboolib.common.platform.function.getDataFolder
 import java.io.File
 
+/**
+ * 配置文件相关工具类
+ */
 object ConfigUtils {
     /**
      * 获取文件夹内所有文件
+     *
      * @param dir 待获取文件夹
      * @return 文件夹内所有文件
      */
@@ -28,6 +32,7 @@ object ConfigUtils {
 
     /**
      * 获取文件夹内所有文件
+     *
      * @param dir 待获取文件夹路径
      * @return 文件夹内所有文件
      */
@@ -38,6 +43,7 @@ object ConfigUtils {
 
     /**
      * 获取文件夹内所有文件
+     *
      * @param plugin 待获取文件夹归属插件
      * @param dir 待获取文件夹路径
      * @return 文件夹内所有文件
@@ -49,6 +55,7 @@ object ConfigUtils {
 
     /**
      * 克隆ConfigurationSection
+     *
      * @return 对应ConfigurationSection的克隆
      */
     @JvmStatic
@@ -62,6 +69,7 @@ object ConfigUtils {
 
     /**
      * 获取文件中所有ConfigurationSection
+     *
      * @return 文件中所有ConfigurationSection
      */
     @JvmStatic
@@ -76,6 +84,7 @@ object ConfigUtils {
 
     /**
      * 获取所有文件中所有ConfigurationSection
+     *
      * @return 文件中所有ConfigurationSection
      */
     @JvmStatic
@@ -89,6 +98,7 @@ object ConfigUtils {
 
     /**
      * 获取文件中所有顶级节点内容
+     *
      * @return 文件中所有顶级节点内容
      */
     @JvmStatic
@@ -103,6 +113,7 @@ object ConfigUtils {
 
     /**
      * 获取文件中所有顶级节点内容
+     *
      * @return 文件中所有顶级节点内容
      */
     @JvmStatic
@@ -119,6 +130,7 @@ object ConfigUtils {
      * ConfigurationSection 中可能包含 Map, List, ConfigurationSection 及任意值
      * 所有值的处理都放在这个方法里循环调用了,
      * 所以参数和返回值都是Any
+     *
      * @param data 待转换内容
      * @return 转换结果
      */

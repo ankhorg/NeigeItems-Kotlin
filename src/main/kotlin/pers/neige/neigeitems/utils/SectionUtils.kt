@@ -13,9 +13,13 @@ import taboolib.module.nms.ItemTagType
 import java.awt.Color
 import java.util.*
 
+/**
+ * 节点相关工具类
+ */
 object SectionUtils {
     /**
      * 对文本进行节点解析
+     *
      * @param cache 解析值缓存
      * @param player 待解析玩家
      * @param sections 节点池
@@ -53,6 +57,7 @@ object SectionUtils {
 
     /**
      * 对文本进行节点解析
+     *
      * @return 解析值
      */
     @JvmStatic
@@ -62,6 +67,7 @@ object SectionUtils {
 
     /**
      * 对文本进行节点解析
+     *
      * @param cache 解析值缓存
      * @return 解析值
      */
@@ -72,6 +78,7 @@ object SectionUtils {
 
     /**
      * 对文本进行节点解析
+     *
      * @param player 待解析玩家
      * @return 解析值
      */
@@ -82,6 +89,7 @@ object SectionUtils {
 
     /**
      * 对文本进行节点解析
+     *
      * @param cache 解析值缓存
      * @param sections 节点池
      * @return 解析值
@@ -93,6 +101,7 @@ object SectionUtils {
 
     /**
      * 对文本进行节点解析
+     *
      * @param parse 是否对文本进行节点解析
      * @param cache 解析值缓存
      * @param player 待解析玩家
@@ -114,6 +123,7 @@ object SectionUtils {
 
     /**
      * 对节点内容进行解析 (已经去掉 <>)
+     *
      * @param cache 解析值缓存
      * @param player 待解析玩家
      * @param sections 节点池
@@ -176,6 +186,7 @@ object SectionUtils {
 
     /**
      * 对文本进行物品节点解析
+     *
      * @param itemTag 物品NBT
      * @return 解析值
      */
@@ -207,6 +218,7 @@ object SectionUtils {
 
     /**
      * 对物品节点内容进行解析 (已经去掉 <>)
+     *
      * @param itemTag 物品NBT
      * @return 解析值
      */
@@ -255,6 +267,7 @@ object SectionUtils {
 
     /**
      * 加载字符串最外层<>位置
+     *
      * @param string 待加载文本
      * @param start 用于存储<位置
      * @param end 用于存储>位置

@@ -14,9 +14,13 @@ import taboolib.platform.util.giveItem
 import java.text.DecimalFormat
 import java.util.*
 
+/**
+ * 物品动作相关工具类
+ */
 object ActionUtils {
     /**
      * 通过配置信息判断玩家是否处于消耗冷却(消耗物品触发物品动作的冷却时间)
+     *
      * @param player 消耗物品的玩家
      * @param id 待消耗物品ID/组ID
      * @return 是否处于冷却时间
@@ -47,6 +51,7 @@ object ActionUtils {
 
     /**
      * 通过动作信息判断玩家是否处于动作冷却(无消耗触发物品动作的冷却时间)
+     *
      * @param player 消耗物品的玩家
      * @return 是否处于冷却时间
      */
@@ -76,6 +81,7 @@ object ActionUtils {
 
     /**
      * 消耗一定数量物品
+     *
      * @param player 物品持有者, 用于接收拆分出的物品
      * @param amount 消耗数
      * @param itemTag 物品NBT
@@ -123,6 +129,7 @@ object ActionUtils {
 
     /**
      * 消耗一定数量物品, 返回操作后的物品数组
+     *
      * @param amount 消耗数
      * @param itemTag 物品NBT
      * @param neigeItems NI特殊NBT

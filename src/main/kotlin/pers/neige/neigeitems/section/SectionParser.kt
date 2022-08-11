@@ -3,7 +3,9 @@ package pers.neige.neigeitems.section
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 
-// 节点解析器抽象类
+/**
+ * 节点解析器抽象类
+ */
 abstract class SectionParser {
     /**
      * 获取节点解析器ID

@@ -8,7 +8,9 @@ import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.platform.util.actionBar
 
-// 用于实现掉落物归属功能
+/**
+ * 用于实现掉落物归属功能
+ */
 object ItemOwner {
     // 拾取物品事件
     @SubscribeEvent(priority = EventPriority.LOWEST)

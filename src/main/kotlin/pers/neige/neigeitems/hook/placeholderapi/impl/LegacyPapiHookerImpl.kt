@@ -5,6 +5,11 @@ import org.bukkit.OfflinePlayer
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker
 import java.util.*
 
+/**
+ * 低版本PlaceholderAPI挂钩
+ *
+ * @constructor 启用低版本PlaceholderAPI挂钩
+ */
 class LegacyPapiHookerImpl : PapiHooker() {
     private val placeholders = PlaceholderAPI.getPlaceholders()
 

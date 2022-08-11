@@ -129,6 +129,7 @@ object HookerManager {
 
     /**
      * 解析papi变量, 不解析颜色代码
+     *
      * @param player 用于解析PAPI变量的玩家对象
      * @param text 待解析文本
      * @return 解析后文本
@@ -143,6 +144,7 @@ object HookerManager {
 
     /**
      * 解析papi变量的同时解析颜色代码
+     *
      * @param player 用于解析PAPI变量的玩家对象
      * @param text 待解析文本
      * @return 解析后文本
@@ -157,6 +159,7 @@ object HookerManager {
 
     /**
      * 解析物品变量
+     *
      * @param itemStack 用于解析变量的物品
      * @param text 待解析文本
      * @return 解析后文本
@@ -171,6 +174,7 @@ object HookerManager {
 
     /**
      * 解析物品名和物品Lore中的物品变量
+     *
      * @param itemStack 待解析物品
      */
     @JvmStatic
@@ -180,6 +184,7 @@ object HookerManager {
 
     /**
      * 添加物品变量附属
+     *
      * @param id 变量ID
      * @param function 操作函数
      */

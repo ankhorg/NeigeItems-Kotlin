@@ -19,11 +19,15 @@ import kotlin.math.roundToInt
 import kotlin.math.sin
 
 
+/**
+ * 物品相关工具类
+ */
 object ItemUtils {
     private val invalidNBT by lazy { arrayListOf("Enchantments","VARIABLES_DATA","ench","Damage","HideFlags","Unbreakable", "CustomModelData") }
 
     /**
      * HashMap 转 ItemTag
+     *
      * @return 转换结果
      */
     @JvmStatic
@@ -38,6 +42,7 @@ object ItemUtils {
     /**
      * 类型强制转换
      * 用于解析 NeigeItems 物品 NBT 配置中的类型强制转换
+     *
      * @return 转换结果
      */
     @JvmStatic
@@ -56,6 +61,7 @@ object ItemUtils {
     /**
      * 类型强制转换
      * 用于解析 NeigeItems 物品 NBT 配置中的类型强制转换
+     *
      * @return 转换结果
      */
     @JvmStatic
@@ -69,6 +75,7 @@ object ItemUtils {
     /**
      * 类型强制转换
      * 用于解析 NeigeItems 物品 NBT 配置中的类型强制转换
+     *
      * @return 转换结果
      */
     @JvmStatic
@@ -98,6 +105,7 @@ object ItemUtils {
 
     /**
      * 转 ItemTagData
+     *
      * @return 转换结果
      */
     @JvmStatic
@@ -134,6 +142,7 @@ object ItemUtils {
 
     /**
      * ItemTag 转 HashMap
+     *
      * @return 转换结果
      */
     @JvmStatic
@@ -149,6 +158,7 @@ object ItemUtils {
 
     /**
      * ItemTagData 解析
+     *
      * @return 解析结果
      */
     @JvmStatic
@@ -171,6 +181,7 @@ object ItemUtils {
 
     /**
      * ItemTag 合并(后者覆盖前者)
+     *
      * @param itemTag 用于合并覆盖
      * @return 合并结果
      */
@@ -200,6 +211,7 @@ object ItemUtils {
 
     /**
      * 掉落指定数量NI物品并触发掉落技能及掉落归属
+     *
      * @param itemStack 待掉落物品
      */
     @JvmStatic
@@ -209,6 +221,7 @@ object ItemUtils {
 
     /**
      * 掉落指定数量NI物品并触发掉落技能及掉落归属
+     *
      * @param itemStack 待掉落物品
      * @param amount 掉落数量
      */
@@ -219,6 +232,7 @@ object ItemUtils {
 
     /**
      * 掉落NI物品并触发掉落技能及掉落归属
+     *
      * @param itemStack 待掉落物品
      * @param itemTag 物品NBT, 用于解析NI物品数据
      * @param neigeItems NI物品NBT
@@ -250,6 +264,7 @@ object ItemUtils {
 
     /**
      * 判断ItemStack是否为NI物品并返回NI物品信息
+     *
      * @return NI物品信息?
      */
     @JvmStatic
@@ -268,6 +283,7 @@ object ItemUtils {
 
     /**
      * 根据数量将物品超级加倍, 返回一个列表
+     *
      * @param amount 需要的物品数量
      * @return 物品列表
      */
@@ -294,6 +310,7 @@ object ItemUtils {
 
     /**
      * 根据信息加载物品
+     *
      * @param items 用于存储待生成物品
      * @param itemInfos 物品信息
      * @param player 用于解析物品的玩家
@@ -367,6 +384,7 @@ object ItemUtils {
 
     /**
      * 根据信息进行物品掉落
+     *
      * @param dropItems 掉落物列表
      * @param location 掉落位置
      * @param offsetXString 发射横向偏移量

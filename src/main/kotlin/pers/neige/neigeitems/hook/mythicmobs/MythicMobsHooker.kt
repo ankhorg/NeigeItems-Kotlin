@@ -20,15 +20,17 @@ abstract class MythicMobsHooker {
     abstract val deathListener: ProxyListener
 
     /**
-     * 获取MM物品
+     * 获取MM物品, 不存在对应ID的MM物品则返回null
+     *
      * @param id MM物品ID
-     * @return MM物品(不存在则为空)
+     * @return MM物品(不存在则返回null)
      */
     abstract fun getItemStack(id: String): ItemStack?
 
     /**
-     * 同步获取MM物品(在5.1.0左右的版本中, MM物品的获取强制同步)
+     * 同步获取MM物品, 不存在对应ID的MM物品则返回null(在5.1.0左右的版本中, MM物品的获取强制同步)
      * 不一定真的同步获取, 只在必要时同步(指高版本)
+     *
      * @param id MM物品ID
      * @return MM物品(不存在则为空)
      */
@@ -36,6 +38,7 @@ abstract class MythicMobsHooker {
 
     /**
      * 释放MM技能
+     *
      * @param entity 技能释放者
      * @param skill 技能ID
      */
@@ -43,11 +46,14 @@ abstract class MythicMobsHooker {
 
     /**
      * 获取所有MM物品ID
+     *
+     * @return 所有MM物品ID
      */
     abstract fun getItemIds(): List<String>
 
     /**
      * 根据掉落信息加载掉落物品
+     *
      * @param entity 待掉落物品的MM怪物
      * @param dropItems 用于存储待掉落物品
      * @param player 用于解析物品的玩家

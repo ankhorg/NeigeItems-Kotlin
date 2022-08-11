@@ -4,14 +4,21 @@ import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import pers.neige.neigeitems.script.CompiledScript
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import java.io.File
-import javax.script.ScriptEngine
 
-// 脚本文件管理器, 用于管理所有js节点的脚本文件, 同时提供公用ScriptEngine用于解析公式节点内容
+/**
+ * 脚本文件管理器, 用于管理所有js节点的脚本文件, 同时提供公用ScriptEngine用于解析公式节点内容
+ *
+ * @constructor 构建脚本文件管理器
+ */
 object ScriptManager {
-    // 公用ScriptEngine
+    /**
+     * 获取公用ScriptEngine
+     */
     val scriptEngine = nashornHooker.getNashornEngine()
 
-    // 所有已编译的js脚本文件
+    /**
+     * 获取所有已编译的js脚本文件及路径
+     */
     val compiledScripts = HashMap<String, CompiledScript>()
 
     init {

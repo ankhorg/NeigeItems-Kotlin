@@ -8,13 +8,25 @@ import pers.neige.neigeitems.utils.ConfigUtils.loadConfiguration
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
-// 全局节点&节点解析器管理器
+/**
+ * 全局节点 & 节点解析器管理器
+ *
+ * @constructor 构建全局节点 & 节点解析器管理器
+ */
 object SectionManager {
-    // <文件名, 该文件中的所有节点>
+    /**
+     * 获取<文件名-该文件中的所有节点>对应map
+     */
     val globalSectionMap = HashMap<String, ConfigurationSection>()
-    // <节点ID, 节点>
+
+    /**
+     * 获取<节点ID-节点>对应map
+     */
     val globalSections = HashMap<String, Any>()
-    // 所有节点解析器
+
+    /**
+     * 获取所有节点解析器
+     */
     val sectionParsers = ConcurrentHashMap<String, SectionParser>()
 
     init {
@@ -28,6 +40,7 @@ object SectionManager {
 
     /**
      * 用于加载节点解析器
+     *
      * @param sectionParser 节点解析器
      */
     fun loadParser(sectionParser: SectionParser) {

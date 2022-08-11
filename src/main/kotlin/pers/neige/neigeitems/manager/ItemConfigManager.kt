@@ -6,15 +6,32 @@ import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
-// 物品加载是分两段进行的, 先加载全部基础配置, 再逐个进行继承和全局节点加载
-// 所以要有ItemConfig和ItemConfigManager
+/**
+ * 物品加载是分两段进行的, 先加载全部基础配置, 再逐个进行继承和全局节点加载
+ * 所以要有ItemConfig和ItemConfigManager
+ *
+ * @constructor 构建物品配置管理器
+ */
 open class ItemConfigManager {
-    // 全部物品文件
+    /**
+     * 获取全部物品文件
+     */
     val files: ArrayList<File> = getAllFiles("Items")
-    // 全部物品
+
+    /**
+     * 获取全部物品基础配置
+     */
     val itemConfigs: ConcurrentHashMap<String, ItemConfig> = ConcurrentHashMap<String, ItemConfig>()
-    // 全部物品ID
+
+    /**
+     * 获取全部物品ID(已排序)
+     */
     val itemIds get() = itemConfigs.keys.toList().sorted()
+
+    /**
+     * 获取全部物品ID(未排序)
+     */
+    val itemIdsRaw get() = itemConfigs.keys.toList()
 
     init {
         // 初始化物品配置

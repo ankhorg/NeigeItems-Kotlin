@@ -15,10 +15,20 @@ import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * 物品管理器
+ *
+ * @constructor 构建物品管理器
+ */
 object ItemManager : ItemConfigManager() {
-    // 所有物品生成器
+    /**
+     * 获取所有物品生成器
+     */
     val items: ConcurrentHashMap<String, ItemGenerator> = ConcurrentHashMap<String, ItemGenerator>()
-    // 物品总数
+
+    /**
+     * 获取物品总数
+     */
     val itemAmount get() = itemIds.size
 
     init {
@@ -55,6 +65,7 @@ object ItemManager : ItemConfigManager() {
 
     /**
      * 获取物品原始Config的克隆
+     *
      * @param id 物品ID
      * @return 物品原始Config的克隆
      */
@@ -64,6 +75,7 @@ object ItemManager : ItemConfigManager() {
 
     /**
      * 获取物品原始Config
+     *
      * @param id 物品ID
      * @return 物品原始Config
      */
@@ -73,6 +85,7 @@ object ItemManager : ItemConfigManager() {
 
     /**
      * 获取物品生成器
+     *
      * @param id 物品ID
      * @return 物品生成器
      */
@@ -82,6 +95,7 @@ object ItemManager : ItemConfigManager() {
 
     /**
      * 获取物品
+     *
      * @param id 物品ID
      * @return 物品
      */
@@ -91,6 +105,7 @@ object ItemManager : ItemConfigManager() {
 
     /**
      * 获取物品
+     *
      * @param id 物品ID
      * @param player 用于解析物品的玩家
      * @return 物品
@@ -101,6 +116,7 @@ object ItemManager : ItemConfigManager() {
 
     /**
      * 获取物品
+     *
      * @param id 物品ID
      * @param data 用于解析物品的指向数据
      * @return 物品
@@ -111,6 +127,7 @@ object ItemManager : ItemConfigManager() {
 
     /**
      * 获取物品
+     *
      * @param id 物品ID
      * @param player 用于解析物品的玩家
      * @param data 用于解析物品的指向数据
@@ -123,6 +140,7 @@ object ItemManager : ItemConfigManager() {
 
     /**
      * 是否存在对应ID的物品
+     *
      * @param id 物品ID
      * @return 是否存在对应ID的物品
      */
@@ -132,6 +150,7 @@ object ItemManager : ItemConfigManager() {
 
     /**
      * 保存物品
+     *
      * @param itemStack 保存物品
      * @param id 物品ID
      * @param path 保存路径

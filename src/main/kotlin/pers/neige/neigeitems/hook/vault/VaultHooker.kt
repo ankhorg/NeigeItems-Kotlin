@@ -2,9 +2,13 @@ package pers.neige.neigeitems.hook.vault
 
 import org.bukkit.OfflinePlayer
 
+/**
+ * Vault附属经济挂钩
+ */
 abstract class VaultHooker {
     /**
      * 给予玩家Vault金钱
+     *
      * @param player 待操作玩家
      * @param amount 给予金钱数
      */
@@ -12,6 +16,7 @@ abstract class VaultHooker {
 
     /**
      * 扣除玩家Vault金钱
+     *
      * @param player 待操作玩家
      * @param amount 扣除金钱数
      */
@@ -19,6 +24,7 @@ abstract class VaultHooker {
 
     /**
      * 获取玩家Vault金钱
+     *
      * @param player 待操作玩家
      */
     abstract fun getMoney(player: OfflinePlayer): Double

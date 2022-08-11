@@ -38,6 +38,9 @@ import java.io.File
 import java.util.*
 import kotlin.math.ceil
 
+/**
+ * 插件指令
+ */
 @CommandHeader(name = "NeigeItems", aliases = ["ni"])
 object Command {
     private val bukkitAdapter = BukkitAdapter()

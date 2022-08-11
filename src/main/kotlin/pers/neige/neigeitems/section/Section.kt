@@ -5,8 +5,15 @@ import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
 import taboolib.common.platform.function.info
 
-// 用于对节点的ConfigurationSection进行包装, 方便地获取或缓存解析值
-// configSection.name只能获得末级ID, 难以解决形似a.b.c的多级调用
+/**
+ * 用于对节点的ConfigurationSection进行包装, 方便地获取或缓存解析值
+ * configSection.name只能获得末级ID, 难以解决形似a.b.c的多级调用
+ * 因此需要特别指定ID
+ *
+ * @property configSection 节点配置
+ * @property id 节点ID
+ * @constructor 编译js脚本并进行包装
+ */
 class Section(configSection: ConfigurationSection, val id: String = configSection.name) {
     /**
      * 获取节点类型
@@ -20,6 +27,7 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
 
     /**
      * 获取节点解析值
+     *
      * @param cache 解析值缓存
      * @param player 待解析玩家
      * @param sections 节点池
@@ -44,6 +52,7 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
 
     /**
      * 获取节点解析值并存入缓存
+     *
      * @param cache 解析值缓存
      * @param player 待解析玩家
      * @param sections 节点池

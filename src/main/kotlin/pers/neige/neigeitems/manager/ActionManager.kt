@@ -30,12 +30,18 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
 
-// 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
+/**
+ * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
+ */
 object ActionManager {
-    // 拥有动作的物品及相关动作
+    /**
+     * 获取拥有动作的物品ID及相关动作
+     */
     val itemActions: ConcurrentHashMap<String, ItemAction> = ConcurrentHashMap<String, ItemAction>()
 
-    // 物品动作实现函数
+    /**
+     * 获取物品动作实现函数
+     */
     val actions = HashMap<String, BiFunction<Player, String, Boolean>>()
 
     init {
@@ -60,6 +66,7 @@ object ActionManager {
 
     /**
      * 执行物品动作
+     *
      * @param player 执行玩家
      * @param action 动作文本
      * @param itemTag 用于解析nbt及data, 可为空
@@ -72,6 +79,7 @@ object ActionManager {
 
     /**
      * 执行物品动作
+     *
      * @param player 执行玩家
      * @param action 动作文本
      */
@@ -81,6 +89,7 @@ object ActionManager {
 
     /**
      * 执行物品动作
+     *
      * @param player 执行玩家
      * @param action 动作文本
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
@@ -91,6 +100,7 @@ object ActionManager {
 
     /**
      * 执行物品动作
+     *
      * @param player 执行玩家
      * @param action 动作文本
      * @param itemTag 用于解析nbt及data, 可为空
@@ -117,6 +127,7 @@ object ActionManager {
 
     /**
      * 添加物品动作
+     *
      * @param id 动作ID
      * @param function 动作执行函数
      */

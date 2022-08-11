@@ -14,14 +14,18 @@ import taboolib.module.nms.getItemTag
 import java.util.*
 import java.util.function.BiFunction
 
-// 用于实现物品变量功能
-// 本部分的相关API暴露于HookManager
+/**
+ * 用于实现物品变量功能
+ */
 class ItemPlaceholder {
-    // 类似papi的实现, 物品变量由众多附属构成
+    /**
+     * 获取物品变量附属
+     */
     val expansions = HashMap<String, BiFunction<ItemStack, String, String?>>()
 
     /**
      * 用于添加物品变量附属
+     *
      * @param id 变量ID
      * @param function 操作函数
      */
@@ -31,6 +35,7 @@ class ItemPlaceholder {
 
     /**
      * 解析物品名和物品Lore中的物品变量
+     *
      * @param itemStack 待解析物品
      */
     fun itemParse(itemStack: ItemStack) {
@@ -52,6 +57,7 @@ class ItemPlaceholder {
     }
 
     init {
+        // 加载基础变量
         addExpansion("neigeitems") { itemStack, param ->
             val args = param.split("_")
             val itemTag = itemStack.getItemTag()
@@ -108,6 +114,7 @@ class ItemPlaceholder {
             }
         }
 
+        // 监听数据包进行变量替换
         ProtocolLibrary.getProtocolManager().addPacketListener(object :
             PacketAdapter(
                 plugin,
@@ -135,7 +142,8 @@ class ItemPlaceholder {
     }
 
     /**
-     * 解析物品变量
+     * 根据物品解析物品变量
+     *
      * @param itemStack 用于解析变量的物品
      * @param text 待解析文本
      * @return 解析后文本

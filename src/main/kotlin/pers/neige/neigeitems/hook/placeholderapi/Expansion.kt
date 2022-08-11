@@ -4,6 +4,9 @@ import org.bukkit.entity.Player
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.platform.compat.PlaceholderExpansion
 
+/**
+ * PlaceholderAPI扩展
+ */
 object Expansion : PlaceholderExpansion {
     override val identifier = "ni"
 

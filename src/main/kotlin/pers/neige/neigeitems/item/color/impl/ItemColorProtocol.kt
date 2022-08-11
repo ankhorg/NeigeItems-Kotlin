@@ -49,6 +49,7 @@ class ItemColorProtocol : ItemColor() {
      * 这样就需要重新向玩家发送Team数据包,
      * 不然玩家的客户端将认为之前的Team与玩家无关,
      * 从而导致掉落物只发出白色光效.
+     *
      * @param player 待操作玩家
      */
     fun initTeam(player: Player) {
