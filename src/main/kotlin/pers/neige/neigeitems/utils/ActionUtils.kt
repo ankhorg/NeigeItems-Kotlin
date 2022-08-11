@@ -32,7 +32,7 @@ object ActionUtils {
         // 如果冷却存在且大于0
         if (cooldown > 0) {
             // 获取当前时间
-            val time = Date().time
+            val time = System.currentTimeMillis()
             // 获取上次使用时间
             val lastTime = player.getMetadataEZ("NI-Consume-CD-${this.getString("group", id)}", "Long", 0.toLong()) as Long
             // 如果仍处于冷却时间
@@ -62,7 +62,7 @@ object ActionUtils {
         // 如果冷却存在且大于0
         if (cooldown > 0) {
             // 获取当前时间
-            val time = Date().time
+            val time = System.currentTimeMillis()
             // 获取上次使用时间
             val lastTime = player.getMetadataEZ("NI-CD-$group", "Long", 0.toLong()) as Long
             // 如果仍处于冷却时间

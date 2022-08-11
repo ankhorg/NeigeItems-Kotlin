@@ -204,3 +204,10 @@ ownerTest:
     owner: Neige
 CustomAction:
   material: STONE
+itemTimeTest:
+  material: STONE
+  name: 限时物品-到期时间-<js::ItemTime.js::main_<itemtime>>
+  options:
+    itemtime: <itemtime>
+  sections:
+    itemtime: 60

@@ -6,7 +6,9 @@ import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
-// papi节点解析器(仅包含即时声明节点)
+/**
+ * papi节点解析器(仅包含即时声明节点)
+ */
 object PapiParser : SectionParser() {
     override val id: String = "papi"
 

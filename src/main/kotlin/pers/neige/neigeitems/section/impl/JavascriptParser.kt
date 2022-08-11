@@ -7,7 +7,9 @@ import pers.neige.neigeitems.manager.ScriptManager
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
-// js节点解析器
+/**
+ * js节点解析器
+ */
 object JavascriptParser : SectionParser() {
     override val id: String = "js"
 

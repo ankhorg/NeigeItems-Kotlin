@@ -6,7 +6,9 @@ import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.ScriptUtils.eval
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
-// 公式节点解析器
+/**
+ * 公式节点解析器
+ */
 object CalculationParser : SectionParser() {
     override val id: String = "calculation"
 

@@ -6,7 +6,9 @@ import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.math.BigDecimal
 
-// 权重节点解析器
+/**
+ * 权重节点解析器
+ */
 object WeightParser : SectionParser() {
     override val id: String = "weight"
 

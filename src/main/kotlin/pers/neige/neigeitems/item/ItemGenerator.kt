@@ -155,6 +155,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
 
     /**
      * 生成物品, 生成失败则返回null
+     *
      * @param player 用于解析内容的玩家
      * @param data 指向数据
      * @return 生成的物品, 生成失败则返回null
@@ -288,6 +289,10 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 // 设置掉落执行技能
                 if (configSection.contains("options.dropskill")) {
                     neigeItems["dropSkill"] = ItemTagData(configSection.getString("options.dropskill") ?: "")
+                }
+                // 设置物品时限
+                if (configSection.contains("options.itemtime")) {
+                    neigeItems["itemTime"] = ItemTagData(System.currentTimeMillis() + (configSection.getLong("options.itemtime", 0) * 1000))
                 }
                 itemTag["NeigeItems"] = neigeItems
                 // 设置物品NBT

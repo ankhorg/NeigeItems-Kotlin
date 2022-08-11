@@ -4,7 +4,9 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
 
-// 自定义节点, 具体将在js文件中实现, nashorn会自动解析匹配类型, 因此不用担心重定向问题, 不用将kotlin的function更改为java的function
+/**
+ * 自定义节点, 具体将在js文件中实现, nashorn会自动解析匹配类型, 因此不用担心重定向问题, 不用将kotlin的function更改为java的function
+ */
 class CustomSection(
     // 自定义节点ID
     override val id: String,

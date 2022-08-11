@@ -5,7 +5,9 @@ import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
-// 随机数节点解析器
+/**
+ * 随机数节点解析器
+ */
 object NumberParser : SectionParser() {
     override val id: String = "number"
 

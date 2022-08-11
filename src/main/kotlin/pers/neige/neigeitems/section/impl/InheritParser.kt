@@ -6,7 +6,9 @@ import pers.neige.neigeitems.section.Section
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
-// 继承节点解析器
+/**
+ * 继承节点解析器
+ */
 object InheritParser : SectionParser() {
     override val id: String = "inherit"
 
