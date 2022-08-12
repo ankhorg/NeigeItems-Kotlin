@@ -7,11 +7,18 @@ import com.comphenix.protocol.events.ListenerPriority
 import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.events.PacketEvent
+import com.comphenix.protocol.injector.BukkitUnwrapper
+import com.comphenix.protocol.reflect.FieldAccessException
+import com.comphenix.protocol.reflect.FuzzyReflection
+import com.comphenix.protocol.reflect.accessors.Accessors
+import com.comphenix.protocol.reflect.fuzzy.FuzzyMethodContract
 import com.comphenix.protocol.utility.MinecraftReflection
 import com.comphenix.protocol.utility.MinecraftVersion
 import com.comphenix.protocol.wrappers.WrappedChatComponent
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.World
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
@@ -49,6 +56,56 @@ class ItemColorProtocol : ItemColor() {
         }
     }
 
+    private val teamPackets = let {
+        val teamPackets = HashMap<String, PacketContainer>()
+        for ((id, color) in colors) {
+            // 创建Team数据包
+            val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
+            // 设置队伍ID
+            packet.strings.write(0, "NI-$color")
+            when (version) {
+                // 1.12版本, 设置前缀即可显示颜色
+                12 -> {
+                    // 设置数据包类型为"创建Team"
+                    packet.integers.write(1, 0)
+                    // 设置队伍前缀
+                    packet.strings.write(2, color.toString())
+                }
+                // 1.13-1.16, 设置颜色即可显示颜色
+                13 -> {
+                    // 设置数据包类型为"创建Team"
+                    packet.integers.write(0, 0)
+                    // 设置队伍颜色
+                    packet.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
+                }
+                // 1.17+, 重点仍旧在设置颜色, 但是创建数据包时PacketPlayOutScoreboardTeam$b是没有默认值的, 需要一个个手动填满
+                else -> {
+                    // 设置数据包类型为"创建Team"
+                    packet.integers.write(0, 0)
+                    // 获取队伍信息
+                    val internalStructure = packet.optionalStructures.read(0).get()
+                    // 设置队伍颜色
+                    internalStructure.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
+                    // 设置展示名
+                    internalStructure.chatComponents.write(0, WrappedChatComponent.fromText("NI-$color"))
+                    // 设置前缀
+                    internalStructure.chatComponents.write(1, WrappedChatComponent.fromText(color.toString()))
+                    // 设置后缀
+                    internalStructure.chatComponents.write(2, WrappedChatComponent.fromText(""))
+                    // 设置名牌可见性
+                    internalStructure.strings.write(0, "always")
+                    // 设置TeamPush
+                    internalStructure.strings.write(1, "always")
+                    // 设置友军选项
+                    internalStructure.integers.write(0, 3)
+                }
+            }
+            // 存储数据包
+            teamPackets[id] = packet
+        }
+        teamPackets
+    }
+
     /**
      * 根据玩家当前计分板进行Team初始化
      * 玩家的计分板不一定一成不变,
@@ -67,48 +124,7 @@ class ItemColorProtocol : ItemColor() {
         if (!player.hasMetadata("NI-TeamScoreboard") || (player.getMetadataEZ("NI-TeamScoreboard", "String", "") as String) != player.scoreboard.toString()) {
             // 初始化前通过Metadata记录当前计分板
             player.setMetadataEZ("NI-TeamScoreboard", player.scoreboard.toString())
-            for ((id, color) in colors) {
-                // 创建Team数据包
-                val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
-                // 设置队伍ID
-                packet.strings.write(0, "NI-$color")
-                when (version) {
-                    // 1.12版本, 设置前缀即可显示颜色
-                    12 -> {
-                        // 设置数据包类型为"创建Team"
-                        packet.integers.write(1, 0)
-                        // 设置队伍前缀
-                        packet.strings.write(2, color.toString())
-                    }
-                    // 1.13-1.16, 设置颜色即可显示颜色
-                    13 -> {
-                        // 设置数据包类型为"创建Team"
-                        packet.integers.write(0, 0)
-                        // 设置队伍颜色
-                        packet.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
-                    }
-                    // 1.17+, 重点仍旧在设置颜色, 但是PacketPlayOutScoreboardTeam$b创建数据包时是没有默认值的, 需要一个个手动填满
-                    else -> {
-                        // 设置数据包类型为"创建Team"
-                        packet.integers.write(0, 0)
-                        // 获取队伍信息
-                        val internalStructure = packet.optionalStructures.read(0).get()
-                        // 设置队伍颜色
-                        internalStructure.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
-                        // 设置展示名
-                        internalStructure.chatComponents.write(0, WrappedChatComponent.fromText("NI-$color"))
-                        // 设置前缀
-                        internalStructure.chatComponents.write(1, WrappedChatComponent.fromText(color.toString()))
-                        // 设置后缀
-                        internalStructure.chatComponents.write(2, WrappedChatComponent.fromText(""))
-                        // 设置名牌可见性
-                        internalStructure.strings.write(0, "always")
-                        // 设置TeamPush
-                        internalStructure.strings.write(1, "always")
-                        // 设置友军选项
-                        internalStructure.integers.write(0, 3)
-                    }
-                }
+            for ((id, packet) in teamPackets) {
                 // 发送数据包
                 protocolManager.sendServerPacket(player, packet)
             }
@@ -135,8 +151,13 @@ class ItemColorProtocol : ItemColor() {
                     // 相关实体
                     val id = event.packet.integers.read(0)
                     if (id >= 0) {
-                        val entity = protocolManager.getEntityFromID(receiver.world, id)
-                        if(entity is Item) {
+                        // 虽然但是, 有的时候会找不到相关实体
+                        val entity = try {
+                            protocolManager.getEntityFromID(receiver.world, id)
+                        } catch (error: FieldAccessException) {
+                            null
+                        }
+                        if (entity is Item) {
                             val itemStack = entity.itemStack
                             if (itemStack.type != Material.AIR) {
                                 val itemTag = itemStack.getItemTag()

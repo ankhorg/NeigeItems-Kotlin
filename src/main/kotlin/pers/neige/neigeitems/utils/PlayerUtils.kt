@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.utils
 
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
