@@ -9,6 +9,7 @@ import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.events.PacketEvent
 import com.comphenix.protocol.utility.MinecraftReflection
 import com.comphenix.protocol.utility.MinecraftVersion
+import com.comphenix.protocol.wrappers.WrappedChatComponent
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Item
@@ -23,7 +24,7 @@ import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.module.nms.getItemTag
-import kotlin.collections.ArrayList
+import java.util.*
 import kotlin.experimental.or
 
 
@@ -35,11 +36,18 @@ import kotlin.experimental.or
 class ItemColorProtocol : ItemColor() {
     override val mode = "Protocol"
 
-    private val enumChatFormat: Class<*> = MinecraftReflection.getMinecraftClass("EnumChatFormat")
+    private val enumChatFormatClass: Class<*> = MinecraftReflection.getMinecraftClass("EnumChatFormat")
 
     private val protocolManager: ProtocolManager = ProtocolLibrary.getProtocolManager()
 
-    private var legacy = !MinecraftVersion.getCurrentVersion().isAtLeast(MinecraftVersion.AQUATIC_UPDATE)
+    private val version = let {
+        val version = MinecraftVersion.getCurrentVersion()
+        when {
+            !version.isAtLeast(MinecraftVersion.AQUATIC_UPDATE) -> 12
+            !version.isAtLeast(MinecraftVersion.CAVES_CLIFFS_1) -> 13
+            else -> 17
+        }
+    }
 
     /**
      * 根据玩家当前计分板进行Team初始化
@@ -64,16 +72,42 @@ class ItemColorProtocol : ItemColor() {
                 val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
                 // 设置队伍ID
                 packet.strings.write(0, "NI-$color")
-                if (legacy) {
-                    // 设置数据包类型为"创建Team"
-                    packet.integers.write(1, 0)
-                    // 设置队伍前缀
-                    packet.strings.write(2, color.toString())
-                } else {
-                    // 设置数据包类型为"创建Team"
-                    packet.integers.write(0, 0)
-                    // 设置队伍颜色
-                    packet.getEnumModifier(ChatColor::class.java, enumChatFormat).write(0, color)
+                when (version) {
+                    // 1.12版本, 设置前缀即可显示颜色
+                    12 -> {
+                        // 设置数据包类型为"创建Team"
+                        packet.integers.write(1, 0)
+                        // 设置队伍前缀
+                        packet.strings.write(2, color.toString())
+                    }
+                    // 1.13-1.16, 设置颜色即可显示颜色
+                    13 -> {
+                        // 设置数据包类型为"创建Team"
+                        packet.integers.write(0, 0)
+                        // 设置队伍颜色
+                        packet.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
+                    }
+                    // 1.17+, 重点仍旧在设置颜色, 但是PacketPlayOutScoreboardTeam$b创建数据包时是没有默认值的, 需要一个个手动填满
+                    else -> {
+                        // 设置数据包类型为"创建Team"
+                        packet.integers.write(0, 0)
+                        // 获取队伍信息
+                        val internalStructure = packet.optionalStructures.read(0).get()
+                        // 设置队伍颜色
+                        internalStructure.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
+                        // 设置展示名
+                        internalStructure.chatComponents.write(0, WrappedChatComponent.fromText("NI-$color"))
+                        // 设置前缀
+                        internalStructure.chatComponents.write(1, WrappedChatComponent.fromText(color.toString()))
+                        // 设置后缀
+                        internalStructure.chatComponents.write(2, WrappedChatComponent.fromText(""))
+                        // 设置名牌可见性
+                        internalStructure.strings.write(0, "always")
+                        // 设置TeamPush
+                        internalStructure.strings.write(1, "always")
+                        // 设置友军选项
+                        internalStructure.integers.write(0, 3)
+                    }
                 }
                 // 发送数据包
                 protocolManager.sendServerPacket(player, packet)
@@ -120,10 +154,20 @@ class ItemColorProtocol : ItemColor() {
                                             // 创建Team数据包
                                             val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
                                             // 设置数据包类型为"向Team添加实体"
-                                            if (legacy) {
-                                                packet.integers.write(1, 3)
-                                            } else {
-                                                packet.integers.write(0, 3)
+                                            when (version) {
+                                                12 -> {
+                                                    packet.integers.write(1, 3)
+                                                }
+                                                13 -> {
+                                                    packet.integers.write(0, 3)
+                                                }
+                                                else -> {
+                                                    packet.integers.write(0, 3)
+                                                    // 设置队伍颜色
+                                                    val internalStructure = packet.optionalStructures.read(0).get()
+                                                    internalStructure.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
+                                                    packet.optionalStructures.write(0, Optional.of(internalStructure))
+                                                }
                                             }
                                             // 设置队伍ID
                                             packet.strings.write(0, "NI-$color")
