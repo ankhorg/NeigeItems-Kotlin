@@ -20,7 +20,6 @@ abstract class ItemColor {
             hashMap["AQUA"] = ChatColor.AQUA
             hashMap["BLACK"] = ChatColor.BLACK
             hashMap["BLUE"] = ChatColor.BLUE
-            hashMap["BLUE"] = ChatColor.BLUE
             hashMap["DARK_AQUA"] = ChatColor.DARK_AQUA
             hashMap["DARK_BLUE"] = ChatColor.DARK_BLUE
             hashMap["DARK_GRAY"] = ChatColor.DARK_GRAY

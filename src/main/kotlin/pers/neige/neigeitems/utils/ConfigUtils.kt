@@ -3,6 +3,7 @@ package pers.neige.neigeitems.utils
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
+import pers.neige.neigeitems.manager.SectionManager
 import taboolib.common.platform.function.getDataFolder
 import java.io.File
 
@@ -240,5 +241,37 @@ object ConfigUtils {
             }
         }
         return this
+    }
+
+    /**
+     * 全局节点加载
+     * @param configSection 待操作配置
+     * @return 操作后配置
+     */
+    @JvmStatic
+    fun loadGlobalSections(configSection: ConfigurationSection): ConfigurationSection {
+        // 如果调用了全局节点
+        if (configSection.contains("globalsections")) {
+            // 获取全局节点ID
+            val globalSectionIds = configSection.getStringList("globalsections")
+            // 针对每个试图调用的全局节点
+            globalSectionIds.forEach {
+                when (val values = SectionManager.globalSectionMap[it]) {
+                    // 对于节点调用
+                    null -> {
+                        SectionManager.globalSections[it]?.let { value ->
+                            configSection.set("sections.$it", value)
+                        }
+                    }
+                    // 对于节点文件调用
+                    else -> {
+                        values.getKeys(false).forEach {
+                            configSection.set("sections.$it", values.get(it))
+                        }
+                    }
+                }
+            }
+        }
+        return configSection
     }
 }

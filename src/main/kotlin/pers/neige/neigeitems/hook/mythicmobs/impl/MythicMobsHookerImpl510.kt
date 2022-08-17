@@ -161,7 +161,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
                             // 如果是玩家
                             if (player is Player) {
                                 // 加载物品掉落信息
-                                loadItems(dropItems, itemPack.items, player)
+                                loadItems(dropItems, itemPack.items, player, HashMap<String, String>(), itemPack.sections)
                             }
                         }
                     }

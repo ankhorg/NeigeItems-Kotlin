@@ -1323,7 +1323,7 @@ object Command {
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
-                    loadItems(dropItems, itemPack.items, parser)
+                    loadItems(dropItems, itemPack.items, parser, HashMap<String, String>(), itemPack.sections)
                     location?.let { location ->
                         if (itemPack.fancyDrop) {
                             dropItems(dropItems, location, itemPack.offsetXString, itemPack.offsetYString, itemPack.angleType)
@@ -1390,7 +1390,7 @@ object Command {
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
-                    loadItems(dropItems, itemPack.items, player)
+                    loadItems(dropItems, itemPack.items, player, HashMap<String, String>(), itemPack.sections)
                     dropItems.forEach { itemStack ->
                         bukkitScheduler.callSyncMethod(plugin) {
                             player.giveItem(itemStack)

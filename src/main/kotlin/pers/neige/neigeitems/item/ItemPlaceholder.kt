@@ -122,7 +122,8 @@ class ItemPlaceholder {
                 PacketType.Play.Server.WINDOW_ITEMS,
                 PacketType.Play.Server.SET_SLOT) {
                 override fun onPacketSending(event: PacketEvent) {
-                    if (event.player.gameMode == GameMode.SURVIVAL) {
+                    val gameMode = event.player.gameMode
+                    if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
                         if (event.packetType == PacketType.Play.Server.WINDOW_ITEMS) {
                             val items = event.packet.itemListModifier.read(0)
                             items.forEach { itemStack ->

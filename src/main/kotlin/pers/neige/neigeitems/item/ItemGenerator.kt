@@ -23,6 +23,7 @@ import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
+import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ConfigUtils.toMap
 import pers.neige.neigeitems.utils.ItemUtils.coverWith
@@ -64,7 +65,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
     val originConfigSection = itemConfig.configSection ?: YamlConfiguration() as ConfigurationSection
 
     /**
-     * 获取物品解析后配置
+     * 获取物品解析后配置(经过继承和全局节点调用)
      */
     var configSection = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), originConfigSection))
 
@@ -123,33 +124,6 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         }
         // 覆盖物品配置
         configSection.coverWith(originConfigSection)
-        return configSection
-    }
-
-    // 全局节点加载
-    private fun loadGlobalSections(configSection: ConfigurationSection): ConfigurationSection {
-        // 如果调用了全局节点
-        if (configSection.contains("globalsections")) {
-            // 获取全局节点ID
-            val globalSectionIds = configSection.getStringList("globalsections")
-            // 针对每个试图调用的全局节点
-            globalSectionIds.forEach {
-                when (val values = SectionManager.globalSectionMap[it]) {
-                    // 对于节点调用
-                    null -> {
-                        SectionManager.globalSections[it]?.let { value ->
-                            configSection.set("sections.$it", value)
-                        }
-                    }
-                    // 对于节点文件调用
-                    else -> {
-                        values.getKeys(false).forEach {
-                            configSection.set("sections.$it", values.get(it))
-                        }
-                    }
-                }
-            }
-        }
         return configSection
     }
 

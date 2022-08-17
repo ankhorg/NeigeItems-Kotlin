@@ -40,11 +40,7 @@ object ItemPackManager {
             config.getKeys(false).forEach { id ->
                 val configSection = config.getConfigurationSection(id)
                 configSection?.let {
-                    configSection.getConfigurationSection("FancyDrop")?.let {
-                        itemPacks[id] = ItemPack(id, configSection.getStringList("Items"), true, it.getString("offset.x"), it.getString("offset.y"), it.getString("angle.type"))
-                    } ?: let {
-                        itemPacks[id] = ItemPack(id, configSection.getStringList("Items"), false)
-                    }
+                    itemPacks[id] = ItemPack(id, configSection)
                 }
             }
         }
