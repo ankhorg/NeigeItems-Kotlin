@@ -508,7 +508,7 @@ object ActionManager {
     }
 
     // 拾取物品
-    @SubscribeEvent(priority = EventPriority.LOW)
+    @SubscribeEvent(priority = EventPriority.HIGH)
     fun listener(event: EntityPickupItemEvent) {
         // 获取玩家
         val player = event.entity
@@ -550,7 +550,7 @@ object ActionManager {
         } else {
             bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
                 // 检测冷却
-                if (!itemAction.isCoolDown(player)) return@Runnable
+                if (itemAction.isCoolDown(player)) return@Runnable
                 // 执行动作
                 itemAction.run(player, itemAction.pick, itemTag)
             })
