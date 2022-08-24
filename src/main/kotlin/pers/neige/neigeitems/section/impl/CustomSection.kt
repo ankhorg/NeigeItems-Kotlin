@@ -6,6 +6,7 @@ import pers.neige.neigeitems.section.SectionParser
 
 /**
  * 自定义节点, 具体将在js文件中实现, nashorn会自动解析匹配类型, 因此不用担心重定向问题, 不用将kotlin的function更改为java的function
+ * 别问我这个类为什么不叫CustomParser, 等我反应过来的时候为时已晚
  */
 class CustomSection(
     // 自定义节点ID

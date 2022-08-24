@@ -7,6 +7,8 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
+import pers.neige.neigeitems.utils.ConfigUtils.saveToString
+import pers.neige.neigeitems.utils.SectionUtils.getSection
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.ItemTagType
@@ -41,8 +43,11 @@ object SectionUtils {
         for (index in 0 until start.size) {
             // 解析目标文本
             listString.append(
+                // 先截取文本
                 this.substring(start[index]+1, end[index])
+                    // 因为取的是最外层 <> 包裹的字符串, 所以内部可能还需要继续解析
                     .parseSection(cache, player, sections)
+                    // 解析完成后可以视作节点ID/即时声明节点, 进行节点调用
                     .getSection(cache, player, sections)
             )
 

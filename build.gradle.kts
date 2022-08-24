@@ -23,7 +23,6 @@ taboolib {
         "common-5",
         "module-chat",
         "module-configuration",
-        "module-metrics",
         "module-nms",
         "module-nms-util",
         "module-metrics",
@@ -54,8 +53,8 @@ dependencies {
     compileOnly("ink.ptms.core:v11900:11900-minimize:universal")
     compileOnly(kotlin("stdlib"))
     compileOnly("org.openjdk.nashorn:nashorn-core:15.4")
-    compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("io.lumine:Mythic-Dist:5.1.0-SNAPSHOT")
