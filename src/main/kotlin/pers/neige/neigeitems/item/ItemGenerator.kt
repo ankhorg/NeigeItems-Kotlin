@@ -19,8 +19,6 @@ import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.manager.SectionManager
-import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections

@@ -2,7 +2,6 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player

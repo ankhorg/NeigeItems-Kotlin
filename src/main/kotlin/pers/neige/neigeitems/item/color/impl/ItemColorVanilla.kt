@@ -11,7 +11,8 @@ import pers.neige.neigeitems.item.color.ItemColor
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
-import taboolib.module.nms.nmsGeneric
+import taboolib.module.nms.ItemTag
+import taboolib.module.nms.getItemTag
 
 /**
  * 基于Bukkit功能实现的掉落物光效系统
@@ -50,7 +51,13 @@ class ItemColorVanilla : ItemColor() {
                 val itemStack = item.itemStack
                 if (itemStack.type != Material.AIR) {
                     // 由于是异步操作, 物品仍可能为空气(还没获取NBT就被玩家捡走了), 所以直接使用nmsGeneric.getItemTag
-                    val itemTag = nmsGeneric.getItemTag(itemStack)
+                    // val itemTag = nmsGeneric.getItemTag(itemStack)
+                    // 新版本taboolib中似乎禁止直接使用nmsGeneric, 因此直接开摆
+                    val itemTag = try {
+                        itemStack.getItemTag()
+                    } catch (error: IllegalStateException) {
+                        ItemTag()
+                    }
 
                     // 检测物品是否有用于标记光效颜色的特殊NBT
                     itemTag["NeigeItems"]?.asCompound()?.get("color")?.asString()?.let {
