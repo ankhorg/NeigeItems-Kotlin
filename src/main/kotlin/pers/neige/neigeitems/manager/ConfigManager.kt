@@ -38,6 +38,7 @@ object ConfigManager {
         plugin.saveResource("ItemPacks${File.separator}ExampleItemPack.yml", false)
         plugin.saveResource("Items${File.separator}ExampleItem.yml", false)
         plugin.saveResource("Scripts${File.separator}ExampleScript.js", false)
+        plugin.saveResource("Scripts${File.separator}ItemTime.js", false)
         plugin.saveDefaultConfig()
         // 加载bstats
         val metrics = Metrics(15750, plugin.description.version, Platform.BUKKIT)
