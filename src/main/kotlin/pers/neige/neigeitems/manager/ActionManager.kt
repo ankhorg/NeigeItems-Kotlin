@@ -481,7 +481,7 @@ object ActionManager {
         // 如果该物品需要被消耗
         if (consume != null && consume.getBoolean("drop", false)) {
             // 检测冷却
-            if (consume.isCoolDown(player, id)) {
+            if (!consume.isCoolDown(player, id)) {
                 // 获取待消耗数量
                 val amount: Int = consume.getInt("amount", 1)
                 // 消耗物品
