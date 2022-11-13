@@ -245,15 +245,25 @@ object ItemUtils {
         itemTag: ItemTag = itemStack.getItemTag(),
         neigeItems: ItemTag? = itemTag["NeigeItems"]?.asCompound()
     ): Item? {
+        // 记录掉落物拥有者
+        val owner = neigeItems?.get("owner")?.asString()
+        // 移除相关nbt, 防止物品无法堆叠
+        owner?.let {
+            neigeItems.remove("owner")
+            itemTag.saveTo(itemStack)
+        }
+        // 返回结果物品
         return bukkitScheduler.callSyncMethod(plugin) {
+            // 掉落物品
             val item = this.world?.dropItem(this, itemStack)
-            neigeItems?.let {
-                neigeItems["owner"]?.asString()?.let { owner ->
-                    item?.setMetadataEZ("NI-Owner", owner)
-                }
+            // 设置拥有者相关Metadata
+            owner?.let {
+                item?.setMetadataEZ("NI-Owner", it)
             }
+            // 返回结果物品
             item
         }.get()?.let { item ->
+            // 掉落物技能
             neigeItems?.let {
                 neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
                     mythicMobsHooker?.castSkill(item, dropSkill)

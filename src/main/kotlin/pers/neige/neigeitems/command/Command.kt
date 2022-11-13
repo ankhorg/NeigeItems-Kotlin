@@ -30,6 +30,7 @@ import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.chat.TellrawJson
+import taboolib.module.nms.getItemTag
 import taboolib.module.nms.getName
 import taboolib.platform.BukkitAdapter
 import taboolib.platform.util.giveItem
@@ -1036,6 +1037,14 @@ object Command {
                     amount?.let {
                         // 给物品
                         getItemStack(id, player, data)?.let { itemStack ->
+                            // 移除一下物品拥有者信息
+                            // 由于这种操作有点太过sb, 决定放弃处理这种情况
+//                            val itemTag = itemStack.getItemTag()
+//                            val neigeItems = itemTag["NeigeItems"]?.asCompound()
+//                            neigeItems?.get("owner")?.asString()?.let {
+//                                neigeItems.remove("owner")
+//                                itemTag.saveTo(itemStack)
+//                            }
                             bukkitScheduler.callSyncMethod(plugin) {
                                 player.giveItems(itemStack, amount.coerceAtLeast(1))
                             }
@@ -1062,6 +1071,14 @@ object Command {
                         // 给物品
                         repeat(amount.coerceAtLeast(1)) {
                             getItemStack(id, player, data)?.let { itemStack ->
+                                // 移除一下物品拥有者信息
+                                // 由于这种操作有点太过sb, 决定放弃处理这种情况
+//                                val itemTag = itemStack.getItemTag()
+//                                val neigeItems = itemTag["NeigeItems"]?.asCompound()
+//                                neigeItems?.get("owner")?.asString()?.let {
+//                                    neigeItems.remove("owner")
+//                                    itemTag.saveTo(itemStack)
+//                                }
                                 bukkitScheduler.callSyncMethod(plugin) {
                                     player.giveItem(itemStack)
                                 }

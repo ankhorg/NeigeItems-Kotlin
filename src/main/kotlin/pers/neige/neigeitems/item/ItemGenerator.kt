@@ -188,7 +188,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 if (configSection.contains("custommodeldata")) {
                     try {
                         itemMeta?.setCustomModelData(configSection.getInt("custommodeldata"))
-                    } catch (error: NoSuchMethodError) {}
+                    } catch (_: NoSuchMethodError) {}
                 }
                 // 设置物品名
                 if (configSection.contains("name")) {
@@ -216,7 +216,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                         try {
                             val itemFlag = ItemFlag.valueOf(value)
                             itemMeta?.addItemFlags(itemFlag)
-                        } catch (error: IllegalArgumentException) {}
+                        } catch (_: IllegalArgumentException) {}
                     }
                 }
                 // 设置物品颜色
