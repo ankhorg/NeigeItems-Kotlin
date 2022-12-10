@@ -21,6 +21,11 @@ object ScriptManager {
      */
     val compiledScripts = HashMap<String, CompiledScript>()
 
+    /**
+     * 获取所有用于join节点的已编译的js脚本文件及文本
+     */
+    val joinScripts = HashMap<String, CompiledScript>()
+
     init {
         // 加载全部脚本
         loadScripts()
@@ -31,7 +36,7 @@ object ScriptManager {
      */
     private fun loadScripts() {
         for (file in getAllFiles("Scripts")) {
-            compiledScripts[file.path.replace("plugins${File.separator}NeigeItems${File.separator}Scripts${File.separator}", "")] = pers.neige.neigeitems.script.CompiledScript(file)
+            compiledScripts[file.path.replace("plugins${File.separator}NeigeItems${File.separator}Scripts${File.separator}", "")] = CompiledScript(file)
         }
     }
 
@@ -40,6 +45,7 @@ object ScriptManager {
      */
     fun reload() {
         compiledScripts.clear()
+        joinScripts.clear()
         loadScripts()
     }
 }

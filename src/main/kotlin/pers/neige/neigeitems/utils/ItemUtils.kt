@@ -341,6 +341,8 @@ object ItemUtils {
      * @param items 用于存储待生成物品
      * @param itemInfos 物品信息
      * @param player 用于解析物品的玩家
+     * @param cache 随机节点缓存
+     * @param sections 随机节点
      */
     @JvmStatic
     fun loadItems(

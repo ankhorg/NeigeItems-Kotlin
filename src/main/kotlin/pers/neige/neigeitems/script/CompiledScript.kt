@@ -13,16 +13,28 @@ import javax.script.ScriptEngine
  * @property file js脚本文件
  * @constructor 编译js脚本并进行包装
  */
-class CompiledScript(file: File) {
+class CompiledScript {
     /**
      * 获取已编译脚本
      */
-    val compiledScript = nashornHooker.compile(InputStreamReader(FileInputStream(file), FileUtils.charset(file)))
+    private val compiledScript: javax.script.CompiledScript
 
     /**
      * 获取该脚本对应的ScriptEngine
      */
-    val scriptEngine: ScriptEngine = compiledScript.engine
+    val scriptEngine: ScriptEngine
+
+    constructor(file: File){
+        compiledScript = nashornHooker.compile(InputStreamReader(FileInputStream(file), FileUtils.charset(file)))
+        scriptEngine = compiledScript.engine
+        magicFunction()
+    }
+
+    constructor(script: String){
+        compiledScript = nashornHooker.compile(script)
+        scriptEngine = compiledScript.engine
+        magicFunction()
+    }
 
     /**
      * 执行脚本中的指定函数
@@ -36,8 +48,10 @@ class CompiledScript(file: File) {
         return nashornHooker.invoke(this, function, map, *args)
     }
 
-    init {
-        // 此段代码用于解决js脚本的高并发调用问题, 只可意会不可言传
+    /**
+     * 此段代码用于解决js脚本的高并发调用问题, 只可意会不可言传
+     */
+    private fun magicFunction() {
         compiledScript.eval()
         scriptEngine.eval("""
             function NeigeItemsNumberOne() {}

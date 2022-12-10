@@ -82,6 +82,7 @@ object SectionManager {
         loadParser(CalculationParser)
         loadParser(InheritParser)
         loadParser(JavascriptParser)
+        loadParser(JoinParser)
         loadParser(NumberParser)
         loadParser(StringsParser)
         loadParser(WeightParser)

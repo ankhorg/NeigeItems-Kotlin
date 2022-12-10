@@ -259,6 +259,92 @@ function main() {
     //         return null
     //     }
     // }
+
+    // join节点的js实现, 涉及js脚本的部分性能稍差, 其余部分性能一致
+    // SectionManager.loadParser(new CustomSection(
+    //     "join",
+    //     function(data, cache, player, sections) {
+    //         return joinHandler(cache, player, sections, true, [data.getStringList("list"), data.getString("separator"), data.getString("prefix"), data.getString("postfix"), data.getString("limit"), data.getString("truncated"), data.getString("transform")])
+    //     },
+    //     // join节点不提供即时声明
+    //     function(args, cache, player, sections) {
+    //         return "<join::"+ String.join("_", args) +">"
+    //     }))
+
+    // function joinHandler(cache, player, sections, parse, args) {
+    //     function parse(info) {
+    //         return SectionUtils.parseSection(info, parse, cache, player, sections)
+    //     }
+    //     // 获取待操作列表
+    //     let list = getOrNull(args, 0)
+    //     // 获取分隔符(默认为", ")
+    //     let separator = getOrNull(args, 1) || ", "
+    //     // 获取前缀
+    //     let prefix = getOrNull(args, 2) || ""
+    //     // 获取后缀
+    //     let postfix = getOrNull(args, 3) || ""
+    //     // 获取长度限制
+    //     let limit = getOrNull(args, 4)
+    //     // 获取删节符号
+    //     let truncated = getOrNull(args, 5)
+    //     // 获取操作函数
+    //     let transform = getOrNull(args, 6)
+    //     // 如果待操作列表存在且不为空, 进行后续操作
+    //     if (list != null && list.length != 0) {
+    //         // 解析分隔符
+    //         separator = parse(separator)
+    //         // 解析前缀
+    //         prefix = parse(prefix)
+    //         // 解析后缀
+    //         postfix = parse(postfix)
+    //         // 解析长度限制
+    //         if (limit != null) {
+    //             limit = parseInt(parse(limit))
+    //             if (!isNaN(limit)) {
+    //                 if (limit >= list.length) limit = null
+    //                 if (limit < 0) limit = 0
+    //             }
+    //         }
+    //         // 解析删节符号
+    //         if (truncated != null) {
+    //             truncated = parse(truncated)
+    //         }
+    //         // 尝试构建操作函数
+    //         if (transform != null) {
+    //             transform = new Function("it", "index", "list", "parse", "player", parse(transform))
+    //         }
+    //         // 开始构建结果
+    //         let result = ""
+    //         // 添加前缀
+    //         result += prefix
+    //         // 遍历列表
+    //         const length = limit || list.length
+    //         for (let index = 0; index < length; index++) {
+    //             // 解析元素节点
+    //             let element = parse(list[index])
+    //             // 操作元素
+    //             if (transform != null) {
+    //                 element = transform(element, index, list, parse, player)
+    //             }
+    //             // 添加元素
+    //             result += element
+    //             // 添加分隔符
+    //             if (index != (length - 1) || (limit != null && truncated != null)) {
+    //                 result += separator
+    //             }
+    //         }
+    //         // 添加删节符号
+    //         if (limit != null && truncated != null) {
+    //             result += truncated
+    //         }
+    //         // 添加后缀
+    //         result += postfix
+    //         // 返回结果
+    //         return result
+    //     }
+    //     return null
+    // }
+
 }
 
 function getOrNull(arrayList, index) {
