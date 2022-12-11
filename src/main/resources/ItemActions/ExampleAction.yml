@@ -52,7 +52,7 @@ ExampleItem4:
   all: 
   - "console: say He's name is %player_name%"
   - "command: say My name is %player_name%"
-actionTest:
+ActionTest:
   all: 
   - "console: say 名为test1的NBT的值为: <nbt::test1>"
   - "console: say 名为test2.test3的NBT的值为: <nbt::test2.test3>"
@@ -60,11 +60,11 @@ actionTest:
   - "console: say 名为test4.1的NBT的值为: <nbt::test4.1>"
   - "console: say 名为test的节点的值为: <data::test>"
   - "console: say 随机数尝试: <number::0_10_2>"
-eatTest:
+EatTest1:
   eat:
     - "giveFood: 5"
     - "giveHealth: 5"
-eatTest2:
+EatTest2:
   consume:
     cooldown: 3000
     amount: 1
@@ -72,10 +72,10 @@ eatTest2:
   eat:
     - "giveFood: 5"
     - "giveHealth: 5"
-dropTest:
+DropTest1:
   drop:
     - "castSkill: SkillTest"
-dropTest2:
+DropTest2:
   consume:
     cooldown: 3000
     amount: 1

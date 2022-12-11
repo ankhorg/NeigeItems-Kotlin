@@ -123,13 +123,13 @@ template2:
   material: DIAMOND_SWORD
 
 # 一个全局继承测试, 它继承了"template1"的所有内容
-templateItem1:
+TemplateItem1:
   inherit: template1
   name: §f物品继承测试
   sections:
     damage: 100
 # 一个部分继承测试, 它继承了"template1"的lore, 以及"template2"的material
-templateItem2:
+TemplateItem2:
   inherit: 
     lore: template1
     material: template2
@@ -137,7 +137,7 @@ templateItem2:
   sections:
     damage: 100
 # 一个顺序继承测试, 它将按顺序进行节点继承. 先继承"template1"的所有内容，再继承"template2"的所有内容
-templateItem3:
+TemplateItem3:
   inherit:
   - template1
   - template2
@@ -145,7 +145,8 @@ templateItem3:
   sections:
     damage: 100'
 
-inheritSectionTest:
+# 继承节点测试
+InheritSectionTest:
   material: STONE
   lore:
   - <templateTest>
@@ -156,7 +157,9 @@ inheritSectionTest:
     inheritTest:
       type: inherit
       template: templateTest
-actionTest:
+
+# 物品动作测试
+ActionTest:
   material: STONE
   name: <test>
   nbt:
@@ -168,7 +171,9 @@ actionTest:
     - "999"
   sections:
     test: "yeah"
-customSection:
+
+# 自定义节点测试
+CustomSection:
   material: STONE
   lore:
     - '自定义节点测试: <test-1>'
@@ -181,19 +186,25 @@ customSection:
         - test
         - test
         - test
-eatTest:
+
+# 物品动作Eat触发器测试
+EatTest1:
   material: APPLE
-eatTest2:
+EatTest2:
   material: APPLE
   options:
     charge: 10
-dropTest:
+
+# 物品动作Drop触发器测试
+DropTest1:
   material: STONE
-dropTest2:
+DropTest2:
   material: STONE
   options:
     charge: 3
-ownerTest:
+
+# Owner功能测试
+OwnerTest:
   material: STONE
   name: 你捡我啊
   options:
@@ -202,16 +213,22 @@ ownerTest:
     # 首次拾取后将不再有掉落物归属效果
     # 服务器重启后效果重置(掉了, 关服了, 再次开服, 谁都能捡)
     owner: Neige
+
+# 自定义动作测试
 CustomAction:
   material: STONE
-itemTimeTest:
+
+# 物品时限测试
+ItemTimeTest:
   material: STONE
   name: 限时物品-到期时间-<js::ItemTime.js::main_<itemtime>>
   options:
     itemtime: <itemtime>
   sections:
     itemtime: 60
-Join1:
+
+# join节点测试
+JoinTest1:
   material: STONE
   lore:
     # 结果: 1, 2, 3, 4, 5
@@ -226,7 +243,7 @@ Join1:
         - 3
         - 4
         - 5
-Join2:
+JoinTest2:
   material: STONE
   lore:
     # 结果: 1-2-3-4-5
@@ -242,7 +259,7 @@ Join2:
         - 5
       # 分隔符(默认为", )
       separator: "-"
-Join3:
+JoinTest3:
   material: STONE
   lore:
     # 结果: <1, 2, 3, 4, 5>
@@ -260,7 +277,7 @@ Join3:
       prefix: "<"
       # 后缀
       postfix: ">"
-Join4:
+JoinTest4:
   material: STONE
   lore:
     # 结果: 1, 2, 3
@@ -276,7 +293,7 @@ Join4:
         - 5
       # 限制长度
       limit: 3
-Join5:
+JoinTest5:
   material: STONE
   lore:
     # 结果: 1, 2, 3, ...
@@ -293,7 +310,7 @@ Join5:
       limit: 3
       # 超过长度的部分用该符号代替
       truncated: "..."
-Join6:
+JoinTest6:
   material: STONE
   lore:
     # 结果: 2, 3, 4, 5, 6
@@ -316,7 +333,7 @@ Join6:
       transform: |-
         // 尝试将当前元素转换为整数, 并加一, 然后保留整数
         return (parseInt(this.it) + 1).toFixed(0)
-Join7:
+JoinTest7:
   material: STONE
   lore:
     # 等同于:
