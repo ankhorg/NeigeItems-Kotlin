@@ -357,3 +357,24 @@ JoinTest7:
       separator: "\\n"
       prefix: '"'
       postfix: '"'
+GaussianTest:
+  material: STONE
+  lore:
+    - '随机数: <test>'
+    # <gaussian::基础数值_浮动单位_浮动范围上限_取整位数(默认为1, 可省略)_数值下限(可省略)_数值上限(可省略)>
+    - '随机数: <gaussian::100_0.1_0.5_1>'
+  sections:
+    test:
+      type: gaussian
+      # 基础数值
+      base: 100
+      # 浮动单位
+      spread: 0.1
+      # 浮动范围上限
+      maxSpread: 0.5
+      # 取整位数(默认为1)
+      fixed: 1
+      # 数值下限
+      min: 0
+      # 数值上限
+      max: 10000

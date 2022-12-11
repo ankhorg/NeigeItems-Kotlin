@@ -80,6 +80,7 @@ object SectionManager {
      */
     private fun loadBasicParser() {
         loadParser(CalculationParser)
+        loadParser(GaussianParser)
         loadParser(InheritParser)
         loadParser(JavascriptParser)
         loadParser(JoinParser)

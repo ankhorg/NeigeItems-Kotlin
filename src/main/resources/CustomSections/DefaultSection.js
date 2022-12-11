@@ -345,6 +345,69 @@ function main() {
     //     return null
     // }
 
+    // gaussian节点的js实现, 性能稍差(20%左右)
+    // SectionManager.loadParser(new CustomSection(
+    //     "gaussian",
+    //     function(data, cache, player, sections) {
+    //         return gaussianHandler(cache, player, sections, true, [data.getString("base"), data.getString("spread"), data.getString("maxSpread"), data.getString("fixed"), data.getString("min"), data.getString("max")])
+    //     },
+    //     function(args, cache, player, sections) {
+    //         return gaussianHandler(cache, player, sections, false, args) || "<gaussian::"+ String.join("_", args) +">"
+    //     }))
+
+    // function gaussianHandler(cache, player, sections, parse, args) {
+    //     // 基础数值
+    //     let base = getOrNull(args, 0)
+    //     // 浮动单位
+    //     let spread = getOrNull(args, 1)
+    //     // 浮动范围上限
+    //     let maxSpread = getOrNull(args, 2)
+    //     if (base != null && spread != null && maxSpread != null) {
+    //         // 节点解析
+    //         base = parseFloat(SectionUtils.parseSection(base, parse, cache, player, sections))
+    //         spread = parseFloat(SectionUtils.parseSection(spread, parse, cache, player, sections))
+    //         maxSpread = parseFloat(SectionUtils.parseSection(maxSpread, parse, cache, player, sections))
+    //         // 获取取整位数(若未指定取整位数, 默认取1)
+    //         let fixed = getOrNull(args, 3)
+    //         if (fixed != null) {
+    //             fixed = parseInt(SectionUtils.parseSection(fixed, parse, cache, player, sections))
+    //         } else {
+    //             fixed = 1
+    //         }
+    //         // 数值下限
+    //         let min = getOrNull(args, 4)
+    //         if (min != null) {
+    //             min = parseFloat(SectionUtils.parseSection(min, parse, cache, player, sections))
+    //         }
+    //         // 数值上限
+    //         let max = getOrNull(args, 5)
+    //         if (max != null) {
+    //             max = parseFloat(SectionUtils.parseSection(max, parse, cache, player, sections))
+    //         }
+    //         // 检测是否为数值
+    //         if (!isNaN(base) && !isNaN(spread) && !isNaN(maxSpread)) {
+    //             // 根据正态分布进行范围随机
+    //             let random = RANDOM.nextGaussian()*spread
+    //             // 限制随机范围下限
+    //             random = Math.max(-maxSpread, random)
+    //             // 限制随机范围上限
+    //             random = Math.min(maxSpread, random)
+    //             // 获取结果(基础数值+基础数值*浮动范围)
+    //             random = base*(1 + random)
+    //             // 限制数值下限
+    //             if (min != null && !isNaN(min)) {
+    //                 random = Math.max(random, min)
+    //             }
+    //             // 限制数值上限
+    //             if (max != null && !isNaN(max)) {
+    //                 random = Math.min(random, max)
+    //             }
+    //             // 返回结果(基础数值+基础数值*浮动范围)
+    //             return random.toFixed(fixed)
+    //         }
+    //     }
+    //     return null
+    // }
 }
 
 function getOrNull(arrayList, index) {
