@@ -152,8 +152,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         configString = configSection
             .saveToString(id)
             .parseSection(cache, player, sections)
-            .replace("\\<", "<")
-            .replace("\\>", ">")
+//            .replace("\\<", "<")
+//            .replace("\\>", ">")
         player?.let { configString = papi(player, configString) }
         if (config.getBoolean("Main.Debug")) print(configString)
         configSection = configString.loadFromString(id) ?: YamlConfiguration()

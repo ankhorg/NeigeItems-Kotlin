@@ -138,32 +138,35 @@ object SectionUtils {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        when (val index = this.indexOf("::")) {
+        val string = this
+            .replace("\\<", "<")
+            .replace("\\>", ">")
+        when (val index = string.indexOf("::")) {
             // 私有节点调用
             -1 -> {
                 // 尝试读取缓存
-                if (cache?.get(this) != null) {
+                if (cache?.get(string) != null) {
                     // 直接返回对应节点值
-                    return cache[this] as String
+                    return cache[string] as String
                 // 读取失败, 尝试主动解析
                 } else {
                     // 尝试解析并返回对应节点值
-                    if (sections != null && sections.contains(this)) {
+                    if (sections != null && sections.contains(string)) {
                         // 获取节点ConfigurationSection
-                        val section = sections.getConfigurationSection(this)
+                        val section = sections.getConfigurationSection(string)
                         // 简单节点
                         if (section == null) {
-                            val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
-                            cache?.put(this, result)
+                            val result = sections.getString(string)?.parseSection(cache, player, sections) ?: "<$string>"
+                            cache?.put(string, result)
                             return result
                         }
                         // 加载节点
-                        return Section(section, this).load(cache, player, sections) ?: "<$this>"
+                        return Section(section, string).load(cache, player, sections) ?: "<$string>"
                     }
-                    if (this.startsWith("#")) {
+                    if (string.startsWith("#")) {
                         try {
                             try {
-                                val hex = (this.substring(1).toIntOrNull(16) ?: 0)
+                                val hex = (string.substring(1).toIntOrNull(16) ?: 0)
                                     .coerceAtLeast(0)
                                     .coerceAtMost(0xFFFFFF)
                                 val color = Color(hex)
@@ -174,15 +177,15 @@ object SectionUtils {
                         }
                     }
                 }
-                return "<$this>"
+                return "<$string>"
             }
             // 即时声明节点解析
             else -> {
                 // 获取节点类型
-                val type = this.substring(0, index)
+                val type = string.substring(0, index)
                 // 获取参数
-                val args = this.substring(index+2).split("_")
-                return SectionManager.sectionParsers[type]?.onRequest(args, cache, player, sections) ?: "<$this>"
+                val args = string.substring(index+2).split("_")
+                return SectionManager.sectionParsers[type]?.onRequest(args, cache, player, sections) ?: "<$string>"
             }
         }
     }
