@@ -278,12 +278,11 @@ object SectionUtils {
     private fun load(string: String, start: ArrayList<Int>, end: ArrayList<Int>) {
         val stack = LinkedList<Int>()
         string.forEachIndexed { index, char ->
-            // 如果是待识别的左括号
-            if (char == '<' && (string[0.coerceAtLeast(index - 1)] != '\\')) {
+            if (char == '<' && string[0.coerceAtLeast(index - 1)] != '\\') {
                 // 压栈
                 stack.push(index)
                 // 如果是右括号
-            } else if (char == '>' && string[(string.length-1).coerceAtMost(index + 1)] != '\\') {
+            } else if (char == '>' && string[0.coerceAtLeast(index - 1)] != '\\') {
                 // 前面有左括号了
                 if (!stack.isEmpty()) {
                     // 还不止一个
