@@ -74,7 +74,7 @@ object Command {
                         repeat(argument.toIntOrNull() ?: 1) {
                             getItemStack(context.argument(-1), sender)
                         }
-                        println("耗时: ${System.currentTimeMillis() - time}ms")
+                        sender.sendMessage("耗时: ${System.currentTimeMillis() - time}ms")
                     }
                 }
             }

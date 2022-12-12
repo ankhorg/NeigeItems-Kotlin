@@ -363,7 +363,7 @@ object ActionManager {
                 }
             }
             // 消耗检测完毕, 检测不消耗情况
-            if ((leftAction && !left) || (rightAction && !right) || (allAction && !all)) {
+            if ((leftAction && !left && itemAction.left != null) || (rightAction && !right && itemAction.right != null) || (allAction && !all && itemAction.all != null)) {
                 // 取消交互事件
                 event.isCancelled = true
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {

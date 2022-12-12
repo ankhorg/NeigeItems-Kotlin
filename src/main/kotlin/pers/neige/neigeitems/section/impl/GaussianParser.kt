@@ -4,14 +4,14 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.collections.HashMap
 
 /**
  * gaussian节点解析器
  */
 object GaussianParser : SectionParser() {
-    private val RANDOM = Random()
+    private val RANDOM = ThreadLocalRandom.current()
 
     override val id: String = "gaussian"
 
