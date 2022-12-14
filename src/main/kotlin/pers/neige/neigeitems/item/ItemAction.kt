@@ -34,9 +34,19 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
     val left = config.get("left")
 
     /**
+     * 获取使用物品左键交互后同步触发的物品动作, 不存在则返回null
+     */
+    val leftSync = config.get("leftSync")
+
+    /**
      * 获取使用物品右键交互触发的物品动作, 不存在则返回null
      */
     val right = config.get("right")
+
+    /**
+     * 获取使用物品右键交互后同步触发的物品动作, 不存在则返回null
+     */
+    val rightSync = config.get("rightSync")
 
     /**
      * 获取使用物品左键或右键交互触发的物品动作, 不存在则返回null
@@ -44,9 +54,29 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
     val all = config.get("all")
 
     /**
+     * 获取使用物品左键或右键交互后同步触发的物品动作, 不存在则返回null
+     */
+    val allSync = config.get("allSync")
+
+    /**
+     * 该物品是否有点击触发的物品动作
+     */
+    val hasClickAction = (left != null || leftSync != null || right != null || rightSync != null || all != null || allSync != null)
+
+    /**
      * 获取食用或饮用物品触发的物品动作, 不存在则返回null
      */
     val eat = config.get("eat")
+
+    /**
+     * 获取食用或饮用物品后同步触发的物品动作, 不存在则返回null
+     */
+    val eatSync = config.get("eatSync")
+
+    /**
+     * 该物品是否有食用触发的物品动作
+     */
+    val hasEatAction = (eat != null || eatSync != null)
 
     /**
      * 获取丢弃物品触发的物品动作, 不存在则返回null
@@ -54,9 +84,29 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
     val drop = config.get("drop")
 
     /**
+     * 获取丢弃物品后同步触发的物品动作, 不存在则返回null
+     */
+    val dropSync = config.get("dropSync")
+
+    /**
+     * 该物品是否有丢弃触发的物品动作
+     */
+    val hasDropAction = (drop != null || dropSync != null)
+
+    /**
      * 获取捡起物品触发的物品动作, 不存在则返回null
      */
     val pick = config.get("pick")
+
+    /**
+     * 获取捡起物品后同步触发的物品动作, 不存在则返回null
+     */
+    val pickSync = config.get("pickSync")
+
+    /**
+     * 该物品是否有拾取触发的物品动作
+     */
+    val hasPickAction = (pick != null || pickSync != null)
 
     /**
      * 运行某个动作

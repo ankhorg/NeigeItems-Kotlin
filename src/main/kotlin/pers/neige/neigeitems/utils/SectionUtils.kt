@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
+import pers.neige.neigeitems.utils.SectionUtils.getSection
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.ItemTagType
@@ -230,13 +231,16 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.getItemSection(itemTag: ItemTag, player: OfflinePlayer): String {
-        when (val index = this.indexOf("::")) {
+        val string = this
+            .replace("\\<", "<")
+            .replace("\\>", ">")
+        when (val index = string.indexOf("::")) {
             -1 -> {
-                return "<$this>"
+                return "<$string>"
             }
             else -> {
-                val name = this.substring(0, index)
-                val args = this.substring(index + 2)
+                val name = string.substring(0, index)
+                val args = string.substring(index + 2)
                 return when (name.lowercase(Locale.getDefault())) {
                     "nbt" -> {
                         var value: ItemTagData = itemTag
@@ -248,12 +252,12 @@ object SectionUtils {
                                     key.toIntOrNull()?.let { index ->
                                         val list = value.asList()
                                         if (list.size > index) {
-                                            value.asList()[index.coerceAtLeast(0)].also { value = it } ?: let { value = ItemTagData("<$this>") }
-                                        } else { value = ItemTagData("<$this>") }
-                                    } ?: let { value = ItemTagData("<$this>") }
+                                            value.asList()[index.coerceAtLeast(0)].also { value = it } ?: let { value = ItemTagData("<$string>") }
+                                        } else { value = ItemTagData("<$string>") }
+                                    } ?: let { value = ItemTagData("<$string>") }
                                 }
-                                ItemTagType.COMPOUND -> value.asCompound()[key]?.also { value = it } ?: let { value = ItemTagData("<$this>") }
-                                else -> let { value = ItemTagData("<$this>") }
+                                ItemTagType.COMPOUND -> value.asCompound()[key]?.also { value = it } ?: let { value = ItemTagData("<$string>") }
+                                else -> let { value = ItemTagData("<$string>") }
                             }
                         }
 
@@ -261,10 +265,10 @@ object SectionUtils {
                     }
                     "data" -> {
                         val data = itemTag["NeigeItems"]?.asCompound()?.get("data")?.asString()
-                        data?.parseObject<HashMap<String, String>>()?.get(args) ?: "<$this>"
+                        data?.parseObject<HashMap<String, String>>()?.get(args) ?: "<$string>"
                     }
                     else -> {
-                        return SectionManager.sectionParsers[name]?.onRequest(args.split("_"), null, player) ?: "<$this>"
+                        return SectionManager.sectionParsers[name]?.onRequest(args.split("_"), null, player) ?: "<$string>"
                     }
                 }
             }
