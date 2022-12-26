@@ -7,12 +7,6 @@ import java.io.FileInputStream
 import java.io.InputStreamReader
 import javax.script.ScriptEngine
 
-/**
- * 编译js脚本并进行包装, 便于调用其中的指定函数
- *
- * @property file js脚本文件
- * @constructor 编译js脚本并进行包装
- */
 class CompiledScript {
     /**
      * 获取已编译脚本
@@ -24,12 +18,24 @@ class CompiledScript {
      */
     val scriptEngine: ScriptEngine
 
+    /**
+     * 编译js脚本并进行包装, 便于调用其中的指定函数
+     *
+     * @property file js脚本文件
+     * @constructor 编译js脚本并进行包装
+     * */
     constructor(file: File){
         compiledScript = nashornHooker.compile(InputStreamReader(FileInputStream(file), FileUtils.charset(file)))
         scriptEngine = compiledScript.engine
         magicFunction()
     }
 
+    /**
+     * 编译js脚本并进行包装, 便于调用其中的指定函数
+     *
+     * @property script js脚本文本
+     * @constructor 编译js脚本并进行包装
+     * */
     constructor(script: String){
         compiledScript = nashornHooker.compile(script)
         scriptEngine = compiledScript.engine

@@ -63,11 +63,11 @@ object Command {
 
     @CommandBody
     val test = subCommand {
-        dynamic(commit = "item") {
+        dynamic {
             suggestion<Player>(uncheck = true) { _, _ ->
                 ItemManager.items.keys.toList()
             }
-            dynamic(optional = true, commit = "amount") {
+            dynamic(optional = true) {
                 execute<Player> { sender, context, argument ->
                     submit(async = true) {
                         val time = System.currentTimeMillis()
@@ -88,7 +88,7 @@ object Command {
                 help(sender)
             }
         }
-        dynamic(commit = "player") {
+        dynamic {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 Bukkit.getOnlinePlayers().map { it.name }
             }
@@ -97,7 +97,7 @@ object Command {
                     help(sender)
                 }
             }
-            dynamic(commit = "action") {
+            dynamic {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                     arrayListOf("action")
                 }
@@ -117,7 +117,7 @@ object Command {
         execute<CommandSender> { sender, _, _, ->
             listCommandAsync(sender, 1)
         }
-        dynamic(commit = "page") {
+        dynamic {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 (1..ceil(ItemManager.itemAmount.toDouble()/config.getDouble("ItemList.ItemAmount")).toInt()).toList().map { it.toString() }
             }
@@ -136,7 +136,7 @@ object Command {
             }
         }
         // ni get [物品ID]
-        dynamic(commit = "item") {
+        dynamic {
             suggestion<Player>(uncheck = true) { _, _ ->
                 ItemManager.items.keys.toList()
             }
@@ -144,7 +144,7 @@ object Command {
                 giveCommandAsync(sender, sender, argument, "1")
             }
             // ni get [物品ID] (数量)
-            dynamic(optional = true, commit = "amount") {
+            dynamic(optional = true) {
                 suggestion<Player>(uncheck = true) { _, _ ->
                     arrayListOf("amount")
                 }
@@ -152,7 +152,7 @@ object Command {
                     giveCommandAsync(sender, sender, context.argument(-1), argument)
                 }
                 // ni get [物品ID] (数量) (是否反复随机)
-                dynamic(optional = true, commit = "random") {
+                dynamic(optional = true) {
                     suggestion<Player>(uncheck = true) { _, _ ->
                         arrayListOf("true", "false")
                     }
@@ -160,7 +160,7 @@ object Command {
                         giveCommandAsync(sender, sender, context.argument(-2), context.argument(-1), argument)
                     }
                     // ni get [物品ID] (数量) (是否反复随机) (指向数据)
-                    dynamic(optional = true, commit = "data") {
+                    dynamic(optional = true) {
                         suggestion<Player>(uncheck = true) { _, _ ->
                             arrayListOf("data")
                         }
@@ -181,7 +181,7 @@ object Command {
                 help(sender)
             }
         }
-        dynamic(commit = "player") {
+        dynamic {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 Bukkit.getOnlinePlayers().map { it.name }
             }
@@ -191,7 +191,7 @@ object Command {
                 }
             }
             // ni give [玩家ID] [物品ID]
-            dynamic(commit = "item") {
+            dynamic {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                     ItemManager.items.keys.toList()
                 }
@@ -199,7 +199,7 @@ object Command {
                     giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-1)), argument, "1")
                 }
                 // ni give [玩家ID] [物品ID] (数量)
-                dynamic(optional = true, commit = "amount") {
+                dynamic(optional = true) {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                         arrayListOf("amount")
                     }
@@ -207,7 +207,7 @@ object Command {
                         giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-2)), context.argument(-1), argument)
                     }
                     // ni give [玩家ID] [物品ID] (数量) (是否反复随机)
-                    dynamic(optional = true, commit = "random") {
+                    dynamic(optional = true) {
                         suggestion<CommandSender>(uncheck = true) { _, _ ->
                             arrayListOf("true", "false")
                         }
@@ -215,7 +215,7 @@ object Command {
                             giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-3)), context.argument(-2), context.argument(-1), argument)
                         }
                         // ni give [玩家ID] [物品ID] (数量) (是否反复随机) (指向数据)
-                        dynamic(optional = true, commit = "data") {
+                        dynamic(optional = true) {
                             suggestion<CommandSender>(uncheck = true) { _, _ ->
                                 arrayListOf("data")
                             }
@@ -237,7 +237,7 @@ object Command {
                 help(sender)
             }
         }
-        dynamic(commit = "player") {
+        dynamic {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 Bukkit.getOnlinePlayers().map { it.name }
             }
@@ -247,7 +247,7 @@ object Command {
                 }
             }
             // ni givePack [玩家ID] [物品包ID]
-            dynamic(commit = "item") {
+            dynamic {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                     ItemPackManager.itemPackIds
                 }
@@ -255,7 +255,7 @@ object Command {
                     givePackCommandAsync(sender, context.argument(-1), argument, "1")
                 }
                 // ni givePack [玩家ID] [物品包ID] (数量)
-                dynamic(optional = true, commit = "amount") {
+                dynamic(optional = true) {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                         arrayListOf("amount")
                     }
@@ -276,7 +276,7 @@ object Command {
             }
         }
         // ni giveAll [物品ID]
-        dynamic(commit = "item") {
+        dynamic {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 ItemManager.items.keys.toList()
             }
@@ -284,7 +284,7 @@ object Command {
                 giveAllCommandAsync(sender, argument, "1")
             }
             // ni giveAll [物品ID] (数量)
-            dynamic(optional = true, commit = "amount") {
+            dynamic(optional = true) {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                     arrayListOf("amount")
                 }
@@ -292,7 +292,7 @@ object Command {
                     giveAllCommandAsync(sender, context.argument(-1), argument)
                 }
                 // ni giveAll [物品ID] (数量) (是否反复随机)
-                dynamic(optional = true, commit = "random") {
+                dynamic(optional = true) {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                         arrayListOf("true", "false")
                     }
@@ -300,7 +300,7 @@ object Command {
                         giveAllCommandAsync(sender, context.argument(-2), context.argument(-1), argument)
                     }
                     // ni giveAll [物品ID] (数量) (是否反复随机) (指向数据)
-                    dynamic(optional = true, commit = "data") {
+                    dynamic(optional = true) {
                         suggestion<CommandSender>(uncheck = true) { _, _ ->
                             arrayListOf("data")
                         }
@@ -317,7 +317,7 @@ object Command {
     // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机] [物品解析对象] (指向数据) > 于指定位置掉落NI物品
     val drop = subCommand {
         // ni drop [物品ID]
-        dynamic(commit = "item") {
+        dynamic {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 ItemManager.items.keys.toList()
             }
@@ -327,7 +327,7 @@ object Command {
                 }
             }
             // ni drop [物品ID] [数量]
-            dynamic(commit = "amount") {
+            dynamic {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                     arrayListOf("amount")
                 }
@@ -337,7 +337,7 @@ object Command {
                     }
                 }
                 // ni drop [物品ID] [数量] [世界名]
-                dynamic(commit = "world") {
+                dynamic {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                         Bukkit.getWorlds().map { it.name }
                     }
@@ -347,7 +347,7 @@ object Command {
                         }
                     }
                     // ni drop [物品ID] [数量] [世界名] [X坐标]
-                    dynamic(commit = "x") {
+                    dynamic {
                         suggestion<CommandSender>(uncheck = true) { _, _ ->
                             arrayListOf("x")
                         }
@@ -357,7 +357,7 @@ object Command {
                             }
                         }
                         // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标]
-                        dynamic(commit = "y") {
+                        dynamic {
                             suggestion<CommandSender>(uncheck = true) { _, _ ->
                                 arrayListOf("y")
                             }
@@ -367,7 +367,7 @@ object Command {
                                 }
                             }
                             // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标]
-                            dynamic(commit = "z") {
+                            dynamic {
                                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                                     arrayListOf("z")
                                 }
@@ -377,7 +377,7 @@ object Command {
                                     }
                                 }
                                 // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机]
-                                dynamic(commit = "random") {
+                                dynamic {
                                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                                         arrayListOf("true", "false")
                                     }
@@ -387,7 +387,7 @@ object Command {
                                         }
                                     }
                                     // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机] [物品解析对象]
-                                    dynamic(commit = "player") {
+                                    dynamic {
                                         suggestion<CommandSender>(uncheck = true) { _, _ ->
                                             Bukkit.getOnlinePlayers().map { it.name }
                                         }
@@ -395,7 +395,7 @@ object Command {
                                             dropCommandAsync(sender, context.argument(-7), context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument)
                                         }
                                         // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机] [物品解析对象] (指向数据)
-                                        dynamic(optional = true, commit = "data") {
+                                        dynamic(optional = true) {
                                             suggestion<CommandSender>(uncheck = true) { _, _ ->
                                                 arrayListOf("data")
                                             }
@@ -417,7 +417,7 @@ object Command {
     // ni dropPack [物品包ID] (数量) [世界名] [X坐标] [Y坐标] [Z坐标] (物品解析对象) > 于指定位置掉落NI物品包
     val dropPack = subCommand {
         // ni dropPack [物品包ID]
-        dynamic(commit = "item") {
+        dynamic {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 ItemPackManager.itemPackIds
             }
@@ -427,7 +427,7 @@ object Command {
                 }
             }
             // ni dropPack [物品包ID] [数量]
-            dynamic(commit = "amount") {
+            dynamic {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                     arrayListOf("amount")
                 }
@@ -437,7 +437,7 @@ object Command {
                     }
                 }
                 // ni dropPack [物品包ID] [数量] [世界名]
-                dynamic(commit = "world") {
+                dynamic {
                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                         Bukkit.getWorlds().map { it.name }
                     }
@@ -447,7 +447,7 @@ object Command {
                         }
                     }
                     // ni dropPack [物品包ID] [数量] [世界名] [X坐标]
-                    dynamic(commit = "x") {
+                    dynamic {
                         suggestion<CommandSender>(uncheck = true) { _, _ ->
                             arrayListOf("x")
                         }
@@ -457,7 +457,7 @@ object Command {
                             }
                         }
                         // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标]
-                        dynamic(commit = "y") {
+                        dynamic {
                             suggestion<CommandSender>(uncheck = true) { _, _ ->
                                 arrayListOf("y")
                             }
@@ -467,7 +467,7 @@ object Command {
                                 }
                             }
                             // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标]
-                            dynamic(commit = "z") {
+                            dynamic {
                                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                                     arrayListOf("z")
                                 }
@@ -477,7 +477,7 @@ object Command {
                                     }
                                 }
                                 // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象]
-                                dynamic(commit = "random") {
+                                dynamic {
                                     suggestion<CommandSender>(uncheck = true) { _, _ ->
                                         Bukkit.getOnlinePlayers().map { it.name }
                                     }
@@ -502,7 +502,7 @@ object Command {
             }
         }
         // ni save [物品ID]
-        dynamic(commit = "id") {
+        dynamic {
             suggestion<Player>(uncheck = true) { _, _ ->
                 arrayListOf("id")
             }
@@ -524,7 +524,7 @@ object Command {
                 }
             }
             // ni save [物品ID] (保存路径)
-            dynamic(commit = "path") {
+            dynamic {
                 suggestion<Player>(uncheck = true) { _, _ ->
                     ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
                 }
@@ -558,7 +558,7 @@ object Command {
             }
         }
         // ni cover [物品ID]
-        dynamic(commit = "id") {
+        dynamic {
             suggestion<Player>(uncheck = true) { _, _ ->
                 arrayListOf("id")
             }
@@ -578,7 +578,7 @@ object Command {
                 }
             }
             // ni cover [物品ID] (保存路径)
-            dynamic(commit = "path") {
+            dynamic {
                 suggestion<Player>(uncheck = true) { _, _ ->
                     ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
                 }
@@ -603,7 +603,7 @@ object Command {
 
     @CommandBody
     val mm = subCommand {
-        dynamic(commit = "action") {
+        dynamic {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 arrayListOf("load", "cover", "loadAll", "get", "give", "giveAll")
             }
@@ -634,7 +634,7 @@ object Command {
                     } ?: sender.sendMessage(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
                 }
             }
-            dynamic(commit = "action") {
+            dynamic {
                 suggestion<CommandSender>(uncheck = true) { _, context ->
                     mythicMobsHooker?.let {
                         when (context.argument(-1)) {
@@ -731,7 +731,7 @@ object Command {
                         } ?: sender.sendMessage(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
                     }
                 }
-                dynamic(commit = "action") {
+                dynamic {
                     suggestion<CommandSender>(uncheck = true) { _, context ->
                         mythicMobsHooker?.let {
                             when (context.argument(-2)) {
@@ -812,7 +812,7 @@ object Command {
                             } ?: sender.sendMessage(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
                         }
                     }
-                    dynamic(commit = "action") {
+                    dynamic {
                         suggestion<CommandSender>(uncheck = true) { _, context ->
                             mythicMobsHooker?.let {
                                 when (context.argument(-3)) {
@@ -853,7 +853,7 @@ object Command {
         execute<CommandSender> { sender, _, _ ->
             help(sender)
         }
-        dynamic(commit = "page") {
+        dynamic {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 (1..commandsPages).toList().map { it.toString() }
             }
