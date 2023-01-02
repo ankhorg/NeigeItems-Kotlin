@@ -4,6 +4,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.utils.ConfigUtils.saveResourceNotWarn
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
@@ -30,15 +31,15 @@ object ConfigManager {
      */
     @Awake(LifeCycle.INIT)
     fun saveResource() {
-        plugin.saveResource("CustomActions${File.separator}CustomAction.js", false)
-        plugin.saveResource("CustomSections${File.separator}CustomSection.js", false)
-        plugin.saveResource("CustomSections${File.separator}DefaultSection.js", false)
-        plugin.saveResource("GlobalSections${File.separator}ExampleSection.yml", false)
-        plugin.saveResource("ItemActions${File.separator}ExampleAction.yml", false)
-        plugin.saveResource("ItemPacks${File.separator}ExampleItemPack.yml", false)
-        plugin.saveResource("Items${File.separator}ExampleItem.yml", false)
-        plugin.saveResource("Scripts${File.separator}ExampleScript.js", false)
-        plugin.saveResource("Scripts${File.separator}ItemTime.js", false)
+        plugin.saveResourceNotWarn("CustomActions${File.separator}CustomAction.js")
+        plugin.saveResourceNotWarn("CustomSections${File.separator}CustomSection.js")
+        plugin.saveResourceNotWarn("CustomSections${File.separator}DefaultSection.js")
+        plugin.saveResourceNotWarn("GlobalSections${File.separator}ExampleSection.yml")
+        plugin.saveResourceNotWarn("ItemActions${File.separator}ExampleAction.yml")
+        plugin.saveResourceNotWarn("ItemPacks${File.separator}ExampleItemPack.yml")
+        plugin.saveResourceNotWarn("Items${File.separator}ExampleItem.yml")
+        plugin.saveResourceNotWarn("Scripts${File.separator}ExampleScript.js")
+        plugin.saveResourceNotWarn("Scripts${File.separator}ItemTime.js")
         plugin.saveDefaultConfig()
         // 加载bstats
         val metrics = Metrics(15750, plugin.description.version, Platform.BUKKIT)
