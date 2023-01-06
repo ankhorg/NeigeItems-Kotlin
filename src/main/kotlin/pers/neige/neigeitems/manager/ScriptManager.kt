@@ -2,6 +2,8 @@ package pers.neige.neigeitems.manager
 
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import pers.neige.neigeitems.script.CompiledScript
+import pers.neige.neigeitems.section.impl.JoinParser
+import pers.neige.neigeitems.section.impl.RepeatParser
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import java.io.File
 
@@ -20,11 +22,6 @@ object ScriptManager {
      * 获取所有已编译的js脚本文件及路径
      */
     val compiledScripts = HashMap<String, CompiledScript>()
-
-    /**
-     * 获取所有用于join节点的已编译的js脚本文件及文本
-     */
-    val joinScripts = HashMap<String, CompiledScript>()
 
     init {
         // 加载全部脚本
@@ -45,7 +42,8 @@ object ScriptManager {
      */
     fun reload() {
         compiledScripts.clear()
-        joinScripts.clear()
+        JoinParser.compiledScripts.clear()
+        RepeatParser.compiledScripts.clear()
         loadScripts()
     }
 }

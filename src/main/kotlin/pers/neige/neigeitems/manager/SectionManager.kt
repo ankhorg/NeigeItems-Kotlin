@@ -85,9 +85,10 @@ object SectionManager {
         loadParser(JavascriptParser)
         loadParser(JoinParser)
         loadParser(NumberParser)
+        loadParser(PapiParser)
+        loadParser(RepeatParser)
         loadParser(StringsParser)
         loadParser(WeightParser)
-        loadParser(PapiParser)
     }
 
     /**
