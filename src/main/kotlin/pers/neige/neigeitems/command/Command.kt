@@ -1450,9 +1450,10 @@ object Command {
     private fun reloadCommand(sender: CommandSender) {
         submit(async = true) {
             ConfigManager.reload()
-            ItemManager.reload()
-            ScriptManager.reload()
+            // ItemManager初始化的时候会将引用的全局节点写入ItemGenerator, 所以SectionManager应该在ItemManager之前重载
             SectionManager.reload()
+            ScriptManager.reload()
+            ItemManager.reload()
             ItemPackManager.reload()
             ActionManager.reload()
             sender.sendMessage(config.getString("Messages.reloadedMessage"))
