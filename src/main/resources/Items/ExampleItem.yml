@@ -409,7 +409,7 @@ RepeatTest2:
       type: repeat
       content: "|"
       repeat: 20
-      prefix: "&4"
+      prefix: "§4"
       # 对列表中的每个元素进行一定操作
       # this.it代表content
       # this.index代表当前序号(0代表第一个, 1代表第二个, 以此类推)
@@ -417,7 +417,7 @@ RepeatTest2:
       # this.vars(String string)用于解析节点
       transform: |-
         if (this.index == this.vars("<number>")) {
-            return "&f" + this.it
+            return "§f" + this.it
         } else {
             return this.it
         }
