@@ -4,6 +4,7 @@ import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.ItemManager
 import taboolib.common.platform.event.ProxyListener
@@ -42,7 +43,7 @@ abstract class MythicMobsHooker {
      * @param entity 技能释放者
      * @param skill 技能ID
      */
-    abstract fun castSkill(entity: Entity, skill: String)
+    abstract fun castSkill(entity: Entity, skill: String, trigger: Entity? = null)
 
     /**
      * 获取所有MM物品ID

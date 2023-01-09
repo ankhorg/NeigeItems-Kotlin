@@ -207,8 +207,8 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
         }.get()
     }
 
-    override fun castSkill(entity: Entity, skill: String) {
-        apiHelper.castSkill(entity, skill)
+    override fun castSkill(entity: Entity, skill: String, trigger: Entity?) {
+        apiHelper.castSkill(entity, skill, trigger, entity.location, null, null, 1.0F)
     }
 
     override fun getItemIds(): List<String> {
