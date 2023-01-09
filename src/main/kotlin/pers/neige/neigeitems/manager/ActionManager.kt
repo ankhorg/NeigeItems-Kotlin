@@ -388,7 +388,7 @@ object ActionManager {
         }
         // 释放MM技能
         addAction("castSkill") { player, string ->
-            mythicMobsHooker?.castSkill(player, string)
+            mythicMobsHooker?.castSkill(player, string, player)
             true
         }
         // 延迟(单位是tick)

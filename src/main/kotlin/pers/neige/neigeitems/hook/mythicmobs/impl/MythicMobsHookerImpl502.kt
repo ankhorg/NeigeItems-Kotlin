@@ -184,14 +184,14 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
                     // 获取掉落偏移信息
                     val offset = fancyDrop.getConfigurationSection("offset")
                     // 多彩掉落
-                    dropItems(dropItems, entity.location, offset.getString("x"), offset.getString("y"), fancyDrop.getString("angle.type"))
+                    dropItems(dropItems, entity.location, player, offset.getString("x"), offset.getString("y"), fancyDrop.getString("angle.type"))
                 // 如果物品包中含有多彩掉落信息
                 } else if (fancy) {
                     // 多彩掉落
-                    dropItems(dropItems, entity.location, offsetXString, offsetYString, angleType)
+                    dropItems(dropItems, entity.location, player, offsetXString, offsetYString, angleType)
                 } else {
                     // 普通掉落
-                    dropItems(dropItems, entity.location)
+                    dropItems(dropItems, entity.location, player)
                 }
             }
         }

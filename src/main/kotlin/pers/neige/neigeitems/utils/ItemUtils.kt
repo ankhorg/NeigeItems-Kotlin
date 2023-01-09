@@ -3,6 +3,7 @@ package pers.neige.neigeitems.utils
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -216,8 +217,8 @@ object ItemUtils {
      * @param itemStack 待掉落物品
      */
     @JvmStatic
-    fun Location.dropNiItems(itemStack: ItemStack) {
-        this.dropNiItems(itemStack, null)
+    fun Location.dropNiItems(itemStack: ItemStack, entity: Entity? = null) {
+        this.dropNiItems(itemStack, null, entity)
     }
 
     /**
@@ -227,8 +228,8 @@ object ItemUtils {
      * @param amount 掉落数量
      */
     @JvmStatic
-    fun Location.dropNiItems(itemStack: ItemStack, amount: Int?) {
-        itemStack.getItems(amount).forEach { item -> this.dropNiItem(item) }
+    fun Location.dropNiItems(itemStack: ItemStack, amount: Int?, entity: Entity? = null) {
+        itemStack.getItems(amount).forEach { item -> this.dropNiItem(item, entity) }
     }
 
     /**
@@ -242,6 +243,7 @@ object ItemUtils {
     @JvmStatic
     fun Location.dropNiItem(
         itemStack: ItemStack,
+        entity: Entity? = null,
         itemTag: ItemTag = itemStack.getItemTag(),
         neigeItems: ItemTag? = itemTag["NeigeItems"]?.asCompound()
     ): Item? {
@@ -266,7 +268,7 @@ object ItemUtils {
             // 掉落物技能
             neigeItems?.let {
                 neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
-                    mythicMobsHooker?.castSkill(item, dropSkill)
+                    mythicMobsHooker?.castSkill(item, dropSkill, entity)
                 }
             }
             item
@@ -430,6 +432,7 @@ object ItemUtils {
     fun dropItems(
         dropItems: List<ItemStack>,
         location: Location,
+        entity: Entity? = null,
         offsetXString: String? = null,
         offsetYString: String? = null,
         angleType: String? = null
@@ -462,7 +465,7 @@ object ItemUtils {
             // 开始掉落
             for ((index, itemStack) in dropItems.withIndex()) {
                 val itemTag = itemStack.getItemTag()
-                location.dropNiItem(itemStack, itemTag)?.let { item ->
+                location.dropNiItem(itemStack, entity, itemTag)?.let { item ->
                     val vector = Vector(offsetX, offsetY, 0.0)
                     if (angleType == "random") {
                         val angleCos = cos(Math.PI * 2 * Math.random())
@@ -484,7 +487,7 @@ object ItemUtils {
             // 普通掉落
             for (itemStack in dropItems) {
                 val itemTag = itemStack.getItemTag()
-                location.dropNiItem(itemStack, itemTag)
+                location.dropNiItem(itemStack, entity, itemTag)
             }
         }
     }

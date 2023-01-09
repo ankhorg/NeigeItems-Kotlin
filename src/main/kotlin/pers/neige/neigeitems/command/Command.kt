@@ -1227,7 +1227,7 @@ object Command {
                     amount?.let {
                         // 掉物品
                         getItemStack(id, parser, data)?.let { itemStack ->
-                            location?.dropNiItems(itemStack, amount.coerceAtLeast(1))
+                            location?.dropNiItems(itemStack, amount.coerceAtLeast(1), parser)
                             sender.sendMessage(config.getString("Messages.dropSuccessInfo")
                                 ?.replace("{world}", location?.world?.name ?: "")
                                 ?.replace("{x}", location?.x.toString())
@@ -1251,7 +1251,7 @@ object Command {
                         // 掉物品
                         repeat(amount.coerceAtLeast(1)) {
                             getItemStack(id, parser, data)?.let { itemStack ->
-                                location?.dropNiItem(itemStack)
+                                location?.dropNiItem(itemStack, parser)
                                 dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
                                 // 未知物品ID
                             } ?: let {
@@ -1343,9 +1343,9 @@ object Command {
                     loadItems(dropItems, itemPack.items, parser, HashMap<String, String>(), itemPack.sections)
                     location?.let { location ->
                         if (itemPack.fancyDrop) {
-                            dropItems(dropItems, location, itemPack.offsetXString, itemPack.offsetYString, itemPack.angleType)
+                            dropItems(dropItems, location, parser, itemPack.offsetXString, itemPack.offsetYString, itemPack.angleType)
                         } else {
-                            dropItems(dropItems, location)
+                            dropItems(dropItems, location, parser)
                         }
                     }
                 }
