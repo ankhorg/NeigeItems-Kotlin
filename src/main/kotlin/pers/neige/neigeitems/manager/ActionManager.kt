@@ -24,7 +24,6 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.common.platform.function.submit
 import taboolib.module.nms.ItemTag
 import taboolib.platform.util.giveItem
 import java.io.File

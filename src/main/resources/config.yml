@@ -15,7 +15,6 @@ Messages:
   unknownItem: §e[NI] §6找不到ID为 §a{itemID} §6的物品
   unknownItemPack: §e[NI] §6找不到ID为 §a{packID} §6的物品包
   existedKey: §e[NI] §6已存在ID为 §a{itemID} §6的物品
-  invalidPaser: §e[NI] §6不能针对后台解析物品, 请指定一个玩家
   onlyPlayer: §e[NI] §6该指令仅可玩家使用
   successSaveInfo: §e[NI] §6成功将 §f{name} §6以ID §a{itemID} §6保存至 §a{path}
   mmImportSuccessInfo: §e[NI] §6成功将所有MM物品保存至 §a{path}
@@ -49,6 +48,15 @@ Help:
     action:
       command: §e/ni §faction [玩家ID] [动作内容]
       description: 执行NI物品动作
+    edithand:
+      command: §e/ni §fedithand [玩家ID] [物品编辑函数ID] [函数内容]
+      description: 通过对应编辑函数编辑主手物品
+    editoffhand:
+      command: §e/ni §feditoffhand [玩家ID] [物品编辑函数ID] [函数内容]
+      description: 通过对应编辑函数编辑副手物品
+    editslot:
+      command: §e/ni §feditslot [玩家ID] [物品编辑函数ID] [函数内容]
+      description: 通过对应编辑函数编辑对应槽位物品
     list:
       command: §e/ni §flist (页码)
       description: 查看所有NI物品

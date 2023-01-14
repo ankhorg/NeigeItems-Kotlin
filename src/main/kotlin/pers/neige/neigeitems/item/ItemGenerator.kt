@@ -165,7 +165,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 val itemStack = ItemStack(material)
                 // 设置子ID/损伤值
                 if (configSection.contains("damage")) {
-                    itemStack.setDurability(configSection.getInt("damage").toShort())
+                    itemStack.durability = configSection.getInt("damage").toShort()
                 }
                 // 设置物品附魔
                 if (configSection.contains("enchantments")) {

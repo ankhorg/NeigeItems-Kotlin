@@ -5,7 +5,6 @@ import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.script.CompiledScript
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import java.lang.StringBuilder
 import java.util.concurrent.ConcurrentHashMap
 
 /**

@@ -14,6 +14,8 @@ import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.HookerManager.parseItemPlaceholder
 import pers.neige.neigeitems.manager.HookerManager.parseItemPlaceholders
+import pers.neige.neigeitems.manager.ItemEditorManager.editorNames
+import pers.neige.neigeitems.manager.ItemEditorManager.runEditor
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.manager.ItemManager.saveItem
 import pers.neige.neigeitems.manager.ItemPackManager.itemPacks
@@ -30,7 +32,6 @@ import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.chat.TellrawJson
-import taboolib.module.nms.getItemTag
 import taboolib.module.nms.getName
 import taboolib.platform.BukkitAdapter
 import taboolib.platform.util.giveItem
@@ -99,12 +100,141 @@ object Command {
             }
             dynamic {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
-                    arrayListOf("action")
+                    ActionManager.actions.keys.toList().sorted()
                 }
                 execute<CommandSender> { _, context, argument ->
                     submit(async = true) {
                         Bukkit.getPlayerExact(context.argument(-1))?.let { player ->
                             runAction(player, argument.parseSection(player))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @CommandBody
+    val edithand = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
+        dynamic {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                Bukkit.getOnlinePlayers().map { it.name }
+            }
+            execute<CommandSender> { sender, _, _ ->
+                submit(async = true) {
+                    help(sender)
+                }
+            }
+            dynamic {
+                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                    editorNames.sorted()
+                }
+                execute<CommandSender> { sender, _, _ ->
+                    submit(async = true) {
+                        help(sender)
+                    }
+                }
+                dynamic {
+                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                        arrayListOf("content")
+                    }
+                    execute<CommandSender> { _, context, argument ->
+                        Bukkit.getPlayerExact(context.argument(-2))?.let { player ->
+                            runEditor(context.argument(-1), player, player.inventory.itemInMainHand, argument)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @CommandBody
+    val editoffhand = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
+        dynamic {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                Bukkit.getOnlinePlayers().map { it.name }
+            }
+            execute<CommandSender> { sender, _, _ ->
+                submit(async = true) {
+                    help(sender)
+                }
+            }
+            dynamic {
+                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                    editorNames.sorted()
+                }
+                execute<CommandSender> { sender, _, _ ->
+                    submit(async = true) {
+                        help(sender)
+                    }
+                }
+                dynamic {
+                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                        arrayListOf("content")
+                    }
+                    execute<CommandSender> { _, context, argument ->
+                        Bukkit.getPlayerExact(context.argument(-2))?.let { player ->
+                            runEditor(context.argument(-1), player, player.inventory.itemInOffHand, argument)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @CommandBody
+    val editslot = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
+        dynamic {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                Bukkit.getOnlinePlayers().map { it.name }
+            }
+            execute<CommandSender> { sender, _, _ ->
+                submit(async = true) {
+                    help(sender)
+                }
+            }
+            dynamic {
+                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                    arrayListOf("slot")
+                }
+                execute<CommandSender> { sender, _, _ ->
+                    submit(async = true) {
+                        help(sender)
+                    }
+                }
+                dynamic {
+                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                        editorNames.sorted()
+                    }
+                    execute<CommandSender> { sender, _, _ ->
+                        submit(async = true) {
+                            help(sender)
+                        }
+                    }
+                    dynamic {
+                        suggestion<CommandSender>(uncheck = true) { _, _ ->
+                            arrayListOf("content")
+                        }
+                        execute<CommandSender> { _, context, argument ->
+                            Bukkit.getPlayerExact(context.argument(-3))?.let { player ->
+                                player.inventory.getItem(context.argument(-2).toIntOrNull() ?: 0)?.let { itemStack ->
+                                    runEditor(context.argument(-1), player, itemStack, argument)
+                                }
+                            }
                         }
                     }
                 }
@@ -1456,6 +1586,7 @@ object Command {
             ItemManager.reload()
             ItemPackManager.reload()
             ActionManager.reload()
+            ItemEditorManager.reload()
             sender.sendMessage(config.getString("Messages.reloadedMessage"))
         }
     }

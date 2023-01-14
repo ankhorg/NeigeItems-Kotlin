@@ -7,7 +7,6 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
-import pers.neige.neigeitems.utils.SectionUtils.getSection
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.ItemTagType
@@ -185,7 +184,7 @@ object SectionUtils {
                 // 获取节点类型
                 val type = string.substring(0, index)
                 // 获取参数
-                val args = string.substring(index+2).split("_")
+                val args = string.substring(index+2).split("(?<!\\\\)_".toRegex()).map { it.replace("\\_", "_") }
                 return SectionManager.sectionParsers[type]?.onRequest(args, cache, player, sections) ?: "<$string>"
             }
         }

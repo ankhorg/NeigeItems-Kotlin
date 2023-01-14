@@ -4,7 +4,6 @@ import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
-import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.ItemManager
 import taboolib.common.platform.event.ProxyListener

@@ -5,7 +5,6 @@ import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.collections.HashMap
 
 /**
  * gaussian节点解析器

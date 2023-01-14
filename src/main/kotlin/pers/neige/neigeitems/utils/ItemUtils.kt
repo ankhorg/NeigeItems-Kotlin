@@ -13,6 +13,7 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.ItemUtils.toItemTagData
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.*
@@ -100,6 +101,14 @@ object ItemUtils {
             }
             this.startsWith("(Double) ") -> {
                 this.substring(9, this.length).toDoubleOrNull()?.let { ItemTagData(it) } ?: ItemTagData(this)
+            }
+            this.startsWith("[") && this.endsWith("]") -> {
+                val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
+                when {
+                    list.all { it is Byte } -> ByteArray(list.size){ list[it] as Byte }.toItemTagData()
+                    list.all { it is Int } -> IntArray(list.size){ list[it] as Int }.toItemTagData()
+                    else -> ItemTagData(this)
+                }
             }
             else -> ItemTagData(this)
         }
@@ -209,6 +218,254 @@ object ItemUtils {
             }
         }
         return this
+    }
+
+    /**
+     * 向ItemTag中插入一个值(key以.做分隔). 我这代码写得依托答辩, 建议不要用.
+     *
+     * @param key ItemTag键
+     * @param value ItemTag值
+     */
+    @JvmStatic
+    fun ItemTag.putDeepFixed(key: String, value: ItemTagData) {
+        // 父级ItemTag
+        var father: ItemTagData = this
+        // 当前ItemTagData的Id
+        var tempId = ""
+        // 当前ItemTagData
+        var temp: ItemTagData = this
+        // 待获取ItemTag键
+        val args = key.split(".")
+
+        // 逐层深入
+        for (index in 0 until (args.size - 1)) {
+            // 获取下一级Id
+            val node = args[index]
+            // 判断当前ItemTagData类型
+            when (temp.type) {
+                // 是COMPOUND
+                ItemTagType.COMPOUND -> {
+                    // 记录父级ItemTag
+                    father = temp
+                    // 获取下一级, 如果下一级是空的就创建一个新ItemTag()丢进去
+                    temp = temp.asCompound().computeIfAbsent(node) {
+                        ItemTag()
+                    }
+                    // 记录当前ItemTagData的Id
+                    tempId = node
+                }
+                // 其他情况
+                else -> {
+                    // 新建一个ItemTag
+                    val fatherItemTag = ItemTag()
+                    // 覆盖上一层
+                    father.asCompound()[tempId] = fatherItemTag
+                    // 新建当前ItemTagData
+                    val tempItemTag = ItemTag()
+                    // 建立下一级ItemTagData
+                    fatherItemTag[node] = tempItemTag
+                    // 记录父级ItemTag
+                    father = fatherItemTag
+                    // 记录当前ItemTagData
+                    temp = tempItemTag
+                    // 记录当前ItemTagData的Id
+                    tempId = node
+                }
+            }
+        }
+
+        // 已达末级
+        val node = args[args.lastIndex]
+        if (temp.type == ItemTagType.COMPOUND) {
+            // 东西丢进去
+            temp.asCompound()[node] = value
+            // 如果当前ItemTagData是其他类型
+        } else {
+            // 新建一个ItemTag
+            val newItemTag = ItemTag()
+            // 东西丢进去
+            newItemTag[node] = value
+            // 覆盖上一层
+            father.asCompound()[tempId] = newItemTag
+        }
+    }
+
+    /**
+     * 向ItemTag中插入一个值(key以.做分隔, 如果key可以转换成Int, 就认为你当前层级是一个ItemTagList, 而非ItemTag). 我这代码写得依托答辩, 建议不要用.
+     *
+     * @param key ItemTag键
+     * @param value ItemTag值
+     */
+    @JvmStatic
+    fun ItemTag.putDeepWithList(key: String, value: ItemTagData) {
+        // 父级ItemTag
+        var father: ItemTagData = this
+        // 当前ItemTagData的Id
+        var tempId = ""
+        // 当前ItemTagData
+        var temp: ItemTagData = this
+        // 待获取ItemTag键
+        val args = key.split(".")
+
+        // 逐层深入
+        for (index in 0 until (args.size - 1)) {
+            // 获取下一级Id
+            val node = args[index]
+            val nodeIndex = node.toIntOrNull()
+            // 我姑且认为没炸
+            var boom = false
+            let {
+                if (nodeIndex != null) {
+                    // 判断当前ItemTagData类型
+                    when (temp.type) {
+                        // 是LIST
+                        ItemTagType.LIST -> {
+                            val originFather = father
+                            // 记录父级ItemTagList
+                            father = temp
+                            // 获取下一级
+                            val content = temp.asList().getOrNull(nodeIndex)
+                            // 如果下一级有东西
+                            if (content != null) {
+                                // 皆大欢喜
+                                temp = content
+                                // 如果下一级没东西
+                            } else {
+                                // 如果刚好是比list的大小多一个
+                                if (nodeIndex == temp.asList().size) {
+                                    // 创建一个新的ItemTag
+                                    val newItemTag = ItemTag()
+                                    // 丢进去
+                                    temp.asList().add(newItemTag)
+                                    // 记录一下
+                                    temp = newItemTag
+                                    // 如果现在这个index很离谱
+                                } else {
+                                    // 你妈, 爬(变成ItemTag)
+                                    boom = true
+                                    father = originFather
+                                    return@let
+                                }
+                            }
+                            // 记录当前ItemTagData的Id
+                            tempId = node
+                        }
+                        // 其他情况
+                        else -> {
+                            // 其他情况说明需要重新创建一个ItemTagList, 所以nodeIndex必须为0
+                            if (nodeIndex == 0) {
+                                // 新建一个ItemTag
+                                val fatherItemTagList = ItemTagList()
+                                // 覆盖上一层
+                                father.asCompound()[tempId] = fatherItemTagList
+                                // 新建当前ItemTagData
+                                val tempItemTag = ItemTag()
+                                // 建立下一级ItemTagData
+                                fatherItemTagList.add(tempItemTag)
+                                // 记录父级ItemTag
+                                father = fatherItemTagList
+                                // 记录当前ItemTagData
+                                temp = tempItemTag
+                                // 记录当前ItemTagData的Id
+                                tempId = node
+                            } else {
+                                // 你给我爬(变成ItemTag)
+                                boom = true
+                                return@let
+                            }
+                        }
+                    }
+                }
+            }
+            // 如果当前的键不是数字, 或者是数字但是不对劲炸了
+            if (nodeIndex == null || boom) {
+                // 判断当前ItemTagData类型
+                when (temp.type) {
+                    // 是COMPOUND
+                    ItemTagType.COMPOUND -> {
+                        // 记录父级ItemTag
+                        father = temp
+                        // 获取下一级, 如果下一级是空的就创建一个新ItemTag()丢进去
+                        temp = temp.asCompound().computeIfAbsent(node) {
+                            ItemTag()
+                        }
+                        // 记录当前ItemTagData的Id
+                        tempId = node
+                    }
+                    // 其他情况
+                    else -> {
+                        // 新建一个ItemTag
+                        val fatherItemTag = ItemTag()
+                        // 覆盖上一层
+                        father.asCompound()[tempId] = fatherItemTag
+                        // 新建当前ItemTagData
+                        val tempItemTag = ItemTag()
+                        // 建立下一级ItemTagData
+                        fatherItemTag[node] = tempItemTag
+                        // 记录父级ItemTag
+                        father = fatherItemTag
+                        // 记录当前ItemTagData
+                        temp = tempItemTag
+                        // 记录当前ItemTagData的Id
+                        tempId = node
+                    }
+                }
+            }
+        }
+
+        // 已达末级
+        val node = args[args.lastIndex]
+        val nodeIndex = node.toIntOrNull()
+        var boom = false
+        // 我姑且认为没炸
+        let {
+            if (nodeIndex != null) {
+                // ByteArray插入
+                if (temp.type == ItemTagType.BYTE_ARRAY && value.type == ItemTagType.BYTE) {
+                    val byteArray = temp.asByteArray()
+                    if (nodeIndex >= 0 && nodeIndex < byteArray.size) {
+                        byteArray[nodeIndex] = value.asByte()
+                    } else {
+                        return@let
+                    }
+                    // 覆盖上一层
+                    tempId.toIntOrNull()?.let {
+                        father.asList()[it] = ItemTagData(byteArray)
+                    } ?: let {
+                        father.asCompound()[tempId] = ItemTagData(byteArray)
+                    }
+                // IntArray插入
+                } else if (temp.type == ItemTagType.INT_ARRAY && value.type == ItemTagType.INT) {
+                    val intArray = temp.asIntArray()
+                    if (nodeIndex >= 0 && nodeIndex < intArray.size) {
+                        intArray[nodeIndex] = value.asInt()
+                    } else {
+                        return@let
+                    }
+                    // 覆盖上一层
+                    tempId.toIntOrNull()?.let {
+                        father.asList()[it] = ItemTagData(intArray)
+                    } ?: let {
+                        father.asCompound()[tempId] = ItemTagData(intArray)
+                    }
+                }
+            }
+        }
+        // 如果当前的键不是数字, 或者是数字但是不对劲炸了
+        if (nodeIndex == null || boom) {
+            if (temp.type == ItemTagType.COMPOUND) {
+                // 东西丢进去
+                temp.asCompound()[node] = value
+            // 如果当前ItemTagData是其他类型
+            } else {
+                // 新建一个ItemTag
+                val newItemTag = ItemTag()
+                // 东西丢进去
+                newItemTag[node] = value
+                // 覆盖上一层
+                father.asCompound()[tempId] = newItemTag
+            }
+        }
     }
 
     /**

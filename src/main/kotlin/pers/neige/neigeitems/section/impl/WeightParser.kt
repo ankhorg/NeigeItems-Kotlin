@@ -39,7 +39,7 @@ object WeightParser : SectionParser() {
         var total = BigDecimal(0)
         // 加载所有参数并遍历
         values.forEach {
-            val value = it.toString().parseSection(parse, cache, player, sections)
+            val value = it.parseSection(parse, cache, player, sections)
             // 检测权重
             when (val index = value.indexOf("::")) {
                 // 无权重, 直接记录
