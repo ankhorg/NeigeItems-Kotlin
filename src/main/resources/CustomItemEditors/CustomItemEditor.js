@@ -28,7 +28,7 @@ function main() {
                 if (itemMeta != null) {
                     // 获取并设置lore
                     let lore = itemMeta.lore
-                    if (itemMeta == null) lore = new ArrayList()
+                    if (lore == null) lore = new ArrayList()
                     lore.addAll(ChatColor.translateAlternateColorCodes('&', content).split("\\n"))
                     itemMeta.lore = lore
                     // 将改动完成的itemMeta设置回去

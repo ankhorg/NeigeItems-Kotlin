@@ -60,6 +60,7 @@ dependencies {
     compileOnly("io.lumine:Mythic-Dist:5.1.0-SNAPSHOT")
     compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    compileOnly("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
 }
 
 tasks.withType<JavaCompile> {
