@@ -320,6 +320,249 @@ object ItemEditorManager {
             }
             return@addBasicItemEditor false
         }
+        // 正则替换物品显示名(只替换一次)
+        addBasicItemEditor("replaceNameRegex") { _, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Name还替换个头
+                    if (!itemMeta.hasDisplayName()) return@addBasicItemEditor true
+                    // 获取Name
+                    var name = itemMeta.displayName
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 遍历待操作内容
+                    info.forEach { (key, value) ->
+                        var hasReplaced = false
+
+                        name = name.replace(key.toRegex()) { matchResult ->
+                            if (!hasReplaced) {
+                                hasReplaced = true
+                                // 获取所有组值
+                                val groupValues = matchResult.groupValues
+
+                                value.replace("\\$(\\d+)".toRegex()) {
+                                    groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                                }
+                            } else {
+                                matchResult.value
+                            }
+                        }
+                    }
+
+                    // 设置Name
+                    itemMeta.setDisplayName(name)
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品显示名(只替换一次, 解析其中的papi变量)
+        addBasicItemEditor("replaceNameRegexPapi") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Name还替换个头
+                    if (!itemMeta.hasDisplayName()) return@addBasicItemEditor true
+                    // 获取Name
+                    var name = itemMeta.displayName
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 遍历待操作内容
+                    info.forEach { (key, value) ->
+                        var hasReplaced = false
+
+                        name = name.replace(key.toRegex()) { matchResult ->
+                            if (!hasReplaced) {
+                                hasReplaced = true
+                                // 获取所有组值
+                                val groupValues = matchResult.groupValues
+
+                                papi(player, value.replace("\\$(\\d+)".toRegex()) {
+                                    groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                                })
+                            } else {
+                                matchResult.value
+                            }
+                        }
+                    }
+
+                    // 设置Name
+                    itemMeta.setDisplayName(name)
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品显示名(只替换一次, 解析其中的即时声明节点)
+        addBasicItemEditor("replaceNameRegexSection") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Name还替换个头
+                    if (!itemMeta.hasDisplayName()) return@addBasicItemEditor true
+                    // 获取Name
+                    var name = itemMeta.displayName
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 遍历待操作内容
+                    info.forEach { (key, value) ->
+                        var hasReplaced = false
+
+                        name = name.replace(key.toRegex()) { matchResult ->
+                            if (!hasReplaced) {
+                                hasReplaced = true
+                                // 获取所有组值
+                                val groupValues = matchResult.groupValues
+
+                                value.replace("\\$(\\d+)".toRegex()) {
+                                    groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                                }.parseSection(player)
+                            } else {
+                                matchResult.value
+                            }
+                        }
+                    }
+
+                    // 设置Name
+                    itemMeta.setDisplayName(name)
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品显示名(替换全部)
+        addBasicItemEditor("replaceAllNameRegex") { _, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Name还替换个头
+                    if (!itemMeta.hasDisplayName()) return@addBasicItemEditor true
+                    // 获取Name
+                    var name = itemMeta.displayName
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 遍历待操作内容
+                    info.forEach { (key, value) ->
+                        name = name.replace(key.toRegex()) { matchResult ->
+                            // 获取所有组值
+                            val groupValues = matchResult.groupValues
+
+                            value.replace("\\$(\\d+)".toRegex()) {
+                                groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                            }
+                        }
+                    }
+
+                    // 设置Name
+                    itemMeta.setDisplayName(name)
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品显示名(替换全部, 解析其中的papi变量)
+        addBasicItemEditor("replaceAllNameRegexPapi") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Name还替换个头
+                    if (!itemMeta.hasDisplayName()) return@addBasicItemEditor true
+                    // 获取Name
+                    var name = itemMeta.displayName
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 遍历待操作内容
+                    info.forEach { (key, value) ->
+                        name = name.replace(key.toRegex()) { matchResult ->
+                            // 获取所有组值
+                            val groupValues = matchResult.groupValues
+
+                            papi(player, value.replace("\\$(\\d+)".toRegex()) {
+                                groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                            })
+                        }
+                    }
+
+                    // 设置Name
+                    itemMeta.setDisplayName(name)
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品显示名(替换全部, 解析其中的即时声明节点)
+        addBasicItemEditor("replaceAllNameRegexSection") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Name还替换个头
+                    if (!itemMeta.hasDisplayName()) return@addBasicItemEditor true
+                    // 获取Name
+                    var name = itemMeta.displayName
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 遍历待操作内容
+                    info.forEach { (key, value) ->
+                        name = name.replace(key.toRegex()) { matchResult ->
+                            // 获取所有组值
+                            val groupValues = matchResult.groupValues
+
+                            value.replace("\\$(\\d+)".toRegex()) {
+                                groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                            }.parseSection(player)
+                        }
+                    }
+
+                    // 设置Name
+                    itemMeta.setDisplayName(name)
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
         // 给物品添加lore
         addBasicItemEditor("addLore") { _, itemStack, content ->
             // 判断是不是空气
@@ -519,6 +762,420 @@ object ItemEditorManager {
 
                         // 添加Lore
                         lore.add(text.toString())
+                    }
+
+                    // 设置Lore
+                    itemMeta.lore = lore
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品Lore(只替换一次)
+        addBasicItemEditor("replaceLoreRegex") { _, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Lore还替换个头
+                    if (!itemMeta.hasLore()) return@addBasicItemEditor true
+                    // 获取lore
+                    val originLore = itemMeta.lore
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 新Lore
+                    val lore = ArrayList<String>()
+
+                    // 遍历原Lore的每一行
+                    originLore?.forEach {
+                        // 获取迭代器
+                        val iterator = info.entries.iterator()
+                        // 有可能替换着替换着就没有info了
+                        var result = when {
+                            info.isEmpty() -> it
+                            else -> ""
+                        }
+
+                        // 遍历待操作内容
+                        while (iterator.hasNext()) {
+                            val entry = iterator.next()
+                            val key = entry.key
+                            val value = entry.value
+                            var hasReplaced = false
+
+                            result = it.replace(key.toRegex()) { matchResult ->
+                                if (!hasReplaced) {
+                                    hasReplaced = true
+                                    // 替换过就移出替换表
+                                    iterator.remove()
+                                    // 获取所有组值
+                                    val groupValues = matchResult.groupValues
+
+                                    value.replace("\\$(\\d+)".toRegex()) {
+                                        groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                                    }
+                                } else {
+                                    matchResult.value
+                                }
+                            }
+                        }
+
+                        // 如果替换文本包含换行符
+                        if (result.contains("\n")) {
+                            // 拆一下
+                            result.split("\n").let { array ->
+                                // 遍历
+                                for (index in array.indices) {
+                                    // 怼进去
+                                    lore.add(result)
+                                }
+                            }
+                        } else {
+                            // 不包含换行符就直接添加Lore
+                            lore.add(result)
+                        }
+                    }
+
+                    // 设置Lore
+                    itemMeta.lore = lore
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品Lore(只替换一次, 解析其中的papi变量)
+        addBasicItemEditor("replaceLoreRegexPapi") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Lore还替换个头
+                    if (!itemMeta.hasLore()) return@addBasicItemEditor true
+                    // 获取lore
+                    val originLore = itemMeta.lore
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 新Lore
+                    val lore = ArrayList<String>()
+
+                    // 遍历原Lore的每一行
+                    originLore?.forEach {
+                        // 获取迭代器
+                        val iterator = info.entries.iterator()
+                        // 有可能替换着替换着就没有info了
+                        var result = when {
+                            info.isEmpty() -> it
+                            else -> ""
+                        }
+
+                        // 遍历待操作内容
+                        while (iterator.hasNext()) {
+                            val entry = iterator.next()
+                            val key = entry.key
+                            val value = entry.value
+                            var hasReplaced = false
+
+                            result = it.replace(key.toRegex()) { matchResult ->
+                                if (!hasReplaced) {
+                                    hasReplaced = true
+                                    // 替换过就移出替换表
+                                    iterator.remove()
+                                    // 获取所有组值
+                                    val groupValues = matchResult.groupValues
+
+                                    papi(player, value.replace("\\$(\\d+)".toRegex()) {
+                                        groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                                    })
+                                } else {
+                                    matchResult.value
+                                }
+                            }
+                        }
+
+                        // 如果替换文本包含换行符
+                        if (result.contains("\n")) {
+                            // 拆一下
+                            result.split("\n").let { array ->
+                                // 遍历
+                                for (index in array.indices) {
+                                    // 怼进去
+                                    lore.add(result)
+                                }
+                            }
+                        } else {
+                            // 不包含换行符就直接添加Lore
+                            lore.add(result)
+                        }
+                    }
+
+                    // 设置Lore
+                    itemMeta.lore = lore
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品Lore(只替换一次, 解析其中的即时声明节点)
+        addBasicItemEditor("replaceLoreRegexSection") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Lore还替换个头
+                    if (!itemMeta.hasLore()) return@addBasicItemEditor true
+                    // 获取lore
+                    val originLore = itemMeta.lore
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 新Lore
+                    val lore = ArrayList<String>()
+
+                    // 遍历原Lore的每一行
+                    originLore?.forEach {
+                        // 获取迭代器
+                        val iterator = info.entries.iterator()
+                        // 有可能替换着替换着就没有info了
+                        var result = when {
+                            info.isEmpty() -> it
+                            else -> ""
+                        }
+
+                        // 遍历待操作内容
+                        while (iterator.hasNext()) {
+                            val entry = iterator.next()
+                            val key = entry.key
+                            val value = entry.value
+                            var hasReplaced = false
+
+                            result = it.replace(key.toRegex()) { matchResult ->
+                                if (!hasReplaced) {
+                                    hasReplaced = true
+                                    // 替换过就移出替换表
+                                    iterator.remove()
+                                    // 获取所有组值
+                                    val groupValues = matchResult.groupValues
+
+                                    value.replace("\\$(\\d+)".toRegex()) {
+                                        groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                                    }.parseSection(player)
+                                } else {
+                                    matchResult.value
+                                }
+                            }
+                        }
+
+                        // 如果替换文本包含换行符
+                        if (result.contains("\n")) {
+                            // 拆一下
+                            result.split("\n").let { array ->
+                                // 遍历
+                                for (index in array.indices) {
+                                    // 怼进去
+                                    lore.add(result)
+                                }
+                            }
+                        } else {
+                            // 不包含换行符就直接添加Lore
+                            lore.add(result)
+                        }
+                    }
+
+                    // 设置Lore
+                    itemMeta.lore = lore
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品Lore(替换全部)
+        addBasicItemEditor("replaceAllLoreRegex") { _, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Lore还替换个头
+                    if (!itemMeta.hasLore()) return@addBasicItemEditor true
+                    // 获取lore
+                    val originLore = itemMeta.lore
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 新Lore
+                    val lore = ArrayList<String>()
+
+                    // 遍历原Lore的每一行
+                    originLore?.forEach {
+                        var result = ""
+
+                        // 遍历待操作内容
+                        info.forEach { (key, value) ->
+                            result = it.replace(key.toRegex()) { matchResult ->
+                                // 获取所有组值
+                                val groupValues = matchResult.groupValues
+
+                                value.replace("\\$(\\d+)".toRegex()) {
+                                    groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                                }
+                            }
+                        }
+
+                        // 如果替换文本包含换行符
+                        if (result.contains("\n")) {
+                            // 拆一下
+                            result.split("\n").let { array ->
+                                // 遍历
+                                for (index in array.indices) {
+                                    // 怼进去
+                                    lore.add(result)
+                                }
+                            }
+                        } else {
+                            // 不包含换行符就直接添加Lore
+                            lore.add(result)
+                        }
+                    }
+
+                    // 设置Lore
+                    itemMeta.lore = lore
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品Lore(替换全部, 解析其中的papi变量)
+        addBasicItemEditor("replaceAllLoreRegexPapi") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Lore还替换个头
+                    if (!itemMeta.hasLore()) return@addBasicItemEditor true
+                    // 获取lore
+                    val originLore = itemMeta.lore
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 新Lore
+                    val lore = ArrayList<String>()
+
+                    // 遍历原Lore的每一行
+                    originLore?.forEach {
+                        var result = ""
+
+                        // 遍历待操作内容
+                        info.forEach { (key, value) ->
+                            result = it.replace(key.toRegex()) { matchResult ->
+                                // 获取所有组值
+                                val groupValues = matchResult.groupValues
+
+                                papi(player, value.replace("\\$(\\d+)".toRegex()) {
+                                    groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                                })
+                            }
+                        }
+
+                        // 如果替换文本包含换行符
+                        if (result.contains("\n")) {
+                            // 拆一下
+                            result.split("\n").let { array ->
+                                // 遍历
+                                for (index in array.indices) {
+                                    // 怼进去
+                                    lore.add(result)
+                                }
+                            }
+                        } else {
+                            // 不包含换行符就直接添加Lore
+                            lore.add(result)
+                        }
+                    }
+
+                    // 设置Lore
+                    itemMeta.lore = lore
+                    // 将改动完成的itemMeta设置回去
+                    itemStack.itemMeta = itemMeta
+                    return@addBasicItemEditor true
+                }
+            }
+            return@addBasicItemEditor false
+        }
+        // 正则替换物品Lore(替换全部, 解析其中的即时声明节点)
+        addBasicItemEditor("replaceAllLoreRegexSection") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取itemMeta
+                itemStack.itemMeta?.let { itemMeta ->
+                    // 没Lore还替换个头
+                    if (!itemMeta.hasLore()) return@addBasicItemEditor true
+                    // 获取lore
+                    val originLore = itemMeta.lore
+
+                    // 获取 待替换文本: 替换文本
+                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    // 啥也没写还替换个头
+                    if (info.isEmpty()) return@addBasicItemEditor true
+
+                    // 新Lore
+                    val lore = ArrayList<String>()
+
+                    // 遍历原Lore的每一行
+                    originLore?.forEach {
+                        var result = ""
+
+                        // 遍历待操作内容
+                        info.forEach { (key, value) ->
+                            result = it.replace(key.toRegex()) { matchResult ->
+                                // 获取所有组值
+                                val groupValues = matchResult.groupValues
+
+                                value.replace("\\$(\\d+)".toRegex()) {
+                                    groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
+                                }.parseSection(player)
+                            }
+                        }
+
+                        // 如果替换文本包含换行符
+                        if (result.contains("\n")) {
+                            // 拆一下
+                            result.split("\n").let { array ->
+                                // 遍历
+                                for (index in array.indices) {
+                                    // 怼进去
+                                    lore.add(result)
+                                }
+                            }
+                        } else {
+                            // 不包含换行符就直接添加Lore
+                            lore.add(result)
+                        }
                     }
 
                     // 设置Lore
@@ -909,13 +1566,30 @@ object ItemEditorManager {
             addItemEditor(id) { player, itemStack, content ->
                 return@addItemEditor function.apply(player, itemStack, content)
             }
-            // (解析其中的papi变量)
-            addItemEditor("${id}Papi") { player, itemStack, content ->
-                return@addItemEditor function.apply(player, itemStack, papi(player, content))
-            }
-            // (解析其中的即时声明节点)
-            addItemEditor("${id}Section") { player, itemStack, content ->
-                return@addItemEditor function.apply(player, itemStack, content.parseSection(player))
+            // 有的函数不能这样简单操作
+            val specialEditorNames = HashSet<String>()
+            specialEditorNames.add("replaceNameRegex")
+            specialEditorNames.add("replaceNameRegexPapi")
+            specialEditorNames.add("replaceNameRegexSection")
+            specialEditorNames.add("replaceAllNameRegex")
+            specialEditorNames.add("replaceAllNameRegexPapi")
+            specialEditorNames.add("replaceAllNameRegexSection")
+            specialEditorNames.add("replaceLoreRegex")
+            specialEditorNames.add("replaceLoreRegexPapi")
+            specialEditorNames.add("replaceLoreRegexSection")
+            specialEditorNames.add("replaceAllLoreRegex")
+            specialEditorNames.add("replaceAllLoreRegexPapi")
+            specialEditorNames.add("replaceAllLoreRegexSection")
+
+            if (!specialEditorNames.contains(id)) {
+                // (解析其中的papi变量)
+                addItemEditor("${id}Papi") { player, itemStack, content ->
+                    return@addItemEditor function.apply(player, itemStack, papi(player, content))
+                }
+                // (解析其中的即时声明节点)
+                addItemEditor("${id}Section") { player, itemStack, content ->
+                    return@addItemEditor function.apply(player, itemStack, content.parseSection(player))
+                }
             }
         }
     }
