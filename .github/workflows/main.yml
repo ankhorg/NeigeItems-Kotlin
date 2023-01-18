@@ -1,0 +1,136 @@
+name: Workflow Build
+on: [ push ]
+jobs:
+  build:
+    name: build jar
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      - name: cache gradle packages
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: setup jdk 8.0
+        uses: actions/setup-java@v2
+        with:
+          distribution: adopt
+          java-version: 8.0
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: build
+        run: ./gradlew build
+      - name: capture build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Artifacts
+          path: build/libs/
+  build-api:
+    name: build api jar
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      - name: cache gradle packages
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: setup jdk 8.0
+        uses: actions/setup-java@v2
+        with:
+          distribution: adopt
+          java-version: 8.0
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: build
+        run: ./gradlew build -Papi=true
+      - name: capture build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Artifacts
+          path: build/libs/
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+      - name: cache gradle packages
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+      - name: validate gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: setup jdk 8.0
+        uses: actions/setup-java@v2
+        with:
+          distribution: adopt
+          java-version: 8.0
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+        // 获取项目名称
+      - name: Get Project name
+        id: get_name
+        run: |
+          output=$(./gradlew properties)
+          name=$(echo "$output" | grep "^name:" | cut -d' ' -f2)
+          echo "Project name: $name"
+          echo "project_name=$name" >> $GITHUB_OUTPUT
+        env:
+          project_name: ${{ steps.get_name.outputs.project_name }}
+        // 获取项目版本
+      - name: Get Project version
+        id: get_version
+        run: |
+          output=$(./gradlew properties)
+          version=$(echo "$output" | grep "^version:" | cut -d' ' -f2)
+          echo "Project version: $version"
+          echo "project_version=$version" >> $GITHUB_OUTPUT
+        env:
+          project_version: ${{ steps.get_version.outputs.project_version }}
+        // 下载本体
+      - name: Download Content
+        uses: actions/download-artifact@v2
+        with:
+          name: Artifacts
+        // 创建release
+      - name: Create release
+        id: create-new-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.project_version }}
+          release_name: ${{ steps.get_version.outputs.project_name }} ${{ steps.get_version.outputs.project_version }}
+        // 向release上传NeigeItems.jar
+      - name: Upload Jar asset to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-new-release.outputs.upload_url }}
+          asset_path: ${{ steps.get_name.outputs.project_name }}-${{ steps.get_version.outputs.project_version }}.jar
+          asset_name: ${{ steps.get_name.outputs.project_name }}-${{ steps.get_version.outputs.project_version }}.jar
+          asset_content_type: application/zip
+        // 向release上传NeigeItems-api.jar
+      - name: Upload API Jar asset to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-new-release.outputs.upload_url }}
+          asset_path: ${{ steps.get_name.outputs.project_name }}-${{ steps.get_version.outputs.project_version }}-api.jar
+          asset_name: ${{ steps.get_name.outputs.project_name }}-${{ steps.get_version.outputs.project_version }}-api.jar
+          asset_content_type: application/zip

@@ -6,7 +6,18 @@ plugins {
     id("org.jetbrains.dokka") version "1.6.10"
 }
 
+val api: String? by project
+
+task("versionAddAPI") {
+    if (api == null) return@task
+    val origin = project.version.toString()
+    project.version = "$origin-api"
+}
+
 taboolib {
+    if (project.version.toString().contains("-api")) {
+        options("skip-kotlin-relocate")
+    }
     description {
         contributors {
             name("Neige")
