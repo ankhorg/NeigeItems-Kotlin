@@ -60,6 +60,8 @@ jobs:
           name: Artifacts
           path: build/libs/
   release:
+    name: release jar
+    needs: [ build, build-api ]
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
