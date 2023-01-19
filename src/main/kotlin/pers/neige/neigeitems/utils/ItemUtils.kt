@@ -13,7 +13,6 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.utils.ItemUtils.toItemTagData
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.*
