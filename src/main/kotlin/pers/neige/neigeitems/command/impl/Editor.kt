@@ -38,7 +38,7 @@ object Editor {
                     }
                     execute<CommandSender> { _, context, argument ->
                         Bukkit.getPlayerExact(context.argument(-2))?.let { player ->
-                            ItemEditorManager.runEditor(context.argument(-1), player, player.inventory.itemInMainHand, argument)
+                            ItemEditorManager.runEditor(context.argument(-1), argument, player.inventory.itemInMainHand, player)
                         }
                     }
                 }
@@ -76,7 +76,7 @@ object Editor {
                     }
                     execute<CommandSender> { _, context, argument ->
                         Bukkit.getPlayerExact(context.argument(-2))?.let { player ->
-                            ItemEditorManager.runEditor(context.argument(-1), player, player.inventory.itemInOffHand, argument)
+                            ItemEditorManager.runEditor(context.argument(-1), argument, player.inventory.itemInOffHand, player)
                         }
                     }
                 }
@@ -124,7 +124,7 @@ object Editor {
                         execute<CommandSender> { _, context, argument ->
                             Bukkit.getPlayerExact(context.argument(-3))?.let { player ->
                                 player.inventory.getItem(context.argument(-2).toIntOrNull() ?: 0)?.let { itemStack ->
-                                    ItemEditorManager.runEditor(context.argument(-1), player, itemStack, argument)
+                                    ItemEditorManager.runEditor(context.argument(-1), argument, itemStack, player)
                                 }
                             }
                         }

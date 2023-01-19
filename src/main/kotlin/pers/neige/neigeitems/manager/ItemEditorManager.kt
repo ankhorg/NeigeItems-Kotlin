@@ -70,7 +70,7 @@ object ItemEditorManager {
      * @param itemStack 待编辑物品
      * @param content 传入的文本
      */
-    fun runEditor(id: String, player: Player, itemStack: ItemStack, content: String) {
+    fun runEditor(id: String, content: String, itemStack: ItemStack, player: Player) {
         itemEditors[id.lowercase(Locale.getDefault())]?.apply(player, itemStack, content)
     }
 
