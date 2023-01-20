@@ -23,18 +23,16 @@ import javax.script.ScriptEngine
  * @constructor 启用openjdk nashorn挂钩
  */
 class NashornHookerImpl : NashornHooker() {
-    private val engineFactory = NashornScriptEngineFactory()
-
     override fun getNashornEngine(): ScriptEngine {
-        return engineFactory.getScriptEngine(arrayOf("-Dnashorn.args=--language=es6"), this::class.java.classLoader)
+        return NashornScriptEngineFactory().getScriptEngine(arrayOf("-Dnashorn.args=--language=es6"), this::class.java.classLoader)
     }
 
     override fun compile(string: String): CompiledScript {
-        return (engineFactory.getScriptEngine(arrayOf("-Dnashorn.args=--language=es6"), this::class.java.classLoader) as Compilable).compile(string)
+        return (NashornScriptEngineFactory().getScriptEngine(arrayOf("-Dnashorn.args=--language=es6"), this::class.java.classLoader) as Compilable).compile(string)
     }
 
     override fun compile(reader: Reader): CompiledScript {
-        return (engineFactory.getScriptEngine(arrayOf("-Dnashorn.args=--language=es6"), this::class.java.classLoader) as Compilable).compile(reader)
+        return (NashornScriptEngineFactory().getScriptEngine(arrayOf("-Dnashorn.args=--language=es6"), this::class.java.classLoader) as Compilable).compile(reader)
     }
 
     override fun invoke(compiledScript: pers.neige.neigeitems.script.CompiledScript, function: String, map: HashMap<String, Any>?, vararg args: Any): Any? {

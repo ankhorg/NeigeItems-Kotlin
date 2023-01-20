@@ -29,6 +29,7 @@ import java.util.function.BiFunction
 object HookerManager {
     val nashornHooker: NashornHooker =
         try {
+            Class.forName("jdk.nashorn.api.scripting.NashornScriptEngineFactory")
             // jdk自带nashorn
             LegacyNashornHookerImpl()
         } catch (error: Throwable) {
