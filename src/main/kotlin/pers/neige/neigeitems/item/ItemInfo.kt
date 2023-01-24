@@ -13,4 +13,4 @@ class ItemInfo(
     val itemTag: ItemTag,
     val neigeItems: ItemTag,
     val id: String
-) {}
+)

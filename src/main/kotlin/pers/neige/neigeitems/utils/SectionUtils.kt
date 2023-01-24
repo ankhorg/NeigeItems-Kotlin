@@ -31,6 +31,125 @@ object SectionUtils {
         player: OfflinePlayer? = null,
         sections: ConfigurationSection? = null
     ): String {
+        val stack = ArrayList<Int>()
+        val stringBuilders = ArrayList<StringBuilder>()
+        val result = StringBuilder()
+        val chars = this.toCharArray()
+        var backslash = false
+        for (index in chars.indices) {
+            val char = chars[index]
+            if (char == '<' && !backslash) {
+                // 压栈
+                stack.add(index)
+                stringBuilders.add(StringBuilder())
+                // 如果是右括号
+            } else if (char == '>' && !backslash) {
+                // 前面有左括号了
+                if (stack.isNotEmpty()) {
+                    // 还不止一个
+                    if (stack.size > 1) {
+                        // 出栈
+                        stack.removeLast()
+                        val string = stringBuilders.removeLast().toString().getSection(cache, player, sections)
+                        stringBuilders[stack.lastIndex].append(string)
+                        // 只有一个
+                    } else {
+                        // 记录并出栈
+                        stack.removeLast()
+                        val string = stringBuilders.removeLast().toString().getSection(cache, player, sections)
+                        result.append(string)
+                    }
+                } else {
+                    result.append(char)
+                }
+            } else {
+                if (stack.isNotEmpty()) {
+                    if (char != '<' && char != '>' && backslash) {
+                        stringBuilders[stack.lastIndex].append('\\')
+                    }
+                    if (char != '\\') {
+                        stringBuilders[stack.lastIndex].append(char)
+                    }
+                } else {
+                    if (char != '<' && char != '>' && backslash) {
+                        result.append('\\')
+                    }
+                    if (char != '\\') {
+                        result.append(char)
+                    }
+                }
+            }
+            if (char == '\\') {
+                backslash = true
+            } else {
+                backslash = false
+            }
+        }
+        if (stringBuilders.isNotEmpty()) {
+            for (stringBuilder in stringBuilders) {
+                result.append('<')
+                result.append(stringBuilder)
+            }
+        }
+        return result.toString()
+    }
+
+    /**
+     * 加载字符串最外层<>位置(测试)
+     *
+     * @param string 待加载文本
+     * @param start 用于存储<位置
+     * @param end 用于存储>位置
+     */
+    @JvmStatic
+    fun loadTest(string: String, start: ArrayList<Int>, end: ArrayList<Int>) {
+        // 经测试, 这比LinkedList还略快一筹
+        val stack = ArrayList<Int>()
+        val chars = string.toCharArray()
+        var backslash = false
+        for (index in chars.indices) {
+            val char = chars[index]
+            if (char == '<' && !backslash) {
+                // 压栈
+                stack.add(index)
+                // 如果是右括号
+            } else if (char == '>' && !backslash) {
+                // 前面有左括号了
+                if (stack.isNotEmpty()) {
+                    // 还不止一个
+                    if (stack.size > 1) {
+                        // 出栈
+                        stack.removeLast()
+                        // 只有一个
+                    } else {
+                        // 记录并出栈
+                        start.add(stack.removeLast())
+                        end.add(index)
+                    }
+                }
+            }
+            if (char == '\\') {
+                backslash = true
+            } else {
+                backslash = false
+            }
+        }
+    }
+
+    /**
+     * 对文本进行节点解析(弃用做法)
+     *
+     * @param cache 解析值缓存
+     * @param player 待解析玩家
+     * @param sections 节点池
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.parseSectionOld(
+        cache: HashMap<String, String>? = null,
+        player: OfflinePlayer? = null,
+        sections: ConfigurationSection? = null
+    ): String {
         // 定位最外层 <> 包裹的字符串
         val start = ArrayList<Int>()
         val end = ArrayList<Int>()
@@ -138,35 +257,32 @@ object SectionUtils {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        val string = this
-            .replace("\\<", "<")
-            .replace("\\>", ">")
-        when (val index = string.indexOf("::")) {
+        when (val index = this.indexOf("::")) {
             // 私有节点调用
             -1 -> {
                 // 尝试读取缓存
-                if (cache?.get(string) != null) {
+                if (cache?.get(this) != null) {
                     // 直接返回对应节点值
-                    return cache[string] as String
+                    return cache[this] as String
                 // 读取失败, 尝试主动解析
                 } else {
                     // 尝试解析并返回对应节点值
-                    if (sections != null && sections.contains(string)) {
+                    if (sections != null && sections.contains(this)) {
                         // 获取节点ConfigurationSection
-                        val section = sections.getConfigurationSection(string)
+                        val section = sections.getConfigurationSection(this)
                         // 简单节点
                         if (section == null) {
-                            val result = sections.getString(string)?.parseSection(cache, player, sections) ?: "<$string>"
-                            cache?.put(string, result)
+                            val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
+                            cache?.put(this, result)
                             return result
                         }
                         // 加载节点
-                        return Section(section, string).load(cache, player, sections) ?: "<$string>"
+                        return Section(section, this).load(cache, player, sections) ?: "<$this>"
                     }
-                    if (string.startsWith("#")) {
+                    if (this.startsWith("#")) {
                         try {
                             try {
-                                val hex = (string.substring(1).toIntOrNull(16) ?: 0)
+                                val hex = (this.substring(1).toIntOrNull(16) ?: 0)
                                     .coerceAtLeast(0)
                                     .coerceAtMost(0xFFFFFF)
                                 val color = Color(hex)
@@ -177,15 +293,15 @@ object SectionUtils {
                         }
                     }
                 }
-                return "<$string>"
+                return "<$this>"
             }
             // 即时声明节点解析
             else -> {
                 // 获取节点类型
-                val type = string.substring(0, index)
+                val type = this.substring(0, index)
                 // 获取参数
-                val args = string.substring(index+2).split("(?<!\\\\)_".toRegex()).map { it.replace("\\_", "_") }
-                return SectionManager.sectionParsers[type]?.onRequest(args, cache, player, sections) ?: "<$string>"
+                val args = this.substring(index+2).split("(?<!\\\\)_".toRegex()).map { it.replace("\\_", "_") }
+                return SectionManager.sectionParsers[type]?.onRequest(args, cache, player, sections) ?: "<$this>"
             }
         }
     }
@@ -281,27 +397,38 @@ object SectionUtils {
      * @param start 用于存储<位置
      * @param end 用于存储>位置
      */
-    private fun load(string: String, start: ArrayList<Int>, end: ArrayList<Int>) {
-        val stack = LinkedList<Int>()
-        string.forEachIndexed { index, char ->
-            if (char == '<' && string[0.coerceAtLeast(index - 1)] != '\\') {
+    @JvmStatic
+    fun load(string: String, start: ArrayList<Int>, end: ArrayList<Int>) {
+        // 经测试, 这比LinkedList还略快一筹
+        val stack = ArrayList<Int>()
+        val chars = string.toCharArray()
+        var backslash = false
+        for (index in chars.indices) {
+            val char = chars[index]
+            if (char == '<' && !backslash) {
                 // 压栈
-                stack.push(index)
+                stack.add(index)
                 // 如果是右括号
-            } else if (char == '>' && string[0.coerceAtLeast(index - 1)] != '\\') {
+            } else if (char == '>' && !backslash) {
                 // 前面有左括号了
-                if (!stack.isEmpty()) {
+                if (stack.isNotEmpty()) {
                     // 还不止一个
                     if (stack.size > 1) {
                         // 出栈
-                        stack.pop()
+                        stack.removeLast()
                         // 只有一个
                     } else {
                         // 记录并出栈
-                        start.add(stack.poll())
+                        start.add(stack.removeLast())
                         end.add(index)
                     }
                 }
-            }}
+            }
+            if (char == '\\') {
+                backslash = true
+            } else {
+                backslash = false
+            }
+        }
     }
 }

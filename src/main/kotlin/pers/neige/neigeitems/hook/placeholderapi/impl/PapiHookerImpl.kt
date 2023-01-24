@@ -111,4 +111,15 @@ class PapiHookerImpl : PapiHooker() {
 
         return builder.toString()
     }
+
+    override fun request(player: OfflinePlayer, identifier: String, parameters: String): String {
+        val placeholder = localExpansionManager.getExpansion(identifier.lowercase(Locale.getDefault()))
+        if (placeholder != null) {
+            val replacement = placeholder.onRequest(player, parameters)
+            if (replacement != null) {
+                return replacement
+            }
+        }
+        return "%${identifier}_$parameters%"
+    }
 }

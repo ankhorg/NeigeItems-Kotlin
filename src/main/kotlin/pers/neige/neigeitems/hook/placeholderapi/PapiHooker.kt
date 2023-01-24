@@ -17,4 +17,16 @@ abstract class PapiHooker {
      * @return 解析后文本
      */
     abstract fun papi(player: OfflinePlayer, text: String): String
+
+    /**
+     * 例：%player_name%
+     * identifier -> player
+     * parameters -> name
+     *
+     * @param player 用于解析PAPI变量的玩家对象
+     * @param identifier PAPI标识符
+     * @param parameters PAPI参数
+     * @return 解析后文本
+     */
+    abstract fun request(player: OfflinePlayer, identifier: String, parameters: String): String
 }

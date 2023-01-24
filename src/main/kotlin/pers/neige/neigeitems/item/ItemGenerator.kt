@@ -203,7 +203,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                         val lores = ChatColor.translateAlternateColorCodes('&', originLores[i]).split("\n")
                         finalLores.addAll(lores)
                     }
-                    itemMeta?.setLore(finalLores)
+                    itemMeta?.lore = finalLores
                 }
                 // 设置是否无法破坏
                 if (configSection.contains("unbreakable")) {

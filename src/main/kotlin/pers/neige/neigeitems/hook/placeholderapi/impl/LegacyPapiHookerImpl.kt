@@ -79,7 +79,7 @@ class LegacyPapiHookerImpl : PapiHooker() {
                 continue
             }
 
-            val placeholder = PlaceholderAPI.getPlaceholders()[lowercaseIdentifierString]
+            val placeholder = placeholders[lowercaseIdentifierString]
             if (placeholder == null) {
                 builder.append('%').append(identifierString)
 
@@ -110,5 +110,16 @@ class LegacyPapiHookerImpl : PapiHooker() {
         }
 
         return builder.toString()
+    }
+
+    override fun request(player: OfflinePlayer, identifier: String, parameters: String): String {
+        val placeholder = placeholders[identifier.lowercase(Locale.getDefault())]
+        if (placeholder != null) {
+            val replacement = placeholder.onRequest(player, parameters)
+            if (replacement != null) {
+                return replacement
+            }
+        }
+        return "%${identifier}_$parameters%"
     }
 }

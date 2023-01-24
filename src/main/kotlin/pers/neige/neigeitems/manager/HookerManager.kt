@@ -159,6 +159,21 @@ object HookerManager {
     }
 
     /**
+     * 解析papi变量, 不解析颜色代码
+     *
+     * @param player 用于解析PAPI变量的玩家对象
+     * @param text 待解析文本
+     * @return 解析后文本
+     */
+    @JvmStatic
+    fun requestPapi(player: OfflinePlayer, identifier: String, parameters: String): String {
+        return when (papiHooker) {
+            null -> "%${identifier}_$parameters%"
+            else -> papiHooker.request(player, identifier, parameters)
+        }
+    }
+
+    /**
      * 解析物品变量
      *
      * @param itemStack 用于解析变量的物品
