@@ -118,3 +118,6 @@ ItemList:
 ItemOwner:
   # actionbar / message
   messageType: actionbar
+ItemColor:
+  # protocol / vanilla
+  type: protocol

@@ -24,6 +24,7 @@ import pers.neige.neigeitems.item.color.impl.ItemColorVanilla
 import pers.neige.neigeitems.manager.ConfigManager.config
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import java.util.*
 import java.util.function.BiFunction
 
 object HookerManager {
@@ -109,10 +110,14 @@ object HookerManager {
     }
 
     val itemColor: ItemColor? by lazy {
-        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            try {
-                ItemColorProtocol()
-            } catch (error: Throwable) {
+        if (config.getString("ItemColor.type")?.lowercase(Locale.getDefault()) == "protocol") {
+            if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
+                try {
+                    ItemColorProtocol()
+                } catch (error: Throwable) {
+                    ItemColorVanilla()
+                }
+            } else {
                 ItemColorVanilla()
             }
         } else {
