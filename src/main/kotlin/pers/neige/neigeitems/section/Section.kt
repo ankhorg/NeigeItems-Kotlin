@@ -33,7 +33,11 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
      * @param sections 节点池
      * @return 解析值
      */
-    fun get(cache: HashMap<String, String>? = null, player: OfflinePlayer? = null, sections: ConfigurationSection? = null): String? {
+    fun get(
+        cache: HashMap<String, String>? = null,
+        player: OfflinePlayer? = null,
+        sections: ConfigurationSection? = null
+    ): String? {
         // 空类型(可能是多层节点)
         type?.let {
             // 空解析器
@@ -58,7 +62,11 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
      * @param sections 节点池
      * @return 解析值
      */
-    fun load(cache: HashMap<String, String>? = null, player: OfflinePlayer? = null, sections: ConfigurationSection? = null): String? {
+    fun load(
+        cache: HashMap<String, String>? = null,
+        player: OfflinePlayer? = null,
+        sections: ConfigurationSection? = null
+    ): String? {
         val result = get(cache, player, sections)
         result?.let { cache?.put(id, it) }
         return result

@@ -12,6 +12,7 @@ import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.ItemTagType
 import java.awt.Color
 import java.util.*
+import java.util.function.Function
 
 /**
  * 节点相关工具类
@@ -31,150 +32,9 @@ object SectionUtils {
         player: OfflinePlayer? = null,
         sections: ConfigurationSection? = null
     ): String {
-        val stack = ArrayList<Int>()
-        val stringBuilders = ArrayList<StringBuilder>()
-        val result = StringBuilder()
-        val chars = this.toCharArray()
-        var backslash = false
-        for (index in chars.indices) {
-            val char = chars[index]
-            if (char == '<' && !backslash) {
-                // 压栈
-                stack.add(index)
-                stringBuilders.add(StringBuilder())
-                // 如果是右括号
-            } else if (char == '>' && !backslash) {
-                // 前面有左括号了
-                if (stack.isNotEmpty()) {
-                    // 还不止一个
-                    if (stack.size > 1) {
-                        // 出栈
-                        stack.removeLast()
-                        val string = stringBuilders.removeLast().toString().getSection(cache, player, sections)
-                        stringBuilders[stack.lastIndex].append(string)
-                        // 只有一个
-                    } else {
-                        // 记录并出栈
-                        stack.removeLast()
-                        val string = stringBuilders.removeLast().toString().getSection(cache, player, sections)
-                        result.append(string)
-                    }
-                } else {
-                    result.append(char)
-                }
-            } else {
-                if (stack.isNotEmpty()) {
-                    if (char != '<' && char != '>' && backslash) {
-                        stringBuilders[stack.lastIndex].append('\\')
-                    }
-                    if (char != '\\') {
-                        stringBuilders[stack.lastIndex].append(char)
-                    }
-                } else {
-                    if (char != '<' && char != '>' && backslash) {
-                        result.append('\\')
-                    }
-                    if (char != '\\') {
-                        result.append(char)
-                    }
-                }
-            }
-            if (char == '\\') {
-                backslash = true
-            } else {
-                backslash = false
-            }
+        return this.parse {
+            return@parse it.getSection(cache, player, sections)
         }
-        if (stringBuilders.isNotEmpty()) {
-            for (stringBuilder in stringBuilders) {
-                result.append('<')
-                result.append(stringBuilder)
-            }
-        }
-        return result.toString()
-    }
-
-    /**
-     * 加载字符串最外层<>位置(测试)
-     *
-     * @param string 待加载文本
-     * @param start 用于存储<位置
-     * @param end 用于存储>位置
-     */
-    @JvmStatic
-    fun loadTest(string: String, start: ArrayList<Int>, end: ArrayList<Int>) {
-        // 经测试, 这比LinkedList还略快一筹
-        val stack = ArrayList<Int>()
-        val chars = string.toCharArray()
-        var backslash = false
-        for (index in chars.indices) {
-            val char = chars[index]
-            if (char == '<' && !backslash) {
-                // 压栈
-                stack.add(index)
-                // 如果是右括号
-            } else if (char == '>' && !backslash) {
-                // 前面有左括号了
-                if (stack.isNotEmpty()) {
-                    // 还不止一个
-                    if (stack.size > 1) {
-                        // 出栈
-                        stack.removeLast()
-                        // 只有一个
-                    } else {
-                        // 记录并出栈
-                        start.add(stack.removeLast())
-                        end.add(index)
-                    }
-                }
-            }
-            if (char == '\\') {
-                backslash = true
-            } else {
-                backslash = false
-            }
-        }
-    }
-
-    /**
-     * 对文本进行节点解析(弃用做法)
-     *
-     * @param cache 解析值缓存
-     * @param player 待解析玩家
-     * @param sections 节点池
-     * @return 解析值
-     */
-    @JvmStatic
-    fun String.parseSectionOld(
-        cache: HashMap<String, String>? = null,
-        player: OfflinePlayer? = null,
-        sections: ConfigurationSection? = null
-    ): String {
-        // 定位最外层 <> 包裹的字符串
-        val start = ArrayList<Int>()
-        val end = ArrayList<Int>()
-        load(this, start, end)
-        if (start.size == 0) return this
-        // 对 <> 包裹的文本进行节点解析
-        val listString = StringBuilder(this.substring(0, start[0]))
-        for (index in 0 until start.size) {
-            // 解析目标文本
-            listString.append(
-                // 先截取文本
-                this.substring(start[index]+1, end[index])
-                    // 因为取的是最外层 <> 包裹的字符串, 所以内部可能还需要继续解析
-                    .parseSection(cache, player, sections)
-                    // 解析完成后可以视作节点ID/即时声明节点, 进行节点调用
-                    .getSection(cache, player, sections)
-            )
-
-            if (index+1 != start.size) {
-                listString.append(this.substring(end[index]+1, start[(start.size-1).coerceAtMost(index+1)]))
-            } else {
-                listString.append(this.substring(end[index]+1, this.length))
-            }
-        }
-        return listString.toString()
     }
 
     /**
@@ -223,6 +83,13 @@ object SectionUtils {
 
     /**
      * 对文本进行节点解析
+     * parse参数为false时不对文本进行解析
+     * 用意为不解析即时声明节点的参数(处理即时节点的SectionParser.onRequest时将parse定义为false, 解析参数时传入parse即可)
+     * 因为即时声明节点能传入进来一定是经过了parseSection
+     * 而这一步会对文本进行全局节点解析
+     * 即: 参数为解析后分割传入的
+     * 对于已解析的参数, 多解析一次等于浪费时间
+     * 注: 但inherit节点不能盲目调用parse, 因为继承而来的文本一定是未解析的(sections只经过一次papi解析)
      *
      * @param parse 是否对文本进行节点解析
      * @param cache 解析值缓存
@@ -264,7 +131,7 @@ object SectionUtils {
                 if (cache?.get(this) != null) {
                     // 直接返回对应节点值
                     return cache[this] as String
-                // 读取失败, 尝试主动解析
+                    // 读取失败, 尝试主动解析
                 } else {
                     // 尝试解析并返回对应节点值
                     if (sections != null && sections.contains(this)) {
@@ -299,8 +166,8 @@ object SectionUtils {
             else -> {
                 // 获取节点类型
                 val type = this.substring(0, index)
-                // 获取参数
-                val args = this.substring(index+2).split("(?<!\\\\)_".toRegex()).map { it.replace("\\_", "_") }
+                // 所有参数
+                val args = this.substring(index+2).split('_', '\\')
                 return SectionManager.sectionParsers[type]?.onRequest(args, cache, player, sections) ?: "<$this>"
             }
         }
@@ -310,69 +177,56 @@ object SectionUtils {
      * 对文本进行物品节点解析
      *
      * @param itemTag 物品NBT
+     * @param player 用于解析物品的玩家
      * @return 解析值
      */
     @JvmStatic
-    fun String.parseItemSection(itemTag: ItemTag, player: OfflinePlayer): String {
-        // 定位最外层 <> 包裹的字符串
-        val start = ArrayList<Int>()
-        val end = ArrayList<Int>()
-        load(this, start, end)
-        if (start.size == 0) return this
-        // 对 <> 包裹的文本进行节点解析
-        val listString = StringBuilder(this.substring(0, start[0]))
-        for (index in 0 until start.size) {
-            // 解析目标文本
-            listString.append(
-                this.substring(start[index]+1, end[index])
-                    .parseItemSection(itemTag, player)
-                    .getItemSection(itemTag, player)
-            )
-
-            if (index+1 != start.size) {
-                listString.append(this.substring(end[index]+1, start[(start.size-1).coerceAtMost(index+1)]))
-            } else {
-                listString.append(this.substring(end[index]+1, this.length))
-            }
+    fun String.parseItemSection(
+        itemTag: ItemTag,
+        player: OfflinePlayer
+    ): String {
+        return this.parse {
+            return@parse it.getItemSection(itemTag, player)
         }
-        return listString.toString()
     }
 
     /**
      * 对物品节点内容进行解析 (已经去掉 <>)
      *
      * @param itemTag 物品NBT
+     * @param player 用于解析物品的玩家
      * @return 解析值
      */
     @JvmStatic
-    fun String.getItemSection(itemTag: ItemTag, player: OfflinePlayer): String {
-        val string = this
-            .replace("\\<", "<")
-            .replace("\\>", ">")
-        when (val index = string.indexOf("::")) {
+    fun String.getItemSection(
+        itemTag: ItemTag,
+        player: OfflinePlayer
+    ): String {
+        when (val index = this.indexOf("::")) {
             -1 -> {
-                return "<$string>"
+                return "<$this>"
             }
             else -> {
-                val name = string.substring(0, index)
-                val args = string.substring(index + 2)
+                // 获取节点类型
+                val name = this.substring(0, index)
+                val param = this.substring(index+2)
                 return when (name.lowercase(Locale.getDefault())) {
                     "nbt" -> {
                         var value: ItemTagData = itemTag
-                        val argsArray: Array<String> = args.split(".").toTypedArray()
+                        val args = param.split('.', '\\')
 
-                        argsArray.forEach { key ->
+                        args.forEach { key ->
                             when (value.type) {
                                 ItemTagType.LIST -> {
                                     key.toIntOrNull()?.let { index ->
                                         val list = value.asList()
                                         if (list.size > index) {
-                                            value.asList()[index.coerceAtLeast(0)].also { value = it } ?: let { value = ItemTagData("<$string>") }
-                                        } else { value = ItemTagData("<$string>") }
-                                    } ?: let { value = ItemTagData("<$string>") }
+                                            value.asList()[index.coerceAtLeast(0)].also { value = it } ?: let { value = ItemTagData("<$this>") }
+                                        } else { value = ItemTagData("<$this>") }
+                                    } ?: let { value = ItemTagData("<$this>") }
                                 }
-                                ItemTagType.COMPOUND -> value.asCompound()[key]?.also { value = it } ?: let { value = ItemTagData("<$string>") }
-                                else -> let { value = ItemTagData("<$string>") }
+                                ItemTagType.COMPOUND -> value.asCompound()[key]?.also { value = it } ?: let { value = ItemTagData("<$this>") }
+                                else -> let { value = ItemTagData("<$this>") }
                             }
                         }
 
@@ -380,10 +234,10 @@ object SectionUtils {
                     }
                     "data" -> {
                         val data = itemTag["NeigeItems"]?.asCompound()?.get("data")?.asString()
-                        data?.parseObject<HashMap<String, String>>()?.get(args) ?: "<$string>"
+                        data?.parseObject<HashMap<String, String>>()?.get(param) ?: "<$this>"
                     }
                     else -> {
-                        return SectionManager.sectionParsers[name]?.onRequest(args.split("_"), null, player) ?: "<$string>"
+                        return SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player) ?: "<$this>"
                     }
                 }
             }
@@ -391,44 +245,150 @@ object SectionUtils {
     }
 
     /**
-     * 加载字符串最外层<>位置
+     * 对文本进行某种解析
      *
-     * @param string 待加载文本
-     * @param start 用于存储<位置
-     * @param end 用于存储>位置
+     * @return 解析值
      */
     @JvmStatic
-    fun load(string: String, start: ArrayList<Int>, end: ArrayList<Int>) {
-        // 经测试, 这比LinkedList还略快一筹
-        val stack = ArrayList<Int>()
-        val chars = string.toCharArray()
-        var backslash = false
-        for (index in chars.indices) {
-            val char = chars[index]
-            if (char == '<' && !backslash) {
-                // 压栈
-                stack.add(index)
-                // 如果是右括号
-            } else if (char == '>' && !backslash) {
-                // 前面有左括号了
-                if (stack.isNotEmpty()) {
+    fun String.parse(transform: Function<String, String?>): String {
+        return this.parse(transform, '<', '>', '\\')
+    }
+
+    /**
+     * 对文本进行某种解析
+     *
+     * @param head 节点起始标识
+     * @param tail 节点终止标识
+     * @param escape 转义符
+     * @param transform 解析函数
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.parse(transform: Function<String, String?>, head: Char, tail: Char, escape: Char): String {
+        // 缓存待解析节点
+        val stringBuilders = ArrayList<StringBuilder>()
+        // 储存解析结果
+        val result = StringBuilder()
+        val chars = this.toCharArray()
+        // 表示前一个字符是不是转义符(即反斜杠)
+        var lastIsEscape = false
+        // 遍历
+        for (char in chars) {
+            // 当前字符是不是起始标识
+            val isHead = char == head
+            // 当前字符是不是终止标识
+            val isTail = char == tail
+            // 当前字符是不是转义符
+            val isEscape = char == escape
+            // 当前为节点起始标识且前一字符不是转义符, 代表节点的起始
+            if (isHead && !lastIsEscape) {
+                // 添加一个新的StringBuilder, 用于缓存当前节点文本
+                stringBuilders.add(StringBuilder())
+                // 当前为节点终止标识且前一字符不是转义符
+            } else if (isTail && !lastIsEscape) {
+                // 前面有节点起始标识
+                if (stringBuilders.isNotEmpty()) {
                     // 还不止一个
-                    if (stack.size > 1) {
-                        // 出栈
-                        stack.removeLast()
+                    if (stringBuilders.size > 1) {
+                        // 证明这是一个嵌套节点, 解析当前内容, append进父节点的待解析文本里, 移除当前节点的缓存
+                        val string = stringBuilders.removeLast().toString()
+                        stringBuilders[stringBuilders.lastIndex].append(transform.apply(string) ?: string)
                         // 只有一个
                     } else {
-                        // 记录并出栈
-                        start.add(stack.removeLast())
-                        end.add(index)
+                        // 证明当前节点是一个顶级节点, 解析当前内容, append进结果文本, 移除节点缓存
+                        val string = stringBuilders.removeLast().toString()
+                        result.append(transform.apply(string) ?: string)
                     }
+                } else {
+                    // 因为已经检查过, 当前字符不被转义, 且不为反斜杠, 所以可以直接append
+                    result.append(char)
+                }
+                // 字符不为节点的起始或终止
+            } else {
+                // 如果stringBuilders不为空, 说明当前仍在解析进行节点识别, 应将字符填入节点缓存
+                // 如果stringBuilders为空, 说明当前处于顶层, 应直接填入result
+                val stringBuilder = when {
+                    stringBuilders.isNotEmpty() -> stringBuilders[stringBuilders.lastIndex]
+                    else -> result
+                }
+                // 如果前一字符为转义符, 理应判断当前字符是否需要转义
+                // 需要转义则吞掉转义符, 不需转义则将转义符视作普通反斜杠处理
+                if (!isHead && !isTail && !isEscape && lastIsEscape) {
+                    stringBuilder.append(escape)
+                }
+                // 如果当前字符不为转义符, 直接填入字符
+                if (!isEscape || lastIsEscape) {
+                    stringBuilder.append(char)
                 }
             }
-            if (char == '\\') {
-                backslash = true
-            } else {
-                backslash = false
+            // 进行转义符记录
+            lastIsEscape = isEscape && !lastIsEscape
+        }
+        // 递归结束后stringBuilders不为空, 说明文本中存在冗余节点起始标识
+        // 对于此种情况, 应将该标识符视作普通文本处理
+        if (stringBuilders.isNotEmpty()) {
+            // 遍历stringBuilders
+            for (stringBuilder in stringBuilders) {
+                // 填入节点起始标识
+                result.append(head)
+                // 填入文本
+                result.append(stringBuilder)
             }
         }
+        return result.toString()
+    }
+
+    /**
+     * 对文本进行分割
+     *
+     * @param separator 分隔符
+     * @param escape 转义符
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.split(separator: Char, escape: Char): ArrayList<String> {
+        // 参数文本
+        val chars = this.toCharArray()
+        // 所有参数
+        val args = ArrayList<String>()
+        // 缓存当前参数
+        val arg = StringBuilder()
+
+        // 表示前一个字符是不是转义符(即反斜杠)
+        var lastIsEscape = false
+
+        // 遍历
+        for (char in chars) {
+            // 当前字符是不是转义符
+            val isEscape = char == escape
+            // 当前字符是不是分隔符
+            val isSeparator = char == separator
+            // 如果当前字符是分隔符且上一个字符不是转义符
+            if (isSeparator && !lastIsEscape) {
+                // 参数怼回去
+                args.add(arg.toString())
+                arg.setLength(0)
+            } else {
+                // 如果前一字符为转义符, 理应判断当前字符是否需要转义
+                // 需要转义则吞掉转义符, 不需转义则将转义符视作普通反斜杠处理
+                if (!isEscape && !isSeparator && lastIsEscape) {
+                    arg.append(escape)
+                }
+                // 如果当前字符不为转义符, 直接填入字符
+                if (!isEscape || lastIsEscape) {
+                    arg.append(char)
+                }
+            }
+            // 进行转义符记录
+            lastIsEscape = isEscape && !lastIsEscape
+        }
+        // 处理最后一个参数
+        // 如果最后一个字符是转义符, 应将其视作普通反斜杠处理
+        if (lastIsEscape) {
+            args.add("$arg$escape")
+        } else {
+            args.add(arg.toString())
+        }
+        return args
     }
 }

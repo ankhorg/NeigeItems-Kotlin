@@ -19,7 +19,14 @@ object JavascriptParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
-        return handler(cache, player, sections, true, data.getString("path"), data.getStringList("args"))
+        return handler(
+            cache,
+            player,
+            sections,
+            true,
+            data.getString("path"),
+            data.getStringList("args")
+        )
     }
 
     override fun onRequest(
@@ -28,18 +35,39 @@ object JavascriptParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        return handler(cache, player, sections, false, args.getOrNull(0), if (args.isNotEmpty()) args.drop(1) else mutableListOf()) ?: "<$id::${args.joinToString("_")}>"
+        return handler(
+            cache,
+            player,
+            sections,
+            false,
+            args.getOrNull(0),
+            if (args.isNotEmpty()) args.drop(1) else mutableListOf()
+        ) ?: "<$id::${args.joinToString("_")}>"
     }
 
-    private fun handler(cache: HashMap<String, String>?,
-                        player: OfflinePlayer?,
-                        sections: ConfigurationSection?,
-                        parse: Boolean,
-                        info: String?,
-                        args: List<String>): String? {
+
+    /**
+     * @param cache 解析值缓存
+     * @param player 待解析玩家
+     * @param sections 节点池
+     * @param parse 是否对参数进行节点解析
+     * @param info 脚本文件名::函数名
+     * @param args 函数参数
+     * @return 解析值
+     */
+    private fun handler(
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?,
+        parse: Boolean,
+        info: String?,
+        args: List<String>
+    ): String? {
         info?.let {
-            val array = it.split("::")
+            val array = info.split("::")
+            // 脚本文件名
             val path = array[0]
+            // 函数名
             val func = array[1]
             val map = HashMap<String, Any>()
             player?.let {

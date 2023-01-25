@@ -18,7 +18,12 @@ object InheritParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
-        return handler(cache, player, sections, true, data.getString("template"))
+        return handler(
+            cache,
+            player,
+            sections,
+            data.getString("template")
+        )
     }
 
     override fun onRequest(
@@ -27,24 +32,38 @@ object InheritParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        return handler(cache, player, sections, false, args.joinToString("_")) ?: "<$id::${args.joinToString("_")}>"
+        return handler(
+            cache,
+            player,
+            sections,
+            args.joinToString("_")
+        ) ?: "<$id::${args.joinToString("_")}>"
     }
 
-    private fun handler(cache: HashMap<String, String>?,
-                        player: OfflinePlayer?,
-                        sections: ConfigurationSection?,
-                        parse: Boolean,
-                        template: String?): String? {
+
+    /**
+     * @param cache 解析值缓存
+     * @param player 待解析玩家
+     * @param sections 节点池
+     * @param template 继承模板ID文本
+     * @return 解析值
+     */
+    private fun handler(
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?,
+        template: String?
+    ): String? {
         // 获取继承模板ID
-        template?.let { inheritId ->
+        template?.let {
             // 获取继承模板
-            val result = when (val section = sections?.getConfigurationSection(inheritId)) {
+            val result = when (val section = sections?.getConfigurationSection(template)) {
                 // 继承简单节点
                 null -> {
-                    sections?.getString(inheritId)?.parseSection(parse, cache, player, sections)
+                    sections?.getString(template)?.parseSection(true, cache, player, sections)
                 }
                 // 继承私有节点
-                else -> Section(section, inheritId).get(cache, player, sections)
+                else -> Section(section, template).get(cache, player, sections)
             }
             return result
         }

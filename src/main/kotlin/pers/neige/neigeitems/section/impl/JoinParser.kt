@@ -24,9 +24,33 @@ object JoinParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
-        return handler(cache, player, sections, data.getStringList("list"), data.getString("separator"), data.getString("prefix"), data.getString("postfix"), data.getString("limit"), data.getString("truncated"), data.getString("transform"))
+        return handler(
+            cache,
+            player,
+            sections,
+            data.getStringList("list"),
+            data.getString("separator"),
+            data.getString("prefix"),
+            data.getString("postfix"),
+            data.getString("limit"),
+            data.getString("truncated"),
+            data.getString("transform")
+        )
     }
 
+    /**
+     * @param cache 解析值缓存
+     * @param player 待解析玩家
+     * @param sections 节点池
+     * @param list 待操作列表
+     * @param separator 分隔符
+     * @param prefix 前缀
+     * @param postfix 后缀
+     * @param limit 长度限制
+     * @param truncated 删节符号
+     * @param transform 操作函数
+     * @return 解析值
+     */
     private fun handler(cache: HashMap<String, String>?,
                         player: OfflinePlayer?,
                         sections: ConfigurationSection?,
@@ -70,7 +94,7 @@ object JoinParser : SectionParser() {
             val result = StringBuilder()
             // 添加前缀
             result.append(prefix)
-            // 遍历列表
+            // 获取遍历范围
             val length = limit ?: list.size
 
             // 预定义参数map
@@ -87,6 +111,7 @@ object JoinParser : SectionParser() {
                 map["vars"] = java.util.function.Function<String, String> { string -> string.parseSection(cache, player, sections) }
             }
 
+            // 遍历列表
             for (index in 0 until length) {
                 // 解析元素节点
                 var element = list[index].parseSection(cache, player, sections)
@@ -97,7 +122,7 @@ object JoinParser : SectionParser() {
                     // 当前序号
                     map["index"] = index
                     // 操作元素
-                    element = transform.invoke("main", map)?.toString()?.parseSection(cache, player, sections) ?: ""
+                    element = transform.invoke("main", map)?.toString() ?: ""
                 }
                 // 添加元素
                 result.append(element)

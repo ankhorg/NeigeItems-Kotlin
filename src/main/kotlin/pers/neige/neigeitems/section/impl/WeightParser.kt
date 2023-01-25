@@ -18,7 +18,13 @@ object WeightParser : SectionParser() {
         player: OfflinePlayer?, sections:
         ConfigurationSection?
     ): String? {
-        return handler(cache, player, sections, true, data.getStringList("values"))
+        return handler(
+            cache,
+            player,
+            sections,
+            true,
+            data.getStringList("values")
+        )
     }
 
     override fun onRequest(
@@ -27,14 +33,30 @@ object WeightParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        return handler(cache, player, sections, false, args) ?: "<${StringsParser.id}::${args.joinToString("_")}>"
+        return handler(
+            cache,
+            player,
+            sections,
+            false,
+            args
+        ) ?: "<$id::${args.joinToString("_")}>"
     }
 
-    private fun handler(cache: HashMap<String, String>?,
-                        player: OfflinePlayer?,
-                        sections: ConfigurationSection?,
-                        parse: Boolean,
-                        values: List<String>): String? {
+    /**
+     * @param cache 解析值缓存
+     * @param player 待解析玩家
+     * @param sections 节点池
+     * @param parse 是否对参数进行节点解析
+     * @param values 文本列表
+     * @return 解析值
+     */
+    private fun handler(
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?,
+        parse: Boolean,
+        values: List<String>
+    ): String? {
         val info = HashMap<String, BigDecimal>()
         var total = BigDecimal(0)
         // 加载所有参数并遍历

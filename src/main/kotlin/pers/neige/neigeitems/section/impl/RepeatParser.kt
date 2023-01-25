@@ -23,32 +23,46 @@ object RepeatParser : SectionParser() {
         cache: HashMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?
-    ): String? {
-        return handler(cache, player, sections, data.getString("content"), data.getString("separator"), data.getString("prefix"), data.getString("postfix"), data.getString("repeat"), data.getString("transform"))
+    ): String {
+        return handler(
+            cache,
+            player,
+            sections,
+            data.getString("content")?.parseSection(cache, player, sections) ?: "",
+            data.getString("separator")?.parseSection(cache, player, sections),
+            data.getString("prefix")?.parseSection(cache, player, sections),
+            data.getString("postfix")?.parseSection(cache, player, sections),
+            data.getString("repeat")?.parseSection(cache, player, sections)?.toIntOrNull(),
+            data.getString("transform")
+        )
     }
 
+    /**
+     * @param cache 解析值缓存
+     * @param player 待解析玩家
+     * @param sections 节点池
+     * @param content 待重复内容
+     * @param separator 分隔符
+     * @param prefix 前缀
+     * @param postfix 后缀
+     * @param repeat 长度限制
+     * @param transform 操作函数
+     * @return 解析值
+     */
     private fun handler(cache: HashMap<String, String>?,
                         player: OfflinePlayer?,
                         sections: ConfigurationSection?,
-                        rawContent: String?,
-                        rawSeparator: String?,
-                        rawPrefix: String?,
-                        rawPostfix: String?,
-                        rawRepeat: String?,
-                        rawTransform: String?,
+                        content: String,
+                        separator: String?,
+                        prefix: String?,
+                        postfix: String?,
+                        repeat: Int?,
+                        transformString: String?,
     ): String {
-        // 获取待重复内容
-        val content = rawContent?.parseSection(cache, player, sections) ?: ""
-        // 获取分隔符(默认为"")
-        val separator = rawSeparator?.parseSection(cache, player, sections)
-        // 获取前缀
-        val prefix = rawPrefix?.parseSection(cache, player, sections)
-        // 获取后缀
-        val postfix = rawPostfix?.parseSection(cache, player, sections)
         // 获取长度限制
-        val repeat = (rawRepeat?.parseSection(cache, player, sections)?.toIntOrNull() ?: 1).coerceAtLeast(0)
+        val length = (repeat ?: 1).coerceAtLeast(0)
         // 获取操作函数
-        val transform = rawTransform?.let {
+        val transform = transformString?.let {
             compiledScripts.computeIfAbsent(it) {
                 CompiledScript("""
                     function main() {
@@ -78,7 +92,7 @@ object RepeatParser : SectionParser() {
             map["vars"] = java.util.function.Function<String, String> { string -> string.parseSection(cache, player, sections) }
         }
 
-        for (index in 0 until repeat) {
+        for (index in 0 until length) {
             // 解析元素节点
             var element = content
             // 操作元素
@@ -86,13 +100,13 @@ object RepeatParser : SectionParser() {
                 // 当前序号
                 map["index"] = index
                 // 操作元素
-                element = transform.invoke("main", map)?.toString()?.parseSection(cache, player, sections) ?: ""
+                element = transform.invoke("main", map)?.toString() ?: ""
             }
             // 添加元素
             result.append(element)
             // 添加分隔符
             separator?.let {
-                if (index != (repeat - 1)) {
+                if (index != (length - 1)) {
                     result.append(it)
                 }
             }

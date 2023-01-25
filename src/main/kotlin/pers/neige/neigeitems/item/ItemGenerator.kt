@@ -148,14 +148,18 @@ class ItemGenerator (val itemConfig: ItemConfig) {
 
         // 获取私有节点配置
         val sections = configSection.getConfigurationSection("sections")
+        // 解析私有节点配置是没有意义的, 删除该部分将大大提升性能
+        configSection.set("sections", null)
         // 对文本化配置进行全局节点解析
         configString = configSection
             .saveToString(id)
             .parseSection(cache, player, sections)
-//            .replace("\\<", "<")
-//            .replace("\\>", ">")
+        // 曾怀疑过前后两次papi解析是否会对生成速度造成较大影响
+        // 后经测试得出结论: 这两次papi解析耗时微乎其微, 各种节点初始化才是耗时的大头
         player?.let { configString = papi(player, configString) }
+        // Debug信息
         if (config.getBoolean("Main.Debug")) print(configString)
+        if (config.getBoolean("Main.Debug") && sections != null) print(sections.saveToString("$id-sections"))
         configSection = configString.loadFromString(id) ?: YamlConfiguration()
         // 构建物品
         if (configSection.contains("material")) {

@@ -10,8 +10,6 @@ import java.util.concurrent.ThreadLocalRandom
  * gaussian节点解析器
  */
 object GaussianParser : SectionParser() {
-    private val RANDOM = ThreadLocalRandom.current()
-
     override val id: String = "gaussian"
 
     override fun onRequest(
@@ -20,7 +18,18 @@ object GaussianParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
-        return handler(cache, player, sections, true, data.getString("base"), data.getString("spread"), data.getString("maxSpread"), data.getString("fixed"), data.getString("min"), data.getString("max"))
+        return handler(
+            cache,
+            player,
+            sections,
+            true,
+            data.getString("base"),
+            data.getString("spread"),
+            data.getString("maxSpread"),
+            data.getString("fixed"),
+            data.getString("min"),
+            data.getString("max")
+        )
     }
 
     override fun onRequest(
@@ -29,29 +38,60 @@ object GaussianParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        return handler(cache, player, sections, false, *args.toTypedArray()) ?: "<$id::${args.joinToString("_")}>"
+        return handler(
+            cache,
+            player,
+            sections,
+            false,
+            args.getOrNull(0),
+            args.getOrNull(1),
+            args.getOrNull(2),
+            args.getOrNull(3),
+            args.getOrNull(4),
+            args.getOrNull(5),
+        ) ?: "<$id::${args.joinToString("_")}>"
     }
 
-    private fun handler(cache: HashMap<String, String>?,
-                        player: OfflinePlayer?,
-                        sections: ConfigurationSection?,
-                        parse: Boolean,
-                        vararg args: String?): String? {
+    /**
+     * @param cache 解析值缓存
+     * @param player 待解析玩家
+     * @param sections 节点池
+     * @param parse 是否对参数进行节点解析
+     * @param baseString 基础数值文本
+     * @param spreadString 浮动单位文本
+     * @param maxSpreadString 浮动范围上限文本
+     * @param fixedString 取整位数文本
+     * @param minString 最小值文本
+     * @param maxString 最大值文本
+     * @return 解析值
+     */
+    private fun handler(
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?,
+        parse: Boolean,
+        baseString: String?,
+        spreadString: String?,
+        maxSpreadString: String?,
+        fixedString: String?,
+        minString: String?,
+        maxString: String?,
+    ): String? {
         // 获取基础数值
-        val base = args.getOrNull(0)?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
+        val base = baseString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
         // 获取浮动单位
-        val spread = args.getOrNull(1)?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
+        val spread = spreadString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
         // 获取浮动范围上限
-        val maxSpread = args.getOrNull(2)?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
+        val maxSpread = maxSpreadString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
         // 获取取整位数
-        val fixed = args.getOrNull(3)?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 1
+        val fixed = fixedString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 1
         // 获取大小范围
-        val min = args.getOrNull(4)?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
-        val max = args.getOrNull(5)?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
+        val min = minString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
+        val max = maxString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
         // 获取随机数
         if (base != null && spread != null && maxSpread != null) {
             // 根据正态分布进行范围随机
-            val random = (RANDOM.nextGaussian()*spread)
+            val random = (ThreadLocalRandom.current().nextGaussian()*spread)
                 // 限制随机范围下限
                 .coerceAtLeast(-maxSpread)
                 // 限制随机范围上限

@@ -2,6 +2,7 @@ package pers.neige.neigeitems.section
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import pers.neige.neigeitems.section.impl.WeightParser
 
 /**
  * 节点解析器抽象类
@@ -20,7 +21,12 @@ abstract class SectionParser {
      * @param sections 节点池
      * @return 解析值
      */
-    open fun onRequest(data: ConfigurationSection, cache: HashMap<String, String>? = null, player: OfflinePlayer? = null, sections: ConfigurationSection? = null): String? {
+    open fun onRequest(
+        data: ConfigurationSection,
+        cache: HashMap<String, String>? = null,
+        player: OfflinePlayer? = null,
+        sections: ConfigurationSection? = null
+    ): String? {
         return null
     }
 
@@ -32,7 +38,12 @@ abstract class SectionParser {
      * @param sections 节点池
      * @return 解析值
      */
-    open fun onRequest(args: List<String>, cache: HashMap<String, String>? = null, player: OfflinePlayer? = null, sections: ConfigurationSection? = null): String {
-        return ""
+    open fun onRequest(
+        args: List<String>,
+        cache: HashMap<String, String>? = null,
+        player: OfflinePlayer? = null,
+        sections: ConfigurationSection? = null
+    ): String {
+        return "<$id::${args.joinToString("_")}>"
     }
 }

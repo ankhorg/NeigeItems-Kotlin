@@ -18,7 +18,16 @@ object CalculationParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
-        return handler(cache, player, sections, true, data.getString("formula"), data.getString("fixed"), data.getString("min"), data.getString("max"))
+        return handler(
+            cache,
+            player,
+            sections,
+            true,
+            data.getString("formula"),
+            data.getString("fixed"),
+            data.getString("min"),
+            data.getString("max")
+        )
     }
 
     override fun onRequest(
@@ -27,28 +36,53 @@ object CalculationParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        return handler(cache, player, sections, false, *args.toTypedArray()) ?: "<$id::${args.joinToString("_")}>"
+        return handler(
+            cache,
+            player,
+            sections,
+            false,
+            args.getOrNull(0),
+            args.getOrNull(1),
+            args.getOrNull(2),
+            args.getOrNull(3)
+        ) ?: "<$id::${args.joinToString("_")}>"
     }
 
-    private fun handler(cache: HashMap<String, String>?,
-                        player: OfflinePlayer?,
-                        sections: ConfigurationSection?,
-                        parse: Boolean,
-                        vararg args: String?): String? {
+    /**
+     * @param cache 解析值缓存
+     * @param player 待解析玩家
+     * @param sections 节点池
+     * @param parse 是否对参数进行节点解析
+     * @param fomulaString 公式文本
+     * @param fixedString 取整位数文本
+     * @param minString 最小值文本
+     * @param maxString 最大值文本
+     * @return 解析值
+     */
+    private fun handler(
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?,
+        parse: Boolean,
+        fomulaString: String?,
+        fixedString: String?,
+        minString: String?,
+        maxString: String?
+    ): String? {
         try {
             // 加载公式
-            args.getOrNull(0)?.parseSection(parse, cache, player, sections)?.let {
+            fomulaString?.parseSection(parse, cache, player, sections)?.let {
                 // 计算结果
                 var result = it.eval().toString().toDouble()
                 // 获取大小范围
-                args.getOrNull(2)?.parseSection(parse, cache, player, sections)?.toDouble()?.let { min ->
+                minString?.parseSection(parse, cache, player, sections)?.toDouble()?.let { min ->
                     result = min.coerceAtLeast(result)
                 }
-                args.getOrNull(3)?.parseSection(parse, cache, player, sections)?.toDouble()?.let { max ->
+                maxString?.parseSection(parse, cache, player, sections)?.toDouble()?.let { max ->
                     result = max.coerceAtMost(result)
                 }
                 // 获取取整位数
-                val fixed = args.getOrNull(1)?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 0
+                val fixed = fixedString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 0
                 // 加载结果
                 return "%.${fixed}f".format(result)
             }
