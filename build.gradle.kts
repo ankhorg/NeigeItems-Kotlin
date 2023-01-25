@@ -68,7 +68,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
-    compileOnly("io.lumine:Mythic-Dist:5.1.0-SNAPSHOT")
+    compileOnly("io.lumine:Mythic-Dist:5.1.0")
     compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
