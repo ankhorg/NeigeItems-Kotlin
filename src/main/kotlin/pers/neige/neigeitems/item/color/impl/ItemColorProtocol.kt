@@ -164,7 +164,7 @@ class ItemColorProtocol : ItemColor() {
                                         val flag = event.packet.watchableCollectionModifier.read(0)[0]
                                         val byte = flag.value
                                         if (byte is Byte) {
-                                            flag.value = byte or (1 shl 6)
+                                            flag.value = byte or (1 shl 6).toByte()
                                         }
                                         bukkitScheduler.runTaskAsynchronously(NeigeItems.plugin, Runnable {
                                             initTeam(event.player)

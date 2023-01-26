@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.utils
 
-import com.expression.parser.Parser
+import pers.neige.neigeitems.asahi.util.calculate.calculate
+import java.math.BigDecimal
 
 object CalculationUtils {
     /**
@@ -9,7 +10,7 @@ object CalculationUtils {
      * @return 返回值
      */
     @JvmStatic
-    fun String.calc(): Double {
-        return Parser.simpleEval(this)
+    fun String.calc(): BigDecimal {
+        return this.calculate()
     }
 }

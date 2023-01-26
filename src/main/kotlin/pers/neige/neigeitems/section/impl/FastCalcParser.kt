@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.CalculationUtils.calc
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
+import java.math.BigDecimal
 
 /**
  * 公式节点解析器
@@ -76,10 +77,10 @@ object FastCalcParser : SectionParser() {
                 var result = it.calc()
                 // 获取大小范围
                 minString?.parseSection(parse, cache, player, sections)?.toDouble()?.let { min ->
-                    result = min.coerceAtLeast(result)
+                    result = result.max(BigDecimal(min))
                 }
                 maxString?.parseSection(parse, cache, player, sections)?.toDouble()?.let { max ->
-                    result = max.coerceAtMost(result)
+                    result = result.min(BigDecimal(max))
                 }
                 // 获取取整位数
                 val fixed = fixedString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 0
