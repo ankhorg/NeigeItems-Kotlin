@@ -58,6 +58,7 @@ repositories {
 
 dependencies {
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.6.10")
+    taboo(fileTree("libs/com.expression.parser-3.3.0.jar"))
     compileOnly(fileTree("libs"))
     compileOnly("ink.ptms:nms-all:1.0.0")
     compileOnly("ink.ptms.core:v11900:11900-minimize:mapped")
