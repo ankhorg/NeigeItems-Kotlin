@@ -9,10 +9,12 @@ import pers.neige.neigeitems.command.impl.Help.help
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ItemUtils
+import pers.neige.neigeitems.utils.LangUtils.getLang
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.getName
 import taboolib.platform.util.giveItem
+import taboolib.platform.util.sendLang
 
 object GivePack {
     // ni givePack [玩家ID] [物品包ID] (数量) > 根据ID给予NI物品包
@@ -85,7 +87,7 @@ object GivePack {
         player?.let {
             ItemPackManager.itemPacks[id]?.let { itemPack ->
                 // 如果是按物品提示, 就建立map存储信息
-                val dropData = when (ConfigManager.config.getString("Messages.type.givePackMessage")) {
+                val dropData = when (getLang("Messages.type.givePackMessage")) {
                     "Items" -> HashMap<String, Int>()
                     else -> null
                 }
@@ -106,34 +108,36 @@ object GivePack {
                 // 信息提示
                 dropData?.let {
                     for ((name, amt) in dropData) {
-                        sender.sendMessage(
-                            ConfigManager.config.getString("Messages.successInfo")
-                                ?.replace("{player}", player.name)
-                                ?.replace("{amount}", amt.toString())
-                                ?.replace("{name}", name))
-                        player.sendMessage(
-                            ConfigManager.config.getString("Messages.givenInfo")
-                                ?.replace("{amount}", amt.toString())
-                                ?.replace("{name}", name))
+                        sender.sendLang("Messages.successInfo", mapOf(
+                            Pair("{player}", player.name),
+                            Pair("{amount}", amt.toString()),
+                            Pair("{name}", name)
+                        ))
+                        player.sendLang("Messages.givenInfo", mapOf(
+                            Pair("{amount}", amt.toString()),
+                            Pair("{name}", name)
+                        ))
                     }
                 } ?: let {
-                    sender.sendMessage(
-                        ConfigManager.config.getString("Messages.successPackInfo")
-                            ?.replace("{player}", player.name)
-                            ?.replace("{amount}", repeat.toString())
-                            ?.replace("{name}", id))
-                    player.sendMessage(
-                        ConfigManager.config.getString("Messages.givenPackInfo")
-                            ?.replace("{amount}", repeat.toString())
-                            ?.replace("{name}", id))
+                    sender.sendLang("Messages.successPackInfo", mapOf(
+                        Pair("{player}", player.name),
+                        Pair("{amount}", repeat.toString()),
+                        Pair("{name}", id)
+                    ))
+                    player.sendLang("Messages.givenPackInfo", mapOf(
+                        Pair("{amount}", repeat.toString()),
+                        Pair("{name}", id)
+                    ))
                 }
                 // 未知物品包
             } ?: let {
-                sender.sendMessage(ConfigManager.config.getString("Messages.unknownItemPack")?.replace("{packID}", id))
+                sender.sendLang("Messages.unknownItemPack", mapOf(
+                    Pair("{packID}", id)
+                ))
             }
             // 未知解析对象
         } ?: let {
-            sender.sendMessage(ConfigManager.config.getString("Messages.invalidParser"))
+            sender.sendLang("Messages.invalidParser")
         }
     }
 }

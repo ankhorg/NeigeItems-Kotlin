@@ -13,6 +13,7 @@ import pers.neige.neigeitems.utils.PlayerUtils.giveItems
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.getName
+import taboolib.platform.util.sendLang
 import java.io.File
 
 object MM {
@@ -32,21 +33,29 @@ object MM {
                                         when (ItemManager.saveItem(itemStack, id, ConfigManager.config.getString("Main.MMItemsPath") ?: "MMItems.yml", false)) {
                                             // 保存成功
                                             1 -> {
-                                                sender.sendMessage(
-                                                    ConfigManager.config.getString("Messages.successSaveInfo")
-                                                    ?.replace("{name}", itemStack.getName())
-                                                    ?.replace("{itemID}", id)
-                                                    ?.replace("{path}", ConfigManager.config.getString("Main.MMItemsPath") ?: "MMItems.yml"))
+                                                sender.sendLang("Messages.successSaveInfo", mapOf(
+                                                    Pair("{name}", itemStack.getName()),
+                                                    Pair("{itemID}", id),
+                                                    Pair("{path}", ConfigManager.config.getString("Main.MMItemsPath") ?: "MMItems.yml")
+                                                ))
                                             }
                                             // 已存在对应ID物品
-                                            0 -> sender.sendMessage(ConfigManager.config.getString("Messages.existedKey")?.replace("{itemID}", id))
+                                            0 -> {
+                                                sender.sendLang("Messages.existedKey", mapOf(
+                                                    Pair("{itemID}", id)
+                                                ))
+                                            }
                                         }
                                     }
                                 }
                             }
                             else -> help(sender)
                         }
-                    } ?: sender.sendMessage(ConfigManager.config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
+                    } ?: let {
+                        sender.sendLang("Messages.invalidPlugin", mapOf(
+                            Pair("{plugin}", "MythicMobs")
+                        ))
+                    }
                 }
             }
             dynamic {
@@ -79,18 +88,24 @@ object MM {
                                         when (ItemManager.saveItem(itemStack, argument, "$argument.yml", false)) {
                                             // 保存成功
                                             1 -> {
-                                                sender.sendMessage(
-                                                    ConfigManager.config.getString("Messages.successSaveInfo")
-                                                    ?.replace("{name}", itemStack.getName())
-                                                    ?.replace("{itemID}", argument)
-                                                    ?.replace("{path}", "$argument.yml"))
+                                                sender.sendLang("Messages.successSaveInfo", mapOf(
+                                                    Pair("{name}", itemStack.getName()),
+                                                    Pair("{itemID}", argument),
+                                                    Pair("{path}", "$argument.yml")
+                                                ))
                                             }
                                             // 已存在对应ID物品
-                                            0 -> sender.sendMessage(ConfigManager.config.getString("Messages.existedKey")?.replace("{itemID}", argument))
+                                            0 -> {
+                                                sender.sendLang("Messages.existedKey", mapOf(
+                                                    Pair("{itemID}", argument)
+                                                ))
+                                            }
                                         }
                                         // 未知物品
                                     } ?: let {
-                                        sender.sendMessage(ConfigManager.config.getString("Messages.unknownItem")?.replace("{itemID}", argument))
+                                        sender.sendLang("Messages.unknownItem", mapOf(
+                                            Pair("{itemID}", argument)
+                                        ))
                                     }
                                 }
                                 // ni mm cover [物品ID]
@@ -98,15 +113,17 @@ object MM {
                                     HookerManager.mythicMobsHooker!!.getItemStackSync(argument)?.let { itemStack ->
                                         if (ItemManager.saveItem(itemStack, argument, "$argument.yml", true) != 2) {
                                             // 保存成功
-                                            sender.sendMessage(
-                                                ConfigManager.config.getString("Messages.successSaveInfo")
-                                                ?.replace("{name}", itemStack.getName())
-                                                ?.replace("{itemID}", argument)
-                                                ?.replace("{path}", "$argument.yml"))
+                                            sender.sendLang("Messages.successSaveInfo", mapOf(
+                                                Pair("{name}", itemStack.getName()),
+                                                Pair("{itemID}", argument),
+                                                Pair("{path}", "$argument.yml")
+                                            ))
                                         }
                                         // 未知物品
                                     } ?: let {
-                                        sender.sendMessage(ConfigManager.config.getString("Messages.unknownItem")?.replace("{itemID}", argument))
+                                        sender.sendLang("Messages.unknownItem", mapOf(
+                                            Pair("{itemID}", argument)
+                                        ))
                                     }
                                 }
                                 // ni mm loadAll (保存路径)
@@ -116,14 +133,18 @@ object MM {
                                             when (ItemManager.saveItem(itemStack, id, argument, false)) {
                                                 // 保存成功
                                                 1 -> {
-                                                    sender.sendMessage(
-                                                        ConfigManager.config.getString("Messages.successSaveInfo")
-                                                        ?.replace("{name}", itemStack.getName())
-                                                        ?.replace("{itemID}", id)
-                                                        ?.replace("{path}", argument))
+                                                    sender.sendLang("Messages.successSaveInfo", mapOf(
+                                                        Pair("{name}", itemStack.getName()),
+                                                        Pair("{itemID}", id),
+                                                        Pair("{path}", argument)
+                                                    ))
                                                 }
                                                 // 已存在对应ID物品
-                                                0 -> sender.sendMessage(ConfigManager.config.getString("Messages.existedKey")?.replace("{itemID}", id))
+                                                0 -> {
+                                                    sender.sendLang("Messages.existedKey", mapOf(
+                                                        Pair("{itemID}", id)
+                                                    ))
+                                                }
                                             }
                                         }
                                     }
@@ -133,7 +154,7 @@ object MM {
                                     if (sender is Player) {
                                         giveAddonCommandAsync( sender, sender, argument, HookerManager.mythicMobsHooker!!.getItemStackSync(argument), 1)
                                     } else {
-                                        ConfigManager.config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
+                                        sender.sendLang("Messages.onlyPlayer")
                                     }
                                 }
                                 // ni mm giveAll [物品ID]
@@ -146,7 +167,11 @@ object MM {
                                 }
                                 else -> help(sender)
                             }
-                        } ?: sender.sendMessage(ConfigManager.config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
+                        } ?: let {
+                            sender.sendLang("Messages.invalidPlugin", mapOf(
+                                Pair("{plugin}", "MythicMobs")
+                            ))
+                        }
                     }
                 }
                 dynamic {
@@ -177,18 +202,24 @@ object MM {
                                             when (ItemManager.saveItem(itemStack, context.argument(-1), argument, false)) {
                                                 // 保存成功
                                                 1 -> {
-                                                    sender.sendMessage(
-                                                        ConfigManager.config.getString("Messages.successSaveInfo")
-                                                        ?.replace("{name}", itemStack.getName())
-                                                        ?.replace("{itemID}", context.argument(-1))
-                                                        ?.replace("{path}", argument))
+                                                    sender.sendLang("Messages.successSaveInfo", mapOf(
+                                                        Pair("{name}", itemStack.getName()),
+                                                        Pair("{itemID}", context.argument(-1)),
+                                                        Pair("{path}", argument)
+                                                    ))
                                                 }
                                                 // 已存在对应ID物品
-                                                0 -> sender.sendMessage(ConfigManager.config.getString("Messages.existedKey")?.replace("{itemID}", context.argument(-1)))
+                                                0 -> {
+                                                    sender.sendLang("Messages.existedKey", mapOf(
+                                                        Pair("{itemID}", context.argument(-1))
+                                                    ))
+                                                }
                                             }
                                             // 未知物品
                                         } ?: let {
-                                            sender.sendMessage(ConfigManager.config.getString("Messages.unknownItem")?.replace("{itemID}", context.argument(-1)))
+                                            sender.sendLang("Messages.unknownItem", mapOf(
+                                                Pair("{itemID}", context.argument(-1))
+                                            ))
                                         }
                                     }
                                     // ni mm cover [物品ID] (保存路径)
@@ -196,15 +227,17 @@ object MM {
                                         HookerManager.mythicMobsHooker!!.getItemStackSync(context.argument(-1))?.let { itemStack ->
                                             if (ItemManager.saveItem(itemStack, context.argument(-1), argument, true) != 2) {
                                                 // 保存成功
-                                                sender.sendMessage(
-                                                    ConfigManager.config.getString("Messages.successSaveInfo")
-                                                    ?.replace("{name}", itemStack.getName())
-                                                    ?.replace("{itemID}", context.argument(-1))
-                                                    ?.replace("{path}", argument))
+                                                sender.sendLang("Messages.successSaveInfo", mapOf(
+                                                    Pair("{name}", itemStack.getName()),
+                                                    Pair("{itemID}", context.argument(-1)),
+                                                    Pair("{path}", argument),
+                                                ))
                                             }
                                             // 未知物品
                                         } ?: let {
-                                            sender.sendMessage(ConfigManager.config.getString("Messages.unknownItem")?.replace("{itemID}", context.argument(-1)))
+                                            sender.sendLang("Messages.unknownItem", mapOf(
+                                                Pair("{itemID}", context.argument(-1))
+                                            ))
                                         }
                                     }
                                     // ni mm get [物品ID] (数量)
@@ -212,7 +245,7 @@ object MM {
                                         if (sender is Player) {
                                             giveAddonCommandAsync( sender, sender, context.argument(-1), HookerManager.mythicMobsHooker!!.getItemStackSync(context.argument(-1)), argument.toIntOrNull())
                                         } else {
-                                            ConfigManager.config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
+                                            sender.sendLang("Messages.onlyPlayer")
                                         }
                                     }
                                     // ni mm give [玩家ID] [物品ID]
@@ -229,7 +262,11 @@ object MM {
                                     }
                                     else -> help(sender)
                                 }
-                            } ?: sender.sendMessage(ConfigManager.config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
+                            } ?: let {
+                                sender.sendLang("Messages.invalidPlugin", mapOf(
+                                    Pair("{plugin}", "MythicMobs")
+                                ))
+                            }
                         }
                     }
                     dynamic {
@@ -252,7 +289,11 @@ object MM {
                                         }
                                         else -> help(sender)
                                     }
-                                } ?: sender.sendMessage(ConfigManager.config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
+                                } ?: let {
+                                    sender.sendLang("Messages.invalidPlugin", mapOf(
+                                        Pair("{plugin}", "MythicMobs")
+                                    ))
+                                }
                             }
                         }
                     }
@@ -288,26 +329,28 @@ object MM {
                     NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
                         player.giveItems(itemStack, amount.coerceAtLeast(1))
                     }
-                    sender.sendMessage(
-                        ConfigManager.config.getString("Messages.successInfo")
-                        ?.replace("{player}", player.name)
-                        ?.replace("{amount}", amount.toString())
-                        ?.replace("{name}", itemStack.getName()))
-                    player.sendMessage(
-                        ConfigManager.config.getString("Messages.givenInfo")
-                        ?.replace("{amount}", amount.toString())
-                        ?.replace("{name}", itemStack.getName()))
+                    sender.sendLang("Messages.successInfo", mapOf(
+                        Pair("{player}", player.name),
+                        Pair("{amount}", amount.toString()),
+                        Pair("{name}", itemStack.getName())
+                    ))
+                    player.sendLang("Messages.givenInfo", mapOf(
+                        Pair("{amount}", amount.toString()),
+                        Pair("{name}", itemStack.getName())
+                    ))
                     // 未知物品ID
                 } ?: let {
-                    sender.sendMessage(ConfigManager.config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+                    sender.sendLang("Messages.unknownItem", mapOf(
+                        Pair("{itemID}", id)
+                    ))
                 }
                 // 无效数字
             } ?: let {
-                sender.sendMessage(ConfigManager.config.getString("Messages.invalidAmount"))
+                sender.sendLang("Messages.invalidAmount")
             }
             // 无效玩家
         } ?: let {
-            sender.sendMessage(ConfigManager.config.getString("Messages.invalidPlayer"))
+            sender.sendLang("Messages.invalidPlayer")
         }
     }
 }

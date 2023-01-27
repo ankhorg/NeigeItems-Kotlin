@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("io.izzel.taboolib") version "1.51"
+    id("io.izzel.taboolib") version "1.55"
     id("org.jetbrains.kotlin.jvm") version "1.7.20"
     id("org.jetbrains.dokka") version "1.7.20"
 }
@@ -23,10 +23,10 @@ taboolib {
             name("Neige")
         }
         dependencies {
-            name("ProtocolLib").with("bukkit").optional(true).loadafter(true)
-            name("PlaceholderAPI").with("bukkit").optional(true).loadafter(true)
-            name("MythicMobs").with("bukkit").optional(true).loadafter(true)
-            name("Vault").with("bukkit").optional(true).loadafter(true)
+            name("ProtocolLib").with("bukkit").optional(true)
+            name("PlaceholderAPI").with("bukkit").optional(true)
+            name("MythicMobs").with("bukkit").optional(true)
+            name("Vault").with("bukkit").optional(true)
         }
     }
     install(
@@ -60,8 +60,8 @@ dependencies {
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
     compileOnly(fileTree("libs"))
     compileOnly("ink.ptms:nms-all:1.0.0")
-    compileOnly("ink.ptms.core:v11900:11900-minimize:mapped")
-    compileOnly("ink.ptms.core:v11900:11900-minimize:universal")
+    compileOnly("ink.ptms.core:v11902:11902-minimize:mapped")
+    compileOnly("ink.ptms.core:v11902:11902-minimize:universal")
     compileOnly(kotlin("stdlib"))
     compileOnly("org.openjdk.nashorn:nashorn-core:15.4")
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")

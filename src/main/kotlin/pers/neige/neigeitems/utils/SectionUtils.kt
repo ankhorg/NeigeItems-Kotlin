@@ -247,6 +247,7 @@ object SectionUtils {
     /**
      * 对文本进行某种解析
      *
+     * @param transform 解析函数
      * @return 解析值
      */
     @JvmStatic

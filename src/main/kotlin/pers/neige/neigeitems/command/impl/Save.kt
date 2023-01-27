@@ -7,6 +7,7 @@ import pers.neige.neigeitems.manager.ItemManager
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.getName
+import taboolib.platform.util.sendLang
 import java.io.File
 
 object Save {
@@ -26,16 +27,20 @@ object Save {
                     when (ItemManager.saveItem(sender.inventory.itemInMainHand, argument, "$argument.yml", false)) {
                         // 保存成功
                         1 -> {
-                            sender.sendMessage(
-                                ConfigManager.config.getString("Messages.successSaveInfo")
-                                ?.replace("{name}", sender.inventory.itemInMainHand.getName())
-                                ?.replace("{itemID}", argument)
-                                ?.replace("{path}", "$argument.yml"))
+                            sender.sendLang("Messages.successSaveInfo", mapOf(
+                                Pair("{name}", sender.inventory.itemInMainHand.getName()),
+                                Pair("{itemID}", argument),
+                                Pair("{path}", "$argument.yml")
+                            ))
                         }
                         // 已存在对应ID物品
-                        0 -> sender.sendMessage(ConfigManager.config.getString("Messages.existedKey")?.replace("{itemID}", argument))
+                        0 -> {
+                            sender.sendLang("Messages.existedKey", mapOf(
+                                Pair("{itemID}", argument)
+                            ))
+                        }
                         // 你保存了个空气
-                        else -> sender.sendMessage(ConfigManager.config.getString("Messages.airItem"))
+                        else -> sender.sendLang("Messages.airItem")
                     }
                 }
             }
@@ -49,16 +54,19 @@ object Save {
                         when (ItemManager.saveItem(sender.inventory.itemInMainHand, context.argument(-1), argument, false)) {
                             // 保存成功
                             1 -> {
-                                sender.sendMessage(
-                                    ConfigManager.config.getString("Messages.successSaveInfo")
-                                    ?.replace("{name}", sender.inventory.itemInMainHand.getName())
-                                    ?.replace("{itemID}", context.argument(-1))
-                                    ?.replace("{path}", argument))
+                                sender.sendLang("Messages.successSaveInfo", mapOf(
+                                    Pair("{name}", sender.inventory.itemInMainHand.getName()),
+                                    Pair("{itemID}", context.argument(-1)),
+                                    Pair("{path}", argument)
+                                ))
                             }
                             // 已存在对应ID物品
-                            0 -> sender.sendMessage(ConfigManager.config.getString("Messages.existedKey")?.replace("{itemID}", context.argument(-1)))
+                            0 -> {sender.sendLang("Messages.existedKey", mapOf(
+                                Pair("{itemID}", context.argument(-1))
+                            ))
+                            }
                             // 你保存了个空气
-                            else -> sender.sendMessage(ConfigManager.config.getString("Messages.airItem"))
+                            else -> sender.sendLang("Messages.airItem")
                         }
                     }
                 }
@@ -82,14 +90,14 @@ object Save {
                 submit(async = true) {
                     when (ItemManager.saveItem(sender.inventory.itemInMainHand, argument, "$argument.yml", true)) {
                         // 你保存了个空气
-                        2 -> sender.sendMessage(ConfigManager.config.getString("Messages.airItem"))
+                        2 -> sender.sendLang("Messages.airItem")
                         // 保存成功
                         else -> {
-                            sender.sendMessage(
-                                ConfigManager.config.getString("Messages.successSaveInfo")
-                                ?.replace("{name}", sender.inventory.itemInMainHand.getName())
-                                ?.replace("{itemID}", argument)
-                                ?.replace("{path}", "$argument.yml"))
+                            sender.sendLang("Messages.successSaveInfo", mapOf(
+                                Pair("{name}", sender.inventory.itemInMainHand.getName()),
+                                Pair("{itemID}", argument),
+                                Pair("{path}", "$argument.yml")
+                            ))
                         }
                     }
                 }
@@ -103,14 +111,14 @@ object Save {
                     submit(async = true) {
                         when (ItemManager.saveItem(sender.inventory.itemInMainHand, context.argument(-1), argument, true)) {
                             // 你保存了个空气
-                            2 -> sender.sendMessage(ConfigManager.config.getString("Messages.airItem"))
+                            2 -> sender.sendLang("Messages.airItem")
                             // 保存成功
                             else -> {
-                                sender.sendMessage(
-                                    ConfigManager.config.getString("Messages.successSaveInfo")
-                                    ?.replace("{name}", sender.inventory.itemInMainHand.getName())
-                                    ?.replace("{itemID}", context.argument(-1))
-                                    ?.replace("{path}", argument))
+                                sender.sendLang("Messages.successSaveInfo", mapOf(
+                                    Pair("{name}", sender.inventory.itemInMainHand.getName()),
+                                    Pair("{itemID}", context.argument(-1)),
+                                    Pair("{path}", argument)
+                                ))
                             }
                         }
                     }

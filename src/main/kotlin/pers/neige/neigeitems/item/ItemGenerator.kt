@@ -65,7 +65,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
     /**
      * 获取物品解析后配置(经过继承和全局节点调用)
      */
-    var configSection = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), originConfigSection))
+    val configSection = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), originConfigSection))
 
     /**
      * 获取解析后物品配置文本

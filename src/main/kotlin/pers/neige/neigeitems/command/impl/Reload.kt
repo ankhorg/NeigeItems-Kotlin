@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender
 import pers.neige.neigeitems.manager.*
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
+import taboolib.platform.util.sendLang
 
 object Reload {
     val reload = subCommand {
@@ -22,7 +23,7 @@ object Reload {
             ItemPackManager.reload()
             ActionManager.reload()
             ItemEditorManager.reload()
-            sender.sendMessage(ConfigManager.config.getString("Messages.reloadedMessage"))
+            sender.sendLang("Messages.reloadedMessage")
         }
     }
 }

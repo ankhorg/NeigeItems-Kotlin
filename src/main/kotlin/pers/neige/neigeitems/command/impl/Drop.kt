@@ -12,6 +12,7 @@ import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.getName
+import taboolib.platform.util.sendLang
 
 object Drop {
     val drop = subCommand {
@@ -141,10 +142,10 @@ object Drop {
             if (x != null && y != null && z != null) {
                 dropCommand(sender, id, amount.toIntOrNull(), Location(world, x, y, z), random, Bukkit.getPlayerExact(parser), data)
             } else {
-                sender.sendMessage(ConfigManager.config.getString("Messages.invalidLocation"))
+                sender.sendLang("Messages.invalidLocation")
             }
         } ?: let {
-            sender.sendMessage(ConfigManager.config.getString("Messages.invalidWorld"))
+            sender.sendLang("Messages.invalidWorld")
         }
     }
 
@@ -182,21 +183,23 @@ object Drop {
                         // 掉物品
                         ItemManager.getItemStack(id, parser, data)?.let { itemStack ->
                             location?.dropNiItems(itemStack, amount.coerceAtLeast(1), parser)
-                            sender.sendMessage(
-                                ConfigManager.config.getString("Messages.dropSuccessInfo")
-                                ?.replace("{world}", location?.world?.name ?: "")
-                                ?.replace("{x}", location?.x.toString())
-                                ?.replace("{y}", location?.y.toString())
-                                ?.replace("{z}", location?.z.toString())
-                                ?.replace("{amount}", amount.toString())
-                                ?.replace("{name}", itemStack.getName()))
+                            sender.sendLang("Messages.dropSuccessInfo", mapOf(
+                                Pair("{world}", location?.world?.name ?: ""),
+                                Pair("{x}", location?.x.toString()),
+                                Pair("{y}", location?.y.toString()),
+                                Pair("{z}", location?.z.toString()),
+                                Pair("{amount}", amount.toString()),
+                                Pair("{name}", itemStack.getName())
+                            ))
                             // 未知物品ID
                         } ?: let {
-                            sender.sendMessage(ConfigManager.config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+                            sender.sendLang("Messages.unknownItem", mapOf(
+                                Pair("{itemID}", id)
+                            ))
                         }
                         // 无效数字
                     } ?: let {
-                        sender.sendMessage(ConfigManager.config.getString("Messages.invalidAmount"))
+                        sender.sendLang("Messages.invalidAmount")
                     }
                 }
                 else -> {
@@ -210,29 +213,31 @@ object Drop {
                                 dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
                                 // 未知物品ID
                             } ?: let {
-                                sender.sendMessage(ConfigManager.config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+                                sender.sendLang("Messages.unknownItem", mapOf(
+                                    Pair("{itemID}", id)
+                                ))
                                 return@repeat
                             }
                         }
                         for((name, amt) in dropData) {
-                            sender.sendMessage(
-                                ConfigManager.config.getString("Messages.dropSuccessInfo")
-                                ?.replace("{world}", location?.world?.name ?: "")
-                                ?.replace("{x}", location?.x.toString())
-                                ?.replace("{y}", location?.y.toString())
-                                ?.replace("{z}", location?.z.toString())
-                                ?.replace("{amount}", amt.toString())
-                                ?.replace("{name}", name))
+                            sender.sendLang("Messages.dropSuccessInfo", mapOf(
+                                Pair("{world}", location?.world?.name ?: ""),
+                                Pair("{x}", location?.x.toString()),
+                                Pair("{y}", location?.y.toString()),
+                                Pair("{z}", location?.z.toString()),
+                                Pair("{amount}", amt.toString()),
+                                Pair("{name}", name)
+                            ))
                         }
                         // 无效数字
                     } ?: let {
-                        sender.sendMessage(ConfigManager.config.getString("Messages.invalidAmount"))
+                        sender.sendLang("Messages.invalidAmount")
                     }
                 }
             }
             // 未知解析对象
         } ?: let {
-            sender.sendMessage(ConfigManager.config.getString("Messages.invalidParser"))
+            sender.sendLang("Messages.invalidParser")
         }
     }
 }

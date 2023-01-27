@@ -7,12 +7,14 @@ import pers.neige.neigeitems.command.impl.Help.help
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
+import pers.neige.neigeitems.utils.LangUtils.sendLang
 import taboolib.common.platform.command.CommandBody
 import taboolib.common.platform.command.CommandHeader
 import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.platform.BukkitAdapter
+import taboolib.platform.util.sendLang
 
 /**
  * 插件指令
@@ -29,7 +31,7 @@ object Command {
             }
         }
         incorrectSender { sender, _ ->
-            config.getString("Messages.onlyPlayer")?.let { sender.sendMessage(it) }
+            sender.sendLang("Messages.onlyPlayer")
         }
         incorrectCommand { sender, _, _, _ ->
             help(sender)

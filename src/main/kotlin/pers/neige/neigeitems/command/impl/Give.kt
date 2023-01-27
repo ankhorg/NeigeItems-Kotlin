@@ -12,6 +12,7 @@ import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.getName
 import taboolib.platform.util.giveItem
+import taboolib.platform.util.sendLang
 
 object Give {
     // ni get [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID获取NI物品
@@ -229,22 +230,24 @@ object Give {
                             NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
                                 player.giveItems(itemStack, amount.coerceAtLeast(1))
                             }
-                            sender.sendMessage(
-                                ConfigManager.config.getString("Messages.successInfo")
-                                ?.replace("{player}", player.name)
-                                ?.replace("{amount}", amount.toString())
-                                ?.replace("{name}", itemStack.getName()))
-                            player.sendMessage(
-                                ConfigManager.config.getString("Messages.givenInfo")
-                                ?.replace("{amount}", amount.toString())
-                                ?.replace("{name}", itemStack.getName()))
+                            sender.sendLang("Messages.successInfo", mapOf(
+                                Pair("{player}", player.name),
+                                Pair("{amount}", amount.toString()),
+                                Pair("{name}", itemStack.getName())
+                            ))
+                            player.sendLang("Messages.givenInfo", mapOf(
+                                Pair("{amount}", amount.toString()),
+                                Pair("{name}", itemStack.getName())
+                            ))
                             // 未知物品ID
                         } ?: let {
-                            sender.sendMessage(ConfigManager.config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+                            sender.sendLang("Messages.unknownItem", mapOf(
+                                Pair("{itemID}", id)
+                            ))
                         }
                         // 无效数字
                     } ?: let {
-                        sender.sendMessage(ConfigManager.config.getString("Messages.invalidAmount"))
+                        sender.sendLang("Messages.invalidAmount")
                     }
                 }
                 else -> {
@@ -268,30 +271,32 @@ object Give {
                                 dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
                                 // 未知物品ID
                             } ?: let {
-                                sender.sendMessage(ConfigManager.config.getString("Messages.unknownItem")?.replace("{itemID}", id))
+                                sender.sendLang("Messages.unknownItem", mapOf(
+                                    Pair("{itemID}", id)
+                                ))
                                 return@repeat
                             }
                         }
                         for ((name, amt) in dropData) {
-                            sender.sendMessage(
-                                ConfigManager.config.getString("Messages.successInfo")
-                                ?.replace("{player}", player.name)
-                                ?.replace("{amount}", amt.toString())
-                                ?.replace("{name}", name))
-                            player.sendMessage(
-                                ConfigManager.config.getString("Messages.givenInfo")
-                                ?.replace("{amount}", amt.toString())
-                                ?.replace("{name}", name))
+                            sender.sendLang("Messages.successInfo", mapOf(
+                                Pair("{player}", player.name),
+                                Pair("{amount}", amt.toString()),
+                                Pair("{name}", name)
+                            ))
+                            player.sendLang("Messages.givenInfo", mapOf(
+                                Pair("{amount}", amt.toString()),
+                                Pair("{name}", name)
+                            ))
                         }
                         // 无效数字
                     } ?: let {
-                        sender.sendMessage(ConfigManager.config.getString("Messages.invalidAmount"))
+                        sender.sendLang("Messages.invalidAmount")
                     }
                 }
             }
             // 无效玩家
         } ?: let {
-            sender.sendMessage(ConfigManager.config.getString("Messages.invalidPlayer"))
+            sender.sendLang("Messages.invalidPlayer")
         }
     }
 }

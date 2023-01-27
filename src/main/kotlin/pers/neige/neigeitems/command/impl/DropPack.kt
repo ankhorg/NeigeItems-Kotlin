@@ -11,6 +11,8 @@ import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ItemUtils
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
+import taboolib.module.nms.getName
+import taboolib.platform.util.sendLang
 
 object DropPack {
     val dropPack = subCommand {
@@ -131,10 +133,10 @@ object DropPack {
             if (x != null && y != null && z != null) {
                 dropPackCommand(sender, id, repeat?.toIntOrNull(), Location(world, x, y, z), Bukkit.getPlayerExact(parser))
             } else {
-                sender.sendMessage(ConfigManager.config.getString("Messages.invalidLocation"))
+                sender.sendLang("Messages.invalidLocation")
             }
         } ?: let {
-            sender.sendMessage(ConfigManager.config.getString("Messages.invalidWorld"))
+            sender.sendLang("Messages.invalidWorld")
         }
     }
 
@@ -167,21 +169,23 @@ object DropPack {
                         }
                     }
                 }
-                sender.sendMessage(
-                    ConfigManager.config.getString("Messages.dropPackSuccessInfo")
-                    ?.replace("{world}", location?.world?.name ?: "")
-                    ?.replace("{x}", location?.x.toString())
-                    ?.replace("{y}", location?.y.toString())
-                    ?.replace("{z}", location?.z.toString())
-                    ?.replace("{amount}", repeat.toString())
-                    ?.replace("{name}", id))
+                sender.sendLang("Messages.dropPackSuccessInfo", mapOf(
+                    Pair("{world}", location?.world?.name ?: ""),
+                    Pair("{x}", location?.x.toString()),
+                    Pair("{y}", location?.y.toString()),
+                    Pair("{z}", location?.z.toString()),
+                    Pair("{amount}", repeat.toString()),
+                    Pair("{name}", id)
+                ))
                 // 未知物品包
             } ?: let {
-                sender.sendMessage(ConfigManager.config.getString("Messages.unknownItemPack")?.replace("{packID}", id))
+                sender.sendLang("Messages.unknownItemPack", mapOf(
+                    Pair("{packID}", id)
+                ))
             }
             // 未知解析对象
         } ?: let {
-            sender.sendMessage(ConfigManager.config.getString("Messages.invalidParser"))
+            sender.sendLang("Messages.invalidParser")
         }
     }
 }
