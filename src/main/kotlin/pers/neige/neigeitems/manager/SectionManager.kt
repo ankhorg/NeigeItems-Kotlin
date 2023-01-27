@@ -79,17 +79,17 @@ object SectionManager {
      * 加载基础节点解析器
      */
     private fun loadBasicParser() {
-        loadParser(CalculationParser)
-        loadParser(FastCalcParser)
-        loadParser(GaussianParser)
-        loadParser(InheritParser)
-        loadParser(JavascriptParser)
-        loadParser(JoinParser)
-        loadParser(NumberParser)
-        loadParser(PapiParser)
-        loadParser(RepeatParser)
-        loadParser(StringsParser)
-        loadParser(WeightParser)
+        CalculationParser.register()
+        FastCalcParser.register()
+        GaussianParser.register()
+        InheritParser.register()
+        JavascriptParser.register()
+        JoinParser.register()
+        NumberParser.register()
+        PapiParser.register()
+        RepeatParser.register()
+        StringsParser.register()
+        WeightParser.register()
     }
 
     /**

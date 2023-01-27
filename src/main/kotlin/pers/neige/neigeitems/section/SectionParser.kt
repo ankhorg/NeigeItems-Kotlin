@@ -2,7 +2,7 @@ package pers.neige.neigeitems.section
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.section.impl.WeightParser
+import pers.neige.neigeitems.manager.SectionManager.loadParser
 
 /**
  * 节点解析器抽象类
@@ -45,5 +45,13 @@ abstract class SectionParser {
         sections: ConfigurationSection? = null
     ): String {
         return "<$id::${args.joinToString("_")}>"
+    }
+
+
+    /**
+     * 将本解析器注册至节点管理器
+     */
+    fun register() {
+        loadParser(this)
     }
 }

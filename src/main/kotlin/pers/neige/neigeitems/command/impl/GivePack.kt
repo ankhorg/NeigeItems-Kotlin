@@ -6,15 +6,14 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.command.impl.Help.help
-import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.LangUtils.getLang
+import pers.neige.neigeitems.utils.LangUtils.sendLang
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.getName
 import taboolib.platform.util.giveItem
-import taboolib.platform.util.sendLang
 
 object GivePack {
     // ni givePack [玩家ID] [物品包ID] (数量) > 根据ID给予NI物品包

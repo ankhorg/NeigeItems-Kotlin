@@ -2,9 +2,9 @@ package pers.neige.neigeitems.command.impl
 
 import org.bukkit.command.CommandSender
 import pers.neige.neigeitems.manager.*
+import pers.neige.neigeitems.utils.LangUtils.sendLang
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.platform.util.sendLang
 
 object Reload {
     val reload = subCommand {

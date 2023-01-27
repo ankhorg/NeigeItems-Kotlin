@@ -3,8 +3,8 @@ package pers.neige.neigeitems.section.impl
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.HookerManager.requestPapi
-import pers.neige.neigeitems.utils.StringUtils.joinToString
 import pers.neige.neigeitems.section.SectionParser
+import pers.neige.neigeitems.utils.StringUtils.joinToString
 
 /**
  * papi节点解析器(仅包含即时声明节点)
