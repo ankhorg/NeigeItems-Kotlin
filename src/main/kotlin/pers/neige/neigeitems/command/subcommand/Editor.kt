@@ -1,8 +1,8 @@
-package pers.neige.neigeitems.command.impl
+package pers.neige.neigeitems.command.subcommand
 
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
-import pers.neige.neigeitems.command.impl.Help.help
+import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.manager.ItemEditorManager
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit

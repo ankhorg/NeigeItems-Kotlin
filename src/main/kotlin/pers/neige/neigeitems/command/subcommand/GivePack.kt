@@ -1,11 +1,11 @@
-package pers.neige.neigeitems.command.impl
+package pers.neige.neigeitems.command.subcommand
 
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems
-import pers.neige.neigeitems.command.impl.Help.help
+import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.LangUtils.getLang

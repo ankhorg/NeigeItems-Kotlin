@@ -82,6 +82,7 @@ object SectionManager {
         CalculationParser.register()
         FastCalcParser.register()
         GaussianParser.register()
+        GradientParser.register()
         InheritParser.register()
         JavascriptParser.register()
         JoinParser.register()

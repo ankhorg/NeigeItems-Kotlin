@@ -1,4 +1,4 @@
-package pers.neige.neigeitems.command.impl
+package pers.neige.neigeitems.command.subcommand
 
 import org.bukkit.Material
 import org.bukkit.command.CommandSender

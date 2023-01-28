@@ -2,8 +2,8 @@ package pers.neige.neigeitems.command
 
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import pers.neige.neigeitems.command.impl.*
-import pers.neige.neigeitems.command.impl.Help.help
+import pers.neige.neigeitems.command.subcommand.*
+import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -105,11 +105,11 @@ object Command {
     val cover = Save.cover
 
     @CommandBody
-    val mm = MM.mm
+    val mm = CommandMM
 
     @CommandBody
     // ni list (页码) > 查看所有NI物品
-    val list = pers.neige.neigeitems.command.impl.List.list
+    val list = pers.neige.neigeitems.command.subcommand.List.list
 
     @CommandBody
     val reload = Reload.reload

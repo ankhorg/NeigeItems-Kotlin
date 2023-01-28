@@ -1,7 +1,8 @@
-package pers.neige.neigeitems.command.impl
+package pers.neige.neigeitems.command.subcommand
 
 import org.bukkit.entity.Player
-import pers.neige.neigeitems.command.impl.Help.help
+import pers.neige.neigeitems.command.subcommand.Help.help
+import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import taboolib.common.platform.command.subCommand
@@ -10,6 +11,7 @@ import taboolib.module.nms.getName
 import java.io.File
 
 object Save {
+    // ni save [物品ID] (保存路径) > 将手中物品以对应ID保存至对应路径
     val save = subCommand {
         execute<Player> { sender, _, _ ->
             submit(async = true) {
@@ -19,7 +21,7 @@ object Save {
         // ni save [物品ID]
         dynamic {
             suggestion<Player>(uncheck = true) { _, _ ->
-                arrayListOf("id")
+                HookerManager.mythicMobsHooker!!.getItemIds()
             }
             execute<Player> { sender, _, argument ->
                 submit(async = true) {

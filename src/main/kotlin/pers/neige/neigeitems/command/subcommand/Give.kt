@@ -1,15 +1,17 @@
-package pers.neige.neigeitems.command.impl
+package pers.neige.neigeitems.command.subcommand
 
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import pers.neige.neigeitems.NeigeItems
-import pers.neige.neigeitems.command.impl.Help.help
+import pers.neige.neigeitems.command.subcommand.Help.help
+import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
+import taboolib.module.nms.getItemTag
 import taboolib.module.nms.getName
 import taboolib.platform.util.giveItem
 
@@ -257,13 +259,15 @@ object Give {
                         repeat(amount.coerceAtLeast(1)) {
                             ItemManager.getItemStack(id, player, data)?.let { itemStack ->
                                 // 移除一下物品拥有者信息
-                                // 由于这种操作有点太过sb, 决定放弃处理这种情况
-//                                val itemTag = itemStack.getItemTag()
-//                                val neigeItems = itemTag["NeigeItems"]?.asCompound()
-//                                neigeItems?.get("owner")?.asString()?.let {
-//                                    neigeItems.remove("owner")
-//                                    itemTag.saveTo(itemStack)
-//                                }
+                                // 我知道这种操作有些sb, 但是暂时别无他法
+                                if (config.getBoolean("ItemOwner.removeNBTWhenGive")) {
+                                    val itemTag = itemStack.getItemTag()
+                                    val neigeItems = itemTag["NeigeItems"]?.asCompound()
+                                    neigeItems?.get("owner")?.asString()?.let {
+                                        neigeItems.remove("owner")
+                                        itemTag.saveTo(itemStack)
+                                    }
+                                }
                                 NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
                                     player.giveItem(itemStack)
                                 }
