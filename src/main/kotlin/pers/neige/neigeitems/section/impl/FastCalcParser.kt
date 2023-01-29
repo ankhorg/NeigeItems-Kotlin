@@ -2,10 +2,9 @@ package pers.neige.neigeitems.section.impl
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import pers.neige.neigeitems.asahi.util.calculate.calculate
 import pers.neige.neigeitems.section.SectionParser
-import pers.neige.neigeitems.utils.CalculationUtils.calc
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import java.math.BigDecimal
 
 /**
  * 公式节点解析器
@@ -74,13 +73,13 @@ object FastCalcParser : SectionParser() {
             // 加载公式
             fomulaString?.parseSection(parse, cache, player, sections)?.let {
                 // 计算结果
-                var result = it.calc()
+                var result = it.calculate()
                 // 获取大小范围
                 minString?.parseSection(parse, cache, player, sections)?.toDouble()?.let { min ->
-                    result = result.max(BigDecimal(min))
+                    result = min.coerceAtLeast(result)
                 }
                 maxString?.parseSection(parse, cache, player, sections)?.toDouble()?.let { max ->
-                    result = result.min(BigDecimal(max))
+                    result = max.coerceAtMost(result)
                 }
                 // 获取取整位数
                 val fixed = fixedString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 0

@@ -84,18 +84,18 @@ private fun Queue<Any>.calc(): Double {
             continue
         }
         val calcOperator = obj as CalcOperator
-        val a = calcStack.pop()
-        val b = calcStack.pop()
+        val a = if (calcStack.isEmpty()) 0.0 else calcStack.pop()
+        val b = if (calcStack.isEmpty()) 0.0 else calcStack.pop()
         calcStack.push(calcOperator.calc(a, b))
     }
     return calcStack.pop()
 }
 
-internal fun String.calculate(): BigDecimal {
+internal fun String.calculate(): Double {
     return runCatching {
-        BigDecimal.valueOf(toCalcInfix().toCalcSuffix().calc())
+        filter { it != ' ' }.toCalcInfix().toCalcSuffix().calc()
     }.getOrElse {
         warning("Wrong calculation formula! $this");
-        BigDecimal(0)
+        0.0
     }
 }
