@@ -12,5 +12,6 @@ import taboolib.module.nms.ItemTag
 class ItemInfo(
     val itemTag: ItemTag,
     val neigeItems: ItemTag,
-    val id: String
+    val id: String,
+    val data: HashMap<String, String>?,
 )

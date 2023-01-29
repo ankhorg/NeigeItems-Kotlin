@@ -65,9 +65,9 @@ object ConfigManager {
     fun loadConfig() {
         originConfig.getKeys(true).forEach { key ->
             if (!plugin.config.contains(key)) {
-                plugin.config.set(key, ConfigManager.originConfig.get(key))
+                plugin.config.set(key, originConfig.get(key))
             } else {
-                val completeValue = ConfigManager.originConfig.get(key)
+                val completeValue = originConfig.get(key)
                 val value = plugin.config.get(key)
                 if (completeValue is ConfigurationSection && value !is ConfigurationSection) {
                     plugin.config.set(key, completeValue)

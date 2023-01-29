@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.utils
 
+import com.alibaba.fastjson2.parseObject
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
@@ -538,6 +539,17 @@ object ItemUtils {
      */
     @JvmStatic
     fun ItemStack.isNiItem(): ItemInfo? {
+        return this.isNiItem(false)
+    }
+
+    /**
+     * 判断ItemStack是否为NI物品并返回NI物品信息
+     *
+     * @param parseData 是否将data解析为HashMap
+     * @return NI物品信息?
+     */
+    @JvmStatic
+    fun ItemStack.isNiItem(parseData: Boolean): ItemInfo? {
         if (this.type != Material.AIR) {
             // 获取物品NBT
             val itemTag = this.getItemTag()
@@ -545,7 +557,11 @@ object ItemUtils {
             val neigeItems = itemTag["NeigeItems"]?.asCompound() ?: let { return null }
             // 获取物品id
             val id = neigeItems["id"]?.asString() ?: let { return null }
-            return ItemInfo(itemTag, neigeItems, id)
+            val data = when {
+                parseData -> neigeItems["data"]?.asString()?.parseObject<HashMap<String, String>>()
+                else -> null
+            }
+            return ItemInfo(itemTag, neigeItems, id, data)
         }
         return null
     }
