@@ -256,29 +256,30 @@ object Give {
                     amount?.let {
                         val dropData = HashMap<String, Int>()
                         // 给物品
-                        repeat(amount.coerceAtLeast(1)) {
-                            ItemManager.getItemStack(id, player, data)?.let { itemStack ->
-                                // 移除一下物品拥有者信息
-                                // 我知道这种操作有些sb, 但是暂时别无他法
-                                if (config.getBoolean("ItemOwner.removeNBTWhenGive")) {
-                                    val itemTag = itemStack.getItemTag()
-                                    val neigeItems = itemTag["NeigeItems"]?.asCompound()
-                                    neigeItems?.get("owner")?.asString()?.let {
-                                        neigeItems.remove("owner")
-                                        itemTag.saveTo(itemStack)
+                        if (ItemManager.hasItem(id)) {
+                            repeat(amount.coerceAtLeast(1)) {
+                                ItemManager.getItemStack(id, player, data)?.let { itemStack ->
+                                    // 移除一下物品拥有者信息
+                                    // 我知道这种操作有些sb, 但是暂时别无他法
+                                    if (config.getBoolean("ItemOwner.removeNBTWhenGive")) {
+                                        val itemTag = itemStack.getItemTag()
+                                        val neigeItems = itemTag["NeigeItems"]?.asCompound()
+                                        neigeItems?.get("owner")?.asString()?.let {
+                                            neigeItems.remove("owner")
+                                            itemTag.saveTo(itemStack)
+                                        }
                                     }
+                                    NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
+                                        player.giveItem(itemStack)
+                                    }
+                                    dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
+                                    // 未知物品ID
                                 }
-                                NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
-                                    player.giveItem(itemStack)
-                                }
-                                dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
-                                // 未知物品ID
-                            } ?: let {
-                                sender.sendLang("Messages.unknownItem", mapOf(
-                                    Pair("{itemID}", id)
-                                ))
-                                return@repeat
                             }
+                        } else {
+                            sender.sendLang("Messages.unknownItem", mapOf(
+                                Pair("{itemID}", id)
+                            ))
                         }
                         for ((name, amt) in dropData) {
                             sender.sendLang("Messages.successInfo", mapOf(
