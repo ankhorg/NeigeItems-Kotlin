@@ -16,18 +16,26 @@ import javax.script.ScriptEngine
  */
 class LegacyNashornHookerImpl : NashornHooker() {
     override fun getNashornEngine(): ScriptEngine {
-        return NashornScriptEngineFactory().getScriptEngine(arrayOf("-Dnashorn.args=--language=es6"), this::class.java.classLoader)
+        return getNashornEngine(arrayOf("-Dnashorn.args=--language=es6"))
+    }
+
+    override fun getGlobalEngine(): ScriptEngine {
+        return getNashornEngine(arrayOf("-Dnashorn.args=--language=es6", "--global-per-engine"))
+    }
+
+    override fun getNashornEngine(args: Array<String>): ScriptEngine {
+        return NashornScriptEngineFactory().getScriptEngine(args, this::class.java.classLoader)
     }
 
     override fun compile(string: String): CompiledScript {
-        return (NashornScriptEngineFactory().getScriptEngine(arrayOf("-Dnashorn.args=--language=es6"), this::class.java.classLoader) as Compilable).compile(string)
+        return (getNashornEngine() as Compilable).compile(string)
     }
 
     override fun compile(reader: Reader): CompiledScript {
-        return (NashornScriptEngineFactory().getScriptEngine(arrayOf("-Dnashorn.args=--language=es6"), this::class.java.classLoader) as Compilable).compile(reader)
+        return (getNashornEngine() as Compilable).compile(reader)
     }
 
-    override fun invoke(compiledScript: pers.neige.neigeitems.script.CompiledScript, function: String, map: HashMap<String, Any>?, vararg args: Any): Any? {
+    override fun invoke(compiledScript: pers.neige.neigeitems.script.CompiledScript, function: String, map: Map<String, Any>?, vararg args: Any): Any? {
         val newObject: ScriptObjectMirror = (compiledScript.scriptEngine as Invocable).invokeFunction("newObject") as ScriptObjectMirror
         map?.forEach { (key, value) -> newObject[key] = value }
         return newObject.callMember(function, *args)

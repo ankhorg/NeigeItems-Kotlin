@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.hook.nashorn
 
+import com.sun.xml.internal.fastinfoset.util.StringArray
 import java.io.Reader
 import javax.script.Compilable
 import javax.script.CompiledScript
@@ -15,6 +16,21 @@ abstract class NashornHooker {
      * @return 一个新的Nashorn引擎
      */
     abstract fun getNashornEngine(): ScriptEngine
+
+    /**
+     * 获取一个共享上下文的Nashorn引擎(不要尝试在这个引擎中声明变量, 出现BUG自行思考)
+     *
+     * @return 一个新的Nashorn引擎
+     */
+    abstract fun getGlobalEngine(): ScriptEngine
+
+    /**
+     * 获取一个新的Nashorn引擎
+     *
+     * @param args 应用于引擎的参数
+     * @return 一个新的Nashorn引擎
+     */
+    abstract fun getNashornEngine(args: Array<String>): ScriptEngine
 
     /**
      * 编译一段js脚本, 返回已编译脚本对象(将创建一个新的ScriptEngine用于解析脚本)
@@ -64,5 +80,5 @@ abstract class NashornHooker {
      * @param args 传入函数的参数
      * @return 返回值
      */
-    abstract fun invoke(compiledScript: pers.neige.neigeitems.script.CompiledScript, function: String, map: HashMap<String, Any>?, vararg args: Any): Any?
+    abstract fun invoke(compiledScript: pers.neige.neigeitems.script.CompiledScript, function: String, map: Map<String, Any>?, vararg args: Any): Any?
 }

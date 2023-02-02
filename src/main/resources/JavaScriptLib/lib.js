@@ -1,0 +1,693 @@
+const Calendar = Packages.java.util.Calendar
+const ThreadLocalRandom = Packages.java.util.concurrent.ThreadLocalRandom
+
+const Bukkit = Packages.org.bukkit.Bukkit
+const ChatColor = Packages.org.bukkit.ChatColor
+const GameMode = Packages.org.bukkit.GameMode
+
+const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
+const HookerManager = Packages.pers.neige.neigeitems.manager.HookerManager
+const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
+
+const bukkitScheduler = Bukkit.getScheduler()
+const bukkitServer = Bukkit.getServer()
+const consoleSender = bukkitServer.getConsoleSender()
+const pluginManager = Bukkit.getPluginManager()
+const plugin = pluginManager.getPlugin("NeigeItems")
+
+/**
+ * 判断玩家是否拥有某个权限节点
+ *
+ * @param perm String 权限节点
+ * @return Boolean 玩家是否拥有该权限
+ */
+const perm = function(perm) {
+    return player.hasPermission(perm)
+}
+
+/**
+ * 替换文本中的颜色代码
+ *
+ * @param text String 待替换文本
+ * @return String 替换后文本
+ */
+const color = function(text) {
+    return ChatColor.translateAlternateColorCodes('&', text)
+}
+
+/**
+ * 发送一段消息
+ *
+ * @param text String 待发送消息
+ */
+const tell = function(text) {
+    player.sendMessage(text)
+}
+
+/**
+ * 执行一段指令
+ *
+ * @param cmd String 待执行指令
+ */
+const command = function(cmd) {
+    bukkitServer.dispatchCommand(player, cmd)
+}
+
+/**
+ * 后台执行一段指令
+ *
+ * @param cmd String 待执行指令
+ */
+const console = function(cmd) {
+    bukkitServer.dispatchCommand(consoleSender, cmd)
+}
+
+/**
+ * 解析文本中的papi变量
+ *
+ * @param text String 解析后文本
+ * @return String 解析后文本
+ */
+const papi = function(text) {
+    return HookerManager.papi(player, text)
+}
+
+/**
+ * 解析文本中的即时声明节点
+ *
+ * @param text String 解析后文本
+ * @return String 解析后文本
+ */
+const parse = function(text) {
+    return SectionUtils.parseSection(text, player)
+}
+
+/**
+ * 生成一个随机数(默认0-1)
+ *
+ * @param min Double 随机数最小值
+ * @param max Double 随机数最大值
+ * @return Double 随机数
+ */
+const random = function(min, max) {
+    return ThreadLocalRandom.current().nextDouble(min || 0, max || 1)
+}
+
+/**
+ * 概率返回true(默认概率0-1)
+ * 例:
+ * value = 0.5; limit = null, 50%返回true
+ * value = 50; limit = 100, 50%返回true
+ *
+ * @param value Double 返回true的概率
+ * @param limit Double 概率上限
+ * @return Boolean 随机数
+ */
+const chance = function(value, limit) {
+    return value > ThreadLocalRandom.current().nextDouble(0, limit || 1)
+}
+
+/**
+ * 执行一段物品动作
+ *
+ * @param action String 物品动作
+ */
+const runAction = function(action) {
+    ActionManager.runAction(player, action)
+}
+
+/**
+ * 同步执行一个函数
+ *
+ * @param func 待执行函数
+ */
+const sync = function(func) {
+    BukkitScheduler.callSyncMethod(plugin, func)
+}
+
+/**
+ * 异步执行一个函数
+ *
+ * @param func 待执行函数
+ */
+const async = function(func) {
+    BukkitScheduler["runTaskAsynchronously(Plugin,Runnable)"](plugin, func)
+}
+
+/**
+ * 获取玩家IP
+ *
+ * @return String 玩家IP地址
+ */
+const address = function() {
+    return player.getAddress().getHostString()
+}
+
+/**
+ * 判断/修改玩家是否允许飞行
+ *
+ * @param flight Boolean 是否允许飞行
+ * @return Boolean 玩家是否允许飞行
+ */
+const allowFlight = function(flight) {
+    if (flight == null) {
+        return player.getAllowFlight()
+    } else {
+        player.setAllowFlight(flight)
+        return flight
+    }
+}
+
+/**
+ * 获取玩家攻击冷却
+ *
+ * @return float 当前攻击冷却
+ */
+const attackCooldown = function() {
+    return player.getAttackCooldown()
+}
+
+/**
+ * 获取玩家重生点
+ *
+ * @return Location 玩家重生点
+ */
+const bedSpawn = function() {
+    return player.getBedSpawnLocation()
+}
+
+/**
+ * 获取玩家重生点X轴坐标
+ *
+ * @return double 玩家重生点X轴坐标
+ */
+const bedSpawnX = function() {
+    return player.getBedSpawnLocation().getX()
+}
+
+/**
+ * 获取玩家重生点Y轴坐标
+ *
+ * @return double 玩家重生点Y轴坐标
+ */
+const bedSpawnY = function() {
+    return player.getBedSpawnLocation().getY()
+}
+
+/**
+ * 获取玩家重生点Z轴坐标
+ *
+ * @return double 玩家重生点Z轴坐标
+ */
+const bedSpawnZ = function() {
+    return player.getBedSpawnLocation().getZ()
+}
+
+/**
+ * 获取玩家是否正在格挡
+ *
+ * @return Boolean 玩家是否正在格挡
+ */
+const blocking = function() {
+    return player.isBlocking()
+}
+
+/**
+ * 获取/修改玩家指南针目标
+ *
+ * @param loc Location 指南针目标
+ * @return Location 指南针目标
+ */
+const compassTarget = function(loc) {
+    if (loc == null) {
+        return player.getCompassTarget()
+    } else {
+        player.setCompassTarget(loc)
+        return loc
+    }
+}
+
+/**
+ * 获取玩家指南针目标X轴坐标
+ *
+ * @return double 玩家指南针目标X轴坐标
+ */
+const compassTargetX = function() {
+    return player.getCompassTarget().getX()
+}
+
+/**
+ * 获取玩家指南针目标Y轴坐标
+ *
+ * @return double 玩家指南针目标Y轴坐标
+ */
+const compassTargetY = function() {
+    return player.getCompassTarget().getY()
+}
+
+/**
+ * 获取玩家指南针目标Z轴坐标
+ *
+ * @return double 玩家指南针目标Z轴坐标
+ */
+const compassTargetZ = function() {
+    return player.getCompassTarget().getZ()
+}
+
+/**
+ * 获取本月日期
+ *
+ * @return int 日期
+ */
+const day = function() {
+    return Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+}
+
+/**
+ * 获取本月日期
+ *
+ * @return int 日期
+ */
+const dayOfMonth = function() {
+    return Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+}
+
+/**
+ * 获取今天是星期几(1-7)
+ *
+ * @return int 星期几
+ */
+const dayOfWeek = function() {
+    return (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1) || 7
+}
+
+/**
+ * 获取今天是一年中的第几天(1-365)
+ *
+ * @return int 天数
+ */
+const dayOfYear = function() {
+    return Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+}
+
+/**
+ * 获取现在是几月(1-12)
+ *
+ * @return int 月份
+ */
+const month = function() {
+    return Calendar.getInstance().get(Calendar.MONTH) + 1
+}
+
+/**
+ * 获取当前年份
+ *
+ * @return int 年份
+ */
+const year = function() {
+    return Calendar.getInstance().get(Calendar.YEAR)
+}
+
+/**
+ * 获取现在是几点钟
+ *
+ * @return int 小时
+ */
+const hour = function() {
+    return Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+}
+
+/**
+ * 获取现在是几分钟
+ *
+ * @return int 分钟
+ */
+const minute = function() {
+    return Calendar.getInstance().get(Calendar.MINUTE)
+}
+
+/**
+ * 获取现在是几秒钟
+ *
+ * @return int 秒钟
+ */
+const second = function() {
+    return Calendar.getInstance().get(Calendar.SECOND)
+}
+
+/**
+ * 获取现在是本月第几周
+ *
+ * @return int 周数
+ */
+const weekInMonth = function() {
+    return Calendar.getInstance().get(Calendar.DAY_OF_WEEK_IN_MONTH)
+}
+
+/**
+ * 获取现在是上午还是下午(0/1)
+ *
+ * @return int 上午/下午
+ */
+const amOrPm = function() {
+    return Calendar.getInstance().get(Calendar.AM_PM)
+}
+
+/**
+ * 获取当前时间戳
+ *
+ * @return int 时间戳
+ */
+const time = function() {
+    return new Date().getTime()
+}
+
+/**
+ * 获取玩家是否死亡
+ *
+ * @return Boolean 玩家当前是否死亡
+ */
+const dead = function() {
+    return player.isDead()
+}
+
+/**
+ * 获取/修改玩家疲劳度
+ *
+ * @param value float 玩家疲劳度
+ * @return float 玩家疲劳度
+ */
+const exhaustion = function(value) {
+    if (value == null) {
+        return player.getExhaustion()
+    } else {
+        player.setExhaustion(value)
+        return value
+    }
+}
+
+/**
+ * 获取/修改玩家经验值
+ *
+ * @param value int 经验值
+ * @return int 经验值
+ */
+const exp = function(value) {
+    if (value == null) {
+        return player.getTotalExperience()
+    } else {
+        player.setTotalExperience(value)
+        return value
+    }
+}
+
+/**
+ * 给予玩家经验值
+ *
+ * @param value int 经验值
+ */
+const addExp = function(value) {
+    player.giveExp(value)
+}
+
+/**
+ * 扣除玩家经验值
+ *
+ * @param value int 经验值
+ */
+const takeExp = function(value) {
+    player.giveExp(-value)
+}
+
+/**
+ * 获取/修改玩家等级
+ *
+ * @param value int 等级
+ * @return int 等级
+ */
+const level = function(value) {
+    if (value == null) {
+        return player.getLevel()
+    } else {
+        player.setLevel(value)
+        return value
+    }
+}
+
+/**
+ * 给予玩家等级
+ *
+ * @param value int 等级
+ */
+const addLevel = function(value) {
+    player.giveExpLevels(value)
+}
+
+/**
+ * 扣除玩家等级
+ *
+ * @param value int 等级
+ */
+const takeLevel = function(value) {
+    player.giveExpLevels(-value)
+}
+
+/**
+ * 玩家是否首次登录
+ *
+ * @return Boolean 是否首次登录
+ */
+const firstPlay = function() {
+    return !player.hasPlayedBefore()
+}
+
+/**
+ * 获取/修改玩家飞行状态
+ *
+ * @param value Boolean 玩家飞行状态
+ * @return Boolean 玩家飞行状态
+ */
+const fly = function(value) {
+    if (value == null) {
+        return player.isFlying()
+    } else {
+        player.setFlying(value)
+        return value
+    }
+}
+
+/**
+ * 获取/修改玩家飞行速度
+ *
+ * @param value float 玩家飞行速度
+ * @return float 玩家飞行速度
+ */
+const flySpeed = function(value) {
+    if (value == null) {
+        return player.getFlySpeed()
+    } else {
+        player.setFlySpeed(value)
+        return value
+    }
+}
+
+/**
+ * 获取/修改玩家行走速度
+ *
+ * @param value float 玩家行走速度
+ * @return float 玩家行走速度
+ */
+const walkSpeed = function(value) {
+    if (value == null) {
+        return player.getWalkSpeed()
+    } else {
+        player.setWalkSpeed(value)
+        return value
+    }
+}
+
+/**
+ * 获取/修改玩家饥饿度
+ *
+ * @param value int 饥饿度
+ * @return int 饥饿度
+ */
+const food = function(value) {
+    if (value == null) {
+        return player.getFoodLevel()
+    } else {
+        player.setFoodLevel(value)
+        return value
+    }
+}
+
+/**
+ * 给予玩家饥饿度
+ *
+ * @param value int 饥饿度
+ */
+const addFood = function(value) {
+    player.setFoodLevel(Math.min(Math.max(player.getFoodLevel() + value, 0), 20))
+}
+
+/**
+ * 扣除玩家饥饿度
+ *
+ * @param value int 饥饿度
+ */
+const takeFood = function(value) {
+    player.setFoodLevel(Math.min(Math.max(player.getFoodLevel() - value, 0), 20))
+}
+
+/**
+ * 获取/修改玩家游戏模式(ADVENTURE/CREATIVE/SPECTATOR/SURVIVAL)
+ *
+ * @param value String 游戏模式
+ * @return String 游戏模式
+ */
+const gamemode = function(value) {
+    if (value == null) {
+        return player.getGameMode()
+    } else {
+        player.setGameMode(GameMode.valueOf(value.toUpperCase()))
+        return value
+    }
+}
+
+/**
+ * 获取/修改玩家滑翔状态
+ *
+ * @param value Boolean 滑翔状态
+ * @return Boolean 滑翔状态
+ */
+const guilding = function(value) {
+    if (value == null) {
+        return player.isGliding()
+    } else {
+        player.setGliding(value)
+        return value
+    }
+}
+
+/**
+ * 获取/修改玩家发光状态
+ *
+ * @param value Boolean 发光状态
+ * @return Boolean 发光状态
+ */
+const glowing = function(value) {
+    if (value == null) {
+        return player.isGlowing()
+    } else {
+        player.setGlowing(value)
+        return value
+    }
+}
+
+/**
+ * 获取/修改玩家是否拥有重力
+ *
+ * @param value Boolean 重力状态
+ * @return Boolean 重力状态
+ */
+const gravity = function(value) {
+    if (value == null) {
+        return player.hasGravity()
+    } else {
+        player.setGravity(value)
+        return value
+    }
+}
+
+/**
+ * 获取玩家生命
+ *
+ * @return double 玩家生命
+ */
+const health = function() {
+    return player.getHealth()
+}
+
+/**
+ * 获取玩家名称
+ *
+ * @return String 玩家名称
+ */
+const name = function() {
+    return player.getName()
+}
+
+/**
+ * 获取/修改玩家剩余氧气
+ *
+ * @param value int 剩余氧气
+ * @return int 剩余氧气
+ */
+const remainingAir = function(value) {
+    if (value == null) {
+        return player.getRemainingAir()
+    } else {
+        player.setRemainingAir(value)
+        return value
+    }
+}
+
+/**
+ * 判断玩家是否正在睡觉
+ *
+ * @return Boolean 睡觉状态
+ */
+const sleeping = function() {
+    return player.isSleeping()
+}
+
+/**
+ * 获取/设置玩家潜行状态
+ *
+ * @return Boolean 潜行状态
+ */
+const sneaking = function(value) {
+    if (value == null) {
+        return player.isSneaking()
+    } else {
+        player.setSneaking(value)
+        return value
+    }
+}
+
+/**
+ * 获取/设置玩家疾跑状态
+ *
+ * @return Boolean 疾跑状态
+ */
+const sprinting = function(value) {
+    if (value == null) {
+        return player.isSprinting()
+    } else {
+        player.setSprinting(value)
+        return value
+    }
+}
+
+/**
+ * 获取/设置玩家游泳状态
+ *
+ * @return Boolean 游泳状态
+ */
+const swimming = function(value) {
+    if (value == null) {
+        return player.isSwimming()
+    } else {
+        player.setSwimming(value)
+        return value
+    }
+}
+
+/**
+ * 获取玩家所处世界名称
+ *
+ * @return String 世界名称
+ */
+const world = function() {
+    return player.getWorld().getName()
+}

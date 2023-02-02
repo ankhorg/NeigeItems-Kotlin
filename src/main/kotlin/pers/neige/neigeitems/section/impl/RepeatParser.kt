@@ -14,7 +14,7 @@ object RepeatParser : SectionParser() {
     override val id: String = "repeat"
 
     /**
-     * 所有用于repeat节点的已编译的js脚本文件及文本
+     * 获取所有用于repeat节点的已编译的js脚本文件及文本
      */
     val compiledScripts = ConcurrentHashMap<String, CompiledScript>()
 

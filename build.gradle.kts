@@ -7,17 +7,23 @@ plugins {
 }
 
 val api: String? by project
+val lib: String? by project
 
-task("versionAddAPI") {
-    if (api == null) return@task
-    val origin = project.version.toString()
-    project.version = "$origin-api"
+task("versionCheck") {
+    if (api != null) {
+        val origin = project.version.toString()
+        project.version = "$origin-api"
+    } else if (lib != null) {
+        val origin = project.version.toString()
+        project.version = "$origin-lib"
+    }
 }
 
 taboolib {
     if (project.version.toString().contains("-api")) {
         options("skip-kotlin-relocate")
     }
+//    relocate("org.openjdk.nashorn","pers.neige.neigeitems.nashorn")
     description {
         contributors {
             name("Neige")
@@ -62,16 +68,23 @@ dependencies {
     compileOnly("ink.ptms:nms-all:1.0.0")
     compileOnly("ink.ptms.core:v11902:11902-minimize:mapped")
     compileOnly("ink.ptms.core:v11902:11902-minimize:universal")
-    compileOnly(kotlin("stdlib"))
-    compileOnly("org.openjdk.nashorn:nashorn-core:15.4")
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("io.lumine:Mythic-Dist:5.1.0")
-    compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
-    compileOnly("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
+    if (project.version.toString().contains("-lib")) {
+        taboo(kotlin("stdlib"))
+        taboo("org.openjdk.nashorn:nashorn-core:15.4")
+        taboo("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
+        taboo("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
+    } else {
+        compileOnly(kotlin("stdlib"))
+        compileOnly("org.openjdk.nashorn:nashorn-core:15.4")
+        compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
+        compileOnly("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
+    }
 }
 
 tasks.withType<JavaCompile> {

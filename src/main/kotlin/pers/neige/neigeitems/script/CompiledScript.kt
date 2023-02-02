@@ -50,7 +50,7 @@ class CompiledScript {
      * @param args 传入对应方法的参数
      * @return 解析值
      */
-    fun invoke(function: String, map: HashMap<String, Any>?, vararg args: Any): Any? {
+    fun invoke(function: String, map: Map<String, Any>?, vararg args: Any): Any? {
         return nashornHooker.invoke(this, function, map, *args)
     }
 

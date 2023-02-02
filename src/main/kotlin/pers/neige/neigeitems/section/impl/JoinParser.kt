@@ -14,7 +14,7 @@ object JoinParser : SectionParser() {
     override val id: String = "join"
 
     /**
-     * 所有用于join节点的已编译的js脚本文件及文本
+     * 获取所有用于join节点的已编译的js脚本文件及文本
      */
     val compiledScripts = ConcurrentHashMap<String, CompiledScript>()
 

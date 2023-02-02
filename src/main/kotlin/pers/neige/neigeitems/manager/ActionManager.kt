@@ -13,6 +13,7 @@ import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemAction
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
+import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.HookerManager.papiColor
 import pers.neige.neigeitems.manager.HookerManager.vaultHooker
@@ -27,9 +28,11 @@ import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
 import taboolib.platform.util.giveItem
 import java.io.File
+import java.io.InputStreamReader
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
+import javax.script.CompiledScript
 
 /**
  * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
@@ -45,6 +48,16 @@ object ActionManager {
      */
     val actions = HashMap<String, BiFunction<Player, String, Boolean>>()
 
+    /**
+     * 获取用于编译condition的脚本引擎
+     */
+    val engine = nashornHooker.getGlobalEngine()
+
+    /**
+     * 获取缓存的已编译condition脚本
+     */
+    val compiledScripts = ConcurrentHashMap<String, CompiledScript>()
+
     init {
         // 加载所有拥有动作的物品及相关动作
         loadItemActions()
@@ -52,6 +65,12 @@ object ActionManager {
         loadBasicActions()
         // 加载自定义动作
         loadCustomActions()
+        // 加载顶级成员
+        try {
+            plugin.getResource("JavaScriptLib/lib.js")?.let { engine.eval(InputStreamReader(it, "UTF-8")) }
+        } catch (error: Throwable) {
+            error.printStackTrace()
+        }
     }
 
     /**
