@@ -11,7 +11,11 @@ import java.util.*
  * @constructor 启用高版本PlaceholderAPI挂钩
  */
 class PapiHookerImpl : PapiHooker() {
-    private val localExpansionManager = PlaceholderAPIPlugin.getInstance().localExpansionManager
+    private val localExpansionManager get() = PlaceholderAPIPlugin.getInstance().localExpansionManager
+
+    init {
+        localExpansionManager
+    }
 
     override fun papi(player: OfflinePlayer, text: String): String {
         val chars = text.toCharArray()

@@ -11,7 +11,11 @@ import java.util.*
  * @constructor 启用低版本PlaceholderAPI挂钩
  */
 class LegacyPapiHookerImpl : PapiHooker() {
-    private val placeholders = PlaceholderAPI.getPlaceholders()
+    private val placeholders get() =  PlaceholderAPI.getPlaceholders()
+
+    init {
+        placeholders
+    }
 
     override fun papi(player: OfflinePlayer, text: String): String {
         val chars = text.toCharArray()
