@@ -21,7 +21,7 @@ object Save {
         // ni save [物品ID]
         dynamic {
             suggestion<Player>(uncheck = true) { _, _ ->
-                HookerManager.mythicMobsHooker!!.getItemIds()
+                arrayListOf("id")
             }
             execute<Player> { sender, _, argument ->
                 submit(async = true) {
