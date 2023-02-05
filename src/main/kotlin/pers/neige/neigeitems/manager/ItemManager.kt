@@ -9,6 +9,7 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.utils.ConfigUtils.clone
+import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
 import pers.neige.neigeitems.utils.ItemUtils.toMap
 import taboolib.module.nms.getItemTag
 import java.io.File
@@ -220,7 +221,7 @@ object ItemManager : ItemConfigManager() {
                     }
                     // 设置物品NBT
                     if (!itemNBT.isEmpty()) {
-                        configSection.set("nbt", itemNBT.toMap())
+                        configSection.set("nbt", itemNBT.toMap(invalidNBT))
                     }
                 }
                 // 保存文件

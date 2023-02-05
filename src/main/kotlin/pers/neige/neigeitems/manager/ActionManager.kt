@@ -23,6 +23,7 @@ import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
+import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
@@ -122,13 +123,9 @@ object ActionManager {
                 else -> value.parseItemSection(itemTag, player)
             }
             // 解析动作类型及动作内容
-            var actionType = actionString.lowercase(Locale.getDefault())
-            var actionContent = ""
-            val index = actionString.indexOf(": ")
-            if (index != -1) {
-                actionType = actionString.substring(0, index).lowercase(Locale.getDefault())
-                actionContent = actionString.substring(index+2, actionString.length)
-            }
+            val info = actionString.splitOnce(": ")
+            val actionType = info[0].lowercase(Locale.getDefault())
+            val actionContent = info.getOrNull(1) ?: ""
 
             when {
                 // 延迟
@@ -186,18 +183,11 @@ object ActionManager {
             else -> action.parseItemSection(itemTag, player)
         }
         // 解析动作类型及动作内容
-        var actionType = actionString.lowercase(Locale.getDefault())
-        var actionContent = ""
-        val index = actionString.indexOf(": ")
-        if (index != -1) {
-            actionType = actionString.substring(0, index).lowercase(Locale.getDefault())
-            actionContent = actionString.substring(index+2, actionString.length)
-        }
-        actions[actionType]?.let {
-            val actionFunction: BiFunction<Player, String, Boolean> = it
-            return actionFunction.apply(player, actionContent)
-        }
-        return true
+        val info = actionString.splitOnce(": ")
+        val actionType = info[0].lowercase(Locale.getDefault())
+        val actionContent = info.getOrNull(1) ?: ""
+        // 执行动作
+        return actions[actionType]?.apply(player, actionContent) ?: true
     }
 
     /**
@@ -248,7 +238,7 @@ object ActionManager {
             // 防止某个脚本出错导致加载中断
             try {
                 pers.neige.neigeitems.script.CompiledScript(file).invoke("main", null)
-            } catch (error: Throwable) {}
+            } catch (_: Throwable) {}
         }
     }
 
@@ -268,21 +258,21 @@ object ActionManager {
         }
         // 强制玩家发送消息
         addAction("chat") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.chat(papi(player, string))
             }
             true
         }
         // 强制玩家发送消息(将&解析为颜色符号)
         addAction("chatWithColor") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.chat(papiColor(player, string))
             }
             true
         }
         // 强制玩家执行指令
         addAction("command") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 Bukkit.dispatchCommand(player, papiColor(player, string))
             }
             true
@@ -291,21 +281,21 @@ object ActionManager {
         actions["command"]?.let { addAction("player", it) }
         // 强制玩家执行指令(不将&解析为颜色符号)
         addAction("commandNoColor") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 Bukkit.dispatchCommand(player, papi(player, string))
             }
             true
         }
         // 后台执行指令
         addAction("console") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papiColor(player, string))
             }
             true
         }
         // 后台执行指令(不将&解析为颜色符号)
         addAction("consoleNoColor") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papi(player, string))
             }
             true
@@ -322,84 +312,84 @@ object ActionManager {
         }
         // 给予玩家经验
         addAction("giveExp") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.giveExp(papi(player, string).toIntOrNull() ?: 0)
             }
             true
         }
         // 扣除玩家经验
         addAction("takeExp") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.giveExp((papi(player, string).toIntOrNull() ?: 0) * -1)
             }
             true
         }
         // 设置玩家经验
         addAction("setExp") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.totalExperience = papi(player, string).toIntOrNull() ?: 0
             }
             true
         }
         // 给予玩家经验等级
         addAction("giveLevel") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.giveExpLevels(papi(player, string).toIntOrNull() ?: 0)
             }
             true
         }
         // 扣除玩家经验等级
         addAction("takeLevel") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.giveExpLevels((papi(player, string).toIntOrNull() ?: 0) * -1)
             }
             true
         }
         // 设置玩家经验等级
         addAction("setLevel") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.level = papi(player, string).toIntOrNull() ?: 0
             }
             true
         }
         // 给予玩家饱食度
         addAction("giveFood") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.foodLevel = (player.foodLevel + (papi(player, string).toIntOrNull() ?: 0)).coerceAtLeast(0).coerceAtMost(20)
             }
             true
         }
         // 扣除玩家饱食度
         addAction("takeFood") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.foodLevel = (player.foodLevel - (papi(player, string).toIntOrNull() ?: 0)).coerceAtLeast(0).coerceAtMost(20)
             }
             true
         }
         // 设置玩家饱食度
         addAction("setFood") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.foodLevel = (papi(player, string).toIntOrNull() ?: 0).coerceAtLeast(0).coerceAtMost(20)
             }
             true
         }
         // 给予玩家生命
         addAction("giveHealth") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.health = (player.health + (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtMost(player.maxHealth)
             }
             true
         }
         // 扣除玩家生命
         addAction("takeHealth") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.health = (player.health - (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtLeast(0.toDouble())
             }
             true
         }
         // 设置玩家生命
         addAction("setHealth") { player, string ->
-            runTreadSafe {
+            runThreadSafe {
                 player.health = (papi(player, string).toDoubleOrNull() ?: 0.toDouble()).coerceAtLeast(0.toDouble()).coerceAtMost(player.maxHealth)
             }
             true
@@ -698,7 +688,7 @@ object ActionManager {
         }
     }
 
-    private fun runTreadSafe(task: Runnable) {
+    private fun runThreadSafe(task: Runnable) {
         if (isPrimaryThread()) {
             task.run()
         } else {

@@ -15,7 +15,9 @@ import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
+import pers.neige.neigeitems.utils.SectionUtils.getItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
+import pers.neige.neigeitems.utils.StringUtils.split
 import taboolib.module.nms.*
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -26,7 +28,7 @@ import kotlin.math.sin
  * 物品相关工具类
  */
 object ItemUtils {
-    private val invalidNBT by lazy { arrayListOf("Enchantments","VARIABLES_DATA","ench","Damage","HideFlags","Unbreakable", "CustomModelData") }
+    val invalidNBT by lazy { arrayListOf("Enchantments","VARIABLES_DATA","ench","Damage","HideFlags","Unbreakable", "CustomModelData") }
 
     /**
      * HashMap 转 ItemTag
@@ -154,15 +156,30 @@ object ItemUtils {
     /**
      * ItemTag 转 HashMap
      *
+     * @param invalidNBT 转换过程中忽视对应NBT
+     * @return 转换结果
+     */
+    @JvmStatic
+    fun ItemTag.toMap(invalidNBT: List<String>): HashMap<String, Any> {
+        val hashMap = HashMap<String, Any>()
+        for ((key, value) in this) {
+            if (!invalidNBT.contains(key)) {
+                hashMap[key] = value.parseValue()
+            }
+        }
+        return hashMap
+    }
+
+    /**
+     * ItemTag 转 HashMap
+     *
      * @return 转换结果
      */
     @JvmStatic
     fun ItemTag.toMap(): HashMap<String, Any> {
         val hashMap = HashMap<String, Any>()
         for ((key, value) in this) {
-            if (!invalidNBT.contains(key)) {
-                hashMap[key] = value.parseValue()
-            }
+            hashMap[key] = value.parseValue()
         }
         return hashMap
     }
@@ -212,6 +229,7 @@ object ItemUtils {
                     // 覆盖
                     this[key] = value
                 }
+                // 这个键原NBT里没有
             } else {
                 // 添加
                 this[key] = value
@@ -221,7 +239,77 @@ object ItemUtils {
     }
 
     /**
-     * 向ItemTag中插入一个值(key以.做分隔). 我这代码写得依托答辩, 建议不要用.
+     * 获取物品NBT, 这个方法的意义在于, 方便让js脚本调用
+     *
+     * @param itemStack 待操作物品
+     * @return 物品NBT
+     */
+    @JvmStatic
+    fun getItemTag(itemStack: ItemStack): ItemTag {
+        return itemStack.getItemTag()
+    }
+
+    /**
+     * 获取ItemTag中的值(key以.作分隔, 以\转义), 获取不到返回null
+     *
+     * @param key ItemTag键
+     * @return ItemTag值(获取不到返回null)
+     */
+    @JvmStatic
+    fun ItemTag.getDeepOrNull(key: String): ItemTagData? {
+        // 当前层级ItemTagData
+        var value: ItemTagData? = this
+        // key以.作分隔
+        val args = key.split('.', '\\')
+
+        // 逐层深入
+        args.forEach { currentKey ->
+            // 检测当前ItemTagData类型
+            when (value?.type) {
+                ItemTagType.LIST -> {
+                    // key无法转换为数字/数组越界将返回null, 其他情况下将返回下一级
+                    value = currentKey.toIntOrNull()?.coerceAtLeast(0)?.let { index ->
+                        val list = value!!.asList()
+                        when {
+                            list.size > index -> list[index]
+                            else -> return null
+                        }
+                    }
+                }
+                ItemTagType.BYTE_ARRAY -> {
+                    // key无法转换为数字/数组越界将返回null, 其他情况下将返回下一级
+                    value = currentKey.toIntOrNull()?.coerceAtLeast(0)?.let { index ->
+                        val array = value!!.asByteArray()
+                        when {
+                            array.size > index -> ItemTagData(array[index])
+                            else -> return null
+                        }
+                    }
+                }
+                ItemTagType.INT_ARRAY -> {
+                    // key无法转换为数字/数组越界将返回null, 其他情况下将返回下一级
+                    value = currentKey.toIntOrNull()?.coerceAtLeast(0)?.let { index ->
+                        val array = value!!.asIntArray()
+                        when {
+                            array.size > index -> ItemTagData(array[index])
+                            else -> return null
+                        }
+                    }
+                }
+                ItemTagType.COMPOUND -> {
+                    // 当前Compound不含对应的key将返回null, 其他情况下将返回下一级
+                    value = value!!.asCompound().getOrElse(currentKey, null)
+                }
+                // 可能情况: 数组索引不是数字/数组越界/当前Compound不含对应的key/ItemTag层数不够
+                else -> return null
+            }
+        }
+
+        return value
+    }
+
+    /**
+     * 向ItemTag中插入一个值(key以.作分隔, 以\转义). 我这代码写得依托答辩, 建议不要用.
      *
      * @param key ItemTag键
      * @param value ItemTag值
@@ -235,7 +323,7 @@ object ItemUtils {
         // 当前ItemTagData
         var temp: ItemTagData = this
         // 待获取ItemTag键
-        val args = key.split(".")
+        val args = key.split('.', '\\')
 
         // 逐层深入
         for (index in 0 until (args.size - 1)) {
@@ -291,7 +379,7 @@ object ItemUtils {
     }
 
     /**
-     * 向ItemTag中插入一个值(key以.做分隔, 如果key可以转换成Int, 就认为你当前层级是一个ItemTagList, 而非ItemTag). 我这代码写得依托答辩, 建议不要用.
+     * 向ItemTag中插入一个值(key以.作分隔, 以\转义, 如果key可以转换成Int, 就认为你当前层级是一个ItemTagList, 而非ItemTag). 我这代码写得依托答辩, 建议不要用.
      *
      * @param key ItemTag键
      * @param value ItemTag值
@@ -305,7 +393,7 @@ object ItemUtils {
         // 当前ItemTagData
         var temp: ItemTagData = this
         // 待获取ItemTag键
-        val args = key.split(".")
+        val args = key.split('.', '\\')
 
         // 逐层深入
         for (index in 0 until (args.size - 1)) {
@@ -423,30 +511,69 @@ object ItemUtils {
                 // ByteArray插入
                 if (temp.type == ItemTagType.BYTE_ARRAY && value.type == ItemTagType.BYTE) {
                     val byteArray = temp.asByteArray()
+                    // 检测是否越界
                     if (nodeIndex >= 0 && nodeIndex < byteArray.size) {
                         byteArray[nodeIndex] = value.asByte()
+                        // 刚好大一个
+                    } else if (nodeIndex == byteArray.size) {
+                        // 复制扩容
+                        val newArray = byteArray.copyOf(byteArray.size+1)
+                        newArray[nodeIndex] = value.asByte()
+                        // 覆盖上一层
+                        when (father.type) {
+                            ItemTagType.LIST -> {
+                                father.asList()[tempId.toInt()] = ItemTagData(newArray)
+                            }
+                            else -> {
+                                father.asCompound()[tempId] = ItemTagData(newArray)
+                            }
+                        }
+                        // 越界了, 爬
                     } else {
+                        // 你给我爬(变成ItemTag)
+                        boom = true
                         return@let
-                    }
-                    // 覆盖上一层
-                    tempId.toIntOrNull()?.let {
-                        father.asList()[it] = ItemTagData(byteArray)
-                    } ?: let {
-                        father.asCompound()[tempId] = ItemTagData(byteArray)
                     }
                 // IntArray插入
                 } else if (temp.type == ItemTagType.INT_ARRAY && value.type == ItemTagType.INT) {
                     val intArray = temp.asIntArray()
+                    // 检测是否越界
                     if (nodeIndex >= 0 && nodeIndex < intArray.size) {
                         intArray[nodeIndex] = value.asInt()
-                    } else {
+                        // 刚好大一个
+                    } else if (nodeIndex == intArray.size) {
+                        // 复制扩容
+                        val newArray = intArray.copyOf(intArray.size+1)
+                        newArray[nodeIndex] = value.asInt()
+                        // 覆盖上一层
+                        when (father.type) {
+                            ItemTagType.LIST -> {
+                                father.asList()[tempId.toInt()] = ItemTagData(newArray)
+                            }
+                            else -> {
+                                father.asCompound()[tempId] = ItemTagData(newArray)
+                            }
+                        }
+                        // 越界了, 爬
+                    }  else {
+                        // 你给我爬(变成ItemTag)
+                        boom = true
                         return@let
                     }
-                    // 覆盖上一层
-                    tempId.toIntOrNull()?.let {
-                        father.asList()[it] = ItemTagData(intArray)
-                    } ?: let {
-                        father.asCompound()[tempId] = ItemTagData(intArray)
+                // List插入
+                } else if (temp.type == ItemTagType.LIST) {
+                    val list = temp.asList()
+                    // 检测是否越界
+                    if (nodeIndex >= 0 && nodeIndex < list.size) {
+                        list[nodeIndex] = value
+                        // 刚好大一个, 直接add
+                    } else if (nodeIndex == list.size) {
+                        list.add(value)
+                        // 越界了, 爬
+                    } else {
+                        // 你给我爬(变成ItemTag)
+                        boom = true
+                        return@let
                     }
                 }
             }

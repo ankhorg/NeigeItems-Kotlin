@@ -101,7 +101,7 @@ object SectionManager {
             // 防止某个脚本出错导致加载中断
             try {
                 pers.neige.neigeitems.script.CompiledScript(file).invoke("main", null)
-            } catch (error: Throwable) {}
+            } catch (_: Throwable) {}
         }
     }
 }
