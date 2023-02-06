@@ -24,12 +24,12 @@ object JsonUtils {
     }
 
     /**
-     * HashMap<String, String> 转 String
+     * Map<String, String> 转 String
      *
      * @return 转换结果
      */
     @JvmStatic
-    fun toString(map: HashMap<String, String>): String {
+    fun toString(map: Map<String, String>): String {
         return map.toJSONString()
     }
 }
