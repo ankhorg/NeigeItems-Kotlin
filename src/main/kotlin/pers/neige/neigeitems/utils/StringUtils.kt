@@ -5,6 +5,13 @@ import pers.neige.neigeitems.utils.StringUtils.split
 import java.util.ArrayList
 
 object StringUtils {
+    /**
+     * List转文本
+     *
+     * @param separator 分隔符
+     * @param start 起始索引
+     * @return 结果文本
+     */
     @JvmStatic
     fun List<String>.joinToString(separator: CharSequence = ", ", start: Int = 0): String {
         val buffer = StringBuilder()
