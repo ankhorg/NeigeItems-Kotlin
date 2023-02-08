@@ -1,13 +1,28 @@
-const Calendar = Packages.java.util.Calendar
-const ThreadLocalRandom = Packages.java.util.concurrent.ThreadLocalRandom
+load('nashorn:mozilla_compat.js')
 
-const Bukkit = Packages.org.bukkit.Bukkit
-const ChatColor = Packages.org.bukkit.ChatColor
-const GameMode = Packages.org.bukkit.GameMode
+importPackage("java.io")
+importPackage("java.lang")
+importPackage("java.math")
+importPackage("java.util")
+importPackage("java.util.concurrent")
+importPackage("java.util.function")
+
+importPackage("org.bukkit")
+importPackage("org.bukkit.configuration")
+importPackage("org.bukkit.configuration.file")
+importPackage("org.bukkit.entity")
+importPackage("org.bukkit.inventory")
+importPackage("org.bukkit.inventory.meta")
+importPackage("org.bukkit.scheduler")
+
+importPackage("pers.neige.neigeitems.utils")
 
 const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
+const ConfigManager = Packages.pers.neige.neigeitems.manager.ConfigManager.INSTANCE
 const HookerManager = Packages.pers.neige.neigeitems.manager.HookerManager
-const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
+const ItemEditorManager = Packages.pers.neige.neigeitems.manager.ItemEditorManager.INSTANCE
+const ItemManager = Packages.pers.neige.neigeitems.manager.ItemManager.INSTANCE
+const ItemPackManager = Packages.pers.neige.neigeitems.manager.ItemPackManager.INSTANCE
 
 const bukkitScheduler = Bukkit.getScheduler()
 const bukkitServer = Bukkit.getServer()
@@ -65,7 +80,7 @@ const console = function(cmd) {
 /**
  * 解析文本中的papi变量
  *
- * @param text String 解析后文本
+ * @param text String 待解析文本
  * @return String 解析后文本
  */
 const papi = function(text) {
@@ -75,11 +90,29 @@ const papi = function(text) {
 /**
  * 解析文本中的即时声明节点
  *
- * @param text String 解析后文本
+ * @param text String 待解析文本
  * @return String 解析后文本
  */
 const parse = function(text) {
-    return SectionUtils.parseSection(text, player)
+    if (typeof cache == "undefined" && typeof sections == "undefined") {
+        return SectionUtils.parseSection(text, player)
+    } else {
+        return SectionUtils.parseSection(text, cache, player, sections)
+    }
+}
+
+/**
+ * 解析文本中的物品节点
+ *
+ * @param text String 待解析文本
+ * @return String 解析后文本
+ */
+const parseItem = function(text) {
+    if (typeof itemTag != "undefined") {
+        return SectionUtils.parseItemSection(text, itemTag, player)
+    } else {
+        return "未传入物品"
+    }
 }
 
 /**
@@ -105,6 +138,29 @@ const random = function(min, max) {
  */
 const chance = function(value, limit) {
     return value > ThreadLocalRandom.current().nextDouble(0, limit || 1)
+}
+
+/**
+ * 检测连击情况
+ *
+ * @param group String 连击组
+ * @param types [] 连击类型
+ * @return Boolean 是否达成连击
+ */
+const combo = function(group, types) {
+    if(!player.hasMetadata("NI-Combo-" + group)) {
+        player.setMetadataEZ("NI-Combo-" + group, new ArrayList())
+    }
+    const comboInfos = player.getMetadata("NI-Combo-" + group)[0].value()
+    if (comboInfos.size() < types.length) return false
+
+    const difference = comboInfos.size() - types.length
+    let result = true
+    for (let index = 0; index < types.length; index++) {
+        if (types[index] !== comboInfos[index + difference].type) result = false
+    }
+
+    return result
 }
 
 /**
@@ -547,7 +603,7 @@ const takeFood = function(value) {
  */
 const gamemode = function(value) {
     if (value == null) {
-        return player.getGameMode()
+        return player.getGameMode().toString()
     } else {
         player.setGameMode(GameMode.valueOf(value.toUpperCase()))
         return value
@@ -606,6 +662,15 @@ const gravity = function(value) {
  */
 const health = function() {
     return player.getHealth()
+}
+
+/**
+ * 获取玩家最大生命
+ *
+ * @return double 玩家生命
+ */
+const maxHealth = function() {
+    return player.getMaxHealth()
 }
 
 /**

@@ -51,17 +51,18 @@ object JoinParser : SectionParser() {
      * @param transform 操作函数
      * @return 解析值
      */
-    private fun handler(cache: HashMap<String, String>?,
-                        player: OfflinePlayer?,
-                        sections: ConfigurationSection?,
-                        list: List<String>?,
-                        rawSeparator: String?,
-                        rawPrefix: String?,
-                        rawPostfix: String?,
-                        rawLimit: String?,
-                        rawTruncated: String?,
-                        rawTransform: String?,
-                        ): String? {
+    private fun handler(
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?,
+        list: List<String>?,
+        rawSeparator: String?,
+        rawPrefix: String?,
+        rawPostfix: String?,
+        rawLimit: String?,
+        rawTruncated: String?,
+        rawTransform: String?,
+    ): String? {
         // 如果待操作列表存在, 进行后续操作
         list?.let {
             // 获取分隔符(默认为", ")

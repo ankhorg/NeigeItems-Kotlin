@@ -75,6 +75,19 @@ object ItemEditorManager {
     }
 
     /**
+     * 使用物品编辑函数
+     *
+     * @param id 函数ID
+     * @param player 物品拥有者
+     * @param itemStack 待编辑物品
+     * @param content 传入的文本
+     * @return 动作是否执行成功
+     */
+    fun runEditorWithResult(id: String, content: String, itemStack: ItemStack, player: Player): Boolean? {
+        return itemEditors[id.lowercase(Locale.getDefault())]?.apply(player, itemStack, content)
+    }
+
+    /**
      * 添加物品编辑函数
      *
      * @param id 函数ID

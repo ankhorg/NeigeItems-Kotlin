@@ -49,15 +49,16 @@ object RepeatParser : SectionParser() {
      * @param transform 操作函数
      * @return 解析值
      */
-    private fun handler(cache: HashMap<String, String>?,
-                        player: OfflinePlayer?,
-                        sections: ConfigurationSection?,
-                        content: String,
-                        separator: String?,
-                        prefix: String?,
-                        postfix: String?,
-                        repeat: Int?,
-                        transformString: String?,
+    private fun handler(
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?,
+        content: String,
+        separator: String?,
+        prefix: String?,
+        postfix: String?,
+        repeat: Int?,
+        transformString: String?,
     ): String {
         // 获取长度限制
         val length = (repeat ?: 1).coerceAtLeast(0)

@@ -80,6 +80,7 @@ object SectionManager {
      */
     private fun loadBasicParser() {
         CalculationParser.register()
+        CheckParser.register()
         FastCalcParser.register()
         GaussianParser.register()
         GradientParser.register()

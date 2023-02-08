@@ -180,7 +180,7 @@ object Drop {
                     // 获取数量
                     amount?.let {
                         // 掉物品
-                        ItemManager.getItemStack(id, parser, data)?.let { itemStack ->
+                        ItemManager.getItemStack(id, parser, data)?.also { itemStack ->
                             location?.dropNiItems(itemStack, amount.coerceAtLeast(1), parser)
                             sender.sendLang("Messages.dropSuccessInfo", mapOf(
                                 Pair("{world}", location?.world?.name ?: ""),
@@ -207,7 +207,7 @@ object Drop {
                         val dropData = HashMap<String, Int>()
                         // 掉物品
                         repeat(amount.coerceAtLeast(1)) {
-                            ItemManager.getItemStack(id, parser, data)?.let { itemStack ->
+                            ItemManager.getItemStack(id, parser, data)?.also { itemStack ->
                                 location?.dropNiItem(itemStack, parser)
                                 dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
                                 // 未知物品ID

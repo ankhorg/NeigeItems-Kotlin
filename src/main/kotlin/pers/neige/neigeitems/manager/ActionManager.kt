@@ -2,38 +2,52 @@ package pers.neige.neigeitems.manager
 
 import org.bukkit.Bukkit
 import org.bukkit.Bukkit.isPrimaryThread
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
+import org.bukkit.event.Event
 import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
+import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
-import pers.neige.neigeitems.item.ItemAction
+import pers.neige.neigeitems.item.action.ComboInfo
+import pers.neige.neigeitems.item.action.ItemAction
+import pers.neige.neigeitems.manager.ConfigManager.comboInterval
+import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.HookerManager.papiColor
 import pers.neige.neigeitems.manager.HookerManager.vaultHooker
+import pers.neige.neigeitems.manager.ItemEditorManager.runEditorWithResult
 import pers.neige.neigeitems.utils.ActionUtils.consume
 import pers.neige.neigeitems.utils.ActionUtils.consumeAndReturn
 import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
+import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
+import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
+import taboolib.module.nms.getItemTag
 import taboolib.platform.util.giveItem
 import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.BiFunction
 import javax.script.CompiledScript
+import javax.script.ScriptEngine
+import javax.script.SimpleBindings
+import kotlin.collections.LinkedHashMap
 
 /**
  * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
@@ -57,7 +71,12 @@ object ActionManager {
     /**
      * 获取缓存的已编译condition脚本
      */
-    val compiledScripts = ConcurrentHashMap<String, CompiledScript>()
+    val conditionScripts = ConcurrentHashMap<String, CompiledScript>()
+
+    /**
+     * 获取缓存的已编译action脚本
+     */
+    val actionScripts = ConcurrentHashMap<String, pers.neige.neigeitems.script.CompiledScript>()
 
     init {
         // 加载所有拥有动作的物品及相关动作
@@ -90,48 +109,73 @@ object ActionManager {
      *
      * @param player 执行玩家
      * @param action 动作文本
+     * @param start 动作从第几个开始执行(默认为0)
+     * @param end 动作执行到第几个结束
+     * @param itemStack 用于解析条件, 可为空
      * @param itemTag 用于解析nbt及data, 可为空
+     * @param event 用于解析条件, 可为空
      */
-    fun runAction(player: Player, action: List<String>, itemTag: ItemTag?, start: Int?, end: Int?) {
+    fun runAction(
+        player: Player,
+        action: List<*>,
+        itemStack: ItemStack? = null,
+        itemTag: ItemTag? = itemStack?.getItemTag(),
+        event: Event? = null,
+        start: Int = 0,
+        end: Int = action.size,
+        map: Map<String, Any?>? = null
+    ) {
         // 动作执行延迟
         var delay = 0L
 
-        val actionStart = start?.coerceAtLeast(0)?.coerceAtMost(action.size) ?: 0
-        val actionEnd = (end?.coerceAtLeast(0)?.coerceAtMost(action.size) ?: action.size).coerceAtLeast(actionStart)
+        // 动作执行起止
+        val actionStart = start.coerceAtLeast(0).coerceAtMost(action.size)
+        val actionEnd = end.coerceAtLeast(actionStart).coerceAtMost(action.size)
 
         // 遍历所有动作
-        for (i in actionStart until actionEnd) {
+        for (index in actionStart until actionEnd) {
             // 延迟执行
             if (delay > 0) {
+                // 线程判断
                 if (isPrimaryThread()) {
                     bukkitScheduler.runTaskLater(plugin, Runnable {
-                        runAction(player, action, itemTag, i, actionEnd)
+                        runAction(player, action, itemStack, itemTag, event, index, actionEnd, map)
                     }, delay)
                 } else {
                     bukkitScheduler.runTaskLaterAsynchronously(plugin, Runnable {
-                        runAction(player, action, itemTag, i, actionEnd)
+                        runAction(player, action, itemStack, itemTag, event, index, actionEnd, map)
                     }, delay)
                 }
+                // 停止当前操作
                 break
             }
 
-            val value = action[i]
+            // 动作内容
+            val value = action[index]
 
-            // 解析物品变量
-            val actionString = when (itemTag) {
-                null -> value
-                else -> value.parseItemSection(itemTag, player)
-            }
-            // 解析动作类型及动作内容
-            val info = actionString.splitOnce(": ")
-            val actionType = info[0].lowercase(Locale.getDefault())
-            val actionContent = info.getOrNull(1) ?: ""
+            // 如果属于一条文本
+            if (value is String) {
+                // 解析物品变量
+                val actionString = when (itemTag) {
+                    null -> value
+                    else -> value.parseItemSection(itemTag, player)
+                }
+                // 解析动作类型及动作内容
+                val info = actionString.splitOnce(": ")
+                val actionType = info[0]
+                val actionContent = info.getOrNull(1) ?: ""
 
-            when {
-                // 延迟
-                actionType == "delay" -> delay += actionContent.toLongOrNull() ?: 0
-                // 正常执行
-                else -> if (!runAction(player, actionType, actionContent)) break
+                // 执行动作
+                when {
+                    // 延迟
+                    actionType == "delay" -> delay += actionContent.toLongOrNull() ?: 0
+                    // 正常执行
+                    else -> if (!runAction(player, actionType, actionContent, itemStack, itemTag, event)) break
+                }
+                // 如果属于其他类型
+            } else {
+                // 直接执行
+                if (!runAction(player, value, itemStack, itemTag, event, map)) break
             }
         }
     }
@@ -141,20 +185,15 @@ object ActionManager {
      *
      * @param player 执行玩家
      * @param action 动作文本
-     * @param itemTag 用于解析nbt及data, 可为空
      */
-    fun runAction(player: Player, action: List<String>, itemTag: ItemTag?) {
-        runAction(player, action, itemTag, null, null)
-    }
-
-    /**
-     * 执行物品动作
-     *
-     * @param player 执行玩家
-     * @param action 动作文本
-     */
-    fun runAction(player: Player, action: List<String>) {
-        runAction(player, action, null)
+    fun runAction(
+        player: Player,
+        action: List<*>,
+        itemStack: ItemStack? = null,
+        itemTag: ItemTag? = itemStack?.getItemTag(),
+        event: Event? = null
+    ) {
+        runAction(player, action, itemStack, itemTag, event, 0, action.size)
     }
 
     /**
@@ -164,8 +203,11 @@ object ActionManager {
      * @param action 动作文本
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
-    fun runAction(player: Player, action: String): Boolean {
-        return runAction(player, action, null)
+    fun runAction(
+        player: Player,
+        action: String
+    ): Boolean {
+        return runAction(player, action)
     }
 
     /**
@@ -173,10 +215,18 @@ object ActionManager {
      *
      * @param player 执行玩家
      * @param action 动作文本
+     * @param itemStack 用于解析条件, 可为空
      * @param itemTag 用于解析nbt及data, 可为空
+     * @param event 用于解析条件, 可为空
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
-    fun runAction(player: Player, action: String, itemTag: ItemTag? = null): Boolean {
+    fun runAction(
+        player: Player,
+        action: String,
+        itemStack: ItemStack? = null,
+        itemTag: ItemTag? = itemStack?.getItemTag(),
+        event: Event? = null
+    ): Boolean {
         // 解析物品变量
         val actionString = when (itemTag) {
             null -> action
@@ -184,10 +234,10 @@ object ActionManager {
         }
         // 解析动作类型及动作内容
         val info = actionString.splitOnce(": ")
-        val actionType = info[0].lowercase(Locale.getDefault())
+        val actionType = info[0]
         val actionContent = info.getOrNull(1) ?: ""
         // 执行动作
-        return actions[actionType]?.apply(player, actionContent) ?: true
+        return runAction(player, actionType, actionContent, itemStack, itemTag, event)
     }
 
     /**
@@ -196,14 +246,160 @@ object ActionManager {
      * @param player 执行玩家
      * @param actionType 动作类型
      * @param actionContent 动作内容
+     * @param itemStack 用于解析条件, 可为空
+     * @param itemTag 用于解析nbt及data, 可为空
+     * @param event 用于解析条件, 可为空
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
-    fun runAction(player: Player, actionType: String, actionContent: String): Boolean {
-        actions[actionType]?.let {
-            val actionFunction: BiFunction<Player, String, Boolean> = it
-            return actionFunction.apply(player, actionContent)
+    fun runAction(
+        player: Player,
+        actionType: String,
+        actionContent: String,
+        itemStack: ItemStack? = null,
+        itemTag: ItemTag? = itemStack?.getItemTag(),
+        event: Event? = null
+    ): Boolean {
+        actions[actionType.lowercase(Locale.getDefault())]?.apply(player, actionContent)?.also { return it }
+        itemStack?.also { runEditorWithResult(actionType, actionContent, itemStack, player)?.also { return it } }
+        return true
+    }
+
+    /**
+     * 执行物品动作
+     *
+     * @param player 执行玩家
+     * @param action 动作内容
+     * @param itemStack 用于解析条件, 可为空
+     * @param itemTag 用于解析nbt及data, 可为空
+     * @param event 用于解析条件, 可为空
+     * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
+     */
+    fun runAction(
+        player: Player,
+        action: ConfigurationSection,
+        itemStack: ItemStack? = null,
+        itemTag: ItemTag? = itemStack?.getItemTag(),
+        event: Event? = null,
+        map: Map<String, Any?>? = null
+    ): Boolean {
+        // 动作执行条件
+        val condition: String? = action.getString("condition")
+        // 动作内容
+        val actions = action.get("actions")
+        // 不满足条件时执行的内容
+        val deny = action.get("deny")
+
+        // 如果没有条件或者条件通过
+        if (parseCondition(condition, player, itemStack, itemTag, event, map)) {
+            // 执行动作
+            return runAction(player, actions, itemStack, itemTag, event, map)
+            // 条件未通过
+        } else {
+            // 执行deny动作
+            return runAction(player, deny, itemStack, itemTag, event, map)
+        }
+    }
+
+    /**
+     * 执行物品动作
+     *
+     * @param player 执行玩家
+     * @param action 动作内容
+     * @param itemStack 用于解析条件, 可为空
+     * @param itemTag 用于解析nbt及data, 可为空
+     * @param event 用于解析条件, 可为空
+     * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
+     */
+    fun runAction(
+        player: Player,
+        action: LinkedHashMap<String, *>,
+        itemStack: ItemStack? = null,
+        itemTag: ItemTag? = itemStack?.getItemTag(),
+        event: Event? = null,
+        map: Map<String, Any?>? = null
+    ): Boolean {
+        // 动作执行条件
+        val condition: String? = action["condition"] as String?
+        // 动作内容
+        val actions = action["actions"]
+        // 不满足条件时执行的内容
+        val deny = action["deny"]
+
+        // 如果条件通过
+        if (parseCondition(condition, player, itemStack, itemTag, event, map)) {
+            // 执行动作
+            return runAction(player, actions, itemStack, itemTag, event, map)
+            // 条件未通过
+        } else {
+            // 执行deny动作
+            return runAction(player, deny, itemStack, itemTag, event, map)
+        }
+    }
+
+    /**
+     * 执行物品动作
+     *
+     * @param player 执行玩家
+     * @param action 动作内容
+     * @param itemStack 用于解析条件, 可为空
+     * @param itemTag 用于解析nbt及data, 可为空
+     * @param event 用于解析条件, 可为空
+     * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
+     */
+    fun runAction(
+        player: Player,
+        action: Any?,
+        itemStack: ItemStack? = null,
+        itemTag: ItemTag? = itemStack?.getItemTag(),
+        event: Event? = null,
+        map: Map<String, Any?>? = null
+    ): Boolean {
+        when (action) {
+            is String -> return runAction(player, action, itemStack, itemTag, event)
+            is List<*> -> runAction(player, action, itemStack, itemTag, event, 0, action.size, map)
+            is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, itemStack, itemTag, event, map)
+            is ConfigurationSection -> return runAction(player, action, itemStack, itemTag, event, map)
         }
         return true
+    }
+
+    /**
+     * 解析条件
+     *
+     * @param condition 条件内容
+     * @param player 执行玩家
+     * @param itemStack 用于解析条件, 可为空
+     * @param itemTag 用于解析nbt及data, 可为空
+     * @param event 用于解析条件, 可为空
+     * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
+     */
+    fun parseCondition(
+        condition: String?,
+        player: Player,
+        itemStack: ItemStack? = null,
+        itemTag: ItemTag? = itemStack?.getItemTag(),
+        event: Event? = null,
+        map: Map<String, Any?>? = null
+    ): Boolean {
+        val pass = condition?.let {
+            // 条件中调用的顶级变量
+            val bindings = SimpleBindings()
+            map?.forEach { (key, value) ->
+                value?.let { bindings[key] = it }
+            }
+            bindings["variables"] = HashMap<String, Any?>()
+            bindings["player"] = player
+            itemStack?.let { bindings["itemStack"] = it }
+            itemTag?.let { bindings["itemTag"] = it }
+            event?.let { bindings["event"] = it }
+            // 解析条件
+            kotlin.runCatching {
+                conditionScripts.computeIfAbsent(condition) {
+                    nashornHooker.compile(engine, condition)
+                }.eval(bindings) as Boolean
+            }.getOrNull()
+        }
+        return (pass == null || pass)
     }
 
     /**
@@ -220,14 +416,83 @@ object ActionManager {
      * 加载所有拥有动作的物品及相关动作
      */
     private fun loadItemActions() {
+        // 是否升级旧版本配置
+        val upgrade = config.getBoolean("ItemAction.upgrade")
+        // 遍历物品动作配置文件
         for (file: File in ConfigUtils.getAllFiles("ItemActions")) {
+            // 将当前文件转换为YamlConfiguration
             val config = YamlConfiguration.loadConfiguration(file)
+            var upgraded = false
+            // 遍历顶级键
             config.getKeys(false).forEach { id ->
-                config.getConfigurationSection(id)?.let {
-                    itemActions[id] = ItemAction(id, it)
+                // 当前物品的动作配置文件
+                config.getConfigurationSection(id)?.let { configurationSection ->
+                    // 进行升级操作
+                    if (upgrade && upgradeConfig(configurationSection)) upgraded = true
+                    // 加载物品动作
+                    itemActions[id] = ItemAction(id, configurationSection)
                 }
             }
+            // 保存升级内容
+            if (upgrade && upgraded) config.save(file)
         }
+        if (upgrade) {
+            config.set("ItemAction.upgrade", false)
+            plugin.saveConfig()
+        }
+    }
+
+    /**
+     * 升级旧版本物品动作配置文件
+     *
+     * @param configurationSection
+     * @return 这配置是不是旧配置
+     */
+    private fun upgradeConfig(configurationSection: ConfigurationSection): Boolean {
+        var upgraded = false
+
+        // 消耗配置
+        val consume = configurationSection.getConfigurationSection("consume")
+        // 冷却时间配置
+        val cooldown = configurationSection.get("cooldown")
+        // 冷却组配置
+        val group = configurationSection.get("group")
+        // 动作配置
+        arrayListOf("left", "right", "all", "eat", "drop", "pick").forEach { id ->
+            // 配置了当前动作
+            if (configurationSection.contains(id) && configurationSection.getConfigurationSection(id) == null) {
+                upgraded = true
+                val config = YamlConfiguration()
+                // 当前配置有消耗动作
+                if (consume?.getBoolean(id) == true
+                    // all类型的特殊判断
+                    || (id == "all" && consume?.getBoolean("left") == true || consume?.getBoolean("right") == true )) {
+                    // 转换消耗数量
+                    config.set("consume.amount", consume.get("amount"))
+                    // 转换冷却时间
+                    config.get("consume.cooldown")?.let { config.set("cooldown", cooldown) }
+                    // 转换冷却组
+                    config.get("consume.group")?.let { config.set("group", cooldown) }
+                }
+                // 转换冷却时间
+                config.set("cooldown", cooldown)
+                // 转换冷却组
+                config.set("group", group)
+                // 转成sync
+                config.set("sync", configurationSection.getStringList(id))
+                // 设置升级后配置
+                configurationSection.set(id, config)
+            }
+        }
+        if (upgraded) {
+            // 移除消耗配置
+            configurationSection.set("consume", null)
+            // 移除冷却时间配置
+            configurationSection.set("cooldown", null)
+            // 移除冷却组配置
+            configurationSection.set("group", null)
+        }
+        return upgraded
     }
 
     /**
@@ -399,6 +664,38 @@ object ActionManager {
             mythicMobsHooker?.castSkill(player, string, player)
             true
         }
+        // 连击记录
+        addAction("combo") { player, string ->
+            val info = string.splitOnce(" ")
+            // 连击组
+            val comboGroup = info[0]
+            // 连击类型
+            val comboType = info.getOrNull(1) ?: ""
+            if(!player.hasMetadata("NI-Combo-$comboGroup")) {
+                player.setMetadataEZ("NI-Combo-$comboGroup", ArrayList<ComboInfo>())
+            }
+            // 当前时间
+            val time = System.currentTimeMillis()
+            // 记录列表
+            val comboInfos = player.getMetadata("NI-Combo-$comboGroup")[0].value() as ArrayList<ComboInfo>
+            // 为空则填入
+            if (comboInfos.isEmpty()) {
+                comboInfos.add(ComboInfo(comboType, time))
+            } else {
+                // 连击中断
+                if (comboInfos.last().time + comboInterval < time) {
+                    comboInfos.clear()
+                }
+                // 填入信息
+                comboInfos.add(ComboInfo(comboType, time))
+            }
+            true
+        }
+        // 连击清空
+        addAction("comboClear") { player, string ->
+            player.setMetadataEZ("NI-Combo-$string", ArrayList<ComboInfo>())
+            true
+        }
         // 延迟(单位是tick)
         addAction("delay") { _, _ ->
             true
@@ -416,13 +713,17 @@ object ActionManager {
         val player = event.player
         // 获取操作物品
         val itemStack = event.item
+        // 类型不对劲/物品为空则终止操作
+        if (event.action == Action.PHYSICAL || itemStack == null) return
         // 物品NBT
         val itemTag: ItemTag
         // NI物品数据
         val neigeItems: ItemTag
         // NI物品id
         val id: String
-        when (val itemInfo = itemStack?.isNiItem()) {
+        // 初始化NI物品数据
+        when (val itemInfo = itemStack.isNiItem()) {
+            // 不是NI物品, 终止操作
             null -> return
             else -> {
                 itemTag = itemInfo.itemTag
@@ -432,83 +733,82 @@ object ActionManager {
         }
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
-        // 没有对应物品动作就停止判断
-        if (!itemAction.hasClickAction) return
-        // 获取物品消耗信息
-        val consume =  itemAction.consume
-        // 获取交互类型
-        val action = event.action
-        val leftAction = (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
-        val rightAction = (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
-        val allAction = (leftAction || rightAction)
-        // 如果物品配置了消耗事件
+        // 获取基础触发器
+        val basicTrigger = when (event.action) {
+            // 左键类型
+            Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK -> {
+                when {
+                    player.isSneaking -> {
+                        // 如果既没有shift_left又没有shift_all就爬
+                        if (!itemAction.hasShiftLeftAction) return
+                        itemAction.triggers["shift_left"]
+                    }
+                    else -> {
+                        // 如果既没有left又没有all就爬
+                        if (!itemAction.hasLeftAction) return
+                        itemAction.triggers["left"]
+                    }
+                }
+            }
+            // 右键类型
+            Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK -> {
+                when {
+                    player.isSneaking -> {
+                        // 如果既没有shift_right又没有shift_all就爬
+                        if (!itemAction.hasShiftRightAction) return
+                        itemAction.triggers["shift_right"]
+                    }
+                    else -> {
+                        // 如果既没有right又没有all就爬
+                        if (!itemAction.hasRightAction) return
+                        itemAction.triggers["right"]
+                    }
+                }
+            }
+            // 停止操作
+            else -> return
+        }
+        // 获取all触发器
+        val allTrigger = when {
+            player.isSneaking -> itemAction.triggers["shift_all"]
+            else -> itemAction.triggers["all"]
+        }
+
+        // 获取消耗信息
+        val consume = basicTrigger?.consume ?: allTrigger?.consume
+        // 取消交互事件
+        event.isCancelled = true
+        // 检测冷却
+        if ((basicTrigger ?: allTrigger)!!.isCoolDown(player, itemTag)) return
+        // 如果物品需要消耗
         if (consume != null) {
-            // 获取左键是否消耗
-            val left = (leftAction && consume.getBoolean("left", false))
-            // 获取右键是否消耗
-            val right = (rightAction && consume.getBoolean("right", false))
-            // 获取左右键是否消耗
-            val all = (allAction && consume.getBoolean("all", false))
-            // 如果该物品需要被消耗
-            if (left || right || all) {
-                // 取消交互事件
-                event.isCancelled = true
-                // 检测冷却
-                if (consume.isCoolDown(player, id)) return
-                // 获取待消耗数量
-                val amount: Int = consume.getInt("amount", 1)
-                // 消耗物品
-                if (itemStack.consume(player, amount, itemTag, neigeItems)) {
-                    // 消耗成功, 执行动作
-                    if (all) itemAction.run(player, itemAction.allSync, itemTag)
-                    if (left) itemAction.run(player, itemAction.leftSync, itemTag)
-                    if (right) itemAction.run(player, itemAction.rightSync, itemTag)
+            // 检测条件
+            consume.getString("condition")?.let {
+                // 不满足条件就爬
+                if (!parseCondition(it, player, itemStack, itemTag, event)) {
+                    // 跑一下deny动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        if (all) itemAction.run(player, itemAction.all, itemTag)
-                        if (left) itemAction.run(player, itemAction.left, itemTag)
-                        if (right) itemAction.run(player, itemAction.right, itemTag)
+                        runAction(player, consume.get("deny"), itemStack, itemTag, event)
                     })
+                    // 爬
+                    return
                 }
             }
-            // 消耗检测完毕, 检测不消耗情况
-            if ((leftAction && !left && (itemAction.left != null || itemAction.leftSync != null))
-                || (rightAction && !right && (itemAction.right != null || itemAction.rightSync != null))
-                || (allAction && !all && (itemAction.all != null || itemAction.allSync != null))) {
-                // 取消交互事件
-                event.isCancelled = true
-                // 检测冷却
-                if (!itemAction.isCoolDown(player)) {
-                    // 执行动作
-                    if (allAction && !all) itemAction.run(player, itemAction.allSync, itemTag)
-                    if (leftAction && !left) itemAction.run(player, itemAction.leftSync, itemTag)
-                    if (rightAction && !right) itemAction.run(player, itemAction.rightSync, itemTag)
-                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        if (allAction && !all) itemAction.run(player, itemAction.all, itemTag)
-                        if (leftAction && !left) itemAction.run(player, itemAction.left, itemTag)
-                        if (rightAction && !right) itemAction.run(player, itemAction.right, itemTag)
-                    })
-                }
-            }
-        } else {
-            if ((leftAction && (itemAction.left != null || itemAction.leftSync != null))
-                || (rightAction && (itemAction.right != null || itemAction.rightSync != null))
-                || (allAction && (itemAction.all != null || itemAction.allSync != null))) {
-                // 取消交互事件
-                event.isCancelled = true
-                // 检测冷却
-                if (!itemAction.isCoolDown(player)) {
-                    // 执行动作
-                    if (allAction) itemAction.run(player, itemAction.allSync, itemTag)
-                    if (leftAction) itemAction.run(player, itemAction.leftSync, itemTag)
-                    if (rightAction) itemAction.run(player, itemAction.rightSync, itemTag)
-                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        if (allAction) itemAction.run(player, itemAction.all, itemTag)
-                        if (leftAction) itemAction.run(player, itemAction.left, itemTag)
-                        if (rightAction) itemAction.run(player, itemAction.right, itemTag)
-                    })
-                }
+            // 获取待消耗数量
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, player)?.toIntOrNull() ?: 1
+            // 消耗物品
+            if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
+                // 跑一下deny动作
+                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                    runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                })
+                // 数量不足
+                return
             }
         }
+        // 执行动作
+        basicTrigger?.run(player, itemStack, itemTag, event)
+        allTrigger?.run(player, itemStack, itemTag, event)
     }
 
     // 吃或饮用
@@ -534,19 +834,35 @@ object ActionManager {
         }
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
+        // 获取基础触发器
+        val trigger = itemAction.triggers["eat"]
         // 没有对应物品动作就停止判断
-        if (!itemAction.hasEatAction) return
+        if (trigger == null) return
+
         // 获取物品消耗信息
-        val consume =  itemAction.consume
+        val consume =  trigger.consume
+        // 取消事件
         event.isCancelled = true
+        // 检测冷却
+        if (trigger.isCoolDown(player, itemTag)) return
         // 如果该物品需要被消耗
-        if (consume != null && consume.getBoolean("eat", false)) {
-            // 检测冷却
-            if (consume.isCoolDown(player, id)) return
+        if (consume != null) {
+            // 检测条件
+            consume.getString("condition")?.let {
+                // 不满足条件就爬
+                if (!parseCondition(it, player, itemStack, itemTag, event)) {
+                    // 跑一下deny动作
+                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                        runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                    })
+                    // 爬
+                    return
+                }
+            }
             // 获取待消耗数量
-            val amount: Int = consume.getInt("amount", 1)
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, player)?.toIntOrNull() ?: 1
             // 消耗物品
-            itemStack.consumeAndReturn(amount, itemTag, neigeItems)?.let { itemStacks ->
+            itemStack.consumeAndReturn(amount, itemTag, neigeItems)?.also { itemStacks ->
                 // 设置物品
                 if (event.item == player.inventory.itemInMainHand) {
                     player.inventory.setItemInMainHand(itemStacks[0])
@@ -558,22 +874,17 @@ object ActionManager {
                         player.giveItem(itemStacks[1])
                     }, 1)
                 }
-                // 执行动作
-                itemAction.run(player, itemAction.eatSync, itemTag)
+            } ?: let {
+                // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    itemAction.run(player, itemAction.eat, itemTag)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, event)
                 })
-            }
-        } else {
-            // 检测冷却
-            if (!itemAction.isCoolDown(player)) {
-                // 执行动作
-                itemAction.run(player, itemAction.eatSync, itemTag)
-                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    itemAction.run(player, itemAction.eat, itemTag)
-                })
+                // 数量不足
+                return
             }
         }
+        // 执行动作
+        trigger.run(player, itemStack, itemTag, event)
     }
 
     // 丢弃物品
@@ -599,39 +910,46 @@ object ActionManager {
         }
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
+        // 获取基础触发器
+        val trigger = itemAction.triggers["drop"]
         // 没有对应物品动作就停止判断
-        if (!itemAction.hasDropAction) return
+        if (trigger == null) return
+
         // 获取物品消耗信息
-        val consume =  itemAction.consume
+        val consume =  trigger.consume
+        // 检测冷却
+        if (trigger.isCoolDown(player, itemTag)) {
+            event.isCancelled
+            return
+        }
         // 如果该物品需要被消耗
-        if (consume != null && consume.getBoolean("drop", false)) {
-            // 检测冷却
-            if (!consume.isCoolDown(player, id)) {
-                // 获取待消耗数量
-                val amount: Int = consume.getInt("amount", 1)
-                // 消耗物品
-                if (itemStack.consume(player, amount, itemTag, neigeItems)) {
-                    // 执行动作
-                    itemAction.run(player, itemAction.dropSync, itemTag)
+        if (consume != null) {
+            // 检测条件
+            consume.getString("condition")?.let {
+                // 不满足条件就爬
+                if (!parseCondition(it, player, itemStack, itemTag, event)) {
+                    // 跑一下deny动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        itemAction.run(player, itemAction.drop, itemTag)
+                        runAction(player, consume.get("deny"), itemStack, itemTag, event)
                     })
+                    // 爬
+                    return
                 }
-            } else {
-                event.isCancelled = true
             }
-        } else {
-            // 检测冷却
-            if (!itemAction.isCoolDown(player)) {
-                itemAction.run(player, itemAction.dropSync, itemTag)
+            // 获取待消耗数量
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, player)?.toIntOrNull() ?: 1
+            // 消耗物品
+            if (itemStack.consume(player, amount, itemTag, neigeItems)) {
+                // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    // 执行动作
-                    itemAction.run(player, itemAction.drop, itemTag)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, event)
                 })
-            } else {
-                event.isCancelled = true
+                // 数量不足
+                return
             }
         }
+        // 执行动作
+        trigger.run(player, itemStack, itemTag, event)
     }
 
     // 拾取物品
@@ -658,34 +976,43 @@ object ActionManager {
         }
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
+        // 获取基础触发器
+        val trigger = itemAction.triggers["pick"]
         // 没有对应物品动作就停止判断
-        if (!itemAction.hasPickAction) return
+        if (trigger == null) return
+
         // 获取物品消耗信息
-        val consume =  itemAction.consume
+        val consume =  trigger.consume
+        // 检测冷却
+        if (trigger.isCoolDown(player, itemTag)) return
         // 如果该物品需要被消耗
-        if (consume != null && consume.getBoolean("pick", false)) {
-            // 检测冷却
-            if (consume.isCoolDown(player, id)) return
-            // 获取待消耗数量
-            val amount: Int = consume.getInt("amount", 1)
-            // 消耗物品
-            if (itemStack.consume(player, amount, itemTag, neigeItems)) {
-                // 执行动作
-                itemAction.run(player, itemAction.pickSync, itemTag)
-                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    itemAction.run(player, itemAction.pick, itemTag)
-                })
+        if (consume != null) {
+            // 检测条件
+            consume.getString("condition")?.let {
+                // 不满足条件就爬
+                if (!parseCondition(it, player, itemStack, itemTag, event)) {
+                    // 跑一下deny动作
+                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+                        runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                    })
+                    // 爬
+                    return
+                }
             }
-        } else {
-            // 检测冷却
-            if (!itemAction.isCoolDown(player)) {
-                // 执行动作
-                itemAction.run(player, itemAction.pickSync, itemTag)
+            // 获取待消耗数量
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, player)?.toIntOrNull() ?: 1
+            // 消耗物品
+            if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
+                // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    itemAction.run(player, itemAction.pick, itemTag)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, event)
                 })
+                // 数量不足
+                return
             }
         }
+        // 执行动作
+        trigger.run(player, itemStack, itemTag, event)
     }
 
     private fun runThreadSafe(task: Runnable) {

@@ -26,6 +26,8 @@ object ConfigManager {
      */
     val config get() = plugin.config
 
+    var comboInterval = config.getLong("ItemAction.comboInterval", 500)
+
     /**
      * 加载默认配置文件
      */
@@ -85,5 +87,6 @@ object ConfigManager {
     fun reload() {
         plugin.reloadConfig()
         loadConfig()
+        comboInterval = config.getLong("ItemAction.comboInterval", 500)
     }
 }

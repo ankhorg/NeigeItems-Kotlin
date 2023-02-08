@@ -122,3 +122,8 @@ ItemOwner:
 ItemColor:
   # protocol / vanilla
   type: protocol
+ItemAction:
+  # 是否将1.6以下版本的ItemAction配置转换为1.7版本格式
+  upgrade: true
+  # 连击间隔(ms)
+  comboInterval: 500
