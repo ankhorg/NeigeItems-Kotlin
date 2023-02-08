@@ -101,7 +101,7 @@ object ItemManager : ItemConfigManager() {
      * @return 物品
      */
     fun getItemStack(id: String): ItemStack? {
-        return getItemStack(id, null, null)
+        return getItemStack(id, null, HashMap<String, String>())
     }
 
     /**
@@ -112,7 +112,7 @@ object ItemManager : ItemConfigManager() {
      * @return 物品
      */
     fun getItemStack(id: String, player: OfflinePlayer?): ItemStack? {
-        return getItemStack(id, player, null)
+        return getItemStack(id, player, HashMap<String, String>())
     }
 
     /**
@@ -130,11 +130,34 @@ object ItemManager : ItemConfigManager() {
      * 获取物品
      *
      * @param id 物品ID
+     * @param data 用于解析物品的指向数据
+     * @return 物品
+     */
+    fun getItemStack(id: String, data: HashMap<String, String>?): ItemStack? {
+        return getItemStack(id, null, data)
+    }
+
+    /**
+     * 获取物品
+     *
+     * @param id 物品ID
      * @param player 用于解析物品的玩家
      * @param data 用于解析物品的指向数据
      * @return 物品
      */
     fun getItemStack(id: String, player: OfflinePlayer?, data: String?): ItemStack? {
+        return items[id]?.getItemStack(player, data)
+    }
+
+    /**
+     * 获取物品
+     *
+     * @param id 物品ID
+     * @param player 用于解析物品的玩家
+     * @param data 用于解析物品的指向数据
+     * @return 物品
+     */
+    fun getItemStack(id: String, player: OfflinePlayer?, data: HashMap<String, String>?): ItemStack? {
         return items[id]?.getItemStack(player, data)
     }
 

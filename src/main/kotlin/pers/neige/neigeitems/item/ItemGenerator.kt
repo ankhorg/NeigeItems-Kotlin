@@ -133,6 +133,20 @@ class ItemGenerator (val itemConfig: ItemConfig) {
      * @return 生成的物品, 生成失败则返回null
      */
     fun getItemStack(player: OfflinePlayer?, data: String?): ItemStack? {
+        return getItemStack(player, when (data) {
+            null -> HashMap<String, String>()
+            else -> data.parseObject<HashMap<String, String>>()
+        })
+    }
+
+    /**
+     * 生成物品, 生成失败则返回null
+     *
+     * @param player 用于解析内容的玩家
+     * @param data 指向数据
+     * @return 生成的物品, 生成失败则返回null
+     */
+    fun getItemStack(player: OfflinePlayer?, data: HashMap<String, String>?): ItemStack? {
         var configString = this.configString
 
         // 进行一次papi解析
@@ -141,10 +155,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         var configSection = configString.loadFromString(id) ?: YamlConfiguration()
 
         // 加载缓存
-        val cache = when (data) {
-            null -> HashMap<String, String>()
-            else -> data.parseObject<HashMap<String, String>>()
-        }
+        val cache = data ?: HashMap<String, String>()
 
         // 获取私有节点配置
         val sections = configSection.getConfigurationSection("sections")
