@@ -207,7 +207,7 @@ object ActionManager {
         player: Player,
         action: String
     ): Boolean {
-        return runAction(player, action)
+        return runAction(player, action, null, null, null)
     }
 
     /**
