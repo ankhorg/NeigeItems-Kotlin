@@ -43,12 +43,12 @@ object JoinParser : SectionParser() {
      * @param player 待解析玩家
      * @param sections 节点池
      * @param list 待操作列表
-     * @param separator 分隔符
-     * @param prefix 前缀
-     * @param postfix 后缀
-     * @param limit 长度限制
-     * @param truncated 删节符号
-     * @param transform 操作函数
+     * @param rawSeparator 分隔符
+     * @param rawPrefix 前缀
+     * @param rawPostfix 后缀
+     * @param rawLimit 长度限制
+     * @param rawTruncated 删节符号
+     * @param rawTransform 操作函数
      * @return 解析值
      */
     private fun handler(

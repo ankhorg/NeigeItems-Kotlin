@@ -37,7 +37,6 @@ object GradientParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
-        // 相较于papi(player, "%${args.joinToString("_")}%"), 这种方式性能略有提升, 因为少遍历了一次字符串
         return handler(
             cache,
             player,
@@ -61,14 +60,15 @@ object GradientParser : SectionParser() {
      * @param text 文本内容
      * @return 解析值
      */
-    private fun handler(cache: HashMap<String, String>?,
-                        player: OfflinePlayer?,
-                        sections: ConfigurationSection?,
-                        parse: Boolean,
-                        colorStartString: String?,
-                        colorEndString: String?,
-                        stepString: String?,
-                        text: String?
+    private fun handler(
+        cache: HashMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?,
+        parse: Boolean,
+        colorStartString: String?,
+        colorEndString: String?,
+        stepString: String?,
+        text: String?
     ): String? {
         if (colorStartString != null && colorEndString != null && text != null) {
             val colorStart = Color((colorStartString.toIntOrNull(16) ?: 0)

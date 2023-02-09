@@ -3,7 +3,6 @@ package pers.neige.neigeitems.section.impl
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.NeigeItems
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.manager.ActionManager.parseCondition
@@ -16,10 +15,10 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.script.SimpleBindings
 
 /**
- * check节点解析器
+ * when节点解析器
  */
-object CheckParser : SectionParser() {
-    override val id: String = "check"
+object WhenParser : SectionParser() {
+    override val id: String = "when"
 
     override fun onRequest(
         data: ConfigurationSection,
@@ -32,7 +31,7 @@ object CheckParser : SectionParser() {
             player,
             sections,
             data.getString("value")?.parseSection(cache, player, sections),
-            data.get("actions")
+            data.get("conditions")
         )
     }
 
@@ -49,24 +48,35 @@ object CheckParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?,
         value: String?,
-        actions: Any?
+        conditions: Any?
     ): String? {
-        player?.player?.let {
-            bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                ActionManager.runAction(
-                    it,
-                    actions,
-                    null,
-                    null,
-                    null,
-                    mapOf(
-                        Pair("value", value),
-                        Pair("cache", cache),
-                        Pair("sections", sections)
-                    )
-                )
-            })
+        if (conditions is List<*>) {
+            // 遍历条件
+            conditions.forEach { info ->
+                when (info) {
+                    // 是LinkedHashMap说明需要条件判断
+                    is LinkedHashMap<*, *> -> {
+                        // 获取一下条件和结果
+                        val condition = info["condition"]
+                        val result = info["result"]
+                        // 确认类型正确
+                        if (condition is String? && result is String) {
+                            // 如果符合条件
+                            if (parseCondition(condition, player?.player, map = mapOf(
+                                    Pair("value", value),
+                                    Pair("cache", cache),
+                                    Pair("sections", sections)
+                                ))) {
+                                // 返回
+                                return result.parseSection(cache, player, sections)
+                            }
+                        }
+                    }
+                    // 是String说明可以直接返回
+                    is String -> return info
+                }
+            }
         }
-        return value
+        return null
     }
 }

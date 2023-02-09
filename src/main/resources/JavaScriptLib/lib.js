@@ -1,22 +1,11 @@
-load('nashorn:mozilla_compat.js')
+const Calendar = Packages.java.util.Calendar
+const ThreadLocalRandom = Packages.java.util.concurrent.ThreadLocalRandom
 
-importPackage("java.io")
-importPackage("java.lang")
-importPackage("java.math")
-importPackage("java.util")
-importPackage("java.util.concurrent")
-importPackage("java.util.function")
+const Bukkit = Packages.org.bukkit.Bukkit
+const ChatColor = Packages.org.bukkit.ChatColor
+const GameMode = Packages.org.bukkit.GameMode
 
-importPackage("org.bukkit")
-importPackage("org.bukkit.configuration")
-importPackage("org.bukkit.configuration.file")
-importPackage("org.bukkit.entity")
-importPackage("org.bukkit.inventory")
-importPackage("org.bukkit.inventory.meta")
-importPackage("org.bukkit.scheduler")
-
-importPackage("pers.neige.neigeitems.utils")
-
+const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
 const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
 const ConfigManager = Packages.pers.neige.neigeitems.manager.ConfigManager.INSTANCE
 const HookerManager = Packages.pers.neige.neigeitems.manager.HookerManager

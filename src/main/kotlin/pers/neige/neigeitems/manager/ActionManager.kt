@@ -29,7 +29,6 @@ import pers.neige.neigeitems.utils.ActionUtils.consumeAndReturn
 import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
@@ -42,10 +41,8 @@ import java.io.File
 import java.io.InputStreamReader
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.BiFunction
 import javax.script.CompiledScript
-import javax.script.ScriptEngine
 import javax.script.SimpleBindings
 import kotlin.collections.LinkedHashMap
 
@@ -375,7 +372,7 @@ object ActionManager {
      */
     fun parseCondition(
         condition: String?,
-        player: Player,
+        player: Player?,
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
         event: Event? = null,
@@ -388,7 +385,7 @@ object ActionManager {
                 value?.let { bindings[key] = it }
             }
             bindings["variables"] = HashMap<String, Any?>()
-            bindings["player"] = player
+            player?.let { bindings["player"] = it }
             itemStack?.let { bindings["itemStack"] = it }
             itemTag?.let { bindings["itemTag"] = it }
             event?.let { bindings["event"] = it }

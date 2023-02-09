@@ -150,6 +150,28 @@ CheckTest:
               actions:
               - "tell: 你得到了名为 test3 的物品"
 
+WhenTest:
+  material: STONE
+  name: <test> - <when>
+  sections:
+    test: <number::0_100>
+    when:
+      type: when
+      value: <test>
+      conditions:
+        - condition: value < 10
+          result: E
+        - condition: value < 30
+          result: D
+        - condition: value < 50
+          result: C
+        - condition: value < 70
+          result: B
+        - condition: value < 90
+          result: A
+        - condition: value <= 100
+          result: S
+
 ComboTest:
   material: DIAMOND
 

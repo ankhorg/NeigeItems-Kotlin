@@ -92,6 +92,7 @@ object SectionManager {
         RepeatParser.register()
         StringsParser.register()
         WeightParser.register()
+        WhenParser.register()
     }
 
     /**
