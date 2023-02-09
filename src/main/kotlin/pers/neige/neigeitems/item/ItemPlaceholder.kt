@@ -8,6 +8,8 @@ import com.comphenix.protocol.events.PacketEvent
 import org.bukkit.GameMode
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
+import pers.neige.neigeitems.utils.SectionUtils.getItemSection
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.ItemTagType
 import taboolib.module.nms.getItemTag
@@ -69,46 +71,11 @@ class ItemPlaceholder {
                     itemTag["NeigeItems"]?.asCompound()?.get("maxCharge")?.asInt()?.toString()
                 }
                 "nbt" -> {
-                    var value: ItemTagData? = itemTag
-                    val argsArray: Array<String> = args.drop(1).joinToString("_").split(".").toTypedArray()
-
-                    argsArray.forEach { key ->
-                        when (value?.type) {
-                            ItemTagType.LIST -> {
-                                key.toIntOrNull()?.let { index ->
-                                    val list = value!!.asList()
-                                    if (list.size > index) {
-                                        value!!.asList()[index.coerceAtLeast(0)].also { value = it } ?: let { value = null }
-                                    } else { value = null }
-                                } ?: let { value = null }
-                            }
-                            ItemTagType.COMPOUND -> value!!.asCompound()[key]?.also { value = it } ?: let { value = null }
-                            else -> let { value = null }
-                        }
-                    }
-
-                    value?.asString()
+                    itemTag.getDeepOrNull(args.drop(1).joinToString("_"))?.asString()
                 }
                 "nbtnumber" -> {
-                    var value: ItemTagData? = itemTag
                     val fixed = args[1]
-                    val argsArray: Array<String> = args.drop(2).joinToString("_").split(".").toTypedArray()
-
-                    argsArray.forEach { key ->
-                        when (value?.type) {
-                            ItemTagType.LIST -> {
-                                key.toIntOrNull()?.let { index ->
-                                    val list = value!!.asList()
-                                    if (list.size > index) {
-                                        value!!.asList()[index.coerceAtLeast(0)].also { value = it } ?: let { value = null }
-                                    } else { value = null }
-                                } ?: let { value = null }
-                            }
-                            ItemTagType.COMPOUND -> value!!.asCompound()[key]?.also { value = it } ?: let { value = null }
-                            else -> let { value = null }
-                        }
-                    }
-                    "%.${fixed}f".format(value?.asDouble())
+                    "%.${fixed}f".format(itemTag.getDeepOrNull(args.drop(2).joinToString("_"))?.asDouble())
                 }
                 else -> null
             }

@@ -393,13 +393,23 @@ object ActionManager {
             itemTag?.let { bindings["itemTag"] = it }
             event?.let { bindings["event"] = it }
             // 解析条件
-            kotlin.runCatching {
+            try {
+                // 条件里返回null就直接转换成false
                 conditionScripts.computeIfAbsent(condition) {
                     nashornHooker.compile(engine, condition)
-                }.eval(bindings) as Boolean
-            }.getOrNull()
+                }.eval(bindings) ?: false
+            } catch (error: Throwable) {
+                // 条件报错就视作false
+                error.printStackTrace()
+                false
+            }
         }
-        return (pass == null || pass)
+        return when (pass) {
+            is Boolean -> pass
+            // 这里的null指没有条件, 故而视为true
+            null -> true
+            else -> false
+        }
     }
 
     /**
