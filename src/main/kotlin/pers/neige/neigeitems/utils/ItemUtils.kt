@@ -12,6 +12,7 @@ import org.bukkit.util.Vector
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemInfo
+import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
@@ -770,7 +771,9 @@ object ItemUtils {
                     if (probability != null && Math.random() > probability) continue
                 }
                 // 如果NI和MM都不存在对应物品就跳过去
-                if (!ItemManager.hasItem(args[0]) && mythicMobsHooker?.getItemStackSync(args[0]) == null) continue
+                if (!ItemManager.hasItem(args[0])
+                    && mythicMobsHooker?.getItemStackSync(args[0]) == null
+                    && easyItemHooker?.hasItem(args[0]) != true) continue
 
                 // 获取掉落数量
                 var amount = 1
@@ -791,10 +794,22 @@ object ItemUtils {
                 // 看看需不需要每次都随机生成
                 if (args.size > 3 && args[3] == "false") {
                     // 真只随机一次啊?那嗯怼吧
-                    ItemManager.getItemStack(args[0], player, data)?.getItems(amount)?.forEach { items.add(it) } ?: let {
-                        mythicMobsHooker?.getItemStackSync(args[0])?.let { itemStack ->
-                            repeat(amount) {
-                                items.add(itemStack)
+                    when {
+                        ItemManager.hasItem(args[0]) -> {
+                            ItemManager.getItemStack(args[0], player, data)?.getItems(amount)?.forEach { items.add(it) }
+                        }
+                        easyItemHooker?.hasItem(args[0]) == true -> {
+                            easyItemHooker?.getItemStack(args[0])?.let { itemStack ->
+                                repeat(amount) {
+                                    items.add(itemStack)
+                                }
+                            }
+                        }
+                        else -> {
+                            mythicMobsHooker?.getItemStackSync(args[0])?.let { itemStack ->
+                                repeat(amount) {
+                                    items.add(itemStack)
+                                }
                             }
                         }
                     }
@@ -807,6 +822,9 @@ object ItemUtils {
                                     items.add(itemStack)
                                 }
                             }
+                        }
+                        easyItemHooker?.hasItem(args[0]) == true -> {
+                            easyItemHooker?.getItemStack(args[0])?.getItems(amount)?.forEach { items.add(it) }
                         }
                         // 对于MM物品, 这个配置项不代表是否随机生成, 代表物品是否合并
                         else -> {

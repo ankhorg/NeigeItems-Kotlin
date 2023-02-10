@@ -222,6 +222,20 @@ InheritSectionTest:
       type: inherit
       template: templateTest
 
+GradientTest:
+  material: STONE
+  lore:
+    - <test1>
+    - <test2>
+  sections:
+    test1: <gradient::000000_FFFFFF_1_---------->
+    test2:
+      type: gradient
+      colorStart: 000000
+      colorEnd: FFFFFF
+      step: 1
+      text: ----------
+
 # 物品动作测试
 ActionTest:
   material: STONE

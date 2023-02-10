@@ -8,17 +8,26 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.neosearch.stringsearcher.StringSearcher
+import pers.neige.neigeitems.NeigeItems.bukkitScheduler
+import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.HookerManager.papi
+import pers.neige.neigeitems.utils.ActionUtils.consume
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.castToItemTagData
+import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
 import pers.neige.neigeitems.utils.ItemUtils.putDeepWithList
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.function.TriFunction
 import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
+import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
 import java.util.*
+import pers.neige.neigeitems.utils.StringUtils.split
+import pers.neige.neigeitems.utils.StringUtils.splitOnce
+import taboolib.module.nms.ItemTagData
+import taboolib.platform.util.giveItem
 
 @RuntimeDependencies(
     RuntimeDependency(
@@ -1571,6 +1580,158 @@ object ItemEditorManager {
                 }
                 // 保存物品NBT
                 itemTag.saveTo(itemStack)
+                return@addBasicItemEditor true
+            }
+            return@addBasicItemEditor false
+        }
+        // 物品刷新
+        addBasicItemEditor("refresh") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取待刷新节点信息
+                val sections = content.split(' ', '\\')
+                // NI物品数据
+                val neigeItems: ItemTag
+                // NI物品id
+                val id: String
+                // NI节点数据
+                val data: HashMap<String, String>
+                when (val itemInfo = itemStack.isNiItem(true)) {
+                    null -> return@addBasicItemEditor true
+                    else -> {
+                        neigeItems = itemInfo.neigeItems
+                        id = itemInfo.id
+                        data = itemInfo.data ?: HashMap<String, String>()
+                    }
+                }
+                sections.forEach { data.remove(it) }
+                ItemManager.getItemStack(id, player, data)?.getItemTag()?.also { newTag ->
+                    neigeItems["charge"]?.let {
+                        newTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                    }
+                    newTag.saveTo(itemStack)
+                }
+                return@addBasicItemEditor true
+            }
+            return@addBasicItemEditor false
+        }
+        // 物品重构
+        addBasicItemEditor("rebuild") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                // 获取待重构节点信息
+                val sections = content.parseObject<HashMap<String, String?>>()
+                // NI物品数据
+                val neigeItems: ItemTag
+                // NI物品id
+                val id: String
+                // NI节点数据
+                val data: HashMap<String, String>
+                when (val itemInfo = itemStack.isNiItem(true)) {
+                    null -> return@addBasicItemEditor true
+                    else -> {
+                        neigeItems = itemInfo.neigeItems
+                        id = itemInfo.id
+                        data = itemInfo.data ?: HashMap<String, String>()
+                    }
+                }
+                sections.forEach { (key, value) ->
+                    when (value) {
+                        null -> data.remove(key)
+                        else -> data[key] = value
+                    }
+                }
+                ItemManager.getItemStack(id, player, data)?.getItemTag()?.also { newTag ->
+                    neigeItems["charge"]?.let {
+                        newTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                    }
+                    newTag.saveTo(itemStack)
+                }
+                return@addBasicItemEditor true
+            }
+            return@addBasicItemEditor false
+        }
+        // 物品刷新
+        addBasicItemEditor("refreshAmount") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                val info = content.split(' ', '\\')
+                // 刷新数量
+                val amount = info[0].toIntOrNull()?.coerceAtLeast(1) ?: 1
+                // 获取待刷新节点信息
+                val sections = info.drop(1)
+                if (amount < itemStack.amount) {
+                    val itemClone = itemStack.clone()
+                    itemClone.amount = itemClone.amount - amount
+                    itemStack.amount = amount
+                    bukkitScheduler.runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
+                }
+                // NI物品数据
+                val neigeItems: ItemTag
+                // NI物品id
+                val id: String
+                // NI节点数据
+                val data: HashMap<String, String>
+                when (val itemInfo = itemStack.isNiItem(true)) {
+                    null -> return@addBasicItemEditor true
+                    else -> {
+                        neigeItems = itemInfo.neigeItems
+                        id = itemInfo.id
+                        data = itemInfo.data ?: HashMap<String, String>()
+                    }
+                }
+                sections.forEach { data.remove(it) }
+                ItemManager.getItemStack(id, player, data)?.getItemTag()?.also { newTag ->
+                    neigeItems["charge"]?.let {
+                        newTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                    }
+                    newTag.saveTo(itemStack)
+                }
+                return@addBasicItemEditor true
+            }
+            return@addBasicItemEditor false
+        }
+        // 物品重构
+        addBasicItemEditor("rebuildAmount") { player, itemStack, content ->
+            // 判断是不是空气
+            if (itemStack.type != Material.AIR) {
+                val info = content.splitOnce(" ")
+                // 刷新数量
+                val amount = info[0].toIntOrNull()?.coerceAtLeast(1) ?: 1
+                // 获取待刷新节点信息
+                val sections = (info.getOrNull(1) ?: "").parseObject<HashMap<String, String?>>()
+                if (amount < itemStack.amount) {
+                    val itemClone: ItemStack = itemStack.clone()
+                    itemClone.amount = itemClone.amount - amount
+                    itemStack.amount = amount
+                    bukkitScheduler.runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
+                }
+                // NI物品数据
+                val neigeItems: ItemTag
+                // NI物品id
+                val id: String
+                // NI节点数据
+                val data: HashMap<String, String>
+                when (val itemInfo = itemStack.isNiItem(true)) {
+                    null -> return@addBasicItemEditor true
+                    else -> {
+                        neigeItems = itemInfo.neigeItems
+                        id = itemInfo.id
+                        data = itemInfo.data ?: HashMap<String, String>()
+                    }
+                }
+                sections.forEach { (key, value) ->
+                    when (value) {
+                        null -> data.remove(key)
+                        else -> data[key] = value
+                    }
+                }
+                ItemManager.getItemStack(id, player, data)?.getItemTag()?.also { newTag ->
+                    neigeItems["charge"]?.let {
+                        newTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                    }
+                    newTag.saveTo(itemStack)
+                }
                 return@addBasicItemEditor true
             }
             return@addBasicItemEditor false
