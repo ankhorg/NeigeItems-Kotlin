@@ -83,6 +83,7 @@ abstract class MythicMobsHooker {
                     neigeItems["dropChance"]?.asDouble()?.let {
                         if (Math.random() <= it) {
                             val id = neigeItems["id"]?.asString()
+                            // 处理NI物品(根据玩家信息重新生成)
                             if (id != null) {
                                 val target = when (player) {
                                     is OfflinePlayer -> player
@@ -92,6 +93,11 @@ abstract class MythicMobsHooker {
                                     // 丢进待掉落列表里
                                     dropItems.add(it)
                                 }
+                                // 处理MM/EI物品(单纯移除NBT)
+                            } else {
+                                itemTag.remove("NeigeItems")
+                                itemTag.saveTo(itemStack)
+                                dropItems.add(itemStack)
                             }
                         }
                     }
