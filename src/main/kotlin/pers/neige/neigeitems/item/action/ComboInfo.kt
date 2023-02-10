@@ -1,7 +1,5 @@
 package pers.neige.neigeitems.item.action
 
-import java.util.concurrent.CopyOnWriteArrayList
-
 /**
  * 用于记录连击
  *

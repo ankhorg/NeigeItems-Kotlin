@@ -3,7 +3,6 @@ package pers.neige.neigeitems.asahi.util.calculate
 import pers.neige.neigeitems.asahi.util.calculate.CalcOperator.Companion.isCalcOperator
 import pers.neige.neigeitems.asahi.util.calculate.CalcOperator.Companion.toCalcOperator
 import taboolib.common.platform.function.warning
-import java.math.BigDecimal
 import java.util.*
 
 /**

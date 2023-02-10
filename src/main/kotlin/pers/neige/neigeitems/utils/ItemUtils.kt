@@ -16,7 +16,6 @@ import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
-import pers.neige.neigeitems.utils.SectionUtils.getItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import taboolib.module.nms.*

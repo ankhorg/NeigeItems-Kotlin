@@ -1,10 +1,8 @@
 package pers.neige.neigeitems.utils
 
-import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.item.action.ActionTrigger
-import pers.neige.neigeitems.item.action.ItemAction
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ

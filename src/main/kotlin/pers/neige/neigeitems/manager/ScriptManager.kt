@@ -2,7 +2,6 @@ package pers.neige.neigeitems.manager
 
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import pers.neige.neigeitems.script.CompiledScript
-import pers.neige.neigeitems.section.impl.CheckParser
 import pers.neige.neigeitems.section.impl.JoinParser
 import pers.neige.neigeitems.section.impl.RepeatParser
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles

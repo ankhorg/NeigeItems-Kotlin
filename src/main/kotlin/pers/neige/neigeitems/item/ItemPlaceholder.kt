@@ -9,9 +9,6 @@ import org.bukkit.GameMode
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
-import pers.neige.neigeitems.utils.SectionUtils.getItemSection
-import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.ItemTagType
 import taboolib.module.nms.getItemTag
 import java.util.*
 import java.util.function.BiFunction

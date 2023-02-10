@@ -15,8 +15,8 @@ import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
-import pers.neige.neigeitems.manager.ItemManager.hasItem
 import pers.neige.neigeitems.manager.ItemPackManager.itemPacks
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
@@ -24,6 +24,7 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
+import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import java.util.*
@@ -78,13 +79,14 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
                         val probability = args[1].toDoubleOrNull()
                         if (probability != null && Math.random() > probability) continue
                     }
-                    if (!hasItem(args[0])) continue
 
                     try {
-                        getItemStack(args[0], null, data)?.let { itemStack ->
+                        (getItemStack(args[0], null, data)
+                            ?: easyItemHooker?.getItemStack(args[0])
+                            ?: getItemStackSync(args[0]))?.let { itemStack ->
                             dropChance[slot]?.let { chance ->
                                 val itemTag = itemStack.getItemTag()
-                                itemTag["NeigeItems"]?.asCompound()?.set("dropChance", ItemTagData(chance))
+                                itemTag.computeIfAbsent("NeigeItems") { ItemTag() }?.asCompound()?.set("dropChance", ItemTagData(chance))
                                 itemTag.saveTo(itemStack)
                             }
 

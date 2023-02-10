@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.hook.nashorn.impl
 
-import com.sun.xml.internal.fastinfoset.util.StringArray
 import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory
 import org.openjdk.nashorn.api.scripting.ScriptObjectMirror
 import pers.neige.neigeitems.hook.nashorn.NashornHooker

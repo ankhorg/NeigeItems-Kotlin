@@ -1,10 +1,9 @@
-package pers.neige.neigeitems.hook.vault
+package pers.neige.neigeitems.hook.easyitem
 
-import org.bukkit.OfflinePlayer
 import org.bukkit.inventory.ItemStack
 
 /**
- * Vault附属经济挂钩
+ * EasyItem挂钩
  */
 abstract class EasyItemHooker {
     /**
@@ -21,5 +20,5 @@ abstract class EasyItemHooker {
      * @param id EI物品ID
      * @return 是否存在
      */
-    abstract fun hasItem(id: String): Boolean?
+    abstract fun hasItem(id: String): Boolean
 }

@@ -3,13 +3,10 @@ package pers.neige.neigeitems.item.action
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
-import org.bukkit.event.entity.EntityEvent
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.manager.ActionManager
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
 import java.util.*
-import kotlin.collections.HashMap
 
 /**
  * 物品动作信息

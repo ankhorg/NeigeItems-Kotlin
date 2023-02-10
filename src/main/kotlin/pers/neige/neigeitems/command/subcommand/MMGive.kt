@@ -6,15 +6,12 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.command.subcommand.Help.help
-import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
-import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.getName
-import taboolib.platform.util.giveItem
 
 object MMGive {
     // ni mm get [物品ID] (数量) > 根据ID获取MM物品

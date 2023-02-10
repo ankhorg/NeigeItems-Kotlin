@@ -2,18 +2,11 @@ package pers.neige.neigeitems.section.impl
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ActionManager
-import pers.neige.neigeitems.manager.ActionManager.parseCondition
-import pers.neige.neigeitems.manager.HookerManager
-import pers.neige.neigeitems.script.CompiledScript
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import java.io.InputStreamReader
-import java.util.concurrent.ConcurrentHashMap
-import javax.script.SimpleBindings
 
 /**
  * check节点解析器

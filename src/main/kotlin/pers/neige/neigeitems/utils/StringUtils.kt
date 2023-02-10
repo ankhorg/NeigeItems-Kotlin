@@ -1,9 +1,5 @@
 package pers.neige.neigeitems.utils
 
-import pers.neige.neigeitems.utils.SectionUtils.getSection
-import pers.neige.neigeitems.utils.StringUtils.split
-import java.util.ArrayList
-
 object StringUtils {
     /**
      * List转文本

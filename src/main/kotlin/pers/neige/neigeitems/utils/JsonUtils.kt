@@ -4,7 +4,6 @@ import com.alibaba.fastjson2.parseObject
 import com.alibaba.fastjson2.toJSONString
 import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
-import java.util.HashMap
 
 @RuntimeDependencies(
     RuntimeDependency(

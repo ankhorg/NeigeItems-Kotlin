@@ -4,6 +4,8 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.hook.easyitem.EasyItemHooker
+import pers.neige.neigeitems.hook.easyitem.impl.EasyItemHookerImpl
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl459
 import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl490
@@ -15,9 +17,7 @@ import pers.neige.neigeitems.hook.nashorn.impl.NashornHookerImpl
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker
 import pers.neige.neigeitems.hook.placeholderapi.impl.LegacyPapiHookerImpl
 import pers.neige.neigeitems.hook.placeholderapi.impl.PapiHookerImpl
-import pers.neige.neigeitems.hook.vault.EasyItemHooker
 import pers.neige.neigeitems.hook.vault.VaultHooker
-import pers.neige.neigeitems.hook.vault.impl.EasyItemHookerImpl
 import pers.neige.neigeitems.hook.vault.impl.VaultHookerImpl
 import pers.neige.neigeitems.item.ItemPlaceholder
 import pers.neige.neigeitems.item.color.ItemColor

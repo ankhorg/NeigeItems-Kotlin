@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.hook.nashorn
 
-import com.sun.xml.internal.fastinfoset.util.StringArray
 import java.io.Reader
 import javax.script.Compilable
 import javax.script.CompiledScript
