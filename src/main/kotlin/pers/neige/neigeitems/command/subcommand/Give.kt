@@ -221,13 +221,15 @@ object Give {
                         // 给物品
                         ItemManager.getItemStack(id, player, data)?.let { itemStack ->
                             // 移除一下物品拥有者信息
-                            // 由于这种操作有点太过sb, 决定放弃处理这种情况
-//                            val itemTag = itemStack.getItemTag()
-//                            val neigeItems = itemTag["NeigeItems"]?.asCompound()
-//                            neigeItems?.get("owner")?.asString()?.let {
-//                                neigeItems.remove("owner")
-//                                itemTag.saveTo(itemStack)
-//                            }
+                            // 我知道这种操作有些sb, 但是暂时别无他法
+                            if (config.getBoolean("ItemOwner.removeNBTWhenGive")) {
+                                val itemTag = itemStack.getItemTag()
+                                val neigeItems = itemTag["NeigeItems"]?.asCompound()
+                                neigeItems?.get("owner")?.asString()?.let {
+                                    neigeItems.remove("owner")
+                                    itemTag.saveTo(itemStack)
+                                }
+                            }
                             NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
                                 player.giveItems(itemStack, amount.coerceAtLeast(1))
                             }

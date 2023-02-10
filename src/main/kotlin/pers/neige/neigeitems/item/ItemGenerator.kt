@@ -2,10 +2,7 @@ package pers.neige.neigeitems.item
 
 import com.alibaba.fastjson2.parseObject
 import com.alibaba.fastjson2.toJSONString
-import org.bukkit.ChatColor
-import org.bukkit.Color
-import org.bukkit.Material
-import org.bukkit.OfflinePlayer
+import org.bukkit.*
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.YamlConfiguration
@@ -26,6 +23,7 @@ import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ConfigUtils.toMap
 import pers.neige.neigeitems.utils.ItemUtils.coverWith
 import pers.neige.neigeitems.utils.ItemUtils.toItemTag
+import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
@@ -292,9 +290,10 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 itemTag.saveTo(itemStack)
                 return itemStack
             } else {
-                println(config.getString("Messages.invalidMaterial")
-                    ?.replace("{itemID}", id)
-                    ?.replace("{material}", configSection.getString("material") ?: ""))
+                Bukkit.getConsoleSender().sendLang("Messages.invalidMaterial", mapOf(
+                    Pair("{itemID}", id),
+                    Pair("{material}", configSection.getString("material") ?: "")
+                ))
             }
         }
         return null
