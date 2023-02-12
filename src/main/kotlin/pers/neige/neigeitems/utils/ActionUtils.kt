@@ -61,7 +61,7 @@ object ActionUtils {
             // 如果仍处于冷却时间
             if (lastTime > time) {
                 ConfigManager.config.getString("Messages.itemCooldown")?.let {
-                    val message = it.replace("{time}", DecimalFormat("0.#").format((lastTime - time)/1000))
+                    val message = it.replace("{time}", "%.1f".format((lastTime - time).toDouble()/1000))
                     player.actionBar(message)
                 }
                 // 冷却中
