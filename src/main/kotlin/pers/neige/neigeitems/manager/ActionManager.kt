@@ -647,21 +647,21 @@ object ActionManager {
         // 给予玩家饱和度
         addAction("giveSaturation") { player, string ->
             runThreadSafe {
-                player.saturation = (player.saturation + (papi(player, string).toFloatOrNull() ?: 0F)).coerceAtLeast(0F).coerceAtMost(20F)
+                player.saturation = (player.saturation + (papi(player, string).toFloatOrNull() ?: 0F)).coerceAtLeast(0F).coerceAtMost(player.foodLevel.toFloat())
             }
             true
         }
         // 扣除玩家饱和度
         addAction("takeSaturation") { player, string ->
             runThreadSafe {
-                player.saturation = (player.saturation - (papi(player, string).toFloatOrNull() ?: 0F)).coerceAtLeast(0F).coerceAtMost(20F)
+                player.saturation = (player.saturation - (papi(player, string).toFloatOrNull() ?: 0F)).coerceAtLeast(0F).coerceAtMost(player.foodLevel.toFloat())
             }
             true
         }
         // 设置玩家饱和度
         addAction("setSaturation") { player, string ->
             runThreadSafe {
-                player.saturation = (papi(player, string).toFloatOrNull() ?: 0F).coerceAtLeast(0F).coerceAtMost(20F)
+                player.saturation = (papi(player, string).toFloatOrNull() ?: 0F).coerceAtLeast(0F).coerceAtMost(player.foodLevel.toFloat())
             }
             true
         }
