@@ -1603,11 +1603,14 @@ object ItemEditorManager {
                     }
                 }
                 sections.forEach { data.remove(it) }
-                ItemManager.getItemStack(id, player, data)?.getItemTag()?.also { newTag ->
-                    neigeItems["charge"]?.let {
-                        newTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                ItemManager.getItemStack(id, player, data)?.let { newItemStack ->
+                    itemStack.type = newItemStack.type
+                    newItemStack.getItemTag().also { newItemTag ->
+                        neigeItems["charge"]?.let {
+                            newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                        }
+                        newItemTag.saveTo(itemStack)
                     }
-                    newTag.saveTo(itemStack)
                 }
                 return@addBasicItemEditor true
             }
@@ -1639,11 +1642,14 @@ object ItemEditorManager {
                         else -> data[key] = value
                     }
                 }
-                ItemManager.getItemStack(id, player, data)?.getItemTag()?.also { newTag ->
-                    neigeItems["charge"]?.let {
-                        newTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                ItemManager.getItemStack(id, player, data)?.let { newItemStack ->
+                    itemStack.type = newItemStack.type
+                    newItemStack.getItemTag().also { newItemTag ->
+                        neigeItems["charge"]?.let {
+                            newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                        }
+                        newItemTag.saveTo(itemStack)
                     }
-                    newTag.saveTo(itemStack)
                 }
                 return@addBasicItemEditor true
             }
@@ -1679,11 +1685,14 @@ object ItemEditorManager {
                     }
                 }
                 sections.forEach { data.remove(it) }
-                ItemManager.getItemStack(id, player, data)?.getItemTag()?.also { newTag ->
-                    neigeItems["charge"]?.let {
-                        newTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                ItemManager.getItemStack(id, player, data)?.let { newItemStack ->
+                    itemStack.type = newItemStack.type
+                    newItemStack.getItemTag().also { newItemTag ->
+                        neigeItems["charge"]?.let {
+                            newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                        }
+                        newItemTag.saveTo(itemStack)
                     }
-                    newTag.saveTo(itemStack)
                 }
                 return@addBasicItemEditor true
             }
@@ -1724,11 +1733,14 @@ object ItemEditorManager {
                         else -> data[key] = value
                     }
                 }
-                ItemManager.getItemStack(id, player, data)?.getItemTag()?.also { newTag ->
-                    neigeItems["charge"]?.let {
-                        newTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                ItemManager.getItemStack(id, player, data)?.let { newItemStack ->
+                    itemStack.type = newItemStack.type
+                    newItemStack.getItemTag().also { newItemTag ->
+                        neigeItems["charge"]?.let {
+                            newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                        }
+                        newItemTag.saveTo(itemStack)
                     }
-                    newTag.saveTo(itemStack)
                 }
                 return@addBasicItemEditor true
             }
