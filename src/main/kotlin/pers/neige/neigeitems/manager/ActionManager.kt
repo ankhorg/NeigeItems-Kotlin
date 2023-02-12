@@ -109,7 +109,9 @@ object ActionManager {
      * @param end 动作执行到第几个结束
      * @param itemStack 用于解析条件, 可为空
      * @param itemTag 用于解析nbt及data, 可为空
+     * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
+     * @param global 用于存储整个动作运行过程中的全局变量
      */
     fun runAction(
         player: Player,
@@ -118,6 +120,7 @@ object ActionManager {
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
         event: Event? = null,
+        global: HashMap<String, Any?>,
         start: Int = 0,
         end: Int = action.size,
         map: Map<String, Any?>? = null
@@ -136,11 +139,11 @@ object ActionManager {
                 // 线程判断
                 if (isPrimaryThread()) {
                     bukkitScheduler.runTaskLater(plugin, Runnable {
-                        runAction(player, action, itemStack, itemTag, data, event, index, actionEnd, map)
+                        runAction(player, action, itemStack, itemTag, data, event, global, index, actionEnd, map)
                     }, delay)
                 } else {
                     bukkitScheduler.runTaskLaterAsynchronously(plugin, Runnable {
-                        runAction(player, action, itemStack, itemTag, data, event, index, actionEnd, map)
+                        runAction(player, action, itemStack, itemTag, data, event, global, index, actionEnd, map)
                     }, delay)
                 }
                 // 停止当前操作
@@ -167,12 +170,12 @@ object ActionManager {
                     // 延迟
                     actionType == "delay" -> delay += actionContent.toLongOrNull() ?: 0
                     // 正常执行
-                    else -> if (!runAction(player, actionType, actionContent, itemStack, itemTag, data, event)) break
+                    else -> if (!runAction(player, actionType, actionContent, itemStack, itemTag, data, event, global)) break
                 }
                 // 如果属于其他类型
             } else {
                 // 直接执行
-                if (!runAction(player, value, itemStack, itemTag, data, event, map)) break
+                if (!runAction(player, value, itemStack, itemTag, data, event, global, map)) break
             }
         }
     }
@@ -182,6 +185,11 @@ object ActionManager {
      *
      * @param player 执行玩家
      * @param action 动作文本
+     * @param itemStack 用于解析条件, 可为空
+     * @param itemTag 用于解析nbt及data, 可为空
+     * @param data 物品节点数据
+     * @param event 用于解析条件, 可为空
+     * @param global 用于存储整个动作运行过程中的全局变量
      */
     fun runAction(
         player: Player,
@@ -189,9 +197,10 @@ object ActionManager {
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
-        event: Event? = null
+        event: Event? = null,
+        global: HashMap<String, Any?>
     ) {
-        runAction(player, action, itemStack, itemTag, data, event, 0, action.size)
+        runAction(player, action, itemStack, itemTag, data, event, global, 0, action.size)
     }
 
     /**
@@ -205,7 +214,7 @@ object ActionManager {
         player: Player,
         action: String
     ): Boolean {
-        return runAction(player, action, null, null, null)
+        return runAction(player, action, null, null, null, null, HashMap<String, Any?>())
     }
 
     /**
@@ -215,7 +224,9 @@ object ActionManager {
      * @param action 动作文本
      * @param itemStack 用于解析条件, 可为空
      * @param itemTag 用于解析nbt及data, 可为空
+     * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
+     * @param global 用于存储整个动作运行过程中的全局变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun runAction(
@@ -224,7 +235,8 @@ object ActionManager {
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
-        event: Event? = null
+        event: Event? = null,
+        global: HashMap<String, Any?>
     ): Boolean {
         // 解析物品变量
         val actionString = when (itemTag) {
@@ -236,7 +248,7 @@ object ActionManager {
         val actionType = info[0]
         val actionContent = info.getOrNull(1) ?: ""
         // 执行动作
-        return runAction(player, actionType, actionContent, itemStack, itemTag, data, event)
+        return runAction(player, actionType, actionContent, itemStack, itemTag, data, event, global)
     }
 
     /**
@@ -247,7 +259,9 @@ object ActionManager {
      * @param actionContent 动作内容
      * @param itemStack 用于解析条件, 可为空
      * @param itemTag 用于解析nbt及data, 可为空
+     * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
+     * @param global 用于存储整个动作运行过程中的全局变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun runAction(
@@ -257,7 +271,8 @@ object ActionManager {
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
-        event: Event? = null
+        event: Event? = null,
+        global: HashMap<String, Any?>
     ): Boolean {
         actions[actionType.lowercase(Locale.getDefault())]?.apply(player, actionContent)?.also { return it }
         itemStack?.also { runEditorWithResult(actionType, actionContent, itemStack, player)?.also { return it } }
@@ -271,7 +286,9 @@ object ActionManager {
      * @param action 动作内容
      * @param itemStack 用于解析条件, 可为空
      * @param itemTag 用于解析nbt及data, 可为空
+     * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
+     * @param global 用于存储整个动作运行过程中的全局变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun runAction(
@@ -281,6 +298,7 @@ object ActionManager {
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
         event: Event? = null,
+        global: HashMap<String, Any?>,
         map: Map<String, Any?>? = null
     ): Boolean {
         // 动作执行条件
@@ -291,13 +309,13 @@ object ActionManager {
         val deny = action.get("deny")
 
         // 如果没有条件或者条件通过
-        if (parseCondition(condition, player, itemStack, itemTag, data, event, map)) {
+        if (parseCondition(condition, player, itemStack, itemTag, data, event, global, map)) {
             // 执行动作
-            return runAction(player, actions, itemStack, itemTag, data, event, map)
+            return runAction(player, actions, itemStack, itemTag, data, event, global, map)
             // 条件未通过
         } else {
             // 执行deny动作
-            return runAction(player, deny, itemStack, itemTag, data, event, map)
+            return runAction(player, deny, itemStack, itemTag, data, event, global, map)
         }
     }
 
@@ -308,7 +326,9 @@ object ActionManager {
      * @param action 动作内容
      * @param itemStack 用于解析条件, 可为空
      * @param itemTag 用于解析nbt及data, 可为空
+     * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
+     * @param global 用于存储整个动作运行过程中的全局变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun runAction(
@@ -318,6 +338,7 @@ object ActionManager {
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
         event: Event? = null,
+        global: HashMap<String, Any?>,
         map: Map<String, Any?>? = null
     ): Boolean {
         // 动作执行条件
@@ -328,13 +349,13 @@ object ActionManager {
         val deny = action["deny"]
 
         // 如果条件通过
-        if (parseCondition(condition, player, itemStack, itemTag, data, event, map)) {
+        if (parseCondition(condition, player, itemStack, itemTag, data, event, global, map)) {
             // 执行动作
-            return runAction(player, actions, itemStack, itemTag, data, event, map)
+            return runAction(player, actions, itemStack, itemTag, data, event, global, map)
             // 条件未通过
         } else {
             // 执行deny动作
-            return runAction(player, deny, itemStack, itemTag, data, event, map)
+            return runAction(player, deny, itemStack, itemTag, data, event, global, map)
         }
     }
 
@@ -345,7 +366,9 @@ object ActionManager {
      * @param action 动作内容
      * @param itemStack 用于解析条件, 可为空
      * @param itemTag 用于解析nbt及data, 可为空
+     * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
+     * @param global 用于存储整个动作运行过程中的全局变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun runAction(
@@ -355,13 +378,14 @@ object ActionManager {
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
         event: Event? = null,
+        global: HashMap<String, Any?> = HashMap<String, Any?>(),
         map: Map<String, Any?>? = null
     ): Boolean {
         when (action) {
-            is String -> return runAction(player, action, itemStack, itemTag, data, event)
-            is List<*> -> runAction(player, action, itemStack, itemTag, data, event, 0, action.size, map)
-            is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, itemStack, itemTag, data, event, map)
-            is ConfigurationSection -> return runAction(player, action, itemStack, itemTag, data, event, map)
+            is String -> return runAction(player, action, itemStack, itemTag, data, event, global)
+            is List<*> -> runAction(player, action, itemStack, itemTag, data, event, global, 0, action.size, map)
+            is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, itemStack, itemTag, data, event, global, map)
+            is ConfigurationSection -> return runAction(player, action, itemStack, itemTag, data, event, global, map)
         }
         return true
     }
@@ -373,7 +397,9 @@ object ActionManager {
      * @param player 执行玩家
      * @param itemStack 用于解析条件, 可为空
      * @param itemTag 用于解析nbt及data, 可为空
+     * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
+     * @param global 用于存储整个动作运行过程中的全局变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun parseCondition(
@@ -383,6 +409,7 @@ object ActionManager {
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
         event: Event? = null,
+        global: HashMap<String, Any?> = HashMap<String, Any?>(),
         map: Map<String, Any?>? = null
     ): Boolean {
         val pass = condition?.let {
@@ -397,6 +424,7 @@ object ActionManager {
             itemTag?.let { bindings["itemTag"] = it }
             data?.let { bindings["data"] = it }
             event?.let { bindings["event"] = it }
+            bindings["global"] = global
             // 解析条件
             try {
                 // 条件里返回null就直接转换成false
@@ -819,15 +847,17 @@ object ActionManager {
         event.isCancelled = true
         // 检测冷却
         if ((basicTrigger ?: allTrigger)!!.isCoolDown(player, itemTag)) return
+        // 用于存储整个动作执行过程中的全局变量
+        val global = HashMap<String, Any?>()
         // 如果物品需要消耗
         if (consume != null) {
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, data, event)) {
+                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
                     // 跑一下deny动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
+                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                     })
                     // 爬
                     return
@@ -839,15 +869,15 @@ object ActionManager {
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                 })
                 // 数量不足
                 return
             }
         }
         // 执行动作
-        basicTrigger?.run(player, itemStack, itemTag, data, event)
-        allTrigger?.run(player, itemStack, itemTag, data, event)
+        basicTrigger?.run(player, itemStack, itemTag, data, event, global)
+        allTrigger?.run(player, itemStack, itemTag, data, event, global)
     }
 
     // 吃或饮用
@@ -887,15 +917,17 @@ object ActionManager {
         event.isCancelled = true
         // 检测冷却
         if (trigger.isCoolDown(player, itemTag)) return
+        // 用于存储整个动作执行过程中的全局变量
+        val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
         if (consume != null) {
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, data, event)) {
+                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
                     // 跑一下deny动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
+                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                     })
                     // 爬
                     return
@@ -919,14 +951,14 @@ object ActionManager {
             } ?: let {
                 // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                 })
                 // 数量不足
                 return
             }
         }
         // 执行动作
-        trigger.run(player, itemStack, itemTag, data, event)
+        trigger.run(player, itemStack, itemTag, data, event, global)
     }
 
     // 丢弃物品
@@ -967,15 +999,17 @@ object ActionManager {
             event.isCancelled
             return
         }
+        // 用于存储整个动作执行过程中的全局变量
+        val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
         if (consume != null) {
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, data, event)) {
+                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
                     // 跑一下deny动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
+                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                     })
                     // 爬
                     return
@@ -987,14 +1021,14 @@ object ActionManager {
             if (itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                 })
                 // 数量不足
                 return
             }
         }
         // 执行动作
-        trigger.run(player, itemStack, itemTag, data, event)
+        trigger.run(player, itemStack, itemTag, data, event, global)
     }
 
     // 拾取物品
@@ -1033,15 +1067,17 @@ object ActionManager {
         val consume =  trigger.consume
         // 检测冷却
         if (trigger.isCoolDown(player, itemTag)) return
+        // 用于存储整个动作执行过程中的全局变量
+        val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
         if (consume != null) {
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, data, event)) {
+                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
                     // 跑一下deny动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
+                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                     })
                     // 爬
                     return
@@ -1053,14 +1089,14 @@ object ActionManager {
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                 })
                 // 数量不足
                 return
             }
         }
         // 执行动作
-        trigger.run(player, itemStack, itemTag, data, event)
+        trigger.run(player, itemStack, itemTag, data, event, global)
     }
 
     private fun runThreadSafe(task: Runnable) {
