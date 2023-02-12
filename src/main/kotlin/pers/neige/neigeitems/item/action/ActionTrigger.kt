@@ -9,6 +9,7 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ActionManager
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
+import java.util.HashMap
 
 class ActionTrigger(val id: String, val type: String, val config: ConfigurationSection) {
     /**
@@ -48,12 +49,13 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         player: Player,
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event
     ) {
         // 运行异步动作
-        async(player, itemStack, itemTag, event)
+        async(player, itemStack, itemTag, data, event)
         // 运行同步动作
-        sync(player, itemStack, itemTag, event)
+        sync(player, itemStack, itemTag, data, event)
     }
 
     /**
@@ -68,10 +70,11 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         player: Player,
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event
     ) {
         bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-            ActionManager.runAction(player, actions, itemStack, itemTag, event)
+            ActionManager.runAction(player, actions, itemStack, itemTag, data, event)
         })
     }
 
@@ -87,8 +90,9 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         player: Player,
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event
     ) {
-        ActionManager.runAction(player, sync, itemStack, itemTag, event)
+        ActionManager.runAction(player, sync, itemStack, itemTag, data, event)
     }
 }

@@ -76,12 +76,14 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
         trigger: ActionTrigger?,
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event
     ) {
         trigger?.run(
             player,
             itemStack,
             itemTag,
+            data,
             event
         )
     }
@@ -100,12 +102,14 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
         trigger: String?,
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event
     ) {
         triggers[trigger]?.run(
             player,
             itemStack,
             itemTag,
+            data,
             event
         )
     }

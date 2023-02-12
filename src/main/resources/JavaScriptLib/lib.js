@@ -5,6 +5,7 @@ const Bukkit = Packages.org.bukkit.Bukkit
 const ChatColor = Packages.org.bukkit.ChatColor
 const GameMode = Packages.org.bukkit.GameMode
 
+const ItemUtils = Packages.pers.neige.neigeitems.utils.ItemUtils
 const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
 const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
 const ConfigManager = Packages.pers.neige.neigeitems.manager.ConfigManager.INSTANCE
@@ -102,6 +103,26 @@ const parseItem = function(text) {
     } else {
         return "未传入物品"
     }
+}
+
+/**
+ * 获取物品NBT
+ *
+ * @param key String NBT键
+ * @return String NBT值转文本
+ */
+const getNBT = function(key) {
+    return ItemUtils.getDeepOrNull(itemTag, key).asString()
+}
+
+/**
+ * 获取物品NBT
+ *
+ * @param key String NBT键
+ * @return ItemTag NBT值
+ */
+const getNBTTag = function(key) {
+    return ItemUtils.getDeepOrNull(itemTag, key)
 }
 
 /**

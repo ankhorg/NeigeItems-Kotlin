@@ -116,6 +116,7 @@ object ActionManager {
         action: List<*>,
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event? = null,
         start: Int = 0,
         end: Int = action.size,
@@ -135,11 +136,11 @@ object ActionManager {
                 // 线程判断
                 if (isPrimaryThread()) {
                     bukkitScheduler.runTaskLater(plugin, Runnable {
-                        runAction(player, action, itemStack, itemTag, event, index, actionEnd, map)
+                        runAction(player, action, itemStack, itemTag, data, event, index, actionEnd, map)
                     }, delay)
                 } else {
                     bukkitScheduler.runTaskLaterAsynchronously(plugin, Runnable {
-                        runAction(player, action, itemStack, itemTag, event, index, actionEnd, map)
+                        runAction(player, action, itemStack, itemTag, data, event, index, actionEnd, map)
                     }, delay)
                 }
                 // 停止当前操作
@@ -166,12 +167,12 @@ object ActionManager {
                     // 延迟
                     actionType == "delay" -> delay += actionContent.toLongOrNull() ?: 0
                     // 正常执行
-                    else -> if (!runAction(player, actionType, actionContent, itemStack, itemTag, event)) break
+                    else -> if (!runAction(player, actionType, actionContent, itemStack, itemTag, data, event)) break
                 }
                 // 如果属于其他类型
             } else {
                 // 直接执行
-                if (!runAction(player, value, itemStack, itemTag, event, map)) break
+                if (!runAction(player, value, itemStack, itemTag, data, event, map)) break
             }
         }
     }
@@ -187,9 +188,10 @@ object ActionManager {
         action: List<*>,
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event? = null
     ) {
-        runAction(player, action, itemStack, itemTag, event, 0, action.size)
+        runAction(player, action, itemStack, itemTag, data, event, 0, action.size)
     }
 
     /**
@@ -221,6 +223,7 @@ object ActionManager {
         action: String,
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event? = null
     ): Boolean {
         // 解析物品变量
@@ -233,7 +236,7 @@ object ActionManager {
         val actionType = info[0]
         val actionContent = info.getOrNull(1) ?: ""
         // 执行动作
-        return runAction(player, actionType, actionContent, itemStack, itemTag, event)
+        return runAction(player, actionType, actionContent, itemStack, itemTag, data, event)
     }
 
     /**
@@ -253,6 +256,7 @@ object ActionManager {
         actionContent: String,
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event? = null
     ): Boolean {
         actions[actionType.lowercase(Locale.getDefault())]?.apply(player, actionContent)?.also { return it }
@@ -275,6 +279,7 @@ object ActionManager {
         action: ConfigurationSection,
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event? = null,
         map: Map<String, Any?>? = null
     ): Boolean {
@@ -286,13 +291,13 @@ object ActionManager {
         val deny = action.get("deny")
 
         // 如果没有条件或者条件通过
-        if (parseCondition(condition, player, itemStack, itemTag, event, map)) {
+        if (parseCondition(condition, player, itemStack, itemTag, data, event, map)) {
             // 执行动作
-            return runAction(player, actions, itemStack, itemTag, event, map)
+            return runAction(player, actions, itemStack, itemTag, data, event, map)
             // 条件未通过
         } else {
             // 执行deny动作
-            return runAction(player, deny, itemStack, itemTag, event, map)
+            return runAction(player, deny, itemStack, itemTag, data, event, map)
         }
     }
 
@@ -311,6 +316,7 @@ object ActionManager {
         action: LinkedHashMap<String, *>,
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event? = null,
         map: Map<String, Any?>? = null
     ): Boolean {
@@ -322,13 +328,13 @@ object ActionManager {
         val deny = action["deny"]
 
         // 如果条件通过
-        if (parseCondition(condition, player, itemStack, itemTag, event, map)) {
+        if (parseCondition(condition, player, itemStack, itemTag, data, event, map)) {
             // 执行动作
-            return runAction(player, actions, itemStack, itemTag, event, map)
+            return runAction(player, actions, itemStack, itemTag, data, event, map)
             // 条件未通过
         } else {
             // 执行deny动作
-            return runAction(player, deny, itemStack, itemTag, event, map)
+            return runAction(player, deny, itemStack, itemTag, data, event, map)
         }
     }
 
@@ -347,14 +353,15 @@ object ActionManager {
         action: Any?,
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event? = null,
         map: Map<String, Any?>? = null
     ): Boolean {
         when (action) {
-            is String -> return runAction(player, action, itemStack, itemTag, event)
-            is List<*> -> runAction(player, action, itemStack, itemTag, event, 0, action.size, map)
-            is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, itemStack, itemTag, event, map)
-            is ConfigurationSection -> return runAction(player, action, itemStack, itemTag, event, map)
+            is String -> return runAction(player, action, itemStack, itemTag, data, event)
+            is List<*> -> runAction(player, action, itemStack, itemTag, data, event, 0, action.size, map)
+            is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, itemStack, itemTag, data, event, map)
+            is ConfigurationSection -> return runAction(player, action, itemStack, itemTag, data, event, map)
         }
         return true
     }
@@ -374,6 +381,7 @@ object ActionManager {
         player: Player?,
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
+        data: HashMap<String, String>? = null,
         event: Event? = null,
         map: Map<String, Any?>? = null
     ): Boolean {
@@ -387,6 +395,7 @@ object ActionManager {
             player?.let { bindings["player"] = it }
             itemStack?.let { bindings["itemStack"] = it }
             itemTag?.let { bindings["itemTag"] = it }
+            data?.let { bindings["data"] = it }
             event?.let { bindings["event"] = it }
             // 解析条件
             try {
@@ -748,14 +757,17 @@ object ActionManager {
         val neigeItems: ItemTag
         // NI物品id
         val id: String
+        // NI节点数据
+        val data: HashMap<String, String>?
         // 初始化NI物品数据
-        when (val itemInfo = itemStack.isNiItem()) {
+        when (val itemInfo = itemStack.isNiItem(true)) {
             // 不是NI物品, 终止操作
             null -> return
             else -> {
                 itemTag = itemInfo.itemTag
                 neigeItems = itemInfo.neigeItems
                 id = itemInfo.id
+                data = itemInfo.data
             }
         }
         // 获取物品动作
@@ -812,10 +824,10 @@ object ActionManager {
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, event)) {
+                if (!parseCondition(it, player, itemStack, itemTag, data, event)) {
                     // 跑一下deny动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
                     })
                     // 爬
                     return
@@ -827,15 +839,15 @@ object ActionManager {
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
                 })
                 // 数量不足
                 return
             }
         }
         // 执行动作
-        basicTrigger?.run(player, itemStack, itemTag, event)
-        allTrigger?.run(player, itemStack, itemTag, event)
+        basicTrigger?.run(player, itemStack, itemTag, data, event)
+        allTrigger?.run(player, itemStack, itemTag, data, event)
     }
 
     // 吃或饮用
@@ -851,12 +863,15 @@ object ActionManager {
         val neigeItems: ItemTag
         // NI物品id
         val id: String
-        when (val itemInfo = itemStack.isNiItem()) {
+        // NI节点数据
+        val data: HashMap<String, String>?
+        when (val itemInfo = itemStack.isNiItem(true)) {
             null -> return
             else -> {
                 itemTag = itemInfo.itemTag
                 neigeItems = itemInfo.neigeItems
                 id = itemInfo.id
+                data = itemInfo.data
             }
         }
         // 获取物品动作
@@ -877,10 +892,10 @@ object ActionManager {
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, event)) {
+                if (!parseCondition(it, player, itemStack, itemTag, data, event)) {
                     // 跑一下deny动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
                     })
                     // 爬
                     return
@@ -904,14 +919,14 @@ object ActionManager {
             } ?: let {
                 // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
                 })
                 // 数量不足
                 return
             }
         }
         // 执行动作
-        trigger.run(player, itemStack, itemTag, event)
+        trigger.run(player, itemStack, itemTag, data, event)
     }
 
     // 丢弃物品
@@ -927,12 +942,15 @@ object ActionManager {
         val neigeItems: ItemTag
         // NI物品id
         val id: String
-        when (val itemInfo = itemStack.isNiItem()) {
+        // NI节点数据
+        val data: HashMap<String, String>?
+        when (val itemInfo = itemStack.isNiItem(true)) {
             null -> return
             else -> {
                 itemTag = itemInfo.itemTag
                 neigeItems = itemInfo.neigeItems
                 id = itemInfo.id
+                data = itemInfo.data
             }
         }
         // 获取物品动作
@@ -954,10 +972,10 @@ object ActionManager {
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, event)) {
+                if (!parseCondition(it, player, itemStack, itemTag, data, event)) {
                     // 跑一下deny动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
                     })
                     // 爬
                     return
@@ -969,14 +987,14 @@ object ActionManager {
             if (itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
                 })
                 // 数量不足
                 return
             }
         }
         // 执行动作
-        trigger.run(player, itemStack, itemTag, event)
+        trigger.run(player, itemStack, itemTag, data, event)
     }
 
     // 拾取物品
@@ -993,12 +1011,15 @@ object ActionManager {
         val neigeItems: ItemTag
         // NI物品id
         val id: String
-        when (val itemInfo = itemStack.isNiItem()) {
+        // NI节点数据
+        val data: HashMap<String, String>?
+        when (val itemInfo = itemStack.isNiItem(true)) {
             null -> return
             else -> {
                 itemTag = itemInfo.itemTag
                 neigeItems = itemInfo.neigeItems
                 id = itemInfo.id
+                data = itemInfo.data
             }
         }
         // 获取物品动作
@@ -1017,10 +1038,10 @@ object ActionManager {
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, event)) {
+                if (!parseCondition(it, player, itemStack, itemTag, data, event)) {
                     // 跑一下deny动作
                     bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
                     })
                     // 爬
                     return
@@ -1032,14 +1053,14 @@ object ActionManager {
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, event)
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event)
                 })
                 // 数量不足
                 return
             }
         }
         // 执行动作
-        trigger.run(player, itemStack, itemTag, event)
+        trigger.run(player, itemStack, itemTag, data, event)
     }
 
     private fun runThreadSafe(task: Runnable) {

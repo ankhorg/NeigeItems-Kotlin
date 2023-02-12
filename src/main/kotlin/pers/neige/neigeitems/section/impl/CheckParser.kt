@@ -49,10 +49,7 @@ object CheckParser : SectionParser() {
                 ActionManager.runAction(
                     it,
                     actions,
-                    null,
-                    null,
-                    null,
-                    mapOf(
+                    map = mapOf(
                         Pair("value", value),
                         Pair("cache", cache),
                         Pair("sections", sections)
