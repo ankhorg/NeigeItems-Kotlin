@@ -95,7 +95,10 @@ abstract class MythicMobsHooker {
                                 }
                                 // 处理MM/EI物品(单纯移除NBT)
                             } else {
-                                itemTag.remove("NeigeItems")
+                                neigeItems.remove("dropChance")
+                                if (neigeItems.isEmpty()) {
+                                    itemTag.remove("NeigeItems")
+                                }
                                 itemTag.saveTo(itemStack)
                                 dropItems.add(itemStack)
                             }
