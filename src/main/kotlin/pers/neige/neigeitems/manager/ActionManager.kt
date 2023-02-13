@@ -72,7 +72,7 @@ object ActionManager {
     /**
      * 获取缓存的已编译action脚本
      */
-    val actionScripts = ConcurrentHashMap<String, pers.neige.neigeitems.script.CompiledScript>()
+    val actionScripts = ConcurrentHashMap<String, CompiledScript>()
 
     init {
         // 加载所有拥有动作的物品及相关动作
@@ -112,6 +112,7 @@ object ActionManager {
      * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
      * @param global 用于存储整个动作运行过程中的全局变量
+     * @param map 传入js的顶级变量
      */
     fun runAction(
         player: Player,
@@ -170,7 +171,7 @@ object ActionManager {
                     // 延迟
                     actionType == "delay" -> delay += actionContent.toLongOrNull() ?: 0
                     // 正常执行
-                    else -> if (!runAction(player, actionType, actionContent, itemStack, itemTag, data, event, global)) break
+                    else -> if (!runAction(player, actionType, actionContent, itemStack, itemTag, data, event, global, map)) break
                 }
                 // 如果属于其他类型
             } else {
@@ -190,6 +191,7 @@ object ActionManager {
      * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
      * @param global 用于存储整个动作运行过程中的全局变量
+     * @param map 传入js的顶级变量
      */
     fun runAction(
         player: Player,
@@ -198,9 +200,10 @@ object ActionManager {
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
         event: Event? = null,
-        global: HashMap<String, Any?>
+        global: HashMap<String, Any?>,
+        map: Map<String, Any?>? = null
     ) {
-        runAction(player, action, itemStack, itemTag, data, event, global, 0, action.size)
+        runAction(player, action, itemStack, itemTag, data, event, global, 0, action.size, map)
     }
 
     /**
@@ -227,6 +230,7 @@ object ActionManager {
      * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
      * @param global 用于存储整个动作运行过程中的全局变量
+     * @param map 传入js的顶级变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun runAction(
@@ -236,7 +240,8 @@ object ActionManager {
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
         event: Event? = null,
-        global: HashMap<String, Any?>
+        global: HashMap<String, Any?>,
+        map: Map<String, Any?>? = null
     ): Boolean {
         // 解析物品变量
         val actionString = when (itemTag) {
@@ -248,7 +253,7 @@ object ActionManager {
         val actionType = info[0]
         val actionContent = info.getOrNull(1) ?: ""
         // 执行动作
-        return runAction(player, actionType, actionContent, itemStack, itemTag, data, event, global)
+        return runAction(player, actionType, actionContent, itemStack, itemTag, data, event, global, map)
     }
 
     /**
@@ -262,6 +267,7 @@ object ActionManager {
      * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
      * @param global 用于存储整个动作运行过程中的全局变量
+     * @param map 传入js的顶级变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun runAction(
@@ -272,10 +278,42 @@ object ActionManager {
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: HashMap<String, String>? = null,
         event: Event? = null,
-        global: HashMap<String, Any?>
+        global: HashMap<String, Any?>,
+        map: Map<String, Any?>? = null
     ): Boolean {
-        actions[actionType.lowercase(Locale.getDefault())]?.apply(player, actionContent)?.also { return it }
+        val lowercaseActionType = actionType.lowercase(Locale.getDefault())
+        actions[lowercaseActionType]?.apply(player, actionContent)?.also { return it }
         itemStack?.also { runEditorWithResult(actionType, actionContent, itemStack, player)?.also { return it } }
+        when (lowercaseActionType) {
+            "js" -> {
+                // 动作中调用的顶级变量
+                val bindings = SimpleBindings()
+                map?.forEach { (key, value) ->
+                    value?.let { bindings[key] = it }
+                }
+                bindings["variables"] = HashMap<String, Any?>()
+                player.let { bindings["player"] = it }
+                itemStack?.let { bindings["itemStack"] = it }
+                itemTag?.let { bindings["itemTag"] = it }
+                data?.let { bindings["data"] = it }
+                event?.let { bindings["event"] = it }
+                bindings["global"] = global
+                val result =  try {
+                    actionScripts.computeIfAbsent(actionContent) {
+                        nashornHooker.compile(engine, actionContent)
+                    }.eval(bindings) ?: true
+                } catch (error: Throwable) {
+                    error.printStackTrace()
+                    true
+                }
+                // js动作返回false等同于break
+                return if (result is Boolean) {
+                    result
+                } else {
+                    true
+                }
+            }
+        }
         return true
     }
 
@@ -289,6 +327,7 @@ object ActionManager {
      * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
      * @param global 用于存储整个动作运行过程中的全局变量
+     * @param map 传入js的顶级变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun runAction(
@@ -329,6 +368,7 @@ object ActionManager {
      * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
      * @param global 用于存储整个动作运行过程中的全局变量
+     * @param map 传入js的顶级变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun runAction(
@@ -369,6 +409,7 @@ object ActionManager {
      * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
      * @param global 用于存储整个动作运行过程中的全局变量
+     * @param map 传入js的顶级变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun runAction(
@@ -382,7 +423,7 @@ object ActionManager {
         map: Map<String, Any?>? = null
     ): Boolean {
         when (action) {
-            is String -> return runAction(player, action, itemStack, itemTag, data, event, global)
+            is String -> return runAction(player, action, itemStack, itemTag, data, event, global, map)
             is List<*> -> runAction(player, action, itemStack, itemTag, data, event, global, 0, action.size, map)
             is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, itemStack, itemTag, data, event, global, map)
             is ConfigurationSection -> return runAction(player, action, itemStack, itemTag, data, event, global, map)
@@ -400,6 +441,7 @@ object ActionManager {
      * @param data 物品节点数据
      * @param event 用于解析条件, 可为空
      * @param global 用于存储整个动作运行过程中的全局变量
+     * @param map 传入js的顶级变量
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
      */
     fun parseCondition(
