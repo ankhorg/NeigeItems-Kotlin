@@ -13,6 +13,7 @@ import taboolib.module.nms.ItemTagData
 import taboolib.platform.util.actionBar
 import taboolib.platform.util.giveItem
 import java.text.DecimalFormat
+import java.util.HashMap
 
 /**
  * 物品动作相关工具类
@@ -26,7 +27,7 @@ object ActionUtils {
      */
     @JvmStatic
     fun ActionTrigger.isCoolDown(player: Player): Boolean {
-        val cd = cooldown?.parseSection(player)?.toLongOrNull() ?: 0
+        val cd = cooldown?.parseSection(player)?.toLongOrNull() ?: 1000
         return this.isCoolDown(player, cd)
     }
 
@@ -38,8 +39,12 @@ object ActionUtils {
      * @return 是否处于冷却时间
      */
     @JvmStatic
-    fun ActionTrigger.isCoolDown(player: Player, itemTag: ItemTag): Boolean {
-        val cd = cooldown?.parseItemSection(itemTag, player)?.toLongOrNull() ?: 0
+    fun ActionTrigger.isCoolDown(
+        player: Player,
+        itemTag: ItemTag,
+        data: HashMap<String, String>?
+    ): Boolean {
+        val cd = cooldown?.parseItemSection(itemTag, data, player)?.toLongOrNull() ?: 1000
         return this.isCoolDown(player, cd)
     }
 

@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
+import pers.neige.neigeitems.utils.SectionUtils.getSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import taboolib.module.nms.ItemTag
 import java.awt.Color
@@ -183,10 +184,31 @@ object SectionUtils {
     @JvmStatic
     fun String.parseItemSection(
         itemTag: ItemTag,
+        data: HashMap<String, String>?,
         player: OfflinePlayer
     ): String {
+        return parseItemSection(itemTag, data, player, null, null)
+    }
+
+    /**
+     * 对文本进行物品节点解析
+     *
+     * @param itemTag 物品NBT
+     * @param player 用于解析物品的玩家
+     * @param cache 解析值缓存
+     * @param sections 节点池
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.parseItemSection(
+        itemTag: ItemTag,
+        data: HashMap<String, String>?,
+        player: OfflinePlayer,
+        cache: HashMap<String, String>?,
+        sections: ConfigurationSection?
+    ): String {
         return this.parse {
-            return@parse it.getItemSection(itemTag, player)
+            return@parse it.getItemSection(itemTag, data, player, cache, sections)
         }
     }
 
@@ -195,15 +217,55 @@ object SectionUtils {
      *
      * @param itemTag 物品NBT
      * @param player 用于解析物品的玩家
+     * @param cache 解析值缓存
+     * @param sections 节点池
      * @return 解析值
      */
     @JvmStatic
     fun String.getItemSection(
         itemTag: ItemTag,
-        player: OfflinePlayer
+        data: HashMap<String, String>?,
+        player: OfflinePlayer,
+        cache: HashMap<String, String>? = null,
+        sections: ConfigurationSection? = null
     ): String {
         when (val index = this.indexOf("::")) {
             -1 -> {
+                if (cache != null && sections != null) {
+                    // 尝试读取缓存
+                    if (cache[this] != null) {
+                        // 直接返回对应节点值
+                        return cache[this] as String
+                        // 读取失败, 尝试主动解析
+                    } else {
+                        // 尝试解析并返回对应节点值
+                        if (sections.contains(this)) {
+                            // 获取节点ConfigurationSection
+                            val section = sections.getConfigurationSection(this)
+                            // 简单节点
+                            if (section == null) {
+                                val result = sections.getString(this)?.parseItemSection(itemTag, data, player, cache, sections) ?: "<$this>"
+                                cache[this] = result
+                                return result
+                            }
+                            // 加载节点
+                            return Section(section, this).load(cache, player, sections) ?: "<$this>"
+                        }
+                        if (this.startsWith("#")) {
+                            try {
+                                try {
+                                    val hex = (this.substring(1).toIntOrNull(16) ?: 0)
+                                        .coerceAtLeast(0)
+                                        .coerceAtMost(0xFFFFFF)
+                                    val color = Color(hex)
+                                    return ChatColor.of(color).toString()
+                                } catch (_: NumberFormatException) {}
+                            } catch (error: NoSuchMethodError) {
+                                Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
+                            }
+                        }
+                    }
+                }
                 return "<$this>"
             }
             else -> {
@@ -215,7 +277,7 @@ object SectionUtils {
                         itemTag.getDeepOrNull(param)?.asString() ?: "<$this>"
                     }
                     "data" -> {
-                        itemTag["NeigeItems"]?.asCompound()?.get("data")?.asString()?.parseObject<HashMap<String, String>>()?.get(param) ?: "<$this>"
+                        (data ?: itemTag["NeigeItems"]?.asCompound()?.get("data")?.asString()?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
                     }
                     else -> {
                         SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player) ?: "<$this>"

@@ -15,7 +15,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
     /**
      * 获取物品使用冷却
      */
-    val cooldown = config.getString("cooldown")
+    val cooldown = config.getString("cooldown", "1000")
 
     /**
      * 获取物品冷却组ID

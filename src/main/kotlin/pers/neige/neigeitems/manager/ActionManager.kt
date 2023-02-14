@@ -31,6 +31,7 @@ import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
+import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
@@ -158,8 +159,18 @@ object ActionManager {
             if (value is String) {
                 // 解析物品变量
                 val actionString = when (itemTag) {
-                    null -> value
-                    else -> value.parseItemSection(itemTag, player)
+                    null -> value.parseSection(
+                        map?.get("cache") as HashMap<String, String>?,
+                        player,
+                        map?.get("sections") as ConfigurationSection?,
+                    )
+                    else -> value.parseItemSection(
+                        itemTag,
+                        data,
+                        player,
+                        map?.get("cache") as HashMap<String, String>?,
+                        map?.get("sections") as ConfigurationSection?
+                    )
                 }
                 // 解析动作类型及动作内容
                 val info = actionString.splitOnce(": ")
@@ -245,8 +256,18 @@ object ActionManager {
     ): Boolean {
         // 解析物品变量
         val actionString = when (itemTag) {
-            null -> action
-            else -> action.parseItemSection(itemTag, player)
+            null -> action.parseSection(
+                map?.get("cache") as HashMap<String, String>?,
+                player,
+                map?.get("sections") as ConfigurationSection?,
+            )
+            else -> action.parseItemSection(
+                itemTag,
+                data,
+                player,
+                map?.get("cache") as HashMap<String, String>?,
+                map?.get("sections") as ConfigurationSection?
+            )
         }
         // 解析动作类型及动作内容
         val info = actionString.splitOnce(": ")
@@ -888,7 +909,7 @@ object ActionManager {
         // 取消交互事件
         event.isCancelled = true
         // 检测冷却
-        if ((basicTrigger ?: allTrigger)!!.isCoolDown(player, itemTag)) return
+        if ((basicTrigger ?: allTrigger)!!.isCoolDown(player, itemTag, data)) return
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 如果物品需要消耗
@@ -906,7 +927,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -958,7 +979,7 @@ object ActionManager {
         // 取消事件
         event.isCancelled = true
         // 检测冷却
-        if (trigger.isCoolDown(player, itemTag)) return
+        if (trigger.isCoolDown(player, itemTag, data)) return
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
@@ -976,7 +997,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
             itemStack.consumeAndReturn(amount, itemTag, neigeItems)?.also { itemStacks ->
                 // 设置物品
@@ -1037,7 +1058,7 @@ object ActionManager {
         // 获取物品消耗信息
         val consume =  trigger.consume
         // 检测冷却
-        if (trigger.isCoolDown(player, itemTag)) {
+        if (trigger.isCoolDown(player, itemTag, data)) {
             event.isCancelled
             return
         }
@@ -1058,7 +1079,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
             if (itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1108,7 +1129,7 @@ object ActionManager {
         // 获取物品消耗信息
         val consume =  trigger.consume
         // 检测冷却
-        if (trigger.isCoolDown(player, itemTag)) return
+        if (trigger.isCoolDown(player, itemTag, data)) return
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
@@ -1126,7 +1147,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作

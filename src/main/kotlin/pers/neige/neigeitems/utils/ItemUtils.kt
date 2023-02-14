@@ -250,6 +250,17 @@ object ItemUtils {
     }
 
     /**
+     * 获取物品显示名, 这个方法的意义在于, 方便让js脚本调用
+     *
+     * @param itemStack 待操作物品
+     * @return 物品显示名
+     */
+    @JvmStatic
+    fun getItemName(itemStack: ItemStack): String {
+        return itemStack.getName()
+    }
+
+    /**
      * 获取ItemTag中的值(key以.作分隔, 以\转义), 获取不到返回null
      *
      * @param key ItemTag键
