@@ -5,7 +5,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.metadata.Metadatable
 import pers.neige.neigeitems.NeigeItems.plugin
-import pers.neige.neigeitems.utils.ItemUtils.getItems
 import taboolib.platform.util.giveItem
 
 /**
@@ -19,8 +18,25 @@ object PlayerUtils {
      */
     @JvmStatic
     fun Player.giveItems(itemStack: ItemStack, amount: Int?) {
-        itemStack.getItems(amount).forEach {
-            giveItem(it)
+        // 最大堆叠
+        val maxStackSize = itemStack.maxStackSize
+        // 整组给予数量
+        val repeat = (amount ?: 1) / maxStackSize
+        // 单独给予数量
+        val leftAmount = (amount ?: 1) % maxStackSize
+        // 整组给予
+        if (repeat > 0) {
+            val cloneItemStack = itemStack.clone()
+            cloneItemStack.amount = maxStackSize
+            repeat(repeat) {
+                inventory.addItem(cloneItemStack).values.forEach { world.dropItem(location, it) }
+            }
+        }
+        // 单独给予
+        if (leftAmount > 0) {
+            val itemLeft = itemStack.clone()
+            itemLeft.amount = leftAmount
+            giveItem(itemLeft)
         }
     }
 

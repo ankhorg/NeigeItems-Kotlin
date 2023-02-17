@@ -177,17 +177,14 @@ object ItemManager : ItemConfigManager() {
      *
      * @param itemStack 保存物品
      * @param id 物品ID
-     * @param path 保存路径
+     * @param file 保存文件
+     * @param config 文件转换来的YamlConfiguration
      * @param cover 是否覆盖
      * @return 1 保存成功; 0 ID冲突; 2 你保存了个空气
      */
-    fun saveItem(itemStack: ItemStack, id: String, path: String = "$id.yml", cover: Boolean): Int {
+    fun saveItem(itemStack: ItemStack, id: String, file: File, config: YamlConfiguration, cover: Boolean): Int {
         // 检测是否为空气
         if (itemStack.type != Material.AIR) {
-            // 获取路径文件
-            val file = File(plugin.dataFolder, "${File.separator}Items${File.separator}$path")
-            if(!file.exists()) { file.createNewFile() }
-            val config = YamlConfiguration.loadConfiguration(file)
             // 检测节点是否存在
             if (!hasItem(id) || cover) {
                 // 创建物品节点
@@ -208,7 +205,7 @@ object ItemManager : ItemConfigManager() {
                         if (itemMeta?.hasCustomModelData() == true) {
                             configSection.set("custommodeldata", itemMeta.customModelData)
                         }
-                    } catch (error: NoSuchMethodError) {}
+                    } catch (_: NoSuchMethodError) {}
                     // 设置子ID/损伤值
                     if (itemStack.durability > 0) {
                         configSection.set("damage", itemStack.durability)
@@ -252,12 +249,28 @@ object ItemManager : ItemConfigManager() {
                 // 保存文件
                 config.save(file)
                 // 物品保存好了, 信息加进ItemManager里
-                addItem(ItemGenerator(ItemConfig(id, file)))
+                addItem(ItemGenerator(ItemConfig(id, file, config)))
                 if (cover) return 0
                 return 1
             }
             return 0
         }
         return 2
+    }
+
+    /**
+     * 保存物品
+     *
+     * @param itemStack 保存物品
+     * @param id 物品ID
+     * @param path 保存路径
+     * @param cover 是否覆盖
+     * @return 1 保存成功; 0 ID冲突; 2 你保存了个空气
+     */
+    fun saveItem(itemStack: ItemStack, id: String, path: String = "$id.yml", cover: Boolean): Int {
+        val file = File(plugin.dataFolder, "${File.separator}Items${File.separator}$path")
+        if(!file.exists()) { file.createNewFile() }
+        val config = YamlConfiguration.loadConfiguration(file)
+        return saveItem(itemStack, id, file, config, cover)
     }
 }

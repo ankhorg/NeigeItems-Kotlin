@@ -4,8 +4,10 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.NeigeItems.bukkitScheduler
+import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.command.subcommand.Help.help
+import pers.neige.neigeitems.event.ItemPackGiveEvent
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.LangUtils.getLang
@@ -94,13 +96,18 @@ object GivePack {
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
-                    ItemUtils.loadItems(dropItems, itemPack.items, player, HashMap<String, String>(), itemPack.sections)
-                    dropItems.forEach { itemStack ->
-                        NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
-                            player.giveItem(itemStack)
-                        }
-                        dropData?.let {
-                            dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
+                    ItemUtils.loadItems(dropItems, itemPack.items, player, HashMap(), itemPack.sections)
+                    // 物品包给予事件
+                    val event = ItemPackGiveEvent(id, player, dropItems)
+                    event.call()
+                    if (!event.isCancelled) {
+                        event.itemStacks.forEach { itemStack ->
+                            bukkitScheduler.callSyncMethod(plugin) {
+                                player.giveItem(itemStack)
+                            }
+                            dropData?.let {
+                                dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
+                            }
                         }
                     }
                 }

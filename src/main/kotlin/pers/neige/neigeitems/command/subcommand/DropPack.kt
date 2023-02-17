@@ -6,8 +6,10 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.command.subcommand.Help.help
+import pers.neige.neigeitems.event.ItemPackDropEvent
 import pers.neige.neigeitems.manager.ItemPackManager
-import pers.neige.neigeitems.utils.ItemUtils
+import pers.neige.neigeitems.utils.ItemUtils.dropItems
+import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
@@ -142,39 +144,48 @@ object DropPack {
         sender: CommandSender,
         id: String,
         repeat: Int?,
-        location: Location?,
+        location: Location,
         parser: Player?
     ) {
         parser?.let {
             ItemPackManager.itemPacks[id]?.let { itemPack ->
+                val packInfo = HashMap<Location, Int>()
                 repeat(repeat ?: 1) {
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
-                    ItemUtils.loadItems(dropItems, itemPack.items, parser, HashMap<String, String>(), itemPack.sections)
-                    location?.let { location ->
-                        if (itemPack.fancyDrop) {
-                            ItemUtils.dropItems(
-                                dropItems,
-                                location,
-                                parser,
-                                itemPack.offsetXString,
-                                itemPack.offsetYString,
-                                itemPack.angleType
-                            )
-                        } else {
-                            ItemUtils.dropItems(dropItems, location, parser)
+                    loadItems(dropItems, itemPack.items, parser, HashMap(), itemPack.sections)
+                    // 物品包掉落事件
+                    val event = ItemPackDropEvent(id, dropItems, location, parser)
+                    event.call()
+                    if (!event.isCancelled) {
+                        event.location.let { location ->
+                            if (itemPack.fancyDrop) {
+                                dropItems(
+                                    event.itemStacks,
+                                    location,
+                                    parser,
+                                    itemPack.offsetXString,
+                                    itemPack.offsetYString,
+                                    itemPack.angleType
+                                )
+                            } else {
+                                dropItems(event.itemStacks, location, parser)
+                            }
                         }
+                        packInfo[event.location] = (packInfo[event.location] ?: 0) + 1
                     }
                 }
-                sender.sendLang("Messages.dropPackSuccessInfo", mapOf(
-                    Pair("{world}", location?.world?.name ?: ""),
-                    Pair("{x}", location?.x.toString()),
-                    Pair("{y}", location?.y.toString()),
-                    Pair("{z}", location?.z.toString()),
-                    Pair("{amount}", repeat.toString()),
-                    Pair("{name}", id)
-                ))
+                for ((loc, amount) in packInfo) {
+                    sender.sendLang("Messages.dropPackSuccessInfo", mapOf(
+                        Pair("{world}", loc.world?.name ?: ""),
+                        Pair("{x}", loc.x.toString()),
+                        Pair("{y}", loc.y.toString()),
+                        Pair("{z}", loc.z.toString()),
+                        Pair("{amount}", amount.toString()),
+                        Pair("{name}", id)
+                    ))
+                }
                 // 未知物品包
             } ?: let {
                 sender.sendLang("Messages.unknownItemPack", mapOf(

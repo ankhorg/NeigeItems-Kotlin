@@ -610,27 +610,38 @@ object ItemUtils {
      * 掉落指定数量NI物品并触发掉落技能及掉落归属
      *
      * @param itemStack 待掉落物品
-     */
-    @JvmStatic
-    fun Location.dropNiItems(itemStack: ItemStack, entity: Entity? = null) {
-        this.dropNiItems(itemStack, null, entity)
-    }
-
-    /**
-     * 掉落指定数量NI物品并触发掉落技能及掉落归属
-     *
-     * @param itemStack 待掉落物品
      * @param amount 掉落数量
+     * @param entity 掉落技能触发者
      */
     @JvmStatic
     fun Location.dropNiItems(itemStack: ItemStack, amount: Int?, entity: Entity? = null) {
-        itemStack.getItems(amount).forEach { item -> this.dropNiItem(item, entity) }
+        // 最大堆叠
+        val maxStackSize = itemStack.maxStackSize
+        // 整组给予数量
+        val repeat = (amount ?: 1) / maxStackSize
+        // 单独给予数量
+        val leftAmount = (amount ?: 1) % maxStackSize
+        // 整组给予
+        if (repeat > 0) {
+            val cloneItemStack = itemStack.clone()
+            cloneItemStack.amount = maxStackSize
+            repeat(repeat) {
+                this.dropNiItem(cloneItemStack, entity)
+            }
+        }
+        // 单独给予
+        if (leftAmount > 0) {
+            val itemLeft = itemStack.clone()
+            itemLeft.amount = leftAmount
+            this.dropNiItem(itemLeft, entity)
+        }
     }
 
     /**
      * 掉落NI物品并触发掉落技能及掉落归属
      *
      * @param itemStack 待掉落物品
+     * @param entity 掉落技能触发者
      * @param itemTag 物品NBT, 用于解析NI物品数据
      * @param neigeItems NI物品NBT
      * @return 掉落物品

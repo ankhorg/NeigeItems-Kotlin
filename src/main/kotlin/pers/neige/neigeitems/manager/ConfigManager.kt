@@ -27,6 +27,7 @@ object ConfigManager {
     val config get() = plugin.config
 
     var comboInterval = config.getLong("ItemAction.comboInterval", 500)
+    var removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
 
     /**
      * 加载默认配置文件
@@ -88,5 +89,6 @@ object ConfigManager {
         plugin.reloadConfig()
         loadConfig()
         comboInterval = config.getLong("ItemAction.comboInterval", 500)
+        removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
     }
 }

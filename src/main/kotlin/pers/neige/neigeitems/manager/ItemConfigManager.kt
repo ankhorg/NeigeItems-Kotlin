@@ -45,7 +45,7 @@ open class ItemConfigManager {
         for (file: File in files) {
             val config = YamlConfiguration.loadConfiguration(file)
             config.getKeys(false).forEach { id ->
-                itemConfigs[id] = ItemConfig(id, file)
+                itemConfigs[id] = ItemConfig(id, file, config)
             }
         }
     }

@@ -8,7 +8,6 @@ import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
-import pers.neige.neigeitems.utils.SectionUtils.getSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import taboolib.module.nms.ItemTag
 import java.awt.Color
@@ -314,7 +313,7 @@ object SectionUtils {
         // 储存解析结果
         val result = StringBuilder()
         val chars = this.toCharArray()
-        // 表示前一个字符是不是转义符(即反斜杠)
+        // 表示前一个字符是不是转义符
         var lastIsEscape = false
         // 遍历
         for (char in chars) {
@@ -368,7 +367,7 @@ object SectionUtils {
             // 进行转义符记录
             lastIsEscape = isEscape && !lastIsEscape
         }
-        // 递归结束后stringBuilders不为空, 说明文本中存在冗余节点起始标识
+        // 遍历结束后stringBuilders不为空, 说明文本中存在冗余节点起始标识
         // 对于此种情况, 应将该标识符视作普通文本处理
         if (stringBuilders.isNotEmpty()) {
             // 遍历stringBuilders

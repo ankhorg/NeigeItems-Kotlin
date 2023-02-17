@@ -8,11 +8,12 @@ import java.io.File
  *
  * @property id 物品ID
  * @property file 物品所在文件
+ * @property config 文件转换来的YamlConfiguration
  * @constructor 根据ID及文件获取物品配置节点
  */
-class ItemConfig(val id: String, val file: File) {
+class ItemConfig(val id: String, val file: File, config: YamlConfiguration = YamlConfiguration.loadConfiguration(file)) {
     /**
      * 获取物品原始配置
      */
-    val configSection = YamlConfiguration.loadConfiguration(file).getConfigurationSection(id)
+    val configSection = config.getConfigurationSection(id)
 }

@@ -12,8 +12,6 @@ import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.platform.util.actionBar
 import taboolib.platform.util.giveItem
-import java.text.DecimalFormat
-import java.util.HashMap
 
 /**
  * 物品动作相关工具类

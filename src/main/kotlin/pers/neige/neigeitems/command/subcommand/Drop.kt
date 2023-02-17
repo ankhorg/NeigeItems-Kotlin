@@ -5,8 +5,8 @@ import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import pers.neige.neigeitems.command.subcommand.Help.help
+import pers.neige.neigeitems.event.ItemDropEvent
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.utils.ItemUtils.dropNiItem
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import taboolib.common.platform.command.subCommand
@@ -169,7 +169,7 @@ object Drop {
         sender: CommandSender,
         id: String,
         amount: Int?,
-        location: Location?,
+        location: Location,
         random: String,
         parser: Player?,
         data: String?
@@ -181,14 +181,18 @@ object Drop {
                     amount?.let {
                         // 掉物品
                         ItemManager.getItemStack(id, parser, data)?.also { itemStack ->
-                            location?.dropNiItems(itemStack, amount.coerceAtLeast(1), parser)
+                            // 物品掉落事件
+                            val event = ItemDropEvent(id, itemStack, amount.coerceAtLeast(1), location, parser)
+                            event.call()
+                            if (event.isCancelled) return
+                            event.location.dropNiItems(event.itemStack, event.amount, parser)
                             sender.sendLang("Messages.dropSuccessInfo", mapOf(
-                                Pair("{world}", location?.world?.name ?: ""),
-                                Pair("{x}", location?.x.toString()),
-                                Pair("{y}", location?.y.toString()),
-                                Pair("{z}", location?.z.toString()),
-                                Pair("{amount}", amount.toString()),
-                                Pair("{name}", itemStack.getName())
+                                Pair("{world}", event.location.world?.name ?: ""),
+                                Pair("{x}", event.location.x.toString()),
+                                Pair("{y}", event.location.y.toString()),
+                                Pair("{z}", event.location.z.toString()),
+                                Pair("{amount}", event.amount.toString()),
+                                Pair("{name}", event.itemStack.getName())
                             ))
                             // 未知物品ID
                         } ?: let {
@@ -204,12 +208,18 @@ object Drop {
                 else -> {
                     // 获取数量
                     amount?.let {
-                        val dropData = HashMap<String, Int>()
+                        // 防止有人在ItemDropEvent瞎几把改location以后提示出错
+                        val dropData = HashMap<Location, HashMap<String, Int>>()
                         // 掉物品
                         repeat(amount.coerceAtLeast(1)) {
-                            ItemManager.getItemStack(id, parser, data)?.also { itemStack ->
-                                location?.dropNiItem(itemStack, parser)
-                                dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
+                            ItemManager.getItemStack(id, parser, data)?.also alsoItem@ { itemStack ->
+                                // 物品掉落事件
+                                val event = ItemDropEvent(id, itemStack, 1, location, parser)
+                                event.call()
+                                if (event.isCancelled) return@alsoItem
+                                event.location.dropNiItems(event.itemStack, event.amount, parser)
+                                val currentData = dropData.computeIfAbsent(event.location) { HashMap() }
+                                currentData[event.itemStack.getName()] = currentData[event.itemStack.getName()]?.let { it + event.amount } ?: event.amount
                                 // 未知物品ID
                             } ?: let {
                                 sender.sendLang("Messages.unknownItem", mapOf(
@@ -218,15 +228,17 @@ object Drop {
                                 return@repeat
                             }
                         }
-                        for((name, amt) in dropData) {
-                            sender.sendLang("Messages.dropSuccessInfo", mapOf(
-                                Pair("{world}", location?.world?.name ?: ""),
-                                Pair("{x}", location?.x.toString()),
-                                Pair("{y}", location?.y.toString()),
-                                Pair("{z}", location?.z.toString()),
-                                Pair("{amount}", amt.toString()),
-                                Pair("{name}", name)
-                            ))
+                        for((loc, currentData) in dropData) {
+                            for((name, amt) in currentData) {
+                                sender.sendLang("Messages.dropSuccessInfo", mapOf(
+                                    Pair("{world}", loc.world?.name ?: ""),
+                                    Pair("{x}", loc.x.toString()),
+                                    Pair("{y}", loc.y.toString()),
+                                    Pair("{z}", loc.z.toString()),
+                                    Pair("{amount}", amt.toString()),
+                                    Pair("{name}", name)
+                                ))
+                            }
                         }
                         // 无效数字
                     } ?: let {

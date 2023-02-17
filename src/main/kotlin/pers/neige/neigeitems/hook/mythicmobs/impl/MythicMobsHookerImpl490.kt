@@ -11,10 +11,9 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.event.MythicDropEvent
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
-import pers.neige.neigeitems.manager.ConfigManager
-import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
-import pers.neige.neigeitems.manager.ItemManager.getItemStack
+import pers.neige.neigeitems.item.ItemPack
 import pers.neige.neigeitems.manager.ItemPackManager.itemPacks
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
@@ -22,10 +21,6 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.getItemTag
-import java.util.*
 
 /**
  * 4.9.0版本MM挂钩
@@ -45,73 +40,16 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
             val config = it.mobType.config.getNestedConfig("NeigeItems")
             val equipment = config.getStringList("Equipment")
             val dropEquipment = config.getStringList("DropEquipment")
-            val entityEquipment = entity.equipment
-            val dropChance = HashMap<String, Double>()
 
-            // 获取死亡后相应NI物品掉落几率
-            for (value in dropEquipment) {
-                val string = value.parseSection()
-                var id = string.lowercase(Locale.getDefault())
-                var chance = 1.toDouble()
-                if (string.contains(" ")) {
-                    val index = string.indexOf(" ")
-                    id = string.substring(0, index).lowercase(Locale.getDefault())
-                    chance = string.substring(index+1).toDoubleOrNull() ?: 1.toDouble()
-                }
-                dropChance[id] = chance
-            }
-
-            // 获取出生附带装备信息
-            for (value in equipment) {
-                val string = value.parseSection()
-                if (string.contains(": ")) {
-                    val index = string.indexOf(": ")
-                    val slot = string.substring(0, index).lowercase(Locale.getDefault())
-                    val info = string.substring(index+2)
-                    val args = info.split(" ")
-
-                    var data: String? = null
-                    if (args.size > 2) data = args.drop(2).joinToString(" ")
-
-                    if (args.size > 1) {
-                        val probability = args[1].toDoubleOrNull()
-                        if (probability != null && Math.random() > probability) continue
-                    }
-
-                    try {
-                        (getItemStack(args[0], null, data)
-                            ?: easyItemHooker?.getItemStack(args[0])
-                            ?: getItemStackSync(args[0]))?.let { itemStack ->
-                            dropChance[slot]?.let { chance ->
-                                val itemTag = itemStack.getItemTag()
-                                itemTag.computeIfAbsent("NeigeItems") { ItemTag() }?.asCompound()?.set("dropChance", ItemTagData(chance))
-                                itemTag.saveTo(itemStack)
-                            }
-
-                            when (slot) {
-                                "helmet" -> entityEquipment?.helmet = itemStack
-                                "chestplate" -> entityEquipment?.chestplate = itemStack
-                                "leggings" -> entityEquipment?.leggings = itemStack
-                                "boots" -> entityEquipment?.boots = itemStack
-                                "mainhand" -> entityEquipment?.setItemInMainHand(itemStack)
-                                "offhand" -> entityEquipment?.setItemInOffHand(itemStack)
-                                else -> {}
-                            }
-                        }
-                    } catch (error: Throwable) {
-                        ConfigManager.config.getString("Messages.equipFailed")?.let { message ->
-                            println(message
-                                .replace("{mobID}", it.mobType.internalName)
-                                .replace("{itemID}", args[0]))
-                        }
-                        error.printStackTrace()
-                    }
-                }
-            }
+            loadEquipment(equipment, dropEquipment, entity, it.mobType.internalName)
         }
     }
 
     override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java, EventPriority.NORMAL, false) {
+        // 获取击杀者
+        val player = it.killer
+        // 判断是否是玩家击杀
+        if (player !is Player) return@registerBukkitListener
         submit(async = true) {
             // 获取MM怪物配置
             val mythicMob = it.mobType
@@ -119,6 +57,7 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
             val mythicId = mythicMob.internalName
             // 获取对应MythicConfig
             val mythicConfig: MythicConfig = mythicMob.config
+            // 不要问我为什么这么干, 谁问谁死
             val fc = mythicConfig::class.java.getDeclaredField("fc")
             fc.isAccessible = true
             // 获取MM怪物的ConfigurationSection
@@ -129,52 +68,29 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
             if (configSection.contains("NeigeItems")) {
                 // 获取被击杀的MM怪物
                 val entity = it.entity as LivingEntity
-                // 获取击杀者
-                val player = it.killer
-                // 预定于掉落物列表
-                val dropItems = ArrayList<ItemStack>()
-                // 掉落应该掉落的装备
-                loadEquipmentDrop(entity, dropItems, player)
-
                 // 获取NeigeItems相关配置项
                 val neigeItems = configSection.getConfigurationSection("NeigeItems")
 
-                var fancy = false
-                var offsetXString: String? = null
-                var offsetYString: String? = null
-                var angleType: String? = null
-
-                // 如果配置了掉落物品包
-                if (neigeItems.contains("DropPacks")) {
-                    // 获取物品包信息
-                    val drops = neigeItems.getStringList("DropPacks")
-                    drops.forEach { id ->
-                        itemPacks[id.parseSection(if (player is Player) player else null)]?.let { itemPack ->
-                            // 尝试加载多彩掉落
-                            if (itemPack.fancyDrop) {
-                                fancy = true
-                                offsetXString = itemPack.offsetXString
-                                offsetYString = itemPack.offsetYString
-                                angleType = itemPack.angleType
-                            }
-                            // 如果是玩家
-                            if (player is Player) {
-                                // 加载物品掉落信息
-                                loadItems(dropItems, itemPack.items, player, HashMap<String, String>(), itemPack.sections)
-                            }
-                        }
-                    }
-                }
-                // 判断是否是玩家击杀
-                if (player is Player) {
+                // 获取物品配置
+                val drops: List<String>? =
                     // 如果配置了掉落相关信息
                     if (neigeItems.contains("Drops")) {
                         // 获取掉落相关的配置项
-                        val drops = neigeItems.getStringList("Drops")
-                        // 加载掉落信息
-                        loadItems(dropItems, drops, player)
-                    }
-                }
+                        neigeItems.getStringList("Drops")
+                    } else null
+
+                // 获取物品包配置(未经过节点解析的物品包ID)
+                val dropPackRawIds: List<String>? =
+                    // 如果配置了掉落物品包
+                    if (neigeItems.contains("DropPacks")) {
+                        // 获取物品包信息
+                        neigeItems.getStringList("DropPacks")
+                    } else null
+
+                // 获取多彩掉落信息
+                var offsetXString: String? = null
+                var offsetYString: String? = null
+                var angleType: String? = null
 
                 // 如果配置了多彩掉落信息
                 if (neigeItems.contains("FancyDrop")) {
@@ -182,16 +98,49 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
                     val fancyDrop = neigeItems.getConfigurationSection("FancyDrop")
                     // 获取掉落偏移信息
                     val offset = fancyDrop.getConfigurationSection("offset")
-                    // 多彩掉落
-                    dropItems(dropItems, entity.location, player, offset.getString("x"), offset.getString("y"), fancyDrop.getString("angle.type"))
-                // 如果物品包中含有多彩掉落信息
-                } else if (fancy) {
-                    // 多彩掉落
-                    dropItems(dropItems, entity.location, player, offsetXString, offsetYString, angleType)
-                } else {
-                    // 普通掉落
-                    dropItems(dropItems, entity.location, player)
+                    offsetXString = offset.getString("x")
+                    offsetYString = offset.getString("y")
+                    angleType = fancyDrop.getString("angle.type")
                 }
+
+                // 待掉落物品包
+                val dropPacks = ArrayList<ItemPack>()
+                dropPackRawIds?.forEach { id ->
+                    itemPacks[id.parseSection(player)]?.let { itemPack ->
+                        dropPacks.add(itemPack)
+                        // 尝试加载多彩掉落
+                        if (itemPack.fancyDrop) {
+                            offsetXString = itemPack.offsetXString
+                            offsetYString = itemPack.offsetYString
+                            angleType = itemPack.angleType
+                        }
+                    }
+                }
+
+                // 东西都加载好了, 触发一下事件
+                val configLoadedEvent = MythicDropEvent.ConfigLoaded(mythicId, entity, player, drops, dropPacks, offsetXString, offsetYString, angleType)
+                configLoadedEvent.call()
+                if (configLoadedEvent.isCancelled) return@submit
+
+                // 预定掉落物列表
+                val dropItems = ArrayList<ItemStack>()
+                // 掉落应该掉落的装备
+                loadEquipmentDrop(entity, dropItems, player)
+                // 加载掉落物品包信息
+                configLoadedEvent.dropPacks.forEach { itemPack ->
+                    // 加载物品掉落信息
+                    loadItems(dropItems, itemPack.items, player, HashMap(), itemPack.sections)
+                }
+                // 加载掉落信息
+                configLoadedEvent.drops?.let { loadItems(dropItems, it, player) }
+
+                // 物品都加载好了, 触发一下事件
+                val dropEvent = MythicDropEvent.Drop(mythicId, entity, player, dropItems)
+                dropEvent.call()
+                if (dropEvent.isCancelled) return@submit
+
+                // 掉落物品
+                dropItems(dropEvent.dropItems, entity.location, player, configLoadedEvent.offsetXString, configLoadedEvent.offsetYString, configLoadedEvent.angleType)
             }
         }
     }

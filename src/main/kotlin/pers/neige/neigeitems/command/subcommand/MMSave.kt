@@ -1,6 +1,8 @@
 package pers.neige.neigeitems.command.subcommand
 
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
@@ -151,9 +153,13 @@ object MMSave {
         // ni mm loadAll
         execute<Player> { sender, _, _ ->
             submit(async = true) {
+                val path = ConfigManager.config.getString("Main.MMItemsPath") ?: "MMItems.yml"
+                val file = File(NeigeItems.plugin.dataFolder, "${File.separator}Items${File.separator}$path")
+                if(!file.exists()) { file.createNewFile() }
+                val config = YamlConfiguration.loadConfiguration(file)
                 mythicMobsHooker!!.getItemIds().forEach { id ->
                     mythicMobsHooker!!.getItemStackSync(id)?.let { itemStack ->
-                        when (ItemManager.saveItem(itemStack, id, ConfigManager.config.getString("Main.MMItemsPath") ?: "MMItems.yml", false)) {
+                        when (ItemManager.saveItem(itemStack, id, file, config, false)) {
                             // 保存成功
                             1 -> {
                                 sender.sendLang("Messages.successSaveInfo", mapOf(
@@ -180,9 +186,12 @@ object MMSave {
             }
             execute<Player> { sender, _, argument ->
                 submit(async = true) {
+                    val file = File(NeigeItems.plugin.dataFolder, "${File.separator}Items${File.separator}$argument")
+                    if(!file.exists()) { file.createNewFile() }
+                    val config = YamlConfiguration.loadConfiguration(file)
                     mythicMobsHooker!!.getItemIds().forEach { id ->
                         mythicMobsHooker!!.getItemStackSync(id)?.let { itemStack ->
-                            when (ItemManager.saveItem(itemStack, id, argument, false)) {
+                            when (ItemManager.saveItem(itemStack, id, file, config, false)) {
                                 // 保存成功
                                 1 -> {
                                     sender.sendLang("Messages.successSaveInfo", mapOf(

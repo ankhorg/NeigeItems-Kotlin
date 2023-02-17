@@ -9,7 +9,6 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ActionManager
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
-import java.util.HashMap
 
 class ActionTrigger(val id: String, val type: String, val config: ConfigurationSection) {
     /**

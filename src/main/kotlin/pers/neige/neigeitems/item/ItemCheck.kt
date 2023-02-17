@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.event.ItemExpirationEvent
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
@@ -53,10 +54,19 @@ object ItemCheck {
         checkItem(e.player as Player, e.inventory)
     }
 
+    /**
+     * 检查物品
+     *
+     * @param player 待检查玩家
+     * @param itemStack 待检查物品
+     */
     private fun checkItem(player: Player, itemStack: ItemStack) {
         itemStack.isNiItem()?.let { itemInfo ->
             itemInfo.neigeItems["itemTime"]?.asLong()?.let {
                 if (System.currentTimeMillis() >= it) {
+                    val event = ItemExpirationEvent(player, itemStack, itemInfo)
+                    event.call()
+                    if (event.isCancelled) return
                     val itemName = itemStack.getName()
                     itemStack.amount = 0
                     player.sendMessage(config.getString("Messages.itemExpirationMessage")
@@ -66,6 +76,12 @@ object ItemCheck {
         }
     }
 
+    /**
+     * 检查物品
+     *
+     * @param player 待检查玩家
+     * @param inventory 待检查背包
+     */
     private fun checkItem(player: Player, inventory: Inventory) {
         if (player.couldCheck()) {
             inventory.contents.forEach {
@@ -74,7 +90,9 @@ object ItemCheck {
         }
     }
 
-    // 当前是否可以检查物品
+    /**
+     * 当前是否可以检查物品(最多一秒检查一次玩家背包, 防止服务器噶了)
+     */
     private fun Player.couldCheck(): Boolean {
         // 获取当前时间
         val time = System.currentTimeMillis()

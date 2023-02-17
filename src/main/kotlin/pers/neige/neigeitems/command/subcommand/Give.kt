@@ -5,7 +5,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.command.subcommand.Help.help
-import pers.neige.neigeitems.manager.ConfigManager.config
+import pers.neige.neigeitems.event.ItemGiveEvent
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
@@ -13,7 +14,6 @@ import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.getItemTag
 import taboolib.module.nms.getName
-import taboolib.platform.util.giveItem
 
 object Give {
     // ni get [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID获取NI物品
@@ -222,7 +222,7 @@ object Give {
                         ItemManager.getItemStack(id, player, data)?.let { itemStack ->
                             // 移除一下物品拥有者信息
                             // 我知道这种操作有些sb, 但是暂时别无他法
-                            if (config.getBoolean("ItemOwner.removeNBTWhenGive")) {
+                            if (ConfigManager.removeNBTWhenGive) {
                                 val itemTag = itemStack.getItemTag()
                                 val neigeItems = itemTag["NeigeItems"]?.asCompound()
                                 neigeItems?.get("owner")?.asString()?.let {
@@ -230,8 +230,12 @@ object Give {
                                     itemTag.saveTo(itemStack)
                                 }
                             }
+                            // 物品给予事件
+                            val event = ItemGiveEvent(id, player, itemStack, amount.coerceAtLeast(1))
+                            event.call()
+                            if (event.isCancelled) return
                             NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
-                                player.giveItems(itemStack, amount.coerceAtLeast(1))
+                                player.giveItems(event.itemStack, event.amount)
                             }
                             sender.sendLang("Messages.successInfo", mapOf(
                                 Pair("{player}", player.name),
@@ -260,10 +264,10 @@ object Give {
                         // 给物品
                         if (ItemManager.hasItem(id)) {
                             repeat(amount.coerceAtLeast(1)) {
-                                ItemManager.getItemStack(id, player, data)?.let { itemStack ->
+                                ItemManager.getItemStack(id, player, data)?.let letItem@ { itemStack ->
                                     // 移除一下物品拥有者信息
                                     // 我知道这种操作有些sb, 但是暂时别无他法
-                                    if (config.getBoolean("ItemOwner.removeNBTWhenGive")) {
+                                    if (ConfigManager.removeNBTWhenGive) {
                                         val itemTag = itemStack.getItemTag()
                                         val neigeItems = itemTag["NeigeItems"]?.asCompound()
                                         neigeItems?.get("owner")?.asString()?.let {
@@ -271,10 +275,14 @@ object Give {
                                             itemTag.saveTo(itemStack)
                                         }
                                     }
+                                    // 物品给予事件
+                                    val event = ItemGiveEvent(id, player, itemStack, 1)
+                                    event.call()
+                                    if (event.isCancelled) return@letItem
                                     NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
-                                        player.giveItem(itemStack)
+                                        player.giveItems(event.itemStack, event.amount)
                                     }
-                                    dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
+                                    dropData[event.itemStack.getName()] = dropData[event.itemStack.getName()]?.let { it + event.amount } ?: event.amount
                                     // 未知物品ID
                                 }
                             }
