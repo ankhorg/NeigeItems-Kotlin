@@ -684,7 +684,7 @@ object ItemUtils {
     /**
      * 判断ItemStack是否为NI物品并返回NI物品信息
      *
-     * @return NI物品信息?
+     * @return NI物品信息, 非NI物品返回null
      */
     @JvmStatic
     fun ItemStack.isNiItem(): ItemInfo? {
@@ -695,7 +695,7 @@ object ItemUtils {
      * 判断ItemStack是否为NI物品并返回NI物品信息
      *
      * @param parseData 是否将data解析为HashMap
-     * @return NI物品信息?
+     * @return NI物品信息, 非NI物品返回null
      */
     @JvmStatic
     fun ItemStack.isNiItem(parseData: Boolean): ItemInfo? {

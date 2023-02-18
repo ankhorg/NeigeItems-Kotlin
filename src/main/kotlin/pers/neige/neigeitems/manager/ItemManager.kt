@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.manager
 
+import com.alibaba.fastjson2.parseObject
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
@@ -8,8 +9,10 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
+import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
+import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.toMap
 import taboolib.module.nms.getItemTag
 import java.io.File
@@ -272,5 +275,24 @@ object ItemManager : ItemConfigManager() {
         if(!file.exists()) { file.createNewFile() }
         val config = YamlConfiguration.loadConfiguration(file)
         return saveItem(itemStack, id, file, config, cover)
+    }
+
+    /**
+     * 判断ItemStack是否为NI物品并返回NI物品信息
+     *
+     * @return NI物品信息, 非NI物品返回null
+     */
+    fun isNiItem(itemStack: ItemStack): ItemInfo? {
+        return itemStack.isNiItem(false)
+    }
+
+    /**
+     * 判断ItemStack是否为NI物品并返回NI物品信息
+     *
+     * @param parseData 是否将data解析为HashMap
+     * @return NI物品信息, 非NI物品返回null
+     */
+    fun isNiItem(itemStack: ItemStack, parseData: Boolean): ItemInfo? {
+        return itemStack.isNiItem(parseData)
     }
 }
