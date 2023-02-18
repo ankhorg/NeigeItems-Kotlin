@@ -71,6 +71,7 @@ object NumberParser : SectionParser() {
         val fixed = fixedString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 0
         // 获取随机数
         if (min != null && max != null) {
+            if (min >= max) return "%.${fixed}f".format(min)
             return "%.${fixed}f".format((ThreadLocalRandom.current().nextDouble(min, max)))
         }
         return null
