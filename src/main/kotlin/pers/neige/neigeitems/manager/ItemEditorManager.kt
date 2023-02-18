@@ -16,7 +16,7 @@ import pers.neige.neigeitems.utils.ItemUtils.castToItemTagData
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
 import pers.neige.neigeitems.utils.ItemUtils.putDeepWithList
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
+import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import pers.neige.neigeitems.utils.function.TriFunction
@@ -456,7 +456,7 @@ object ItemEditorManager {
 
                                 value.replace("\\$(\\d+)".toRegex()) {
                                     groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                                }.parseSection(player)
+                                }.parseItemSection(itemStack.getItemTag(), null, player)
                             } else {
                                 matchResult.value
                             }
@@ -570,7 +570,7 @@ object ItemEditorManager {
 
                             value.replace("\\$(\\d+)".toRegex()) {
                                 groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                            }.parseSection(player)
+                            }.parseItemSection(itemStack.getItemTag(), null, player)
                         }
                     }
 
@@ -995,7 +995,7 @@ object ItemEditorManager {
 
                                     value.replace("\\$(\\d+)".toRegex()) {
                                         groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                                    }.parseSection(player)
+                                    }.parseItemSection(itemStack.getItemTag(), null, player)
                                 } else {
                                     matchResult.value
                                 }
@@ -1178,7 +1178,7 @@ object ItemEditorManager {
 
                                 value.replace("\\$(\\d+)".toRegex()) {
                                     groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                                }.parseSection(player)
+                                }.parseItemSection(itemStack.getItemTag(), null, player)
                             }
                         }
 
@@ -1772,7 +1772,7 @@ object ItemEditorManager {
                 }
                 // (解析其中的即时声明节点)
                 addItemEditor("${id}Section") { player, itemStack, content ->
-                    return@addItemEditor function.apply(player, itemStack, content.parseSection(player))
+                    return@addItemEditor function.apply(player, itemStack, content.parseItemSection(itemStack.getItemTag(), null, player))
                 }
             }
         }
