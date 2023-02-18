@@ -48,11 +48,9 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
     }
 
     override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java, EventPriority.NORMAL, false) {
-        // 获取击杀者
-        val player = it.killer
-        // 判断是否是玩家击杀
-        if (player !is Player) return@registerBukkitListener
         submit(async = true) {
+            // 获取击杀者
+            val player = it.killer
             // 获取MM怪物配置
             val mythicMob = it.mobType
             // 获取MM怪物ID
@@ -106,9 +104,21 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
                     angleType = fancyDrop.getString("angle.type")
                 }
 
+                // 东西都加载好了, 触发一下事件
+                val configLoadedEvent = MythicDropEvent.ConfigLoaded(mythicId, entity, player, drops, dropPackRawIds, offsetXString, offsetYString, angleType)
+                configLoadedEvent.call()
+                if (configLoadedEvent.isCancelled) return@submit
+
+                // 判断是否是玩家击杀, 别问我为什么现在才判断, 这是为了兼容另外一个插件, 所以MythicDropEvent.ConfigLoaded必须先触发一下
+                if (player !is Player) return@submit
+
+                offsetXString = configLoadedEvent.offsetXString
+                offsetYString = configLoadedEvent.offsetYString
+                angleType = configLoadedEvent.angleType
+
                 // 待掉落物品包
                 val dropPacks = ArrayList<ItemPack>()
-                dropPackRawIds?.forEach { id ->
+                configLoadedEvent.dropPacks?.forEach { id ->
                     itemPacks[id.parseSection(player)]?.let { itemPack ->
                         dropPacks.add(itemPack)
                         // 尝试加载多彩掉落
@@ -120,17 +130,12 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
                     }
                 }
 
-                // 东西都加载好了, 触发一下事件
-                val configLoadedEvent = MythicDropEvent.ConfigLoaded(mythicId, entity, player, drops, dropPacks, offsetXString, offsetYString, angleType)
-                configLoadedEvent.call()
-                if (configLoadedEvent.isCancelled) return@submit
-
                 // 预定掉落物列表
                 val dropItems = ArrayList<ItemStack>()
                 // 掉落应该掉落的装备
                 loadEquipmentDrop(entity, dropItems, player)
                 // 加载掉落物品包信息
-                configLoadedEvent.dropPacks.forEach { itemPack ->
+                dropPacks.forEach { itemPack ->
                     // 加载物品掉落信息
                     loadItems(dropItems, itemPack.items, player, HashMap(), itemPack.sections)
                 }
@@ -138,12 +143,12 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
                 configLoadedEvent.drops?.let { loadItems(dropItems, it, player) }
 
                 // 物品都加载好了, 触发一下事件
-                val dropEvent = MythicDropEvent.Drop(mythicId, entity, player, dropItems)
+                val dropEvent = MythicDropEvent.Drop(mythicId, entity, player, dropItems, offsetXString, offsetYString, angleType)
                 dropEvent.call()
                 if (dropEvent.isCancelled) return@submit
 
                 // 掉落物品
-                dropItems(dropEvent.dropItems, entity.location, player, configLoadedEvent.offsetXString, configLoadedEvent.offsetYString, configLoadedEvent.angleType)
+                dropItems(dropEvent.dropItems, entity.location, player, dropEvent.offsetXString, dropEvent.offsetYString, dropEvent.angleType)
             }
         }
     }
