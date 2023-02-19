@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
-import pers.neige.neigeitems.event.ItemGeneratorEvent
+import pers.neige.neigeitems.event.ItemGeneratEvent
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.HookerManager.papi
@@ -290,7 +290,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 }
                 itemTag.saveTo(itemStack)
                 // 触发一下物品生成事件
-                val event = ItemGeneratorEvent(id, player, itemStack, cache, configSection, sections)
+                val event = ItemGeneratEvent(id, player, itemStack, cache, configSection, sections)
                 event.call()
                 return event.itemStack
             } else {
