@@ -16,7 +16,7 @@ import taboolib.platform.type.BukkitProxyEvent
  * @property sections 节点配置(经过了一次papi解析)
  * @constructor 物品生成事件
  */
-class ItemGeneratEvent(
+class ItemGenerateEvent(
     val id: String,
     val player: OfflinePlayer?,
     var itemStack: ItemStack,
