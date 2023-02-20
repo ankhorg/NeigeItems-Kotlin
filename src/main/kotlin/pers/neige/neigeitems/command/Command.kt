@@ -73,6 +73,10 @@ object Command {
     val editslot = Editor.editslot
 
     @CommandBody
+    // ni itemNBT > 查看当前手中物品的NBT
+    val itemNBT = ItemNBT.itemNBT
+
+    @CommandBody
     // ni get [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID获取NI物品
     val get = Give.get
 

@@ -57,6 +57,9 @@ Help:
     editslot:
       command: §e/ni §feditslot [玩家ID] [物品编辑函数ID] [函数内容]
       description: 通过对应编辑函数编辑对应槽位物品
+    itemNBT:
+      command: §e/ni §fitemNBT
+      description: 查看当前手中物品的NBT
     list:
       command: §e/ni §flist (页码)
       description: 查看所有NI物品
