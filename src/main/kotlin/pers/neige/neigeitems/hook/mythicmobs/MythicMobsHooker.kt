@@ -198,7 +198,7 @@ abstract class MythicMobsHooker {
     }
 
     internal fun deathEvent(
-        killer: LivingEntity,
+        killer: LivingEntity?,
         entity: LivingEntity,
         internalName: String
     ) {
