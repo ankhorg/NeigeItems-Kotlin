@@ -3,7 +3,6 @@ package pers.neige.neigeitems.event
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.item.ItemPack
 import taboolib.platform.type.BukkitProxyEvent
 
 /**

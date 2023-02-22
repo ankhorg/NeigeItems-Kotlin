@@ -2,13 +2,19 @@ package pers.neige.neigeitems.hook.mythicmobs
 
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.event.MythicDropEvent
 import pers.neige.neigeitems.event.MythicEquipEvent
+import pers.neige.neigeitems.item.ItemPack
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.manager.ItemPackManager
+import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.ProxyListener
 import taboolib.module.nms.ItemTag
@@ -21,6 +27,11 @@ import java.util.*
  */
 abstract class MythicMobsHooker {
     /**
+     * MM怪物信息
+     */
+    abstract val mobInfos: HashMap<String, ConfigurationSection>
+
+    /**
      * MM怪物生成事件监听器, 监听器优先级HIGH, 得以覆盖MM自身的装备操作
      */
     abstract val spawnListener: ProxyListener
@@ -29,6 +40,11 @@ abstract class MythicMobsHooker {
      * MM怪物死亡事件监听器, 监听器优先级NORMAL
      */
     abstract val deathListener: ProxyListener
+
+    /**
+     * MM重载事件监听器, 监听器优先级NORMAL
+     */
+    abstract val reloadListener: ProxyListener
 
     /**
      * 获取MM物品, 不存在对应ID的MM物品则返回null
@@ -65,17 +81,20 @@ abstract class MythicMobsHooker {
     /**
      * 为MM怪物穿戴装备
      *
-     * @param equipment 装备信息
-     * @param dropEquipment 掉落装备概率
      * @param entity 怪物实体
      * @param internalName 怪物ID
      */
-    fun loadEquipment(
-        equipment: List<String>,
-        dropEquipment: List<String>,
-        entity: LivingEntity,
-        internalName: String
+    internal fun spawnEvent(
+        internalName: String,
+        entity: LivingEntity
     ) {
+        // 获取MM怪物的ConfigurationSection
+        val config = mobInfos[internalName]!!
+        // 装备信息
+        val equipment = config.getStringList("NeigeItems.Equipment")
+        // 掉落装备概率
+        val dropEquipment = config.getStringList("NeigeItems.DropEquipment")
+
         val entityEquipment = entity.equipment
         val dropChance = HashMap<String, Double>()
 
@@ -178,6 +197,77 @@ abstract class MythicMobsHooker {
         }
     }
 
+    internal fun deathEvent(
+        killer: LivingEntity,
+        entity: LivingEntity,
+        internalName: String
+    ) {
+        // 获取MM怪物的ConfigurationSection
+        val configSection = mobInfos[internalName]!!
+
+        // 如果怪物配置了NeigeItems相关信息
+        if (configSection.contains("NeigeItems")) {
+            val drops = configSection.getStringList("NeigeItems.Drops")
+            val dropPackRawIds = configSection.getStringList("NeigeItems.DropPacks")
+            var offsetXString = configSection.getString("NeigeItems.FancyDrop.offset.x")
+            var offsetYString = configSection.getString("NeigeItems.FancyDrop.offset.y")
+            var angleType = configSection.getString("NeigeItems.FancyDrop.angle.type")
+
+            // 东西都加载好了, 触发一下事件
+            val configLoadedEvent = MythicDropEvent.ConfigLoaded(internalName, entity, killer, drops, dropPackRawIds, offsetXString, offsetYString, angleType)
+            configLoadedEvent.call()
+            if (configLoadedEvent.isCancelled) return
+
+            // 判断是否是玩家击杀, 别问我为什么现在才判断, 这是为了兼容另外一个插件, 所以MythicDropEvent.ConfigLoaded必须先触发一下
+            if (killer !is Player) return
+
+            offsetXString = configLoadedEvent.offsetXString
+            offsetYString = configLoadedEvent.offsetYString
+            angleType = configLoadedEvent.angleType
+
+            // 待掉落物品包
+            val dropPacks = ArrayList<ItemPack>()
+            configLoadedEvent.dropPacks?.forEach { id ->
+                ItemPackManager.itemPacks[id.parseSection(killer)]?.let { itemPack ->
+                    dropPacks.add(itemPack)
+                    // 尝试加载多彩掉落
+                    if (itemPack.fancyDrop) {
+                        offsetXString = itemPack.offsetXString
+                        offsetYString = itemPack.offsetYString
+                        angleType = itemPack.angleType
+                    }
+                }
+            }
+
+            // 预定掉落物列表
+            val dropItems = ArrayList<ItemStack>()
+            // 掉落应该掉落的装备
+            loadEquipmentDrop(entity, dropItems, killer)
+            // 加载掉落物品包信息
+            dropPacks.forEach { itemPack ->
+                // 加载物品掉落信息
+                ItemUtils.loadItems(dropItems, itemPack.items, killer, HashMap(), itemPack.sections)
+            }
+            // 加载掉落信息
+            configLoadedEvent.drops?.let { ItemUtils.loadItems(dropItems, it, killer) }
+
+            // 物品都加载好了, 触发一下事件
+            val dropEvent = MythicDropEvent.Drop(internalName, entity, killer, dropItems, offsetXString, offsetYString, angleType)
+            dropEvent.call()
+            if (dropEvent.isCancelled) return
+
+            // 掉落物品
+            ItemUtils.dropItems(
+                dropEvent.dropItems,
+                entity.location,
+                killer,
+                dropEvent.offsetXString,
+                dropEvent.offsetYString,
+                dropEvent.angleType
+            )
+        }
+    }
+
     /**
      * 根据掉落信息加载掉落物品
      *
@@ -185,7 +275,7 @@ abstract class MythicMobsHooker {
      * @param dropItems 用于存储待掉落物品
      * @param player 用于解析物品的玩家
      */
-    fun loadEquipmentDrop(
+    private fun loadEquipmentDrop(
         entity: LivingEntity,
         dropItems: ArrayList<ItemStack>,
         player: LivingEntity?
@@ -211,7 +301,7 @@ abstract class MythicMobsHooker {
      * @param dropItems 用于存储待掉落物品
      * @param player 用于解析物品的玩家
      */
-    fun loadEquipmentDrop(
+    private fun loadEquipmentDrop(
         equipments: ArrayList<ItemStack>,
         dropItems: ArrayList<ItemStack>,
         player: LivingEntity?

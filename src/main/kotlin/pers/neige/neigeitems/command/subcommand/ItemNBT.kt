@@ -1,13 +1,16 @@
 package pers.neige.neigeitems.command.subcommand
 
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.command.Command
-import pers.neige.neigeitems.utils.ItemUtils.toMap
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.chat.TellrawJson
-import taboolib.module.nms.*
+import taboolib.module.nms.ItemTag
+import taboolib.module.nms.ItemTagData
+import taboolib.module.nms.ItemTagType
+import taboolib.module.nms.getItemTag
 
 object ItemNBT {
     val itemNBT = subCommand {
@@ -23,7 +26,9 @@ object ItemNBT {
     }
 
     private fun itemnbtCommand (itemStack: ItemStack, sender: Player) {
-        itemStack.getItemTag().format().sendTo(Command.bukkitAdapter.adaptCommandSender(sender))
+        if (itemStack.type != Material.AIR) {
+            itemStack.getItemTag().format().sendTo(Command.bukkitAdapter.adaptCommandSender(sender))
+        }
     }
 
     val INDENT = "  "
