@@ -36,7 +36,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
 
     private val apiHelper = MythicBukkit.inst().apiHelper
 
-    override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.HIGH, false) {
+    override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.HIGH) {
         submit(async = true) {
             spawnEvent(
                 it.mobType.internalName,
@@ -45,7 +45,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
         }
     }
 
-    override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java, EventPriority.NORMAL, false) {
+    override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java) {
         submit(async = true) {
             deathEvent(
                 it.killer,
@@ -55,7 +55,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
         }
     }
 
-    override val reloadListener = registerBukkitListener(MythicReloadedEvent::class.java, EventPriority.NORMAL, false) {
+    override val reloadListener = registerBukkitListener(MythicReloadedEvent::class.java) {
         loadMobInfos()
     }
 

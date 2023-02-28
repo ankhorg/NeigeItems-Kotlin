@@ -56,7 +56,6 @@ repositories {
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     maven { url = uri("https://repo.dmulloy2.net/repository/public/") }
     maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
-    maven { url = uri("https://mvn.lumine.io/repository/maven-public") }
     maven { url = uri("https://jitpack.io") }
     // taboo的仓库有时候github自动构建连不上, 丢到最后防止自动构建发生意外
     maven { url = uri("https://repo.tabooproject.org/storages/public/releases") }
@@ -72,18 +71,19 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
-    compileOnly("io.lumine:Mythic-Dist:5.1.0")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     if (project.version.toString().contains("-lib")) {
         taboo(kotlin("stdlib"))
         taboo("org.openjdk.nashorn:nashorn-core:15.4")
         taboo("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
         taboo("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
+        taboo("com.google.guava:guava:31.1-jre")
     } else {
         compileOnly(kotlin("stdlib"))
         compileOnly("org.openjdk.nashorn:nashorn-core:15.4")
         compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
         compileOnly("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
+        compileOnly("com.google.guava:guava:31.1-jre")
     }
 }
 

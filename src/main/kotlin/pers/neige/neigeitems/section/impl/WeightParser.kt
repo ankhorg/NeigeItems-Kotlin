@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.math.BigDecimal
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * 权重节点解析器
@@ -86,7 +87,7 @@ object WeightParser : SectionParser() {
         return when {
             info.isEmpty() -> null
             else -> {
-                val random = BigDecimal(Math.random().toString()).multiply(total)
+                val random = BigDecimal(ThreadLocalRandom.current().nextDouble().toString()).multiply(total)
                 var current = BigDecimal(0)
                 var result: String? = null
                 for ((key, value) in info) {

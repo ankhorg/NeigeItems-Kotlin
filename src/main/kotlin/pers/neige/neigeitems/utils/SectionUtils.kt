@@ -177,6 +177,7 @@ object SectionUtils {
      * 对文本进行物品节点解析
      *
      * @param itemTag 物品NBT
+     * @param data NeigeItems.data 代表NI物品节点数据
      * @param player 用于解析物品的玩家
      * @return 解析值
      */
@@ -193,6 +194,7 @@ object SectionUtils {
      * 对文本进行物品节点解析
      *
      * @param itemTag 物品NBT
+     * @param data NeigeItems.data 代表NI物品节点数据
      * @param player 用于解析物品的玩家
      * @param cache 解析值缓存
      * @param sections 节点池
@@ -215,6 +217,7 @@ object SectionUtils {
      * 对物品节点内容进行解析 (已经去掉 <>)
      *
      * @param itemTag 物品NBT
+     * @param data NeigeItems.data 代表NI物品节点数据
      * @param player 用于解析物品的玩家
      * @param cache 解析值缓存
      * @param sections 节点池

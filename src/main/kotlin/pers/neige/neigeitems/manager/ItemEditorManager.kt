@@ -1611,6 +1611,7 @@ object ItemEditorManager {
                         newItemTag.saveTo(itemStack)
                     }
                     itemStack.type = newItemStack.type
+                    itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
             }
@@ -1650,6 +1651,7 @@ object ItemEditorManager {
                         newItemTag.saveTo(itemStack)
                     }
                     itemStack.type = newItemStack.type
+                    itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
             }
@@ -1693,6 +1695,7 @@ object ItemEditorManager {
                         newItemTag.saveTo(itemStack)
                     }
                     itemStack.type = newItemStack.type
+                    itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
             }
@@ -1741,6 +1744,7 @@ object ItemEditorManager {
                         newItemTag.saveTo(itemStack)
                     }
                     itemStack.type = newItemStack.type
+                    itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
             }

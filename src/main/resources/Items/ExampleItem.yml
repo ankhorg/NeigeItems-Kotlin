@@ -435,6 +435,33 @@ JoinTest7:
       separator: "\\n"
       prefix: '"'
       postfix: '"'
+# 等概率不重复词条
+JoinTest8:
+  material: STONE
+  lore:
+    # 等同于随机出现三行不重复词条
+    - '<test>'
+  sections:
+    test:
+      type: join
+      list:
+        - '攻击力: 100'
+        - '攻击百分比: 10%'
+        - '防御力: 100'
+        - '防御百分比: 10%'
+        - '生命值: 100'
+        - '生命百分比: 10%'
+        - '暴击率: 10%'
+        - '暴击伤害: 10%'
+      # 限制最多出3条
+      limit: 3
+      # 是否打乱顺序
+      shuffled: true
+      # 像下面这样写分隔符、前缀和后缀
+      # 即可达到调用多行lore的效果
+      separator: "\\n"
+      prefix: '"'
+      postfix: '"'
 GaussianTest:
   material: STONE
   lore:

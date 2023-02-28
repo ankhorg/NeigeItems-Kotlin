@@ -19,6 +19,7 @@ import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import taboolib.module.nms.*
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -779,17 +780,16 @@ object ItemUtils {
             // 先解析, 解析完根据换行符分割, 分割完遍历随机
             val infos = rawInfo.parseSection(cache, player, sections).split("\n")
             for (info in infos) {
-                val args = info.split(" ")
+                // [物品ID] (数量(或随机最小数量-随机最大数量)) (生成概率) (是否反复随机) (指向数据)
+                val args = info.split(" ", limit = 5)
 
-                val data: String? = when {
-                    args.size > 4 -> args.subList(4, args.size).joinToString(" ")
-                    else -> null
-                }
+                // 获取指向数据
+                val data: String? = args.getOrNull(4)
 
                 // 获取概率并进行概率随机
                 if (args.size > 2) {
                     val probability = args[2].toDoubleOrNull()
-                    if (probability != null && Math.random() > probability) continue
+                    if (probability != null && ThreadLocalRandom.current().nextDouble() > probability) continue
                 }
                 // 如果NI和MM都不存在对应物品就跳过去
                 if (!ItemManager.hasItem(args[0])
@@ -804,7 +804,7 @@ object ItemUtils {
                         val min = args[1].substring(0, index).toIntOrNull()
                         val max = args[1].substring(index+1, args[1].length).toIntOrNull()
                         if (min != null && max != null) {
-                            amount = min + (Math.random() * (max - min)).roundToInt()
+                            amount = ThreadLocalRandom.current().nextInt(min, max+1)
                         }
                     } else {
                         args[1].toIntOrNull()?.let {
@@ -882,7 +882,7 @@ object ItemUtils {
                 val min = offsetXString.substring(0, index).toDoubleOrNull()
                 val max = offsetXString.substring(index+1).toDoubleOrNull()
                 when {
-                    min != null && max != null -> min + Math.random()*(max-min)
+                    min != null && max != null -> ThreadLocalRandom.current().nextDouble(min, max)
                     else -> 0.1
                 }
             } else {
@@ -894,7 +894,7 @@ object ItemUtils {
                 val min = offsetYString.substring(0, index).toDoubleOrNull()
                 val max = offsetYString.substring(index+1).toDoubleOrNull()
                 when {
-                    min != null && max != null -> min + Math.random()*(max-min)
+                    min != null && max != null -> ThreadLocalRandom.current().nextDouble(min, max)
                     else -> 0.1
                 }
             } else {
@@ -906,8 +906,8 @@ object ItemUtils {
                 location.dropNiItem(itemStack, entity, itemTag)?.let { item ->
                     val vector = Vector(offsetX, offsetY, 0.0)
                     if (angleType == "random") {
-                        val angleCos = cos(Math.PI * 2 * Math.random())
-                        val angleSin = sin(Math.PI * 2 * Math.random())
+                        val angleCos = cos(Math.PI * 2 * ThreadLocalRandom.current().nextDouble())
+                        val angleSin = sin(Math.PI * 2 * ThreadLocalRandom.current().nextDouble())
                         val x = angleCos * vector.x + angleSin * vector.z
                         val z = -angleSin * vector.x + angleCos * vector.z
                         vector.setX(x).z = z

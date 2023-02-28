@@ -102,6 +102,7 @@ CustomAction:
       - test
 ComboTest:
   left:
+    cooldown: 10
     sync:
       # 在ComboTest组记录, 触发了类型为left的连击
       - "combo: ComboTest left"
@@ -119,6 +120,7 @@ ComboTest:
             # 进行对应操作
             - 'tell: &e连击 &bL'
   right:
+    cooldown: 10
     sync:
       # 在ComboTest组记录, 触发了类型为right的连击
       - "combo: ComboTest right"

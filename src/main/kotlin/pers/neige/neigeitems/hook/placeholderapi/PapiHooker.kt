@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.hook.placeholderapi
 
 import org.bukkit.OfflinePlayer
+import java.util.function.BiFunction
 
 /**
  * PlaceholderAPI挂钩
@@ -29,4 +30,22 @@ abstract class PapiHooker {
      * @return 解析后文本
      */
     abstract fun request(player: OfflinePlayer, identifier: String, parameters: String): String
+
+    /**
+     * 新建一个papi扩展
+     *
+     * @param identifier papi扩展名
+     * @param author 扩展作者
+     * @param version 扩展版本
+     * @param executor 变量处理器
+     * @return papi扩展
+     */
+    fun newPlaceholderExpansion(
+        identifier: String,
+        author: String,
+        version: String,
+        executor: BiFunction<OfflinePlayer, String, String>
+    ): PlaceholderExpansion {
+        return PlaceholderExpansion(identifier, author, version, executor)
+    }
 }

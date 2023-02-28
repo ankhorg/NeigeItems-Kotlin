@@ -34,7 +34,8 @@ object JoinParser : SectionParser() {
             data.getString("postfix"),
             data.getString("limit"),
             data.getString("truncated"),
-            data.getString("transform")
+            data.getString("transform"),
+            data.getString("shuffled")
         )
     }
 
@@ -62,6 +63,7 @@ object JoinParser : SectionParser() {
         rawLimit: String?,
         rawTruncated: String?,
         rawTransform: String?,
+        rawShuffled: String?
     ): String? {
         // 如果待操作列表存在, 进行后续操作
         list?.let {
@@ -98,6 +100,14 @@ object JoinParser : SectionParser() {
             // 获取遍历范围
             val length = limit ?: list.size
 
+            // 获取是否乱序
+            val shuffled = rawShuffled?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false
+            val realList = if (shuffled) {
+                list.shuffled()
+            } else {
+                list
+            }
+
             // 预定义参数map
             val map = HashMap<String, Any>()
             // 预添加参数
@@ -107,7 +117,7 @@ object JoinParser : SectionParser() {
                     map["player"] = player
                 }
                 // 待操作列表
-                map["list"] = list
+                map["list"] = realList
                 // 节点解析函数
                 map["vars"] = java.util.function.Function<String, String> { string -> string.parseSection(cache, player, sections) }
             }
@@ -115,7 +125,7 @@ object JoinParser : SectionParser() {
             // 遍历列表
             for (index in 0 until length) {
                 // 解析元素节点
-                var element = list[index].parseSection(cache, player, sections)
+                var element = realList[index].parseSection(cache, player, sections)
                 // 操作元素
                 transform?.let {
                     // 待操作元素

@@ -13,7 +13,9 @@ import taboolib.module.metrics.charts.SingleLineChart
 import java.io.File
 import java.io.InputStreamReader
 
-// 配置文件管理器, 用于管理config.yml文件, 对其中缺少的配置项进行主动补全, 同时释放默认配置文件
+/**
+ * 配置文件管理器, 用于管理config.yml文件, 对其中缺少的配置项进行主动补全, 同时释放默认配置文件
+ */
 object ConfigManager {
     /**
      * 获取默认Config
@@ -38,6 +40,7 @@ object ConfigManager {
         plugin.saveResourceNotWarn("CustomItemEditors${File.separator}CustomItemEditor.js")
         plugin.saveResourceNotWarn("CustomSections${File.separator}CustomSection.js")
         plugin.saveResourceNotWarn("CustomSections${File.separator}DefaultSection.js")
+        plugin.saveResourceNotWarn("Expansions${File.separator}ExampleExpansion.js")
         plugin.saveResourceNotWarn("GlobalSections${File.separator}ExampleSection.yml")
         plugin.saveResourceNotWarn("ItemActions${File.separator}ExampleAction.yml")
         plugin.saveResourceNotWarn("ItemPacks${File.separator}ExampleItemPack.yml")

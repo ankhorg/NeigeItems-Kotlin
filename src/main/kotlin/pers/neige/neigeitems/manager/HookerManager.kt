@@ -29,6 +29,9 @@ import taboolib.common.platform.Awake
 import java.util.*
 import java.util.function.BiFunction
 
+/**
+ * 插件兼容管理器, 用于尝试与各个软依赖插件取得联系
+ */
 object HookerManager {
     val nashornHooker: NashornHooker =
         try {

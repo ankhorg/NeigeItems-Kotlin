@@ -26,6 +26,7 @@ object Reload {
             ItemPackManager.reload()
             ActionManager.reload()
             ItemEditorManager.reload()
+            ExpansionManager.reload()
             // 重载完毕
             PluginReloadEvent.Post().call()
             sender.sendLang("Messages.reloadedMessage")

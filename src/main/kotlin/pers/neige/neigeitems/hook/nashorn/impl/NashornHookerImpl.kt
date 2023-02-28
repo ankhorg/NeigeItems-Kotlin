@@ -48,4 +48,11 @@ class NashornHookerImpl : NashornHooker() {
         map?.forEach { (key, value) -> newObject[key] = value }
         return newObject.callMember(function, *args)
     }
+
+    override fun isFunction(engine: ScriptEngine, func: Any?): Boolean {
+        if (func is ScriptObjectMirror && func.isFunction) {
+            return true
+        }
+        return false
+    }
 }

@@ -80,4 +80,24 @@ abstract class NashornHooker {
      * @return 返回值
      */
     abstract fun invoke(compiledScript: pers.neige.neigeitems.script.CompiledScript, function: String, map: Map<String, Any>?, vararg args: Any): Any?
+
+    /**
+     * 检测引擎中是否包含对应函数
+     *
+     * @param engine 函数所在引擎
+     * @param func 待检测函数
+     * @return 是否包含对应函数
+     */
+    abstract fun isFunction(engine: ScriptEngine, func: Any?): Boolean
+
+    /**
+     * 检测引擎中是否包含对应函数
+     *
+     * @param engine 函数所在引擎
+     * @param func 函数名
+     * @return 是否包含对应函数
+     */
+    fun isFunction(engine: ScriptEngine, func: String): Boolean {
+        return isFunction(engine, engine.get(func))
+    }
 }

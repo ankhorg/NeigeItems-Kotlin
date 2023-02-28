@@ -608,7 +608,8 @@ object ActionManager {
         for (file in ConfigUtils.getAllFiles("CustomActions")) {
             // 防止某个脚本出错导致加载中断
             try {
-                pers.neige.neigeitems.script.CompiledScript(file).invoke("main", null)
+                val script = pers.neige.neigeitems.script.CompiledScript(file)
+                script.invoke("main", null)
             } catch (_: Throwable) {}
         }
     }
@@ -793,7 +794,7 @@ object ActionManager {
         }
         // 连击记录
         addAction("combo") { player, string ->
-            val info = string.splitOnce(" ")
+            val info = papi(player, string).splitOnce(" ")
             // 连击组
             val comboGroup = info[0]
             // 连击类型
@@ -820,7 +821,7 @@ object ActionManager {
         }
         // 连击清空
         addAction("comboClear") { player, string ->
-            player.setMetadataEZ("NI-Combo-$string", ArrayList<ComboInfo>())
+            player.setMetadataEZ("NI-Combo-${papi(player, string)}", ArrayList<ComboInfo>())
             true
         }
         // 延迟(单位是tick)

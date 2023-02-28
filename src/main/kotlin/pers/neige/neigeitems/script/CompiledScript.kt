@@ -7,7 +7,7 @@ import java.io.FileInputStream
 import java.io.InputStreamReader
 import javax.script.ScriptEngine
 
-class CompiledScript {
+open class CompiledScript {
     /**
      * 获取已编译脚本
      */
@@ -23,10 +23,11 @@ class CompiledScript {
      *
      * @property file js脚本文件
      * @constructor 编译js脚本并进行包装
-     * */
-    constructor(file: File){
-        compiledScript = nashornHooker.compile(InputStreamReader(FileInputStream(file), FileUtils.charset(file)))
-        scriptEngine = compiledScript.engine
+     */
+    constructor(file: File) {
+        scriptEngine = nashornHooker.getNashornEngine()
+        loadLib()
+        compiledScript = nashornHooker.compile(scriptEngine, InputStreamReader(FileInputStream(file), FileUtils.charset(file)))
         magicFunction()
     }
 
@@ -35,12 +36,15 @@ class CompiledScript {
      *
      * @property script js脚本文本
      * @constructor 编译js脚本并进行包装
-     * */
-    constructor(script: String){
-        compiledScript = nashornHooker.compile(script)
-        scriptEngine = compiledScript.engine
+     */
+    constructor(script: String) {
+        scriptEngine = nashornHooker.getNashornEngine()
+        loadLib()
+        compiledScript = nashornHooker.compile(scriptEngine, script)
         magicFunction()
     }
+
+    open fun loadLib() {}
 
     /**
      * 执行脚本中的指定函数

@@ -21,6 +21,7 @@ import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import java.util.*
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * MM挂钩
@@ -118,14 +119,14 @@ abstract class MythicMobsHooker {
                 val index = string.indexOf(": ")
                 val slot = string.substring(0, index).lowercase(Locale.getDefault())
                 val info = string.substring(index+2)
-                val args = info.split(" ")
+                // [物品ID] (生成概率) (指向数据)
+                val args = info.split(" ", limit = 3)
 
-                var data: String? = null
-                if (args.size > 2) data = args.drop(2).joinToString(" ")
+                val data: String? = args.getOrNull(2)
 
                 if (args.size > 1) {
                     val probability = args[1].toDoubleOrNull()
-                    if (probability != null && Math.random() > probability) continue
+                    if (probability != null && ThreadLocalRandom.current().nextDouble() > probability) continue
                 }
 
                 try {
@@ -313,7 +314,7 @@ abstract class MythicMobsHooker {
 
                 itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
                     neigeItems["dropChance"]?.asDouble()?.let {
-                        if (Math.random() <= it) {
+                        if (ThreadLocalRandom.current().nextDouble() <= it) {
                             val id = neigeItems["id"]?.asString()
                             // 处理NI物品(根据玩家信息重新生成)
                             if (id != null) {
