@@ -32,6 +32,13 @@ abstract class PapiHooker {
     abstract fun request(player: OfflinePlayer, identifier: String, parameters: String): String
 
     /**
+     * 卸载papi扩展
+     *
+     * @param expansion papi扩展
+     */
+    abstract fun unregisterExpansion(expansion: PlaceholderExpansion)
+
+    /**
      * 新建一个papi扩展
      *
      * @param identifier papi扩展名

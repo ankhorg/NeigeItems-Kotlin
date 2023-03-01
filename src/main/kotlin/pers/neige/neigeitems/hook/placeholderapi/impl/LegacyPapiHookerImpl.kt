@@ -3,6 +3,7 @@ package pers.neige.neigeitems.hook.placeholderapi.impl
 import me.clip.placeholderapi.PlaceholderAPI
 import org.bukkit.OfflinePlayer
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker
+import pers.neige.neigeitems.hook.placeholderapi.PlaceholderExpansion
 import java.util.*
 
 /**
@@ -125,5 +126,9 @@ class LegacyPapiHookerImpl : PapiHooker() {
             }
         }
         return "%${identifier}_$parameters%"
+    }
+
+    override fun unregisterExpansion(expansion: PlaceholderExpansion) {
+        PlaceholderAPI.unregisterPlaceholderHook(expansion.expansion.identifier)
     }
 }
