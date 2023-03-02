@@ -1,5 +1,5 @@
 /**
- * 服务器开启后同步执行 及 ni reload后异步执行
+ * 服务器开启后 及 ni reload后异步执行
  */
 function enable() {
     // 调用指令注册
@@ -11,19 +11,19 @@ function enable() {
 }
 
 /**
- * 服务器关闭前同步执行 及 ni reload前异步执行
+ * 服务器关闭前 及 ni reload前异步执行
  */
 function disable() {
 }
 
 /**
- * 服务器开启后同步执行
+ * 服务器开启后异步执行
  */
 function serverEnable() {
 }
 
 /**
- * 服务器关闭前同步执行
+ * 服务器关闭前异步执行
  */
 function serverDisable() {
 }
