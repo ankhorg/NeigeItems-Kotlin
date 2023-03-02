@@ -12,6 +12,7 @@ import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
 import taboolib.common.platform.Awake
 import taboolib.common.platform.event.SubscribeEvent
+import taboolib.common.platform.function.submit
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -103,19 +104,21 @@ object ExpansionManager {
 
     @Awake(LifeCycle.ACTIVE)
     fun serverEnable() {
-        expansions.values.forEach { scriptExpansion ->
-            if (scriptExpansion.enable) {
-                try {
-                    scriptExpansion.invoke("enable", null)
-                } catch (error: Throwable) {
-                    error.printStackTrace()
+        submit(async = true) {
+            expansions.values.forEach { scriptExpansion ->
+                if (scriptExpansion.enable) {
+                    try {
+                        scriptExpansion.invoke("enable", null)
+                    } catch (error: Throwable) {
+                        error.printStackTrace()
+                    }
                 }
-            }
-            if (scriptExpansion.serverEnable) {
-                try {
-                    scriptExpansion.invoke("serverEnable", null)
-                } catch (error: Throwable) {
-                    error.printStackTrace()
+                if (scriptExpansion.serverEnable) {
+                    try {
+                        scriptExpansion.invoke("serverEnable", null)
+                    } catch (error: Throwable) {
+                        error.printStackTrace()
+                    }
                 }
             }
         }
@@ -136,19 +139,21 @@ object ExpansionManager {
 
     @Awake(LifeCycle.DISABLE)
     fun serverDisable() {
-        expansions.values.forEach { scriptExpansion ->
-            if (scriptExpansion.disable) {
-                try {
-                    scriptExpansion.invoke("disable", null)
-                } catch (error: Throwable) {
-                    error.printStackTrace()
+        submit(async = true) {
+            expansions.values.forEach { scriptExpansion ->
+                if (scriptExpansion.disable) {
+                    try {
+                        scriptExpansion.invoke("disable", null)
+                    } catch (error: Throwable) {
+                        error.printStackTrace()
+                    }
                 }
-            }
-            if (scriptExpansion.serverDisable) {
-                try {
-                    scriptExpansion.invoke("serverDisable", null)
-                } catch (error: Throwable) {
-                    error.printStackTrace()
+                if (scriptExpansion.serverDisable) {
+                    try {
+                        scriptExpansion.invoke("serverDisable", null)
+                    } catch (error: Throwable) {
+                        error.printStackTrace()
+                    }
                 }
             }
         }

@@ -83,8 +83,12 @@ function commandExample() {
                 return ["测试补全"]
             }
         )
-        // 注册指令
-        .register()
+        /**
+         * 注册指令
+         * 为了防止默认配置给你带来困扰, 我默认不进行注册
+         * 你想实验的话删掉前面的"// "就好, 那是注释符号
+         */
+        // .register()
 }
 
 /**
@@ -162,6 +166,10 @@ function placeholderExample() {
                 return player.name
             }
         )
-        // 注册PAPI变量
-        .register()
+        /**
+         * 注册PAPI变量
+         * 为了防止默认配置给你带来困扰, 我默认不进行注册
+         * 你想实验的话删掉前面的"// "就好, 那是注释符号
+         */
+        // .register()
 }
