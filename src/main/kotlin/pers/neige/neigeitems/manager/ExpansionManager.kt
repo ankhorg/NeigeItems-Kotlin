@@ -139,21 +139,19 @@ object ExpansionManager {
 
     @Awake(LifeCycle.DISABLE)
     fun serverDisable() {
-        submit(async = true) {
-            expansions.values.forEach { scriptExpansion ->
-                if (scriptExpansion.disable) {
-                    try {
-                        scriptExpansion.invoke("disable", null)
-                    } catch (error: Throwable) {
-                        error.printStackTrace()
-                    }
+        expansions.values.forEach { scriptExpansion ->
+            if (scriptExpansion.disable) {
+                try {
+                    scriptExpansion.invoke("disable", null)
+                } catch (error: Throwable) {
+                    error.printStackTrace()
                 }
-                if (scriptExpansion.serverDisable) {
-                    try {
-                        scriptExpansion.invoke("serverDisable", null)
-                    } catch (error: Throwable) {
-                        error.printStackTrace()
-                    }
+            }
+            if (scriptExpansion.serverDisable) {
+                try {
+                    scriptExpansion.invoke("serverDisable", null)
+                } catch (error: Throwable) {
+                    error.printStackTrace()
                 }
             }
         }

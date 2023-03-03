@@ -11,7 +11,7 @@ function enable() {
 }
 
 /**
- * 服务器关闭前 及 ni reload前异步执行
+ * 服务器关闭前同步执行 及 ni reload前异步执行
  */
 function disable() {
 }
@@ -23,7 +23,7 @@ function serverEnable() {
 }
 
 /**
- * 服务器关闭前异步执行
+ * 服务器关闭前同步执行
  */
 function serverDisable() {
 }
