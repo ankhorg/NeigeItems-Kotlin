@@ -797,78 +797,94 @@ object ItemUtils {
             // 先解析, 解析完根据换行符分割, 分割完遍历随机
             val infos = rawInfo.parseSection(cache, player, sections).split("\n")
             for (info in infos) {
-                // [物品ID] (数量(或随机最小数量-随机最大数量)) (生成概率) (是否反复随机) (指向数据)
-                val args = info.split(" ", limit = 5)
+                loadItems(items, info, player)
+            }
+        }
+    }
 
-                // 获取指向数据
-                val data: String? = args.getOrNull(4)
+    /**
+     * 根据信息加载物品
+     *
+     * @param items 用于存储待生成物品
+     * @param info 物品信息
+     * @param player 用于解析物品的玩家
+     */
+    @JvmStatic
+    fun loadItems(
+        items: ArrayList<ItemStack>,
+        info: String,
+        player: Player? = null
+    ) {
+        // [物品ID] (数量(或随机最小数量-随机最大数量)) (生成概率) (是否反复随机) (指向数据)
+        val args = info.split(" ", limit = 5)
 
-                // 获取概率并进行概率随机
-                if (args.size > 2) {
-                    val probability = args[2].toDoubleOrNull()
-                    if (probability != null && ThreadLocalRandom.current().nextDouble() > probability) continue
+        // 获取指向数据
+        val data: String? = args.getOrNull(4)
+
+        // 获取概率并进行概率随机
+        if (args.size > 2) {
+            val probability = args[2].toDoubleOrNull()
+            if (probability != null && ThreadLocalRandom.current().nextDouble() > probability) return
+        }
+        // 如果NI和MM都不存在对应物品就跳过去
+        if (!ItemManager.hasItem(args[0])
+            && mythicMobsHooker?.getItemStackSync(args[0]) == null
+            && easyItemHooker?.hasItem(args[0]) != true) return
+
+        // 获取掉落数量
+        var amount = 1
+        if (args.size > 1) {
+            if (args[1].contains("-")) {
+                val index = args[1].indexOf("-")
+                val min = args[1].substring(0, index).toIntOrNull()
+                val max = args[1].substring(index+1, args[1].length).toIntOrNull()
+                if (min != null && max != null) {
+                    amount = ThreadLocalRandom.current().nextInt(min, max+1)
                 }
-                // 如果NI和MM都不存在对应物品就跳过去
-                if (!ItemManager.hasItem(args[0])
-                    && mythicMobsHooker?.getItemStackSync(args[0]) == null
-                    && easyItemHooker?.hasItem(args[0]) != true) continue
-
-                // 获取掉落数量
-                var amount = 1
-                if (args.size > 1) {
-                    if (args[1].contains("-")) {
-                        val index = args[1].indexOf("-")
-                        val min = args[1].substring(0, index).toIntOrNull()
-                        val max = args[1].substring(index+1, args[1].length).toIntOrNull()
-                        if (min != null && max != null) {
-                            amount = ThreadLocalRandom.current().nextInt(min, max+1)
-                        }
-                    } else {
-                        args[1].toIntOrNull()?.let {
-                            amount = it
+            } else {
+                args[1].toIntOrNull()?.let {
+                    amount = it
+                }
+            }
+        }
+        // 看看需不需要每次都随机生成
+        if (args.size > 3 && args[3] == "false") {
+            // 真只随机一次啊?那嗯怼吧
+            when {
+                ItemManager.hasItem(args[0]) -> {
+                    ItemManager.getItemStack(args[0], player, data)?.getItems(amount)?.forEach { items.add(it) }
+                }
+                easyItemHooker?.hasItem(args[0]) == true -> {
+                    easyItemHooker?.getItemStack(args[0])?.let { itemStack ->
+                        repeat(amount) {
+                            items.add(itemStack)
                         }
                     }
                 }
-                // 看看需不需要每次都随机生成
-                if (args.size > 3 && args[3] == "false") {
-                    // 真只随机一次啊?那嗯怼吧
-                    when {
-                        ItemManager.hasItem(args[0]) -> {
-                            ItemManager.getItemStack(args[0], player, data)?.getItems(amount)?.forEach { items.add(it) }
-                        }
-                        easyItemHooker?.hasItem(args[0]) == true -> {
-                            easyItemHooker?.getItemStack(args[0])?.let { itemStack ->
-                                repeat(amount) {
-                                    items.add(itemStack)
-                                }
-                            }
-                        }
-                        else -> {
-                            mythicMobsHooker?.getItemStackSync(args[0])?.let { itemStack ->
-                                repeat(amount) {
-                                    items.add(itemStack)
-                                }
-                            }
+                else -> {
+                    mythicMobsHooker?.getItemStackSync(args[0])?.let { itemStack ->
+                        repeat(amount) {
+                            items.add(itemStack)
                         }
                     }
-                } else {
-                    // 随机生成, 那疯狂造就完事儿了
-                    when {
-                        ItemManager.hasItem(args[0]) -> {
-                            repeat(amount) {
-                                ItemManager.getItemStack(args[0], player, data)?.let { itemStack ->
-                                    items.add(itemStack)
-                                }
-                            }
-                        }
-                        easyItemHooker?.hasItem(args[0]) == true -> {
-                            easyItemHooker?.getItemStack(args[0])?.getItems(amount)?.forEach { items.add(it) }
-                        }
-                        // 对于MM物品, 这个配置项不代表是否随机生成, 代表物品是否合并
-                        else -> {
-                            mythicMobsHooker?.getItemStackSync(args[0])?.getItems(amount)?.forEach { items.add(it) }
+                }
+            }
+        } else {
+            // 随机生成, 那疯狂造就完事儿了
+            when {
+                ItemManager.hasItem(args[0]) -> {
+                    repeat(amount) {
+                        ItemManager.getItemStack(args[0], player, data)?.let { itemStack ->
+                            items.add(itemStack)
                         }
                     }
+                }
+                easyItemHooker?.hasItem(args[0]) == true -> {
+                    easyItemHooker?.getItemStack(args[0])?.getItems(amount)?.forEach { items.add(it) }
+                }
+                // 对于MM物品, 这个配置项不代表是否随机生成, 代表物品是否合并
+                else -> {
+                    mythicMobsHooker?.getItemStackSync(args[0])?.getItems(amount)?.forEach { items.add(it) }
                 }
             }
         }
