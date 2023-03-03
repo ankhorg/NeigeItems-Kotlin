@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.utils
 
 import com.alibaba.fastjson2.parseObject
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
@@ -661,24 +662,40 @@ object ItemUtils {
             neigeItems.remove("owner")
             itemTag.saveTo(itemStack)
         }
-        // 返回结果物品
-        return bukkitScheduler.callSyncMethod(plugin) {
+        if (Bukkit.isPrimaryThread()) {
             // 掉落物品
             val item = this.world?.dropItem(this, itemStack)
-            // 设置拥有者相关Metadata
-            owner?.let {
-                item?.setMetadataEZ("NI-Owner", it)
-            }
-            // 返回结果物品
-            item
-        }.get()?.let { item ->
-            // 掉落物技能
-            neigeItems?.let {
-                neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
-                    mythicMobsHooker?.castSkill(item, dropSkill, entity)
+            return item?.also {
+                // 设置拥有者相关Metadata
+                owner?.let {
+                    item.setMetadataEZ("NI-Owner", it)
+                }
+                // 掉落物技能
+                neigeItems?.let {
+                    neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                        mythicMobsHooker?.castSkill(item, dropSkill, entity)
+                    }
                 }
             }
-            item
+        } else {
+            // 返回结果物品
+            return bukkitScheduler.callSyncMethod(plugin) {
+                // 掉落物品
+                val item = this.world?.dropItem(this, itemStack)
+                // 设置拥有者相关Metadata
+                owner?.let {
+                    item?.setMetadataEZ("NI-Owner", it)
+                }
+                // 返回结果物品
+                item
+            }.get()?.also { item ->
+                // 掉落物技能
+                neigeItems?.let {
+                    neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                        mythicMobsHooker?.castSkill(item, dropSkill, entity)
+                    }
+                }
+            }
         }
     }
 

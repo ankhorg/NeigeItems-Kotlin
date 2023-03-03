@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.script.tool
 
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.PluginCommand
 import org.bukkit.command.TabCompleter
@@ -135,10 +136,16 @@ class ScriptCommand(val name: String) {
         ExpansionManager.commands["${nameSpace}:$name"]?.unRegister()
         ExpansionManager.commands["${nameSpace}:$name"] = this
         // 这玩意儿必须同步跑, 不然服会爆炸
-        bukkitScheduler.callSyncMethod(plugin) {
+        if (Bukkit.isPrimaryThread()) {
             val bukkitCommand = BukkitCommand()
             bukkitCommand.commandMap.register(nameSpace, command)
             bukkitCommand.sync()
+        } else {
+            bukkitScheduler.callSyncMethod(plugin) {
+                val bukkitCommand = BukkitCommand()
+                bukkitCommand.commandMap.register(nameSpace, command)
+                bukkitCommand.sync()
+            }
         }
         return this
     }
@@ -150,7 +157,7 @@ class ScriptCommand(val name: String) {
      */
     fun unRegister(): ScriptCommand {
         // 这玩意儿必须同步跑, 不然服会爆炸
-        bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
+        if (Bukkit.isPrimaryThread()) {
             val bukkitCommand = BukkitCommand()
             bukkitCommand.unregisterCommand(name)
             bukkitCommand.unregisterCommand("${nameSpace}:$name")
@@ -159,6 +166,17 @@ class ScriptCommand(val name: String) {
                 bukkitCommand.unregisterCommand("${nameSpace}:$it")
             }
             bukkitCommand.sync()
+        } else {
+            bukkitScheduler.callSyncMethod(plugin) {
+                val bukkitCommand = BukkitCommand()
+                bukkitCommand.unregisterCommand(name)
+                bukkitCommand.unregisterCommand("${nameSpace}:$name")
+                command.aliases.forEach {
+                    bukkitCommand.unregisterCommand(it)
+                    bukkitCommand.unregisterCommand("${nameSpace}:$it")
+                }
+                bukkitCommand.sync()
+            }
         }
         return this
     }

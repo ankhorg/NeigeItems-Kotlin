@@ -197,7 +197,11 @@ const runAction = function(action) {
  * @param func 待执行函数
  */
 const sync = function(func) {
-    BukkitScheduler.callSyncMethod(plugin, func)
+    if (Bukkit.isPrimaryThread()) {
+        func()
+    } else {
+        BukkitScheduler.callSyncMethod(plugin, func)
+    }
 }
 
 /**

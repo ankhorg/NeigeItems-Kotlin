@@ -9,6 +9,7 @@ import io.lumine.mythic.bukkit.utils.config.file.FileConfiguration
 import io.lumine.mythic.bukkit.utils.config.file.YamlConfiguration
 import io.lumine.mythic.core.config.MythicConfigImpl
 import io.lumine.mythic.core.items.ItemExecutor
+import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
@@ -101,9 +102,13 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
     }
 
     override fun getItemStackSync(id: String): ItemStack? {
-        return bukkitScheduler.callSyncMethod(plugin) {
+        return if (Bukkit.isPrimaryThread()) {
             itemManager.getItemStack(id)
-        }.get()
+        } else {
+            bukkitScheduler.callSyncMethod(plugin) {
+                itemManager.getItemStack(id)
+            }.get()
+        }
     }
 
     override fun castSkill(entity: Entity, skill: String, trigger: Entity?) {

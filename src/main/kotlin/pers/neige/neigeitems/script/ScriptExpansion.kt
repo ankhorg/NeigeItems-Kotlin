@@ -33,7 +33,11 @@ class ScriptExpansion : CompiledScript {
                 const scheduler = Bukkit.getScheduler()
                 
                 function sync(task) {
-                    scheduler.callSyncMethod(plugin, task)
+                    if (Bukkit.isPrimaryThread()) {
+                        task()
+                    } else {
+                        scheduler.callSyncMethod(plugin, task)
+                    }
                 }
                 
                 function async(task) {

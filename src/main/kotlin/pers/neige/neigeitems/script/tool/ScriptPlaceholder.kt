@@ -72,9 +72,14 @@ class ScriptPlaceholder(private val identifier: String) {
         ExpansionManager.placeholders[identifier] = this
         papiHooker?.newPlaceholderExpansion(identifier, author, version, executor)?.also {
             // papi是用HashMap存的扩展, 得主线程注册, 防止出现线程安全问题
-            bukkitScheduler.callSyncMethod(plugin) {
+            if (Bukkit.isPrimaryThread()) {
                 placeholderExpansion = it
                 it.register()
+            } else {
+                bukkitScheduler.callSyncMethod(plugin) {
+                    placeholderExpansion = it
+                    it.register()
+                }
             }
             // papiHooker为null说明没安装PlaceholderAPI
         } ?: let {
@@ -90,9 +95,15 @@ class ScriptPlaceholder(private val identifier: String) {
      * @return ScriptListener本身
      */
     fun unRegister(): ScriptPlaceholder {
-        bukkitScheduler.callSyncMethod(plugin) {
+        if (Bukkit.isPrimaryThread()) {
             placeholderExpansion?.also {
                 it.unregister()
+            }
+        } else {
+            bukkitScheduler.callSyncMethod(plugin) {
+                placeholderExpansion?.also {
+                    it.unregister()
+                }
             }
         }
         return this
