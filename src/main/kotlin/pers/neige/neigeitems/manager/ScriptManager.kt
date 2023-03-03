@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.manager
 
+import org.bukkit.Bukkit
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import pers.neige.neigeitems.script.CompiledScript
 import pers.neige.neigeitems.section.impl.JoinParser
@@ -33,7 +34,13 @@ object ScriptManager {
      */
     private fun loadScripts() {
         for (file in getAllFiles("Scripts")) {
-            compiledScripts[file.path.replace("plugins${File.separator}NeigeItems${File.separator}Scripts${File.separator}", "")] = CompiledScript(file)
+            val fileName = file.path.replace("plugins${File.separator}NeigeItems${File.separator}Scripts${File.separator}", "")
+            try {
+                compiledScripts[fileName] = CompiledScript(file)
+            } catch (error: Throwable) {
+                Bukkit.getLogger().info(ConfigManager.config.getString("Messages.invalidScript")?.replace("{script}", fileName))
+                error.printStackTrace()
+            }
         }
     }
 
