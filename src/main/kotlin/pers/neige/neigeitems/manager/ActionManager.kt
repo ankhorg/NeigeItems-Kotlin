@@ -2,6 +2,7 @@ package pers.neige.neigeitems.manager
 
 import org.bukkit.Bukkit
 import org.bukkit.Bukkit.isPrimaryThread
+import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -835,7 +836,7 @@ object ActionManager {
     }
 
     // 物品左右键交互
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun listener(event: PlayerInteractEvent) {
         // 获取玩家
         val player = event.player
@@ -945,7 +946,7 @@ object ActionManager {
     }
 
     // 吃或饮用
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun listener(event: PlayerItemConsumeEvent) {
         // 获取玩家
         val player = event.player
@@ -1026,7 +1027,7 @@ object ActionManager {
     }
 
     // 丢弃物品
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun listener(event: PlayerDropItemEvent) {
         // 获取玩家
         val player = event.player
@@ -1060,7 +1061,7 @@ object ActionManager {
         val consume =  trigger.consume
         // 检测冷却
         if (trigger.isCoolDown(player, itemTag, data)) {
-            event.isCancelled
+            event.isCancelled = true
             return
         }
         // 用于存储整个动作执行过程中的全局变量
@@ -1082,7 +1083,7 @@ object ActionManager {
             // 获取待消耗数量
             val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
-            if (itemStack.consume(player, amount, itemTag, neigeItems)) {
+            if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
                 bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
                     runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
@@ -1093,10 +1094,18 @@ object ActionManager {
         }
         // 执行动作
         trigger.run(player, itemStack, itemTag, data, event, global)
+        // 应用consume/action对itemStack的操作
+        if (itemStack.amount == 0 || itemStack.type == Material.AIR) {
+            event.itemDrop.remove()
+            // 就让Item保持AIR会导致后面监听事件的插件报错, 不如干脆取消事件算了
+            event.isCancelled = true
+        } else {
+            event.itemDrop.itemStack = itemStack
+        }
     }
 
     // 拾取物品
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun listener(event: EntityPickupItemEvent) {
         // 获取玩家
         val player = event.entity
@@ -1130,7 +1139,10 @@ object ActionManager {
         // 获取物品消耗信息
         val consume =  trigger.consume
         // 检测冷却
-        if (trigger.isCoolDown(player, itemTag, data)) return
+        if (trigger.isCoolDown(player, itemTag, data)) {
+            event.isCancelled = true
+            return
+        }
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
@@ -1161,6 +1173,14 @@ object ActionManager {
         }
         // 执行动作
         trigger.run(player, itemStack, itemTag, data, event, global)
+        // 应用consume/action对itemStack的操作
+        if (itemStack.amount == 0 || itemStack.type == Material.AIR) {
+            event.item.remove()
+            // 就让Item保持AIR会导致后面监听事件的插件报错, 不如干脆取消事件算了
+            event.isCancelled = true
+        } else {
+            event.item.itemStack = itemStack
+        }
     }
 
     private fun runThreadSafe(task: Runnable) {

@@ -20,14 +20,14 @@ import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.getName
 
 object ItemCheck {
-    @SubscribeEvent(priority = EventPriority.MONITOR)
+    @SubscribeEvent(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun listener(e: PlayerDropItemEvent) {
         val itemStack = e.itemDrop.itemStack
         checkItem(e.player, itemStack)
         e.itemDrop.itemStack = itemStack
     }
 
-    @SubscribeEvent(priority = EventPriority.MONITOR)
+    @SubscribeEvent(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun listener(e: PlayerPickupItemEvent) {
         val itemStack = e.item.itemStack
         checkItem(e.player, itemStack)
@@ -49,7 +49,7 @@ object ItemCheck {
         checkItem(e.player, e.player.inventory)
     }
 
-    @SubscribeEvent(priority = EventPriority.MONITOR)
+    @SubscribeEvent(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun listener(e: InventoryOpenEvent) {
         checkItem(e.player as Player, e.inventory)
     }

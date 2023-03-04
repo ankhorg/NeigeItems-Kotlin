@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.manager
 
-import com.google.common.collect.Sets.newConcurrentHashSet
 import pers.neige.neigeitems.event.PluginReloadEvent
 import pers.neige.neigeitems.script.ScriptExpansion
 import pers.neige.neigeitems.script.tool.ScriptCommand
@@ -11,6 +10,7 @@ import taboolib.common.LifeCycle
 import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
 import taboolib.common.platform.Awake
+import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
 import java.io.File
@@ -40,7 +40,7 @@ object ExpansionManager {
     /**
      * 所有脚本扩展注册的监听器
      */
-    val listeners = newConcurrentHashSet<ScriptListener>()
+    val listeners = ConcurrentHashMap.newKeySet<ScriptListener>()
 
     /**
      * 所有脚本扩展注册的papi变量
@@ -89,7 +89,7 @@ object ExpansionManager {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(ignoreCancelled = true)
     fun enable(event: PluginReloadEvent.Post?) {
         expansions.values.forEach { scriptExpansion ->
             if (scriptExpansion.enable) {
@@ -124,7 +124,7 @@ object ExpansionManager {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(ignoreCancelled = true)
     fun disable(event: PluginReloadEvent.Pre?) {
         expansions.values.forEach { scriptExpansion ->
             if (scriptExpansion.disable) {

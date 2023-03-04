@@ -13,7 +13,7 @@ import taboolib.platform.util.actionBar
  */
 object ItemOwner {
     // 拾取物品事件
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun listener(event: EntityPickupItemEvent) {
         // 获取玩家
         val player = event.entity
