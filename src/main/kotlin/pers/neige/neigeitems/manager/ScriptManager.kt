@@ -5,6 +5,7 @@ import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import pers.neige.neigeitems.script.CompiledScript
 import pers.neige.neigeitems.section.impl.JoinParser
 import pers.neige.neigeitems.section.impl.RepeatParser
+import pers.neige.neigeitems.section.impl.WeightJoinParser
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import java.io.File
 
@@ -51,6 +52,7 @@ object ScriptManager {
         compiledScripts.clear()
         JoinParser.compiledScripts.clear()
         RepeatParser.compiledScripts.clear()
+        WeightJoinParser.compiledScripts.clear()
         ActionManager.conditionScripts.clear()
         ActionManager.actionScripts.clear()
         loadScripts()
