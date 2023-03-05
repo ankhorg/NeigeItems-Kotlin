@@ -25,7 +25,8 @@ object WeightDeclareParser : SectionParser() {
             data.getStringList("list"),
             data.getString("key"),
             data.getString("amount"),
-            data.getString("shuffled")
+            data.getString("shuffled"),
+            data.getString("putelse")
         )
     }
 
@@ -37,6 +38,7 @@ object WeightDeclareParser : SectionParser() {
      * @param rawKey 节点键
      * @param rawAmount 声明数量
      * @param rawShuffled 是否乱序
+     * @param rawPutElse 是否记录未选中内容
      * @return 解析值
      */
     private fun handler(
@@ -46,7 +48,8 @@ object WeightDeclareParser : SectionParser() {
         list: List<String>,
         rawKey: String?,
         rawAmount: String?,
-        rawShuffled: String?
+        rawShuffled: String?,
+        rawPutElse: String?
     ): String? {
         val info = HashMap<String, Double>()
         var total = 0.0
@@ -91,6 +94,9 @@ object WeightDeclareParser : SectionParser() {
             aExpj(info, amount)
         }
 
+        // 是否记录未选中内容
+        val putElse = rawPutElse?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false
+
         // 获取声明节点键
         val key = rawKey?.parseSection(cache, player, sections)
 
@@ -99,6 +105,16 @@ object WeightDeclareParser : SectionParser() {
                 cache.putIfAbsent("$key.$index", realList[index])
             }
             cache.putIfAbsent("$key.length", realList.size.toString())
+
+            if (putElse) {
+                val elseList = info.keys.also { it.removeAll(realList) }
+                var index = 0
+                elseList.forEach { element ->
+                    cache.putIfAbsent("$key.else.$index", element)
+                    index ++
+                }
+                cache.putIfAbsent("$key.else.length", elseList.size.toString())
+            }
         }
 
         return realList.getOrNull(0)

@@ -593,6 +593,9 @@ WeightDeclareTest:
     - '第2个值: <test.1>'
     - '第3个值: <test.2>'
     - '列表长度: <test.length>'
+    - '第1个未选中值: <test.else.0>'
+    - '第2个未选中值: <test.else.1>'
+    - '未选中值长度: <test.else.length>'
   sections:
     test:
       type: weightdeclare
@@ -610,3 +613,5 @@ WeightDeclareTest:
       amount: 3
       # 是否打乱顺序
       shuffled: true
+      # 是否记录未选中的值
+      putelse: true
