@@ -219,8 +219,10 @@ abstract class MythicMobsHooker {
             configLoadedEvent.call()
             if (configLoadedEvent.isCancelled) return
 
-            // 判断是否是玩家击杀, 别问我为什么现在才判断, 这是为了兼容另外一个插件, 所以MythicDropEvent.ConfigLoaded必须先触发一下
-            if (killer !is Player) return
+            // 判断玩家击杀
+            if (killer !is Player && configSection.getBoolean("NeigeItems.PlayerOnly", true)) return
+
+            val player = killer as? Player
 
             offsetXString = configLoadedEvent.offsetXString
             offsetYString = configLoadedEvent.offsetYString
@@ -229,7 +231,7 @@ abstract class MythicMobsHooker {
             // 待掉落物品包
             val dropPacks = ArrayList<ItemPack>()
             configLoadedEvent.dropPacks?.forEach { id ->
-                ItemPackManager.itemPacks[id.parseSection(killer)]?.let { itemPack ->
+                ItemPackManager.itemPacks[id.parseSection(player)]?.let { itemPack ->
                     dropPacks.add(itemPack)
                     // 尝试加载多彩掉落
                     if (itemPack.fancyDrop) {
@@ -243,17 +245,17 @@ abstract class MythicMobsHooker {
             // 预定掉落物列表
             val dropItems = ArrayList<ItemStack>()
             // 掉落应该掉落的装备
-            loadEquipmentDrop(entity, dropItems, killer)
+            loadEquipmentDrop(entity, dropItems, player)
             // 加载掉落物品包信息
             dropPacks.forEach { itemPack ->
                 // 加载物品掉落信息
-                ItemUtils.loadItems(dropItems, itemPack.items, killer, HashMap(), itemPack.sections)
+                ItemUtils.loadItems(dropItems, itemPack.items, player, HashMap(), itemPack.sections)
             }
             // 加载掉落信息
-            configLoadedEvent.drops?.let { ItemUtils.loadItems(dropItems, it, killer) }
+            configLoadedEvent.drops?.let { ItemUtils.loadItems(dropItems, it, player) }
 
             // 物品都加载好了, 触发一下事件
-            val dropEvent = MythicDropEvent.Drop(internalName, entity, killer, dropItems, offsetXString, offsetYString, angleType)
+            val dropEvent = MythicDropEvent.Drop(internalName, entity, player, dropItems, offsetXString, offsetYString, angleType)
             dropEvent.call()
             if (dropEvent.isCancelled) return
 

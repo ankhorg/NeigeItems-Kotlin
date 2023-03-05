@@ -48,7 +48,7 @@ class MythicDropEvent {
     class Drop(
         val internalName: String,
         val entity: LivingEntity,
-        val player: Player,
+        val player: Player?,
         var dropItems: List<ItemStack>,
         var offsetXString: String?,
         var offsetYString: String?,
