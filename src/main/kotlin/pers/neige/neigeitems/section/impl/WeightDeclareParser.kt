@@ -96,9 +96,9 @@ object WeightDeclareParser : SectionParser() {
 
         if (key != null && cache != null) {
             for (index in realList.indices) {
-                cache["$key.$index"] = realList[index]
+                cache.putIfAbsent("$key.$index", realList[index])
             }
-            cache["$key.length"] = realList.size.toString()
+            cache.putIfAbsent("$key.length", realList.size.toString())
         }
 
         return realList.getOrNull(0)
