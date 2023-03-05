@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.parseObject
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Item
@@ -761,6 +762,32 @@ object ItemUtils {
     }
 
     /**
+     * 用于兼容旧版本API
+     */
+    @JvmStatic
+    fun loadItems(
+        items: ArrayList<ItemStack>,
+        itemInfos: List<String>,
+        player: Player? = null
+    ) {
+        loadItems(items, itemInfos, player as? OfflinePlayer, null, null)
+    }
+
+    /**
+     * 用于兼容旧版本API
+     */
+    @JvmStatic
+    fun loadItems(
+        items: ArrayList<ItemStack>,
+        itemInfos: List<String>,
+        player: Player? = null,
+        cache: HashMap<String, String>? = null,
+        sections: ConfigurationSection? = null
+    ) {
+        loadItems(items, itemInfos, player as? OfflinePlayer, cache, sections)
+    }
+
+    /**
      * 根据信息加载物品
      *
      * @param items 用于存储待生成物品
@@ -771,7 +798,7 @@ object ItemUtils {
     fun loadItems(
         items: ArrayList<ItemStack>,
         itemInfos: List<String>,
-        player: Player? = null
+        player: OfflinePlayer? = null
     ) {
         loadItems(items, itemInfos, player, null, null)
     }
@@ -789,7 +816,7 @@ object ItemUtils {
     fun loadItems(
         items: ArrayList<ItemStack>,
         itemInfos: List<String>,
-        player: Player? = null,
+        player: OfflinePlayer? = null,
         cache: HashMap<String, String>? = null,
         sections: ConfigurationSection? = null
     ) {
@@ -813,7 +840,7 @@ object ItemUtils {
     fun loadItems(
         items: ArrayList<ItemStack>,
         info: String,
-        player: Player? = null
+        player: OfflinePlayer? = null
     ) {
         // [物品ID] (数量(或随机最小数量-随机最大数量)) (生成概率) (是否反复随机) (指向数据)
         val args = info.split(" ", limit = 5)

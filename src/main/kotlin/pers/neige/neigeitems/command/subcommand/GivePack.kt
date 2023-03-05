@@ -18,7 +18,7 @@ import taboolib.module.nms.getName
 import taboolib.platform.util.giveItem
 
 object GivePack {
-    // ni givePack [玩家ID] [物品包ID] (数量) > 根据ID给予NI物品包
+    // ni givePack [玩家ID] [物品包ID] (数量) (指向数据) > 根据ID给予NI物品包
     val givePack = subCommand {
         execute<CommandSender> { sender, _, _ ->
             submit(async = true) {
@@ -50,6 +50,15 @@ object GivePack {
                     execute<CommandSender> { sender, context, argument ->
                         givePackCommandAsync(sender, context.argument(-2), context.argument(-1), argument)
                     }
+                    // ni givePack [玩家ID] [物品包ID] (数量) (指向数据)
+                    dynamic(optional = true) {
+                        suggestion<CommandSender>(uncheck = true) { _, _ ->
+                            arrayListOf("data")
+                        }
+                        execute<CommandSender> { sender, context, argument ->
+                            givePackCommandAsync(sender, context.argument(-3), context.argument(-2), context.argument(-1), argument)
+                        }
+                    }
                 }
             }
         }
@@ -59,10 +68,11 @@ object GivePack {
         sender: CommandSender,
         player: String,
         id: String,
-        repeat: String?
+        repeat: String?,
+        data: String? = null
     ) {
         submit(async = true) {
-            givePackCommand(sender, player, id, repeat)
+            givePackCommand(sender, player, id, repeat, data)
         }
     }
 
@@ -74,16 +84,19 @@ object GivePack {
         // 待给予物品组ID
         id: String,
         // 重复次数
-        repeat: String?
+        repeat: String?,
+        // 指向数据
+        data: String? = null
     ) {
-        givePackCommand(sender, Bukkit.getPlayerExact(player), id, repeat?.toIntOrNull())
+        givePackCommand(sender, Bukkit.getPlayerExact(player), id, repeat?.toIntOrNull(), data)
     }
 
     private fun givePackCommand(
         sender: CommandSender,
         player: Player?,
         id: String,
-        repeat: Int?
+        repeat: Int?,
+        data: String? = null
     ) {
         player?.let {
             ItemPackManager.itemPacks[id]?.let { itemPack ->
@@ -96,7 +109,7 @@ object GivePack {
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
-                    ItemUtils.loadItems(dropItems, itemPack.items, player, HashMap(), itemPack.sections)
+                    dropItems.addAll(itemPack.getItemStacks(player, data))
                     // 物品包给予事件
                     val event = ItemPackGiveEvent(id, player, dropItems)
                     event.call()

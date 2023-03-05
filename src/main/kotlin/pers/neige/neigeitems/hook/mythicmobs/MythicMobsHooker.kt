@@ -229,10 +229,11 @@ abstract class MythicMobsHooker {
             angleType = configLoadedEvent.angleType
 
             // 待掉落物品包
-            val dropPacks = ArrayList<ItemPack>()
+            val dropPacks = HashMap<ItemPack, String?>()
             configLoadedEvent.dropPacks?.forEach { id ->
-                ItemPackManager.itemPacks[id.parseSection(player)]?.let { itemPack ->
-                    dropPacks.add(itemPack)
+                val info = id.parseSection(player).split(" ", limit = 2)
+                ItemPackManager.itemPacks[info[0]]?.let { itemPack ->
+                    dropPacks[itemPack] = info.getOrNull(1)
                     // 尝试加载多彩掉落
                     if (itemPack.fancyDrop) {
                         offsetXString = itemPack.offsetXString
@@ -247,9 +248,9 @@ abstract class MythicMobsHooker {
             // 掉落应该掉落的装备
             loadEquipmentDrop(entity, dropItems, player)
             // 加载掉落物品包信息
-            dropPacks.forEach { itemPack ->
+            dropPacks.forEach { (itemPack, data) ->
                 // 加载物品掉落信息
-                ItemUtils.loadItems(dropItems, itemPack.items, player, HashMap(), itemPack.sections)
+                dropItems.addAll(itemPack.getItemStacks(player, data))
             }
             // 加载掉落信息
             configLoadedEvent.drops?.let { ItemUtils.loadItems(dropItems, it, player) }

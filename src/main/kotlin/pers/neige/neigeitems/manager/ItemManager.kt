@@ -103,7 +103,7 @@ object ItemManager : ItemConfigManager() {
      * @return 物品
      */
     fun getItemStack(id: String): ItemStack? {
-        return getItemStack(id, null, HashMap<String, String>())
+        return getItemStack(id, null, null as? HashMap<String, String>)
     }
 
     /**
@@ -114,7 +114,7 @@ object ItemManager : ItemConfigManager() {
      * @return 物品
      */
     fun getItemStack(id: String, player: OfflinePlayer?): ItemStack? {
-        return getItemStack(id, player, HashMap<String, String>())
+        return getItemStack(id, player, null as? HashMap<String, String>)
     }
 
     /**

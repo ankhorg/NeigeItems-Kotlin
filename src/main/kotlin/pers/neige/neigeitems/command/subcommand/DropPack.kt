@@ -84,6 +84,15 @@ object DropPack {
                                     execute<CommandSender> { sender, context, argument ->
                                         dropPackCommandAsync(sender, context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument)
                                     }
+                                    // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象] (指向数据)
+                                    dynamic {
+                                        suggestion<CommandSender>(uncheck = true) { _, _ ->
+                                            arrayListOf("data")
+                                        }
+                                        execute<CommandSender> { sender, context, argument ->
+                                            dropPackCommandAsync(sender, context.argument(-7), context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument)
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -101,10 +110,11 @@ object DropPack {
         xString: String,
         yString: String,
         zString: String,
-        parser: String
+        parser: String,
+        data: String? = null
     ) {
         submit(async = true) {
-            dropPackCommand(sender, id, repeat, worldName, xString, yString, zString, parser)
+            dropPackCommand(sender, id, repeat, worldName, xString, yString, zString, parser, data)
         }
     }
 
@@ -124,14 +134,16 @@ object DropPack {
         // 掉落世界z坐标
         zString: String,
         // 物品解析对象, 用于生成物品
-        parser: String
+        parser: String,
+        // 指向数据
+        data: String? = null
     ) {
         Bukkit.getWorld(worldName)?.let { world ->
             val x = xString.toDoubleOrNull()
             val y = yString.toDoubleOrNull()
             val z = zString.toDoubleOrNull()
             if (x != null && y != null && z != null) {
-                dropPackCommand(sender, id, repeat?.toIntOrNull(), Location(world, x, y, z), Bukkit.getPlayerExact(parser))
+                dropPackCommand(sender, id, repeat?.toIntOrNull(), Location(world, x, y, z), Bukkit.getPlayerExact(parser), data)
             } else {
                 sender.sendLang("Messages.invalidLocation")
             }
@@ -145,7 +157,8 @@ object DropPack {
         id: String,
         repeat: Int?,
         location: Location,
-        parser: Player?
+        parser: Player?,
+        data: String? = null
     ) {
         parser?.let {
             ItemPackManager.itemPacks[id]?.let { itemPack ->
@@ -154,7 +167,7 @@ object DropPack {
                     // 预定于掉落物列表
                     val dropItems = ArrayList<ItemStack>()
                     // 加载掉落信息
-                    loadItems(dropItems, itemPack.items, parser, HashMap(), itemPack.sections)
+                    dropItems.addAll(itemPack.getItemStacks(parser, data))
                     // 物品包掉落事件
                     val event = ItemPackDropEvent(id, dropItems, location, parser)
                     event.call()

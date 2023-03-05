@@ -32,6 +32,16 @@ object ItemPackManager {
     }
 
     /**
+     * 获取物品包
+     *
+     * @param id 物品包ID
+     * @return 物品包(无对应物品包返回null)
+     */
+    fun getItemPack(id: String): ItemPack? {
+        return itemPacks[id]
+    }
+
+    /**
      * 加载全部物品包
      */
     private fun loadItemPacks() {
