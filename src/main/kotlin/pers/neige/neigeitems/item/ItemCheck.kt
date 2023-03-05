@@ -61,16 +61,18 @@ object ItemCheck {
      * @param itemStack 待检查物品
      */
     private fun checkItem(player: Player, itemStack: ItemStack) {
-        itemStack.isNiItem()?.let { itemInfo ->
-            itemInfo.neigeItems["itemTime"]?.asLong()?.let {
-                if (System.currentTimeMillis() >= it) {
-                    val event = ItemExpirationEvent(player, itemStack, itemInfo)
-                    event.call()
-                    if (event.isCancelled) return
-                    val itemName = itemStack.getName()
-                    itemStack.amount = 0
-                    player.sendMessage(config.getString("Messages.itemExpirationMessage")
-                        ?.replace("{itemName}", itemName))
+        kotlin.runCatching {
+            itemStack.isNiItem()?.let { itemInfo ->
+                itemInfo.neigeItems["itemTime"]?.asLong()?.let {
+                    if (System.currentTimeMillis() >= it) {
+                        val event = ItemExpirationEvent(player, itemStack, itemInfo)
+                        event.call()
+                        if (event.isCancelled) return
+                        val itemName = itemStack.getName()
+                        itemStack.amount = 0
+                        player.sendMessage(config.getString("Messages.itemExpirationMessage")
+                            ?.replace("{itemName}", itemName))
+                    }
                 }
             }
         }

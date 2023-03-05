@@ -9,7 +9,7 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * join节点解析器
+ * weightjoin节点解析器
  */
 object WeightJoinParser : SectionParser() {
     override val id: String = "weightjoin"
@@ -72,14 +72,6 @@ object WeightJoinParser : SectionParser() {
             val prefix = rawPrefix?.parseSection(cache, player, sections) ?: ""
             // 获取后缀
             val postfix = rawPostfix?.parseSection(cache, player, sections) ?: ""
-            // 获取长度限制
-            val amount = rawAmount?.parseSection(cache, player, sections)?.toIntOrNull()?.let {
-                when {
-                    it >= list.size -> null
-                    it < 0 -> 0
-                    else -> it
-                }
-            } ?: 1
             // 获取操作函数
             val transform = rawTransform?.let {
                 compiledScripts.computeIfAbsent(it) {
@@ -112,7 +104,7 @@ object WeightJoinParser : SectionParser() {
                     }
                     // 有权重, 根据权重大小进行记录
                     else -> {
-                        val weight = value.substring(0, index).toDoubleOrNull() ?: 1.toDouble()
+                        val weight = value.substring(0, index).toDoubleOrNull() ?: 1.0
                         val string = value.substring(index+2, value.length)
                         info[string]?.let {
                             info[string] = it + weight
@@ -121,6 +113,15 @@ object WeightJoinParser : SectionParser() {
                     }
                 }
             }
+
+            // 获取数量限制
+            val amount = rawAmount?.parseSection(cache, player, sections)?.toIntOrNull()?.let {
+                when {
+                    it >= info.size -> info.size
+                    it < 0 -> 0
+                    else -> it
+                }
+            } ?: 1
 
             // 获取是否乱序
             val shuffled = rawShuffled?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false

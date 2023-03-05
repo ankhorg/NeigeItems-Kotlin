@@ -91,6 +91,7 @@ object SectionManager {
         PapiParser.register()
         RepeatParser.register()
         StringsParser.register()
+        WeightDeclareParser.register()
         WeightJoinParser.register()
         WeightParser.register()
         WhenParser.register()

@@ -584,3 +584,29 @@ WeightJoinTest:
       separator: "\\n"
       prefix: '"'
       postfix: '"'
+
+WeightDeclareTest:
+  material: STONE
+  lore:
+    - '第1个值: <test>'
+    - '第1个值: <test.0>'
+    - '第2个值: <test.1>'
+    - '第3个值: <test.2>'
+    - '列表长度: <test.length>'
+  sections:
+    test:
+      type: weightdeclare
+      key: test
+      list:
+        - '1::暴击率'
+        - '1::暴击伤害'
+        - '2::攻击力'
+        - '2::攻击百分比'
+        - '3::防御力'
+        - '3::防御百分比'
+        - '4::生命值'
+        - '4::生命百分比'
+      # 选取3条
+      amount: 3
+      # 是否打乱顺序
+      shuffled: true
