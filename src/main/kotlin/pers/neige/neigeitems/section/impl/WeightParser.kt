@@ -74,12 +74,12 @@ object WeightParser : SectionParser() {
                 }
                 // 有权重, 根据权重大小进行记录
                 else -> {
-                    val weight = value.substring(0, index).toDoubleOrNull() ?: 1.toDouble()
+                    val weight = value.substring(0, index).toBigDecimalOrNull() ?: 1.toBigDecimal()
                     val string = value.substring(index+2, value.length)
                     info[string]?.let {
-                        info[string] = it.add(BigDecimal(weight))
-                    } ?: let { info[string] = BigDecimal(weight) }
-                    total = total.add(BigDecimal(weight))
+                        info[string] = it.add(weight)
+                    } ?: let { info[string] = weight }
+                    total = total.add(weight)
                 }
             }
         }
