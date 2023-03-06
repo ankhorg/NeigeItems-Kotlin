@@ -89,7 +89,6 @@ object WeightJoinParser : SectionParser() {
 
             // 加权随机取值
             val info = HashMap<String, Double>()
-            var total = 0.0
             // 加载所有参数并遍历
             list.forEach {
                 val value = it.parseSection(cache, player, sections)
@@ -100,7 +99,6 @@ object WeightJoinParser : SectionParser() {
                         info[value]?.let {
                             info[value] = it + 1
                         } ?: let { info[value] = 1.0 }
-                        total += 1
                     }
                     // 有权重, 根据权重大小进行记录
                     else -> {
@@ -109,7 +107,6 @@ object WeightJoinParser : SectionParser() {
                         info[string]?.let {
                             info[string] = it + weight
                         } ?: let { info[string] = weight }
-                        total = total + weight
                     }
                 }
             }

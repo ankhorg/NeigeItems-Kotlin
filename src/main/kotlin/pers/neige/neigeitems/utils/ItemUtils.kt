@@ -764,18 +764,34 @@ object ItemUtils {
     /**
      * 用于兼容旧版本API
      */
+    @Deprecated(
+        "已弃用",
+        ReplaceWith(
+            "loadItems(items, itemInfos, player as? OfflinePlayer, null, null, true)",
+            "pers.neige.neigeitems.utils.ItemUtils.loadItems",
+            "org.bukkit.OfflinePlayer"
+        )
+    )
     @JvmStatic
     fun loadItems(
         items: ArrayList<ItemStack>,
         itemInfos: List<String>,
         player: Player? = null
     ) {
-        loadItems(items, itemInfos, player as? OfflinePlayer, null, null)
+        loadItems(items, itemInfos, player as? OfflinePlayer, null, null, true)
     }
 
     /**
      * 用于兼容旧版本API
      */
+    @Deprecated(
+        "已弃用",
+        ReplaceWith(
+            "loadItems(items, itemInfos, player as? OfflinePlayer, cache, sections, true)",
+            "pers.neige.neigeitems.utils.ItemUtils.loadItems",
+            "org.bukkit.OfflinePlayer"
+        )
+    )
     @JvmStatic
     fun loadItems(
         items: ArrayList<ItemStack>,
@@ -784,7 +800,29 @@ object ItemUtils {
         cache: HashMap<String, String>? = null,
         sections: ConfigurationSection? = null
     ) {
-        loadItems(items, itemInfos, player as? OfflinePlayer, cache, sections)
+        loadItems(items, itemInfos, player as? OfflinePlayer, cache, sections, true)
+    }
+
+    /**
+     * 用于兼容旧版本API
+     */
+    @Deprecated(
+        "已弃用",
+        ReplaceWith(
+            "loadItems(items, itemInfos, player, cache, sections, true)",
+            "pers.neige.neigeitems.utils.ItemUtils.loadItems",
+            "org.bukkit.OfflinePlayer"
+        )
+    )
+    @JvmStatic
+    fun loadItems(
+        items: ArrayList<ItemStack>,
+        itemInfos: List<String>,
+        player: OfflinePlayer? = null,
+        cache: HashMap<String, String>? = null,
+        sections: ConfigurationSection? = null
+    ) {
+        loadItems(items, itemInfos, player, cache, sections, true)
     }
 
     /**
@@ -800,7 +838,7 @@ object ItemUtils {
         itemInfos: List<String>,
         player: OfflinePlayer? = null
     ) {
-        loadItems(items, itemInfos, player, null, null)
+        loadItems(items, itemInfos, player, null, null, true)
     }
 
     /**
@@ -811,6 +849,7 @@ object ItemUtils {
      * @param player 用于解析物品的玩家
      * @param cache 随机节点缓存
      * @param sections 随机节点
+     * @param parse 是否解析其中的节点
      */
     @JvmStatic
     fun loadItems(
@@ -818,14 +857,53 @@ object ItemUtils {
         itemInfos: List<String>,
         player: OfflinePlayer? = null,
         cache: HashMap<String, String>? = null,
-        sections: ConfigurationSection? = null
+        sections: ConfigurationSection? = null,
+        parse: Boolean
     ) {
         for (rawInfo in itemInfos) {
             // 先解析, 解析完根据换行符分割, 分割完遍历随机
-            val infos = rawInfo.parseSection(cache, player, sections).split("\n")
+            val infos = if (parse) {
+                rawInfo.parseSection(cache, player, sections).split("\n")
+            } else {
+                rawInfo.split("\n")
+            }
             for (info in infos) {
                 loadItems(items, info, player)
             }
+        }
+    }
+
+    /**
+     * 根据信息加载物品
+     *
+     * @param itemInfos 物品信息
+     * @param player 用于解析物品的玩家
+     * @return 物品
+     */
+    @JvmStatic
+    fun loadItems(
+        itemInfos: List<String>,
+        player: OfflinePlayer? = null
+    ): ArrayList<ItemStack> {
+        return ArrayList<ItemStack>().also {
+            loadItems(it, itemInfos, player, null, null, false)
+        }
+    }
+
+    /**
+     * 根据信息加载物品
+     *
+     * @param info 物品信息
+     * @param player 用于解析物品的玩家
+     * @return 物品
+     */
+    @JvmStatic
+    fun loadItems(
+        info: String,
+        player: OfflinePlayer? = null
+    ): ArrayList<ItemStack> {
+        return ArrayList<ItemStack>().also {
+            loadItems(it, info, player)
         }
     }
 

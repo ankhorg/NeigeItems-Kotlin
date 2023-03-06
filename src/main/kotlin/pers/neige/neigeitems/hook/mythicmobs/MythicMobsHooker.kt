@@ -15,6 +15,7 @@ import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ItemUtils
+import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.ProxyListener
 import taboolib.module.nms.ItemTag
@@ -253,7 +254,7 @@ abstract class MythicMobsHooker {
                 dropItems.addAll(itemPack.getItemStacks(player, data))
             }
             // 加载掉落信息
-            configLoadedEvent.drops?.let { ItemUtils.loadItems(dropItems, it, player) }
+            configLoadedEvent.drops?.let { loadItems(dropItems, it, player as? OfflinePlayer, null, null, true) }
 
             // 物品都加载好了, 触发一下事件
             val dropEvent = MythicDropEvent.Drop(internalName, entity, player, dropItems, offsetXString, offsetYString, angleType)

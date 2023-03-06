@@ -10,8 +10,8 @@ import kotlin.math.pow
  */
 object SamplingUtils {
     @JvmStatic
-    fun aExpj(samples: HashMap<String, Double>, m: Int): List<String> {
-        val heap = PriorityQueue<Pair<Double, String>>(compareBy { it.first })
+    fun <T> aExpj(samples: HashMap<T, Double>, m: Int): List<T> {
+        val heap = PriorityQueue<Pair<Double, T>>(compareBy { it.first })
         var thresholdX: Double? = null
         var thresholdT = 0.0
         var weightAcc = 0.0
@@ -44,6 +44,6 @@ object SamplingUtils {
             heap.add(ki to item)
         }
 
-        return heap.map { it.second }.toList()
+        return heap.map { it.second }
     }
 }
