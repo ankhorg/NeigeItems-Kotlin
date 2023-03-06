@@ -161,7 +161,7 @@ object DropPack {
         data: String? = null
     ) {
         parser?.let {
-            ItemPackManager.itemPacks[id]?.let { itemPack ->
+            ItemPackManager.getItemPack(id)?.let { itemPack ->
                 val packInfo = HashMap<Location, Int>()
                 repeat(repeat ?: 1) {
                     // 预定于掉落物列表

@@ -110,6 +110,7 @@ class ItemColorProtocol : ItemColor() {
      * 从而导致掉落物只发出白色光效.
      *
      * @param player 待操作玩家
+     * @param force 是否强制初始化
      */
     fun initTeam(player: Player, force: Boolean = false) {
         // 每次发包后会通过Metadata记录玩家当前所处计分板,
@@ -129,9 +130,7 @@ class ItemColorProtocol : ItemColor() {
     init {
         // 玩家登录时根据玩家当前计分板进行Team初始化
         registerBukkitListener(PlayerJoinEvent::class.java, EventPriority.NORMAL, false) {
-            bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                initTeam(it.player, true)
-            })
+            initTeam(it.player, true)
         }
 
         // 用于设置物品发光颜色
@@ -165,33 +164,31 @@ class ItemColorProtocol : ItemColor() {
                                         if (byte is Byte) {
                                             flag.value = byte or (1 shl 6).toByte()
                                         }
-                                        bukkitScheduler.runTaskAsynchronously(NeigeItems.plugin, Runnable {
-                                            initTeam(event.player)
-                                            // 创建Team数据包
-                                            val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
-                                            // 设置数据包类型为"向Team添加实体"
-                                            when (version) {
-                                                12 -> {
-                                                    packet.integers.write(1, 3)
-                                                }
-                                                13 -> {
-                                                    packet.integers.write(0, 3)
-                                                }
-                                                else -> {
-                                                    packet.integers.write(0, 3)
-                                                    // 设置队伍颜色
-                                                    val internalStructure = packet.optionalStructures.read(0).get()
-                                                    internalStructure.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
-                                                    packet.optionalStructures.write(0, Optional.of(internalStructure))
-                                                }
+                                        initTeam(event.player)
+                                        // 创建Team数据包
+                                        val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
+                                        // 设置数据包类型为"向Team添加实体"
+                                        when (version) {
+                                            12 -> {
+                                                packet.integers.write(1, 3)
                                             }
-                                            // 设置队伍ID
-                                            packet.strings.write(0, "NI-$color")
-                                            // 添加实体
-                                            (packet.getSpecificModifier(Collection::class.java).read(0) as ArrayList<String>).add(entity.uniqueId.toString())
-                                            // 发送数据包
-                                            protocolManager.sendServerPacket(receiver, packet)
-                                        })
+                                            13 -> {
+                                                packet.integers.write(0, 3)
+                                            }
+                                            else -> {
+                                                packet.integers.write(0, 3)
+                                                // 设置队伍颜色
+                                                val internalStructure = packet.optionalStructures.read(0).get()
+                                                internalStructure.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
+                                                packet.optionalStructures.write(0, Optional.of(internalStructure))
+                                            }
+                                        }
+                                        // 设置队伍ID
+                                        packet.strings.write(0, "NI-$color")
+                                        // 添加实体
+                                        (packet.getSpecificModifier(Collection::class.java).read(0) as ArrayList<String>).add(entity.uniqueId.toString())
+                                        // 发送数据包
+                                        protocolManager.sendServerPacket(receiver, packet)
                                     }
                                 }
                             }

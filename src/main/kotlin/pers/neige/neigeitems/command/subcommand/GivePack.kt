@@ -99,7 +99,7 @@ object GivePack {
         data: String? = null
     ) {
         player?.let {
-            ItemPackManager.itemPacks[id]?.let { itemPack ->
+            ItemPackManager.getItemPack(id)?.let { itemPack ->
                 // 如果是按物品提示, 就建立map存储信息
                 val dropData = when (getLang("Messages.type.givePackMessage")) {
                     "Items" -> HashMap<String, Int>()

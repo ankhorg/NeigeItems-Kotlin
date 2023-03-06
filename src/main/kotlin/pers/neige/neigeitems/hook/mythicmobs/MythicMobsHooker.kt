@@ -232,8 +232,9 @@ abstract class MythicMobsHooker {
             // 待掉落物品包
             val dropPacks = HashMap<ItemPack, String?>()
             configLoadedEvent.dropPacks?.forEach { id ->
+                // 物品包ID 指向数据
                 val info = id.parseSection(player).split(" ", limit = 2)
-                ItemPackManager.itemPacks[info[0]]?.let { itemPack ->
+                ItemPackManager.getItemPack(info[0])?.let { itemPack ->
                     dropPacks[itemPack] = info.getOrNull(1)
                     // 尝试加载多彩掉落
                     if (itemPack.fancyDrop) {
