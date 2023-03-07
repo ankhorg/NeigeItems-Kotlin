@@ -124,16 +124,16 @@ object WeightDeclareParser : SectionParser() {
                 }
                 index++
             }
-            cache.putIfAbsent("$key.length", originAmount.toString())
+            cache["$key.length"] = originAmount.toString()
 
             if (putElse) {
                 val elseList = info.keys.also { it.removeAll(realList) }
                 var index = 0
                 elseList.forEach { element ->
-                    cache.putIfAbsent("$key.else.$index", element)
+                    cache["$key.else.$index"] = element
                     index ++
                 }
-                cache.putIfAbsent("$key.else.length", elseList.size.toString())
+                cache["$key.else.length"] = elseList.size.toString()
             }
         }
 
