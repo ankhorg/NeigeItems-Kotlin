@@ -74,14 +74,31 @@ object WeightDeclareParser : SectionParser() {
             }
         }
 
+        // 获取声明节点键
+        val key = rawKey?.parseSection(cache, player, sections)
+
         // 获取声明数量
-        val amount = rawAmount?.parseSection(cache, player, sections)?.toIntOrNull()?.let {
+        val originAmount = rawAmount?.parseSection(cache, player, sections)?.toIntOrNull()?.let {
             when {
                 it >= info.size -> info.size
                 it < 0 -> 0
                 else -> it
             }
         } ?: 1
+        var amount = originAmount
+
+        // 已存在对应值的情况
+        if (key != null && cache != null) {
+            for (index in 0 until amount) {
+                // 看看有没有预传入对应的声明值
+                val value = cache["$key.$index"]
+                // 如果传入了就挪出待选列表, 同时amount-1
+                info[value]?.also {
+                    info.remove(value)
+                    amount--
+                }
+            }
+        }
 
         // 获取是否乱序
         val shuffled = rawShuffled?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false
@@ -94,14 +111,20 @@ object WeightDeclareParser : SectionParser() {
         // 是否记录未选中内容
         val putElse = rawPutElse?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false
 
-        // 获取声明节点键
-        val key = rawKey?.parseSection(cache, player, sections)
-
         if (key != null && cache != null) {
-            for (index in realList.indices) {
-                cache.putIfAbsent("$key.$index", realList[index])
+            var length = amount
+            var over = 0
+            var index = 0
+            while (index < length) {
+                if (cache.contains("$key.$index")) {
+                    length++
+                    over++
+                } else {
+                    cache["$key.$index"] = realList[index - over]
+                }
+                index++
             }
-            cache.putIfAbsent("$key.length", realList.size.toString())
+            cache.putIfAbsent("$key.length", originAmount.toString())
 
             if (putElse) {
                 val elseList = info.keys.also { it.removeAll(realList) }
@@ -114,6 +137,6 @@ object WeightDeclareParser : SectionParser() {
             }
         }
 
-        return realList.getOrNull(0)
+        return cache?.get("$key.0")
     }
 }
