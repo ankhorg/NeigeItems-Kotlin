@@ -30,9 +30,9 @@ class ItemColorVanilla : ItemColor() {
     private fun loadTeams() {
         for ((id, color) in colors) {
             // 注册Team
-            var team = Bukkit.getServer().scoreboardManager?.mainScoreboard?.getTeam("NI-$color")
+            var team = Bukkit.getServer().scoreboardManager?.mainScoreboard?.getTeam("NIVanilla-$color")
             team?.unregister()
-            team = Bukkit.getServer().scoreboardManager?.mainScoreboard?.registerNewTeam("NI-$color")
+            team = Bukkit.getServer().scoreboardManager?.mainScoreboard?.registerNewTeam("NIVanilla-$color")
             // 1.13+设置color即可改变光效发光颜色
             team?.color = color
             // 1.12-需要给prefix设置颜色才能改变发光颜色

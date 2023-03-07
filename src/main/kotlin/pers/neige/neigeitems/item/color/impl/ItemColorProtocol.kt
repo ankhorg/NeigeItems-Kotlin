@@ -50,13 +50,12 @@ class ItemColorProtocol : ItemColor() {
         }
     }
 
-    private val teamPackets = let {
-        val teamPackets = HashMap<String, PacketContainer>()
+    private val teamPackets = HashMap<String, PacketContainer>().also { teamPackets ->
         for ((id, color) in colors) {
             // 创建Team数据包
             val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
             // 设置队伍ID
-            packet.strings.write(0, "NI-$color")
+            packet.strings.write(0, "NIProtocol-$color")
             when (version) {
                 // 1.12版本, 设置前缀即可显示颜色
                 12 -> {
@@ -81,7 +80,7 @@ class ItemColorProtocol : ItemColor() {
                     // 设置队伍颜色
                     internalStructure.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
                     // 设置展示名
-                    internalStructure.chatComponents.write(0, WrappedChatComponent.fromText("NI-$color"))
+                    internalStructure.chatComponents.write(0, WrappedChatComponent.fromText("NIProtocol-$color"))
                     // 设置前缀
                     internalStructure.chatComponents.write(1, WrappedChatComponent.fromText(color.toString()))
                     // 设置后缀
@@ -97,7 +96,6 @@ class ItemColorProtocol : ItemColor() {
             // 存储数据包
             teamPackets[id] = packet
         }
-        teamPackets
     }
 
     /**
@@ -184,7 +182,7 @@ class ItemColorProtocol : ItemColor() {
                                             }
                                         }
                                         // 设置队伍ID
-                                        packet.strings.write(0, "NI-$color")
+                                        packet.strings.write(0, "NIProtocol-$color")
                                         // 添加实体
                                         (packet.getSpecificModifier(Collection::class.java).read(0) as ArrayList<String>).add(entity.uniqueId.toString())
                                         // 发送数据包
