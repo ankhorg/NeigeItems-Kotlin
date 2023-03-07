@@ -836,7 +836,7 @@ object ActionManager {
     }
 
     // 物品左右键交互
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     fun listener(event: PlayerInteractEvent) {
         // 获取玩家
         val player = event.player
