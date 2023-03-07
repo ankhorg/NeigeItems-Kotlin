@@ -200,7 +200,7 @@ const sync = function(func) {
     if (Bukkit.isPrimaryThread()) {
         func()
     } else {
-        BukkitScheduler.callSyncMethod(plugin, func)
+        bukkitScheduler.callSyncMethod(plugin, func)
     }
 }
 
@@ -210,7 +210,7 @@ const sync = function(func) {
  * @param func 待执行函数
  */
 const async = function(func) {
-    BukkitScheduler["runTaskAsynchronously(Plugin,Runnable)"](plugin, func)
+    bukkitScheduler["runTaskAsynchronously(Plugin,Runnable)"](plugin, func)
 }
 
 /**
