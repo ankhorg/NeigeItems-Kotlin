@@ -46,6 +46,8 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
 import javax.script.CompiledScript
 import javax.script.SimpleBindings
+import pers.neige.neigeitems.utils.StringUtils.split
+import taboolib.platform.util.sendActionBar
 
 /**
  * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
@@ -670,6 +672,48 @@ object ActionManager {
         addAction("consoleNoColor") { player, string ->
             runThreadSafe {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papi(player, string))
+            }
+            true
+        }
+        // 发送Title
+        addAction("title") { player, string ->
+            runThreadSafe {
+                papiColor(player, string).split(' ', '\\').also { args ->
+                    val title = args.getOrNull(0)
+                    val subtitle = args.getOrNull(1) ?: ""
+                    val fadeIn = args.getOrNull(2)?.toIntOrNull() ?: 10
+                    val stay = args.getOrNull(3)?.toIntOrNull() ?: 70
+                    val fadeOut = args.getOrNull(4)?.toIntOrNull() ?: 20
+                    player.sendTitle(title, subtitle, fadeIn, stay, fadeOut)
+                }
+            }
+            true
+        }
+        // 发送Title(不将&解析为颜色符号)
+        addAction("titleNoColor") { player, string ->
+            runThreadSafe {
+                papi(player, string).split(' ', '\\').also { args ->
+                    val title = args.getOrNull(0)
+                    val subtitle = args.getOrNull(1) ?: ""
+                    val fadeIn = args.getOrNull(2)?.toIntOrNull() ?: 10
+                    val stay = args.getOrNull(3)?.toIntOrNull() ?: 70
+                    val fadeOut = args.getOrNull(4)?.toIntOrNull() ?: 20
+                    player.sendTitle(title, subtitle, fadeIn, stay, fadeOut)
+                }
+            }
+            true
+        }
+        // 发送ActionBar
+        addAction("actionBar") { player, string ->
+            runThreadSafe {
+                player.sendActionBar(papiColor(player, string))
+            }
+            true
+        }
+        // 发送ActionBar(不将&解析为颜色符号)
+        addAction("actionBarNoColor") { player, string ->
+            runThreadSafe {
+                player.sendActionBar(papi(player, string))
             }
             true
         }
