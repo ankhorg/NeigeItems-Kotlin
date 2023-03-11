@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
@@ -965,9 +966,7 @@ object ActionManager {
                 // 不满足条件就爬
                 if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
                     // 跑一下deny动作
-                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                    })
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                     // 爬
                     return
                 }
@@ -977,9 +976,7 @@ object ActionManager {
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
-                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                })
+                runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                 // 数量不足
                 return
             }
@@ -1035,9 +1032,7 @@ object ActionManager {
                 // 不满足条件就爬
                 if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
                     // 跑一下deny动作
-                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                    })
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                     // 爬
                     return
                 }
@@ -1059,9 +1054,7 @@ object ActionManager {
                 }
             } ?: let {
                 // 跑一下deny动作
-                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                })
+                runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                 // 数量不足
                 return
             }
@@ -1117,9 +1110,7 @@ object ActionManager {
                 // 不满足条件就爬
                 if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
                     // 跑一下deny动作
-                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                    })
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                     // 爬
                     return
                 }
@@ -1129,9 +1120,7 @@ object ActionManager {
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
-                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                })
+                runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                 // 数量不足
                 return
             }
@@ -1196,9 +1185,7 @@ object ActionManager {
                 // 不满足条件就爬
                 if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
                     // 跑一下deny动作
-                    bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                    })
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                     // 爬
                     return
                 }
@@ -1208,9 +1195,7 @@ object ActionManager {
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
-                bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                })
+                runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
                 // 数量不足
                 return
             }
@@ -1225,6 +1210,138 @@ object ActionManager {
         } else {
             event.item.itemStack = itemStack
         }
+    }
+
+    // 点击物品
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    fun listener(event: InventoryClickEvent) {
+        // 获取玩家
+        val player = event.whoClicked
+        if (player !is Player) return
+        // 获取点击物品
+        val itemStack = event.cursor
+        // 物品NBT
+        val itemTag: ItemTag
+        // NI物品数据
+        val neigeItems: ItemTag
+        // NI物品id
+        val id: String
+        // NI节点数据
+        val data: HashMap<String, String>?
+        when (val itemInfo = itemStack?.isNiItem(true)) {
+            null -> return
+            else -> {
+                itemTag = itemInfo.itemTag
+                neigeItems = itemInfo.neigeItems
+                id = itemInfo.id
+                data = itemInfo.data
+            }
+        }
+        // 获取物品动作
+        val itemAction = itemActions[id] ?: let { return }
+        // 获取基础触发器
+        val trigger = itemAction.triggers["click"]
+        // 没有对应物品动作就停止判断
+        if (trigger == null) return
+
+        // 获取物品消耗信息
+        val consume =  trigger.consume
+        // 取消交互事件
+        event.isCancelled = true
+        // 检测冷却
+        if (trigger.isCoolDown(player, itemTag, data)) return
+        // 用于存储整个动作执行过程中的全局变量
+        val global = HashMap<String, Any?>()
+        // 如果该物品需要被消耗
+        if (consume != null) {
+            // 检测条件
+            consume.getString("condition")?.let {
+                // 不满足条件就爬
+                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
+                    // 跑一下deny动作
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
+                    // 爬
+                    return
+                }
+            }
+            // 获取待消耗数量
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
+            // 消耗物品
+            if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
+                // 跑一下deny动作
+                runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
+                // 数量不足
+                return
+            }
+        }
+        // 执行动作
+        trigger.run(player, itemStack, itemTag, data, event, global)
+    }
+
+    // 物品被点击
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    fun beClickedListener(event: InventoryClickEvent) {
+        // 获取玩家
+        val player = event.whoClicked
+        if (player !is Player) return
+        // 获取点击物品
+        val itemStack = event.currentItem
+        // 物品NBT
+        val itemTag: ItemTag
+        // NI物品数据
+        val neigeItems: ItemTag
+        // NI物品id
+        val id: String
+        // NI节点数据
+        val data: HashMap<String, String>?
+        when (val itemInfo = itemStack?.isNiItem(true)) {
+            null -> return
+            else -> {
+                itemTag = itemInfo.itemTag
+                neigeItems = itemInfo.neigeItems
+                id = itemInfo.id
+                data = itemInfo.data
+            }
+        }
+        // 获取物品动作
+        val itemAction = itemActions[id] ?: let { return }
+        // 获取基础触发器
+        val trigger = itemAction.triggers["beclicked"]
+        // 没有对应物品动作就停止判断
+        if (trigger == null) return
+
+        // 获取物品消耗信息
+        val consume =  trigger.consume
+        // 取消交互事件
+        event.isCancelled = true
+        // 检测冷却
+        if (trigger.isCoolDown(player, itemTag, data)) return
+        // 用于存储整个动作执行过程中的全局变量
+        val global = HashMap<String, Any?>()
+        // 如果该物品需要被消耗
+        if (consume != null) {
+            // 检测条件
+            consume.getString("condition")?.let {
+                // 不满足条件就爬
+                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
+                    // 跑一下deny动作
+                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
+                    // 爬
+                    return
+                }
+            }
+            // 获取待消耗数量
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
+            // 消耗物品
+            if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
+                // 跑一下deny动作
+                runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
+                // 数量不足
+                return
+            }
+        }
+        // 执行动作
+        trigger.run(player, itemStack, itemTag, data, event, global)
     }
 
     private fun runThreadSafe(task: Runnable) {
