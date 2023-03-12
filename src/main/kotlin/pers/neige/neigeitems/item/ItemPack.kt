@@ -245,7 +245,9 @@ class ItemPack(
                     // 根据换行符分割, 分割完遍历随机
                     for (value in rawInfo.split("\n")) {
                         val itemInfo = ItemInfo(value)
-                        info[itemInfo] = itemInfo.probability * 100000
+                        if (itemInfo.probability > 0) {
+                            info[itemInfo] = itemInfo.probability * 100000
+                        }
                     }
                 }
 

@@ -10,14 +10,14 @@ import kotlin.math.pow
  */
 object SamplingUtils {
     @JvmStatic
-    fun <T> aExpj(samples: HashMap<T, Double>, m: Int): List<T> {
+    fun <T> aExpj(samples: HashMap<T, Double>, amount: Int): List<T> {
         val heap = PriorityQueue<Pair<Double, T>>(compareBy { it.first })
         var thresholdX: Double? = null
         var thresholdT = 0.0
         var weightAcc = 0.0
 
         for ((item, weight) in samples) {
-            if (heap.size < m) {
+            if (heap.size < amount) {
                 val randNum = ThreadLocalRandom.current().nextDouble(0.0, 1.0)
                 val ki = randNum.pow(1.0 / weight)
                 heap.add(ki to item)
