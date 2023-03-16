@@ -23,6 +23,8 @@ import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ConfigUtils.toMap
 import pers.neige.neigeitems.utils.ItemUtils.coverWith
+import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
+import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
 import pers.neige.neigeitems.utils.ItemUtils.toItemTag
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -258,6 +260,27 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 if (configSection.contains("options.charge")) {
                     neigeItems["charge"] = ItemTagData(configSection.getInt("options.charge"))
                     neigeItems["maxCharge"] = ItemTagData(configSection.getInt("options.charge"))
+                }
+                // 设置物品最大使用次数
+                if (configSection.contains("options.maxcharge")) {
+                    neigeItems["maxCharge"] = ItemTagData(configSection.getInt("options.maxcharge"))
+                }
+                // 设置物品自定义耐久
+                if (configSection.contains("options.durability")) {
+                    neigeItems["durability"] = ItemTagData(configSection.getInt("options.durability"))
+                    neigeItems["maxDurability"] = ItemTagData(configSection.getInt("options.durability"))
+                }
+                // 设置物品最大自定义耐久
+                if (configSection.contains("options.maxdurability")) {
+                    neigeItems["maxDurability"] = ItemTagData(configSection.getInt("options.maxdurability"))
+                }
+                // 设置物品自定义耐久为0时是否破坏
+                if (configSection.contains("options.itembreak")) {
+                    if (configSection.getBoolean("options.itembreak", true)) {
+                        neigeItems["itemBreak"] = ItemTagData(1.toByte())
+                    } else {
+                        neigeItems["itemBreak"] = ItemTagData(0.toByte())
+                    }
                 }
                 // 首次掉落归属
                 if (configSection.contains("options.owner")) {

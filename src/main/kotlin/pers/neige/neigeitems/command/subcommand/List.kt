@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.command.Command
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
+import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.manager.ItemManager
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
@@ -77,7 +78,7 @@ object List {
                                 // 解析物品变量
                                 HookerManager.parseItemPlaceholders(itemStack)
                                 TellrawJson()
-                                    .append(HookerManager.parseItemPlaceholder(itemStack, itemStack.getName()))
+                                    .append(itemStack.getParsedName())
                                     .hoverItem(itemStack)
                                     .runCommand("/ni get $id")
                             }.getOrNull()?.let {
@@ -85,7 +86,7 @@ object List {
                             } ?: let {
                                 listItemRaw.append(
                                     TellrawJson()
-                                        .append(HookerManager.parseItemPlaceholder(itemStack, itemStack.getName()))
+                                        .append(itemStack.getParsedName())
                                         .runCommand("/ni get $id")
                                 )
                             }
@@ -97,7 +98,7 @@ object List {
                 // 在不传入玩家变量的情况下尝试构建物品获取物品名
                 // 如果用户在js节点中调用了玩家对象, 这样搞就会报错
                 kotlin.runCatching { ItemManager.getItemStack(id) }.getOrNull()?.let { itemStack ->
-                    sender.sendMessage(listItemMessage.replace("{name}", itemStack.getName()))
+                    sender.sendMessage(listItemMessage.replace("{name}", itemStack.getParsedName()))
                 } ?: let {
                     val itemKeySection = ItemManager.getOriginConfig(id)
                     val itemName = when {

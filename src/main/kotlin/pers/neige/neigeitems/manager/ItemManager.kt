@@ -10,9 +10,12 @@ import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.utils.ConfigUtils.clone
+import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
 import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
+import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
 import pers.neige.neigeitems.utils.ItemUtils.toMap
+import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import java.io.File
 import java.util.*
@@ -293,5 +296,153 @@ object ItemManager : ItemConfigManager() {
      */
     fun isNiItem(itemStack: ItemStack, parseData: Boolean): ItemInfo? {
         return itemStack.isNiItem(parseData)
+    }
+
+    /**
+     * 设置物品使用次数
+     *
+     * @param amount 使用次数
+     */
+    @JvmStatic
+    fun ItemStack.setCharge(amount: Int) {
+        // 获取物品NBT
+        val itemTag = getItemTag()
+        // 获取物品最大使用次数(不存在则停止操作)
+        val maxCharge = itemTag.getDeepOrNull("NeigeItems.maxCharge")?.asInt() ?: return
+        // 计算新使用次数
+        val newCharge = amount.coerceAtMost(maxCharge).coerceAtLeast(0)
+        // 修改使用次数
+        itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(maxCharge))
+    }
+
+    /**
+     * 添加物品使用次数
+     *
+     * @param amount 添加量(可为负)
+     */
+    @JvmStatic
+    fun ItemStack.addCharge(amount: Int) {
+        // 获取物品NBT
+        val itemTag = getItemTag()
+        // 获取物品使用次数(不存在则停止操作)
+        val charge = itemTag.getDeepOrNull("NeigeItems.charge")?.asInt() ?: return
+        // 获取物品最大使用次数
+        val maxCharge = itemTag.getDeepOrNull("NeigeItems.maxCharge")!!.asInt()
+        // 计算新使用次数
+        val newCharge = (charge + amount).coerceAtMost(maxCharge).coerceAtLeast(0)
+        // 修改使用次数
+        itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(newCharge))
+    }
+
+    /**
+     * 设置物品最大使用次数
+     *
+     * @param amount 最大使用次数
+     */
+    @JvmStatic
+    fun ItemStack.setMaxCharge(amount: Int) {
+        // 获取物品NBT
+        val itemTag = getItemTag()
+        // 获取物品耐久值(不存在则停止操作)
+        val charge = (itemTag.getDeepOrNull("NeigeItems.charge")?.asInt() ?: return).coerceAtMost(amount.coerceAtLeast(1))
+        // 修改耐久值
+        itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(charge))
+        // 修改最大耐久值
+        itemTag.putDeepFixed("NeigeItems.maxCharge", ItemTagData(amount.coerceAtLeast(1)))
+    }
+
+    /**
+     * 添加物品最大使用次数
+     *
+     * @param amount 添加量(可为负)
+     */
+    @JvmStatic
+    fun ItemStack.addMaxCharge(amount: Int) {
+        // 获取物品NBT
+        val itemTag = getItemTag()
+        // 获取物品最大耐久值
+        val maxCharge = ((itemTag.getDeepOrNull("NeigeItems.maxCharge")?.asInt() ?: return) + amount).coerceAtLeast(1)
+        // 获取物品耐久值(不存在则停止操作)
+        val charge = itemTag.getDeepOrNull("NeigeItems.charge")!!.asInt().coerceAtMost(maxCharge)
+        // 修改耐久值
+        itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(charge))
+        // 修改最大耐久值
+        itemTag.putDeepFixed("NeigeItems.maxCharge", ItemTagData(maxCharge))
+    }
+
+    /**
+     * 设置物品耐久值
+     *
+     * @param amount 耐久值
+     */
+    @JvmStatic
+    fun ItemStack.setCustomDurability(amount: Int) {
+        // 获取物品NBT
+        val itemTag = getItemTag()
+        // 获取物品最大耐久值(不存在则停止操作)
+        val maxDurability = itemTag.getDeepOrNull("NeigeItems.maxDurability")?.asInt() ?: return
+        // 计算新耐久值
+        val newDurability = amount.coerceAtMost(maxDurability).coerceAtLeast(0)
+        // 修改耐久值
+        itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(newDurability))
+        this.durability = (this.durability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
+    }
+
+    /**
+     * 添加物品耐久值
+     *
+     * @param amount 添加量(可为负)
+     */
+    @JvmStatic
+    fun ItemStack.addCustomDurability(amount: Int) {
+        // 获取物品NBT
+        val itemTag = getItemTag()
+        // 获取物品耐久值(不存在则停止操作)
+        val durability = itemTag.getDeepOrNull("NeigeItems.durability")?.asInt() ?: return
+        // 获取物品最大耐久值
+        val maxDurability = itemTag.getDeepOrNull("NeigeItems.maxDurability")!!.asInt()
+        // 计算新耐久值
+        val newDurability = (durability + amount).coerceAtMost(maxDurability).coerceAtLeast(0)
+        // 修改耐久值
+        itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(newDurability))
+        this.durability = (this.durability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
+    }
+
+    /**
+     * 设置物品最大耐久值
+     *
+     * @param amount 最大耐久值
+     */
+    @JvmStatic
+    fun ItemStack.setMaxCustomDurability(amount: Int) {
+        // 获取物品NBT
+        val itemTag = getItemTag()
+        // 获取物品耐久值(不存在则停止操作)
+        val durability = (itemTag.getDeepOrNull("NeigeItems.durability")?.asInt() ?: return).coerceAtMost(amount.coerceAtLeast(1))
+        // 修改耐久值
+        itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(durability))
+        // 修改最大耐久值
+        itemTag.putDeepFixed("NeigeItems.maxDurability", ItemTagData(amount.coerceAtLeast(1)))
+        this.durability = (this.durability * (1 - (durability.toDouble()/amount))).toInt().toShort()
+    }
+
+    /**
+     * 添加物品最大耐久值
+     *
+     * @param amount 添加量(可为负)
+     */
+    @JvmStatic
+    fun ItemStack.addMaxCustomDurability(amount: Int) {
+        // 获取物品NBT
+        val itemTag = getItemTag()
+        // 获取物品最大耐久值
+        val maxDurability = ((itemTag.getDeepOrNull("NeigeItems.maxDurability")?.asInt() ?: return) + amount).coerceAtLeast(1)
+        // 获取物品耐久值(不存在则停止操作)
+        val durability = itemTag.getDeepOrNull("NeigeItems.durability")!!.asInt().coerceAtMost(maxDurability)
+        // 修改耐久值
+        itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(durability))
+        // 修改最大耐久值
+        itemTag.putDeepFixed("NeigeItems.maxDurability", ItemTagData(maxDurability))
+        this.durability = (this.durability * (1 - (durability.toDouble()/maxDurability))).toInt().toShort()
     }
 }

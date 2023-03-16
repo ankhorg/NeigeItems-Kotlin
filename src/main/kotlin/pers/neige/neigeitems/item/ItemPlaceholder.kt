@@ -58,21 +58,38 @@ class ItemPlaceholder {
     init {
         // 加载基础变量
         addExpansion("neigeitems") { itemStack, param ->
-            val args = param.split("_")
+            val args = param.split("_", limit = 2)
             val itemTag = itemStack.getItemTag()
             when (args[0].lowercase(Locale.getDefault())) {
                 "charge" -> {
-                    itemTag["NeigeItems"]?.asCompound()?.get("charge")?.asInt()?.toString()
+                    itemTag.getDeepOrNull("NeigeItems.charge")?.asString()
                 }
                 "maxcharge" -> {
-                    itemTag["NeigeItems"]?.asCompound()?.get("maxCharge")?.asInt()?.toString()
+                    itemTag.getDeepOrNull("NeigeItems.maxCharge")?.asString()
+                }
+                "durability" -> {
+                    itemTag.getDeepOrNull("NeigeItems.durability")?.asString()
+                }
+                "maxdurability" -> {
+                    itemTag.getDeepOrNull("NeigeItems.maxDurability")?.asString()
+                }
+                "itembreak" -> {
+                    val info = args.getOrNull(1)?.split("_", limit = 2)
+                    val itemBreak = itemTag.getDeepOrNull("NeigeItems.itemBreak")?.asByte()
+                    // 值为0代表不损坏
+                    if (itemBreak == 0.toByte()) {
+                        info?.getOrNull(0)
+                    // 值为1或不存在代表损坏
+                    } else {
+                        info?.getOrNull(1)
+                    }
                 }
                 "nbt" -> {
-                    itemTag.getDeepOrNull(args.drop(1).joinToString("_"))?.asString()
+                    itemTag.getDeepOrNull(args.getOrNull(1) ?: "")?.asString()
                 }
                 "nbtnumber" -> {
-                    val fixed = args[1]
-                    "%.${fixed}f".format(itemTag.getDeepOrNull(args.drop(2).joinToString("_"))?.asDouble())
+                    val info = args.getOrNull(1)?.split("_", limit = 2)
+                    "%.${info?.getOrNull(0)}f".format(itemTag.getDeepOrNull(info?.getOrNull(1) ?: "")?.asDouble())
                 }
                 else -> null
             }

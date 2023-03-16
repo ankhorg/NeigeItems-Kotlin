@@ -8,13 +8,12 @@ import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.event.ItemPackGiveEvent
+import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.manager.ItemPackManager
-import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.LangUtils.getLang
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.module.nms.getName
 import taboolib.platform.util.giveItem
 
 object GivePack {
@@ -119,7 +118,7 @@ object GivePack {
                                 player.giveItem(itemStack)
                             }
                             dropData?.let {
-                                dropData[itemStack.getName()] = dropData[itemStack.getName()]?.let { it + 1 } ?: let { 1 }
+                                dropData[itemStack.getParsedName()] = dropData[itemStack.getParsedName()]?.let { it + 1 } ?: let { 1 }
                             }
                         }
                     }

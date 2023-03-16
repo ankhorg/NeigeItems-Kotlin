@@ -26,6 +26,7 @@ import pers.neige.neigeitems.item.color.impl.ItemColorVanilla
 import pers.neige.neigeitems.manager.ConfigManager.config
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
+import taboolib.module.nms.getName
 import java.util.*
 import java.util.function.BiFunction
 
@@ -216,6 +217,19 @@ object HookerManager {
         return when (itemPlaceholder) {
             null -> text
             else -> itemPlaceholder.parse(itemStack, text)
+        }
+    }
+
+    /**
+     * 获取已解析物品变量的物品名
+     *
+     * @return 解析后文本
+     */
+    @JvmStatic
+    fun ItemStack.getParsedName(): String {
+        return when (itemPlaceholder) {
+            null -> getName()
+            else -> itemPlaceholder.parse(this, getName())
         }
     }
 

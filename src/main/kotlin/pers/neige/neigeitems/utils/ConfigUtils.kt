@@ -48,6 +48,44 @@ object ConfigUtils {
     }
 
     /**
+     * 获取文件夹内文件
+     *
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getFile(file: String): File {
+        return File(getDataFolder(), File.separator + file)
+    }
+
+    /**
+     * 获取文件夹内文件(不存在时返回null)
+     *
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getFileOrNull(file: String): File? {
+        return File(getDataFolder(), File.separator + file).let {
+            if (!it.exists()) null
+            else it
+        }
+    }
+
+    /**
+     * 获取文件夹内文件(不存在时创建文件)
+     *
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getFileOrCreate(file: String): File {
+        return File(getDataFolder(), File.separator + file).also {
+            if (!it.exists()) it.mkdirs()
+        }
+    }
+
+    /**
      * 获取文件夹内所有文件
      *
      * @param plugin 待获取文件夹归属插件
@@ -57,6 +95,59 @@ object ConfigUtils {
     @JvmStatic
     fun getAllFiles(plugin: Plugin, dir: String): ArrayList<File> {
         return getAllFiles(File(plugin.dataFolder, File.separator + dir))
+    }
+
+    /**
+     * 获取文件夹内所有文件
+     *
+     * @param plugin 待获取文件夹归属插件
+     * @param dir 待获取文件夹路径
+     * @return 文件夹内所有文件
+     */
+    @JvmStatic
+    fun getAllFiles(plugin: String, dir: String): ArrayList<File> {
+        return getAllFiles(File(File(getDataFolder().parent, File.separator + plugin), File.separator + dir))
+    }
+
+    /**
+     * 获取文件夹内文件
+     *
+     * @param plugin 待获取文件夹归属插件
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getFile(plugin: String, file: String): File {
+        return File(File(getDataFolder().parent, File.separator + plugin), File.separator + file)
+    }
+
+    /**
+     * 获取文件夹内文件(不存在时返回null)
+     *
+     * @param plugin 待获取文件夹归属插件
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getFileOrNull(plugin: String, file: String): File? {
+        return File(File(getDataFolder().parent, File.separator + plugin), File.separator + file).let {
+            if (!it.exists()) null
+            else it
+        }
+    }
+
+    /**
+     * 获取文件夹内文件(不存在时创建文件)
+     *
+     * @param plugin 待获取文件夹归属插件
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getFileOrCreate(plugin: String, file: String): File {
+        return File(File(getDataFolder().parent, File.separator + plugin), File.separator + file).also {
+            if (!it.exists()) it.mkdirs()
+        }
     }
 
     /**

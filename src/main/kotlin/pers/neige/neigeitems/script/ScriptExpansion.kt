@@ -28,8 +28,26 @@ class ScriptExpansion : CompiledScript {
                 const EventPriority = Packages.pers.neige.neigeitems.taboolib.common.platform.event.EventPriority
                 const Listener = Packages.pers.neige.neigeitems.script.tool.ScriptListener
                 const Placeholder = Packages.pers.neige.neigeitems.script.tool.ScriptPlaceholder
+                const ActionUtils = Packages.pers.neige.neigeitems.utils.ActionUtils
+                const ConfigUtils = Packages.pers.neige.neigeitems.utils.ConfigUtils
+                const FileUtils = Packages.pers.neige.neigeitems.utils.FileUtils
+                const ItemUtils = Packages.pers.neige.neigeitems.utils.ItemUtils
+                const JsonUtils = Packages.pers.neige.neigeitems.utils.JsonUtils
+                const LangUtils = Packages.pers.neige.neigeitems.utils.LangUtils
+                const PlayerUtils = Packages.pers.neige.neigeitems.utils.PlayerUtils
+                const SamplingUtils = Packages.pers.neige.neigeitems.utils.SamplingUtils
+                const ScriptUtils = Packages.pers.neige.neigeitems.utils.ScriptUtils
+                const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
+                const StringUtils = Packages.pers.neige.neigeitems.utils.StringUtils
+                const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
+                const ConfigManager = Packages.pers.neige.neigeitems.manager.ConfigManager.INSTANCE
+                const HookerManager = Packages.pers.neige.neigeitems.manager.HookerManager
+                const ItemEditorManager = Packages.pers.neige.neigeitems.manager.ItemEditorManager.INSTANCE
+                const ItemManager = Packages.pers.neige.neigeitems.manager.ItemManager.INSTANCE
+                const ItemPackManager = Packages.pers.neige.neigeitems.manager.ItemPackManager.INSTANCE
                 
                 const plugin = Packages.pers.neige.neigeitems.NeigeItems.INSTANCE.plugin
+                const pluginManager = Bukkit.getPluginManager()
                 const scheduler = Bukkit.getScheduler()
                 
                 function sync(task) {

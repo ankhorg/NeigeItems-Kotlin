@@ -7,13 +7,13 @@ import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.event.ItemGiveEvent
 import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 import taboolib.module.nms.getItemTag
-import taboolib.module.nms.getName
 
 object Give {
     // ni get [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID获取NI物品
@@ -240,11 +240,11 @@ object Give {
                             sender.sendLang("Messages.successInfo", mapOf(
                                 Pair("{player}", player.name),
                                 Pair("{amount}", amount.toString()),
-                                Pair("{name}", itemStack.getName())
+                                Pair("{name}", itemStack.getParsedName())
                             ))
                             player.sendLang("Messages.givenInfo", mapOf(
                                 Pair("{amount}", amount.toString()),
-                                Pair("{name}", itemStack.getName())
+                                Pair("{name}", itemStack.getParsedName())
                             ))
                             // 未知物品ID
                         } ?: let {
@@ -282,7 +282,7 @@ object Give {
                                     NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
                                         player.giveItems(event.itemStack, event.amount)
                                     }
-                                    dropData[event.itemStack.getName()] = dropData[event.itemStack.getName()]?.let { it + event.amount } ?: event.amount
+                                    dropData[event.itemStack.getParsedName()] = dropData[event.itemStack.getParsedName()]?.let { it + event.amount } ?: event.amount
                                     // 未知物品ID
                                 }
                             }

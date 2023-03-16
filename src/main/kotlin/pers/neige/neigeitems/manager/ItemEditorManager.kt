@@ -11,6 +11,14 @@ import org.neosearch.stringsearcher.StringSearcher
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.HookerManager.papi
+import pers.neige.neigeitems.manager.ItemManager.addCharge
+import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
+import pers.neige.neigeitems.manager.ItemManager.addMaxCharge
+import pers.neige.neigeitems.manager.ItemManager.addMaxCustomDurability
+import pers.neige.neigeitems.manager.ItemManager.setCharge
+import pers.neige.neigeitems.manager.ItemManager.setCustomDurability
+import pers.neige.neigeitems.manager.ItemManager.setMaxCharge
+import pers.neige.neigeitems.manager.ItemManager.setMaxCustomDurability
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.castToItemTagData
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
@@ -1747,6 +1755,90 @@ object ItemEditorManager {
                     itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
+            }
+            return@addBasicItemEditor false
+        }
+        // 给物品设置使用次数
+        addBasicItemEditor("setCharge") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.setCharge(it)
+            }
+            return@addBasicItemEditor true
+        }
+        // 给物品增加使用次数
+        addBasicItemEditor("addCharge") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.addCharge(it)
+            }
+            return@addBasicItemEditor false
+        }
+        // 给物品减少使用次数
+        addBasicItemEditor("takeCharge") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.addCharge(-it)
+            }
+            return@addBasicItemEditor false
+        }
+        // 给物品设置最大使用次数
+        addBasicItemEditor("setMaxCharge") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.setMaxCharge(it)
+            }
+            return@addBasicItemEditor true
+        }
+        // 给物品增加最大使用次数
+        addBasicItemEditor("addMaxCharge") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.addMaxCharge(it)
+            }
+            return@addBasicItemEditor false
+        }
+        // 给物品减少最大使用次数
+        addBasicItemEditor("takeMaxCharge") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.addMaxCharge(-it)
+            }
+            return@addBasicItemEditor false
+        }
+        // 给物品设置自定义耐久值
+        addBasicItemEditor("setCustomDurability") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.setCustomDurability(it)
+            }
+            return@addBasicItemEditor true
+        }
+        // 给物品增加自定义耐久值
+        addBasicItemEditor("addCustomDurability") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.addCustomDurability(it)
+            }
+            return@addBasicItemEditor false
+        }
+        // 给物品减少自定义耐久值
+        addBasicItemEditor("takeCustomDurability") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.addCustomDurability(-it)
+            }
+            return@addBasicItemEditor false
+        }
+        // 给物品设置最大自定义耐久值
+        addBasicItemEditor("setMaxCustomDurability") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.setMaxCustomDurability(it)
+            }
+            return@addBasicItemEditor true
+        }
+        // 给物品增加最大自定义耐久值
+        addBasicItemEditor("addMaxCustomDurability") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.addMaxCustomDurability(it)
+            }
+            return@addBasicItemEditor false
+        }
+        // 给物品减少最大自定义耐久值
+        addBasicItemEditor("takeMaxCustomDurability") { _, itemStack, content ->
+            content.toIntOrNull()?.also {
+                itemStack.addMaxCustomDurability(-it)
             }
             return@addBasicItemEditor false
         }

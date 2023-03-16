@@ -6,12 +6,12 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.event.ItemDropEvent
+import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.module.nms.getName
 
 object Drop {
     val drop = subCommand {
@@ -192,7 +192,7 @@ object Drop {
                                 Pair("{y}", event.location.y.toString()),
                                 Pair("{z}", event.location.z.toString()),
                                 Pair("{amount}", event.amount.toString()),
-                                Pair("{name}", event.itemStack.getName())
+                                Pair("{name}", event.itemStack.getParsedName())
                             ))
                             // 未知物品ID
                         } ?: let {
@@ -219,7 +219,7 @@ object Drop {
                                 if (event.isCancelled) return@alsoItem
                                 event.location.dropNiItems(event.itemStack, event.amount, parser)
                                 val currentData = dropData.computeIfAbsent(event.location) { HashMap() }
-                                currentData[event.itemStack.getName()] = currentData[event.itemStack.getName()]?.let { it + event.amount } ?: event.amount
+                                currentData[event.itemStack.getParsedName()] = currentData[event.itemStack.getParsedName()]?.let { it + event.amount } ?: event.amount
                                 // 未知物品ID
                             } ?: let {
                                 sender.sendLang("Messages.unknownItem", mapOf(

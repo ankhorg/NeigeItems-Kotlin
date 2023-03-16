@@ -11,9 +11,9 @@ object Expansion : PlaceholderExpansion {
     override val identifier = "ni"
 
     override fun onPlaceholderRequest(player: Player?, args: String): String {
-        val params = args.split("_")
+        val params = args.split("_", limit = 2)
         return when (params[0].lowercase()) {
-            "parse" -> params.subList(1, params.size).joinToString("_").parseSection(player)
+            "parse" -> params.getOrNull(1)?.parseSection(player) ?: ""
             else -> ""
         }
     }

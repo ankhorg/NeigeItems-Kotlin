@@ -615,3 +615,37 @@ WeightDeclareTest:
       shuffled: true
       # 是否记录未选中的值
       putelse: true
+
+DurabilityTest1:
+  material: FLINT_AND_STEEL
+  # 发包显示(创造模式不解析)
+  name: "%neigeitems_durability%/%neigeitems_maxdurability%"
+  lore:
+    - "%neigeitems_itembreak_耐久耗尽不损坏_耐久耗尽损坏%"
+  options:
+    # 不填写maxdurability则默认最大耐久等于耐久
+    durability: 5
+# 手持火焰弹右键点燃TNT时触发
+DurabilityTest2:
+  # 1.12.2版本应该改成FIREBALL(即火焰弹)
+  material: FIRE_CHARGE
+  name: "%neigeitems_durability%/%neigeitems_maxdurability%"
+  lore:
+    - "%neigeitems_itembreak_耐久耗尽不损坏_耐久耗尽损坏%"
+  options:
+    durability: 5
+    # 耐久耗尽后物品不损坏
+    itembreak: false
+DurabilityTest3:
+  material: STONE_SWORD
+  name: "%neigeitems_durability%/%neigeitems_maxdurability%"
+  options:
+    # 耐久
+    durability: 5
+    # 最大耐久
+    maxdurability: 6
+DurabilityTest4:
+  material: BOW
+  name: "%neigeitems_durability%/%neigeitems_maxdurability%"
+  options:
+    durability: 5
