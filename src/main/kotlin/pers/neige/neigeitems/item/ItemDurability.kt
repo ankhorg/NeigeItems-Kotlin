@@ -40,7 +40,7 @@ object ItemDurability {
     /**
      * 点燃TNT(点燃TNT不触发点燃方块事件, 故而另做考虑)
      */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun igniteTNT(event: PlayerInteractEvent) {
         // 交互物品
         val itemStack = event.item
@@ -106,7 +106,7 @@ object ItemDurability {
     /**
      * 交互实体
      */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun igniteCreeper(event: PlayerInteractEntityEvent) {
         // 对于已损坏物品取消事件
         if (event.player.inventory.getItem(event.hand)?.getItemTag()?.getDeepOrNull("NeigeItems.durability")?.asInt() == 0) {
@@ -121,7 +121,7 @@ object ItemDurability {
     /**
      * 射箭
      */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun shootBow(event: EntityShootBowEvent) {
         // 对于已损坏物品取消事件
         if (event.bow?.getItemTag()?.getDeepOrNull("NeigeItems.durability")?.asInt() == 0) {
@@ -136,7 +136,7 @@ object ItemDurability {
     /**
      * 吃/喝东西
      */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun consume(event: PlayerItemConsumeEvent) {
         // 对于已损坏物品取消事件
         if (event.item.getItemTag().getDeepOrNull("NeigeItems.durability")?.asInt() == 0) {
@@ -151,7 +151,7 @@ object ItemDurability {
     /**
      * 含耐久物品损坏
      */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun itemDamage(event: PlayerItemDamageEvent) {
         // 消耗耐久值
         event.item.damage(event.player, event.damage, true, event)
@@ -160,7 +160,7 @@ object ItemDurability {
     /**
      * 经验修补
      */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun itemMend(event: PlayerItemMendEvent) {
         event.item.addCustomDurability(event.repairAmount)
     }
