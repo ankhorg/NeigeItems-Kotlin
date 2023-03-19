@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.event.player.PlayerItemDamageEvent
 import org.bukkit.event.player.PlayerItemMendEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
@@ -107,13 +108,19 @@ object ItemDurability {
      * 交互实体
      */
     @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    fun igniteCreeper(event: PlayerInteractEntityEvent) {
+    fun interact(event: PlayerInteractEntityEvent) {
         // 对于已损坏物品取消事件
-        if (event.player.inventory.getItem(event.hand)?.getItemTag()?.getDeepOrNull("NeigeItems.durability")?.asInt() == 0) {
-            event.isCancelled = true
-            // 物品损坏提示
-            getLang("Messages.brokenItem")?.let {
-                if (it != "") event.player.sendActionBar(it)
+        val itemStack = when(event.hand) {
+            EquipmentSlot.HAND -> event.player.inventory.itemInMainHand
+            else -> event.player.inventory.itemInOffHand
+        }
+        if (itemStack.type != Material.AIR) {
+            if (itemStack.getItemTag().getDeepOrNull("NeigeItems.durability")?.asInt() == 0) {
+                event.isCancelled = true
+                // 物品损坏提示
+                getLang("Messages.brokenItem")?.let {
+                    if (it != "") event.player.sendActionBar(it)
+                }
             }
         }
     }
