@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
+import pers.neige.neigeitems.utils.SectionUtils.getSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import taboolib.module.nms.ItemTag
 import java.awt.Color
@@ -240,38 +241,36 @@ object SectionUtils {
     ): String {
         when (val index = this.indexOf("::")) {
             -1 -> {
-                if (cache != null && sections != null) {
-                    // 尝试读取缓存
-                    if (cache[this] != null) {
-                        // 直接返回对应节点值
-                        return cache[this] as String
-                        // 读取失败, 尝试主动解析
-                    } else {
-                        // 尝试解析并返回对应节点值
-                        if (sections.contains(this)) {
-                            // 获取节点ConfigurationSection
-                            val section = sections.getConfigurationSection(this)
-                            // 简单节点
-                            if (section == null) {
-                                val result = sections.getString(this)?.parseItemSection(itemStack, itemTag, data, player, cache, sections) ?: "<$this>"
-                                cache[this] = result
-                                return result
-                            }
-                            // 加载节点
-                            return Section(section, this).load(cache, player, sections) ?: "<$this>"
+                // 尝试读取缓存
+                if (kotlin.runCatching { cache?.get(this) }.getOrNull() != null) {
+                    // 直接返回对应节点值
+                    return cache?.get(this) as String
+                    // 读取失败, 尝试主动解析
+                } else {
+                    // 尝试解析并返回对应节点值
+                    if (sections != null && sections.contains(this)) {
+                        // 获取节点ConfigurationSection
+                        val section = sections.getConfigurationSection(this)
+                        // 简单节点
+                        if (section == null) {
+                            val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
+                            cache?.put(this, result)
+                            return result
                         }
-                        if (this.startsWith("#")) {
+                        // 加载节点
+                        return Section(section, this).load(cache, player, sections) ?: "<$this>"
+                    }
+                    if (this.startsWith("#")) {
+                        try {
                             try {
-                                try {
-                                    val hex = (this.substring(1).toIntOrNull(16) ?: 0)
-                                        .coerceAtLeast(0)
-                                        .coerceAtMost(0xFFFFFF)
-                                    val color = Color(hex)
-                                    return ChatColor.of(color).toString()
-                                } catch (_: NumberFormatException) {}
-                            } catch (error: NoSuchMethodError) {
-                                Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
-                            }
+                                val hex = (this.substring(1).toIntOrNull(16) ?: 0)
+                                    .coerceAtLeast(0)
+                                    .coerceAtMost(0xFFFFFF)
+                                val color = Color(hex)
+                                return ChatColor.of(color).toString()
+                            } catch (_: NumberFormatException) {}
+                        } catch (error: NoSuchMethodError) {
+                            Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
                         }
                     }
                 }

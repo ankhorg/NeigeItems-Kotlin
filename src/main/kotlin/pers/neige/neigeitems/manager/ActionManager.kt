@@ -164,17 +164,17 @@ object ActionManager {
                 // 解析物品变量
                 val actionString = when (itemTag) {
                     null -> value.parseSection(
-                        map?.get("cache") as HashMap<String, String>?,
+                        map?.get("cache") as? HashMap<String, String>,
                         player,
-                        map?.get("sections") as ConfigurationSection?,
+                        map?.get("sections") as? ConfigurationSection,
                     )
                     else -> value.parseItemSection(
                         itemStack!!,
                         itemTag,
                         data,
                         player,
-                        map?.get("cache") as HashMap<String, String>?,
-                        map?.get("sections") as ConfigurationSection?
+                        (map?.get("cache") ?: global) as? HashMap<String, String>,
+                        map?.get("sections") as? ConfigurationSection
                     )
                 }
                 // 解析动作类型及动作内容
@@ -262,17 +262,17 @@ object ActionManager {
         // 解析物品变量
         val actionString = when (itemTag) {
             null -> action.parseSection(
-                map?.get("cache") as HashMap<String, String>?,
+                map?.get("cache") as? HashMap<String, String>,
                 player,
-                map?.get("sections") as ConfigurationSection?,
+                map?.get("sections") as? ConfigurationSection,
             )
             else -> action.parseItemSection(
                 itemStack!!,
                 itemTag,
                 data,
                 player,
-                map?.get("cache") as HashMap<String, String>?,
-                map?.get("sections") as ConfigurationSection?
+                (map?.get("cache") ?: global) as? HashMap<String, String>,
+                map?.get("sections") as? ConfigurationSection
             )
         }
         // 解析动作类型及动作内容
@@ -974,7 +974,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1040,7 +1040,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             itemStack.consumeAndReturn(amount, itemTag, neigeItems)?.also { itemStacks ->
                 // 设置物品
@@ -1118,7 +1118,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1193,7 +1193,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1267,7 +1267,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1333,7 +1333,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
