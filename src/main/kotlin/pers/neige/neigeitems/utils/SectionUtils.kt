@@ -5,6 +5,7 @@ import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
@@ -176,6 +177,7 @@ object SectionUtils {
     /**
      * 对文本进行物品节点解析
      *
+     * @param itemStack 物品
      * @param itemTag 物品NBT
      * @param data NeigeItems.data 代表NI物品节点数据
      * @param player 用于解析物品的玩家
@@ -183,16 +185,18 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.parseItemSection(
+        itemStack: ItemStack,
         itemTag: ItemTag,
         data: HashMap<String, String>?,
         player: OfflinePlayer
     ): String {
-        return parseItemSection(itemTag, data, player, null, null)
+        return parseItemSection(itemStack, itemTag, data, player, null, null)
     }
 
     /**
      * 对文本进行物品节点解析
      *
+     * @param itemStack 物品
      * @param itemTag 物品NBT
      * @param data NeigeItems.data 代表NI物品节点数据
      * @param player 用于解析物品的玩家
@@ -202,6 +206,7 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.parseItemSection(
+        itemStack: ItemStack,
         itemTag: ItemTag,
         data: HashMap<String, String>?,
         player: OfflinePlayer,
@@ -209,13 +214,14 @@ object SectionUtils {
         sections: ConfigurationSection?
     ): String {
         return this.parse {
-            return@parse it.getItemSection(itemTag, data, player, cache, sections)
+            return@parse it.getItemSection(itemStack, itemTag, data, player, cache, sections)
         }
     }
 
     /**
      * 对物品节点内容进行解析 (已经去掉 <>)
      *
+     * @param itemStack 物品
      * @param itemTag 物品NBT
      * @param data NeigeItems.data 代表NI物品节点数据
      * @param player 用于解析物品的玩家
@@ -225,6 +231,7 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.getItemSection(
+        itemStack: ItemStack,
         itemTag: ItemTag,
         data: HashMap<String, String>?,
         player: OfflinePlayer,
@@ -246,7 +253,7 @@ object SectionUtils {
                             val section = sections.getConfigurationSection(this)
                             // 简单节点
                             if (section == null) {
-                                val result = sections.getString(this)?.parseItemSection(itemTag, data, player, cache, sections) ?: "<$this>"
+                                val result = sections.getString(this)?.parseItemSection(itemStack, itemTag, data, player, cache, sections) ?: "<$this>"
                                 cache[this] = result
                                 return result
                             }
@@ -280,6 +287,15 @@ object SectionUtils {
                     }
                     "data" -> {
                         (data ?: itemTag["NeigeItems"]?.asCompound()?.get("data")?.asString()?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
+                    }
+                    "amount" -> {
+                        itemStack.amount.toString()
+                    }
+                    "type" -> {
+                        itemStack.type.toString()
+                    }
+                    "damage" -> {
+                        itemStack.durability.toString()
                     }
                     else -> {
                         SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player) ?: "<$this>"

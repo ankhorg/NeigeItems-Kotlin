@@ -33,16 +33,18 @@ object ActionUtils {
      * 通过动作信息判断玩家是否处于动作冷却(无消耗触发物品动作的冷却时间)
      *
      * @param player 消耗物品的玩家
+     * @param itemStack 物品
      * @param itemTag 物品NBT
      * @return 是否处于冷却时间
      */
     @JvmStatic
     fun ActionTrigger.isCoolDown(
         player: Player,
+        itemStack: ItemStack,
         itemTag: ItemTag,
         data: HashMap<String, String>?
     ): Boolean {
-        val cd = cooldown?.parseItemSection(itemTag, data, player)?.toLongOrNull() ?: 1000
+        val cd = cooldown?.parseItemSection(itemStack, itemTag, data, player)?.toLongOrNull() ?: 1000
         return this.isCoolDown(player, cd)
     }
 

@@ -169,6 +169,7 @@ object ActionManager {
                         map?.get("sections") as ConfigurationSection?,
                     )
                     else -> value.parseItemSection(
+                        itemStack!!,
                         itemTag,
                         data,
                         player,
@@ -266,6 +267,7 @@ object ActionManager {
                 map?.get("sections") as ConfigurationSection?,
             )
             else -> action.parseItemSection(
+                itemStack!!,
                 itemTag,
                 data,
                 player,
@@ -956,7 +958,7 @@ object ActionManager {
         // 取消交互事件
         event.isCancelled = true
         // 检测冷却
-        if ((basicTrigger ?: allTrigger)!!.isCoolDown(player, itemTag, data)) return
+        if ((basicTrigger ?: allTrigger)!!.isCoolDown(player, itemStack, itemTag, data)) return
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 如果物品需要消耗
@@ -972,7 +974,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1022,7 +1024,7 @@ object ActionManager {
         // 取消事件
         event.isCancelled = true
         // 检测冷却
-        if (trigger.isCoolDown(player, itemTag, data)) return
+        if (trigger.isCoolDown(player, itemStack, itemTag, data)) return
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
@@ -1038,7 +1040,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
             itemStack.consumeAndReturn(amount, itemTag, neigeItems)?.also { itemStacks ->
                 // 设置物品
@@ -1097,7 +1099,7 @@ object ActionManager {
         // 获取物品消耗信息
         val consume =  trigger.consume
         // 检测冷却
-        if (trigger.isCoolDown(player, itemTag, data)) {
+        if (trigger.isCoolDown(player, itemStack, itemTag, data)) {
             event.isCancelled = true
             return
         }
@@ -1116,7 +1118,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1172,7 +1174,7 @@ object ActionManager {
         // 获取物品消耗信息
         val consume =  trigger.consume
         // 检测冷却
-        if (trigger.isCoolDown(player, itemTag, data)) {
+        if (trigger.isCoolDown(player, itemStack, itemTag, data)) {
             event.isCancelled = true
             return
         }
@@ -1191,7 +1193,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1249,7 +1251,7 @@ object ActionManager {
         // 取消交互事件
         event.isCancelled = true
         // 检测冷却
-        if (trigger.isCoolDown(player, itemTag, data)) return
+        if (trigger.isCoolDown(player, itemStack, itemTag, data)) return
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
@@ -1265,7 +1267,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1315,7 +1317,7 @@ object ActionManager {
         // 取消交互事件
         event.isCancelled = true
         // 检测冷却
-        if (trigger.isCoolDown(player, itemTag, data)) return
+        if (trigger.isCoolDown(player, itemStack, itemTag, data)) return
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
@@ -1331,7 +1333,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemTag, data, player)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
