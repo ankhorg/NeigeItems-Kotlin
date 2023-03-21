@@ -28,6 +28,8 @@ class ScriptExpansion : CompiledScript {
                 const EventPriority = Packages.pers.neige.neigeitems.taboolib.common.platform.event.EventPriority
                 const Listener = Packages.pers.neige.neigeitems.script.tool.ScriptListener
                 const Placeholder = Packages.pers.neige.neigeitems.script.tool.ScriptPlaceholder
+                const Task = Packages.pers.neige.neigeitems.script.tool.ScriptTask
+                
                 const ActionUtils = Packages.pers.neige.neigeitems.utils.ActionUtils
                 const ConfigUtils = Packages.pers.neige.neigeitems.utils.ConfigUtils
                 const FileUtils = Packages.pers.neige.neigeitems.utils.FileUtils

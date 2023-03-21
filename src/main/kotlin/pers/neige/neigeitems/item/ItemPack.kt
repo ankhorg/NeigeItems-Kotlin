@@ -23,7 +23,7 @@ import java.util.concurrent.ThreadLocalRandom
  * 物品包信息
  *
  * @property id 物品包ID
- * @property rawConfigSection 物品包配置
+ * @param rawConfigSection 物品包配置
  */
 class ItemPack(
     /**

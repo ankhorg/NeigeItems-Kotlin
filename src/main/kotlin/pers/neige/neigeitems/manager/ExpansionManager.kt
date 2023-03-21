@@ -5,6 +5,7 @@ import pers.neige.neigeitems.script.ScriptExpansion
 import pers.neige.neigeitems.script.tool.ScriptCommand
 import pers.neige.neigeitems.script.tool.ScriptListener
 import pers.neige.neigeitems.script.tool.ScriptPlaceholder
+import pers.neige.neigeitems.script.tool.ScriptTask
 import pers.neige.neigeitems.utils.ConfigUtils
 import taboolib.common.LifeCycle
 import taboolib.common.env.RuntimeDependencies
@@ -47,6 +48,11 @@ object ExpansionManager {
      */
     val placeholders = ConcurrentHashMap<String, ScriptPlaceholder>()
 
+    /**
+     * 所有脚本扩展注册的Bukkit任务
+     */
+    val tasks = ConcurrentHashMap.newKeySet<ScriptTask>()
+
     init {
         load()
     }
@@ -70,6 +76,11 @@ object ExpansionManager {
             it.unRegister()
         }
         placeholders.clear()
+        // 卸载Bukkit任务
+        tasks.forEach {
+            it.unRegister()
+        }
+        tasks.clear()
         expansions.clear()
         load()
     }
