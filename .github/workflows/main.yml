@@ -4,8 +4,8 @@ on:
     branches:
       - main
 jobs:
-  # 自动部署GitPage
-  gitpage:
+  # 自动部署Javadoc
+  javadoc:
     runs-on: ubuntu-latest
     steps:
       # 拉取代码
