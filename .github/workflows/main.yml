@@ -1,5 +1,8 @@
 name: Workflow Build
-on: [ push ]
+on:
+  push:
+    branches:
+      - main
 jobs:
   # 自动部署GitPage
   gitpage:
