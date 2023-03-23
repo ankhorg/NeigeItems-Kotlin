@@ -27,7 +27,9 @@ jobs:
           java-version: 8.0
       # 编译出静态页面
       - name: Build
-        run: ./gradlew dokkaJavadoc
+        run: |-
+          chmod +x gradlew
+          ./gradlew dokkaJavadoc
       # 塞进javadoc分支(即部署到GitPage)
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v3
