@@ -1,6 +1,25 @@
 name: Workflow Build
 on: [ push ]
 jobs:
+  # 自动部署GitPage
+  gitpage:
+    runs-on: ubuntu-latest
+    steps:
+      # 拉取代码
+      - name: Checkout
+        uses: actions/checkout@master
+        with:
+          persist-credentials: false
+      # 编译出静态页面
+      - name: Install and Build
+        run: ./gradlew dokkaJavadoc
+      # 塞进javadoc分支(即部署到GitPage)
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: javadoc
+          FOLDER: build\dokka\javadoc
   build:
     name: build jar
     runs-on: ubuntu-latest
