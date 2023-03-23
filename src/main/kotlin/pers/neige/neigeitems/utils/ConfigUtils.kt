@@ -81,7 +81,11 @@ object ConfigUtils {
     @JvmStatic
     fun getFileOrCreate(file: String): File {
         return File(getDataFolder(), File.separator + file).also {
-            if (!it.exists()) it.mkdirs()
+            if (!it.exists()) {
+                val parent = it.parentFile
+                if (!parent.exists()) parent.mkdirs()
+                it.createNewFile()
+            }
         }
     }
 
@@ -146,7 +150,11 @@ object ConfigUtils {
     @JvmStatic
     fun getFileOrCreate(plugin: String, file: String): File {
         return File(File(getDataFolder().parent, File.separator + plugin), File.separator + file).also {
-            if (!it.exists()) it.mkdirs()
+            if (!it.exists()) {
+                val parent = it.parentFile
+                if (!parent.exists()) parent.mkdirs()
+                it.createNewFile()
+            }
         }
     }
 
