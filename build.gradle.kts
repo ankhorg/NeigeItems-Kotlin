@@ -78,12 +78,14 @@ dependencies {
         taboo("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
         taboo("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
 //        taboo("com.google.guava:guava:31.1-jre")
+        taboo("org.apache.maven:maven-model:3.9.1")
     } else {
         compileOnly(kotlin("stdlib"))
         compileOnly("org.openjdk.nashorn:nashorn-core:15.4")
         compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
         compileOnly("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
 //        compileOnly("com.google.guava:guava:31.1-jre")
+        compileOnly("org.apache.maven:maven-model:3.9.1")
     }
 }
 

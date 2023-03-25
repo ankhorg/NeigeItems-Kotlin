@@ -29,6 +29,8 @@ class ScriptExpansion : CompiledScript {
                 const Listener = Packages.pers.neige.neigeitems.script.tool.ScriptListener
                 const Placeholder = Packages.pers.neige.neigeitems.script.tool.ScriptPlaceholder
                 const Task = Packages.pers.neige.neigeitems.script.tool.ScriptTask
+                const MavenDependency = Packages.pers.neige.neigeitems.maven.MavenDependency
+                const LocalDependency = Packages.pers.neige.neigeitems.maven.LocalDependency
                 
                 const ActionUtils = Packages.pers.neige.neigeitems.utils.ActionUtils
                 const ConfigUtils = Packages.pers.neige.neigeitems.utils.ConfigUtils

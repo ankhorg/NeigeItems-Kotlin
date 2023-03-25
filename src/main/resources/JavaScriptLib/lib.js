@@ -109,7 +109,7 @@ const parse = function(text) {
  */
 const parseItem = function(text) {
     if (typeof itemTag != "undefined") {
-        return SectionUtils.parseItemSection(text, itemTag, data, player)
+        return SectionUtils.parseItemSection(text, itemStack, itemTag, data, player)
     } else {
         return "未传入物品"
     }
