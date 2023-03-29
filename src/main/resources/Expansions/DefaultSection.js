@@ -1,4 +1,4 @@
-function main() {
+function enable() {
     const SectionManager = Packages.pers.neige.neigeitems.manager.SectionManager.INSTANCE
     const CustomSection = Packages.pers.neige.neigeitems.section.impl.CustomSection
     const Section = Packages.pers.neige.neigeitems.section.Section

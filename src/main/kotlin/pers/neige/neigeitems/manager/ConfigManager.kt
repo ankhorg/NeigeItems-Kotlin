@@ -36,10 +36,10 @@ object ConfigManager {
      */
     @Awake(LifeCycle.INIT)
     fun saveResource() {
-        plugin.saveResourceNotWarn("CustomActions${File.separator}CustomAction.js")
-        plugin.saveResourceNotWarn("CustomItemEditors${File.separator}CustomItemEditor.js")
-        plugin.saveResourceNotWarn("CustomSections${File.separator}CustomSection.js")
-        plugin.saveResourceNotWarn("CustomSections${File.separator}DefaultSection.js")
+        plugin.saveResourceNotWarn("Expansions${File.separator}CustomAction.js")
+        plugin.saveResourceNotWarn("Expansions${File.separator}CustomItemEditor.js")
+        plugin.saveResourceNotWarn("Expansions${File.separator}CustomSection.js")
+        plugin.saveResourceNotWarn("Expansions${File.separator}DefaultSection.js")
         plugin.saveResourceNotWarn("Expansions${File.separator}ExampleExpansion.js")
         plugin.saveResourceNotWarn("GlobalSections${File.separator}ExampleSection.yml")
         plugin.saveResourceNotWarn("ItemActions${File.separator}ExampleAction.yml")

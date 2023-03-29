@@ -1,6 +1,6 @@
 // 文件名不重要, 写成啥都行
-// main函数会自动执行
-function main() {
+// enable函数会自动执行
+function enable() {
     // 导入相应的类, 这两行看不懂的话直接抄就行
     const SectionManager = Packages.pers.neige.neigeitems.manager.SectionManager.INSTANCE
     const CustomSection = Packages.pers.neige.neigeitems.section.impl.CustomSection
