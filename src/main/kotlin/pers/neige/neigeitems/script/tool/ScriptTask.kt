@@ -97,13 +97,18 @@ class ScriptTask {
                 async && delay > 0 -> {
                     bukkitRunnable.runTaskLaterAsynchronously(plugin, delay)
                 }
+                async -> {
+                    bukkitRunnable.runTaskAsynchronously(plugin)
+                }
                 period > 0 -> {
                     bukkitRunnable.runTaskTimer(plugin, delay.coerceAtLeast(0), period)
                 }
                 delay > 0 -> {
                     bukkitRunnable.runTaskLater(plugin, delay)
                 }
-                else -> null
+                else -> {
+                    bukkitRunnable.runTask(plugin)
+                }
             }
         } else {
             bukkitScheduler.callSyncMethod(plugin) {
@@ -117,13 +122,18 @@ class ScriptTask {
                     async && delay > 0 -> {
                         bukkitRunnable.runTaskLaterAsynchronously(plugin, delay)
                     }
+                    async -> {
+                        bukkitRunnable.runTaskAsynchronously(plugin)
+                    }
                     period > 0 -> {
                         bukkitRunnable.runTaskTimer(plugin, delay.coerceAtLeast(0), period)
                     }
                     delay > 0 -> {
                         bukkitRunnable.runTaskLater(plugin, delay)
                     }
-                    else -> null
+                    else -> {
+                        bukkitRunnable.runTask(plugin)
+                    }
                 }
             }.get()
         }
@@ -151,13 +161,5 @@ class ScriptTask {
             }
         }
         return this
-    }
-
-    init {
-        object : BukkitRunnable() {
-            override fun run() {
-                TODO("Not yet implemented")
-            }
-        }
     }
 }
