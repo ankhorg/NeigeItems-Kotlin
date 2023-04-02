@@ -23,7 +23,6 @@ import pers.neige.neigeitems.utils.StringUtils.split
 import taboolib.module.nms.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.cos
-import kotlin.math.roundToInt
 import kotlin.math.sin
 
 
@@ -43,6 +42,17 @@ object ItemUtils {
         val itemTag = ItemTag()
         for ((key, value) in this) {
             itemTag[key as String] = value.toItemTagData()
+        }
+        return itemTag
+    }
+
+    @JvmStatic
+    fun ConfigurationSection.toItemTag(): ItemTag {
+        val itemTag = ItemTag()
+        this.getKeys(false).forEach { key ->
+            this.get(key)?.let { value ->
+                itemTag[key as String] = value.toItemTagData()
+            }
         }
         return itemTag
     }
@@ -152,6 +162,7 @@ object ItemUtils {
                 }
             }
             is HashMap<*, *> -> ItemTagData(this.toItemTag())
+            is ConfigurationSection -> ItemTagData(this.toItemTag())
             else -> ItemTagData("nm的你塞了个什么东西进来，我给你一拖鞋")
         }
     }

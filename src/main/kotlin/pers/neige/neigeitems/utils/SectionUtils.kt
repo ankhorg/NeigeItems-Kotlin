@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
-import pers.neige.neigeitems.utils.SectionUtils.getSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import taboolib.module.nms.ItemTag
 import java.awt.Color

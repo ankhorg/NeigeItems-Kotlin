@@ -9,7 +9,6 @@ import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.event.ItemPackDropEvent
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
-import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit

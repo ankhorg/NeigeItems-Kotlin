@@ -9,7 +9,6 @@ import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.ProxyListener
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.unregisterListener
-import taboolib.platform.BukkitCommand
 import java.util.function.Consumer
 
 /**

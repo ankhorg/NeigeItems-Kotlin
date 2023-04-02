@@ -21,7 +21,12 @@ object ConfigManager {
      * 获取默认Config
      */
     private val originConfig: FileConfiguration =
-        plugin.getResource("config.yml")?.let { YamlConfiguration.loadConfiguration(InputStreamReader(it, "UTF-8")) } ?: YamlConfiguration()
+        plugin.getResource("config.yml")?.let {
+            val reader = InputStreamReader(it, "UTF-8")
+            val config = YamlConfiguration.loadConfiguration(reader)
+            reader.close()
+            config
+        } ?: YamlConfiguration()
 
     /**
      * 获取配置文件

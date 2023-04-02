@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.utils
 
+import java.math.BigDecimal
+
 object StringUtils {
     /**
      * List转文本
@@ -72,7 +74,6 @@ object StringUtils {
         return args
     }
 
-
     /**
      * 将文本分为两段
      *
@@ -89,5 +90,49 @@ object StringUtils {
                 arrayOf(pre, post)
             }
         }
+    }
+
+    /**
+     * 转Int
+     *
+     * @param string 分隔符
+     * @return Int?
+     */
+    @JvmStatic
+    fun toIntOrNull(string: String): Int? {
+        return string.toIntOrNull()
+    }
+
+    /**
+     * 转Byte
+     *
+     * @param string 分隔符
+     * @return Byte?
+     */
+    @JvmStatic
+    fun toByteOrNull(string: String): Byte? {
+        return string.toByteOrNull()
+    }
+
+    /**
+     * 转Double
+     *
+     * @param string 分隔符
+     * @return Double?
+     */
+    @JvmStatic
+    fun toDoubleOrNull(string: String): Double? {
+        return string.toDoubleOrNull()
+    }
+
+    /**
+     * 转BigDecimal
+     *
+     * @param string 分隔符
+     * @return BigDecimal?
+     */
+    @JvmStatic
+    fun toBigDecimalOrNull(string: String): BigDecimal? {
+        return string.toBigDecimalOrNull()
     }
 }

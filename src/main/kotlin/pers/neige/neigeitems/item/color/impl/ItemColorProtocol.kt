@@ -16,8 +16,6 @@ import org.bukkit.Material
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
-import pers.neige.neigeitems.NeigeItems
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ

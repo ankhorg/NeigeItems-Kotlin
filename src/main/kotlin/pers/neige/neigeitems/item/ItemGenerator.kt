@@ -15,16 +15,12 @@ import org.bukkit.inventory.meta.PotionMeta
 import pers.neige.neigeitems.event.ItemGenerateEvent
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.manager.ConfigManager.config
-import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
-import pers.neige.neigeitems.utils.ConfigUtils.toMap
 import pers.neige.neigeitems.utils.ItemUtils.coverWith
-import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
-import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
 import pers.neige.neigeitems.utils.ItemUtils.toItemTag
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -69,9 +65,30 @@ class ItemGenerator (val itemConfig: ItemConfig) {
     val configSection = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), originConfigSection))
 
     /**
+     * 获取物品节点配置
+     */
+    val sections = configSection.getConfigurationSection("sections")
+
+    /**
+     * 获取去除节点配置的物品配置
+     */
+    val configNoSection = (YamlConfiguration() as ConfigurationSection).also {
+        this.configSection.getKeys(false).forEach { key ->
+            if (key != "sections") {
+                it.set(key, this.configSection.get(key))
+            }
+        }
+    }
+
+    /**
      * 获取解析后物品配置文本
      */
     val configString = configSection.saveToString(id)
+
+    /**
+     * 获取去除节点配置的物品配置文本
+     */
+    val configStringNoSection = configNoSection.saveToString(id)
 
     /**
      * 获取解析后物品配置文本哈希值
@@ -148,31 +165,43 @@ class ItemGenerator (val itemConfig: ItemConfig) {
      * @return 生成的物品, 生成失败则返回null
      */
     fun getItemStack(player: OfflinePlayer?, data: HashMap<String, String>?): ItemStack? {
-        var configString = this.configString
-
-        // 进行一次papi解析
-        player?.let { configString = papi(player, configString) }
-        // 加载回YamlConfiguration
-        var configSection = configString.loadFromString(id) ?: YamlConfiguration()
-
         // 加载缓存
         val cache = data ?: HashMap<String, String>()
-
         // 获取私有节点配置
-        val sections = configSection.getConfigurationSection("sections")
-        // 解析私有节点配置是没有意义的, 删除该部分将大大提升性能
-        configSection.set("sections", null)
+        val sections = this.sections
         // 对文本化配置进行全局节点解析
-        configString = configSection
-            .saveToString(id)
-            .parseSection(cache, player, sections)
-        // 曾怀疑过前后两次papi解析是否会对生成速度造成较大影响
-        // 后经测试得出结论: 这两次papi解析耗时微乎其微, 各种节点初始化才是耗时的大头
-        player?.let { configString = papi(player, configString) }
+        val configString = configStringNoSection.parseSection(cache, player, sections)
         // Debug信息
         if (config.getBoolean("Main.Debug")) print(configString)
         if (config.getBoolean("Main.Debug") && sections != null) print(sections.saveToString("$id-sections"))
-        configSection = configString.loadFromString(id) ?: YamlConfiguration()
+        val configSection = configString.loadFromString(id) ?: YamlConfiguration()
+
+        // 2023/4/2 补充: papi解析所带来的的二次加载配置文件导致了运行缓慢
+//        var configString = this.configString
+//
+//        // 进行一次papi解析
+//        player?.let { configString = papi(player, configString) }
+//        // 加载回YamlConfiguration
+//        var configSection = configString.loadFromString(id) ?: YamlConfiguration()
+//
+//        // 加载缓存
+//        val cache = data ?: HashMap<String, String>()
+//
+//        // 获取私有节点配置
+//        val sections = configSection.getConfigurationSection("sections")
+//        // 解析私有节点配置是没有意义的, 删除该部分将大大提升性能
+//        configSection.set("sections", null)
+//        // 对文本化配置进行全局节点解析
+//        configString = configSection
+//            .saveToString(id)
+//            .parseSection(cache, player, sections)
+//        // 曾怀疑过前后两次papi解析是否会对生成速度造成较大影响
+//        // 后经测试得出结论: 这两次papi解析耗时微乎其微, 各种节点初始化才是耗时的大头
+//        player?.let { configString = papi(player, configString) }
+//        // Debug信息
+//        if (config.getBoolean("Main.Debug")) print(configString)
+//        if (config.getBoolean("Main.Debug") && sections != null) print(sections.saveToString("$id-sections"))
+//        configSection = configString.loadFromString(id) ?: YamlConfiguration()
         // 构建物品
         if (configSection.contains("material")) {
             // 获取材质
@@ -307,7 +336,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 // 设置物品NBT
                 if (configSection.contains("nbt")) {
                     // 获取配置NBT
-                    val itemNBT = configSection.getConfigurationSection("nbt")?.toMap()?.toItemTag()
+                    val itemNBT = configSection.getConfigurationSection("nbt")?.toItemTag()
                     // NBT覆盖
                     itemNBT?.let {itemTag.coverWith(it)}
                 }

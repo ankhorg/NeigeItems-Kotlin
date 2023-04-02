@@ -12,11 +12,9 @@ import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
-import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.ItemUtils.getItems
 import pers.neige.neigeitems.utils.SamplingUtils.aExpj
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import java.util.HashMap
 import java.util.concurrent.ThreadLocalRandom
 
 /**

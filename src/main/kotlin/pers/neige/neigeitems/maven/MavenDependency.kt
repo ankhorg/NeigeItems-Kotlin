@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.maven
 
-import org.apache.maven.model.Model
+import taboolib.common.env.RuntimeDependencies
+import taboolib.common.env.RuntimeDependency
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -9,11 +10,6 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import java.security.MessageDigest
-import taboolib.common.env.RuntimeDependencies
-import taboolib.common.env.RuntimeDependency
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader
-import pers.neige.easyitem.taboolib.common.reflect.Reflex.Companion.getProperty
-import java.io.FileReader
 
 @RuntimeDependencies(
     RuntimeDependency(

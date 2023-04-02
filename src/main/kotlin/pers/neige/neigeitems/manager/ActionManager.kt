@@ -34,12 +34,14 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
+import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
 import taboolib.platform.util.giveItem
+import taboolib.platform.util.sendActionBar
 import java.io.File
 import java.io.InputStreamReader
 import java.util.*
@@ -47,8 +49,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
 import javax.script.CompiledScript
 import javax.script.SimpleBindings
-import pers.neige.neigeitems.utils.StringUtils.split
-import taboolib.platform.util.sendActionBar
 
 /**
  * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
@@ -87,10 +87,15 @@ object ActionManager {
         // 加载自定义动作
         loadCustomActions()
         // 加载顶级成员
+        val reader = plugin.getResource("JavaScriptLib/lib.js")?.let {
+            InputStreamReader(it, "UTF-8")
+        }
         try {
-            plugin.getResource("JavaScriptLib/lib.js")?.let { engine.eval(InputStreamReader(it, "UTF-8")) }
+            reader?.let { engine.eval(it) }
         } catch (error: Throwable) {
             error.printStackTrace()
+        } finally {
+            reader?.close()
         }
     }
 

@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.hook.placeholderapi
 
-import me.clip.placeholderapi.PlaceholderAPI
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.OfflinePlayer
 import pers.neige.neigeitems.manager.HookerManager.papiHooker

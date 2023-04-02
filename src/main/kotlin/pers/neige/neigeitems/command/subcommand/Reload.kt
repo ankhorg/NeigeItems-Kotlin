@@ -19,10 +19,12 @@ object Reload {
             // 准备重载
             PluginReloadEvent.Pre().call()
             ConfigManager.reload()
-            // ItemManager初始化的时候会将引用的全局节点写入ItemGenerator, 所以SectionManager应该在ItemManager之前重载
+            // ItemManager初始化的时候会将引用的全局节点写入ItemGenerator
+            // 而全局节点由SectionManager加载
+            // 所以SectionManager应该在ItemManager之前重载
             SectionManager.reload()
-            ScriptManager.reload()
             ItemManager.reload()
+            ScriptManager.reload()
             ItemPackManager.reload()
             ActionManager.reload()
             ItemEditorManager.reload()

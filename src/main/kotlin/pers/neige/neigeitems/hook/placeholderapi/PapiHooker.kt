@@ -20,6 +20,22 @@ abstract class PapiHooker {
     abstract fun papi(player: OfflinePlayer, text: String): String
 
     /**
+     * 将文本中的所有papi变量改写为papi节点
+     *
+     * @param text 待转换文本
+     * @return 转换后文本
+     */
+    abstract fun toSection(text: String): String
+
+    /**
+     * 判断文本中是否存在有效papi变量
+     *
+     * @param text 待检测文本
+     * @return 是否存在有效papi变量
+     */
+    abstract fun hasPapi(text: String): Boolean
+
+    /**
      * 例：%player_name%
      * identifier -> player
      * parameters -> name

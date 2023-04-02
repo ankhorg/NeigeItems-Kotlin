@@ -5,6 +5,9 @@ import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.section.impl.*
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import pers.neige.neigeitems.utils.ConfigUtils.loadConfiguration
+import taboolib.common.LifeCycle
+import taboolib.common.platform.Awake
+import taboolib.common.platform.function.submit
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -14,6 +17,11 @@ import java.util.concurrent.ConcurrentHashMap
  * @constructor 构建全局节点 & 节点解析器管理器
  */
 object SectionManager {
+    /**
+     * 获取全部全局节点文件
+     */
+    val files: ArrayList<File> = getAllFiles("GlobalSections")
+
     /**
      * 获取<文件名-该文件中的所有节点>对应map
      */
@@ -51,6 +59,8 @@ object SectionManager {
      * 重载节点管理器
      */
     fun reload() {
+        files.clear()
+        files.addAll(getAllFiles("GlobalSections"))
         globalSectionMap.clear()
         globalSections.clear()
         sectionParsers.clear()
@@ -60,10 +70,45 @@ object SectionManager {
     }
 
     /**
+     * 检测替换PAPI变量
+     */
+    @Awake(LifeCycle.ACTIVE)
+    private fun update() {
+        // 延迟3秒执行, 等待PAPI扩展加载
+        submit(delay = 60) {
+            HookerManager.papiHooker?.let {
+                for (file: File in files) {
+                    val text = file.readText()
+                    if (HookerManager.papiHooker.hasPapi(text)) {
+                        reload()
+                        ItemManager.reload()
+                        return@submit
+                    }
+                }
+                for (file: File in ItemManager.files) {
+                    val text = file.readText()
+                    if (HookerManager.papiHooker.hasPapi(text)) {
+                        reload()
+                        ItemManager.reload()
+                        return@submit
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * 加载全部全局节点
      */
     private fun loadGlobalSections() {
-        for (file in getAllFiles("GlobalSections")) {
+        for (file in files) {
+            // 将文件中所有的有效 %xxx_xxx% 替换为 <papi::xxx_xxx>
+            HookerManager.papiHooker?.let {
+                val text = file.readText()
+                if (HookerManager.papiHooker.hasPapi(text)) {
+                    file.writeText(HookerManager.papiHooker.toSection(text))
+                }
+            }
             val fileName = file.path.replace("plugins${File.separator}NeigeItems${File.separator}GlobalSections${File.separator}", "")
             val config = file.loadConfiguration()
             globalSectionMap[fileName] = config

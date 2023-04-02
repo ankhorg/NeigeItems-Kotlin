@@ -191,6 +191,34 @@ object HookerManager {
     }
 
     /**
+     * 判断文本中是否存在有效papi变量
+     *
+     * @param text 待检测文本
+     * @return 是否存在有效papi变量
+     */
+    @JvmStatic
+    fun hasPapi(text: String): Boolean {
+        return when (papiHooker) {
+            null -> false
+            else -> papiHooker.hasPapi(text)
+        }
+    }
+
+    /**
+     * 将文本中的所有papi变量改写为papi节点
+     *
+     * @param text 待转换文本
+     * @return 转换后文本
+     */
+    @JvmStatic
+    fun toSection(text: String): String {
+        return when (papiHooker) {
+            null -> text
+            else -> papiHooker.toSection(text)
+        }
+    }
+
+    /**
      * 解析papi变量, 不解析颜色代码
      *
      * @param player 用于解析PAPI变量的玩家对象

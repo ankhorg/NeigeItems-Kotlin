@@ -43,6 +43,13 @@ open class ItemConfigManager {
      */
     private fun loadItemConfigs() {
         for (file: File in files) {
+            // 将文件中所有的有效 %xxx_xxx% 替换为 <papi::xxx_xxx>
+            HookerManager.papiHooker?.let {
+                val text = file.readText()
+                if (HookerManager.papiHooker.hasPapi(text)) {
+                    file.writeText(HookerManager.papiHooker.toSection(text))
+                }
+            }
             val config = YamlConfiguration.loadConfiguration(file)
             config.getKeys(false).forEach { id ->
                 itemConfigs[id] = ItemConfig(id, file, config)
