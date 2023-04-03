@@ -84,9 +84,9 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
                 // 获取MM怪物的ConfigurationSection
                 val fileConfiguration: FileConfiguration = fc.get(mythicConfig) as FileConfiguration
                 // 获取MM怪物的ConfigurationSection
-                val configSection = fileConfiguration.getConfigurationSection(mythicId).clone()
-
-                mobInfos[mythicId] = configSection
+                fileConfiguration.getConfigurationSection(mythicId)?.clone()?.let {
+                    mobInfos[mythicId] = it
+                }
             }
             MobInfoReloadedEvent().call()
         }
