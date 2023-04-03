@@ -30,11 +30,11 @@ import taboolib.common.platform.function.submit
 class MythicMobsHookerImpl510 : MythicMobsHooker() {
     private val test = YamlConfiguration()
 
-    override val spawnEvent = MythicMobSpawnEvent::class.java
+    override val spawnEventClass = MythicMobSpawnEvent::class.java
 
-    override val deathEvent = MythicMobDeathEvent::class.java
+    override val deathEventClass = MythicMobDeathEvent::class.java
 
-    override val reloadEvent = MythicReloadedEvent::class.java
+    override val reloadEventClass = MythicReloadedEvent::class.java
 
     private val itemManager: ItemExecutor = MythicBukkit.inst().itemManager
 

@@ -36,17 +36,17 @@ abstract class MythicMobsHooker {
     /**
      * MM怪物生成事件
      */
-    abstract val spawnEvent: Class<*>
+    abstract val spawnEventClass: Class<*>
 
     /**
      * MM怪物死亡事件
      */
-    abstract val deathEvent: Class<*>
+    abstract val deathEventClass: Class<*>
 
     /**
      * MM重载事件
      */
-    abstract val reloadEvent: Class<*>
+    abstract val reloadEventClass: Class<*>
 
     /**
      * MM怪物生成事件监听器, 监听器优先级HIGH, 得以覆盖MM自身的装备操作
