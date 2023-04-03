@@ -65,7 +65,6 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
 
     override val reloadListener = registerBukkitListener(MythicReloadedEvent::class.java) {
         loadMobInfos()
-        MobInfoReloadedEvent().call()
     }
 
     init {
@@ -89,6 +88,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
 
                 mobInfos[mythicId] = configSection
             }
+            MobInfoReloadedEvent().call()
         }
     }
 
