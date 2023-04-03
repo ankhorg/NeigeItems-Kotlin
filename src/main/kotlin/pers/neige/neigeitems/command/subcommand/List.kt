@@ -11,7 +11,7 @@ import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.manager.ItemManager
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.module.chat.TellrawJson
+import taboolib.module.chat.RawMessage
 import taboolib.module.nms.getName
 import taboolib.platform.util.hoverItem
 import java.util.*
@@ -49,7 +49,7 @@ object List {
         // 发送前缀
         ConfigManager.config.getString("ItemList.Prefix")?.let { sender.sendMessage(it) }
         // 预构建待发送信息
-        val listMessage = TellrawJson()
+        val listMessage = RawMessage()
         // 获取当前序号
         val prevItemAmount = ((realPage-1)* ConfigManager.config.getInt("ItemList.ItemAmount"))+1
         // 逐个获取物品
@@ -64,10 +64,10 @@ object List {
             if (sender is Player) {
                 kotlin.runCatching { ItemManager.getItemStack(id, sender) }.getOrNull()?.let { itemStack ->
                     val listItemMessageList = listItemMessage.split("{name}")
-                    val listItemRaw = TellrawJson()
+                    val listItemRaw = RawMessage()
                     for ((i, it) in listItemMessageList.withIndex()) {
                         listItemRaw.append(
-                            TellrawJson()
+                            RawMessage()
                                 .append(it)
                                 .runCommand("/ni get $id")
                                 .hoverText(ConfigManager.config.getString("Messages.clickGiveMessage")?:"")
@@ -77,7 +77,7 @@ object List {
                             kotlin.runCatching {
                                 // 解析物品变量
                                 HookerManager.parseItemPlaceholders(itemStack)
-                                TellrawJson()
+                                RawMessage()
                                     .append(itemStack.getParsedName())
                                     .hoverItem(itemStack)
                                     .runCommand("/ni get $id")
@@ -85,7 +85,7 @@ object List {
                                 listItemRaw.append(it)
                             } ?: let {
                                 listItemRaw.append(
-                                    TellrawJson()
+                                    RawMessage()
                                         .append(itemStack.getParsedName())
                                         .runCommand("/ni get $id")
                                 )
@@ -111,14 +111,14 @@ object List {
                 }
             }
         }
-        val prevRaw = TellrawJson()
+        val prevRaw = RawMessage()
             .append(ConfigManager.config.getString("ItemList.Prev")?:"")
         if (realPage != 1) {
             prevRaw
                 .hoverText((ConfigManager.config.getString("ItemList.Prev")?:"") + ": " + (realPage-1).toString())
                 .runCommand("/ni list ${realPage-1}")
         }
-        val nextRaw = TellrawJson()
+        val nextRaw = RawMessage()
             .append(ConfigManager.config.getString("ItemList.Next")?:"")
         if (realPage != pageAmount) {
             nextRaw.hoverText((ConfigManager.config.getString("ItemList.Next")?:"") + ": " + (realPage+1))

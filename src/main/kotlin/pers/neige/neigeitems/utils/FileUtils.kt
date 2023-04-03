@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.utils
 
+import pers.neige.neigeitems.manager.ConfigManager
+import taboolib.common.platform.ProxyCommandSender
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
@@ -64,5 +66,27 @@ object FileUtils {
             e.printStackTrace()
         }
         return charset
+    }
+
+    /**
+     * 读取文本文件
+     *
+     * @param file 文本文件
+     * @return 文件文本
+     */
+    @JvmStatic
+    fun readText(file: File): String {
+        return file.readText()
+    }
+
+    /**
+     * 写入文本文件
+     *
+     * @param file 文本文件
+     * @param text 文件文本
+     */
+    @JvmStatic
+    fun writeText(file: File, text: String) {
+        file.writeText(text)
     }
 }

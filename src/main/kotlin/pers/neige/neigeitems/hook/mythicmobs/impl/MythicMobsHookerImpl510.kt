@@ -16,6 +16,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
@@ -32,6 +33,8 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
     override val spawnEvent = MythicMobSpawnEvent::class.java
 
     override val deathEvent = MythicMobDeathEvent::class.java
+
+    override val reloadEvent = MythicReloadedEvent::class.java
 
     private val itemManager: ItemExecutor = MythicBukkit.inst().itemManager
 
@@ -62,6 +65,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
 
     override val reloadListener = registerBukkitListener(MythicReloadedEvent::class.java) {
         loadMobInfos()
+        MobInfoReloadedEvent().call()
     }
 
     init {

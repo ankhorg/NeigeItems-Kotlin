@@ -59,7 +59,7 @@ object WeightParser : SectionParser() {
         values: List<String>
     ): String? {
         val info = HashMap<String, BigDecimal>()
-        var total = BigDecimal(0)
+        var total = BigDecimal.ZERO
         // 加载所有参数并遍历
         values.forEach {
             val value = it.parseSection(parse, cache, player, sections)
@@ -68,13 +68,13 @@ object WeightParser : SectionParser() {
                 // 无权重, 直接记录
                 -1 -> {
                     info[value]?.let {
-                        info[value] = it.add(BigDecimal(1))
-                    } ?: let { info[value] = BigDecimal(1) }
-                    total = total.add(BigDecimal(1))
+                        info[value] = it.add(BigDecimal.ONE)
+                    } ?: let { info[value] = BigDecimal.ONE }
+                    total = total.add(BigDecimal.ONE)
                 }
                 // 有权重, 根据权重大小进行记录
                 else -> {
-                    val weight = value.substring(0, index).toBigDecimalOrNull() ?: 1.toBigDecimal()
+                    val weight = value.substring(0, index).toBigDecimalOrNull() ?: BigDecimal.ONE
                     val string = value.substring(index+2, value.length)
                     info[string]?.let {
                         info[string] = it.add(weight)
@@ -88,7 +88,7 @@ object WeightParser : SectionParser() {
             info.isEmpty() -> null
             else -> {
                 val random = BigDecimal(ThreadLocalRandom.current().nextDouble().toString()).multiply(total)
-                var current = BigDecimal(0)
+                var current = BigDecimal.ZERO
                 var result: String? = null
                 for ((key, value) in info) {
                     current = current.add(value)
