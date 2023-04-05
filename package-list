@@ -8,6 +8,7 @@ $dokka.location:pers.neige.neigeitems.item.color/ItemColor.Companion///PointingT
 $dokka.location:pers.neige.neigeitems.item/ItemDurability.DamageResult///PointingToDeclaration/pers/neige/neigeitems/item/ItemDurability.DamageResult.html
 $dokka.location:pers.neige.neigeitems.item/ItemPack.ItemInfo///PointingToDeclaration/pers/neige/neigeitems/item/ItemPack.ItemInfo.html
 pers.neige.neigeitems
+pers.neige.neigeitems.asahi.util.calculate
 pers.neige.neigeitems.command
 pers.neige.neigeitems.command.subcommand
 pers.neige.neigeitems.event
