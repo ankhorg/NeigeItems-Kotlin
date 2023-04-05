@@ -2,7 +2,7 @@ package pers.neige.neigeitems.section.impl
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.asahi.util.calculate.calculate
+import pers.neige.neigeitems.asahi.util.calculate.FormulaParser.calculate
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 

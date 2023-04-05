@@ -31,7 +31,9 @@ internal enum class CalcOperator(
 
     companion object {
         private val symbols = CalcOperator.values().map { it.symbol }.toHashSet()
+        private val symbolsExceptRightBracket = CalcOperator.values().map { it.symbol }.filter { it != ')' }.toHashSet()
         fun Char.isCalcOperator(): Boolean = this in symbols
+        fun Char.isCalcOperatorExceptRightBracket(): Boolean = this in symbolsExceptRightBracket
         fun Char.toCalcOperator(): CalcOperator {
             return when (this) {
                 '+' -> PLUS
