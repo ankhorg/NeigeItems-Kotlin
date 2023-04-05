@@ -1,7 +1,5 @@
 package pers.neige.neigeitems.utils
 
-import pers.neige.neigeitems.manager.ConfigManager
-import taboolib.common.platform.ProxyCommandSender
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream

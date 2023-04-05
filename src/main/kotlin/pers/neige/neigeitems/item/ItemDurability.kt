@@ -6,8 +6,11 @@ import org.bukkit.Sound
 import org.bukkit.Statistic
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.HumanEntity
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.player.*
 import org.bukkit.inventory.EquipmentSlot
@@ -155,6 +158,25 @@ object ItemDurability {
     }
 
     /**
+     * 伤害事件
+     */
+    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    fun entityDamageByEntity(event: EntityDamageByEntityEvent) {
+        if (event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK || event.damager !is Player) return
+        val player = event.damager as Player
+        val itemStack = player.inventory.itemInMainHand
+
+        // 对于已损坏物品取消事件
+        if (itemStack.getItemTag().getDeepOrNull("NeigeItems.durability")?.asInt() == 0) {
+            event.isCancelled = true
+            // 物品损坏提示
+            getLang("Messages.brokenItem")?.let {
+                if (it != "") player.sendActionBar(it)
+            }
+        }
+    }
+
+    /**
      * 含耐久物品损坏
      */
     @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -197,7 +219,10 @@ object ItemDurability {
         // 获取物品耐久值(不存在则停止操作)
         val durability = itemTag.getDeepOrNull("NeigeItems.durability")?.asInt() ?: return DamageResult.VANILLA
         // 检测物品是否损坏
-        if (durability == 0) return DamageResult.BROKEN_ITEM
+        if (durability == 0) {
+            damageEvent?.isCancelled = true
+            return DamageResult.BROKEN_ITEM
+        }
 
         // 处理真实伤害值
         val realDamage = if (damageEvent == null) {
@@ -263,7 +288,7 @@ object ItemDurability {
             } else {
                 // 修改耐久值
                 itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(0))
-                damageEvent?.let {damageEvent.damage = type.maxDurability - durability - 1}
+                damageEvent?.let {damageEvent.damage = type.maxDurability - this.durability - 1}
                 // 保存NBT
                 itemTag.saveTo(this)
                 // 播放物品破碎声
