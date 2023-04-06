@@ -47,7 +47,6 @@ abstract class SectionParser {
         return "<$id::${args.joinToString("_")}>"
     }
 
-
     /**
      * 将本解析器注册至节点管理器
      */

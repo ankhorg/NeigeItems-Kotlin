@@ -111,7 +111,7 @@ Help:
       command: §e/ni §freload
       description: 重新加载NI物品
     help:
-      command: §e/ni §fhelp
+      command: §e/ni §fhelp (页数)
       description: 查看帮助信息
 ItemList:
   Prefix: §6===========§eNeigeItems§6===========

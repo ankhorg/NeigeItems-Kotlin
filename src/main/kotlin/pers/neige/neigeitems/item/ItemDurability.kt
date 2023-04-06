@@ -166,12 +166,14 @@ object ItemDurability {
         val player = event.damager as Player
         val itemStack = player.inventory.itemInMainHand
 
-        // 对于已损坏物品取消事件
-        if (itemStack.getItemTag().getDeepOrNull("NeigeItems.durability")?.asInt() == 0) {
-            event.isCancelled = true
-            // 物品损坏提示
-            getLang("Messages.brokenItem")?.let {
-                if (it != "") player.sendActionBar(it)
+        if (itemStack.type != Material.AIR) {
+            // 对于已损坏物品取消事件
+            if (itemStack.getItemTag().getDeepOrNull("NeigeItems.durability")?.asInt() == 0) {
+                event.isCancelled = true
+                // 物品损坏提示
+                getLang("Messages.brokenItem")?.let {
+                    if (it != "") player.sendActionBar(it)
+                }
             }
         }
     }
