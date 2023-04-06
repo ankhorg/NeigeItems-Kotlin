@@ -70,11 +70,16 @@ class ItemGenerator (val itemConfig: ItemConfig) {
     val sections = configSection.getConfigurationSection("sections")
 
     /**
-     * 获取去除节点配置的物品配置
+     * 获取物品静态配置
+     */
+    val static = configSection.getConfigurationSection("static")
+
+    /**
+     * 获取去除节点&静态配置的物品配置
      */
     val configNoSection = (YamlConfiguration() as ConfigurationSection).also {
         this.configSection.getKeys(false).forEach { key ->
-            if (key != "sections") {
+            if (key != "sections" && key != "static") {
                 it.set(key, this.configSection.get(key))
             }
         }
@@ -86,7 +91,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
     val configString = configSection.saveToString(id)
 
     /**
-     * 获取去除节点配置的物品配置文本
+     * 获取去除节点&静态配置的物品配置文本
      */
     val configStringNoSection = configNoSection.saveToString(id)
 
@@ -94,6 +99,176 @@ class ItemGenerator (val itemConfig: ItemConfig) {
      * 获取解析后物品配置文本哈希值
      */
     val hashCode = configString.hashCode()
+
+    /**
+     * 获取是否存在静态材质
+     */
+    val hasStaticMaterial = static?.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) } != null
+
+    /**
+     * 获取原始静态物品
+     */
+    private val originStaticItemStack = static?.let {
+        var hasStatic = false
+        var material = static.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) }
+        if (material != null) hasStatic = true
+        material = material ?: Material.STONE
+        val itemStack = ItemStack(material)
+        // 设置子ID/损伤值
+        if (static.contains("damage")) {
+            hasStatic = true
+            itemStack.durability = static.getInt("damage").toShort()
+        }
+        // 设置物品附魔
+        if (static.contains("enchantments")) {
+            hasStatic = true
+            // 获取所有待设置附魔
+            val enchantSection = static.getConfigurationSection("enchantments")
+            // 遍历添加
+            enchantSection?.getKeys(false)?.forEach {
+                val level = enchantSection.getInt(it)
+                val enchant = Enchantment.getByName(it.uppercase(Locale.getDefault()))
+                // 判断等级 && 附魔名称 是否合法
+                if (level > 0 && enchant != null) {
+                    // 添加附魔
+                    itemStack.addUnsafeEnchantment(enchant, level)
+                }
+            }
+        }
+        // 获取ItemMeta
+        val itemMeta = itemStack.itemMeta
+        // 设置CustomModelData
+        if (static.contains("custommodeldata")) {
+            try {
+                itemMeta?.setCustomModelData(static.getInt("custommodeldata"))
+                hasStatic = true
+            } catch (_: NoSuchMethodError) {}
+        }
+        // 设置物品名
+        if (static.contains("name")) {
+            hasStatic = true
+            itemMeta?.setDisplayName(static.getString("name")
+                ?.let { ChatColor.translateAlternateColorCodes('&', it) })
+        }
+        // 设置Lore
+        if (static.contains("lore")) {
+            hasStatic = true
+            val originLores = static.getStringList("lore")
+            val finalLores = ArrayList<String>()
+            for (i in originLores.indices) {
+                val lores = ChatColor.translateAlternateColorCodes('&', originLores[i]).split("\n")
+                finalLores.addAll(lores)
+            }
+            itemMeta?.lore = finalLores
+        }
+        // 设置是否无法破坏
+        if (static.contains("unbreakable")) {
+            hasStatic = true
+            itemMeta?.isUnbreakable = static.getBoolean("unbreakable")
+        }
+        // 设置ItemFlags
+        if (static.contains("hideflags")) {
+            hasStatic = true
+            val flags = static.getStringList("hideflags")
+            for (value in flags) {
+                try {
+                    val itemFlag = ItemFlag.valueOf(value)
+                    itemMeta?.addItemFlags(itemFlag)
+                } catch (_: IllegalArgumentException) {}
+            }
+        }
+        // 设置物品颜色
+        if (static.contains("color")) {
+            hasStatic = true
+            var color = static.get("color")
+            color = when (color) {
+                is String -> color.toIntOrNull(16) ?: 0
+                else -> color.toString().toIntOrNull() ?: 0
+            }
+            color = color.coerceAtLeast(0).coerceAtMost(0xFFFFFF)
+            when (itemMeta) {
+                is LeatherArmorMeta -> itemMeta.setColor(Color.fromRGB(color))
+                is MapMeta -> itemMeta.color = Color.fromRGB(color)
+                is PotionMeta -> itemMeta.color = Color.fromRGB(color)
+            }
+        }
+        itemStack.itemMeta = itemMeta
+        // 设置物品NBT
+        val itemTag = itemStack.getItemTag()
+        val neigeItems = ItemTag()
+        // 设置物品使用次数
+        if (static.contains("options.charge")) {
+            hasStatic = true
+            neigeItems["charge"] = ItemTagData(static.getInt("options.charge"))
+            neigeItems["maxCharge"] = ItemTagData(static.getInt("options.charge"))
+        }
+        // 设置物品最大使用次数
+        if (static.contains("options.maxcharge")) {
+            hasStatic = true
+            neigeItems["maxCharge"] = ItemTagData(static.getInt("options.maxcharge"))
+        }
+        // 设置物品自定义耐久
+        if (static.contains("options.durability")) {
+            hasStatic = true
+            neigeItems["durability"] = ItemTagData(static.getInt("options.durability"))
+            neigeItems["maxDurability"] = ItemTagData(static.getInt("options.durability"))
+        }
+        // 设置物品最大自定义耐久
+        if (static.contains("options.maxdurability")) {
+            hasStatic = true
+            neigeItems["maxDurability"] = ItemTagData(static.getInt("options.maxdurability"))
+        }
+        // 设置物品自定义耐久为0时是否破坏
+        if (static.contains("options.itembreak")) {
+            hasStatic = true
+            if (static.getBoolean("options.itembreak", true)) {
+                neigeItems["itemBreak"] = ItemTagData(1.toByte())
+            } else {
+                neigeItems["itemBreak"] = ItemTagData(0.toByte())
+            }
+        }
+        // 首次掉落归属
+        if (static.contains("options.owner")) {
+            hasStatic = true
+            neigeItems["owner"] = ItemTagData(static.getString("options.owner"))
+        }
+        // 设置掉落物闪光颜色
+        if (static.contains("options.color")) {
+            hasStatic = true
+            static.getString("options.color")?.uppercase(Locale.getDefault())?.let {
+                // 判断你这颜色保不保熟
+                if (ItemColor.colors.containsKey(it)) {
+                    neigeItems["color"] = ItemTagData(it)
+                }
+            }
+        }
+        // 设置掉落执行技能
+        if (static.contains("options.dropskill")) {
+            hasStatic = true
+            neigeItems["dropSkill"] = ItemTagData(static.getString("options.dropskill") ?: "")
+        }
+        // 设置物品时限
+        if (static.contains("options.itemtime")) {
+            hasStatic = true
+            neigeItems["itemTime"] = ItemTagData(System.currentTimeMillis() + (static.getLong("options.itemtime", 0) * 1000))
+        }
+        itemTag["NeigeItems"] = neigeItems
+        // 设置物品NBT
+        if (static.contains("nbt")) {
+            hasStatic = true
+            // 获取配置NBT
+            val itemNBT = static.getConfigurationSection("nbt")?.toItemTag()
+            // NBT覆盖
+            itemNBT?.let {itemTag.coverWith(it)}
+        }
+        itemTag.saveTo(itemStack)
+        if (hasStatic) itemStack else null
+    }
+
+    /**
+     * 获取静态物品
+     */
+    val staticItemStack get() = originStaticItemStack?.clone()
 
     private fun inherit(configSection: ConfigurationSection, originConfigSection: ConfigurationSection): ConfigurationSection {
         // 检测是否需要进行继承
@@ -203,11 +378,12 @@ class ItemGenerator (val itemConfig: ItemConfig) {
 //        if (config.getBoolean("Main.Debug") && sections != null) print(sections.saveToString("$id-sections"))
 //        configSection = configString.loadFromString(id) ?: YamlConfiguration()
         // 构建物品
-        if (configSection.contains("material")) {
+        if (configSection.contains("material") || hasStaticMaterial) {
             // 获取材质
             val material = configSection.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) }
-            if (material != null) {
-                val itemStack = ItemStack(material)
+            if (material != null || hasStaticMaterial) {
+                val itemStack = staticItemStack ?: ItemStack(material!!)
+                material?.let { itemStack.type = material }
                 // 设置子ID/损伤值
                 if (configSection.contains("damage")) {
                     itemStack.durability = configSection.getInt("damage").toShort()
@@ -281,7 +457,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 itemStack.itemMeta = itemMeta
                 // 设置物品NBT
                 val itemTag = itemStack.getItemTag()
-                val neigeItems = ItemTag()
+                val neigeItems = itemTag.getOrPut("NeigeItems") { ItemTag() }.asCompound()
                 neigeItems["id"] = ItemTagData(id)
                 neigeItems["data"] = ItemTagData(cache.toJSONString())
                 neigeItems["hashCode"] = ItemTagData(hashCode)
