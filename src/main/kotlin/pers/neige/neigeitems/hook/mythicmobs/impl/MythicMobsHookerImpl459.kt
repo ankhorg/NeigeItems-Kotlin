@@ -1,7 +1,6 @@
 package pers.neige.neigeitems.hook.mythicmobs.impl
 
 import io.lumine.utils.config.file.FileConfiguration
-import io.lumine.utils.config.file.YamlConfiguration
 import io.lumine.xikage.mythicmobs.MythicMobs
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
@@ -25,8 +24,8 @@ import taboolib.common.platform.function.submit
  * @constructor 启用4.5.9版本MM挂钩
  */
 class MythicMobsHookerImpl459 : MythicMobsHooker() {
-    private val test = YamlConfiguration()
-    
+    override val version = "459"
+
     override val spawnEventClass = MythicMobSpawnEvent::class.java
 
     override val deathEventClass = MythicMobDeathEvent::class.java

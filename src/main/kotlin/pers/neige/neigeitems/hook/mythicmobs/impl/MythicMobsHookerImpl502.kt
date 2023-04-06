@@ -8,7 +8,6 @@ import io.lumine.mythic.bukkit.events.MythicReloadedEvent
 import io.lumine.mythic.core.config.MythicConfigImpl
 import io.lumine.mythic.core.items.ItemExecutor
 import io.lumine.mythic.utils.config.file.FileConfiguration
-import io.lumine.mythic.utils.config.file.YamlConfiguration
 import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
@@ -28,7 +27,7 @@ import taboolib.common.platform.function.submit
  * @constructor 启用5.0.2版本MM挂钩
  */
 class MythicMobsHookerImpl502 : MythicMobsHooker() {
-    private val test = YamlConfiguration()
+    override val version = "502"
 
     override val spawnEventClass = MythicMobSpawnEvent::class.java
 

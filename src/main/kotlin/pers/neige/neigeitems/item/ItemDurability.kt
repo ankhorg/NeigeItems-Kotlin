@@ -97,11 +97,13 @@ object ItemDurability {
             return
         }
         // 对于已损坏物品取消事件
-        if (itemStack?.getItemTag()?.getDeepOrNull("NeigeItems.durability")?.asInt() == 0) {
-            event.isCancelled = true
-            // 物品损坏提示
-            getLang("Messages.brokenItem")?.let {
-                if (it != "") event.player.sendActionBar(it)
+        if (itemStack != null && itemStack.type != Material.AIR) {
+            if (itemStack.getItemTag().getDeepOrNull("NeigeItems.durability")?.asInt() == 0) {
+                event.isCancelled = true
+                // 物品损坏提示
+                getLang("Messages.brokenItem")?.let {
+                    if (it != "") event.player.sendActionBar(it)
+                }
             }
         }
     }

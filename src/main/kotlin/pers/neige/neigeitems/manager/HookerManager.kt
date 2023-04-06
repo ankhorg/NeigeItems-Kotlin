@@ -50,17 +50,22 @@ object HookerManager {
         try {
             try {
                 // 5.0.3+
+                Class.forName("io.lumine.mythic.bukkit.utils.config.file.YamlConfiguration")
                 MythicMobsHookerImpl510()
             } catch (error: Throwable) {
                 try {
                     // 5.0.3-
+                    Class.forName("io.lumine.mythic.utils.config.file.YamlConfiguration")
+                    Class.forName("io.lumine.mythic.bukkit.MythicBukkit")
                     MythicMobsHookerImpl502()
                 } catch (error: Throwable) {
                     try {
                         // 5.0.0-
+                        Class.forName("io.lumine.xikage.mythicmobs.utils.config.file.YamlConfiguration")
                         MythicMobsHookerImpl490()
                     } catch (error: Throwable) {
                         // 4.7.2-
+                        Class.forName("io.lumine.utils.config.file.YamlConfiguration")
                         MythicMobsHookerImpl459()
                     }
                 }

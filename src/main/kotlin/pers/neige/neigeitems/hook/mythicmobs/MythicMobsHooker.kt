@@ -29,6 +29,11 @@ import java.util.concurrent.ThreadLocalRandom
  */
 abstract class MythicMobsHooker {
     /**
+     * MM挂钩版本
+     */
+    abstract val version: String
+
+    /**
      * MM怪物信息
      */
     abstract val mobInfos: HashMap<String, ConfigurationSection>
