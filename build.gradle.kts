@@ -9,9 +9,6 @@ plugins {
 }
 
 taboolib {
-    if (project.version.toString().contains("-api")) {
-        options("skip-kotlin-relocate")
-    }
 //    relocate("org.openjdk.nashorn","pers.neige.neigeitems.nashorn")
     description {
         contributors {
@@ -91,8 +88,7 @@ tasks.compileKotlin {
 
 tasks.create("apiJar", Jar::class){
     dependsOn(tasks.compileJava, tasks.compileKotlin)
-    from(tasks.compileJava)
-    from(tasks.compileKotlin)
+    from(tasks.compileJava, tasks.compileKotlin)
 
     // clean no-class file
     include { it.isDirectory or it.name.endsWith(".class") }
