@@ -116,7 +116,6 @@ publishing {
             artifact(tasks["apiJar"]){
                 classifier = null
             }
-            artifactId = "NeigeItems"
         }
     }
 }
