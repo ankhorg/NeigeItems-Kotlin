@@ -1,3 +1,5 @@
+import io.izzel.taboolib.gradle.RelocateJar
+
 plugins {
     `java-library`
     `maven-publish`
@@ -7,9 +9,6 @@ plugins {
 }
 
 taboolib {
-    if (project.version.toString().contains("-api")) {
-        options("skip-kotlin-relocate")
-    }
 //    relocate("org.openjdk.nashorn","pers.neige.neigeitems.nashorn")
     description {
         contributors {
@@ -48,6 +47,12 @@ repositories {
     maven("https://repo.tabooproject.org/storages/public/releases")
 }
 
+configurations{
+    maybeCreate("packShadow")
+    get("compileOnly").extendsFrom(get("packShadow"))
+    get("packShadow").extendsFrom(get("taboo"))
+}
+
 dependencies {
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
     compileOnly(fileTree("libs"))
@@ -57,19 +62,18 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
 
-    taboo(kotlin("stdlib"))
-    taboo("org.openjdk.nashorn:nashorn-core:15.4")
-    taboo("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
-    taboo("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
-//        taboo("com.google.guava:guava:31.1-jre")
-    taboo("org.apache.maven:maven-model:3.9.1")
+    "packShadow"(kotlin("stdlib"))
+    "packShadow"("org.openjdk.nashorn:nashorn-core:15.4")
+    "packShadow"("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
+    "packShadow"("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
+//        "packShadow"("com.google.guava:guava:31.1-jre")
+    "packShadow"("org.apache.maven:maven-model:3.9.1")
 }
 
 java{
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
-
 
 tasks.compileJava {
     options.encoding = "UTF-8"
@@ -84,8 +88,7 @@ tasks.compileKotlin {
 
 tasks.create("apiJar", Jar::class){
     dependsOn(tasks.compileJava, tasks.compileKotlin)
-    from(tasks.compileJava)
-    from(tasks.compileKotlin)
+    from(tasks.compileJava, tasks.compileKotlin)
 
     // clean no-class file
     include { it.isDirectory or it.name.endsWith(".class") }
@@ -94,8 +97,35 @@ tasks.create("apiJar", Jar::class){
     archiveClassifier.set("api")
 }
 
+afterEvaluate {
+    val relocateAllJarTask = tasks.create("relocateAllJar", RelocateJar::class)
+
+    val allJarTask = tasks.create("allJar", Jar::class) {
+        dependsOn(tasks.compileJava, tasks.compileKotlin, tasks.processResources)
+        from(tasks.compileJava, tasks.compileKotlin, tasks.processResources)
+        with(copySpec {
+            from(configurations["packShadow"].map {
+                if (it.isDirectory) { it }else{ zipTree(it) }
+            })
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        })
+        archiveClassifier.set("all")
+        finalizedBy(relocateAllJarTask)
+    }
+
+    relocateAllJarTask.apply {
+        val copyTask = tasks.getByName("tabooRelocateJar", RelocateJar::class)
+        tabooExt = copyTask.tabooExt
+        project = copyTask.project
+        relocations = copyTask.relocations
+        classifier = copyTask.classifier
+        inJar = allJarTask.archiveFile.get().asFile
+    }
+}
+
 tasks.assemble{
     dependsOn(tasks["apiJar"])
+    dependsOn(tasks["allJar"])
 }
 
 publishing {
