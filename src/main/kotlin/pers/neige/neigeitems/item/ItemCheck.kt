@@ -60,7 +60,7 @@ object ItemCheck {
      * @param player 待检查玩家
      * @param itemStack 待检查物品
      */
-    private fun checkItem(player: Player, itemStack: ItemStack) {
+    fun checkItem(player: Player, itemStack: ItemStack) {
         kotlin.runCatching {
             itemStack.isNiItem()?.let { itemInfo ->
                 itemInfo.neigeItems["itemTime"]?.asLong()?.let {
@@ -85,7 +85,7 @@ object ItemCheck {
      * @param player 待检查玩家
      * @param inventory 待检查背包
      */
-    private fun checkItem(player: Player, inventory: Inventory) {
+    fun checkItem(player: Player, inventory: Inventory) {
         if (player.couldCheck()) {
             inventory.contents.forEach {
                 it?.let { checkItem(player, it) }

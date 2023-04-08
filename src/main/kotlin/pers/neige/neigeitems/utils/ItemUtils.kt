@@ -1050,7 +1050,7 @@ object ItemUtils {
                 offsetYString.toDoubleOrNull() ?: 0.1
             }
             // 开始掉落
-            for ((index, itemStack) in dropItems.withIndex()) {
+            dropItems.forEachIndexed { index, itemStack ->
                 val itemTag = itemStack.getItemTag()
                 location.dropNiItem(itemStack, entity, itemTag)?.let { item ->
                     val vector = Vector(offsetX, offsetY, 0.0)

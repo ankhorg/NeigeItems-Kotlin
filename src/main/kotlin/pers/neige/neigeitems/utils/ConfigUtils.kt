@@ -316,7 +316,8 @@ object ConfigUtils {
     }
 
     /**
-     * ConfigurationSection 合并(后者覆盖前者)
+     * ConfigurationSection 合并(后者覆盖前者, 在前者上操作)
+     *
      * @param configSection 用于合并覆盖
      * @return 合并结果
      */
@@ -349,11 +350,13 @@ object ConfigUtils {
 
     /**
      * 全局节点加载
-     * @param configSection 待操作配置
+     *
+     * @param configSection
+     * @param remove 加载完成后是否把globalsections节点删除掉
      * @return 操作后配置
      */
     @JvmStatic
-    fun loadGlobalSections(configSection: ConfigurationSection): ConfigurationSection {
+    fun loadGlobalSections(configSection: ConfigurationSection, remove: Boolean = true): ConfigurationSection {
         // 如果调用了全局节点
         if (configSection.contains("globalsections")) {
             // 获取全局节点ID
@@ -375,6 +378,7 @@ object ConfigUtils {
                     }
                 }
             }
+            if (remove) configSection.set("globalsections", null)
         }
         return configSection
     }

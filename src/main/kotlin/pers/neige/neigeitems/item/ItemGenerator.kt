@@ -289,8 +289,11 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                             // 获取模板
                             val currentSection = ItemManager.getOriginConfig(value)
                             // 如果存在对应模板且模板存在对应键, 进行继承
-                            if (currentSection != null && currentSection.contains(key)) {
-                                configSection.set(key, currentSection.get(key))
+                            if (currentSection != null) {
+                                val realConfig = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), currentSection), false)
+                                if (realConfig.contains(key)) {
+                                    configSection.set(key, realConfig.get(key))
+                                }
                             }
                         }
                     }
@@ -298,7 +301,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 is String -> {
                     // 仅指定单个模板ID，进行全局继承
                     ItemManager.getOriginConfig(inheritInfo)?.let { inheritConfigSection ->
-                        configSection.coverWith(inheritConfigSection)
+                        val realConfig = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), inheritConfigSection), false)
+                        configSection.coverWith(realConfig)
                     }
                 }
                 is List<*> -> {
@@ -306,8 +310,9 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                     for (templateId in inheritInfo) {
                         // 逐个获取模板
                         ItemManager.getOriginConfig(templateId as String)?.let { currentSection ->
+                            val realConfig = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), currentSection), false)
                             // 进行模板覆盖
-                            configSection.coverWith(currentSection)
+                            configSection.coverWith(realConfig)
                         }
                     }
                 }
