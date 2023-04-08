@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>ItemGenerator 1.12.8 API </title>
+    <title>ItemGenerator 1.12.10 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -196,29 +196,47 @@ public final class <span class="typeNameLabel"><a href=ItemGenerator.html>ItemGe
                                         
                                         <tr class="rowColor">
                                             <td class="colFirst"><code>private final ConfigurationSection</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#configNoSection>configNoSection</a></code></th>
+                                            <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#static>static</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr class="altColor">
+                                            <td class="colFirst"><code>private final ConfigurationSection</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#configNoSection>configNoSection</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
                                             <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#configString>configString</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
+                                        <tr class="altColor">
                                             <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#configStringNoSection>configStringNoSection</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="altColor">
+                                        <tr class="rowColor">
                                             <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#hashCode>hashCode</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#hasStaticMaterial>hasStaticMaterial</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
                                         <tr class="rowColor">
+                                            <td class="colFirst"><code>private final ItemStack</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#staticItemStack>staticItemStack</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
                                             <td class="colFirst"><code>private final <a href=ItemConfig.html>ItemConfig</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#itemConfig>itemConfig</a></code></th>
                                             <td class="colLast"></td>
@@ -346,12 +364,20 @@ public final class <span class="typeNameLabel"><a href=ItemGenerator.html>ItemGe
                                         <tr id="i5" class="rowColor">
                                             <td class="colFirst"><code>final ConfigurationSection</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getConfigNoSection()>getConfigNoSection</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getStatic()>getStatic</a>() </code>
                                             </th>
-                                            <td class="colLast">获取去除节点配置的物品配置</td>
+                                            <td class="colLast">获取物品静态配置</td>
                                         </tr>
                                         
                                         <tr id="i6" class="altColor">
+                                            <td class="colFirst"><code>final ConfigurationSection</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getConfigNoSection()>getConfigNoSection</a>() </code>
+                                            </th>
+                                            <td class="colLast">获取去除节点&amp;静态配置的物品配置</td>
+                                        </tr>
+                                        
+                                        <tr id="i7" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getConfigString()>getConfigString</a>() </code>
@@ -359,15 +385,15 @@ public final class <span class="typeNameLabel"><a href=ItemGenerator.html>ItemGe
                                             <td class="colLast">获取解析后物品配置文本</td>
                                         </tr>
                                         
-                                        <tr id="i7" class="rowColor">
+                                        <tr id="i8" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getConfigStringNoSection()>getConfigStringNoSection</a>() </code>
                                             </th>
-                                            <td class="colLast">获取去除节点配置的物品配置文本</td>
+                                            <td class="colLast">获取去除节点&amp;静态配置的物品配置文本</td>
                                         </tr>
                                         
-                                        <tr id="i8" class="altColor">
+                                        <tr id="i9" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getHashCode()>getHashCode</a>() </code>
@@ -375,7 +401,23 @@ public final class <span class="typeNameLabel"><a href=ItemGenerator.html>ItemGe
                                             <td class="colLast">获取解析后物品配置文本哈希值</td>
                                         </tr>
                                         
-                                        <tr id="i9" class="rowColor">
+                                        <tr id="i10" class="altColor">
+                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getHasStaticMaterial()>getHasStaticMaterial</a>() </code>
+                                            </th>
+                                            <td class="colLast">获取是否存在静态材质</td>
+                                        </tr>
+                                        
+                                        <tr id="i11" class="rowColor">
+                                            <td class="colFirst"><code>final ItemStack</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getStaticItemStack()>getStaticItemStack</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i12" class="altColor">
                                             <td class="colFirst"><code>final <a href=ItemConfig.html>ItemConfig</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getItemConfig()>getItemConfig</a>() </code>
@@ -383,7 +425,7 @@ public final class <span class="typeNameLabel"><a href=ItemGenerator.html>ItemGe
                                             <td class="colLast">物品基础配置</td>
                                         </tr>
                                         
-                                        <tr id="i10" class="altColor">
+                                        <tr id="i13" class="rowColor">
                                             <td class="colFirst"><code>final ItemStack</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getItemStack(OfflinePlayer,String)>getItemStack</a>(OfflinePlayer player, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> data) </code>
@@ -391,7 +433,7 @@ public final class <span class="typeNameLabel"><a href=ItemGenerator.html>ItemGe
                                             <td class="colLast">生成物品, 生成失败则返回null</td>
                                         </tr>
                                         
-                                        <tr id="i11" class="rowColor">
+                                        <tr id="i14" class="altColor">
                                             <td class="colFirst"><code>final ItemStack</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ItemGenerator.html#getItemStack(OfflinePlayer,HashMap)>getItemStack</a>(OfflinePlayer player, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data) </code>
@@ -528,6 +570,21 @@ public final class <span class="typeNameLabel"><a href=ItemGenerator.html>ItemGe
                                     </li>
                                 </ul>
                                 
+                                <a id="getStatic()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getStatic</h4>
+                                        <pre class="methodSignature"> final ConfigurationSection <a href=ItemGenerator.html#getStatic()>getStatic</a>()</pre>
+                                        <div class="block"><p>获取物品静态配置</p></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
                                 <a id="getConfigNoSection()">
                                     <!--   -->
                                 </a>
@@ -537,7 +594,7 @@ public final class <span class="typeNameLabel"><a href=ItemGenerator.html>ItemGe
                                     <li class="blockList">
                                         <h4>getConfigNoSection</h4>
                                         <pre class="methodSignature"> final ConfigurationSection <a href=ItemGenerator.html#getConfigNoSection()>getConfigNoSection</a>()</pre>
-                                        <div class="block"><p>获取去除节点配置的物品配置</p></div>
+                                        <div class="block"><p>获取去除节点&amp;静态配置的物品配置</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -567,7 +624,7 @@ public final class <span class="typeNameLabel"><a href=ItemGenerator.html>ItemGe
                                     <li class="blockList">
                                         <h4>getConfigStringNoSection</h4>
                                         <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=ItemGenerator.html#getConfigStringNoSection()>getConfigStringNoSection</a>()</pre>
-                                        <div class="block"><p>获取去除节点配置的物品配置文本</p></div>
+                                        <div class="block"><p>获取去除节点&amp;静态配置的物品配置文本</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -583,6 +640,36 @@ public final class <span class="typeNameLabel"><a href=ItemGenerator.html>ItemGe
                                         <h4>getHashCode</h4>
                                         <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=ItemGenerator.html#getHashCode()>getHashCode</a>()</pre>
                                         <div class="block"><p>获取解析后物品配置文本哈希值</p></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getHasStaticMaterial()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getHasStaticMaterial</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> <a href=ItemGenerator.html#getHasStaticMaterial()>getHasStaticMaterial</a>()</pre>
+                                        <div class="block"><p>获取是否存在静态材质</p></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getStaticItemStack()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getStaticItemStack</h4>
+                                        <pre class="methodSignature"> final ItemStack <a href=ItemGenerator.html#getStaticItemStack()>getStaticItemStack</a>()</pre>
+                                        <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
