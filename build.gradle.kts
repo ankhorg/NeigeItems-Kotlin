@@ -6,19 +6,6 @@ plugins {
     id("org.jetbrains.dokka") version "1.7.20"
 }
 
-val api: String? by project
-val lib: String? by project
-
-task("versionCheck") {
-    if (api != null) {
-        val origin = project.version.toString()
-        project.version = "$origin-api"
-    } else if (lib != null) {
-        val origin = project.version.toString()
-        project.version = "$origin-lib"
-    }
-}
-
 taboolib {
     if (project.version.toString().contains("-api")) {
         options("skip-kotlin-relocate")
@@ -52,76 +39,83 @@ taboolib {
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/public") }
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
-    maven { url = uri("https://repo.dmulloy2.net/repository/public/") }
-    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
-    maven { url = uri("https://jitpack.io") }
+    maven("https://hub.spigotmc.org/nexus/content/repositories/public")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://repo.dmulloy2.net/repository/public/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://jitpack.io")
     // taboo的仓库有时候github自动构建连不上, 丢到最后防止自动构建发生意外
-    maven { url = uri("https://repo.tabooproject.org/storages/public/releases") }
+    maven("https://repo.tabooproject.org/storages/public/releases")
 }
 
 dependencies {
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
     compileOnly(fileTree("libs"))
-    compileOnly("ink.ptms:nms-all:1.0.0")
-    compileOnly("ink.ptms.core:v11902:11902-minimize:mapped")
-    compileOnly("ink.ptms.core:v11902:11902-minimize:universal")
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
-    compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
-    if (project.version.toString().contains("-lib")) {
-        taboo(kotlin("stdlib"))
-        taboo("org.openjdk.nashorn:nashorn-core:15.4")
-        taboo("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
-        taboo("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
+
+    taboo(kotlin("stdlib"))
+    taboo("org.openjdk.nashorn:nashorn-core:15.4")
+    taboo("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
+    taboo("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
 //        taboo("com.google.guava:guava:31.1-jre")
-        taboo("org.apache.maven:maven-model:3.9.1")
-    } else {
-        compileOnly(kotlin("stdlib"))
-        compileOnly("org.openjdk.nashorn:nashorn-core:15.4")
-        compileOnly("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
-        compileOnly("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
-//        compileOnly("com.google.guava:guava:31.1-jre")
-        compileOnly("org.apache.maven:maven-model:3.9.1")
-    }
+    taboo("org.apache.maven:maven-model:3.9.1")
 }
 
-tasks.withType<JavaCompile> {
+java{
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+
+tasks.compileJava {
     options.encoding = "UTF-8"
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs = listOf("-Xjvm-default=all")
     }
 }
 
-configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+tasks.create("apiJar", Jar::class){
+    dependsOn(tasks.compileJava, tasks.compileKotlin)
+    from(tasks.compileJava)
+    from(tasks.compileKotlin)
+
+    // clean no-class file
+    include { it.isDirectory or it.name.endsWith(".class") }
+    includeEmptyDirs = false
+
+    archiveClassifier.set("api")
+}
+
+tasks.assemble{
+    dependsOn(tasks["apiJar"])
 }
 
 publishing {
     repositories {
-        maven {
-            url = uri("https://repo.tabooproject.org/repository/releases")
-            credentials {
-                username = project.findProperty("taboolibUsername").toString()
-                password = project.findProperty("taboolibPassword").toString()
-            }
-            authentication {
-                create<BasicAuthentication>("basic")
+        if(!System.getenv("CI").toBoolean()){
+            maven(buildDir.resolve("repo"))
+        }else if(!version.toString().endsWith("-SNAPSHOT")){
+            maven("https://s0.blobs.inksnow.org/maven/"){
+                credentials {
+                    username = System.getenv("IREPO_USERNAME")
+                    password = System.getenv("IREPO_PASSWORD")
+                }
             }
         }
     }
     publications {
         create<MavenPublication>("library") {
-            from(components["java"])
-            groupId = project.group.toString()
+            artifact(tasks["apiJar"]){
+                classifier = null
+            }
         }
     }
 }

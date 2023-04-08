@@ -70,8 +70,9 @@ object ItemCheck {
                         if (event.isCancelled) return
                         val itemName = itemStack.getName()
                         itemStack.amount = 0
-                        player.sendMessage(config.getString("Messages.itemExpirationMessage")
-                            ?.replace("{itemName}", itemName))
+                        config.getString("Messages.itemExpirationMessage")
+                            ?.replace("{itemName}", itemName)
+                            ?.let(player::sendMessage)
                     }
                 }
             }
