@@ -64,6 +64,9 @@ jobs:
         continue-on-error: true
         id: build_publish
         run: ./gradlew build publish
+        env:
+          IREPO_USERNAME: ${{ secrets.IREPO_USERNAME }}
+          IREPO_PASSWORD: ${{ secrets.IREPO_PASSWORD }}
       - name: capture build artifacts
         uses: actions/upload-artifact@v2
         with:

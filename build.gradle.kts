@@ -52,7 +52,7 @@ dependencies {
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
     compileOnly(fileTree("libs"))
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
-    compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
@@ -102,14 +102,7 @@ publishing {
     repositories {
         if(!System.getenv("CI").toBoolean()){
             maven(buildDir.resolve("repo"))
-        }else if(version.toString().endsWith("-SNAPSHOT")){
-            maven("https://repo.inker.bot/repository/maven-snapshots/"){
-                credentials {
-                    username = System.getenv("NEXUS_USERNAME")
-                    password = System.getenv("NEXUS_PASSWORD")
-                }
-            }
-        }else{
+        }else if(!version.toString().endsWith("-SNAPSHOT")){
             maven("https://s0.blobs.inksnow.org/maven/"){
                 credentials {
                     username = System.getenv("IREPO_USERNAME")
@@ -123,7 +116,6 @@ publishing {
             artifact(tasks["apiJar"]){
                 classifier = null
             }
-            groupId = "pers.neige"
             artifactId = "NeigeItems"
         }
     }
