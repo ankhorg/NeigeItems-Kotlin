@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.hook.mythicmobs.impl
 
-import io.lumine.utils.config.file.FileConfiguration
+import io.lumine.utils.config.file.YamlConfiguration
 import io.lumine.xikage.mythicmobs.MythicMobs
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
@@ -14,9 +14,13 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
+import pers.neige.neigeitems.item.ItemConfig
+import pers.neige.neigeitems.manager.HookerManager
+import pers.neige.neigeitems.utils.ConfigUtils
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
+import java.io.File
 
 /**
  * 4.5.9版本MM挂钩
@@ -61,44 +65,6 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
 
     override val reloadListener = registerBukkitListener(MythicReloadedEvent::class.java) {
         loadMobInfos()
-    }
-
-    init {
-        loadMobInfos()
-    }
-
-    private fun loadMobInfos() {
-        submit(async = true) {
-            mobInfos.clear()
-            mobManager.mobTypes.forEach { mythicMob ->
-                val mythicId = mythicMob.internalName
-                // 获取对应MythicConfig
-                val mythicConfig: MythicConfig = mythicMob.config
-                // 不要问我为什么这么干, 谁问谁死
-                val fc = mythicConfig::class.java.getDeclaredField("fc")
-                fc.isAccessible = true
-                // 获取MM怪物的ConfigurationSection
-                val fileConfiguration: FileConfiguration = fc.get(mythicConfig) as FileConfiguration
-                // 获取MM怪物的ConfigurationSection
-                fileConfiguration.getConfigurationSection(mythicId)?.clone()?.let {
-                    mobInfos[mythicId] = it
-                }
-            }
-            MobInfoReloadedEvent().call()
-        }
-    }
-
-    private fun io.lumine.utils.config.ConfigurationSection.clone(): ConfigurationSection {
-        val tempConfigSection = org.bukkit.configuration.file.YamlConfiguration() as ConfigurationSection
-        this.getKeys(false).forEach { key ->
-            val value = this.get(key)
-            if (value is io.lumine.utils.config.ConfigurationSection) {
-                tempConfigSection.set(key, value.clone())
-            } else {
-                tempConfigSection.set(key, value)
-            }
-        }
-        return tempConfigSection
     }
 
     override fun getItemStack(id: String): ItemStack? {

@@ -7,7 +7,7 @@ import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
 import io.lumine.xikage.mythicmobs.io.MythicConfig
 import io.lumine.xikage.mythicmobs.items.ItemManager
 import io.lumine.xikage.mythicmobs.mobs.MobManager
-import io.lumine.xikage.mythicmobs.utils.config.file.FileConfiguration
+import io.lumine.xikage.mythicmobs.utils.config.file.YamlConfiguration
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
@@ -65,40 +65,6 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
 
     init {
         loadMobInfos()
-    }
-
-    private fun loadMobInfos() {
-        submit(async = true) {
-            mobInfos.clear()
-            mobManager.mobTypes.forEach { mythicMob ->
-                val mythicId = mythicMob.internalName
-                // 获取对应MythicConfig
-                val mythicConfig: MythicConfig = mythicMob.config
-                // 不要问我为什么这么干, 谁问谁死
-                val fc = mythicConfig::class.java.getDeclaredField("fc")
-                fc.isAccessible = true
-                // 获取MM怪物的ConfigurationSection
-                val fileConfiguration: FileConfiguration = fc.get(mythicConfig) as FileConfiguration
-                // 获取MM怪物的ConfigurationSection
-                fileConfiguration.getConfigurationSection(mythicId)?.clone()?.let {
-                    mobInfos[mythicId] = it
-                }
-            }
-            MobInfoReloadedEvent().call()
-        }
-    }
-
-    private fun io.lumine.xikage.mythicmobs.utils.config.ConfigurationSection.clone(): ConfigurationSection {
-        val tempConfigSection = org.bukkit.configuration.file.YamlConfiguration() as ConfigurationSection
-        this.getKeys(false).forEach { key ->
-            val value = this.get(key)
-            if (value is io.lumine.xikage.mythicmobs.utils.config.ConfigurationSection) {
-                tempConfigSection.set(key, value.clone())
-            } else {
-                tempConfigSection.set(key, value)
-            }
-        }
-        return tempConfigSection
     }
 
     override fun getItemStack(id: String): ItemStack? {

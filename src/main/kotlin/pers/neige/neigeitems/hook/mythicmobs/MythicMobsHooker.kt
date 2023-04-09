@@ -3,10 +3,12 @@ package pers.neige.neigeitems.hook.mythicmobs
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.event.MythicDropEvent
 import pers.neige.neigeitems.event.MythicEquipEvent
 import pers.neige.neigeitems.item.ItemPack
@@ -14,13 +16,16 @@ import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemPackManager
+import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.ProxyListener
+import taboolib.common.platform.function.submit
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
+import java.io.File
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
@@ -291,6 +296,25 @@ abstract class MythicMobsHooker {
                 dropEvent.offsetYString,
                 dropEvent.angleType
             )
+        }
+    }
+
+    init {
+        loadMobInfos()
+    }
+
+    internal fun loadMobInfos() {
+        submit(async = true) {
+            mobInfos.clear()
+            for (file: File in ConfigUtils.getAllFiles("MythicMobs", "Mobs")) {
+                val config = YamlConfiguration.loadConfiguration(file)
+                config.getKeys(false).forEach { id ->
+                    config.getConfigurationSection(id)?.let {
+                        mobInfos[id] = it
+                    }
+                }
+            }
+            MobInfoReloadedEvent().call()
         }
     }
 
