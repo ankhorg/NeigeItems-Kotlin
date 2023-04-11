@@ -313,6 +313,8 @@ object ItemManager : ItemConfigManager() {
         val newCharge = amount.coerceAtMost(maxCharge).coerceAtLeast(0)
         // 修改使用次数
         itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(maxCharge))
+        // 保存修改
+        itemTag.saveTo(this)
     }
 
     /**
@@ -332,6 +334,8 @@ object ItemManager : ItemConfigManager() {
         val newCharge = (charge + amount).coerceAtMost(maxCharge).coerceAtLeast(0)
         // 修改使用次数
         itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(newCharge))
+        // 保存修改
+        itemTag.saveTo(this)
     }
 
     /**
@@ -349,6 +353,8 @@ object ItemManager : ItemConfigManager() {
         itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(charge))
         // 修改最大耐久值
         itemTag.putDeepFixed("NeigeItems.maxCharge", ItemTagData(amount.coerceAtLeast(1)))
+        // 保存修改
+        itemTag.saveTo(this)
     }
 
     /**
@@ -368,6 +374,8 @@ object ItemManager : ItemConfigManager() {
         itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(charge))
         // 修改最大耐久值
         itemTag.putDeepFixed("NeigeItems.maxCharge", ItemTagData(maxCharge))
+        // 保存修改
+        itemTag.saveTo(this)
     }
 
     /**
@@ -386,6 +394,8 @@ object ItemManager : ItemConfigManager() {
         // 修改耐久值
         itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(newDurability))
         this.durability = (this.durability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
+        // 保存修改
+        itemTag.saveTo(this)
     }
 
     /**
@@ -406,6 +416,8 @@ object ItemManager : ItemConfigManager() {
         // 修改耐久值
         itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(newDurability))
         this.durability = (this.durability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
+        // 保存修改
+        itemTag.saveTo(this)
     }
 
     /**
@@ -424,6 +436,8 @@ object ItemManager : ItemConfigManager() {
         // 修改最大耐久值
         itemTag.putDeepFixed("NeigeItems.maxDurability", ItemTagData(amount.coerceAtLeast(1)))
         this.durability = (this.durability * (1 - (durability.toDouble()/amount))).toInt().toShort()
+        // 保存修改
+        itemTag.saveTo(this)
     }
 
     /**
@@ -444,5 +458,7 @@ object ItemManager : ItemConfigManager() {
         // 修改最大耐久值
         itemTag.putDeepFixed("NeigeItems.maxDurability", ItemTagData(maxDurability))
         this.durability = (this.durability * (1 - (durability.toDouble()/maxDurability))).toInt().toShort()
+        // 保存修改
+        itemTag.saveTo(this)
     }
 }
