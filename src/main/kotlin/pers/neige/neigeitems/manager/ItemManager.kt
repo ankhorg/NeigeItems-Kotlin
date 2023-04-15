@@ -46,8 +46,16 @@ object ItemManager : ItemConfigManager() {
      * 初始化所有物品生成器
      */
     private fun loadItems() {
+        var time = System.currentTimeMillis()
         for ((id, itemConfig) in itemConfigs) {
             items[id] = ItemGenerator(itemConfig)
+            if (ConfigManager.debug) {
+                val current = System.currentTimeMillis() - time
+                if (current > 1) {
+                    println("  物品-$id-加载耗时: ${current}ms")
+                }
+                time = System.currentTimeMillis()
+            }
         }
     }
 

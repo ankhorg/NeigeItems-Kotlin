@@ -15,7 +15,9 @@ import org.bukkit.inventory.meta.PotionMeta
 import pers.neige.neigeitems.event.ItemGenerateEvent
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.manager.ConfigManager.config
+import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
@@ -283,11 +285,11 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                      */
                     inheritInfo.getKeys(true).forEach { key ->
                         // 获取模板ID
-                        val value = inheritInfo.get(key)
+                        val id = inheritInfo.get(key)
                         // 检测当前键是否为末级键
-                        if (value is String) {
+                        if (id is String) {
                             // 获取模板
-                            val currentSection = ItemManager.getOriginConfig(value)
+                            val currentSection = ItemManager.getOriginConfig(id)
                             // 如果存在对应模板且模板存在对应键, 进行继承
                             if (currentSection != null) {
                                 val realConfig = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), currentSection), false)
@@ -352,8 +354,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         // 对文本化配置进行全局节点解析
         val configString = configStringNoSection.parseSection(cache, player, sections)
         // Debug信息
-        if (config.getBoolean("Main.Debug")) print(configString)
-        if (config.getBoolean("Main.Debug") && sections != null) print(sections.saveToString("$id-sections"))
+        if (debug) print(configString)
+        if (debug && sections != null) print(sections.saveToString("$id-sections"))
         val configSection = configString.loadFromString(id) ?: YamlConfiguration()
 
         // 2023/4/2 补充: papi解析所带来的的二次加载配置文件导致了运行缓慢

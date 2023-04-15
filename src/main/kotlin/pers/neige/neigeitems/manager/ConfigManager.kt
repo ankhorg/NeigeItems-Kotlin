@@ -33,6 +33,7 @@ object ConfigManager {
      */
     val config get() = plugin.config
 
+    var debug = config.getBoolean("Main.Debug", false)
     var comboInterval = config.getLong("ItemAction.comboInterval", 500)
     var removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
 
@@ -96,6 +97,7 @@ object ConfigManager {
     fun reload() {
         plugin.reloadConfig()
         loadConfig()
+        debug = config.getBoolean("Main.Debug", false)
         comboInterval = config.getLong("ItemAction.comboInterval", 500)
         removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
     }

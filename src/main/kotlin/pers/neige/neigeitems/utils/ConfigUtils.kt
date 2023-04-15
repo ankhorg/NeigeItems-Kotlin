@@ -4,6 +4,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
 import pers.neige.neigeitems.manager.SectionManager
+import pers.neige.neigeitems.utils.ConfigUtils.clone
 import taboolib.common.platform.function.getDataFolder
 import taboolib.platform.BukkitPlugin
 import java.io.File
@@ -159,7 +160,7 @@ object ConfigUtils {
     }
 
     /**
-     * 克隆ConfigurationSection
+     * 深复制ConfigurationSection
      *
      * @return 对应ConfigurationSection的克隆
      */
@@ -167,9 +168,51 @@ object ConfigUtils {
     fun ConfigurationSection.clone(): ConfigurationSection {
         val tempConfigSection = YamlConfiguration() as ConfigurationSection
         this.getKeys(false).forEach { key ->
-            tempConfigSection.set(key, this.get(key))
+            when (val value = this.get(key)) {
+                is ConfigurationSection -> tempConfigSection.set(key, value.clone())
+                is List<*> -> tempConfigSection.set(key, value.clone())
+                else -> tempConfigSection.set(key, value)
+            }
         }
         return tempConfigSection
+    }
+
+    /**
+     * 深复制List
+     *
+     * @return 对应List的克隆
+     */
+    @JvmStatic
+    fun List<*>.clone(): List<*> {
+        return arrayListOf<Any?>().also { list ->
+            forEach { value ->
+                when (value) {
+                    is ConfigurationSection -> list.add(value.clone())
+                    is List<*> -> list.add(value.clone())
+                    is Map<*, *> -> list.add(value.clone())
+                    else -> list.add(value)
+                }
+            }
+        }
+    }
+
+    /**
+     * 深复制Map
+     *
+     * @return 对应Map的克隆
+     */
+    @JvmStatic
+    fun Map<*, *>.clone(): Map<*, *> {
+        return hashMapOf<Any?, Any?>().also { map ->
+            forEach { (key, value) ->
+                when (value) {
+                    is ConfigurationSection -> map[key] = value.clone()
+                    is List<*> -> map[key] = value.clone()
+                    is Map<*, *> -> map[key] = value.clone()
+                    else -> map[key] = value
+                }
+            }
+        }
     }
 
     /**
