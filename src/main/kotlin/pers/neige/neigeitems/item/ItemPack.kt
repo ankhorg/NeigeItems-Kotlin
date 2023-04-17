@@ -48,6 +48,11 @@ class ItemPack(
     }
 
     /**
+     * 获取物品包配置文本
+     */
+    val configString = configSection.saveToString(id)
+
+    /**
      * 获取物品包多彩掉落配置
      */
     val fancyDropConfig = configSection.getConfigurationSection("FancyDrop")
@@ -113,20 +118,15 @@ class ItemPack(
      * @return 解析后物品包配置
      */
     fun getSection(player: OfflinePlayer?, data: HashMap<String, String>?): ConfigurationSection? {
-        // 物品包configuration
-        val configSection = this.configSection.clone()
         // 加载缓存
-        val cache = data ?: HashMap<String, String>()
-
+        val cache = data ?: HashMap()
         // 获取私有节点配置
         val sections = this.sections
         // 对文本化配置进行全局节点解析
-        val configString = configSection
-            .saveToString(id)
-            .parseSection(cache, player, sections)
+        val configString = configString.parseSection(cache, player, sections)
         // Debug信息
-        if (ConfigManager.config.getBoolean("Main.Debug")) print(configString)
-        if (ConfigManager.config.getBoolean("Main.Debug") && sections != null) print(sections.saveToString("$id-sections"))
+        if (ConfigManager.debug) print(configString)
+        if (ConfigManager.debug && sections != null) print(sections.saveToString("$id-sections"))
         return configString.loadFromString(id) ?: YamlConfiguration()
     }
 
@@ -176,14 +176,17 @@ class ItemPack(
             val minItems = config.getInt("MinItems", -1)
             val maxItems = config.getInt("MaxItems", -1)
             val items = config.getStringList("Items")
-            // 最小值为null或大于0的整数
+            // 最小值为null或大于0且小于物品条目总数的整数
             val trueMin = when {
-                (minItems > 0) -> minItems
+                (minItems > 0) -> minItems.coerceAtMost(items.size)
                 else -> null
             }
-            // 最大值为null或大于最小值(没有最小值时也需要大于0)且小于物品条目总数的整数
+            // 最大值为null或大于0和最小值且小于物品条目总数的整数
             val trueMax = when {
-                (maxItems > 0 && (trueMin == null || maxItems > trueMin) && maxItems < items.size) -> maxItems
+                // 最大值小于等于0就终止操作
+                maxItems <= 0 -> return ArrayList()
+                // 如果最大值小于条目总数, 返回最大值
+                maxItems < items.size -> maxItems
                 else -> null
             }
             // 不指定最小/最大掉落行数

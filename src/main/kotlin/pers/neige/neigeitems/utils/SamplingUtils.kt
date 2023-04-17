@@ -12,44 +12,48 @@ import kotlin.math.pow
 object SamplingUtils {
     @JvmStatic
     fun <T> aExpj(samples: Map<T, Double>, amount: Int): List<T> {
-        if (amount > 0) {
-            val heap = PriorityQueue<Pair<Double, T>>(compareBy { it.first })
-            var thresholdX: Double? = null
-            var thresholdT = 0.0
-            var weightAcc = 0.0
-
-            for ((item, weight) in samples) {
-                if (heap.size < amount) {
-                    val randNum = ThreadLocalRandom.current().nextDouble(0.0, 1.0)
-                    val ki = randNum.pow(1.0 / weight)
-                    heap.add(ki to item)
-                    continue
-                }
-
-                if (weightAcc == 0.0) {
-                    thresholdT = heap.peek().first
-                    val randNum = ThreadLocalRandom.current().nextDouble(0.0, 1.0)
-                    thresholdX = ln(randNum) / ln(thresholdT)
-                }
-
-                if (weightAcc + weight < thresholdX!!) {
-                    weightAcc += weight
-                    continue
-                } else {
-                    weightAcc = 0.0
-                }
-
-                val tW = thresholdT.pow(weight)
-                val randNum = ThreadLocalRandom.current().nextDouble(tW, 1.0)
-                val ki = randNum.pow(1.0 / weight)
-                heap.poll()
-                heap.add(ki to item)
-            }
-
-            return heap.map { it.second }
-        } else {
+        // 小于等于0直接返回空列表
+        if (amount <= 0) {
             return arrayListOf()
         }
+        // 等于长度直接返回全集
+        if (amount == samples.size) {
+            return samples.keys.toList()
+        }
+        val heap = PriorityQueue<Pair<Double, T>>(compareBy { it.first })
+        var thresholdX: Double? = null
+        var thresholdT = 0.0
+        var weightAcc = 0.0
+
+        for ((item, weight) in samples) {
+            if (heap.size < amount) {
+                val randNum = ThreadLocalRandom.current().nextDouble(0.0, 1.0)
+                val ki = randNum.pow(1.0 / weight)
+                heap.add(ki to item)
+                continue
+            }
+
+            if (weightAcc == 0.0) {
+                thresholdT = heap.peek().first
+                val randNum = ThreadLocalRandom.current().nextDouble(0.0, 1.0)
+                thresholdX = ln(randNum) / ln(thresholdT)
+            }
+
+            if (weightAcc + weight < thresholdX!!) {
+                weightAcc += weight
+                continue
+            } else {
+                weightAcc = 0.0
+            }
+
+            val tW = thresholdT.pow(weight)
+            val randNum = ThreadLocalRandom.current().nextDouble(tW, 1.0)
+            val ki = randNum.pow(1.0 / weight)
+            heap.poll()
+            heap.add(ki to item)
+        }
+
+        return heap.map { it.second }
     }
 
     @JvmStatic
