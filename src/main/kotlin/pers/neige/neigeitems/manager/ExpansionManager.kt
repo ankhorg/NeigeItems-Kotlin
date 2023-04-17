@@ -88,13 +88,24 @@ object ExpansionManager {
      * 加载脚本扩展
      */
     private fun load() {
+        var time = System.currentTimeMillis()
         for (file in ConfigUtils.getAllFiles("Expansions")) {
+            // 这个不是真的文件名, 而是Expansions文件夹下的相对路径
+            val fileName = file.path.replace("plugins${File.separator}NeigeItems${File.separator}Expansions${File.separator}", "")
             // 防止某个脚本出错导致加载中断
             try {
                 val script = ScriptExpansion(file)
-                expansions[file.path.replace("plugins${File.separator}NeigeItems${File.separator}Expansions${File.separator}", "")] = script
+                expansions[fileName] = script
             } catch (error: Throwable) {
                 error.printStackTrace()
+            } finally {
+                if (ConfigManager.debug) {
+                    val current = System.currentTimeMillis() - time
+                    if (current > 1) {
+                        println("  扩展-$fileName-加载耗时: ${current}ms")
+                    }
+                    time = System.currentTimeMillis()
+                }
             }
         }
     }

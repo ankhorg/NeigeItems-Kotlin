@@ -67,6 +67,9 @@ object Reload {
                 time = System.currentTimeMillis()
             }
 
+            if (ConfigManager.debug) {
+                println("加载耗时大于1ms的扩展将被提示:")
+            }
             ExpansionManager.reload()
             if (ConfigManager.debug) {
                 println("扩展重载耗时: ${System.currentTimeMillis() - time}ms")

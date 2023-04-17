@@ -177,11 +177,9 @@ class ItemColorProtocol : ItemColor() {
                                 itemTag["NeigeItems"]?.asCompound()?.get("color")?.asString()?.let {
                                     colors[it]?.let { color ->
                                         // 设置发光
-                                        val flag = event.packet.watchableCollectionModifier.read(0)[0]
-                                        val byte = flag.value
-                                        if (byte is Byte) {
-                                            flag.value = byte or (1 shl 6).toByte()
-                                        }
+                                        // 使用发包让实体发光只会带来无穷的麻烦
+                                        // 直接通过BukkitAPI设置发光效果才会让我们走向美好的未来
+                                        entity.isGlowing = true
                                         initTeam(event.player)
                                         // 创建Team数据包
                                         val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
