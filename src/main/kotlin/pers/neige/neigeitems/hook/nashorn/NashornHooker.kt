@@ -32,6 +32,15 @@ abstract class NashornHooker {
     abstract fun getNashornEngine(args: Array<String>): ScriptEngine
 
     /**
+     * 获取一个新的Nashorn引擎
+     *
+     * @param args 应用于引擎的参数
+     * @param classLoader 用于生成引擎的classLoader
+     * @return 一个新的Nashorn引擎
+     */
+    abstract fun getNashornEngine(args: Array<String>, classLoader: ClassLoader): ScriptEngine
+
+    /**
      * 编译一段js脚本, 返回已编译脚本对象(将创建一个新的ScriptEngine用于解析脚本)
      *
      * @param string 待编译脚本文本

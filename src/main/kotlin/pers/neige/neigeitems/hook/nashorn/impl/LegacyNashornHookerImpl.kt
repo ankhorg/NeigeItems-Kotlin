@@ -24,7 +24,11 @@ class LegacyNashornHookerImpl : NashornHooker() {
     }
 
     override fun getNashornEngine(args: Array<String>): ScriptEngine {
-        return NashornScriptEngineFactory().getScriptEngine(args, this::class.java.classLoader)
+        return getNashornEngine(args, this::class.java.classLoader)
+    }
+
+    override fun getNashornEngine(args: Array<String>, classLoader: ClassLoader): ScriptEngine {
+        return NashornScriptEngineFactory().getScriptEngine(args, classLoader)
     }
 
     override fun compile(string: String): CompiledScript {
