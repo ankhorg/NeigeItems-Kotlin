@@ -12,12 +12,10 @@ English Wiki(Deprecated): https://neige.gitbook.io/neigeitems-wiki-english/
 
 ```kotlin
 repositories {
-  maven("https://r2.blobs.inksnow.org/maven/")
-  // use below one in China
-  // maven("https://irepo-space-a0.oss-accelerate.aliyuncs.com/maven/")
+  maven("https://r.irepo.space/maven/")
 }
 
 dependencies {
-  compileOnly("pers.neige.neigeitems:NeigeItems:1.12.9")
+  compileOnly("pers.neige.neigeitems:NeigeItems:[latest release version]")
 }
 ```
