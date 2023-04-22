@@ -169,7 +169,7 @@ object ActionManager {
                 // 解析物品变量
                 val actionString = when (itemTag) {
                     null -> value.parseSection(
-                        map?.get("cache") as? HashMap<String, String>,
+                        (map?.get("cache") ?: global) as? HashMap<String, String>,
                         player,
                         map?.get("sections") as? ConfigurationSection,
                     )
@@ -267,7 +267,7 @@ object ActionManager {
         // 解析物品变量
         val actionString = when (itemTag) {
             null -> action.parseSection(
-                map?.get("cache") as? HashMap<String, String>,
+                (map?.get("cache") ?: global) as? HashMap<String, String>,
                 player,
                 map?.get("sections") as? ConfigurationSection,
             )
