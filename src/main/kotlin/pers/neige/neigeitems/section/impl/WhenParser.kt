@@ -43,6 +43,7 @@ object WhenParser : SectionParser() {
         conditions: Any?
     ): String? {
         if (conditions is List<*>) {
+            value?.let { cache?.put("value", value) }
             // 遍历条件
             conditions.forEach { info ->
                 when (info) {
@@ -60,12 +61,12 @@ object WhenParser : SectionParser() {
                                     Pair("sections", sections)
                                 ))) {
                                 // 返回
-                                return result.parseSection(cache, player, sections)
+                                return result.parseSection(cache, player, sections).also { cache?.remove("value") }
                             }
                         }
                     }
                     // 是String说明可以直接返回
-                    is String -> return info
+                    is String -> return info.parseSection(cache, player, sections).also { cache?.remove("value") }
                 }
             }
         }
