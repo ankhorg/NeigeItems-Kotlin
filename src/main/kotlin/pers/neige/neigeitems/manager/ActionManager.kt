@@ -323,13 +323,16 @@ object ActionManager {
                 map?.forEach { (key, value) ->
                     value?.let { bindings[key] = it }
                 }
-                bindings["variables"] = HashMap<String, Any?>()
+                val vars = HashMap<String, Any?>()
+                bindings["variables"] = vars
+                bindings["vars"] = vars
                 player.let { bindings["player"] = it }
                 itemStack?.let { bindings["itemStack"] = it }
                 itemTag?.let { bindings["itemTag"] = it }
                 data?.let { bindings["data"] = it }
                 event?.let { bindings["event"] = it }
                 bindings["global"] = global
+                bindings["glo"] = global
                 val result =  try {
                     actionScripts.computeIfAbsent(actionContent) {
                         nashornHooker.compile(engine, actionContent)
@@ -436,6 +439,30 @@ object ActionManager {
      *
      * @param player 执行玩家
      * @param action 动作内容
+     * @param global 用于存储整个动作运行过程中的全局变量
+     * @param map 传入js的顶级变量
+     * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
+     */
+    fun runAction(
+        player: Player,
+        action: Any?,
+        global: HashMap<String, Any?> = HashMap<String, Any?>(),
+        map: Map<String, Any?>? = null
+    ): Boolean {
+        when (action) {
+            is String -> return runAction(player, action, null, null, null, null, global, map)
+            is List<*> -> runAction(player, action, null, null, null, null, global, 0, action.size, map)
+            is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, null, null, null, null, global, map)
+            is ConfigurationSection -> return runAction(player, action, null, null, null, null, global, map)
+        }
+        return true
+    }
+
+    /**
+     * 执行物品动作
+     *
+     * @param player 执行玩家
+     * @param action 动作内容
      * @param itemStack 用于解析条件, 可为空
      * @param itemTag 用于解析nbt及data, 可为空
      * @param data 物品节点数据
@@ -492,13 +519,16 @@ object ActionManager {
             map?.forEach { (key, value) ->
                 value?.let { bindings[key] = it }
             }
-            bindings["variables"] = HashMap<String, Any?>()
+            val vars = HashMap<String, Any?>()
+            bindings["variables"] = vars
+            bindings["vars"] = vars
             player?.let { bindings["player"] = it }
             itemStack?.let { bindings["itemStack"] = it }
             itemTag?.let { bindings["itemTag"] = it }
             data?.let { bindings["data"] = it }
             event?.let { bindings["event"] = it }
             bindings["global"] = global
+            bindings["glo"] = global
             // 解析条件
             try {
                 // 条件里返回null就直接转换成false
