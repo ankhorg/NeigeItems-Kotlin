@@ -173,16 +173,18 @@ class ItemPack(
     fun getItemStacks(player: OfflinePlayer?, data: HashMap<String, String>?): List<ItemStack> {
         val itemStacks = ArrayList<ItemStack>()
         getSection(player, data)?.also { config ->
-            val minItems = config.getInt("MinItems", -1)
-            val maxItems = config.getInt("MaxItems", -1)
+            val minItems = config.get("MinItems") as? Int
+            val maxItems = config.get("MaxItems") as? Int
             val items = config.getStringList("Items")
             // 最小值为null或大于0且小于物品条目总数的整数
             val trueMin = when {
+                minItems == null -> null
                 (minItems > 0) -> minItems.coerceAtMost(items.size)
                 else -> null
             }
             // 最大值为null或大于0和最小值且小于物品条目总数的整数
             val trueMax = when {
+                maxItems == null -> null
                 // 最大值小于等于0就终止操作
                 maxItems <= 0 -> return ArrayList()
                 // 如果最大值小于条目总数, 返回最大值
