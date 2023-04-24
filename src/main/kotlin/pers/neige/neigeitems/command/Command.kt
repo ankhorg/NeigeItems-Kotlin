@@ -116,6 +116,10 @@ object Command {
     val list = pers.neige.neigeitems.command.subcommand.List.list
 
     @CommandBody
+    // ni search [ID前缀] (页码) > 查看对应ID前缀的NI物品
+    val search = Search.search
+
+    @CommandBody
     val reload = Reload.reload
 
     @CommandBody
