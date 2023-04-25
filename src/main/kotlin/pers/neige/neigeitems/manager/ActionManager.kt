@@ -31,15 +31,18 @@ import pers.neige.neigeitems.utils.ActionUtils.consumeAndReturn
 import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
+import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
+import taboolib.common.platform.Schedule
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
+import taboolib.platform.util.actionBar
 import taboolib.platform.util.giveItem
 import taboolib.platform.util.sendActionBar
 import java.io.File
@@ -1379,6 +1382,66 @@ object ActionManager {
         }
         // 执行动作
         trigger.run(player, itemStack, itemTag, data, event, global)
+    }
+
+    @Schedule(period = 1, async = true)
+    fun schedule() {
+        Bukkit.getOnlinePlayers().forEach { player ->
+            val inventory = player.inventory
+            for (index in 0 until 41) {
+                // 获取物品
+                val itemStack = inventory.getItem(index)
+                tick(player, itemStack, "tick_$index")
+            }
+            tick(player, inventory.itemInMainHand, "tick_hand")
+            tick(player, inventory.itemInOffHand, "tick_offhand")
+            tick(player, inventory.getItem(39), "tick_head")
+            tick(player, inventory.getItem(38), "tick_chest")
+            tick(player, inventory.getItem(37), "tick_legs")
+            tick(player, inventory.getItem(36), "tick_feet")
+        }
+    }
+
+    private fun tick(player: Player, itemStack: ItemStack?, type: String) {
+        // 判断非空
+        if (itemStack == null || itemStack.type == Material.AIR) return
+        // 物品NBT
+        val itemTag: ItemTag
+        // NI物品id
+        val id: String
+        // NI节点数据
+        val data: HashMap<String, String>?
+        when (val itemInfo = itemStack.isNiItem(true)) {
+            null -> return
+            else -> {
+                itemTag = itemInfo.itemTag
+                id = itemInfo.id
+                data = itemInfo.data
+            }
+        }
+        // 获取物品动作
+        val itemAction = itemActions[id] ?: let { return }
+        // 获取基础触发器
+        val trigger = itemAction.triggers[type]
+        // 没有对应物品动作就停止判断
+        if (trigger == null) return
+
+        // 检测冷却
+        val tick = trigger.tick?.parseItemSection(itemStack, itemTag, data, player)?.toLongOrNull() ?: 1000
+        // 如果冷却存在且大于0
+        if (tick > 0) {
+            // 获取上次使用时间
+            val lastTick = player.getMetadataEZ("NI-TICK-${trigger.group}", "Long", 0.toLong()) as Long
+            // 如果仍处于冷却时间
+            if (lastTick > 0) {
+                player.setMetadataEZ("NI-TICK-${trigger.group}", lastTick - 1)
+                return
+            } else {
+                player.setMetadataEZ("NI-TICK-${trigger.group}", tick)
+            }
+        }
+        // 执行动作
+        trigger.run(player, itemStack, itemTag, data, null, HashMap<String, Any?>())
     }
 
     private fun runThreadSafe(task: Runnable) {

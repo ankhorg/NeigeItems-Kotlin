@@ -17,6 +17,11 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
     val cooldown = config.getString("cooldown", "1000")
 
     /**
+     * 获取tick型触发器触发间隔
+     */
+    val tick = config.getString("tick", "10")
+
+    /**
      * 获取物品冷却组ID
      */
     val group: String = config.getString("group") ?: "$type-$id"
@@ -49,7 +54,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
         data: HashMap<String, String>? = null,
-        event: Event,
+        event: Event?,
         global: HashMap<String, Any?>
     ) {
         // 运行异步动作
@@ -71,7 +76,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
         data: HashMap<String, String>? = null,
-        event: Event,
+        event: Event?,
         global: HashMap<String, Any?>
     ) {
         bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
@@ -92,7 +97,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
         data: HashMap<String, String>? = null,
-        event: Event,
+        event: Event?,
         global: HashMap<String, Any?>
     ) {
         ActionManager.runAction(player, sync, itemStack, itemTag, data, event, global)
