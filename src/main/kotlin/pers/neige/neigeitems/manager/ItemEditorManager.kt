@@ -1616,6 +1616,9 @@ object ItemEditorManager {
                         neigeItems["charge"]?.let {
                             newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
                         }
+                        neigeItems["durability"]?.let {
+                            newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
+                        }
                         newItemTag.saveTo(itemStack)
                     }
                     itemStack.type = newItemStack.type
@@ -1655,6 +1658,9 @@ object ItemEditorManager {
                     newItemStack.getItemTag().also { newItemTag ->
                         neigeItems["charge"]?.let {
                             newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                        }
+                        neigeItems["durability"]?.let {
+                            newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
                         }
                         newItemTag.saveTo(itemStack)
                     }
@@ -1699,6 +1705,9 @@ object ItemEditorManager {
                     newItemStack.getItemTag().also { newItemTag ->
                         neigeItems["charge"]?.let {
                             newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                        }
+                        neigeItems["durability"]?.let {
+                            newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
                         }
                         newItemTag.saveTo(itemStack)
                     }
@@ -1748,6 +1757,9 @@ object ItemEditorManager {
                     newItemStack.getItemTag().also { newItemTag ->
                         neigeItems["charge"]?.let {
                             newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                        }
+                        neigeItems["durability"]?.let {
+                            newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
                         }
                         newItemTag.saveTo(itemStack)
                     }

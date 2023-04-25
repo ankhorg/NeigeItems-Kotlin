@@ -72,6 +72,25 @@ class ItemGenerator (val itemConfig: ItemConfig) {
     val sections = configSection.getConfigurationSection("sections")
 
     /**
+     * 获取物品是否需要更新
+     */
+    val update = configSection.getBoolean("options.update.enable", configSection.getBoolean("static.options.update.enable", false))
+
+    /**
+     * 获取更新时保护的NBT
+     */
+    val protectNBT = when (update) {
+        true -> {
+            if (configSection.contains("options.update.protect")) {
+                configSection.getStringList("options.update.protect")
+            } else {
+                configSection.getStringList("static.options.update.protect")
+            }
+        }
+        else -> listOf()
+    }
+
+    /**
      * 获取物品静态配置
      */
     val static = configSection.getConfigurationSection("static")
