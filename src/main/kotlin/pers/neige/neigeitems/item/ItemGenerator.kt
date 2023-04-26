@@ -16,6 +16,7 @@ import pers.neige.neigeitems.event.ItemGenerateEvent
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ConfigManager.debug
+import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
@@ -104,6 +105,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 it.set(key, this.configSection.get(key))
             }
         }
+        it.set("options.update", null)
     }
 
     /**
@@ -160,10 +162,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         val itemMeta = itemStack.itemMeta
         // 设置CustomModelData
         if (static.contains("custommodeldata")) {
-            try {
-                itemMeta?.setCustomModelData(static.getInt("custommodeldata"))
-                hasStatic = true
-            } catch (_: NoSuchMethodError) {}
+            nmsHooker.setCustomModelData(itemMeta, static.getInt("custommodeldata"))
+            hasStatic = true
         }
         // 设置物品名
         if (static.contains("name")) {
@@ -246,6 +246,15 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 neigeItems["itemBreak"] = ItemTagData(1.toByte())
             } else {
                 neigeItems["itemBreak"] = ItemTagData(0.toByte())
+            }
+        }
+        // 设置具有owner的掉落物是否对其他人不可见
+        if (static.contains("options.hide")) {
+            hasStatic = true
+            if (static.getBoolean("options.hide", false)) {
+                neigeItems["hide"] = ItemTagData(1.toByte())
+            } else {
+                neigeItems["hide"] = ItemTagData(0.toByte())
             }
         }
         // 首次掉落归属
@@ -377,32 +386,6 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         if (debug && sections != null) print(sections.saveToString("$id-sections"))
         val configSection = configString.loadFromString(id) ?: YamlConfiguration()
 
-        // 2023/4/2 补充: papi解析所带来的的二次加载配置文件导致了运行缓慢
-//        var configString = this.configString
-//
-//        // 进行一次papi解析
-//        player?.let { configString = papi(player, configString) }
-//        // 加载回YamlConfiguration
-//        var configSection = configString.loadFromString(id) ?: YamlConfiguration()
-//
-//        // 加载缓存
-//        val cache = data ?: HashMap<String, String>()
-//
-//        // 获取私有节点配置
-//        val sections = configSection.getConfigurationSection("sections")
-//        // 解析私有节点配置是没有意义的, 删除该部分将大大提升性能
-//        configSection.set("sections", null)
-//        // 对文本化配置进行全局节点解析
-//        configString = configSection
-//            .saveToString(id)
-//            .parseSection(cache, player, sections)
-//        // 曾怀疑过前后两次papi解析是否会对生成速度造成较大影响
-//        // 后经测试得出结论: 这两次papi解析耗时微乎其微, 各种节点初始化才是耗时的大头
-//        player?.let { configString = papi(player, configString) }
-//        // Debug信息
-//        if (config.getBoolean("Main.Debug")) print(configString)
-//        if (config.getBoolean("Main.Debug") && sections != null) print(sections.saveToString("$id-sections"))
-//        configSection = configString.loadFromString(id) ?: YamlConfiguration()
         // 构建物品
         if (configSection.contains("material") || hasStaticMaterial) {
             // 获取材质
@@ -433,9 +416,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 val itemMeta = itemStack.itemMeta
                 // 设置CustomModelData
                 if (configSection.contains("custommodeldata")) {
-                    try {
-                        itemMeta?.setCustomModelData(configSection.getInt("custommodeldata"))
-                    } catch (_: NoSuchMethodError) {}
+                    nmsHooker.setCustomModelData(itemMeta, configSection.getInt("custommodeldata"))
                 }
                 // 设置物品名
                 if (configSection.contains("name")) {
@@ -511,6 +492,14 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                         neigeItems["itemBreak"] = ItemTagData(1.toByte())
                     } else {
                         neigeItems["itemBreak"] = ItemTagData(0.toByte())
+                    }
+                }
+                // 设置具有owner的掉落物是否对其他人不可见
+                if (configSection.contains("options.hide")) {
+                    if (configSection.getBoolean("options.hide", false)) {
+                        neigeItems["hide"] = ItemTagData(1.toByte())
+                    } else {
+                        neigeItems["hide"] = ItemTagData(0.toByte())
                     }
                 }
                 // 首次掉落归属

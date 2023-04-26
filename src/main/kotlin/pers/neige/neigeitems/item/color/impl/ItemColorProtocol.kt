@@ -10,8 +10,6 @@ import com.comphenix.protocol.events.PacketEvent
 import com.comphenix.protocol.reflect.FieldAccessException
 import com.comphenix.protocol.utility.MinecraftReflection
 import com.comphenix.protocol.utility.MinecraftVersion
-import com.comphenix.protocol.wrappers.WrappedChatComponent
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Item
@@ -20,13 +18,10 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.scoreboard.Scoreboard
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.color.ItemColor
-import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
-import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.module.nms.getItemTag
 import java.util.*
-import kotlin.experimental.or
 
 
 /**

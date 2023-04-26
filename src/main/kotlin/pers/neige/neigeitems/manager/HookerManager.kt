@@ -14,11 +14,15 @@ import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
 import pers.neige.neigeitems.hook.nashorn.impl.LegacyNashornHookerImpl
 import pers.neige.neigeitems.hook.nashorn.impl.NashornHookerImpl
+import pers.neige.neigeitems.hook.nms.NMSHooker
+import pers.neige.neigeitems.hook.nms.impl.NMSHookerOtherImpl
+import pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_12_R1Impl
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker
 import pers.neige.neigeitems.hook.placeholderapi.impl.LegacyPapiHookerImpl
 import pers.neige.neigeitems.hook.placeholderapi.impl.PapiHookerImpl
 import pers.neige.neigeitems.hook.vault.VaultHooker
 import pers.neige.neigeitems.hook.vault.impl.VaultHookerImpl
+import pers.neige.neigeitems.item.ItemHider
 import pers.neige.neigeitems.item.ItemPlaceholder
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.item.color.impl.ItemColorProtocol
@@ -76,6 +80,14 @@ object HookerManager {
         }
     }
 
+    val nmsHooker: NMSHooker =
+        try {
+            Class.forName("net.minecraft.server.v1_12_R1.EntityItem")
+            NMSHookerV1_12_R1Impl()
+        } catch (error: Throwable) {
+            NMSHookerOtherImpl()
+        }
+
     /**
      * 加载MM挂钩功能
      */
@@ -130,17 +142,19 @@ object HookerManager {
         easyItemHooker
     }
 
-    val itemPlaceholder: ItemPlaceholder? = if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-        try {
-            ItemPlaceholder()
-        } catch (error: Throwable) {
-            null
-        }
-    } else {
-        Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "ProtocolLib"))
-        null
-    }
+    /**
+     * 物品变量功能
+     */
+    val itemPlaceholder: ItemPlaceholder?
 
+    /**
+     * 物品隐藏功能
+     */
+    val itemHider: ItemHider?
+
+    /**
+     * 物品光效功能
+     */
     val itemColor: ItemColor? by lazy {
         if (config.getString("ItemColor.type")?.lowercase(Locale.getDefault()) == "protocol") {
             if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
@@ -154,6 +168,25 @@ object HookerManager {
             }
         } else {
             ItemColorVanilla()
+        }
+    }
+
+    init {
+        if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
+            itemPlaceholder = try {
+                ItemPlaceholder()
+            } catch (error: Throwable) {
+                null
+            }
+            itemHider = try {
+                ItemHider()
+            } catch (error: Throwable) {
+                null
+            }
+        } else {
+            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "ProtocolLib"))
+            itemPlaceholder = null
+            itemHider = null
         }
     }
 

@@ -16,6 +16,7 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
+import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -674,32 +675,49 @@ object ItemUtils {
             neigeItems.remove("owner")
             itemTag.saveTo(itemStack)
         }
+        // 记录掉落物拥有者
+        val hide = neigeItems?.get("hide")?.asByte()
         if (Bukkit.isPrimaryThread()) {
             // 掉落物品
-            val item = this.world?.dropItem(this, itemStack)
-            return item?.also {
-                // 设置拥有者相关Metadata
-                owner?.let {
-                    item.setMetadataEZ("NI-Owner", it)
-                }
-                // 掉落物技能
-                neigeItems?.let {
-                    neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
-                        mythicMobsHooker?.castSkill(item, dropSkill, entity)
+            return this.world?.let { world ->
+                nmsHooker.dropItem(
+                    world,
+                    this,
+                    itemStack
+                ) { item ->
+                    // 设置拥有者相关Metadata
+                    owner?.let {
+                        item.setMetadataEZ("NI-Owner", it)
+                    }
+                    hide?.let {
+                        item.setMetadataEZ("NI-Hide", it)
+                    }
+                    // 掉落物技能
+                    neigeItems?.let {
+                        neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
+                            mythicMobsHooker?.castSkill(item, dropSkill, entity)
+                        }
                     }
                 }
             }
         } else {
             // 返回结果物品
             return bukkitScheduler.callSyncMethod(plugin) {
-                // 掉落物品
-                val item = this.world?.dropItem(this, itemStack)
-                // 设置拥有者相关Metadata
-                owner?.let {
-                    item?.setMetadataEZ("NI-Owner", it)
+                this.world?.let { world ->
+                    nmsHooker.dropItem(
+                        world,
+                        this,
+                        itemStack
+                    ) { item ->
+                        // 设置拥有者相关Metadata
+                        owner?.let {
+                            item.setMetadataEZ("NI-Owner", it)
+                        }
+                        hide?.let {
+                            item.setMetadataEZ("NI-Hide", it)
+                        }
+                    }
                 }
-                // 返回结果物品
-                item
             }.get()?.also { item ->
                 // 掉落物技能
                 neigeItems?.let {

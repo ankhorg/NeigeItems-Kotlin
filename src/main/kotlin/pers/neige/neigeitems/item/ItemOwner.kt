@@ -31,11 +31,16 @@ object ItemOwner {
             if (player.name != owner) {
                 // 不是拥有者, 禁止拾取
                 event.isCancelled = true
-                // 通过actionbar进行对应提示
-                config.getString("Messages.invalidOwnerMessage")?.let {
-                    when (config.getString("ItemOwner.messageType")) {
-                        "actionbar" -> player.actionBar(it.replace("{name}", owner))
-                        "message" -> player.sendMessage(it.replace("{name}", owner))
+                // 是否隐藏掉落物
+                val hide = item.getMetadataEZ("NI-Hide", "Byte", 0.toByte()) as Byte
+                // 不隐藏的话给予提示
+                if (hide != 1.toByte()) {
+                    // 通过actionbar进行对应提示
+                    config.getString("Messages.invalidOwnerMessage")?.let {
+                        when (config.getString("ItemOwner.messageType")) {
+                            "actionbar" -> player.actionBar(it.replace("{name}", owner))
+                            "message" -> player.sendMessage(it.replace("{name}", owner))
+                        }
                     }
                 }
             }
