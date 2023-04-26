@@ -18,6 +18,8 @@ pers.neige.neigeitems.hook.mythicmobs
 pers.neige.neigeitems.hook.mythicmobs.impl
 pers.neige.neigeitems.hook.nashorn
 pers.neige.neigeitems.hook.nashorn.impl
+pers.neige.neigeitems.hook.nms
+pers.neige.neigeitems.hook.nms.impl
 pers.neige.neigeitems.hook.placeholderapi
 pers.neige.neigeitems.hook.placeholderapi.impl
 pers.neige.neigeitems.hook.vault
