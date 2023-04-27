@@ -36,6 +36,7 @@ object ConfigManager {
     var debug = config.getBoolean("Main.Debug", false)
     var comboInterval = config.getLong("ItemAction.comboInterval", 500)
     var removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
+    var updateInterval = config.getLong("ItemUpdate.interval", -1)
 
     /**
      * 加载默认配置文件
@@ -100,5 +101,6 @@ object ConfigManager {
         debug = config.getBoolean("Main.Debug", false)
         comboInterval = config.getLong("ItemAction.comboInterval", 500)
         removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
+        updateInterval = config.getLong("ItemUpdate.interval", -1)
     }
 }

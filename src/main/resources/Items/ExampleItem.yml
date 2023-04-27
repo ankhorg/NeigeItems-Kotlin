@@ -9,7 +9,7 @@ ExampleItem:
   name: §6一件皮革甲
   # 物品Lore
   lore:
-  - 'PAPI变量测试: %player_level%'
+  - 'PAPI变量测试: <papi::player_level>'
   - '16进制颜色测试: <#ABCDEF>好耶'
   - '私有简单节点测试: <simple-1>'
   - '私有字符串节点测试: <strings-1>'
@@ -287,7 +287,7 @@ OwnerTest:
   name: 你捡我啊
   options:
     # 通过/ni drop或击杀MM怪物掉落该物品, 该物品首次拾取只能由Neige完成
-    # 你可以在此处填写"%player_name%", 这样就是谁击杀就属于谁了
+    # 你可以在此处填写<papi::player_name>, 这样就是谁击杀就属于谁了
     # 首次拾取后将不再有掉落物归属效果
     # 服务器重启后效果重置(掉了, 关服了, 再次开服, 谁都能捡)
     owner: Neige

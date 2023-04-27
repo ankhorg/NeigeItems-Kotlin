@@ -10,9 +10,13 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.NeigeItems.bukkitScheduler
+import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.event.ItemExpirationEvent
 import pers.neige.neigeitems.event.ItemUpdateEvent
 import pers.neige.neigeitems.manager.ConfigManager.config
+import pers.neige.neigeitems.manager.ConfigManager.updateInterval
+import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
@@ -20,6 +24,8 @@ import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
+import taboolib.common.LifeCycle
+import taboolib.common.platform.Awake
 import taboolib.common.platform.Schedule
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
@@ -47,11 +53,14 @@ object ItemCheck {
         }
     }
 
-    @Schedule(period = 20, async = true)
+    @Awake(LifeCycle.ACTIVE)
     fun schedule() {
-        Bukkit.getOnlinePlayers().forEach { player -> checkItem(player, player.inventory) }
+        if (updateInterval > 0) {
+            bukkitScheduler.runTaskTimerAsynchronously(plugin, Runnable {
+                Bukkit.getOnlinePlayers().forEach { player -> checkItem(player, player.inventory) }
+            }, 0, updateInterval)
+        }
     }
-
     @SubscribeEvent
     fun listener(e: PlayerJoinEvent) {
         checkItem(e.player, e.player.inventory)

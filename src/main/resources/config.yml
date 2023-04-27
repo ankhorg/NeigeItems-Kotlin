@@ -136,3 +136,6 @@ ItemAction:
   upgrade: true
   # 连击间隔(ms)
   comboInterval: 500
+ItemUpdate:
+  # 20tick检测一次玩家背包, -1代表取消
+  interval: 20
