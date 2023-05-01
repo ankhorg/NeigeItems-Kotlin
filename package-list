@@ -28,6 +28,7 @@ pers.neige.neigeitems.item
 pers.neige.neigeitems.item.action
 pers.neige.neigeitems.item.color
 pers.neige.neigeitems.item.color.impl
+pers.neige.neigeitems.listener
 pers.neige.neigeitems.manager
 pers.neige.neigeitems.maven
 pers.neige.neigeitems.script

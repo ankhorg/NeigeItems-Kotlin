@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>ActionManager 1.13.5 API </title>
+    <title>ActionManager 1.13.6 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -372,7 +372,7 @@ public class <span class="typeNameLabel"><a href=ActionManager.html>ActionManage
                                         <tr id="i12" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#listener(PlayerInteractEvent)>listener</a>(PlayerInteractEvent event) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#interactListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,PlayerInteractEvent)>interactListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, PlayerInteractEvent event) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -380,7 +380,7 @@ public class <span class="typeNameLabel"><a href=ActionManager.html>ActionManage
                                         <tr id="i13" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#listener(PlayerItemConsumeEvent)>listener</a>(PlayerItemConsumeEvent event) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#eatListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,PlayerItemConsumeEvent)>eatListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, PlayerItemConsumeEvent event) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -388,7 +388,7 @@ public class <span class="typeNameLabel"><a href=ActionManager.html>ActionManage
                                         <tr id="i14" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#listener(PlayerDropItemEvent)>listener</a>(PlayerDropItemEvent event) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#dropListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,PlayerDropItemEvent)>dropListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, PlayerDropItemEvent event) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -396,7 +396,7 @@ public class <span class="typeNameLabel"><a href=ActionManager.html>ActionManage
                                         <tr id="i15" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#listener(EntityPickupItemEvent)>listener</a>(EntityPickupItemEvent event) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#pickListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,EntityPickupItemEvent)>pickListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, EntityPickupItemEvent event) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -404,7 +404,7 @@ public class <span class="typeNameLabel"><a href=ActionManager.html>ActionManage
                                         <tr id="i16" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#listener(InventoryClickEvent)>listener</a>(InventoryClickEvent event) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#clickListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,InventoryClickEvent)>clickListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, InventoryClickEvent event) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -412,7 +412,7 @@ public class <span class="typeNameLabel"><a href=ActionManager.html>ActionManage
                                         <tr id="i17" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#beClickedListener(InventoryClickEvent)>beClickedListener</a>(InventoryClickEvent event) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#beClickedListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,InventoryClickEvent)>beClickedListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, InventoryClickEvent event) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -420,7 +420,7 @@ public class <span class="typeNameLabel"><a href=ActionManager.html>ActionManage
                                         <tr id="i18" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#schedule()>schedule</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=ActionManager.html#tick(Player,ItemStack,ItemTag,ItemTag,String,HashMap,String)>tick</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> type) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -1044,82 +1044,82 @@ public class <span class="typeNameLabel"><a href=ActionManager.html>ActionManage
                                     </li>
                                 </ul>
                                 
-                                <a id="listener(PlayerInteractEvent)">
+                                <a id="interactListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,PlayerInteractEvent)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>listener</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#listener(PlayerInteractEvent)>listener</a>(PlayerInteractEvent event)</pre>
+                                        <h4>interactListener</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#interactListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,PlayerInteractEvent)>interactListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, PlayerInteractEvent event)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="listener(PlayerItemConsumeEvent)">
+                                <a id="eatListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,PlayerItemConsumeEvent)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>listener</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#listener(PlayerItemConsumeEvent)>listener</a>(PlayerItemConsumeEvent event)</pre>
+                                        <h4>eatListener</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#eatListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,PlayerItemConsumeEvent)>eatListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, PlayerItemConsumeEvent event)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="listener(PlayerDropItemEvent)">
+                                <a id="dropListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,PlayerDropItemEvent)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>listener</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#listener(PlayerDropItemEvent)>listener</a>(PlayerDropItemEvent event)</pre>
+                                        <h4>dropListener</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#dropListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,PlayerDropItemEvent)>dropListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, PlayerDropItemEvent event)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="listener(EntityPickupItemEvent)">
+                                <a id="pickListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,EntityPickupItemEvent)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>listener</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#listener(EntityPickupItemEvent)>listener</a>(EntityPickupItemEvent event)</pre>
+                                        <h4>pickListener</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#pickListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,EntityPickupItemEvent)>pickListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, EntityPickupItemEvent event)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="listener(InventoryClickEvent)">
+                                <a id="clickListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,InventoryClickEvent)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>listener</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#listener(InventoryClickEvent)>listener</a>(InventoryClickEvent event)</pre>
+                                        <h4>clickListener</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#clickListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,InventoryClickEvent)>clickListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, InventoryClickEvent event)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="beClickedListener(InventoryClickEvent)">
+                                <a id="beClickedListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,InventoryClickEvent)">
                                     <!--   -->
                                 </a>
                                 <ul class=
@@ -1127,22 +1127,22 @@ public class <span class="typeNameLabel"><a href=ActionManager.html>ActionManage
                                           >
                                     <li class="blockList">
                                         <h4>beClickedListener</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#beClickedListener(InventoryClickEvent)>beClickedListener</a>(InventoryClickEvent event)</pre>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#beClickedListener(Player,ItemStack,ItemTag,ItemTag,String,HashMap,InventoryClickEvent)>beClickedListener</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, InventoryClickEvent event)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="schedule()">
+                                <a id="tick(Player,ItemStack,ItemTag,ItemTag,String,HashMap,String)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>schedule</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#schedule()>schedule</a>()</pre>
+                                        <h4>tick</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ActionManager.html#tick(Player,ItemStack,ItemTag,ItemTag,String,HashMap,String)>tick</a>(Player player, ItemStack itemStack, ItemTag itemTag, ItemTag neigeItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html>HashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; data, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> type)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
