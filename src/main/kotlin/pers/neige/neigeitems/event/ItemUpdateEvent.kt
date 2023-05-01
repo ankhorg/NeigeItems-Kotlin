@@ -2,7 +2,6 @@ package pers.neige.neigeitems.event
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.item.ItemInfo
 import taboolib.platform.type.BukkitProxyEvent
 
 /**

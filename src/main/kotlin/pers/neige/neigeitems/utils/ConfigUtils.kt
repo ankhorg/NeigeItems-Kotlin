@@ -4,7 +4,6 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
 import pers.neige.neigeitems.manager.SectionManager
-import pers.neige.neigeitems.utils.ConfigUtils.clone
 import taboolib.common.platform.function.getDataFolder
 import taboolib.platform.BukkitPlugin
 import java.io.File

@@ -2,7 +2,6 @@ package pers.neige.neigeitems.manager
 
 import org.bukkit.Bukkit
 import org.bukkit.Bukkit.isPrimaryThread
-import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -30,19 +29,14 @@ import pers.neige.neigeitems.utils.ActionUtils.consume
 import pers.neige.neigeitems.utils.ActionUtils.consumeAndReturn
 import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
-import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
-import taboolib.common.platform.Schedule
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
-import taboolib.platform.util.actionBar
 import taboolib.platform.util.giveItem
 import taboolib.platform.util.sendActionBar
 import java.io.File
@@ -921,33 +915,15 @@ object ActionManager {
     }
 
     // 物品左右键交互
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    fun listener(event: PlayerInteractEvent) {
-        // 获取玩家
-        val player = event.player
-        // 获取操作物品
-        val itemStack = event.item
-        // 类型不对劲/物品为空则终止操作
-        if (event.action == Action.PHYSICAL || itemStack == null) return
-        // 物品NBT
-        val itemTag: ItemTag
-        // NI物品数据
-        val neigeItems: ItemTag
-        // NI物品id
-        val id: String
-        // NI节点数据
-        val data: HashMap<String, String>?
-        // 初始化NI物品数据
-        when (val itemInfo = itemStack.isNiItem(true)) {
-            // 不是NI物品, 终止操作
-            null -> return
-            else -> {
-                itemTag = itemInfo.itemTag
-                neigeItems = itemInfo.neigeItems
-                id = itemInfo.id
-                data = itemInfo.data
-            }
-        }
+    fun interactListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemTag: ItemTag,
+        neigeItems: ItemTag,
+        id: String,
+        data: HashMap<String, String>?,
+        event: PlayerInteractEvent
+    ) {
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1027,29 +1003,15 @@ object ActionManager {
     }
 
     // 吃或饮用
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    fun listener(event: PlayerItemConsumeEvent) {
-        // 获取玩家
-        val player = event.player
-        // 获取手持物品
-        val itemStack = event.item.clone()
-        // 物品NBT
-        val itemTag: ItemTag
-        // NI物品数据
-        val neigeItems: ItemTag
-        // NI物品id
-        val id: String
-        // NI节点数据
-        val data: HashMap<String, String>?
-        when (val itemInfo = itemStack.isNiItem(true)) {
-            null -> return
-            else -> {
-                itemTag = itemInfo.itemTag
-                neigeItems = itemInfo.neigeItems
-                id = itemInfo.id
-                data = itemInfo.data
-            }
-        }
+    fun eatListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemTag: ItemTag,
+        neigeItems: ItemTag,
+        id: String,
+        data: HashMap<String, String>?,
+        event: PlayerItemConsumeEvent
+    ) {
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1080,16 +1042,10 @@ object ActionManager {
             // 获取待消耗数量
             val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
-            itemStack.consumeAndReturn(amount, itemTag, neigeItems)?.also { itemStacks ->
-                // 设置物品
-                if (event.item == player.inventory.itemInMainHand) {
-                    player.inventory.setItemInMainHand(itemStacks[0])
-                } else {
-                    player.inventory.setItemInOffHand(itemStacks[0])
-                }
-                if (itemStacks.size > 1) {
+            itemStack.consumeAndReturn(amount, itemTag, neigeItems)?.also {
+                if (it.size > 1) {
                     bukkitScheduler.runTaskLater(plugin, Runnable {
-                        player.giveItem(itemStacks[1])
+                        player.giveItem(it[1])
                     }, 1)
                 }
             } ?: let {
@@ -1104,29 +1060,15 @@ object ActionManager {
     }
 
     // 丢弃物品
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    fun listener(event: PlayerDropItemEvent) {
-        // 获取玩家
-        val player = event.player
-        // 获取掉落物品
-        val itemStack = event.itemDrop.itemStack
-        // 物品NBT
-        val itemTag: ItemTag
-        // NI物品数据
-        val neigeItems: ItemTag
-        // NI物品id
-        val id: String
-        // NI节点数据
-        val data: HashMap<String, String>?
-        when (val itemInfo = itemStack.isNiItem(true)) {
-            null -> return
-            else -> {
-                itemTag = itemInfo.itemTag
-                neigeItems = itemInfo.neigeItems
-                id = itemInfo.id
-                data = itemInfo.data
-            }
-        }
+    fun dropListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemTag: ItemTag,
+        neigeItems: ItemTag,
+        id: String,
+        data: HashMap<String, String>?,
+        event: PlayerDropItemEvent
+    ) {
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1167,41 +1109,18 @@ object ActionManager {
         }
         // 执行动作
         trigger.run(player, itemStack, itemTag, data, event, global)
-        // 应用consume/action对itemStack的操作
-        if (itemStack.amount == 0 || itemStack.type == Material.AIR) {
-            event.itemDrop.remove()
-            // 就让Item保持AIR会导致后面监听事件的插件报错, 不如干脆取消事件算了
-            event.isCancelled = true
-        } else {
-            event.itemDrop.itemStack = itemStack
-        }
     }
 
     // 拾取物品
-    @SubscribeEvent(priority = EventPriority.HIGH, ignoreCancelled = true)
-    fun listener(event: EntityPickupItemEvent) {
-        // 获取玩家
-        val player = event.entity
-        if (player !is Player) return
-        // 获取拾取物品
-        val itemStack = event.item.itemStack
-        // 物品NBT
-        val itemTag: ItemTag
-        // NI物品数据
-        val neigeItems: ItemTag
-        // NI物品id
-        val id: String
-        // NI节点数据
-        val data: HashMap<String, String>?
-        when (val itemInfo = itemStack.isNiItem(true)) {
-            null -> return
-            else -> {
-                itemTag = itemInfo.itemTag
-                neigeItems = itemInfo.neigeItems
-                id = itemInfo.id
-                data = itemInfo.data
-            }
-        }
+    fun pickListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemTag: ItemTag,
+        neigeItems: ItemTag,
+        id: String,
+        data: HashMap<String, String>?,
+        event: EntityPickupItemEvent
+    ) {
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1242,41 +1161,18 @@ object ActionManager {
         }
         // 执行动作
         trigger.run(player, itemStack, itemTag, data, event, global)
-        // 应用consume/action对itemStack的操作
-        if (itemStack.amount == 0 || itemStack.type == Material.AIR) {
-            event.item.remove()
-            // 就让Item保持AIR会导致后面监听事件的插件报错, 不如干脆取消事件算了
-            event.isCancelled = true
-        } else {
-            event.item.itemStack = itemStack
-        }
     }
 
     // 点击物品
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    fun listener(event: InventoryClickEvent) {
-        // 获取玩家
-        val player = event.whoClicked
-        if (player !is Player) return
-        // 获取点击物品
-        val itemStack = event.cursor
-        // 物品NBT
-        val itemTag: ItemTag
-        // NI物品数据
-        val neigeItems: ItemTag
-        // NI物品id
-        val id: String
-        // NI节点数据
-        val data: HashMap<String, String>?
-        when (val itemInfo = itemStack?.isNiItem(true)) {
-            null -> return
-            else -> {
-                itemTag = itemInfo.itemTag
-                neigeItems = itemInfo.neigeItems
-                id = itemInfo.id
-                data = itemInfo.data
-            }
-        }
+    fun clickListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemTag: ItemTag,
+        neigeItems: ItemTag,
+        id: String,
+        data: HashMap<String, String>?,
+        event: InventoryClickEvent
+    ) {
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1319,30 +1215,15 @@ object ActionManager {
     }
 
     // 物品被点击
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    fun beClickedListener(event: InventoryClickEvent) {
-        // 获取玩家
-        val player = event.whoClicked
-        if (player !is Player) return
-        // 获取点击物品
-        val itemStack = event.currentItem
-        // 物品NBT
-        val itemTag: ItemTag
-        // NI物品数据
-        val neigeItems: ItemTag
-        // NI物品id
-        val id: String
-        // NI节点数据
-        val data: HashMap<String, String>?
-        when (val itemInfo = itemStack?.isNiItem(true)) {
-            null -> return
-            else -> {
-                itemTag = itemInfo.itemTag
-                neigeItems = itemInfo.neigeItems
-                id = itemInfo.id
-                data = itemInfo.data
-            }
-        }
+    fun beClickedListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemTag: ItemTag,
+        neigeItems: ItemTag,
+        id: String,
+        data: HashMap<String, String>?,
+        event: InventoryClickEvent
+    ) {
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1384,41 +1265,15 @@ object ActionManager {
         trigger.run(player, itemStack, itemTag, data, event, global)
     }
 
-    @Schedule(period = 1, async = true)
-    fun schedule() {
-        Bukkit.getOnlinePlayers().forEach { player ->
-            val inventory = player.inventory
-            for (index in 0 until 41) {
-                // 获取物品
-                val itemStack = inventory.getItem(index)
-                tick(player, itemStack, "tick_$index")
-            }
-            tick(player, inventory.itemInMainHand, "tick_hand")
-            tick(player, inventory.itemInOffHand, "tick_offhand")
-            tick(player, inventory.getItem(39), "tick_head")
-            tick(player, inventory.getItem(38), "tick_chest")
-            tick(player, inventory.getItem(37), "tick_legs")
-            tick(player, inventory.getItem(36), "tick_feet")
-        }
-    }
-
-    private fun tick(player: Player, itemStack: ItemStack?, type: String) {
-        // 判断非空
-        if (itemStack == null || itemStack.type == Material.AIR) return
-        // 物品NBT
-        val itemTag: ItemTag
-        // NI物品id
-        val id: String
-        // NI节点数据
-        val data: HashMap<String, String>?
-        when (val itemInfo = itemStack.isNiItem(true)) {
-            null -> return
-            else -> {
-                itemTag = itemInfo.itemTag
-                id = itemInfo.id
-                data = itemInfo.data
-            }
-        }
+    fun tick(
+        player: Player,
+        itemStack: ItemStack,
+        itemTag: ItemTag,
+        neigeItems: ItemTag,
+        id: String,
+        data: HashMap<String, String>?,
+        type: String
+    ) {
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器

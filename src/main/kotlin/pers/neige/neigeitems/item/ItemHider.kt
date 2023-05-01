@@ -6,16 +6,9 @@ import com.comphenix.protocol.events.ListenerPriority
 import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketEvent
 import com.comphenix.protocol.reflect.FieldAccessException
-import org.bukkit.GameMode
 import org.bukkit.entity.Item
-import org.bukkit.entity.Player
-import org.bukkit.event.entity.EntityPickupItemEvent
 import pers.neige.neigeitems.NeigeItems
-import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
-import taboolib.platform.util.actionBar
 
 /**
  * 用于实现掉落物隐藏功能
