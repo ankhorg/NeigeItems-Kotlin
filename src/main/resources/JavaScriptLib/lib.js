@@ -184,6 +184,21 @@ const combo = function(group, types) {
 }
 
 /**
+ * 检测连击情况
+ *
+ * @param group String 连击组
+ * @return Boolean 是否达成连击
+ */
+const comboSize = function(group) {
+    if(!player.hasMetadata("NI-Combo-" + group)) {
+        player.setMetadataEZ("NI-Combo-" + group, new ArrayList())
+    }
+    const comboInfos = player.getMetadata("NI-Combo-" + group)[0].value()
+
+    return comboInfos.size()
+}
+
+/**
  * 执行一段物品动作
  *
  * @param action String 物品动作
