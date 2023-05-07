@@ -254,31 +254,57 @@ abstract class MythicMobsHooker {
             offsetYString = configLoadedEvent.offsetYString
             angleType = configLoadedEvent.angleType
 
-            // 待掉落物品包
-            val dropPacks = HashMap<ItemPack, String?>()
-            configLoadedEvent.dropPacks?.forEach { id ->
-                // 物品包ID 指向数据
-                val info = id.parseSection(player).split(" ", limit = 2)
-                ItemPackManager.getItemPack(info[0])?.let { itemPack ->
-                    dropPacks[itemPack] = info.getOrNull(1)
-                    // 尝试加载多彩掉落
-                    if (itemPack.fancyDrop) {
-                        offsetXString = itemPack.offsetXString
-                        offsetYString = itemPack.offsetYString
-                        angleType = itemPack.angleType
+            // 预定掉落物列表
+            val dropItems = ArrayList<ItemStack>()
+            // 加载物品包掉落
+            configLoadedEvent.dropPacks?.forEach { info ->
+                // 物品包ID 数量 概率 指向数据
+                val args = info.parseSection(player).split(" ", limit = 4)
+                // 物品包ID
+                val id = args[0]
+                // 物品包数量
+                val amount = args.getOrNull(1)?.let {
+                    when {
+                        it.contains("-") -> {
+                            val index = it.indexOf("-")
+                            val min = it.substring(0, index).toIntOrNull()
+                            val max = it.substring(index+1, it.length).toIntOrNull()
+                            if (min != null && max != null) {
+                                ThreadLocalRandom.current().nextInt(min, max+1)
+                            } else {
+                                null
+                            }
+                        }
+                        else -> {
+                            it.toIntOrNull()
+                        }
+                    }
+                } ?: 1
+                // 生成概率
+                val probability = args.getOrNull(2)?.toDoubleOrNull() ?: 1.0
+                // 指向数据
+                val data: String? = args.getOrNull(3)
+
+                // 进行概率随机
+                if (ThreadLocalRandom.current().nextDouble() <= probability) {
+                    // 获取对应物品包
+                    ItemPackManager.getItemPack(id)?.let { itemPack ->
+                        // 尝试加载多彩掉落
+                        if (itemPack.fancyDrop) {
+                            offsetXString = itemPack.offsetXString
+                            offsetYString = itemPack.offsetYString
+                            angleType = itemPack.angleType
+                        }
+                        // 重复amount次
+                        repeat(amount) {
+                            // 加载物品掉落信息
+                            dropItems.addAll(itemPack.getItemStacks(player, data))
+                        }
                     }
                 }
             }
-
-            // 预定掉落物列表
-            val dropItems = ArrayList<ItemStack>()
             // 掉落应该掉落的装备
             loadEquipmentDrop(entity, dropItems, player)
-            // 加载掉落物品包信息
-            dropPacks.forEach { (itemPack, data) ->
-                // 加载物品掉落信息
-                dropItems.addAll(itemPack.getItemStacks(player, data))
-            }
             // 加载掉落信息
             configLoadedEvent.drops?.let { loadItems(dropItems, it, player as? OfflinePlayer, null, null, true) }
 
