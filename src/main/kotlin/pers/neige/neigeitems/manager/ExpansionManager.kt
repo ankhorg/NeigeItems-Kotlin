@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.manager
 
+import org.bukkit.Bukkit
 import pers.neige.neigeitems.event.PluginReloadEvent
 import pers.neige.neigeitems.script.ScriptExpansion
 import pers.neige.neigeitems.script.tool.ScriptCommand
@@ -27,6 +28,11 @@ import java.util.concurrent.ConcurrentHashMap
  * 扩展管理器, 用于管理扩展脚本
  */
 object ExpansionManager {
+    /**
+     * 所有永久脚本扩展<扩展名, 脚本扩展>
+     */
+    val permanentExtension = ConcurrentHashMap<String, ScriptExpansion>()
+
     /**
      * 所有脚本扩展<文件名, 脚本扩展>
      */
@@ -80,8 +86,20 @@ object ExpansionManager {
             it.unRegister()
         }
         tasks.clear()
+        // 清除脚本扩展
         expansions.clear()
+        // 加载脚本扩展
         load()
+    }
+
+    /**
+     * 添加永久脚本扩展
+     *
+     * @param expansionName 扩展名
+     * @param expansion 脚本扩展
+     */
+    fun addPermanentExtension(expansionName: String, expansion: ScriptExpansion) {
+        permanentExtension[expansionName] = expansion
     }
 
     /**
@@ -89,20 +107,25 @@ object ExpansionManager {
      */
     private fun load() {
         var time = System.currentTimeMillis()
+        // 加载文件中的扩展
         for (file in ConfigUtils.getAllFiles("Expansions")) {
             // 这个不是真的文件名, 而是Expansions文件夹下的相对路径
             val fileName = file.path.replace("plugins${File.separator}NeigeItems${File.separator}Expansions${File.separator}", "")
             // 防止某个脚本出错导致加载中断
             try {
+                // 加载脚本
                 val script = ScriptExpansion(file)
                 expansions[fileName] = script
             } catch (error: Throwable) {
+                // 出错了就提示一下
+                Bukkit.getLogger().info(ConfigManager.config.getString("Messages.invalidScript")?.replace("{script}", fileName))
                 error.printStackTrace()
             } finally {
+                // 开启了debug就发一下加载耗时
                 if (ConfigManager.debug) {
                     val current = System.currentTimeMillis() - time
                     if (current > 1) {
-                        println("  扩展-$fileName-加载耗时: ${current}ms")
+                        Bukkit.getLogger().info("  扩展-$fileName-加载耗时: ${current}ms")
                     }
                     time = System.currentTimeMillis()
                 }
@@ -110,71 +133,65 @@ object ExpansionManager {
         }
     }
 
+    /**
+     * 触发enable
+     * PluginReloadEvent是异步触发的, 所以内部没有runTaskAsynchronously
+     */
     @SubscribeEvent(ignoreCancelled = true)
     fun enable(event: PluginReloadEvent.Post?) {
-        expansions.values.forEach { scriptExpansion ->
-            if (scriptExpansion.enable) {
-                try {
-                    scriptExpansion.invoke("enable", null)
-                } catch (error: Throwable) {
-                    error.printStackTrace()
-                }
-            }
+        permanentExtension.forEach { (scriptName, scriptExpansion) ->
+            scriptExpansion.run("enable", scriptName)
+        }
+        expansions.forEach { (scriptName, scriptExpansion) ->
+            scriptExpansion.run("enable", scriptName)
         }
     }
 
+    /**
+     * 触发serverEnable(同时也会触发enable)
+     * 内部runTaskAsynchronously了
+     */
     @Awake(LifeCycle.ACTIVE)
     fun serverEnable() {
         submit(async = true) {
-            expansions.values.forEach { scriptExpansion ->
-                if (scriptExpansion.enable) {
-                    try {
-                        scriptExpansion.invoke("enable", null)
-                    } catch (error: Throwable) {
-                        error.printStackTrace()
-                    }
-                }
-                if (scriptExpansion.serverEnable) {
-                    try {
-                        scriptExpansion.invoke("serverEnable", null)
-                    } catch (error: Throwable) {
-                        error.printStackTrace()
-                    }
-                }
+            permanentExtension.forEach { (scriptName, scriptExpansion) ->
+                scriptExpansion.run("enable", scriptName)
+                scriptExpansion.run("serverEnable", scriptName)
+            }
+            expansions.forEach { (scriptName, scriptExpansion) ->
+                scriptExpansion.run("enable", scriptName)
+                scriptExpansion.run("serverEnable", scriptName)
             }
         }
     }
 
+    /**
+     * 触发disable
+     * PluginReloadEvent是异步触发的, 所以内部没有runTaskAsynchronously
+     */
     @SubscribeEvent(ignoreCancelled = true)
     fun disable(event: PluginReloadEvent.Pre?) {
-        expansions.values.forEach { scriptExpansion ->
-            if (scriptExpansion.disable) {
-                try {
-                    scriptExpansion.invoke("disable", null)
-                } catch (error: Throwable) {
-                    error.printStackTrace()
-                }
-            }
+        permanentExtension.forEach { (scriptName, scriptExpansion) ->
+            scriptExpansion.run("disable", scriptName)
+        }
+        expansions.forEach { (scriptName, scriptExpansion) ->
+            scriptExpansion.run("disable", scriptName)
         }
     }
 
+    /**
+     * 触发serverDisable(同时也会触发disable)
+     * 关服的时候不能开新任务，所以是在主线程触发的
+     */
     @Awake(LifeCycle.DISABLE)
     fun serverDisable() {
-        expansions.values.forEach { scriptExpansion ->
-            if (scriptExpansion.disable) {
-                try {
-                    scriptExpansion.invoke("disable", null)
-                } catch (error: Throwable) {
-                    error.printStackTrace()
-                }
-            }
-            if (scriptExpansion.serverDisable) {
-                try {
-                    scriptExpansion.invoke("serverDisable", null)
-                } catch (error: Throwable) {
-                    error.printStackTrace()
-                }
-            }
+        permanentExtension.forEach { (scriptName, scriptExpansion) ->
+            scriptExpansion.run("disable", scriptName)
+            scriptExpansion.run("serverDisable", scriptName)
+        }
+        expansions.forEach { (scriptName, scriptExpansion) ->
+            scriptExpansion.run("disable", scriptName)
+            scriptExpansion.run("serverDisable", scriptName)
         }
     }
 }

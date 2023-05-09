@@ -36,6 +36,7 @@ Messages:
   clickGiveMessage: §e点击获取该物品
   invalidOwnerMessage: §6无法拾取该物品, 该物品的拥有者是 §f{name}
   invalidScript: '§e[NI] §6载入 {script} 脚本时出现错误, 报错如下:'
+  expansionError: '§e[NI] §6执行 {expansion} 脚本的 {function} 函数时出现错误, 报错如下:'
   brokenItem: '§e物品耐久已耗尽'
   legacyItemUpdateMessage: '§e[NI] §6你所持有的旧物品 §r{name} §6已被更新'
 Help:

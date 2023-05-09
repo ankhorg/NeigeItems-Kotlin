@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.script
 
+import org.bukkit.Bukkit
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import java.io.File
 
@@ -70,22 +72,23 @@ class ScriptExpansion : CompiledScript {
     }
 
     /**
-     * 是否包含加载时执行的函数
+     * 执行指定函数
+     *
+     * @param function 函数名
+     * @param expansionName 脚本名称(默认为unnamed)
      */
-    val enable = nashornHooker.isFunction(scriptEngine, "enable")
-
-    /**
-     * 是否包含加载时执行的函数
-     */
-    val serverEnable = nashornHooker.isFunction(scriptEngine, "serverEnable")
-
-    /**
-     * 是否包含卸载前执行的函数
-     */
-    val disable = nashornHooker.isFunction(scriptEngine, "disable")
-
-    /**
-     * 是否包含加载时执行的函数
-     */
-    val serverDisable = nashornHooker.isFunction(scriptEngine, "serverDisable")
+    fun run(function: String, expansionName: String = "unnamed") {
+        if (nashornHooker.isFunction(scriptEngine, function)) {
+            try {
+                invoke(function, null)
+            } catch (error: Throwable) {
+                Bukkit.getLogger().info(
+                    ConfigManager.config.getString("Messages.expansionError")
+                        ?.replace("{expansion}", expansionName)
+                        ?.replace("{function}", function)
+                )
+                error.printStackTrace()
+            }
+        }
+    }
 }
