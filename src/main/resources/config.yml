@@ -5,40 +5,40 @@ Messages:
   type:
     # Pack/Items
     givePackMessage: Pack
-  invalidPlayer: §e[NI] §6玩家不在线或不存在
-  successInfo: §e[NI] §6成功给予 §f{player} §a{amount} §6个 §f{name}
-  givenInfo: §e[NI] §6你得到了 §a{amount} §6个 §f{name}
-  successPackInfo: §e[NI] §6成功给予 §f{player} §a{amount} §6个 §f{name} §6物品包
-  givenPackInfo: §e[NI] §6你得到了 §a{amount} §6个 §f{name} §6物品包
-  dropSuccessInfo: §e[NI] §6成功在 §a{world} §6的 §a{x},{y},{z} §6掉落了 §a{amount} §6个 §f{name}
-  dropPackSuccessInfo: §e[NI] §6成功在 §a{world} §6的 §a{x},{y},{z} §6掉落了 §a{amount} §6组 §f{name} 物品包
-  unknownItem: §e[NI] §6找不到ID为 §a{itemID} §6的物品
-  unknownItemPack: §e[NI] §6找不到ID为 §a{packID} §6的物品包
-  existedKey: §e[NI] §6已存在ID为 §a{itemID} §6的物品
-  onlyPlayer: §e[NI] §6该指令仅可玩家使用
-  successSaveInfo: §e[NI] §6成功将 §f{name} §6以ID §a{itemID} §6保存至 §a{path}
-  mmImportSuccessInfo: §e[NI] §6成功将所有MM物品保存至 §a{path}
-  itemExpirationMessage: §e[NI] §6你背包中的 §f{itemName} §6已到期删除
-  airItem: §e[NI] §6请不要试图保存空气, 谢谢合作
-  invalidAmount: §e[NI] §6无效数字
-  invalidWorld: §e[NI] §6无效世界
-  invalidLocation: §e[NI] §6无效坐标
-  insufficientPermissions: §e[NI] §6权限不足
-  reloadedMessage: §e[NI] §6重载完毕
-  invalidNBT: §6[NI] §cNBT加载失败, 请勿在列表型NBT中混用键值对, 数字及字符串
-  equipFailed: §e[NI] §6在尝试给ID为 §f{mobID}§6 的MM怪物穿戴ID为 §f{itemID}§6 的NI物品时发生了错误.
-  invalidItem: '§6[NI] §c物品加载失败, 物品可能缺损数据, 物品ID: §6{itemID}'
-  failureInfo: '§e[NI] §6物品给予失败, 可能原因: 物品未配置材质/玩家已下线'
-  invalidPlugin: '§e[NI] §6未发现前置插件: {plugin}'
-  invalidMaterial: '§e[NI] §6物品 {itemID} 使用了未知的材质 {material}'
-  invalidParser: §e[NI] §6不能针对后台解析物品, 请指定一个玩家
+  invalidPlayer: §bNeige§3Items §7> §7玩家不在线或不存在
+  successInfo: §bNeige§3Items §7> §a成功给予 §f{player} {amount} §a个 §f{name}
+  givenInfo: §bNeige§3Items §7> §a你得到了 §f{amount} §a个 §f{name}
+  successPackInfo: §bNeige§3Items §7> §a成功给予 §f{player} {amount} §a个 §f{name} §a物品包
+  givenPackInfo: §bNeige§3Items §7> §a你得到了 §f{amount} §a个 §f{name} §a物品包
+  dropSuccessInfo: §bNeige§3Items §7> §a成功在 §f{world} §a的 §f{x},{y},{z} §a掉落了 §a{amount} §a个 §f{name}
+  dropPackSuccessInfo: §bNeige§3Items §7> §a成功在 §f{world} §a的 §f{x},{y},{z} §a掉落了 §f{amount} §a组 §f{name} §a物品包
+  unknownItem: §bNeige§3Items §7> §7找不到ID为 §f{itemID} §7的物品
+  unknownItemPack: §bNeige§3Items §7> §7找不到ID为 §f{packID} §7的物品包
+  existedKey: §bNeige§3Items §7> §7已存在ID为 §f{itemID} §7的物品
+  onlyPlayer: §bNeige§3Items §7> §7该指令仅可玩家使用
+  successSaveInfo: §bNeige§3Items §7> §a成功将 §f{name} §a以ID §f{itemID} §a保存至 §f{path}
+  mmImportSuccessInfo: §bNeige§3Items §7> §a成功将所有MM物品保存至 §f{path}
+  itemExpirationMessage: §bNeige§3Items §7> §6你背包中的 §f{itemName} §6已到期删除
+  airItem: §bNeige§3Items §7> §7请不要试图保存空气, 谢谢合作
+  invalidAmount: §bNeige§3Items §7> §7无效数字
+  invalidWorld: §bNeige§3Items §7> §7无效世界
+  invalidLocation: §bNeige§3Items §7> §7无效坐标
+  insufficientPermissions: §bNeige§3Items §7> §7权限不足
+  reloadedMessage: §bNeige§3Items §7> §a重载完毕
+  invalidNBT: §bNeige§3Items §7> §6NBT加载失败, 请勿在列表型NBT中混用键值对, 数字及字符串
+  equipFailed: §bNeige§3Items §7> §6在尝试给ID为 §f{mobID}§6 的MM怪物穿戴ID为 §f{itemID}§6 的NI物品时发生了错误.
+  invalidItem: '§bNeige§3Items §7> §6物品加载失败, 物品可能缺损数据, 物品ID: §f{itemID}'
+  failureInfo: '§bNeige§3Items §7> §6物品给予失败, 可能原因: 物品未配置材质/玩家已下线'
+  invalidPlugin: '§bNeige§3Items §7> §7未发现前置插件: {plugin}'
+  invalidMaterial: '§bNeige§3Items §7> §6物品 §f{itemID} §6使用了未知的材质 §f{material}'
+  invalidParser: §bNeige§3Items §7> §7不能针对后台解析物品, 请指定一个玩家
   itemCooldown: §e物品冷却中! 请等待{time}秒
   clickGiveMessage: §e点击获取该物品
   invalidOwnerMessage: §6无法拾取该物品, 该物品的拥有者是 §f{name}
-  invalidScript: '§e[NI] §6载入 {script} 脚本时出现错误, 报错如下:'
-  expansionError: '§e[NI] §6执行 {expansion} 脚本的 {function} 函数时出现错误, 报错如下:'
+  invalidScript: '§bNeige§3Items §7> §6载入 §f{script} §6脚本时出现错误, 报错如下:'
+  expansionError: '§bNeige§3Items §7> §6执行 §f{expansion} §6脚本的 §f{function} §6函数时出现错误, 报错如下:'
   brokenItem: '§e物品耐久已耗尽'
-  legacyItemUpdateMessage: '§e[NI] §6你所持有的旧物品 §r{name} §6已被更新'
+  legacyItemUpdateMessage: '§bNeige§3Items §7> §6你所持有的旧物品 §f{name} §6已被更新'
 Help:
   prefix: |-
     §6====================§eNeigeItems§6====================
