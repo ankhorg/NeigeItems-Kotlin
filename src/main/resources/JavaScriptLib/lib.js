@@ -435,8 +435,17 @@ const second = function() {
  *
  * @return int 周数
  */
-const weekInMonth = function() {
-    return Calendar.getInstance().get(Calendar.DAY_OF_WEEK_IN_MONTH)
+const weekOfMonth = function() {
+    return Calendar.getInstance().get(Calendar.WEEK_OF_MONTH)
+}
+
+/**
+ * 获取现在是本年第几周
+ *
+ * @return int 周数
+ */
+const weekOfYear = function() {
+    return Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
 }
 
 /**
