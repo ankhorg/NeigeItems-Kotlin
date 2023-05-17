@@ -4,6 +4,7 @@ $dokka.location:pers.neige.neigeitems.event/MythicDropEvent.ConfigLoaded///Point
 $dokka.location:pers.neige.neigeitems.event/MythicDropEvent.Drop///PointingToDeclaration/pers/neige/neigeitems/event/MythicDropEvent.Drop.html
 $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Post///PointingToDeclaration/pers/neige/neigeitems/event/PluginReloadEvent.Post.html
 $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Pre///PointingToDeclaration/pers/neige/neigeitems/event/PluginReloadEvent.Pre.html
+$dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Type///PointingToDeclaration/pers/neige/neigeitems/event/PluginReloadEvent.Type.html
 $dokka.location:pers.neige.neigeitems.item.color/ItemColor.Companion///PointingToDeclaration/pers/neige/neigeitems/item/color/ItemColor.Companion.html
 $dokka.location:pers.neige.neigeitems.item/ItemDurability.DamageResult///PointingToDeclaration/pers/neige/neigeitems/item/ItemDurability.DamageResult.html
 $dokka.location:pers.neige.neigeitems.item/ItemPack.ItemInfo///PointingToDeclaration/pers/neige/neigeitems/item/ItemPack.ItemInfo.html
