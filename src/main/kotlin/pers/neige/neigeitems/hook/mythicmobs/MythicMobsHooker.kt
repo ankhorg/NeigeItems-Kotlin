@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.event.MythicDropEvent
 import pers.neige.neigeitems.event.MythicEquipEvent
-import pers.neige.neigeitems.item.ItemPack
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager

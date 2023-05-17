@@ -9,6 +9,7 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
+import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
 import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
@@ -49,7 +50,7 @@ object ItemManager : ItemConfigManager() {
         var time = System.currentTimeMillis()
         for ((id, itemConfig) in itemConfigs) {
             items[id] = ItemGenerator(itemConfig)
-            if (ConfigManager.debug) {
+            if (debug) {
                 val current = System.currentTimeMillis() - time
                 if (current > 1) {
                     println("  物品-$id-加载耗时: ${current}ms")

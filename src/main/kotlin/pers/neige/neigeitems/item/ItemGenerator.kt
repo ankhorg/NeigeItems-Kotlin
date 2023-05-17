@@ -380,8 +380,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         // 对文本化配置进行全局节点解析
         val configString = configStringNoSection.parseSection(cache, player, sections)
         // Debug信息
-        if (debug) print(configString)
-        if (debug && sections != null) print(sections.saveToString("$id-sections"))
+        debug(configString)
+        sections?.let { debug(sections.saveToString("$id-sections")) }
         val configSection = configString.loadFromString(id) ?: YamlConfiguration()
 
         // 构建物品

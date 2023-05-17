@@ -2,6 +2,7 @@ package pers.neige.neigeitems.manager
 
 import org.bukkit.Bukkit
 import pers.neige.neigeitems.event.PluginReloadEvent
+import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.script.ScriptExpansion
 import pers.neige.neigeitems.script.tool.ScriptCommand
 import pers.neige.neigeitems.script.tool.ScriptListener
@@ -122,13 +123,8 @@ object ExpansionManager {
                 error.printStackTrace()
             } finally {
                 // 开启了debug就发一下加载耗时
-                if (ConfigManager.debug) {
-                    val current = System.currentTimeMillis() - time
-                    if (current > 1) {
-                        Bukkit.getLogger().info("  扩展-$fileName-加载耗时: ${current}ms")
-                    }
-                    time = System.currentTimeMillis()
-                }
+                debug("扩展-$fileName-加载耗时: ${System.currentTimeMillis() - time}ms")
+                time = System.currentTimeMillis()
             }
         }
     }
@@ -138,7 +134,10 @@ object ExpansionManager {
      * PluginReloadEvent是异步触发的, 所以内部没有runTaskAsynchronously
      */
     @SubscribeEvent(ignoreCancelled = true)
-    fun enable(event: PluginReloadEvent.Post?) {
+    fun enable(event: PluginReloadEvent.Post) {
+        if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION ) {
+            return
+        }
         permanentExtension.forEach { (scriptName, scriptExpansion) ->
             scriptExpansion.run("enable", scriptName)
         }
@@ -170,7 +169,10 @@ object ExpansionManager {
      * PluginReloadEvent是异步触发的, 所以内部没有runTaskAsynchronously
      */
     @SubscribeEvent(ignoreCancelled = true)
-    fun disable(event: PluginReloadEvent.Pre?) {
+    fun disable(event: PluginReloadEvent.Pre) {
+        if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION ) {
+            return
+        }
         permanentExtension.forEach { (scriptName, scriptExpansion) ->
             scriptExpansion.run("disable", scriptName)
         }

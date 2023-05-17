@@ -5,7 +5,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
@@ -124,8 +124,8 @@ class ItemPack(
         // 对文本化配置进行全局节点解析
         val configString = configString.parseSection(cache, player, sections)
         // Debug信息
-        if (ConfigManager.debug) print(configString)
-        if (ConfigManager.debug && sections != null) print(sections.saveToString("$id-sections"))
+        debug(configString)
+        sections?.let { debug(sections.saveToString("$id-sections")) }
         return configString.loadFromString(id) ?: YamlConfiguration()
     }
 

@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.manager
 
+import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
@@ -102,5 +103,11 @@ object ConfigManager {
         comboInterval = config.getLong("ItemAction.comboInterval", 500)
         removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
         updateInterval = config.getLong("ItemUpdate.interval", -1)
+    }
+
+    fun debug(text: String) {
+        if (debug) {
+            Bukkit.getLogger().info(text)
+        }
     }
 }
