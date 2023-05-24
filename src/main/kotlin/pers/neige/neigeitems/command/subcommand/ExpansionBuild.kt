@@ -76,18 +76,12 @@ object ExpansionBuild {
                                 if (pluginName == null) {
                                     pluginName = java.util.UUID.randomUUID().toString();
                                 }
-                                pers.neige.neigeitems.manager.ExpansionManager.INSTANCE.addPermanentExtension(pluginName, script);
+                                pers.neige.neigeitems.manager.ExpansionManager.INSTANCE.addPermanentExpansion(pluginName, script);
                             }""".trimIndent()
                         val ctMethod = CtNewMethod.make(methodCode, ctClass)
                         ctClass.addMethod(ctMethod)
 
                         JarOutputStream(FileOutputStream(getFileOrCreate("Build${File.separator}${pluginName}.jar"))).use { outputStream ->
-//                            outputStream.putNextEntry(JarEntry("pers/"))
-//                            outputStream.closeEntry()
-//                            outputStream.putNextEntry(JarEntry("pers/neige/"))
-//                            outputStream.closeEntry()
-//                            outputStream.putNextEntry(JarEntry("pers/neige/${pluginName.lowercase(Locale.getDefault())}/"))
-//                            outputStream.closeEntry()
                             outputStream.putNextEntry(JarEntry("pers/neige/${pluginName.lowercase(Locale.getDefault())}/Main.class"))
                             ByteArrayInputStream(ctClass.toBytecode()).use { it.copyTo(outputStream) }
                             outputStream.closeEntry()

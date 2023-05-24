@@ -32,7 +32,7 @@ object ExpansionManager {
     /**
      * 所有永久脚本扩展<扩展名, 脚本扩展>
      */
-    val permanentExtension = ConcurrentHashMap<String, ScriptExpansion>()
+    val permanentExpansion = ConcurrentHashMap<String, ScriptExpansion>()
 
     /**
      * 所有脚本扩展<文件名, 脚本扩展>
@@ -99,8 +99,8 @@ object ExpansionManager {
      * @param expansionName 扩展名
      * @param expansion 脚本扩展
      */
-    fun addPermanentExtension(expansionName: String, expansion: ScriptExpansion) {
-        permanentExtension[expansionName] = expansion
+    fun addPermanentExpansion(expansionName: String, expansion: ScriptExpansion) {
+        permanentExpansion[expansionName] = expansion
     }
 
     /**
@@ -138,7 +138,7 @@ object ExpansionManager {
         if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION ) {
             return
         }
-        permanentExtension.forEach { (scriptName, scriptExpansion) ->
+        permanentExpansion.forEach { (scriptName, scriptExpansion) ->
             scriptExpansion.run("enable", scriptName)
         }
         expansions.forEach { (scriptName, scriptExpansion) ->
@@ -153,7 +153,7 @@ object ExpansionManager {
     @Awake(LifeCycle.ACTIVE)
     fun serverEnable() {
         submit(async = true) {
-            permanentExtension.forEach { (scriptName, scriptExpansion) ->
+            permanentExpansion.forEach { (scriptName, scriptExpansion) ->
                 scriptExpansion.run("enable", scriptName)
                 scriptExpansion.run("serverEnable", scriptName)
             }
@@ -173,7 +173,7 @@ object ExpansionManager {
         if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION ) {
             return
         }
-        permanentExtension.forEach { (scriptName, scriptExpansion) ->
+        permanentExpansion.forEach { (scriptName, scriptExpansion) ->
             scriptExpansion.run("disable", scriptName)
         }
         expansions.forEach { (scriptName, scriptExpansion) ->
@@ -187,7 +187,7 @@ object ExpansionManager {
      */
     @Awake(LifeCycle.DISABLE)
     fun serverDisable() {
-        permanentExtension.forEach { (scriptName, scriptExpansion) ->
+        permanentExpansion.forEach { (scriptName, scriptExpansion) ->
             scriptExpansion.run("disable", scriptName)
             scriptExpansion.run("serverDisable", scriptName)
         }
