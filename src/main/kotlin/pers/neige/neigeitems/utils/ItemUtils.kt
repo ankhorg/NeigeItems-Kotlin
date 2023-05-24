@@ -73,6 +73,14 @@ object ItemUtils {
             this.startsWith("(Long) ") -> this.substring(7, this.length).toLongOrNull() ?: this
             this.startsWith("(Float) ") -> this.substring(8, this.length).toFloatOrNull() ?: this
             this.startsWith("(Double) ") -> this.substring(9, this.length).toDoubleOrNull() ?: this
+            this.startsWith("[") && this.endsWith("]") -> {
+                val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
+                when {
+                    list.all { it is Byte } -> ByteArray(list.size){ list[it] as Byte }
+                    list.all { it is Int } -> IntArray(list.size){ list[it] as Int }
+                    else -> this
+                }
+            }
             else -> this
         }
     }

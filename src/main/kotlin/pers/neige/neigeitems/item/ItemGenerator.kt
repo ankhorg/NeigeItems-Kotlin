@@ -17,11 +17,14 @@ import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.nms.NMSGeneric
+import pers.neige.neigeitems.nms.NMSGeneric.toNiItemTag
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ItemUtils.coverWith
+import pers.neige.neigeitems.utils.ItemUtils.coverWithNi
 import pers.neige.neigeitems.utils.ItemUtils.toItemTag
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -130,19 +133,19 @@ class ItemGenerator (val itemConfig: ItemConfig) {
      * 获取原始静态物品
      */
     private val originStaticItemStack = static?.let {
-        var hasStatic = false
         var material = static.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) }
-        if (material != null) hasStatic = true
         material = material ?: Material.STONE
-        val itemStack = ItemStack(material)
+        // 创建一个Inventory, set的过程就是一个asNMSCopy的过程, get的过程就是一个asCraftMirror的过程
+        // 此举的目的在于, 不触碰NMS的情况下将ItemStack转换为CraftItemStack
+        val tempInventory = Bukkit.createInventory(null, 9, "")
+        tempInventory.setItem(0, ItemStack(material))
+        val itemStack = tempInventory.getItem(0)!!
         // 设置子ID/损伤值
         if (static.contains("damage")) {
-            hasStatic = true
             itemStack.durability = static.getInt("damage").toShort()
         }
         // 设置物品附魔
         if (static.contains("enchantments")) {
-            hasStatic = true
             // 获取所有待设置附魔
             val enchantSection = static.getConfigurationSection("enchantments")
             // 遍历添加
@@ -161,17 +164,14 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         // 设置CustomModelData
         if (static.contains("custommodeldata")) {
             nmsHooker.setCustomModelData(itemMeta, static.getInt("custommodeldata"))
-            hasStatic = true
         }
         // 设置物品名
         if (static.contains("name")) {
-            hasStatic = true
             itemMeta?.setDisplayName(static.getString("name")
                 ?.let { ChatColor.translateAlternateColorCodes('&', it) })
         }
         // 设置Lore
         if (static.contains("lore")) {
-            hasStatic = true
             val originLores = static.getStringList("lore")
             val finalLores = ArrayList<String>()
             for (i in originLores.indices) {
@@ -182,12 +182,10 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         }
         // 设置是否无法破坏
         if (static.contains("unbreakable")) {
-            hasStatic = true
             itemMeta?.isUnbreakable = static.getBoolean("unbreakable")
         }
         // 设置ItemFlags
         if (static.contains("hideflags")) {
-            hasStatic = true
             val flags = static.getStringList("hideflags")
             for (value in flags) {
                 try {
@@ -198,7 +196,6 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         }
         // 设置物品颜色
         if (static.contains("color")) {
-            hasStatic = true
             var color = static.get("color")
             color = when (color) {
                 is String -> color.toIntOrNull(16) ?: 0
@@ -217,29 +214,24 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         val neigeItems = ItemTag()
         // 设置物品使用次数
         if (static.contains("options.charge")) {
-            hasStatic = true
             neigeItems["charge"] = ItemTagData(static.getInt("options.charge"))
             neigeItems["maxCharge"] = ItemTagData(static.getInt("options.charge"))
         }
         // 设置物品最大使用次数
         if (static.contains("options.maxcharge")) {
-            hasStatic = true
             neigeItems["maxCharge"] = ItemTagData(static.getInt("options.maxcharge"))
         }
         // 设置物品自定义耐久
         if (static.contains("options.durability")) {
-            hasStatic = true
             neigeItems["durability"] = ItemTagData(static.getInt("options.durability"))
             neigeItems["maxDurability"] = ItemTagData(static.getInt("options.durability"))
         }
         // 设置物品最大自定义耐久
         if (static.contains("options.maxdurability")) {
-            hasStatic = true
             neigeItems["maxDurability"] = ItemTagData(static.getInt("options.maxdurability"))
         }
         // 设置物品自定义耐久为0时是否破坏
         if (static.contains("options.itembreak")) {
-            hasStatic = true
             if (static.getBoolean("options.itembreak", true)) {
                 neigeItems["itemBreak"] = ItemTagData(1.toByte())
             } else {
@@ -248,7 +240,6 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         }
         // 设置具有owner的掉落物是否对其他人不可见
         if (static.contains("options.hide")) {
-            hasStatic = true
             if (static.getBoolean("options.hide", false)) {
                 neigeItems["hide"] = ItemTagData(1.toByte())
             } else {
@@ -257,12 +248,10 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         }
         // 首次掉落归属
         if (static.contains("options.owner")) {
-            hasStatic = true
             neigeItems["owner"] = ItemTagData(static.getString("options.owner"))
         }
         // 设置掉落物闪光颜色
         if (static.contains("options.color")) {
-            hasStatic = true
             static.getString("options.color")?.uppercase(Locale.getDefault())?.let {
                 // 判断你这颜色保不保熟
                 if (ItemColor.colors.containsKey(it)) {
@@ -272,31 +261,34 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         }
         // 设置掉落执行技能
         if (static.contains("options.dropskill")) {
-            hasStatic = true
             neigeItems["dropSkill"] = ItemTagData(static.getString("options.dropskill") ?: "")
         }
         // 设置物品时限
         if (static.contains("options.itemtime")) {
-            hasStatic = true
             neigeItems["itemTime"] = ItemTagData(System.currentTimeMillis() + (static.getLong("options.itemtime", 0) * 1000))
         }
         itemTag["NeigeItems"] = neigeItems
         // 设置物品NBT
         if (static.contains("nbt")) {
-            hasStatic = true
             // 获取配置NBT
             val itemNBT = static.getConfigurationSection("nbt")?.toItemTag()
             // NBT覆盖
             itemNBT?.let {itemTag.coverWith(it)}
         }
         itemTag.saveTo(itemStack)
-        if (hasStatic) itemStack else null
+        itemStack
+    } ?: let {
+        // 创建一个Inventory, set的过程就是一个asNMSCopy的过程, get的过程就是一个asCraftMirror的过程
+        // 此举的目的在于, 不触碰NMS的情况下将ItemStack转换为CraftItemStack
+        val tempInventory = Bukkit.createInventory(null, 9, "")
+        tempInventory.setItem(0, ItemStack(Material.STONE))
+        tempInventory.getItem(0)!!
     }
 
     /**
      * 获取静态物品
      */
-    val staticItemStack get() = originStaticItemStack?.clone()
+    val staticItemStack get() = originStaticItemStack.clone()
 
     private fun inherit(configSection: ConfigurationSection, originConfigSection: ConfigurationSection): ConfigurationSection {
         // 检测是否需要进行继承
@@ -389,7 +381,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
             // 获取材质
             val material = configSection.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) }
             if (material != null || hasStaticMaterial) {
-                val itemStack = staticItemStack ?: ItemStack(material!!)
+                // 预处理中已将ItemStack转为CraftItemStack, 可提升NBT操作效率
+                val itemStack = staticItemStack
                 material?.let { itemStack.type = material }
                 // 设置子ID/损伤值
                 if (configSection.contains("damage")) {

@@ -4,8 +4,17 @@ import org.bukkit.Bukkit
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import java.io.File
+import java.io.Reader
 
 class ScriptExpansion : CompiledScript {
+    /**
+     * 构建JavaScript脚本扩展
+     *
+     * @property reader js脚本文件
+     * @constructor JavaScript脚本扩展
+     */
+    constructor(reader: Reader) : super(reader)
+
     /**
      * 构建JavaScript脚本扩展
      *
