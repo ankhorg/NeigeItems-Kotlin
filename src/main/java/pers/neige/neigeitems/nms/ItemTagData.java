@@ -1,7 +1,9 @@
 package pers.neige.neigeitems.nms;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.List;
+import java.util.Objects;
 
 public class ItemTagData {
     protected ItemTagType type;

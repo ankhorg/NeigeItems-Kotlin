@@ -17,14 +17,11 @@ import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.nms.NMSGeneric
-import pers.neige.neigeitems.nms.NMSGeneric.toNiItemTag
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ItemUtils.coverWith
-import pers.neige.neigeitems.utils.ItemUtils.coverWithNi
 import pers.neige.neigeitems.utils.ItemUtils.toItemTag
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
