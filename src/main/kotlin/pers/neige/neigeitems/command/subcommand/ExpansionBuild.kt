@@ -1,0 +1,123 @@
+package pers.neige.neigeitems.command.subcommand
+
+import javassist.ClassClassPath
+import javassist.ClassPool
+import javassist.CtNewMethod
+import javassist.bytecode.ClassFile
+import org.bukkit.command.CommandSender
+import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.plugin.java.JavaPlugin
+import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.command.subcommand.Help.help
+import pers.neige.neigeitems.manager.ExpansionManager
+import pers.neige.neigeitems.manager.HookerManager
+import pers.neige.neigeitems.script.ScriptExpansion
+import pers.neige.neigeitems.utils.ConfigUtils
+import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
+import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
+import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
+import pers.neige.neigeitems.utils.LangUtils.sendLang
+import taboolib.common.platform.command.subCommand
+import taboolib.common.platform.function.submit
+import java.io.*
+import java.nio.charset.StandardCharsets
+import java.util.*
+import java.util.jar.JarEntry
+import java.util.jar.JarFile
+import java.util.jar.JarOutputStream
+import javax.script.Invocable
+import kotlin.collections.ArrayList
+
+
+object ExpansionBuild {
+    val engine = HookerManager.nashornHooker.getGlobalEngine().also { engine ->
+        // 加载顶级成员
+        plugin.getResource("JavaScriptLib/build.js")?.use { input ->
+            InputStreamReader(input, "UTF-8").use { reader ->
+                engine.eval(reader)
+            }
+        }
+    }
+
+    // ni expansion build [扩展路径] > 将对应扩展打包为jar插件
+    val build = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            submit(async = true) {
+                help(sender)
+            }
+        }
+        dynamic {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                ExpansionManager.expansions.keys().toList()
+            }
+            execute<CommandSender> { sender, _, argument ->
+                submit(async = true) {
+                    ExpansionManager.expansions[argument]?.also { script ->
+                        val pluginName = script.scriptEngine.get("name") as? String ?: argument.split(File.separator).last().split(".").first()
+                        val authors = script.scriptEngine.get("authors") as? ArrayList<String> ?: ArrayList<String>().also { it.add("unnamed") }
+                        val version = script.scriptEngine.get("version") as? String ?: "1.0.0"
+                        val apiVersion = script.scriptEngine.get("apiVersion") as? String ?: "1.13"
+                        val depend = (script.scriptEngine.get("depend") as? ArrayList<String> ?: ArrayList()).also { it.add("NeigeItems") }
+                        val softdepend = script.scriptEngine.get("softdepend") as? ArrayList<String> ?: ArrayList()
+
+                        val pool = ClassPool.getDefault()
+                        pool.insertClassPath(ClassClassPath(JavaPlugin::class.java))
+                        pool.insertClassPath(ClassClassPath(ExpansionManager::class.java))
+                        pool.insertClassPath(ClassClassPath(ScriptExpansion::class.java))
+                        pool.insertClassPath(ClassClassPath(Objects::class.java))
+                        pool.insertClassPath(ClassClassPath(UUID::class.java))
+                        pool.insertClassPath(ClassClassPath(Reader::class.java))
+                        val ctClass = pool.makeClass("pers.neige.${pluginName.lowercase(Locale.getDefault())}.Main")
+                        ctClass.superclass = pool.get("org.bukkit.plugin.java.JavaPlugin")
+                        val methodCode = """
+                            public void onEnable() {
+                                pers.neige.neigeitems.script.ScriptExpansion script = new pers.neige.neigeitems.script.ScriptExpansion((java.io.Reader)java.util.Objects.requireNonNull(getTextResource("Main.js")));
+                                String pluginName = (String)script.getScriptEngine().get("name");
+                                if (pluginName == null) {
+                                    pluginName = java.util.UUID.randomUUID().toString();
+                                }
+                                pers.neige.neigeitems.manager.ExpansionManager.INSTANCE.addPermanentExtension(pluginName, script);
+                            }""".trimIndent()
+                        val ctMethod = CtNewMethod.make(methodCode, ctClass)
+                        ctClass.addMethod(ctMethod)
+
+                        JarOutputStream(FileOutputStream(getFileOrCreate("Build${File.separator}${pluginName}.jar"))).use { outputStream ->
+//                            outputStream.putNextEntry(JarEntry("pers/"))
+//                            outputStream.closeEntry()
+//                            outputStream.putNextEntry(JarEntry("pers/neige/"))
+//                            outputStream.closeEntry()
+//                            outputStream.putNextEntry(JarEntry("pers/neige/${pluginName.lowercase(Locale.getDefault())}/"))
+//                            outputStream.closeEntry()
+                            outputStream.putNextEntry(JarEntry("pers/neige/${pluginName.lowercase(Locale.getDefault())}/Main.class"))
+                            ByteArrayInputStream(ctClass.toBytecode()).use { it.copyTo(outputStream) }
+                            outputStream.closeEntry()
+                            outputStream.putNextEntry(JarEntry("Main.js"))
+                            getFileOrNull("Expansions${File.separator}$argument")?.let { file ->
+                                FileInputStream(file).use { it.copyTo(outputStream) }
+                            }
+                            outputStream.closeEntry()
+                            outputStream.putNextEntry(JarEntry("plugin.yml"))
+                            YamlConfiguration().also {
+                                it.set("name", pluginName)
+                                it.set("main", "pers.neige.${pluginName.lowercase(Locale.getDefault())}.Main")
+                                it.set("authors", authors)
+                                it.set("version", version)
+                                it.set("api-version", apiVersion)
+                                it.set("depend", depend)
+                                it.set("softdepend", softdepend)
+                                ByteArrayInputStream(it.saveToString().toByteArray(StandardCharsets.UTF_8)).use {
+                                    it.copyTo(outputStream)
+                                }
+                            }
+                            outputStream.closeEntry()
+                            sender.sendLang("Messages.buildExpansionMessage", mapOf(
+                                Pair("{expansion}", argument),
+                                Pair("{file}", "$pluginName.jar")
+                            ))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

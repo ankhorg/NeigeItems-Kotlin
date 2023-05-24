@@ -10,6 +10,7 @@ plugins {
 
 taboolib {
 //    relocate("org.openjdk.nashorn","pers.neige.neigeitems.nashorn")
+    relocate("javassist","pers.neige.neigeitems.javassist")
     description {
         contributors {
             name("Neige")
@@ -62,10 +63,11 @@ dependencies {
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
-
+//    compileOnly("org.ow2.asm:asm:9.4")
+    taboo(fileTree("libs/javassist.jar"))
     "packShadow"(kotlin("stdlib"))
     "packShadow"("org.openjdk.nashorn:nashorn-core:15.4")
-    "packShadow"("com.alibaba.fastjson2:fastjson2-kotlin:2.0.9")
+    "packShadow"("com.alibaba.fastjson2:fastjson2-kotlin:2.0.25")
     "packShadow"("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
 //        "packShadow"("com.google.guava:guava:31.1-jre")
     "packShadow"("org.apache.maven:maven-model:3.9.1")

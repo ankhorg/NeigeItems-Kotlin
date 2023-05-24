@@ -64,7 +64,14 @@ object ActionManager {
     /**
      * 获取用于编译condition的脚本引擎
      */
-    val engine = nashornHooker.getGlobalEngine()
+    val engine = nashornHooker.getGlobalEngine().also { engine ->
+        // 加载顶级成员
+        plugin.getResource("JavaScriptLib/lib.js")?.use { input ->
+            InputStreamReader(input, "UTF-8").use { reader ->
+                engine.eval(reader)
+            }
+        }
+    }
 
     /**
      * 获取缓存的已编译condition脚本
@@ -83,17 +90,6 @@ object ActionManager {
         loadBasicActions()
         // 加载自定义动作
         loadCustomActions()
-        // 加载顶级成员
-        val reader = plugin.getResource("JavaScriptLib/lib.js")?.let {
-            InputStreamReader(it, "UTF-8")
-        }
-        try {
-            reader?.let { engine.eval(it) }
-        } catch (error: Throwable) {
-            error.printStackTrace()
-        } finally {
-            reader?.close()
-        }
     }
 
     /**

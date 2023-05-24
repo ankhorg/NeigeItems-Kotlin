@@ -39,6 +39,7 @@ Messages:
   expansionError: '§bNeige§3Items §7> §6执行 §f{expansion} §6脚本的 §f{function} §6函数时出现错误, 报错如下:'
   brokenItem: '§e物品耐久已耗尽'
   legacyItemUpdateMessage: '§bNeige§3Items §7> §6你所持有的旧物品 §f{name} §6已被更新'
+  buildExpansionMessage: '§bNeige§3Items §7> §a已将 §f{expansion} §a打包为 §f{file}'
 Help:
   prefix: |-
     §6====================§eNeigeItems§6====================

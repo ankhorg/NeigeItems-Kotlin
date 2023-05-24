@@ -112,6 +112,9 @@ object Command {
     val mm = CommandMM
 
     @CommandBody
+    val expansion = CommandExpansion
+
+    @CommandBody
     // ni list (页码) > 查看所有NI物品
     val list = pers.neige.neigeitems.command.subcommand.List.list
 
