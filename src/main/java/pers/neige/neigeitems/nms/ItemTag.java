@@ -3,6 +3,7 @@ package pers.neige.neigeitems.nms;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.utils.NMSUtils;
 
 import java.util.*;
 
@@ -17,19 +18,19 @@ public class ItemTag extends ItemTagData implements Map<String, ItemTagData> {
 
 
     public ItemTag() {
-        super(NMSGeneric.newItemTag());
+        super(NMSUtils.newItemTag());
         this.nbt = this.data;
-        this.map = NMSGeneric.getNbtMap(nbt);
+        this.map = NMSUtils.getNbtMap(nbt);
     }
 
     public ItemTag(Object nbt) {
         super(nbt);
         this.nbt = this.data;
-        this.map = NMSGeneric.getNbtMap(nbt);
+        this.map = NMSUtils.getNbtMap(nbt);
     }
 
     public void saveTo(ItemStack itemStack) {
-        NMSGeneric.setItemTag(itemStack, this);
+        NMSUtils.setItemTag(itemStack, this);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class ItemTag extends ItemTagData implements Map<String, ItemTagData> {
 
     @Nullable
     public ItemTagData getDeep(String key) {
-        Object value = NMSGeneric.getDeep(nbt, key);
+        Object value = NMSUtils.getDeep(nbt, key);
         if (value != null) {
             return new ItemTagData(value);
         } else {
@@ -99,7 +100,7 @@ public class ItemTag extends ItemTagData implements Map<String, ItemTagData> {
 
     @NotNull
     public ItemTagData getDeepOrElse(String key, @NotNull ItemTagData base) {
-        Object value = NMSGeneric.getDeep(nbt, key);
+        Object value = NMSUtils.getDeep(nbt, key);
         if (value != null) {
             return new ItemTagData(value);
         } else {
@@ -109,7 +110,7 @@ public class ItemTag extends ItemTagData implements Map<String, ItemTagData> {
 
     @NotNull
     public ItemTagData getDeepOrPut(String key, @NotNull ItemTagData base) {
-        Object value = NMSGeneric.getDeep(nbt, key);
+        Object value = NMSUtils.getDeep(nbt, key);
         if (value != null) {
             return new ItemTagData(value);
         } else {
@@ -135,7 +136,7 @@ public class ItemTag extends ItemTagData implements Map<String, ItemTagData> {
             this.map.remove(key);
             return null;
         } else {
-            Object result = NMSGeneric.asNBT(value);
+            Object result = NMSUtils.asNBT(value);
             this.map.put(key, result);
             return new ItemTagData(result);
         }
@@ -143,7 +144,7 @@ public class ItemTag extends ItemTagData implements Map<String, ItemTagData> {
 
     @Nullable
     public ItemTagData putDeep(String key, @Nullable ItemTagData value) {
-        NMSGeneric.putDeep(nbt, key, value.data);
+        NMSUtils.putDeep(nbt, key, value.data);
         return value;
     }
 
@@ -153,8 +154,8 @@ public class ItemTag extends ItemTagData implements Map<String, ItemTagData> {
             putDeep(key, null);
             return null;
         } else {
-            Object result = NMSGeneric.asNBT(value);
-            NMSGeneric.putDeep(nbt, key, result);
+            Object result = NMSUtils.asNBT(value);
+            NMSUtils.putDeep(nbt, key, result);
             return new ItemTagData(result);
         }
     }

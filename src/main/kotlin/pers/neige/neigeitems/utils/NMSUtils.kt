@@ -1,12 +1,14 @@
-package pers.neige.neigeitems.nms
+package pers.neige.neigeitems.utils
 
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.nms.ItemTag
+import pers.neige.neigeitems.nms.ItemTagType
 import pers.neige.neigeitems.script.CompiledScript
 import java.io.InputStreamReader
 
-object NMSGeneric {
+object NMSUtils {
     val script: CompiledScript = let {
         val reader = InputStreamReader(plugin.getResource("JavaScriptLib/nms.js")!!, "UTF-8")
         val script = CompiledScript(reader)
@@ -20,11 +22,6 @@ object NMSGeneric {
     }
 
     @JvmStatic
-    fun ConfigurationSection.toNiItemTag(): ItemTag {
-        return ItemTag(script.simpleInvoke("toNBT", this)!!)
-    }
-
-    @JvmStatic
     fun ItemStack.getItemTag(): ItemTag {
         return ItemTag(script.simpleInvoke("getNMSItemTag", this)!!)
     }
@@ -32,10 +29,6 @@ object NMSGeneric {
     @JvmStatic
     fun ItemStack.getDeepValue(key: String): Any? {
         return script.simpleInvoke("getItemStackDeepValue", this, key)
-    }
-
-    fun getItemTag1(itemStack: ItemStack): ItemTag {
-        return ItemTag(script.simpleInvoke("getNMSItemTag", itemStack)!!)
     }
 
     @JvmStatic

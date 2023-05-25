@@ -65,204 +65,6 @@ function getNBTType(nbtBase) {
     return ItemTagType.values()[getTypeId(nbtBase)]
 }
 
-// 1.12
-if (CraftItemStack.asNMSCopy(tempItem).setTag !== undefined) {
-    getTypeId = function(nbtBase) {
-        return nbtBase.getTypeId()
-    }
-
-    nbtMap = function(nbtBase) {
-        return nbtBase.map
-    }
-
-    nbtSize = function(nbtBase) {
-        return nbtBase.map.size()
-    }
-
-    asValue = function(nbtBase) {
-        if (nbtBase instanceof NBTBase) {
-            switch (getTypeId(nbtBase)) {
-                case CraftMagicNumbers.NBT.TAG_BYTE: {
-                    return nbtBase.asByte()
-                }
-                case CraftMagicNumbers.NBT.TAG_SHORT: {
-                    return nbtBase.asShort()
-                }
-                case CraftMagicNumbers.NBT.TAG_INT: {
-                    return nbtBase.asInt()
-                }
-                case CraftMagicNumbers.NBT.TAG_LONG: {
-                    return nbtBase.asLong()
-                }
-                case CraftMagicNumbers.NBT.TAG_FLOAT: {
-                    return nbtBase.asFloat()
-                }
-                case CraftMagicNumbers.NBT.TAG_DOUBLE: {
-                    return nbtBase.asDouble()
-                }
-                case CraftMagicNumbers.NBT.TAG_BYTE_ARRAY: {
-                    return nbtBase.getBytes()
-                }
-                case CraftMagicNumbers.NBT.TAG_STRING: {
-                    return nbtBase.asString()
-                }
-                case CraftMagicNumbers.NBT.TAG_LIST: {
-                    return nbtBase
-                }
-                case CraftMagicNumbers.NBT.TAG_COMPOUND: {
-                    return nbtBase
-                }
-                case CraftMagicNumbers.NBT.TAG_INT_ARRAY: {
-                    return nbtBase.getInts()
-                }
-                default: {
-                    return null
-                }
-            }
-        } else {
-            return nbtBase
-        }
-    }
-
-    toString = function(nbtBase) {
-        return nbtBase.asString()
-    }
-
-    asByte = function(nbtBase) {
-        return nbtBase.asByte()
-    }
-
-    asShort = function(nbtBase) {
-        return nbtBase.asShort()
-    }
-
-    asInt = function(nbtBase) {
-        return nbtBase.asInt()
-    }
-
-    asLong = function(nbtBase) {
-        return nbtBase.asLong()
-    }
-
-    asFloat = function(nbtBase) {
-        return nbtBase.asFloat()
-    }
-
-    asDouble = function(nbtBase) {
-        return nbtBase.asDouble()
-    }
-
-    asString = function(nbtBase) {
-        return nbtBase.asString()
-    }
-
-    asByteArray = function(nbtBase) {
-        return nbtBase.asBytes()
-    }
-
-    asIntArray = function(nbtBase) {
-        return nbtBase.asInts()
-    }
-    // 1.18
-} else {
-    getTypeId = function(nbtBase) {
-        return nbtBase.b()
-    }
-
-    nbtMap = function(nbtBase) {
-        return nbtBase.x
-    }
-
-    nbtSize = function(nbtBase) {
-        return nbtBase.x.size()
-    }
-
-    asValue = function(nbtBase) {
-        if (nbtBase instanceof NBTBase) {
-            switch (getTypeId(nbtBase)) {
-                case CraftMagicNumbers.NBT.TAG_BYTE: {
-                    return nbtBase.i()
-                }
-                case CraftMagicNumbers.NBT.TAG_SHORT: {
-                    return nbtBase.h()
-                }
-                case CraftMagicNumbers.NBT.TAG_INT: {
-                    return nbtBase.g()
-                }
-                case CraftMagicNumbers.NBT.TAG_LONG: {
-                    return nbtBase.f()
-                }
-                case CraftMagicNumbers.NBT.TAG_FLOAT: {
-                    return nbtBase.k()
-                }
-                case CraftMagicNumbers.NBT.TAG_DOUBLE: {
-                    return nbtBase.j()
-                }
-                case CraftMagicNumbers.NBT.TAG_BYTE_ARRAY: {
-                    return nbtBase.e()
-                }
-                case CraftMagicNumbers.NBT.TAG_STRING: {
-                    return nbtBase.f_()
-                }
-                case CraftMagicNumbers.NBT.TAG_LIST: {
-                    return nbtBase
-                }
-                case CraftMagicNumbers.NBT.TAG_COMPOUND: {
-                    return nbtBase
-                }
-                case CraftMagicNumbers.NBT.TAG_INT_ARRAY: {
-                    return nbtBase.g()
-                }
-                default: {
-                    return null
-                }
-            }
-        } else {
-            return nbtBase
-        }
-    }
-
-    toString = function(nbtBase) {
-        return nbtBase.f_()
-    }
-
-    asByte = function(nbtBase) {
-        return nbtBase.i()
-    }
-
-    asShort = function(nbtBase) {
-        return nbtBase.h()
-    }
-
-    asInt = function(nbtBase) {
-        return nbtBase.g()
-    }
-
-    asLong = function(nbtBase) {
-        return nbtBase.f()
-    }
-
-    asFloat = function(nbtBase) {
-        return nbtBase.k()
-    }
-
-    asDouble = function(nbtBase) {
-        return nbtBase.j()
-    }
-
-    asString = function(nbtBase) {
-        return nbtBase.f_()
-    }
-
-    asByteArray = function(nbtBase) {
-        return nbtBase.e()
-    }
-
-    asIntArray = function(nbtBase) {
-        return nbtBase.g()
-    }
-}
-
 toNBT = function(data) {
     if (data instanceof ConfigurationSection) {
         const itemTag = new NBTTagCompound()
@@ -313,6 +115,103 @@ toNBT = function(data) {
 if (tempInventory.getItem(0).handle !== undefined) {
     // 1.16
     if (CraftItemStack.asNMSCopy(tempItem).setTag !== undefined) {
+        getTypeId = function(nbtBase) {
+            return nbtBase.getTypeId()
+        }
+
+        nbtMap = function(nbtBase) {
+            return nbtBase.map
+        }
+
+        nbtSize = function(nbtBase) {
+            return nbtBase.map.size()
+        }
+
+        asValue = function(nbtBase) {
+            if (nbtBase instanceof NBTBase) {
+                switch (getTypeId(nbtBase)) {
+                    case CraftMagicNumbers.NBT.TAG_BYTE: {
+                        return nbtBase.asByte()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_SHORT: {
+                        return nbtBase.asShort()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_INT: {
+                        return nbtBase.asInt()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_LONG: {
+                        return nbtBase.asLong()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_FLOAT: {
+                        return nbtBase.asFloat()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_DOUBLE: {
+                        return nbtBase.asDouble()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_BYTE_ARRAY: {
+                        return nbtBase.getBytes()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_STRING: {
+                        return nbtBase.asString()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_LIST: {
+                        return nbtBase
+                    }
+                    case CraftMagicNumbers.NBT.TAG_COMPOUND: {
+                        return nbtBase
+                    }
+                    case CraftMagicNumbers.NBT.TAG_INT_ARRAY: {
+                        return nbtBase.getInts()
+                    }
+                    default: {
+                        return null
+                    }
+                }
+            } else {
+                return nbtBase
+            }
+        }
+
+        toString = function(nbtBase) {
+            return nbtBase.toString()
+        }
+
+        asByte = function(nbtBase) {
+            return nbtBase.asByte()
+        }
+
+        asShort = function(nbtBase) {
+            return nbtBase.asShort()
+        }
+
+        asInt = function(nbtBase) {
+            return nbtBase.asInt()
+        }
+
+        asLong = function(nbtBase) {
+            return nbtBase.asLong()
+        }
+
+        asFloat = function(nbtBase) {
+            return nbtBase.asFloat()
+        }
+
+        asDouble = function(nbtBase) {
+            return nbtBase.asDouble()
+        }
+
+        asString = function(nbtBase) {
+            return nbtBase.asString()
+        }
+
+        asByteArray = function(nbtBase) {
+            return nbtBase.asBytes()
+        }
+
+        asIntArray = function(nbtBase) {
+            return nbtBase.asInts()
+        }
+
         getOriginNMSItemTag = function(itemStack) {
             if (itemStack instanceof CraftItemStack) {
                 const item = itemStack.handle
@@ -368,6 +267,103 @@ if (tempInventory.getItem(0).handle !== undefined) {
         }
     // 1.18
     } else {
+        getTypeId = function(nbtBase) {
+            return nbtBase.b()
+        }
+
+        nbtMap = function(nbtBase) {
+            return nbtBase.x
+        }
+
+        nbtSize = function(nbtBase) {
+            return nbtBase.x.size()
+        }
+
+        asValue = function(nbtBase) {
+            if (nbtBase instanceof NBTBase) {
+                switch (getTypeId(nbtBase)) {
+                    case CraftMagicNumbers.NBT.TAG_BYTE: {
+                        return nbtBase.i()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_SHORT: {
+                        return nbtBase.h()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_INT: {
+                        return nbtBase.g()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_LONG: {
+                        return nbtBase.f()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_FLOAT: {
+                        return nbtBase.k()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_DOUBLE: {
+                        return nbtBase.j()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_BYTE_ARRAY: {
+                        return nbtBase.e()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_STRING: {
+                        return nbtBase.f_()
+                    }
+                    case CraftMagicNumbers.NBT.TAG_LIST: {
+                        return nbtBase
+                    }
+                    case CraftMagicNumbers.NBT.TAG_COMPOUND: {
+                        return nbtBase
+                    }
+                    case CraftMagicNumbers.NBT.TAG_INT_ARRAY: {
+                        return nbtBase.g()
+                    }
+                    default: {
+                        return null
+                    }
+                }
+            } else {
+                return nbtBase
+            }
+        }
+
+        toString = function(nbtBase) {
+            return nbtBase.f_()
+        }
+
+        asByte = function(nbtBase) {
+            return nbtBase.i()
+        }
+
+        asShort = function(nbtBase) {
+            return nbtBase.h()
+        }
+
+        asInt = function(nbtBase) {
+            return nbtBase.g()
+        }
+
+        asLong = function(nbtBase) {
+            return nbtBase.f()
+        }
+
+        asFloat = function(nbtBase) {
+            return nbtBase.k()
+        }
+
+        asDouble = function(nbtBase) {
+            return nbtBase.j()
+        }
+
+        asString = function(nbtBase) {
+            return nbtBase.f_()
+        }
+
+        asByteArray = function(nbtBase) {
+            return nbtBase.e()
+        }
+
+        asIntArray = function(nbtBase) {
+            return nbtBase.g()
+        }
+
         getOriginNMSItemTag = function(itemStack) {
             if (itemStack instanceof CraftItemStack) {
                 const item = itemStack.handle
@@ -426,6 +422,103 @@ if (tempInventory.getItem(0).handle !== undefined) {
 } else {
     const handle = CraftItemStack.class.getDeclaredField("handle")
     handle.setAccessible(true)
+
+    getTypeId = function(nbtBase) {
+        return nbtBase.getTypeId()
+    }
+
+    nbtMap = function(nbtBase) {
+        return nbtBase.map
+    }
+
+    nbtSize = function(nbtBase) {
+        return nbtBase.map.size()
+    }
+
+    asValue = function(nbtBase) {
+        if (nbtBase instanceof NBTBase) {
+            switch (getTypeId(nbtBase)) {
+                case CraftMagicNumbers.NBT.TAG_BYTE: {
+                    return nbtBase.g()
+                }
+                case CraftMagicNumbers.NBT.TAG_SHORT: {
+                    return nbtBase.f()
+                }
+                case CraftMagicNumbers.NBT.TAG_INT: {
+                    return nbtBase.e()
+                }
+                case CraftMagicNumbers.NBT.TAG_LONG: {
+                    return nbtBase.d()
+                }
+                case CraftMagicNumbers.NBT.TAG_FLOAT: {
+                    return nbtBase.i()
+                }
+                case CraftMagicNumbers.NBT.TAG_DOUBLE: {
+                    return nbtBase.asDouble()
+                }
+                case CraftMagicNumbers.NBT.TAG_BYTE_ARRAY: {
+                    return nbtBase.c()
+                }
+                case CraftMagicNumbers.NBT.TAG_STRING: {
+                    return nbtBase.c_()
+                }
+                case CraftMagicNumbers.NBT.TAG_LIST: {
+                    return nbtBase
+                }
+                case CraftMagicNumbers.NBT.TAG_COMPOUND: {
+                    return nbtBase
+                }
+                case CraftMagicNumbers.NBT.TAG_INT_ARRAY: {
+                    return nbtBase.d()
+                }
+                default: {
+                    return null
+                }
+            }
+        } else {
+            return nbtBase
+        }
+    }
+
+    toString = function(nbtBase) {
+        return nbtBase.toString()
+    }
+
+    asByte = function(nbtBase) {
+        return nbtBase.g()
+    }
+
+    asShort = function(nbtBase) {
+        return nbtBase.f()
+    }
+
+    asInt = function(nbtBase) {
+        return nbtBase.e()
+    }
+
+    asLong = function(nbtBase) {
+        return nbtBase.d()
+    }
+
+    asFloat = function(nbtBase) {
+        return nbtBase.i()
+    }
+
+    asDouble = function(nbtBase) {
+        return nbtBase.asDouble()
+    }
+
+    asString = function(nbtBase) {
+        return nbtBase.c_()
+    }
+
+    asByteArray = function(nbtBase) {
+        return nbtBase.c()
+    }
+
+    asIntArray = function(nbtBase) {
+        return nbtBase.d()
+    }
 
     getOriginNMSItemTag = function(itemStack) {
         if (itemStack instanceof CraftItemStack) {

@@ -49,6 +49,7 @@ class ScriptExpansion : CompiledScript {
                 const ItemUtils = Packages.pers.neige.neigeitems.utils.ItemUtils
                 const JsonUtils = Packages.pers.neige.neigeitems.utils.JsonUtils
                 const LangUtils = Packages.pers.neige.neigeitems.utils.LangUtils
+                const NMSUtils = Packages.pers.neige.neigeitems.utils.NMSUtils
                 const PlayerUtils = Packages.pers.neige.neigeitems.utils.PlayerUtils
                 const SamplingUtils = Packages.pers.neige.neigeitems.utils.SamplingUtils
                 const ScriptUtils = Packages.pers.neige.neigeitems.utils.ScriptUtils

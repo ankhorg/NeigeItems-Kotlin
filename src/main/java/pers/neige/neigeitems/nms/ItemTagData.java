@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.nms;
 
+import pers.neige.neigeitems.utils.NMSUtils;
+
 import javax.annotation.Nullable;
 import java.util.AbstractList;
 import java.util.List;
@@ -16,47 +18,47 @@ public class ItemTagData {
 
     public ItemTagData(String data) {
         this.type = ItemTagType.STRING;
-        this.data = NMSGeneric.asNBT(data);
+        this.data = NMSUtils.asNBT(data);
     }
     
     public ItemTagData(Byte data) {
         this.type = ItemTagType.BYTE;
-        this.data = NMSGeneric.asNBT(data);
+        this.data = NMSUtils.asNBT(data);
     }
     
     public ItemTagData(byte[] data) {
         type = ItemTagType.BYTE_ARRAY;
-        this.data = NMSGeneric.asNBT(data);
+        this.data = NMSUtils.asNBT(data);
     }
 
     public ItemTagData(int data) {
         this.type = ItemTagType.INT;
-        this.data = NMSGeneric.asNBT(data);
+        this.data = NMSUtils.asNBT(data);
     }
 
     public ItemTagData(int[] data) {
         this.type = ItemTagType.INT_ARRAY;
-        this.data = NMSGeneric.asNBT(data);
+        this.data = NMSUtils.asNBT(data);
     }
 
     public ItemTagData(double data) {
         this.type = ItemTagType.DOUBLE;
-        this.data = NMSGeneric.asNBT(data);
+        this.data = NMSUtils.asNBT(data);
     }
 
     public ItemTagData(float data) {
         this.type = ItemTagType.FLOAT;
-        this.data = NMSGeneric.asNBT(data);
+        this.data = NMSUtils.asNBT(data);
     }
 
     public ItemTagData(short data) {
         this.type = ItemTagType.SHORT;
-        this.data = NMSGeneric.asNBT(data);
+        this.data = NMSUtils.asNBT(data);
     }
 
     public ItemTagData(long data) {
         this.type = ItemTagType.LONG;
-        this.data = NMSGeneric.asNBT(data);
+        this.data = NMSUtils.asNBT(data);
     }
 
     public ItemTagData(ItemTag data) {
@@ -70,49 +72,49 @@ public class ItemTagData {
     }
 
     public ItemTagData(Object data) {
-        type = NMSGeneric.getNBTType(data);
+        type = NMSUtils.getNBTType(data);
         this.data = data;
     }
 
     public ItemTagData(List<?> data) {
         this.type = ItemTagType.LIST;
-        this.data = NMSGeneric.asNBT(data);
+        this.data = NMSUtils.asNBT(data);
     }
 
     public String asString() {
-        return NMSGeneric.asString(data);
+        return NMSUtils.asString(data);
     }
 
     public byte asByte() {
-        return NMSGeneric.asByte(data);
+        return NMSUtils.asByte(data);
     }
 
     public byte[] asByteArray() {
-        return NMSGeneric.asByteArray(data);
+        return NMSUtils.asByteArray(data);
     }
 
     public int asInt() {
-        return NMSGeneric.asInt(data);
+        return NMSUtils.asInt(data);
     }
 
     public int[] asIntArray() {
-        return NMSGeneric.asIntArray(data);
+        return NMSUtils.asIntArray(data);
     }
 
     public double asDouble() {
-        return NMSGeneric.asDouble(data);
+        return NMSUtils.asDouble(data);
     }
 
     public float asFloat() {
-        return NMSGeneric.asFloat(data);
+        return NMSUtils.asFloat(data);
     }
 
     public short asShort() {
-        return NMSGeneric.asShort(data);
+        return NMSUtils.asShort(data);
     }
 
     public long asLong() {
-        return NMSGeneric.asLong(data);
+        return NMSUtils.asLong(data);
     }
 
     public ItemTag asCompound() {
@@ -135,6 +137,6 @@ public class ItemTagData {
     }
 
     public String toString() {
-        return NMSGeneric.toString(data);
+        return NMSUtils.toString(data);
     }
 }

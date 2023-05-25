@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.nms;
 
 import org.jetbrains.annotations.NotNull;
+import pers.neige.neigeitems.utils.NMSUtils;
 
 import java.util.*;
 
@@ -12,7 +13,7 @@ public class ItemTagList extends ItemTagData implements List<ItemTagData> {
     }
 
     public ItemTagList() {
-        super(NMSGeneric.newItemTagList());
+        super(NMSUtils.newItemTagList());
         this.nbt = (AbstractList<Object>)this.data;
     }
 
