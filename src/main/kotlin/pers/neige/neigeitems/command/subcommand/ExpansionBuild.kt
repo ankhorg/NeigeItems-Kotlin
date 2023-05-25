@@ -81,7 +81,7 @@ object ExpansionBuild {
                         val ctMethod = CtNewMethod.make(methodCode, ctClass)
                         ctClass.addMethod(ctMethod)
 
-                        JarOutputStream(FileOutputStream(getFileOrCreate("Build${File.separator}${pluginName}.jar"))).use { outputStream ->
+                        JarOutputStream(FileOutputStream(getFileOrCreate("Build${File.separator}$pluginName-$version.jar"))).use { outputStream ->
                             outputStream.putNextEntry(JarEntry("pers/neige/${pluginName.lowercase(Locale.getDefault())}/Main.class"))
                             ByteArrayInputStream(ctClass.toBytecode()).use { it.copyTo(outputStream) }
                             outputStream.closeEntry()
@@ -106,7 +106,7 @@ object ExpansionBuild {
                             outputStream.closeEntry()
                             sender.sendLang("Messages.buildExpansionMessage", mapOf(
                                 Pair("{expansion}", argument),
-                                Pair("{file}", "$pluginName.jar")
+                                Pair("{file}", "$pluginName-$version.jar")
                             ))
                         }
                     }
