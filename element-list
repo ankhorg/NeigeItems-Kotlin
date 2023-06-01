@@ -1,7 +1,5 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
-$dokka.location:////PointingToDeclaration/[root]/package-summary.html
-$dokka.location:/JvmHacker///PointingToDeclaration/[root]/JvmHacker.html
 $dokka.location:pers.neige.neigeitems.event/MythicDropEvent.ConfigLoaded///PointingToDeclaration/pers/neige/neigeitems/event/MythicDropEvent.ConfigLoaded.html
 $dokka.location:pers.neige.neigeitems.event/MythicDropEvent.Drop///PointingToDeclaration/pers/neige/neigeitems/event/MythicDropEvent.Drop.html
 $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Post///PointingToDeclaration/pers/neige/neigeitems/event/PluginReloadEvent.Post.html
