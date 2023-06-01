@@ -169,7 +169,7 @@ const chance = function(value, limit) {
  */
 const combo = function(group, types) {
     if(!player.hasMetadata("NI-Combo-" + group)) {
-        player.setMetadataEZ("NI-Combo-" + group, new ArrayList())
+        PlayerUtils.setMetadataEZ(player, "NI-Combo-" + group, new java.util.ArrayList())
     }
     const comboInfos = player.getMetadata("NI-Combo-" + group)[0].value()
     if (comboInfos.size() < types.length) return false
@@ -191,7 +191,7 @@ const combo = function(group, types) {
  */
 const comboSize = function(group) {
     if(!player.hasMetadata("NI-Combo-" + group)) {
-        player.setMetadataEZ("NI-Combo-" + group, new ArrayList())
+        PlayerUtils.setMetadataEZ(player, "NI-Combo-" + group, new java.util.ArrayList())
     }
     const comboInfos = player.getMetadata("NI-Combo-" + group)[0].value()
 

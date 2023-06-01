@@ -115,109 +115,110 @@ abstract class MythicMobsHooker {
         entity: LivingEntity
     ) {
         // 获取MM怪物的ConfigurationSection
-        val config = mobInfos[internalName]!!
-        // 装备信息
-        val equipment = config.getStringList("NeigeItems.Equipment")
-        // 掉落装备概率
-        val dropEquipment = config.getStringList("NeigeItems.DropEquipment")
+        mobInfos[internalName]?.let { config ->
+            // 装备信息
+            val equipment = config.getStringList("NeigeItems.Equipment")
+            // 掉落装备概率
+            val dropEquipment = config.getStringList("NeigeItems.DropEquipment")
 
-        val entityEquipment = entity.equipment
-        val dropChance = HashMap<String, Double>()
+            val entityEquipment = entity.equipment
+            val dropChance = HashMap<String, Double>()
 
-        // 获取死亡后相应NI物品掉落几率
-        for (value in dropEquipment) {
-            val string = value.parseSection()
-            var id = string.lowercase(Locale.getDefault())
-            var chance = 1.toDouble()
-            if (string.contains(" ")) {
-                val index = string.indexOf(" ")
-                id = string.substring(0, index).lowercase(Locale.getDefault())
-                chance = string.substring(index+1).toDoubleOrNull() ?: 1.toDouble()
-            }
-            dropChance[id] = chance
-        }
-
-        // 获取出生附带装备信息
-        for (value in equipment) {
-            val string = value.parseSection()
-            if (string.contains(": ")) {
-                val index = string.indexOf(": ")
-                val slot = string.substring(0, index).lowercase(Locale.getDefault())
-                val info = string.substring(index+2)
-                // [物品ID] (生成概率) (指向数据)
-                val args = info.split(" ", limit = 3)
-
-                val data: String? = args.getOrNull(2)
-
-                if (args.size > 1) {
-                    val probability = args[1].toDoubleOrNull()
-                    if (probability != null && ThreadLocalRandom.current().nextDouble() > probability) continue
+            // 获取死亡后相应NI物品掉落几率
+            for (value in dropEquipment) {
+                val string = value.parseSection()
+                var id = string.lowercase(Locale.getDefault())
+                var chance = 1.toDouble()
+                if (string.contains(" ")) {
+                    val index = string.indexOf(" ")
+                    id = string.substring(0, index).lowercase(Locale.getDefault())
+                    chance = string.substring(index+1).toDoubleOrNull() ?: 1.toDouble()
                 }
+                dropChance[id] = chance
+            }
 
-                try {
-                    (ItemManager.getItemStack(args[0], null, data)
-                        ?: HookerManager.easyItemHooker?.getItemStack(args[0])
-                        ?: getItemStackSync(args[0]))?.let { itemStack ->
-                        dropChance[slot]?.let { chance ->
-                            val itemTag = itemStack.getItemTag()
-                            itemTag.computeIfAbsent("NeigeItems") { ItemTag() }?.asCompound()?.set("dropChance", ItemTagData(chance))
-                            itemTag.saveTo(itemStack)
-                        }
-                        val event = MythicEquipEvent(entity, internalName, slot, itemStack)
+            // 获取出生附带装备信息
+            for (value in equipment) {
+                val string = value.parseSection()
+                if (string.contains(": ")) {
+                    val index = string.indexOf(": ")
+                    val slot = string.substring(0, index).lowercase(Locale.getDefault())
+                    val info = string.substring(index+2)
+                    // [物品ID] (生成概率) (指向数据)
+                    val args = info.split(" ", limit = 3)
 
-                        when (slot) {
-                            "helmet" -> {
-                                event.call()
-                                when {
-                                    !event.isCancelled -> entityEquipment?.helmet = event.itemStack
-                                    else -> {}
-                                }
+                    val data: String? = args.getOrNull(2)
+
+                    if (args.size > 1) {
+                        val probability = args[1].toDoubleOrNull()
+                        if (probability != null && ThreadLocalRandom.current().nextDouble() > probability) continue
+                    }
+
+                    try {
+                        (ItemManager.getItemStack(args[0], null, data)
+                            ?: HookerManager.easyItemHooker?.getItemStack(args[0])
+                            ?: getItemStackSync(args[0]))?.let { itemStack ->
+                            dropChance[slot]?.let { chance ->
+                                val itemTag = itemStack.getItemTag()
+                                itemTag.computeIfAbsent("NeigeItems") { ItemTag() }?.asCompound()?.set("dropChance", ItemTagData(chance))
+                                itemTag.saveTo(itemStack)
                             }
-                            "chestplate" -> {
-                                event.call()
-                                when {
-                                    !event.isCancelled -> entityEquipment?.chestplate = event.itemStack
-                                    else -> {}
+                            val event = MythicEquipEvent(entity, internalName, slot, itemStack)
+
+                            when (slot) {
+                                "helmet" -> {
+                                    event.call()
+                                    when {
+                                        !event.isCancelled -> entityEquipment?.helmet = event.itemStack
+                                        else -> {}
+                                    }
                                 }
-                            }
-                            "leggings" -> {
-                                event.call()
-                                when {
-                                    !event.isCancelled -> entityEquipment?.leggings = event.itemStack
-                                    else -> {}
+                                "chestplate" -> {
+                                    event.call()
+                                    when {
+                                        !event.isCancelled -> entityEquipment?.chestplate = event.itemStack
+                                        else -> {}
+                                    }
                                 }
-                            }
-                            "boots" -> {
-                                event.call()
-                                when {
-                                    !event.isCancelled -> entityEquipment?.boots = event.itemStack
-                                    else -> {}
+                                "leggings" -> {
+                                    event.call()
+                                    when {
+                                        !event.isCancelled -> entityEquipment?.leggings = event.itemStack
+                                        else -> {}
+                                    }
                                 }
-                            }
-                            "mainhand" -> {
-                                event.call()
-                                when {
-                                    !event.isCancelled -> entityEquipment?.setItemInMainHand(event.itemStack)
-                                    else -> {}
+                                "boots" -> {
+                                    event.call()
+                                    when {
+                                        !event.isCancelled -> entityEquipment?.boots = event.itemStack
+                                        else -> {}
+                                    }
                                 }
-                            }
-                            "offhand" -> {
-                                event.call()
-                                when {
-                                    !event.isCancelled -> entityEquipment?.setItemInOffHand(event.itemStack)
-                                    else -> {}
+                                "mainhand" -> {
+                                    event.call()
+                                    when {
+                                        !event.isCancelled -> entityEquipment?.setItemInMainHand(event.itemStack)
+                                        else -> {}
+                                    }
                                 }
+                                "offhand" -> {
+                                    event.call()
+                                    when {
+                                        !event.isCancelled -> entityEquipment?.setItemInOffHand(event.itemStack)
+                                        else -> {}
+                                    }
+                                }
+                                else -> {}
                             }
-                            else -> {}
                         }
+                    } catch (error: Throwable) {
+                        ConfigManager.config.getString("Messages.equipFailed")?.let { message ->
+                            println(message
+                                .replace("{mobID}", internalName)
+                                .replace("{itemID}", args[0]))
+                        }
+                        error.printStackTrace()
                     }
-                } catch (error: Throwable) {
-                    ConfigManager.config.getString("Messages.equipFailed")?.let { message ->
-                        println(message
-                            .replace("{mobID}", internalName)
-                            .replace("{itemID}", args[0]))
-                    }
-                    error.printStackTrace()
                 }
             }
         }
@@ -229,98 +230,98 @@ abstract class MythicMobsHooker {
         internalName: String
     ) {
         // 获取MM怪物的ConfigurationSection
-        val configSection = mobInfos[internalName]!!
+        mobInfos[internalName]?.let { configSection ->
+            // 如果怪物配置了NeigeItems相关信息
+            if (configSection.contains("NeigeItems")) {
+                val drops = configSection.getStringList("NeigeItems.Drops")
+                val dropPackRawIds = configSection.getStringList("NeigeItems.DropPacks")
+                var offsetXString = configSection.getString("NeigeItems.FancyDrop.offset.x")
+                var offsetYString = configSection.getString("NeigeItems.FancyDrop.offset.y")
+                var angleType = configSection.getString("NeigeItems.FancyDrop.angle.type")
 
-        // 如果怪物配置了NeigeItems相关信息
-        if (configSection.contains("NeigeItems")) {
-            val drops = configSection.getStringList("NeigeItems.Drops")
-            val dropPackRawIds = configSection.getStringList("NeigeItems.DropPacks")
-            var offsetXString = configSection.getString("NeigeItems.FancyDrop.offset.x")
-            var offsetYString = configSection.getString("NeigeItems.FancyDrop.offset.y")
-            var angleType = configSection.getString("NeigeItems.FancyDrop.angle.type")
+                // 东西都加载好了, 触发一下事件
+                val configLoadedEvent = MythicDropEvent.ConfigLoaded(internalName, entity, killer, drops, dropPackRawIds, offsetXString, offsetYString, angleType)
+                configLoadedEvent.call()
+                if (configLoadedEvent.isCancelled) return
 
-            // 东西都加载好了, 触发一下事件
-            val configLoadedEvent = MythicDropEvent.ConfigLoaded(internalName, entity, killer, drops, dropPackRawIds, offsetXString, offsetYString, angleType)
-            configLoadedEvent.call()
-            if (configLoadedEvent.isCancelled) return
+                // 判断玩家击杀
+                if (killer !is Player && configSection.getBoolean("NeigeItems.PlayerOnly", true)) return
 
-            // 判断玩家击杀
-            if (killer !is Player && configSection.getBoolean("NeigeItems.PlayerOnly", true)) return
+                val player = killer as? Player
 
-            val player = killer as? Player
+                offsetXString = configLoadedEvent.offsetXString
+                offsetYString = configLoadedEvent.offsetYString
+                angleType = configLoadedEvent.angleType
 
-            offsetXString = configLoadedEvent.offsetXString
-            offsetYString = configLoadedEvent.offsetYString
-            angleType = configLoadedEvent.angleType
-
-            // 预定掉落物列表
-            val dropItems = ArrayList<ItemStack>()
-            // 加载物品包掉落
-            configLoadedEvent.dropPacks?.forEach { info ->
-                // 物品包ID 数量 概率 指向数据
-                val args = info.parseSection(player).split(" ", limit = 4)
-                // 物品包ID
-                val id = args[0]
-                // 物品包数量
-                val amount = args.getOrNull(1)?.let {
-                    when {
-                        it.contains("-") -> {
-                            val index = it.indexOf("-")
-                            val min = it.substring(0, index).toIntOrNull()
-                            val max = it.substring(index+1, it.length).toIntOrNull()
-                            if (min != null && max != null) {
-                                ThreadLocalRandom.current().nextInt(min, max+1)
-                            } else {
-                                null
+                // 预定掉落物列表
+                val dropItems = ArrayList<ItemStack>()
+                // 加载物品包掉落
+                configLoadedEvent.dropPacks?.forEach { info ->
+                    // 物品包ID 数量 概率 指向数据
+                    val args = info.parseSection(player).split(" ", limit = 4)
+                    // 物品包ID
+                    val id = args[0]
+                    // 物品包数量
+                    val amount = args.getOrNull(1)?.let {
+                        when {
+                            it.contains("-") -> {
+                                val index = it.indexOf("-")
+                                val min = it.substring(0, index).toIntOrNull()
+                                val max = it.substring(index+1, it.length).toIntOrNull()
+                                if (min != null && max != null) {
+                                    ThreadLocalRandom.current().nextInt(min, max+1)
+                                } else {
+                                    null
+                                }
+                            }
+                            else -> {
+                                it.toIntOrNull()
                             }
                         }
-                        else -> {
-                            it.toIntOrNull()
-                        }
-                    }
-                } ?: 1
-                // 生成概率
-                val probability = args.getOrNull(2)?.toDoubleOrNull() ?: 1.0
-                // 指向数据
-                val data: String? = args.getOrNull(3)
+                    } ?: 1
+                    // 生成概率
+                    val probability = args.getOrNull(2)?.toDoubleOrNull() ?: 1.0
+                    // 指向数据
+                    val data: String? = args.getOrNull(3)
 
-                // 进行概率随机
-                if (ThreadLocalRandom.current().nextDouble() <= probability) {
-                    // 获取对应物品包
-                    ItemPackManager.getItemPack(id)?.let { itemPack ->
-                        // 尝试加载多彩掉落
-                        if (itemPack.fancyDrop) {
-                            offsetXString = itemPack.offsetXString
-                            offsetYString = itemPack.offsetYString
-                            angleType = itemPack.angleType
-                        }
-                        // 重复amount次
-                        repeat(amount) {
-                            // 加载物品掉落信息
-                            dropItems.addAll(itemPack.getItemStacks(player, data))
+                    // 进行概率随机
+                    if (ThreadLocalRandom.current().nextDouble() <= probability) {
+                        // 获取对应物品包
+                        ItemPackManager.getItemPack(id)?.let { itemPack ->
+                            // 尝试加载多彩掉落
+                            if (itemPack.fancyDrop) {
+                                offsetXString = itemPack.offsetXString
+                                offsetYString = itemPack.offsetYString
+                                angleType = itemPack.angleType
+                            }
+                            // 重复amount次
+                            repeat(amount) {
+                                // 加载物品掉落信息
+                                dropItems.addAll(itemPack.getItemStacks(player, data))
+                            }
                         }
                     }
                 }
+                // 掉落应该掉落的装备
+                loadEquipmentDrop(entity, dropItems, player)
+                // 加载掉落信息
+                configLoadedEvent.drops?.let { loadItems(dropItems, it, player as? OfflinePlayer, null, null, true) }
+
+                // 物品都加载好了, 触发一下事件
+                val dropEvent = MythicDropEvent.Drop(internalName, entity, player, dropItems, offsetXString, offsetYString, angleType)
+                dropEvent.call()
+                if (dropEvent.isCancelled) return
+
+                // 掉落物品
+                ItemUtils.dropItems(
+                    dropEvent.dropItems,
+                    entity.location,
+                    killer,
+                    dropEvent.offsetXString,
+                    dropEvent.offsetYString,
+                    dropEvent.angleType
+                )
             }
-            // 掉落应该掉落的装备
-            loadEquipmentDrop(entity, dropItems, player)
-            // 加载掉落信息
-            configLoadedEvent.drops?.let { loadItems(dropItems, it, player as? OfflinePlayer, null, null, true) }
-
-            // 物品都加载好了, 触发一下事件
-            val dropEvent = MythicDropEvent.Drop(internalName, entity, player, dropItems, offsetXString, offsetYString, angleType)
-            dropEvent.call()
-            if (dropEvent.isCancelled) return
-
-            // 掉落物品
-            ItemUtils.dropItems(
-                dropEvent.dropItems,
-                entity.location,
-                killer,
-                dropEvent.offsetXString,
-                dropEvent.offsetYString,
-                dropEvent.angleType
-            )
         }
     }
 

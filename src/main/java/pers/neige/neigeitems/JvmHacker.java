@@ -26,6 +26,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 // @formatter:off
+package pers.neige.neigeitems;
 
 import sun.misc.Unsafe;
 import java.io.File;
