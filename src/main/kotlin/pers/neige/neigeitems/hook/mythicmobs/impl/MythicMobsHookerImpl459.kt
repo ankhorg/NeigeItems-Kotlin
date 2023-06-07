@@ -39,20 +39,24 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
 
     override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.HIGH) {
         submit(async = true) {
-            spawnEvent(
-                it.mobType.internalName,
-                it.entity as LivingEntity
-            )
+            if (it.entity is LivingEntity) {
+                spawnEvent(
+                    it.mobType.internalName,
+                    it.entity as LivingEntity
+                )
+            }
         }
     }
 
     override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java) {
         submit(async = true) {
-            deathEvent(
-                it.killer,
-                it.entity as LivingEntity,
-                it.mobType.internalName
-            )
+            if (it.entity is LivingEntity) {
+                deathEvent(
+                    it.killer,
+                    it.entity as LivingEntity,
+                    it.mobType.internalName
+                )
+            }
         }
     }
 
