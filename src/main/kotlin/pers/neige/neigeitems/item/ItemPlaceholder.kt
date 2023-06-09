@@ -8,6 +8,7 @@ import com.comphenix.protocol.events.PacketEvent
 import org.bukkit.GameMode
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
 import taboolib.module.nms.getItemTag
 import java.util.*
@@ -95,13 +96,15 @@ class ItemPlaceholder {
             }
         }
 
-        // 监听数据包进行变量替换
-        ProtocolLibrary.getProtocolManager().addPacketListener(object :
-            PacketAdapter(
-                plugin,
-                ListenerPriority.NORMAL,
-                PacketType.Play.Server.WINDOW_ITEMS,
-                PacketType.Play.Server.SET_SLOT) {
+        // 检测是否开启物品变量功能
+        if (config.getBoolean("ItemPlaceholder.enable")) {
+            // 监听数据包进行变量替换
+            ProtocolLibrary.getProtocolManager().addPacketListener(object :
+                PacketAdapter(
+                    plugin,
+                    ListenerPriority.NORMAL,
+                    PacketType.Play.Server.WINDOW_ITEMS,
+                    PacketType.Play.Server.SET_SLOT) {
                 override fun onPacketSending(event: PacketEvent) {
                     val gameMode = event.player.gameMode
                     if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
@@ -120,7 +123,8 @@ class ItemPlaceholder {
                 }
                 override fun onPacketReceiving(event: PacketEvent) {}
             }
-        )
+            )
+        }
     }
 
     /**

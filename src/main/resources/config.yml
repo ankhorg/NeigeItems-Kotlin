@@ -138,3 +138,6 @@ ItemAction:
   upgrade: true
   # 连击间隔(ms)
   comboInterval: 500
+ItemPlaceholder:
+  # 是否开启物品变量功能(更改后需重启服务器)
+  enable: true
