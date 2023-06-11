@@ -3,7 +3,6 @@ package pers.neige.neigeitems.command.subcommand
 import javassist.ClassClassPath
 import javassist.ClassPool
 import javassist.CtNewMethod
-import javassist.bytecode.ClassFile
 import org.bukkit.command.CommandSender
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
@@ -12,8 +11,6 @@ import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.manager.ExpansionManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.script.ScriptExpansion
-import pers.neige.neigeitems.utils.ConfigUtils
-import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -23,10 +20,7 @@ import java.io.*
 import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.jar.JarEntry
-import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
-import javax.script.Invocable
-import kotlin.collections.ArrayList
 
 
 object ExpansionBuild {

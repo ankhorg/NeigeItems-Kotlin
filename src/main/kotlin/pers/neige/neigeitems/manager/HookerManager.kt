@@ -15,8 +15,7 @@ import pers.neige.neigeitems.hook.nashorn.NashornHooker
 import pers.neige.neigeitems.hook.nashorn.impl.LegacyNashornHookerImpl
 import pers.neige.neigeitems.hook.nashorn.impl.NashornHookerImpl
 import pers.neige.neigeitems.hook.nms.NMSHooker
-import pers.neige.neigeitems.hook.nms.impl.NMSHookerOtherImpl
-import pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_12_R1Impl
+import pers.neige.neigeitems.hook.nms.impl.*
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker
 import pers.neige.neigeitems.hook.placeholderapi.impl.LegacyPapiHookerImpl
 import pers.neige.neigeitems.hook.placeholderapi.impl.PapiHookerImpl
@@ -38,14 +37,21 @@ import java.util.function.BiFunction
  * 插件兼容管理器, 用于尝试与各个软依赖插件取得联系
  */
 object HookerManager {
-    val nashornHooker: NashornHooker =
-        try {
-            Class.forName("jdk.nashorn.api.scripting.NashornScriptEngineFactory")
-            // jdk自带nashorn
-            LegacyNashornHookerImpl()
+    private fun check(clazz: String): Boolean {
+        return try {
+            Class.forName(clazz)
+            true
         } catch (error: Throwable) {
+            false
+        }
+    }
+
+    val nashornHooker: NashornHooker =
+        when {
+            // jdk自带nashorn
+            check("jdk.nashorn.api.scripting.NashornScriptEngineFactory") -> LegacyNashornHookerImpl()
             // 主动下载nashorn
-            NashornHookerImpl()
+            else -> NashornHookerImpl()
         }
 
     // 某些情况下 MythicMobs 的 ItemManager 加载顺序很奇怪，因此写成 by lazy, 然后在 active 阶段主动调用
@@ -82,8 +88,16 @@ object HookerManager {
 
     val nmsHooker: NMSHooker =
         try {
-            Class.forName("net.minecraft.server.v1_12_R1.EntityItem")
-            NMSHookerV1_12_R1Impl()
+            when {
+                check("net.minecraft.server.v1_12_R1.EntityItem") -> NMSHookerV1_12_R1Impl()
+                check("net.minecraft.server.v1_13_R2.EntityItem") -> NMSHookerV1_13_R2Impl()
+                check("net.minecraft.server.v1_14_R1.EntityItem") -> NMSHookerV1_14_R1Impl()
+                check("net.minecraft.server.v1_15_R1.EntityItem") -> NMSHookerV1_15_R1Impl()
+                check("net.minecraft.server.v1_16_R1.EntityItem") -> NMSHookerV1_16_R1Impl()
+                check("net.minecraft.server.v1_16_R2.EntityItem") -> NMSHookerV1_16_R2Impl()
+                check("net.minecraft.server.v1_16_R3.EntityItem") -> NMSHookerV1_16_R3Impl()
+                else -> NMSHookerOtherImpl()
+            }
         } catch (error: Throwable) {
             NMSHookerOtherImpl()
         }

@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack
 import org.neosearch.stringsearcher.StringSearcher
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.ItemManager.addCharge
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
@@ -1311,10 +1312,8 @@ object ItemEditorManager {
                 itemStack.itemMeta?.let { itemMeta ->
                     // 获取待设置CustomModelData
                     content.toIntOrNull()?.let { customModelData ->
-                        try {
-                            // 设置CustomModelData
-                            itemMeta.setCustomModelData(customModelData)
-                        } catch (_: NoSuchMethodError) {}
+                        // 设置CustomModelData
+                        nmsHooker.setCustomModelData(itemMeta, customModelData)
                     }
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta

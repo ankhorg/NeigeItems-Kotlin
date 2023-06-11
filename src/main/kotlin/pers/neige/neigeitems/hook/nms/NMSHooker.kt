@@ -8,7 +8,9 @@ import org.bukkit.inventory.meta.ItemMeta
 import java.util.function.Consumer
 
 abstract class NMSHooker{
-    abstract fun setCustomModelData(itemMeta: ItemMeta?, data: Int)
+    open fun setCustomModelData(itemMeta: ItemMeta?, data: Int) {
+        itemMeta?.setCustomModelData(data)
+    }
 
     abstract fun dropItem(
         world: World,

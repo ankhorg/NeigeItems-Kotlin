@@ -1,22 +1,19 @@
 package pers.neige.neigeitems.hook.nms.impl
 
-import net.minecraft.server.v1_12_R1.EntityItem
-import net.minecraft.server.v1_12_R1.WorldServer
+import net.minecraft.server.v1_13_R2.EntityItem
+import net.minecraft.server.v1_13_R2.WorldServer
 import org.bukkit.Location
 import org.bukkit.World
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld
+import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack
 import org.bukkit.entity.Item
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.ItemMeta
 import pers.neige.neigeitems.hook.nms.NMSHooker
 import java.util.function.Consumer
 
 
-class NMSHookerV1_12_R1Impl : NMSHooker() {
-    override fun setCustomModelData(itemMeta: ItemMeta?, data: Int) {}
-
+class NMSHookerV1_13_R2Impl : NMSHooker() {
     override fun dropItem(
         world: World,
         location: Location,
