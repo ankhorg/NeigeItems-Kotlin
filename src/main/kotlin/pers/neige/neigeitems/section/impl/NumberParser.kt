@@ -14,7 +14,7 @@ object NumberParser : SectionParser() {
 
     override fun onRequest(
         data: ConfigurationSection,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
@@ -31,7 +31,7 @@ object NumberParser : SectionParser() {
 
     override fun onRequest(
         args: List<String>,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
@@ -56,13 +56,14 @@ object NumberParser : SectionParser() {
      * @param fixedString 取整位数文本
      * @return 解析值
      */
-    private fun handler(cache: HashMap<String, String>?,
-                        player: OfflinePlayer?,
-                        sections: ConfigurationSection?,
-                        parse: Boolean,
-                        minString: String?,
-                        maxString: String?,
-                        fixedString: String?
+    private fun handler(
+        cache: MutableMap<String, String>?,
+        player: OfflinePlayer?,
+        sections: ConfigurationSection?,
+        parse: Boolean,
+        minString: String?,
+        maxString: String?,
+        fixedString: String?
     ): String? {
         // 获取大小范围
         val min = minString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()

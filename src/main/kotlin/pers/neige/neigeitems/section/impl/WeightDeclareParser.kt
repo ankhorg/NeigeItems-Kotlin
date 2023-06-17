@@ -14,7 +14,7 @@ object WeightDeclareParser : SectionParser() {
 
     override fun onRequest(
         data: ConfigurationSection,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?, sections:
         ConfigurationSection?
     ): String? {
@@ -42,7 +42,7 @@ object WeightDeclareParser : SectionParser() {
      * @return 解析值
      */
     private fun handler(
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?,
         list: List<String>,
@@ -128,7 +128,7 @@ object WeightDeclareParser : SectionParser() {
 
             if (putElse) {
                 val elseList = info.keys.also { it.removeAll(realList) }
-                var index = 0
+                index = 0
                 elseList.forEach { element ->
                     cache["$key.else.$index"] = element
                     index ++

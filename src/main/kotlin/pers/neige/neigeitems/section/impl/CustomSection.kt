@@ -15,7 +15,7 @@ class CustomSection(
     // 用于响应私有节点解析
     private val func1: (
         ConfigurationSection,
-        HashMap<String, String>?,
+        MutableMap<String, String>?,
         OfflinePlayer?,
         ConfigurationSection?
     ) -> String?,
@@ -23,7 +23,7 @@ class CustomSection(
     // 用于响应即时节点解析
     private val func2: (
         List<String>,
-        HashMap<String, String>?,
+        MutableMap<String, String>?,
         OfflinePlayer?,
         ConfigurationSection?
     ) -> String?
@@ -32,7 +32,7 @@ class CustomSection(
 
     override fun onRequest(
         data: ConfigurationSection,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?): String? {
         return func1(data, cache, player, sections)
@@ -40,7 +40,7 @@ class CustomSection(
 
     override fun onRequest(
         args: List<String>,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?): String {
         return func2(args, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"

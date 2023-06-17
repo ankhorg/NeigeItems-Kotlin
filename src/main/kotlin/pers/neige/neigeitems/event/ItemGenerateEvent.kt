@@ -20,7 +20,7 @@ class ItemGenerateEvent(
     val id: String,
     val player: OfflinePlayer?,
     var itemStack: ItemStack,
-    val cache: HashMap<String, String>,
+    val cache: MutableMap<String, String>,
     val configSection: ConfigurationSection,
     val sections: ConfigurationSection?
     ) : BukkitProxyEvent() {

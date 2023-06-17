@@ -42,7 +42,7 @@ object ActionUtils {
         player: Player,
         itemStack: ItemStack,
         itemTag: ItemTag,
-        data: HashMap<String, String>?
+        data: MutableMap<String, String>?
     ): Boolean {
         val cd = cooldown?.parseItemSection(itemStack, itemTag, data, player)?.toLongOrNull() ?: 1000
         return this.isCoolDown(player, cd)

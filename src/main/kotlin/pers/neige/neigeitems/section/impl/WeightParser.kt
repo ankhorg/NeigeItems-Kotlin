@@ -15,7 +15,7 @@ object WeightParser : SectionParser() {
 
     override fun onRequest(
         data: ConfigurationSection,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?, sections:
         ConfigurationSection?
     ): String? {
@@ -30,7 +30,7 @@ object WeightParser : SectionParser() {
 
     override fun onRequest(
         args: List<String>,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
@@ -52,7 +52,7 @@ object WeightParser : SectionParser() {
      * @return 解析值
      */
     private fun handler(
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?,
         parse: Boolean,

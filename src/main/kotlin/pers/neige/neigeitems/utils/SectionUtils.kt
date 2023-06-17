@@ -29,9 +29,29 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.parseSection(
-        cache: HashMap<String, String>? = null,
+        cache: MutableMap<String, String>? = null,
         player: OfflinePlayer? = null,
         sections: ConfigurationSection? = null
+    ): String {
+        return this.parse {
+            return@parse it.getSection(cache, player, sections)
+        }
+    }
+
+    /**
+     * 对文本进行节点解析
+     *
+     * @param cache 解析值缓存
+     * @param player 待解析玩家
+     * @param sections 节点池
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.parseSection(
+        cache: MutableMap<String, String>? = null,
+        player: OfflinePlayer? = null,
+        sections: ConfigurationSection? = null,
+        params: MutableMap<String, String>? = null
     ): String {
         return this.parse {
             return@parse it.getSection(cache, player, sections)
@@ -55,7 +75,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
-    fun String.parseSection(cache: HashMap<String, String>?): String {
+    fun String.parseSection(cache: MutableMap<String, String>?): String {
         return this.parseSection(cache, null, null)
     }
 
@@ -78,7 +98,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
-    fun String.parseSection(cache: HashMap<String, String>?, sections: ConfigurationSection?): String {
+    fun String.parseSection(cache: MutableMap<String, String>?, sections: ConfigurationSection?): String {
         return this.parseSection(cache, null, sections)
     }
 
@@ -90,7 +110,7 @@ object SectionUtils {
      * 而这一步会对文本进行全局节点解析
      * 即: 参数为解析后分割传入的
      * 对于已解析的参数, 多解析一次等于浪费时间
-     * 注: 但inherit节点不能盲目调用parse, 因为继承而来的文本一定是未解析的(sections只经过一次papi解析)
+     * 注: 但inherit节点不能盲目调用parse, 因为继承而来的文本一定是未解析的
      *
      * @param parse 是否对文本进行节点解析
      * @param cache 解析值缓存
@@ -101,7 +121,7 @@ object SectionUtils {
     @JvmStatic
     fun String.parseSection(
         parse: Boolean,
-        cache: HashMap<String, String>? = null,
+        cache: MutableMap<String, String>? = null,
         player: OfflinePlayer? = null,
         sections: ConfigurationSection? = null
     ): String {
@@ -121,7 +141,7 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.getSection(
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
@@ -187,7 +207,7 @@ object SectionUtils {
     fun String.parseItemSection(
         itemStack: ItemStack,
         itemTag: ItemTag,
-        data: HashMap<String, String>?,
+        data: MutableMap<String, String>?,
         player: OfflinePlayer
     ): String {
         return parseItemSection(itemStack, itemTag, data, player, null, null)
@@ -208,9 +228,9 @@ object SectionUtils {
     fun String.parseItemSection(
         itemStack: ItemStack,
         itemTag: ItemTag,
-        data: HashMap<String, String>?,
+        data: MutableMap<String, String>?,
         player: OfflinePlayer,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         sections: ConfigurationSection?
     ): String {
         return this.parse {
@@ -233,9 +253,9 @@ object SectionUtils {
     fun String.getItemSection(
         itemStack: ItemStack,
         itemTag: ItemTag,
-        data: HashMap<String, String>?,
+        data: MutableMap<String, String>?,
         player: OfflinePlayer,
-        cache: HashMap<String, String>? = null,
+        cache: MutableMap<String, String>? = null,
         sections: ConfigurationSection? = null
     ): String {
         when (val index = this.indexOf("::")) {

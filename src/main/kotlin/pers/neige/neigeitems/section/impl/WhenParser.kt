@@ -14,7 +14,7 @@ object WhenParser : SectionParser() {
 
     override fun onRequest(
         data: ConfigurationSection,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
@@ -36,7 +36,7 @@ object WhenParser : SectionParser() {
      * @return 解析值
      */
     private fun handler(
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?,
         value: String?,

@@ -40,6 +40,7 @@ Messages:
   brokenItem: '§e物品耐久已耗尽'
   legacyItemUpdateMessage: '§bNeige§3Items §7> §6你所持有的旧物品 §f{name} §6已被更新'
   buildExpansionMessage: '§bNeige§3Items §7> §a已将 §f{expansion} §a打包为 §f{file}'
+  invalidMMItem: §bNeige§3Items §7> §7生成MM物品 §f{itemID} §7时出现错误
 Help:
   prefix: |-
     §6====================§eNeigeItems§6====================

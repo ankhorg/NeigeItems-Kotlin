@@ -147,7 +147,7 @@ object ItemManager : ItemConfigManager() {
      * @param data 用于解析物品的指向数据
      * @return 物品
      */
-    fun getItemStack(id: String, data: HashMap<String, String>?): ItemStack? {
+    fun getItemStack(id: String, data: MutableMap<String, String>?): ItemStack? {
         return getItemStack(id, null, data)
     }
 
@@ -171,7 +171,7 @@ object ItemManager : ItemConfigManager() {
      * @param data 用于解析物品的指向数据
      * @return 物品
      */
-    fun getItemStack(id: String, player: OfflinePlayer?, data: HashMap<String, String>?): ItemStack? {
+    fun getItemStack(id: String, player: OfflinePlayer?, data: MutableMap<String, String>?): ItemStack? {
         return items[id]?.getItemStack(player, data)
     }
 

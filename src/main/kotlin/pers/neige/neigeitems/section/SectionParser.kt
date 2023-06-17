@@ -23,7 +23,7 @@ abstract class SectionParser {
      */
     open fun onRequest(
         data: ConfigurationSection,
-        cache: HashMap<String, String>? = null,
+        cache: MutableMap<String, String>? = null,
         player: OfflinePlayer? = null,
         sections: ConfigurationSection? = null
     ): String? {
@@ -40,7 +40,7 @@ abstract class SectionParser {
      */
     open fun onRequest(
         args: List<String>,
-        cache: HashMap<String, String>? = null,
+        cache: MutableMap<String, String>? = null,
         player: OfflinePlayer? = null,
         sections: ConfigurationSection? = null
     ): String {

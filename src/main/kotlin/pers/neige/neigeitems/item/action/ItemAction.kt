@@ -76,9 +76,9 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
         trigger: ActionTrigger?,
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
-        data: HashMap<String, String>? = null,
+        data: MutableMap<String, String>? = null,
         event: Event,
-        global: HashMap<String, Any?>
+        global: MutableMap<String, Any?>
     ) {
         trigger?.run(
             player,
@@ -104,9 +104,9 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
         trigger: String?,
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
-        data: HashMap<String, String>? = null,
+        data: MutableMap<String, String>? = null,
         event: Event,
-        global: HashMap<String, Any?>
+        global: MutableMap<String, Any?>
     ) {
         triggers[trigger]?.run(
             player,

@@ -53,9 +53,9 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         player: Player,
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
-        data: HashMap<String, String>? = null,
+        data: MutableMap<String, String>? = null,
         event: Event?,
-        global: HashMap<String, Any?>
+        global: MutableMap<String, Any?>
     ) {
         // 运行异步动作
         async(player, itemStack, itemTag, data, event, global)
@@ -75,9 +75,9 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         player: Player,
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
-        data: HashMap<String, String>? = null,
+        data: MutableMap<String, String>? = null,
         event: Event?,
-        global: HashMap<String, Any?>
+        global: MutableMap<String, Any?>
     ) {
         bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
             ActionManager.runAction(player, actions, itemStack, itemTag, data, event, global)
@@ -96,9 +96,9 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         player: Player,
         itemStack: ItemStack,
         itemTag: ItemTag? = itemStack.getItemTag(),
-        data: HashMap<String, String>? = null,
+        data: MutableMap<String, String>? = null,
         event: Event?,
-        global: HashMap<String, Any?>
+        global: MutableMap<String, Any?>
     ) {
         ActionManager.runAction(player, sync, itemStack, itemTag, data, event, global)
     }

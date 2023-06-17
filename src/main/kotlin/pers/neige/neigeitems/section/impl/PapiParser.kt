@@ -14,7 +14,7 @@ object PapiParser : SectionParser() {
 
     override fun onRequest(
         args: List<String>,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {

@@ -34,7 +34,7 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
      * @return 解析值
      */
     fun get(
-        cache: HashMap<String, String>? = null,
+        cache: MutableMap<String, String>? = null,
         player: OfflinePlayer? = null,
         sections: ConfigurationSection? = null
     ): String? {
@@ -63,7 +63,7 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
      * @return 解析值
      */
     fun load(
-        cache: HashMap<String, String>? = null,
+        cache: MutableMap<String, String>? = null,
         player: OfflinePlayer? = null,
         sections: ConfigurationSection? = null
     ): String? {

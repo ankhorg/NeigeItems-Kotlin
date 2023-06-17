@@ -32,7 +32,7 @@ object ItemCheck {
         itemTag: ItemTag,
         neigeItems: ItemTag,
         id: String,
-        data: HashMap<String, String>?,
+        data: MutableMap<String, String>?,
     ) {
         kotlin.runCatching {
             // 检测过期物品

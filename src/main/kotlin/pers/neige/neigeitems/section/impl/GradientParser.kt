@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
+import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.joinToString
 import java.awt.Color
 
@@ -15,7 +16,7 @@ object GradientParser : SectionParser() {
 
     override fun onRequest(
         data: ConfigurationSection,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String? {
@@ -33,7 +34,7 @@ object GradientParser : SectionParser() {
 
     override fun onRequest(
         args: List<String>,
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?
     ): String {
@@ -57,29 +58,31 @@ object GradientParser : SectionParser() {
      * @param colorStartString 起始颜色
      * @param colorEndString 结尾颜色
      * @param stepString 每几个字符变一次色
-     * @param text 文本内容
+     * @param rawText 文本内容
      * @return 解析值
      */
     private fun handler(
-        cache: HashMap<String, String>?,
+        cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?,
         parse: Boolean,
         colorStartString: String?,
         colorEndString: String?,
         stepString: String?,
-        text: String?
+        rawText: String?
     ): String? {
-        if (colorStartString != null && colorEndString != null && text != null) {
-            val colorStart = Color((colorStartString.toIntOrNull(16) ?: 0)
+        if (colorStartString != null && colorEndString != null && rawText != null) {
+            val colorStart = Color((colorStartString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
                 .coerceAtLeast(0)
                 .coerceAtMost(0xFFFFFF))
-            val colorEnd = Color((colorEndString.toIntOrNull(16) ?: 0)
+            val colorEnd = Color((colorEndString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
                 .coerceAtLeast(0)
                 .coerceAtMost(0xFFFFFF))
 
-            val step = (stepString?.toIntOrNull() ?: 1)
+            val step = (stepString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 1)
                 .coerceAtLeast(1)
+
+            val text = rawText.parseSection(parse, cache, player, sections)
 
             if (text.length <= step) {
                 return ChatColor.of(colorStart).toString() + text

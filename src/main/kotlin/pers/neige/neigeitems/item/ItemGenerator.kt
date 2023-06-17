@@ -361,7 +361,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
      * @param data 指向数据
      * @return 生成的物品, 生成失败则返回null
      */
-    fun getItemStack(player: OfflinePlayer?, data: HashMap<String, String>?): ItemStack? {
+    fun getItemStack(player: OfflinePlayer?, data: MutableMap<String, String>?): ItemStack? {
         // 加载缓存
         val cache = data ?: HashMap<String, String>()
         // 获取私有节点配置
