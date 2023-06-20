@@ -41,26 +41,6 @@ object SectionUtils {
     /**
      * 对文本进行节点解析
      *
-     * @param cache 解析值缓存
-     * @param player 待解析玩家
-     * @param sections 节点池
-     * @return 解析值
-     */
-    @JvmStatic
-    fun String.parseSection(
-        cache: MutableMap<String, String>? = null,
-        player: OfflinePlayer? = null,
-        sections: ConfigurationSection? = null,
-        params: MutableMap<String, String>? = null
-    ): String {
-        return this.parse {
-            return@parse it.getSection(cache, player, sections)
-        }
-    }
-
-    /**
-     * 对文本进行节点解析
-     *
      * @return 解析值
      */
     @JvmStatic

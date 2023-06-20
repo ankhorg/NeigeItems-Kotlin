@@ -105,6 +105,22 @@ abstract class MythicMobsHooker {
     abstract fun getItemIds(): List<String>
 
     /**
+     * 判断实体是否为MM生物
+     *
+     * @param entity 待判断实体
+     * @return 该实体是否为MM生物
+     */
+    abstract fun isMythicMob(entity: Entity): Boolean
+
+    /**
+     * 获取MM实体的ID(非MM实体返回null)
+     *
+     * @param entity MM实体
+     * @return MM实体ID(非MM实体返回null)
+     */
+    abstract fun getMythicId(entity: Entity): String?
+
+    /**
      * 为MM怪物穿戴装备
      *
      * @param entity 怪物实体

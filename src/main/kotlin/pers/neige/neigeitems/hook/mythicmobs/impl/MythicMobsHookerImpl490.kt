@@ -84,4 +84,15 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
     override fun getItemIds(): List<String> {
         return itemManager.itemNames.toList()
     }
+
+    override fun isMythicMob(entity: Entity): Boolean {
+        return apiHelper.isMythicMob(entity)
+    }
+
+    override fun getMythicId(entity: Entity): String? {
+        return if (apiHelper.isMythicMob(entity))
+            return apiHelper.getMythicMobInstance(entity).type.internalName
+        else
+            null
+    }
 }
