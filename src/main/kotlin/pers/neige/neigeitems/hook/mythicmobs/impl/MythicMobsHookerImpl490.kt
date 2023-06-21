@@ -14,6 +14,7 @@ import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
+import kotlin.math.roundToInt
 
 /**
  * 4.9.0版本MM挂钩
@@ -25,7 +26,14 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
 
     override val spawnEventClass = MythicMobSpawnEvent::class.java
 
+    // 4.9.0 -> int
+    // 4.11.0 -> double
+    // 放弃思考，开反
+    private val spawnMobLevelMethod = spawnEventClass.getDeclaredMethod("getMobLevel")
+
     override val deathEventClass = MythicMobDeathEvent::class.java
+
+    private val deathMobLevelMethod = deathEventClass.getDeclaredMethod("getMobLevel")
 
     override val reloadEventClass = MythicReloadedEvent::class.java
 
@@ -40,10 +48,17 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
     override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.HIGH) {
         submit(async = true) {
             if (it.entity is LivingEntity) {
+                val mobLevel = spawnMobLevelMethod.invoke(it).let { level ->
+                    if (level is Double) {
+                        level.roundToInt()
+                    } else {
+                        level as Int
+                    }
+                }
                 spawnEvent(
                     it.mobType.internalName,
                     it.entity as LivingEntity,
-                    it.mobLevel
+                    mobLevel
                 )
             }
         }
@@ -52,11 +67,18 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
     override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java) {
         submit(async = true) {
             if (it.entity is LivingEntity) {
+                val mobLevel = deathMobLevelMethod.invoke(it).let { level ->
+                    if (level is Double) {
+                        level.roundToInt()
+                    } else {
+                        level as Int
+                    }
+                }
                 deathEvent(
                     it.killer,
                     it.entity as LivingEntity,
                     it.mobType.internalName,
-                    it.mobLevel
+                    mobLevel
                 )
             }
         }
