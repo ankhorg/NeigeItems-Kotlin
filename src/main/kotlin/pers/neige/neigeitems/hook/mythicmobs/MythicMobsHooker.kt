@@ -25,6 +25,7 @@ import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import java.io.File
+import java.text.DecimalFormat
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
@@ -120,6 +121,8 @@ abstract class MythicMobsHooker {
      */
     abstract fun getMythicId(entity: Entity): String?
 
+    private val df2 = DecimalFormat("#0.00")
+
     /**
      * 为MM怪物穿戴装备
      *
@@ -128,7 +131,8 @@ abstract class MythicMobsHooker {
      */
     internal fun spawnEvent(
         internalName: String,
-        entity: LivingEntity
+        entity: LivingEntity,
+        mobLevel: Int
     ) {
         // 获取MM怪物的ConfigurationSection
         mobInfos[internalName]?.let { config ->
@@ -140,9 +144,27 @@ abstract class MythicMobsHooker {
             val entityEquipment = entity.equipment
             val dropChance = HashMap<String, Double>()
 
+            // 构建怪物参数
+            val params = mutableMapOf<String, String>().also { map ->
+                map["mobMaxHealth"] = df2.format(entity.maxHealth)
+                map["mobId"] = internalName
+                map["mobLevel"] = mobLevel.toString()
+                val location = entity.location
+                map["mobLocationX"] = df2.format(location.x)
+                map["mobLocationY"] = df2.format(location.y)
+                map["mobLocationZ"] = df2.format(location.z)
+                map["mobLocationYaw"] = df2.format(location.yaw)
+                map["mobLocationPitch"] = df2.format(location.pitch)
+                map["mobWorld"] = entity.world.name
+                map["mobName"] = entity.name
+                entity.customName?.let {
+                    map["mobCustomName"] = it
+                }
+            }
+
             // 获取死亡后相应NI物品掉落几率
             for (value in dropEquipment) {
-                val string = value.parseSection()
+                val string = value.parseSection(params)
                 var id = string.lowercase(Locale.getDefault())
                 var chance = 1.toDouble()
                 if (string.contains(" ")) {
@@ -155,7 +177,7 @@ abstract class MythicMobsHooker {
 
             // 获取出生附带装备信息
             for (value in equipment) {
-                val string = value.parseSection()
+                val string = value.parseSection(params)
                 if (string.contains(": ")) {
                     val index = string.indexOf(": ")
                     val slot = string.substring(0, index).lowercase(Locale.getDefault())
@@ -243,7 +265,8 @@ abstract class MythicMobsHooker {
     internal fun deathEvent(
         killer: LivingEntity?,
         entity: LivingEntity,
-        internalName: String
+        internalName: String,
+        mobLevel: Int
     ) {
         // 获取MM怪物的ConfigurationSection
         mobInfos[internalName]?.let { configSection ->
@@ -269,12 +292,30 @@ abstract class MythicMobsHooker {
                 offsetYString = configLoadedEvent.offsetYString
                 angleType = configLoadedEvent.angleType
 
+                // 构建怪物参数
+                val params = mutableMapOf<String, String>().also { map ->
+                    map["mobMaxHealth"] = df2.format(entity.maxHealth)
+                    map["mobId"] = internalName
+                    map["mobLevel"] = mobLevel.toString()
+                    val location = entity.location
+                    map["mobLocationX"] = df2.format(location.x)
+                    map["mobLocationY"] = df2.format(location.y)
+                    map["mobLocationZ"] = df2.format(location.z)
+                    map["mobLocationYaw"] = df2.format(location.yaw)
+                    map["mobLocationPitch"] = df2.format(location.pitch)
+                    map["mobWorld"] = entity.world.name
+                    map["mobName"] = entity.name
+                    entity.customName?.let {
+                        map["mobCustomName"] = it
+                    }
+                }
+
                 // 预定掉落物列表
                 val dropItems = ArrayList<ItemStack>()
                 // 加载物品包掉落
                 configLoadedEvent.dropPacks?.forEach { info ->
                     // 物品包ID 数量 概率 指向数据
-                    val args = info.parseSection(player).split(" ", limit = 4)
+                    val args = info.parseSection(params, player).split(" ", limit = 4)
                     // 物品包ID
                     val id = args[0]
                     // 物品包数量
@@ -321,7 +362,7 @@ abstract class MythicMobsHooker {
                 // 掉落应该掉落的装备
                 loadEquipmentDrop(entity, dropItems, player)
                 // 加载掉落信息
-                configLoadedEvent.drops?.let { loadItems(dropItems, it, player as? OfflinePlayer, null, null, true) }
+                configLoadedEvent.drops?.let { loadItems(dropItems, it, player as? OfflinePlayer, params, null, true) }
 
                 // 物品都加载好了, 触发一下事件
                 val dropEvent = MythicDropEvent.Drop(internalName, entity, player, dropItems, offsetXString, offsetYString, angleType)

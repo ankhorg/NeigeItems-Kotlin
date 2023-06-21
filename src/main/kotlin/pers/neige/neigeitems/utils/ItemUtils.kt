@@ -834,7 +834,7 @@ object ItemUtils {
         items: ArrayList<ItemStack>,
         itemInfos: List<String>,
         player: Player? = null,
-        cache: HashMap<String, String>? = null,
+        cache: MutableMap<String, String>? = null,
         sections: ConfigurationSection? = null
     ) {
         loadItems(items, itemInfos, player as? OfflinePlayer, cache, sections, true)
@@ -856,7 +856,7 @@ object ItemUtils {
         items: ArrayList<ItemStack>,
         itemInfos: List<String>,
         player: OfflinePlayer? = null,
-        cache: HashMap<String, String>? = null,
+        cache: MutableMap<String, String>? = null,
         sections: ConfigurationSection? = null
     ) {
         loadItems(items, itemInfos, player, cache, sections, true)
@@ -893,7 +893,7 @@ object ItemUtils {
         items: ArrayList<ItemStack>,
         itemInfos: List<String>,
         player: OfflinePlayer? = null,
-        cache: HashMap<String, String>? = null,
+        cache: MutableMap<String, String>? = null,
         sections: ConfigurationSection? = null,
         parse: Boolean
     ) {

@@ -42,7 +42,8 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
             if (it.entity is LivingEntity) {
                 spawnEvent(
                     it.mobType.internalName,
-                    it.entity as LivingEntity
+                    it.entity as LivingEntity,
+                    it.mobLevel
                 )
             }
         }
@@ -54,7 +55,8 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
                 deathEvent(
                     it.killer,
                     it.entity as LivingEntity,
-                    it.mobType.internalName
+                    it.mobType.internalName,
+                    it.mobLevel
                 )
             }
         }

@@ -17,6 +17,7 @@ import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
+import kotlin.math.roundToInt
 
 /**
  * 5.0.2版本MM挂钩
@@ -45,7 +46,8 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
             if (it.entity is LivingEntity) {
                 spawnEvent(
                     it.mobType.internalName,
-                    it.entity as LivingEntity
+                    it.entity as LivingEntity,
+                    it.mobLevel.roundToInt()
                 )
             }
         }
@@ -57,7 +59,8 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
                 deathEvent(
                     it.killer,
                     it.entity as LivingEntity,
-                    it.mobType.internalName
+                    it.mobType.internalName,
+                    it.mobLevel.roundToInt()
                 )
             }
         }
