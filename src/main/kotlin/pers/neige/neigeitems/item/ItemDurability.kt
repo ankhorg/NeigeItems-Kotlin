@@ -15,6 +15,7 @@ import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
+import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.LangUtils.getLang
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
@@ -199,6 +200,37 @@ object ItemDurability {
      * 扣除物品耐久值
      *
      * @param player 进行物品消耗的玩家
+     * @param itemStack 待操作物品
+     * @param damage 伤害值
+     * @param breakItem 是否损坏物品(对于火焰弹点燃TNT这类事件, 物品消耗大可交给服务端操作)
+     * @param damageEvent PlayerItemDamageEvent, 用于比例修改物品耐久
+     * @return 是否消耗成功(物品没有耐久值或耐久值不合法时同样返回true)
+     */
+    fun damage(
+        player: Player,
+        itemStack: ItemStack,
+        damage: Int = 1,
+        breakItem: Boolean = true,
+        damageEvent: PlayerItemDamageEvent? = null
+    ): DamageResult {
+        // 获取NI物品信息(不是NI物品就停止操作)
+        val itemInfo = itemStack.isNiItem(false) ?: return DamageResult.VANILLA
+        // 物品NBT
+        val itemTag: ItemTag = itemInfo.itemTag
+        // NI物品数据
+        val neigeItems: ItemTag = itemInfo.neigeItems
+        // NI物品id
+        val id: String = itemInfo.id
+        return damage(player, itemStack, itemTag, neigeItems, damage, breakItem, damageEvent)
+    }
+
+    /**
+     * 扣除物品耐久值
+     *
+     * @param player 进行物品消耗的玩家
+     * @param itemStack 待操作物品
+     * @param itemTag 物品nbt
+     * @param neigeItems nbt下的NeigeItems部分
      * @param damage 伤害值
      * @param breakItem 是否损坏物品(对于火焰弹点燃TNT这类事件, 物品消耗大可交给服务端操作)
      * @param damageEvent PlayerItemDamageEvent, 用于比例修改物品耐久
