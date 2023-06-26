@@ -134,7 +134,7 @@ object ActionManager {
     ): Boolean {
         when (action) {
             is String -> return runAction(player, action, null, null, null, null, global, map)
-            is List<*> -> runAction(player, action, null, null, null, null, global, 0, action.size, map)
+            is List<*> -> return runAction(player, action, null, null, null, null, global, 0, action.size, map)
             is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, null, null, null, null, global, map)
             is ConfigurationSection -> return runAction(player, action, null, null, null, null, global, map)
         }
@@ -166,7 +166,7 @@ object ActionManager {
     ): Boolean {
         when (action) {
             is String -> return runAction(player, action, itemStack, itemTag, data, event, global, map)
-            is List<*> -> runAction(player, action, itemStack, itemTag, data, event, global, 0, action.size, map)
+            is List<*> -> return runAction(player, action, itemStack, itemTag, data, event, global, 0, action.size, map)
             is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, itemStack, itemTag, data, event, global, map)
             is ConfigurationSection -> return runAction(player, action, itemStack, itemTag, data, event, global, map)
         }
@@ -198,9 +198,13 @@ object ActionManager {
         global: MutableMap<String, Any?>,
         map: Map<String, Any?>? = null
     ): Boolean {
+        // 获取动作id
         val lowercaseActionType = actionType.lowercase(Locale.getDefault())
+        // 尝试加载物品动作, 返回执行结果
         actions[lowercaseActionType]?.apply(player, actionContent)?.also { return it }
+        // 尝试加载物品编辑函数, 返回执行结果
         itemStack?.also { runEditorWithResult(actionType, actionContent, itemStack, player)?.also { return it } }
+        // 尝试加载内置函数, 返回执行结果
         when (lowercaseActionType) {
             "js" -> {
                 // 动作中调用的顶级变量
@@ -233,6 +237,15 @@ object ActionManager {
                     true
                 }
             }
+            "setglobal" -> {
+                val info = actionContent.splitOnce(" ")
+                if (info.size > 1) {
+                    global[info[0]] = info[1]
+                }
+            }
+            "delglobal" -> {
+                global.remove(actionContent)
+            }
         }
         return true
     }
@@ -262,7 +275,7 @@ object ActionManager {
         start: Int = 0,
         end: Int = action.size,
         map: Map<String, Any?>? = null
-    ) {
+    ): Boolean {
         // 动作执行延迟
         var delay = 0L
 
@@ -285,7 +298,7 @@ object ActionManager {
                     }, delay)
                 }
                 // 停止当前操作
-                break
+                return true
             }
 
             // 动作内容
@@ -296,7 +309,7 @@ object ActionManager {
                 // 解析物品变量
                 val actionString = when (itemTag) {
                     null -> value.parseSection(
-                        (map?.get("cache") ?: global) as? HashMap<String, String>,
+                        (map?.get("cache") ?: global) as? MutableMap<String, String>,
                         player,
                         map?.get("sections") as? ConfigurationSection,
                     )
@@ -305,7 +318,7 @@ object ActionManager {
                         itemTag,
                         data,
                         player,
-                        (map?.get("cache") ?: global) as? HashMap<String, String>,
+                        (map?.get("cache") ?: global) as? MutableMap<String, String>,
                         map?.get("sections") as? ConfigurationSection
                     )
                 }
@@ -319,39 +332,17 @@ object ActionManager {
                     // 延迟
                     actionType == "delay" -> delay += actionContent.toLongOrNull() ?: 0
                     // 正常执行
-                    else -> if (!runAction(player, actionType, actionContent, itemStack, itemTag, data, event, global, map)) break
+                    else -> {
+                        if (!runAction(player, actionType, actionContent, itemStack, itemTag, data, event, global, map)) return false
+                    }
                 }
                 // 如果属于其他类型
             } else {
                 // 直接执行
-                if (!runAction(player, value, itemStack, itemTag, data, event, global, map)) break
+                if (!runAction(player, value, itemStack, itemTag, data, event, global, map)) return false
             }
         }
-    }
-
-    /**
-     * 执行物品动作
-     *
-     * @param player 执行玩家
-     * @param action 动作文本
-     * @param itemStack 用于解析条件, 可为空
-     * @param itemTag 用于解析nbt及data, 可为空
-     * @param data 物品节点数据
-     * @param event 用于解析条件, 可为空
-     * @param global 用于存储整个动作运行过程中的全局变量
-     * @param map 传入js的顶级变量
-     */
-    private fun runAction(
-        player: Player,
-        action: List<*>,
-        itemStack: ItemStack? = null,
-        itemTag: ItemTag? = itemStack?.getItemTag(),
-        data: MutableMap<String, String>? = null,
-        event: Event? = null,
-        global: MutableMap<String, Any?>,
-        map: Map<String, Any?>? = null
-    ) {
-        runAction(player, action, itemStack, itemTag, data, event, global, 0, action.size, map)
+        return true
     }
 
     /**
@@ -380,7 +371,7 @@ object ActionManager {
         // 解析物品变量
         val actionString = when (itemTag) {
             null -> action.parseSection(
-                (map?.get("cache") ?: global) as? HashMap<String, String>,
+                (map?.get("cache") ?: global) as? MutableMap<String, String>,
                 player,
                 map?.get("sections") as? ConfigurationSection,
             )
@@ -389,7 +380,7 @@ object ActionManager {
                 itemTag,
                 data,
                 player,
-                (map?.get("cache") ?: global) as? HashMap<String, String>,
+                (map?.get("cache") ?: global) as? MutableMap<String, String>,
                 map?.get("sections") as? ConfigurationSection
             )
         }
@@ -426,19 +417,45 @@ object ActionManager {
     ): Boolean {
         // 动作执行条件
         val condition: String? = action.getString("condition")
+        // 循环执行条件
+        val whileCondition: String? = action.getString("while")
         // 动作内容
         val actions = action.get("actions")
+        // 结束动作内容
+        val finally = action.get("finally")
         // 不满足条件时执行的内容
         val deny = action.get("deny")
 
-        // 如果没有条件或者条件通过
-        if (parseCondition(condition, player, itemStack, itemTag, data, event, global, map)) {
-            // 执行动作
-            return runAction(player, actions, itemStack, itemTag, data, event, global, map)
-            // 条件未通过
-        } else {
-            // 执行deny动作
-            return runAction(player, deny, itemStack, itemTag, data, event, global, map)
+        // 模式检测
+        when {
+            // condition模式
+            condition != null -> {
+                // 如果条件通过
+                if (parseCondition(condition, player, itemStack, itemTag, data, event, global, map)) {
+                    // 执行动作
+                    return runAction(player, actions, itemStack, itemTag, data, event, global, map)
+                    // 条件未通过
+                } else {
+                    // 执行deny动作
+                    return runAction(player, deny, itemStack, itemTag, data, event, global, map)
+                }
+            }
+            // while模式
+            whileCondition != null -> {
+                while (parseCondition(whileCondition, player, itemStack, itemTag, data, event, global, map)) {
+                    // 执行动作
+                    val result = runAction(player, actions, itemStack, itemTag, data, event, global, map)
+                    if (!result) {
+                        runAction(player, finally, itemStack, itemTag, data, event, global, map)
+                        return false
+                    }
+                }
+                runAction(player, finally, itemStack, itemTag, data, event, global, map)
+                return true
+            }
+            else ->  {
+                return runAction(player, actions, itemStack, itemTag, data, event, global, map)
+            }
         }
     }
 
@@ -467,19 +484,45 @@ object ActionManager {
     ): Boolean {
         // 动作执行条件
         val condition: String? = action["condition"] as String?
+        // 循环执行条件
+        val whileCondition: String? = action["while"] as String?
         // 动作内容
         val actions = action["actions"]
+        // 结束动作内容
+        val finally = action["finally"]
         // 不满足条件时执行的内容
         val deny = action["deny"]
 
-        // 如果条件通过
-        if (parseCondition(condition, player, itemStack, itemTag, data, event, global, map)) {
-            // 执行动作
-            return runAction(player, actions, itemStack, itemTag, data, event, global, map)
-            // 条件未通过
-        } else {
-            // 执行deny动作
-            return runAction(player, deny, itemStack, itemTag, data, event, global, map)
+        // 模式检测
+        when {
+            // condition模式
+            condition != null -> {
+                // 如果条件通过
+                if (parseCondition(condition, player, itemStack, itemTag, data, event, global, map)) {
+                    // 执行动作
+                    return runAction(player, actions, itemStack, itemTag, data, event, global, map)
+                    // 条件未通过
+                } else {
+                    // 执行deny动作
+                    return runAction(player, deny, itemStack, itemTag, data, event, global, map)
+                }
+            }
+            // while模式
+            whileCondition != null -> {
+                while (parseCondition(whileCondition, player, itemStack, itemTag, data, event, global, map)) {
+                    // 执行动作
+                    val result = runAction(player, actions, itemStack, itemTag, data, event, global, map)
+                    if (!result) {
+                        runAction(player, finally, itemStack, itemTag, data, event, global, map)
+                        return false
+                    }
+                }
+                runAction(player, finally, itemStack, itemTag, data, event, global, map)
+                return true
+            }
+            else ->  {
+                return runAction(player, actions, itemStack, itemTag, data, event, global, map)
+            }
         }
     }
 
@@ -984,7 +1027,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1036,7 +1079,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             itemStack.consumeAndReturn(amount, itemTag, neigeItems)?.also {
                 if (it.size > 1) {
@@ -1094,7 +1137,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1146,7 +1189,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1197,7 +1240,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1248,7 +1291,7 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? HashMap<String, String>, null)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作

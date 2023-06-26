@@ -2,6 +2,7 @@ package pers.neige.neigeitems.command.subcommand
 
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -28,9 +29,13 @@ object Action {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
                     ActionManager.actions.keys.toList().sorted()
                 }
-                execute<CommandSender> { _, context, argument ->
+                execute<CommandSender> { sender, context, argument ->
                     submit(async = true) {
-                        Bukkit.getPlayerExact(context.argument(-1))?.let { player ->
+                        var player = Bukkit.getPlayerExact(context.argument(-1))
+                        if (player == null && sender is Player && context.argument(-1) == "me") {
+                            player = sender
+                        }
+                        player?.let {
                             ActionManager.runAction(player, argument.parseSection(player))
                         }
                     }

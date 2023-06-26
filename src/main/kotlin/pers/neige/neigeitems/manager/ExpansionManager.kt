@@ -67,6 +67,16 @@ object ExpansionManager {
      * 重载管理器
      */
     fun reload() {
+        // 卸载脚本扩展
+        unload()
+        // 加载脚本扩展
+        load()
+    }
+
+    /**
+     * 卸载管理器
+     */
+    fun unload() {
         // 卸载脚本指令
         commands.values.forEach {
             it.unRegister()
@@ -89,8 +99,6 @@ object ExpansionManager {
         tasks.clear()
         // 清除脚本扩展
         expansions.clear()
-        // 加载脚本扩展
-        load()
     }
 
     /**
@@ -195,5 +203,6 @@ object ExpansionManager {
             scriptExpansion.run("disable", scriptName)
             scriptExpansion.run("serverDisable", scriptName)
         }
+        unload()
     }
 }
