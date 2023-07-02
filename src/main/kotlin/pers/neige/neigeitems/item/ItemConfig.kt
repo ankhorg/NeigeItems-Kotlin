@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.item
 
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
 
@@ -8,10 +9,10 @@ import java.io.File
  *
  * @property id 物品ID
  * @property file 物品所在文件
- * @property config 文件转换来的YamlConfiguration
+ * @param config 文件转换来的YamlConfiguration
  * @constructor 根据ID及文件获取物品配置节点
  */
-class ItemConfig(val id: String, val file: File, config: YamlConfiguration = YamlConfiguration.loadConfiguration(file)) {
+class ItemConfig(val id: String, val file: File, config: ConfigurationSection = YamlConfiguration.loadConfiguration(file)) {
     /**
      * 获取物品原始配置
      */

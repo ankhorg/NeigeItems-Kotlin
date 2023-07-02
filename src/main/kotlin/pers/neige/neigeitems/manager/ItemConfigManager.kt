@@ -1,6 +1,8 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.plugin.java.JavaPlugin
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import java.io.File
@@ -12,11 +14,11 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @constructor 构建物品配置管理器
  */
-open class ItemConfigManager {
+open class ItemConfigManager(val plugin: JavaPlugin = NeigeItems.plugin, val dir: String = "Items") {
     /**
      * 获取全部物品文件
      */
-    val files: ArrayList<File> = getAllFiles("Items")
+    val files: ArrayList<File> = getAllFiles(plugin, dir)
 
     /**
      * 获取全部物品基础配置
@@ -63,7 +65,7 @@ open class ItemConfigManager {
     fun reloadItemConfigs() {
         files.clear()
         itemConfigs.clear()
-        files.addAll(getAllFiles("Items"))
+        files.addAll(getAllFiles(plugin, dir))
         loadItemConfigs()
     }
 }

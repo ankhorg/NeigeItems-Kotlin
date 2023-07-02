@@ -33,7 +33,7 @@ taboolib {
         "platform-bukkit",
     )
     classifier = null
-    version = "6.0.11-17"
+    version = "6.0.11-18"
 }
 
 repositories {

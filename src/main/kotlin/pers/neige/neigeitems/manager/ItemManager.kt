@@ -5,7 +5,6 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
