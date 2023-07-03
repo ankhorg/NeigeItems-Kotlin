@@ -53,7 +53,7 @@ object CalculationParser : SectionParser() {
      * @param player 待解析玩家
      * @param sections 节点池
      * @param parse 是否对参数进行节点解析
-     * @param fomulaString 公式文本
+     * @param formulaString 公式文本
      * @param fixedString 取整位数文本
      * @param minString 最小值文本
      * @param maxString 最大值文本
@@ -64,14 +64,14 @@ object CalculationParser : SectionParser() {
         player: OfflinePlayer?,
         sections: ConfigurationSection?,
         parse: Boolean,
-        fomulaString: String?,
+        formulaString: String?,
         fixedString: String?,
         minString: String?,
         maxString: String?
     ): String? {
         try {
             // 加载公式
-            fomulaString?.parseSection(parse, cache, player, sections)?.let {
+            formulaString?.parseSection(parse, cache, player, sections)?.let {
                 // 计算结果
                 var result = it.eval().toString().toDouble()
                 // 获取大小范围

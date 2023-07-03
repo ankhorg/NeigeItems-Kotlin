@@ -16,6 +16,7 @@ import pers.neige.neigeitems.manager.ItemManager.addCharge
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
 import pers.neige.neigeitems.manager.ItemManager.addMaxCharge
 import pers.neige.neigeitems.manager.ItemManager.addMaxCustomDurability
+import pers.neige.neigeitems.manager.ItemManager.rebuild
 import pers.neige.neigeitems.manager.ItemManager.setCharge
 import pers.neige.neigeitems.manager.ItemManager.setCustomDurability
 import pers.neige.neigeitems.manager.ItemManager.setMaxCharge
@@ -1629,46 +1630,7 @@ object ItemEditorManager {
         }
         // 物品重构
         addBasicItemEditor("rebuild") { player, itemStack, content ->
-            // 判断是不是空气
-            if (itemStack.type != Material.AIR) {
-                // 获取待重构节点信息
-                val sections = content.parseObject<HashMap<String, String?>>()
-                // NI物品数据
-                val neigeItems: ItemTag
-                // NI物品id
-                val id: String
-                // NI节点数据
-                val data: HashMap<String, String>
-                when (val itemInfo = itemStack.isNiItem(true)) {
-                    null -> return@addBasicItemEditor true
-                    else -> {
-                        neigeItems = itemInfo.neigeItems
-                        id = itemInfo.id
-                        data = itemInfo.data ?: HashMap<String, String>()
-                    }
-                }
-                sections.forEach { (key, value) ->
-                    when (value) {
-                        null -> data.remove(key)
-                        else -> data[key] = value
-                    }
-                }
-                ItemManager.getItemStack(id, player, data)?.let { newItemStack ->
-                    newItemStack.getItemTag().also { newItemTag ->
-                        neigeItems["charge"]?.let {
-                            newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
-                        }
-                        neigeItems["durability"]?.let {
-                            newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
-                        }
-                        newItemTag.saveTo(itemStack)
-                    }
-                    itemStack.type = newItemStack.type
-                    itemStack.durability = newItemStack.durability
-                }
-                return@addBasicItemEditor true
-            }
-            return@addBasicItemEditor false
+            return@addBasicItemEditor itemStack.rebuild(player, content.parseObject<HashMap<String, String?>>())
         }
         // 物品刷新
         addBasicItemEditor("refreshAmount") { player, itemStack, content ->

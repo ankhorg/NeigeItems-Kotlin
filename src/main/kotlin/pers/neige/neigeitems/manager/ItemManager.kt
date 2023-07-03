@@ -15,6 +15,7 @@ import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
 import pers.neige.neigeitems.utils.ItemUtils.toMap
+import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
 import taboolib.module.nms.getItemTag
 import java.io.File
@@ -468,5 +469,53 @@ object ItemManager : ItemConfigManager() {
         this.durability = (this.durability * (1 - (durability.toDouble()/maxDurability))).toInt().toShort()
         // 保存修改
         itemTag.saveTo(this)
+    }
+
+    /**
+     * 重构物品
+     *
+     * @param player 用于重构物品的玩家
+     * @param sections 重构节点(值为null代表刷新该节点)
+     */
+    @JvmStatic
+    fun ItemStack.rebuild(player: OfflinePlayer, sections: MutableMap<String, String?>): Boolean {
+        // 判断是不是空气
+        if (type != Material.AIR) {
+            // NI物品数据
+            val neigeItems: ItemTag
+            // NI物品id
+            val id: String
+            // NI节点数据
+            val data: HashMap<String, String>
+            when (val itemInfo = isNiItem(true)) {
+                null -> return true
+                else -> {
+                    neigeItems = itemInfo.neigeItems
+                    id = itemInfo.id
+                    data = itemInfo.data ?: HashMap<String, String>()
+                }
+            }
+            sections.forEach { (key, value) ->
+                when (value) {
+                    null -> data.remove(key)
+                    else -> data[key] = value
+                }
+            }
+            getItemStack(id, player, data)?.let { newItemStack ->
+                newItemStack.getItemTag().also { newItemTag ->
+                    neigeItems["charge"]?.let {
+                        newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                    }
+                    neigeItems["durability"]?.let {
+                        newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
+                    }
+                    newItemTag.saveTo(this)
+                }
+                type = newItemStack.type
+                durability = newItemStack.durability
+            }
+            return true
+        }
+        return false
     }
 }

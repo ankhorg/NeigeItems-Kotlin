@@ -526,6 +526,31 @@ object ActionManager {
         }
     }
 
+
+    /**
+     * 解析条件
+     *
+     * @param condition 条件内容
+     * @param player 执行玩家
+     * @param global 用于存储整个动作运行过程中的全局变量
+     * @param map 传入js的顶级变量
+     * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
+     */
+    fun parseCondition(
+        condition: String?,
+        player: Player?,
+        global: MutableMap<String, Any?> = HashMap<String, Any?>(),
+        map: Map<String, Any?>? = null
+    ): Boolean {
+        return parseCondition(
+            condition = condition,
+            player = player,
+            global = global,
+            map = map,
+            event = null
+        )
+    }
+
     /**
      * 解析条件
      *

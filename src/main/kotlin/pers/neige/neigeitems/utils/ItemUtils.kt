@@ -58,6 +58,15 @@ object ItemUtils {
         return itemTag
     }
 
+    @JvmStatic
+    fun ItemStack.setItemTag(itemTag: ConfigurationSection) {
+        itemTag.toItemTag().saveTo(this)
+    }
+
+    fun ItemStack.coverWith(itemTag: ConfigurationSection) {
+        this.getItemTag().coverWith(itemTag.toItemTag()).saveTo(this)
+    }
+
     /**
      * 类型强制转换
      * 用于解析 NeigeItems 物品 NBT 配置中的类型强制转换
