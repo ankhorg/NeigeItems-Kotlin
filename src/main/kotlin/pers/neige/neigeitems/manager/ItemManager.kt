@@ -477,6 +477,7 @@ object ItemManager : ItemConfigManager() {
      * @param player 用于重构物品的玩家
      * @param sections 重构节点(值为null代表刷新该节点)
      */
+    @JvmStatic
     fun ItemStack.rebuild(player: OfflinePlayer, sections: MutableMap<String, String?>): Boolean {
         return rebuild(player, sections, null)
     }

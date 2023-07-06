@@ -1041,6 +1041,8 @@ object ActionManager {
         val global = HashMap<String, Any?>()
         // 如果物品需要消耗
         if (consume != null) {
+            // 预执行动作
+            runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
@@ -1093,6 +1095,8 @@ object ActionManager {
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
         if (consume != null) {
+            // 预执行动作
+            runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
@@ -1151,6 +1155,8 @@ object ActionManager {
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
         if (consume != null) {
+            // 预执行动作
+            runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
@@ -1203,6 +1209,8 @@ object ActionManager {
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
         if (consume != null) {
+            // 预执行动作
+            runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
@@ -1254,6 +1262,8 @@ object ActionManager {
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
         if (consume != null) {
+            // 预执行动作
+            runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
@@ -1305,6 +1315,8 @@ object ActionManager {
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗
         if (consume != null) {
+            // 预执行动作
+            runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
             // 检测条件
             consume.getString("condition")?.let {
                 // 不满足条件就爬
