@@ -112,15 +112,19 @@ object HookerManager {
 
     // papi中间有一些兼容版本存在, 先构建新版的Hooker实现, 解析效率更高
     val papiHooker: PapiHooker? =
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        try {
+            PapiHookerImpl()
+        } catch (error: Throwable) {
             try {
-                PapiHookerImpl()
-            } catch (error: Throwable) {
                 LegacyPapiHookerImpl()
+            } catch (error: Throwable) {
+                if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                    error.printStackTrace()
+                } else {
+                    Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "PlaceholderAPI"))
+                }
+                null
             }
-        } else {
-            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "PlaceholderAPI"))
-            null
         }
 
     val vaultHooker: VaultHooker? =
