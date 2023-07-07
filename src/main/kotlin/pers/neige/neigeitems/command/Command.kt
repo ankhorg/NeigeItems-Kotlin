@@ -127,4 +127,7 @@ object Command {
 
     @CommandBody
     val help = Help.helpCommand
+
+    @CommandBody
+    val parse = Parse.parse
 }

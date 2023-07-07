@@ -3,6 +3,7 @@ package pers.neige.neigeitems.section.impl
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
+import pers.neige.neigeitems.utils.ScriptUtils.toRoundingMode
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.util.concurrent.ThreadLocalRandom
 
@@ -28,7 +29,8 @@ object GaussianParser : SectionParser() {
             data.getString("maxSpread"),
             data.getString("fixed"),
             data.getString("min"),
-            data.getString("max")
+            data.getString("max"),
+            data.getString("mode")
         )
     }
 
@@ -49,6 +51,7 @@ object GaussianParser : SectionParser() {
             args.getOrNull(3),
             args.getOrNull(4),
             args.getOrNull(5),
+            args.getOrNull(6)
         ) ?: "<$id::${args.joinToString("_")}>"
     }
 
@@ -63,6 +66,7 @@ object GaussianParser : SectionParser() {
      * @param fixedString 取整位数文本
      * @param minString 最小值文本
      * @param maxString 最大值文本
+     * @param roundingMode 取整模式
      * @return 解析值
      */
     private fun handler(
@@ -76,6 +80,7 @@ object GaussianParser : SectionParser() {
         fixedString: String?,
         minString: String?,
         maxString: String?,
+        roundingMode: String?
     ): String? {
         // 获取基础数值
         val base = baseString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
@@ -85,6 +90,8 @@ object GaussianParser : SectionParser() {
         val maxSpread = maxSpreadString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
         // 获取取整位数
         val fixed = fixedString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 1
+        // 获取取整模式
+        val mode = roundingMode.toRoundingMode()
         // 获取大小范围
         val min = minString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
         val max = maxString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()
@@ -102,7 +109,7 @@ object GaussianParser : SectionParser() {
             // 限制结果上限
             max?.let { result = result.coerceAtMost(it) }
             // 返回结果(基础数值+基础数值*浮动范围)
-            return "%.${fixed}f".format(result)
+            return result.toBigDecimal().setScale(fixed, mode).toString()
         }
         return null
     }

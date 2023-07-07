@@ -41,6 +41,8 @@ Messages:
   legacyItemUpdateMessage: '§bNeige§3Items §7> §6你所持有的旧物品 §f{name} §6已被更新'
   buildExpansionMessage: '§bNeige§3Items §7> §a已将 §f{expansion} §a打包为 §f{file}'
   invalidMMItem: §bNeige§3Items §7> §7生成MM物品 §f{itemID} §7时出现错误
+  invalidRoundingMode: §bNeige§3Items §7> §7未知的取整模式 §f{mode}
+  invalidFormula: §bNeige§3Items §7> §7无法执行的计算公式 §f{formula}
 Help:
   prefix: |-
     §6====================§eNeigeItems§6====================
@@ -54,6 +56,9 @@ Help:
     action:
       command: §e/ni §faction [玩家ID] [动作内容]
       description: 执行NI物品动作
+    parse:
+      command: §e/ni §fparse [玩家ID] [节点内容]
+      description: 解析即时声明节点内容, 将解析值发送给命令执行者
     edithand:
       command: §e/ni §fedithand [玩家ID] [物品编辑函数ID] [函数内容]
       description: 通过对应编辑函数编辑主手物品

@@ -3,17 +3,19 @@ package pers.neige.neigeitems.command.subcommand
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import pers.neige.neigeitems.command.subcommand.Help.help
-import pers.neige.neigeitems.manager.ActionManager
+import pers.neige.neigeitems.event.PluginReloadEvent
+import pers.neige.neigeitems.manager.*
+import pers.neige.neigeitems.manager.ConfigManager.debug
+import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
 
-object Action {
-    val action = subCommand {
+object Parse {
+    val parse = subCommand {
         execute<CommandSender> { sender, _, _ ->
             submit(async = true) {
-                help(sender)
+                Help.help(sender)
             }
         }
         dynamic {
@@ -26,12 +28,12 @@ object Action {
             }
             execute<CommandSender> { sender, _, _ ->
                 submit(async = true) {
-                    help(sender)
+                    Help.help(sender)
                 }
             }
             dynamic {
                 suggestion<CommandSender>(uncheck = true) { _, _ ->
-                    ActionManager.actions.keys.toList().sorted()
+                    arrayListOf("<>")
                 }
                 execute<CommandSender> { sender, context, argument ->
                     submit(async = true) {
@@ -39,9 +41,7 @@ object Action {
                         if (player == null && sender is Player && context.argument(-1) == "me") {
                             player = sender
                         }
-                        player?.let {
-                            ActionManager.runAction(player, argument.parseSection(player))
-                        }
+                        sender.sendMessage(argument.parseSection(player))
                     }
                 }
             }
