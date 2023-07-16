@@ -21,6 +21,7 @@ import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
+import pers.neige.neigeitems.utils.ConfigUtils.toMap
 import pers.neige.neigeitems.utils.ItemUtils.coverWith
 import pers.neige.neigeitems.utils.ItemUtils.toItemTag
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -87,6 +88,34 @@ class ItemGenerator (val itemConfig: ItemConfig) {
             }
         }
         else -> listOf()
+    }
+
+    /**
+     * 获取更新时刷新的节点
+     */
+    val refreshData = when (update) {
+        true -> {
+            if (configSection.contains("options.update.refresh")) {
+                configSection.getStringList("options.update.refresh")
+            } else {
+                configSection.getStringList("static.options.update.refresh")
+            }
+        }
+        else -> listOf()
+    }
+
+    /**
+     * 获取更新时重构的节点
+     */
+    val rebuildData = when (update) {
+        true -> {
+            if (configSection.contains("options.update.rebuild")) {
+                configSection.getConfigurationSection("options.update.rebuild")?.toMap()
+            } else {
+                configSection.getConfigurationSection("static.options.update.rebuild")?.toMap()
+            }
+        }
+        else -> null
     }
 
     /**

@@ -493,49 +493,69 @@ object ItemManager : ItemConfigManager() {
     fun ItemStack.rebuild(player: OfflinePlayer, sections: MutableMap<String, String?>, protectNBT: List<String>?): Boolean {
         // 判断是不是空气
         if (type != Material.AIR) {
-            // 物品NBT
-            val itemTag: ItemTag
-            // NI物品数据
-            val neigeItems: ItemTag
-            // NI物品id
-            val id: String
-            // NI节点数据
-            val data: HashMap<String, String>
-            when (val itemInfo = isNiItem(true)) {
-                null -> return true
+            return when (val itemInfo = isNiItem(true)) {
+                null -> true
                 else -> {
-                    itemTag = itemInfo.itemTag
-                    neigeItems = itemInfo.neigeItems
-                    id = itemInfo.id
-                    data = itemInfo.data ?: HashMap<String, String>()
+                    rebuild(
+                        player,
+                        sections,
+                        protectNBT,
+                        itemInfo.itemTag,
+                        itemInfo.neigeItems,
+                        itemInfo.id,
+                        itemInfo.data ?: HashMap<String, String>()
+                    )
                 }
             }
-            sections.forEach { (key, value) ->
-                when (value) {
-                    null -> data.remove(key)
-                    else -> data[key] = value
-                }
-            }
-            getItemStack(id, player, data)?.let { newItemStack ->
-                newItemStack.getItemTag().also { newItemTag ->
-                    neigeItems["charge"]?.let {
-                        newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
-                    }
-                    neigeItems["durability"]?.let {
-                        newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
-                    }
-                    protectNBT?.forEach { key ->
-                        itemTag.getDeepOrNull(key)?.also {
-                            newItemTag.putDeepFixed(key, it)
-                        }
-                    }
-                    newItemTag.saveTo(this)
-                }
-                type = newItemStack.type
-                durability = newItemStack.durability
-            }
-            return true
         }
         return false
+    }
+
+    /**
+     * 重构物品
+     *
+     * @param player 用于重构物品的玩家
+     * @param sections 重构节点(值为null代表刷新该节点)
+     * @param protectNBT 需要保护的NBT(重构后不刷新), 可以填null
+     * @param itemTag 物品NBT
+     * @param neigeItems NBT下NeigeItems部分
+     * @param id NI物品ID
+     * @param data NI物品节点信息
+     */
+    @JvmStatic
+    fun ItemStack.rebuild(
+        player: OfflinePlayer,
+        sections: MutableMap<String, String?>?,
+        protectNBT: List<String>?,
+        itemTag: ItemTag,
+        neigeItems: ItemTag,
+        id: String,
+        data: MutableMap<String, String>
+    ): Boolean {
+        sections?.forEach { (key, value) ->
+            when (value) {
+                null -> data.remove(key)
+                else -> data[key] = value
+            }
+        }
+        getItemStack(id, player, data)?.let { newItemStack ->
+            newItemStack.getItemTag().also { newItemTag ->
+                neigeItems["charge"]?.let {
+                    newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                }
+                neigeItems["durability"]?.let {
+                    newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
+                }
+                protectNBT?.forEach { key ->
+                    itemTag.getDeepOrNull(key)?.also {
+                        newItemTag.putDeepFixed(key, it)
+                    }
+                }
+                newItemTag.saveTo(this)
+            }
+            type = newItemStack.type
+            durability = newItemStack.durability
+        }
+        return true
     }
 }

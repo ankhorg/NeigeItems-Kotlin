@@ -6,14 +6,17 @@ import pers.neige.neigeitems.event.ItemExpirationEvent
 import pers.neige.neigeitems.event.ItemUpdateEvent
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.manager.ItemManager.rebuild
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
 import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
+import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
 import taboolib.module.nms.getName
+import java.util.HashMap
 
 /**
  * 物品检测器, 用于回收过期物品并更新旧版物品
@@ -53,6 +56,25 @@ object ItemCheck {
             // 物品更新
             ItemManager.getItem(id)?.let { item ->
                 if (item.update && (neigeItems["hashCode"]?.asInt() != item.hashCode)) {
+                    val rebuild = hashMapOf<String, String>().also {
+                        item.rebuildData?.forEach { (key, value) ->
+                            when (value) {
+                                is String -> it[key.parseSection(data, player, null)] = value.parseSection(data, player, null)
+                                is Number -> it[key.parseSection(data, player, null)] = value.toString()
+                            }
+                        }
+                    }
+                    val refresh = arrayListOf<String>().also {
+                        item.refreshData.forEach { key ->
+                            it.add(key.parseSection(data, player, null))
+                        }
+                    }
+                    rebuild.forEach { (key, value) ->
+                        data?.set(key, value)
+                    }
+                    refresh.forEach { key ->
+                        data?.remove(key)
+                    }
                     ItemManager.getItemStack(id, player, data)?.let { newItemStack ->
                         val event = ItemUpdateEvent(player, itemStack, newItemStack)
                         event.call()
