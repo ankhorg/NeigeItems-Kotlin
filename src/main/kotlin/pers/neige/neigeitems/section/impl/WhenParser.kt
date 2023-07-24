@@ -47,8 +47,8 @@ object WhenParser : SectionParser() {
             // 遍历条件
             conditions.forEach { info ->
                 when (info) {
-                    // 是LinkedHashMap说明需要条件判断
-                    is LinkedHashMap<*, *> -> {
+                    // 是Map说明需要条件判断
+                    is Map<*, *> -> {
                         // 获取一下条件和结果
                         val condition = info["condition"]
                         val result = info["result"]

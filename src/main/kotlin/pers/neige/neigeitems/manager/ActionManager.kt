@@ -135,7 +135,7 @@ object ActionManager {
         when (action) {
             is String -> return runAction(player, action, null, null, null, null, global, map)
             is List<*> -> return runAction(player, action, null, null, null, null, global, 0, action.size, map)
-            is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, null, null, null, null, global, map)
+            is Map<*, *> -> return runAction(player, action as Map<String, *>, null, null, null, null, global, map)
             is ConfigurationSection -> return runAction(player, action, null, null, null, null, global, map)
         }
         return true
@@ -167,7 +167,7 @@ object ActionManager {
         when (action) {
             is String -> return runAction(player, action, itemStack, itemTag, data, event, global, map)
             is List<*> -> return runAction(player, action, itemStack, itemTag, data, event, global, 0, action.size, map)
-            is LinkedHashMap<*, *> -> return runAction(player, action as LinkedHashMap<String, *>, itemStack, itemTag, data, event, global, map)
+            is Map<*, *> -> return runAction(player, action as Map<String, *>, itemStack, itemTag, data, event, global, map)
             is ConfigurationSection -> return runAction(player, action, itemStack, itemTag, data, event, global, map)
         }
         return true
@@ -474,7 +474,7 @@ object ActionManager {
      */
     private fun runAction(
         player: Player,
-        action: LinkedHashMap<String, *>,
+        action: Map<String, *>,
         itemStack: ItemStack? = null,
         itemTag: ItemTag? = itemStack?.getItemTag(),
         data: MutableMap<String, String>? = null,
