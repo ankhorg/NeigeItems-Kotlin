@@ -1,14 +1,10 @@
 package pers.neige.neigeitems.section.impl
 
-import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
-import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.ScriptUtils.toRoundingMode
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import java.math.RoundingMode
-import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 /**

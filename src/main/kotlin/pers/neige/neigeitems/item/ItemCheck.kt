@@ -6,7 +6,6 @@ import pers.neige.neigeitems.event.ItemExpirationEvent
 import pers.neige.neigeitems.event.ItemUpdateEvent
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.manager.ItemManager.rebuild
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
 import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -16,7 +15,6 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
 import taboolib.module.nms.getName
-import java.util.HashMap
 
 /**
  * 物品检测器, 用于回收过期物品并更新旧版物品

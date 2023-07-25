@@ -11,6 +11,7 @@ import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.manager.ExpansionManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.script.ScriptExpansion
+import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -84,6 +85,11 @@ object ExpansionBuild {
                                 FileInputStream(file).use { it.copyTo(outputStream) }
                             }
                             outputStream.closeEntry()
+                            for (file in ConfigUtils.getAllFiles("Expansions${File.separator}$pluginName")) {
+                                outputStream.putNextEntry(JarEntry(file.name))
+                                FileInputStream(file).use { it.copyTo(outputStream) }
+                                outputStream.closeEntry()
+                            }
                             outputStream.putNextEntry(JarEntry("plugin.yml"))
                             YamlConfiguration().also {
                                 it.set("name", pluginName)

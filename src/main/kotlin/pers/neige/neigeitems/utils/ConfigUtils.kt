@@ -3,6 +3,7 @@ package pers.neige.neigeitems.utils
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.java.JavaPlugin
 import pers.neige.neigeitems.manager.SectionManager
 import taboolib.common.platform.function.getDataFolder
 import taboolib.platform.BukkitPlugin
@@ -429,7 +430,23 @@ object ConfigUtils {
      * 保存默认文件(不进行替换)
      */
     @JvmStatic
+    @Deprecated(
+        "年少不懂事, 参数不知填父类",
+        ReplaceWith(
+            "(this as JavaPlugin).saveResourceNotWarn(resourcePath)",
+            "org.bukkit.plugin.java.JavaPlugin",
+            "pers.neige.neigeitems.utils.ConfigUtils.saveResourceNotWarn"
+        )
+    )
     fun BukkitPlugin.saveResourceNotWarn(resourcePath: String) {
+        (this as JavaPlugin).saveResourceNotWarn(resourcePath)
+    }
+
+    /**
+     * 保存默认文件(不进行替换)
+     */
+    @JvmStatic
+    fun JavaPlugin.saveResourceNotWarn(resourcePath: String) {
         this.getResource(resourcePath.replace('\\', '/'))?.let { inputStream ->
             val outFile = File(this.dataFolder, resourcePath)
             val lastIndex: Int = resourcePath.lastIndexOf(File.separator)

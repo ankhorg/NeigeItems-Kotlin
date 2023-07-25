@@ -3,6 +3,7 @@ package pers.neige.neigeitems.utils
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
+import java.io.Reader
 
 
 /**
@@ -75,6 +76,17 @@ object FileUtils {
     @JvmStatic
     fun readText(file: File): String {
         return file.readText()
+    }
+
+    /**
+     * 读取Reader文本
+     *
+     * @param reader 待读取Reader
+     * @return 文件文本
+     */
+    @JvmStatic
+    fun readText(reader: Reader): String {
+        return reader.readText()
     }
 
     /**

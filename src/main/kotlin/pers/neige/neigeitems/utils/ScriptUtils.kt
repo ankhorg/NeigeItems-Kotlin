@@ -3,8 +3,6 @@ package pers.neige.neigeitems.utils
 import org.bukkit.Bukkit
 import pers.neige.neigeitems.manager.ScriptManager.scriptEngine
 import pers.neige.neigeitems.utils.LangUtils.sendLang
-import pers.neige.neigeitems.utils.ScriptUtils.calculate
-import pers.neige.neigeitems.utils.ScriptUtils.eval
 import java.math.RoundingMode
 import java.util.*
 
