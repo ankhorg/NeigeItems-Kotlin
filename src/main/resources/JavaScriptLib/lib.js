@@ -3,6 +3,7 @@ const ThreadLocalRandom = Packages.java.util.concurrent.ThreadLocalRandom
 
 const Bukkit = Packages.org.bukkit.Bukkit
 const ChatColor = Packages.org.bukkit.ChatColor
+const EquipmentSlot = Packages.org.bukkit.inventory.EquipmentSlot
 const GameMode = Packages.org.bukkit.GameMode
 const Material = Packages.org.bukkit.Material
 
@@ -201,6 +202,33 @@ const comboSize = function(group) {
     const comboInfos = player.getMetadata("NI-Combo-" + group)[0].value()
 
     return comboInfos.size()
+}
+
+/**
+ * 检测点击事件是否由主手触发
+ *
+ * @return Boolean 点击事件是否由主手触发
+ */
+const isMainHand = function() {
+    return event.hand === EquipmentSlot.HAND
+}
+
+/**
+ * 检测点击事件是否由副手触发
+ *
+ * @return Boolean 点击事件是否由副手触发
+ */
+const isOffHand = function() {
+    return event.hand === EquipmentSlot.OFF_HAND
+}
+
+/**
+ * 检测点击事件是否由副手触发
+ *
+ * @return Boolean 点击事件是否由副手触发
+ */
+const hand = function() {
+    return event.hand.toString()
 }
 
 /**

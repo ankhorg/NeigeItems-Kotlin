@@ -13,6 +13,8 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.action.ComboInfo
@@ -966,6 +968,31 @@ object ActionManager {
         // 连击清空
         addAction("comboClear") { player, string ->
             player.setMetadataEZ("NI-Combo-${papi(player, string)}", ArrayList<ComboInfo>())
+            true
+        }
+        // 设置药水效果
+        addAction("setPotionEffect") { player, string ->
+            val args = string.split(" ", limit = 3)
+            if (args.size == 3) {
+                val type = PotionEffectType.getByName(args[0].uppercase())
+                val amplifier = args[1].toIntOrNull()
+                val duration = args[2].toIntOrNull()
+                if (type != null && duration != null && amplifier != null) {
+                    runThreadSafe {
+                        player.addPotionEffect(PotionEffect(type, duration * 20, amplifier - 1), true)
+                    }
+                }
+            }
+            true
+        }
+        // 移除药水效果
+        addAction("removePotionEffect") { player, string ->
+            val type = PotionEffectType.getByName(string.uppercase())
+            if (type != null) {
+                runThreadSafe {
+                    player.removePotionEffect(type)
+                }
+            }
             true
         }
         // 延迟(单位是tick)

@@ -19,3 +19,7 @@ dependencies {
   compileOnly("pers.neige.neigeitems:NeigeItems:[latest release version]")
 }
 ```
+
+## bStats
+
+![](https://bstats.org/signatures/bukkit/NeigeItems.svg)

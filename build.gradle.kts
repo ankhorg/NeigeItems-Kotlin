@@ -33,7 +33,7 @@ taboolib {
         "platform-bukkit",
     )
     classifier = null
-    version = "6.0.11-21"
+    version = "6.0.11-31"
 }
 
 repositories {
@@ -57,9 +57,9 @@ configurations{
 dependencies {
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
     compileOnly(fileTree("libs"))
-    compileOnly("ink.ptms:nms-all:1.0.0")
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly("ink.ptms:nms-all:1.0.0")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
