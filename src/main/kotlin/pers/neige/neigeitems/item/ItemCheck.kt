@@ -57,14 +57,14 @@ object ItemCheck {
                     val rebuild = hashMapOf<String, String>().also {
                         item.rebuildData?.forEach { (key, value) ->
                             when (value) {
-                                is String -> it[key.parseSection(data, player, null)] = value.parseSection(data, player, null)
-                                is Number -> it[key.parseSection(data, player, null)] = value.toString()
+                                is String -> it[key.parseSection(data, player, item.sections)] = value.parseSection(data, player, item.sections)
+                                is Number -> it[key.parseSection(data, player, item.sections)] = value.toString()
                             }
                         }
                     }
                     val refresh = arrayListOf<String>().also {
                         item.refreshData.forEach { key ->
-                            it.add(key.parseSection(data, player, null))
+                            it.add(key.parseSection(data, player, item.sections))
                         }
                     }
                     rebuild.forEach { (key, value) ->
