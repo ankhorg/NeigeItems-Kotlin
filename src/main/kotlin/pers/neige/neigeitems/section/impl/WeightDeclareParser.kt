@@ -26,7 +26,8 @@ object WeightDeclareParser : SectionParser() {
             data.getString("key"),
             data.getString("amount"),
             data.getString("shuffled"),
-            data.getString("putelse")
+            data.getString("putelse"),
+            data.getString("order")
         )
     }
 
@@ -49,11 +50,23 @@ object WeightDeclareParser : SectionParser() {
         rawKey: String?,
         rawAmount: String?,
         rawShuffled: String?,
-        rawPutElse: String?
+        rawPutElse: String?,
+        rawOrder: String?
     ): String? {
+        // 获取是否乱序
+        val shuffled = rawShuffled?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false
+        // 获取是否顺序
+        val order = rawOrder?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false
+        // 索引记录
+        val indexMap = if (order) {
+            HashMap<String, Int>()
+        } else {
+            null
+        }
+
         val info = HashMap<String, Double>()
         // 加载所有参数并遍历
-        list.forEach {
+        list.forEachIndexed { i, it ->
             val value = it.parseSection(cache, player, sections)
             // 检测权重
             when (val index = value.indexOf("::")) {
@@ -62,6 +75,8 @@ object WeightDeclareParser : SectionParser() {
                     info[value]?.let {
                         info[value] = it + 1
                     } ?: let { info[value] = 1.0 }
+                    // 索引记录
+                    indexMap?.put(value, i)
                 }
                 // 有权重, 根据权重大小进行记录
                 else -> {
@@ -70,6 +85,8 @@ object WeightDeclareParser : SectionParser() {
                     info[string]?.let {
                         info[string] = it + weight
                     } ?: let { info[string] = weight }
+                    // 索引记录
+                    indexMap?.put(string, i)
                 }
             }
         }
@@ -100,12 +117,11 @@ object WeightDeclareParser : SectionParser() {
             }
         }
 
-        // 获取是否乱序
-        val shuffled = rawShuffled?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false
-        val realList = if (shuffled) {
-            aExpj(info, amount).shuffled()
-        } else {
-            aExpj(info, amount)
+        // 获取结果
+        val realList = when {
+            shuffled -> aExpj(info, amount).shuffled()
+            order -> aExpj(info, amount).sortedBy { indexMap!![it] }
+            else -> aExpj(info, amount)
         }
 
         // 是否记录未选中内容

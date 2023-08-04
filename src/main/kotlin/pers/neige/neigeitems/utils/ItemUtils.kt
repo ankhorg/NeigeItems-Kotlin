@@ -25,6 +25,7 @@ import taboolib.module.nms.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 
 /**
@@ -1112,5 +1113,21 @@ object ItemUtils {
                 location.dropNiItem(itemStack, entity, itemTag)
             }
         }
+    }
+
+    /**
+     * 计算钓鱼产物到钓鱼者之间的需要产生的向量
+     *
+     * @param caughtLocation 渔获坐标
+     * @param playerLocation 玩家坐标
+     * @return 渔获->玩家 的向量
+     */
+    @JvmStatic
+    fun getCaughtVelocity(caughtLocation: Location, playerLocation: Location): Vector {
+        val d0 = playerLocation.x - caughtLocation.x
+        val d1 = playerLocation.y - caughtLocation.y
+        val d2 = playerLocation.z - caughtLocation.z
+
+        return Vector(d0 * 0.1, d1 * 0.1 + sqrt(sqrt(d0 * d0 + d1 * d1 + d2 * d2)) * 0.08, d2 * 0.1)
     }
 }

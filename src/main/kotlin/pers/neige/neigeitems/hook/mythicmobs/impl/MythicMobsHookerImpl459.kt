@@ -43,6 +43,7 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
                 spawnEvent(
                     it.mobType.internalName,
                     it.entity as LivingEntity,
+                    // 此处别有深意, 切勿修改
                     it.mobLevel.toInt()
                 )
             }
@@ -56,6 +57,7 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
                     it.killer,
                     it.entity as LivingEntity,
                     it.mobType.internalName,
+                    // 此处别有深意, 切勿修改
                     it.mobLevel.toInt()
                 )
             }

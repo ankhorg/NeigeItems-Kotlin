@@ -46,15 +46,18 @@ object CheckParser : SectionParser() {
     ): String? {
         player?.player?.let {
             bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
-                ActionManager.runAction(
-                    it,
-                    actions,
-                    map = mapOf(
-                        Pair("value", value),
-                        Pair("cache", cache),
-                        Pair("sections", sections)
+                mutableMapOf(
+                    Pair("value", value),
+                    Pair("cache", cache),
+                    Pair("sections", sections)
+                ).let { params ->
+                    ActionManager.runAction(
+                        it,
+                        actions,
+                        params,
+                        params
                     )
-                )
+                }
             })
         }
         return value

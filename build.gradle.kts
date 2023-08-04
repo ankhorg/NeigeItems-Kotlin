@@ -10,7 +10,8 @@ plugins {
 
 taboolib {
 //    relocate("org.openjdk.nashorn","pers.neige.neigeitems.nashorn")
-    relocate("javassist","pers.neige.neigeitems.javassist")
+    relocate("javassist","pers.neige.neigeitems.libs.javassist")
+    relocate("bot.inker.bukkit.nbt","pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
     description {
         contributors {
             name("Neige")
@@ -65,6 +66,7 @@ dependencies {
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
 //    compileOnly("org.ow2.asm:asm:9.4")
     taboo(fileTree("libs/javassist.jar"))
+    taboo(fileTree("libs/callsite-nbt-1.0-dev-SNAPSHOT-opt.jar"))
     "packShadow"(kotlin("stdlib"))
     "packShadow"("org.openjdk.nashorn:nashorn-core:15.4")
     "packShadow"("com.alibaba.fastjson2:fastjson2-kotlin:2.0.25")

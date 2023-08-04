@@ -630,6 +630,8 @@ object ActionManager {
         val upgrade = config.getBoolean("ItemAction.upgrade")
         // 遍历物品动作配置文件
         for (file: File in ConfigUtils.getAllFiles("ItemActions")) {
+            // 仅加载.yml文件
+            if (!file.name.endsWith(".yml")) continue
             // 将当前文件转换为YamlConfiguration
             val config = YamlConfiguration.loadConfiguration(file)
             var upgraded = false
@@ -710,6 +712,8 @@ object ActionManager {
      */
     private fun loadCustomActions() {
         for (file in ConfigUtils.getAllFiles("CustomActions")) {
+            // 仅加载.js文件
+            if (!file.name.endsWith(".js")) continue
             // 防止某个脚本出错导致加载中断
             try {
                 val script = pers.neige.neigeitems.script.CompiledScript(file)

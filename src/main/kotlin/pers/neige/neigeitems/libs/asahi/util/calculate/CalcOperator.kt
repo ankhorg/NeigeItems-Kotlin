@@ -1,4 +1,4 @@
-package pers.neige.neigeitems.asahi.util.calculate
+package pers.neige.neigeitems.libs.asahi.util.calculate
 
 import kotlin.math.pow
 

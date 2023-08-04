@@ -8,6 +8,9 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.NeigeItems.bukkitScheduler
+import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.event.MythicDropEvent
 import pers.neige.neigeitems.event.MythicEquipEvent
@@ -17,6 +20,7 @@ import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils
+import pers.neige.neigeitems.utils.ItemUtils.getCaughtVelocity
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.ProxyListener
@@ -273,13 +277,14 @@ abstract class MythicMobsHooker {
             // 如果怪物配置了NeigeItems相关信息
             if (configSection.contains("NeigeItems")) {
                 val drops = configSection.getStringList("NeigeItems.Drops")
+                val fishDrops = configSection.getStringList("NeigeItems.FishDrops")
                 val dropPackRawIds = configSection.getStringList("NeigeItems.DropPacks")
                 var offsetXString = configSection.getString("NeigeItems.FancyDrop.offset.x")
                 var offsetYString = configSection.getString("NeigeItems.FancyDrop.offset.y")
                 var angleType = configSection.getString("NeigeItems.FancyDrop.angle.type")
 
                 // 东西都加载好了, 触发一下事件
-                val configLoadedEvent = MythicDropEvent.ConfigLoaded(internalName, entity, killer, drops, dropPackRawIds, offsetXString, offsetYString, angleType)
+                val configLoadedEvent = MythicDropEvent.ConfigLoaded(internalName, entity, killer, drops, fishDrops, dropPackRawIds, offsetXString, offsetYString, angleType)
                 configLoadedEvent.call()
                 if (configLoadedEvent.isCancelled) return
 
@@ -364,8 +369,21 @@ abstract class MythicMobsHooker {
                 // 加载掉落信息
                 configLoadedEvent.drops?.let { loadItems(dropItems, it, player as? OfflinePlayer, params, null, true) }
 
+                // 预定拟渔获掉落物列表
+                val fishDropItems: ArrayList<ItemStack>? =
+                    // 存在击杀者, 载入fishDropItems
+                    if (killer != null) {
+                        ArrayList<ItemStack>().also {
+                            configLoadedEvent.fishDrops?.let { fishDrops -> loadItems(it, fishDrops, player as? OfflinePlayer, params, null, true) }
+                        }
+                    // 不存在击杀者, 载入dropItems
+                    } else {
+                        configLoadedEvent.fishDrops?.let { loadItems(dropItems, it, player as? OfflinePlayer, params, null, true) }
+                        null
+                    }
+
                 // 物品都加载好了, 触发一下事件
-                val dropEvent = MythicDropEvent.Drop(internalName, entity, player, dropItems, offsetXString, offsetYString, angleType)
+                val dropEvent = MythicDropEvent.Drop(internalName, entity, player, dropItems, fishDropItems, offsetXString, offsetYString, angleType)
                 dropEvent.call()
                 if (dropEvent.isCancelled) return
 
@@ -378,6 +396,21 @@ abstract class MythicMobsHooker {
                     dropEvent.offsetYString,
                     dropEvent.angleType
                 )
+                // 拟渔获向量计算
+                val caughtVelocity = getCaughtVelocity(entity.location, killer!!.location)
+                // 拟渔获掉落
+                bukkitScheduler.callSyncMethod(plugin) {
+                    dropEvent.fishDropItems?.forEach { itemStack ->
+                        // 掉落
+                        HookerManager.nmsHooker.dropItem(
+                            entity.world,
+                            entity.location,
+                            itemStack
+                        ) { item ->
+                            item.velocity = caughtVelocity
+                        }
+                    }
+                }
             }
         }
     }

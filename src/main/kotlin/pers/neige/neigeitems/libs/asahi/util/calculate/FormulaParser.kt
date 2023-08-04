@@ -1,9 +1,9 @@
-package pers.neige.neigeitems.asahi.util.calculate
+package pers.neige.neigeitems.libs.asahi.util.calculate
 
 import org.bukkit.Bukkit
-import pers.neige.neigeitems.asahi.util.calculate.CalcOperator.Companion.isCalcOperator
-import pers.neige.neigeitems.asahi.util.calculate.CalcOperator.Companion.isCalcOperatorExceptRightBracket
-import pers.neige.neigeitems.asahi.util.calculate.CalcOperator.Companion.toCalcOperator
+import pers.neige.neigeitems.libs.asahi.util.calculate.CalcOperator.Companion.isCalcOperator
+import pers.neige.neigeitems.libs.asahi.util.calculate.CalcOperator.Companion.isCalcOperatorExceptRightBracket
+import pers.neige.neigeitems.libs.asahi.util.calculate.CalcOperator.Companion.toCalcOperator
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import java.util.*
 

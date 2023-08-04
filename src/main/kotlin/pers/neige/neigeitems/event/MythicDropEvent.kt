@@ -16,6 +16,7 @@ class MythicDropEvent {
      * @property entity 怪物实体(你可能需要通过编辑它身上的装备来改变掉落装备)
      * @property killer 怪物击杀者
      * @property drops NeigeItems.Drop
+     * @property drops NeigeItems.FishDrop
      * @property dropPacks NeigeItems.DropPacks
      * @property offsetXString NeigeItems.FancyDrop.offset.x(可能在后续被物品包配置覆盖)
      * @property offsetYString NeigeItems.FancyDrop.offset.y(可能在后续被物品包配置覆盖)
@@ -27,6 +28,7 @@ class MythicDropEvent {
         val entity: LivingEntity,
         val killer: LivingEntity?,
         var drops: List<String>?,
+        var fishDrops: List<String>?,
         var dropPacks: List<String>?,
         var offsetXString: String?,
         var offsetYString: String?,
@@ -40,6 +42,7 @@ class MythicDropEvent {
      * @property entity 怪物实体
      * @property player 怪物击杀者
      * @property dropItems 待掉落物品
+     * @property fishDropItems 拟渔获掉落物品(不存在击杀者时并入dropItems)
      * @property offsetXString 多彩掉落横向偏移
      * @property offsetYString 多彩掉落纵向偏移
      * @property angleType 多彩掉落喷射模式
@@ -50,6 +53,7 @@ class MythicDropEvent {
         val entity: LivingEntity,
         val player: Player?,
         var dropItems: List<ItemStack>,
+        var fishDropItems: List<ItemStack>?,
         var offsetXString: String?,
         var offsetYString: String?,
         var angleType: String?

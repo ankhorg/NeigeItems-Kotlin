@@ -53,7 +53,9 @@ object ItemCheck {
             }
             // 物品更新
             ItemManager.getItem(id)?.let { item ->
+                // 检测hashCode匹配情况, 不匹配代表需要更新
                 if (item.update && (neigeItems["hashCode"]?.asInt() != item.hashCode)) {
+                    // 获取待重构节点
                     val rebuild = hashMapOf<String, String>().also {
                         item.rebuildData?.forEach { (key, value) ->
                             when (value) {
@@ -62,22 +64,33 @@ object ItemCheck {
                             }
                         }
                     }
+                    // 获取待刷新节点
                     val refresh = arrayListOf<String>().also {
                         item.refreshData.forEach { key ->
                             it.add(key.parseSection(data, player, item.sections))
                         }
                     }
+                    // 进行待重构节点覆盖
                     rebuild.forEach { (key, value) ->
                         data?.set(key, value)
                     }
+                    // 进行待刷新节点移除
                     refresh.forEach { key ->
                         data?.remove(key)
                     }
-                    ItemManager.getItemStack(id, player, data)?.let { newItemStack ->
-                        val event = ItemUpdateEvent(player, itemStack, newItemStack)
-                        event.call()
-                        if (event.isCancelled) return
+                    // 触发预生成事件
+                    val preGenerateEvent = ItemUpdateEvent.PreGenerate(player, itemStack, data, item)
+                    preGenerateEvent.call()
+                    if (preGenerateEvent.isCancelled) return
+                    // 生成新物品
+                    preGenerateEvent.item.getItemStack(player, preGenerateEvent.data)?.let { newItemStack ->
+                        // 触发生成后事件
+                        val postGenerateEvent = ItemUpdateEvent.PostGenerate(player, itemStack, newItemStack)
+                        postGenerateEvent.call()
+                        if (postGenerateEvent.isCancelled) return
+                        // 获取旧物品名称
                         val oldName = itemStack.getName()
+                        // 进行物品重构
                         newItemStack.getItemTag().also { newItemTag ->
                             neigeItems["charge"]?.let {
                                 newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
@@ -85,7 +98,7 @@ object ItemCheck {
                             neigeItems["durability"]?.let {
                                 newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
                             }
-                            item.protectNBT.forEach { key ->
+                            preGenerateEvent.item.protectNBT.forEach { key ->
                                 itemTag.getDeepOrNull(key)?.also {
                                     newItemTag.putDeepFixed(key, it)
                                 }
@@ -94,6 +107,7 @@ object ItemCheck {
                         }
                         itemStack.type = newItemStack.type
                         itemStack.durability = newItemStack.durability
+                        // 发送提示信息
                         player.sendLang("Messages.legacyItemUpdateMessage", mapOf("{name}" to oldName))
                     }
                 }

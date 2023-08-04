@@ -35,7 +35,8 @@ object WeightJoinParser : SectionParser() {
             data.getString("postfix"),
             data.getString("amount"),
             data.getString("transform"),
-            data.getString("shuffled")
+            data.getString("shuffled"),
+            data.getString("order")
         )
     }
 
@@ -50,6 +51,7 @@ object WeightJoinParser : SectionParser() {
      * @param rawAmount 选取数量
      * @param rawTransform 操作函数
      * @param rawShuffled 是否乱序
+     * @param rawOrder 是否按原有顺序排列
      * @return 解析值
      */
     private fun handler(
@@ -62,7 +64,8 @@ object WeightJoinParser : SectionParser() {
         rawPostfix: String?,
         rawAmount: String?,
         rawTransform: String?,
-        rawShuffled: String?
+        rawShuffled: String?,
+        rawOrder: String?
     ): String? {
         // 如果待操作列表存在, 进行后续操作
         list?.let {
@@ -81,16 +84,26 @@ object WeightJoinParser : SectionParser() {
                         }""".trimIndent())
                 }
             }
+            // 获取是否乱序
+            val shuffled = rawShuffled?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false
+            // 获取是否顺序
+            val order = rawOrder?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false
 
             // 开始构建结果
             val result = StringBuilder()
             // 添加前缀
             result.append(prefix)
+            // 索引记录
+            val indexMap = if (order) {
+                HashMap<String, Int>()
+            } else {
+                null
+            }
 
             // 加权随机取值
             val info = HashMap<String, Double>()
             // 加载所有参数并遍历
-            list.forEach {
+            list.forEachIndexed { i, it ->
                 val value = it.parseSection(cache, player, sections)
                 // 检测权重
                 when (val index = value.indexOf("::")) {
@@ -99,6 +112,8 @@ object WeightJoinParser : SectionParser() {
                         info[value]?.let {
                             info[value] = it + 1
                         } ?: let { info[value] = 1.0 }
+                        // 索引记录
+                        indexMap?.put(value, i)
                     }
                     // 有权重, 根据权重大小进行记录
                     else -> {
@@ -107,6 +122,8 @@ object WeightJoinParser : SectionParser() {
                         info[string]?.let {
                             info[string] = it + weight
                         } ?: let { info[string] = weight }
+                        // 索引记录
+                        indexMap?.put(string, i)
                     }
                 }
             }
@@ -120,12 +137,11 @@ object WeightJoinParser : SectionParser() {
                 }
             } ?: 1
 
-            // 获取是否乱序
-            val shuffled = rawShuffled?.parseSection(cache, player, sections)?.toBooleanStrictOrNull() ?: false
-            val realList = if (shuffled) {
-                aExpj(info, amount).shuffled()
-            } else {
-                aExpj(info, amount)
+            // 获取结果
+            val realList = when {
+                shuffled -> aExpj(info, amount).shuffled()
+                order -> aExpj(info, amount).sortedBy { indexMap!![it] }
+                else -> aExpj(info, amount)
             }
 
             // 预定义参数map

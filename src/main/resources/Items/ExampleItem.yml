@@ -130,25 +130,21 @@ CheckTest:
       # 执行动作
       # 条件中默认导入了value
       actions:
-          # 如果value为test1
+        # 如果value为test1
         - condition: value == "test1"
           # 通知玩家
           actions:
-          - "tell: 你得到了名为 test1 的物品"
-          # value不为test1
-          deny:
-            # value为test2
-            condition: value == "test2"
-            # 通知玩家
-            actions:
+            - "tell: 你得到了名为 test1 的物品"
+            # 终止动作
+            - return
+        - condition: value == "test2"
+          actions:
             - "tell: 你得到了名为 test2 的物品"
-            # value不为test2
-            deny:
-              # value为test3
-              condition: value == "test3"
-              # 通知玩家
-              actions:
-              - "tell: 你得到了名为 test3 的物品"
+            - return
+        - condition: value == "test3"
+          actions:
+            - "tell: 你得到了名为 test3 的物品"
+            - return
 
 WhenTest:
   material: STONE

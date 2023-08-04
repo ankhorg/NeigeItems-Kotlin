@@ -352,12 +352,12 @@ object SectionUtils {
                     if (stringBuilders.size > 1) {
                         // 证明这是一个嵌套节点, 解析当前内容, append进父节点的待解析文本里, 移除当前节点的缓存
                         val string = stringBuilders.removeLast().toString()
-                        stringBuilders[stringBuilders.lastIndex].append(transform.apply(string) ?: "<$string>")
+                        stringBuilders[stringBuilders.lastIndex].append(transform.apply(string) ?: "$head$string$tail")
                         // 只有一个
                     } else {
                         // 证明当前节点是一个顶级节点, 解析当前内容, append进结果文本, 移除节点缓存
                         val string = stringBuilders.removeLast().toString()
-                        result.append(transform.apply(string) ?: "<$string>")
+                        result.append(transform.apply(string) ?: "$head$string$tail")
                     }
                 } else {
                     // 因为已经检查过, 当前字符不被转义, 且不为反斜杠, 所以可以直接append

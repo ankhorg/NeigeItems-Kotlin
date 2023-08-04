@@ -78,6 +78,8 @@ object SectionManager {
         submit(delay = 60) {
             HookerManager.papiHooker?.let {
                 for (file: File in files) {
+                    // 仅加载.yml文件
+                    if (!file.name.endsWith(".yml")) continue
                     val text = file.readText()
                     if (HookerManager.papiHooker.hasPapi(text)) {
                         reload()
@@ -86,6 +88,8 @@ object SectionManager {
                     }
                 }
                 for (file: File in ItemManager.files) {
+                    // 仅加载.yml文件
+                    if (!file.name.endsWith(".yml")) continue
                     val text = file.readText()
                     if (HookerManager.papiHooker.hasPapi(text)) {
                         reload()
@@ -102,6 +106,8 @@ object SectionManager {
      */
     private fun loadGlobalSections() {
         for (file in files) {
+            // 仅加载.yml文件
+            if (!file.name.endsWith(".yml")) continue
             // 将文件中所有的有效 %xxx_xxx% 替换为 <papi::xxx_xxx>
             HookerManager.papiHooker?.let {
                 val text = file.readText()
