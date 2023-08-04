@@ -1,5 +1,7 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
+$dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PostGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PostGenerate.html
+$dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PreGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PreGenerate.html
 $dokka.location:pers.neige.neigeitems.event/MythicDropEvent.ConfigLoaded///PointingToDeclaration/pers/neige/neigeitems/event/MythicDropEvent.ConfigLoaded.html
 $dokka.location:pers.neige.neigeitems.event/MythicDropEvent.Drop///PointingToDeclaration/pers/neige/neigeitems/event/MythicDropEvent.Drop.html
 $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Post///PointingToDeclaration/pers/neige/neigeitems/event/PluginReloadEvent.Post.html
@@ -9,7 +11,6 @@ $dokka.location:pers.neige.neigeitems.item.color/ItemColor.Companion///PointingT
 $dokka.location:pers.neige.neigeitems.item/ItemDurability.DamageResult///PointingToDeclaration/pers/neige/neigeitems/item/ItemDurability.DamageResult.html
 $dokka.location:pers.neige.neigeitems.item/ItemPack.ItemInfo///PointingToDeclaration/pers/neige/neigeitems/item/ItemPack.ItemInfo.html
 pers.neige.neigeitems
-pers.neige.neigeitems.asahi.util.calculate
 pers.neige.neigeitems.command
 pers.neige.neigeitems.command.subcommand
 pers.neige.neigeitems.event
@@ -29,6 +30,7 @@ pers.neige.neigeitems.item
 pers.neige.neigeitems.item.action
 pers.neige.neigeitems.item.color
 pers.neige.neigeitems.item.color.impl
+pers.neige.neigeitems.libs.asahi.util.calculate
 pers.neige.neigeitems.listener
 pers.neige.neigeitems.manager
 pers.neige.neigeitems.maven
