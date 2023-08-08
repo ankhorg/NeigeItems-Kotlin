@@ -1,10 +1,6 @@
 // 文件名不重要, 写成啥都行
 // enable函数会自动执行
 function enable() {
-    // 导入相应的类, 这两行看不懂的话直接抄就行
-    const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
-    const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
-
     // 插入新的自定义动作
     ActionManager.addAction(
         // 动作名称

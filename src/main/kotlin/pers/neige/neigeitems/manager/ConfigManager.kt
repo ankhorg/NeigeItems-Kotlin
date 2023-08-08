@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
 import pers.neige.neigeitems.utils.ConfigUtils.saveResourceNotWarn
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
@@ -44,31 +45,34 @@ object ConfigManager {
      */
     @Awake(LifeCycle.INIT)
     fun saveResource() {
-        plugin.saveResourceNotWarn("Expansions${File.separator}CustomAction.js")
-        plugin.saveResourceNotWarn("Expansions${File.separator}CustomItemEditor.js")
-        plugin.saveResourceNotWarn("Expansions${File.separator}CustomSection.js")
-        plugin.saveResourceNotWarn("Expansions${File.separator}DefaultSection.js")
-        plugin.saveResourceNotWarn("Expansions${File.separator}ExampleExpansion.js")
-        plugin.saveResourceNotWarn("GlobalSections${File.separator}ExampleSection.yml")
-        plugin.saveResourceNotWarn("ItemActions${File.separator}ExampleAction.yml")
-        plugin.saveResourceNotWarn("ItemPacks${File.separator}ExampleItemPack.yml")
-        plugin.saveResourceNotWarn("Items${File.separator}ExampleItem.yml")
-        plugin.saveResourceNotWarn("Scripts${File.separator}ExampleScript.js")
-        plugin.saveResourceNotWarn("Scripts${File.separator}ItemTime.js")
+        if (getFileOrNull("Expansions") == null) {
+            plugin.saveResourceNotWarn("Expansions${File.separator}CustomAction.js")
+            plugin.saveResourceNotWarn("Expansions${File.separator}CustomItemEditor.js")
+            plugin.saveResourceNotWarn("Expansions${File.separator}CustomSection.js")
+            plugin.saveResourceNotWarn("Expansions${File.separator}DefaultSection.js")
+            plugin.saveResourceNotWarn("Expansions${File.separator}ExampleExpansion.js")
+        }
+        if (getFileOrNull("GlobalSections") == null) {
+            plugin.saveResourceNotWarn("GlobalSections${File.separator}ExampleSection.yml")
+        }
+        if (getFileOrNull("ItemActions") == null) {
+            plugin.saveResourceNotWarn("ItemActions${File.separator}ExampleAction.yml")
+        }
+        if (getFileOrNull("ItemPacks") == null) {
+            plugin.saveResourceNotWarn("ItemPacks${File.separator}ExampleItemPack.yml")
+        }
+        if (getFileOrNull("Items") == null) {
+            plugin.saveResourceNotWarn("Items${File.separator}ExampleItem.yml")
+        }
+        if (getFileOrNull("Scripts") == null) {
+            plugin.saveResourceNotWarn("Scripts${File.separator}ExampleScript.js")
+            plugin.saveResourceNotWarn("Scripts${File.separator}ItemTime.js")
+        }
         plugin.saveDefaultConfig()
         // 加载bstats
         val metrics = Metrics(15750, plugin.description.version, Platform.BUKKIT)
         metrics.addCustomChart(SingleLineChart("items") {
             ItemManager.itemIds.size
-        })
-        metrics.addCustomChart(SingleLineChart("sections") {
-            SectionManager.globalSections.size
-        })
-        metrics.addCustomChart(SingleLineChart("custom-sections") {
-            SectionManager.sectionParsers.size - 7
-        })
-        metrics.addCustomChart(SingleLineChart("scripts") {
-            ScriptManager.compiledScripts.size
         })
     }
 

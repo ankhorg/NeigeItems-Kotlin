@@ -1,4 +1,10 @@
 import io.izzel.taboolib.gradle.RelocateJar
+import java.io.FileOutputStream
+import java.util.jar.JarFile
+import java.util.jar.JarEntry
+import java.util.jar.JarOutputStream
+
+val taboolib_version = "6.0.11-31"
 
 plugins {
     `java-library`
@@ -34,7 +40,7 @@ taboolib {
         "platform-bukkit",
     )
     classifier = null
-    version = "6.0.11-31"
+    version = taboolib_version
 }
 
 repositories {
@@ -64,9 +70,10 @@ dependencies {
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
-//    compileOnly("org.ow2.asm:asm:9.4")
-    taboo(fileTree("libs/javassist.jar"))
-    taboo(fileTree("libs/callsite-nbt-1.0-dev-SNAPSHOT-opt.jar"))
+    compileOnly("io.izzel.taboolib:platform-bukkit:$taboolib_version")
+    taboo("org.ow2.asm:asm:9.4")
+    taboo("org.javassist:javassist:3.20.0-GA")
+    taboo(fileTree("libs/callsite-nbt-1.0-dev-SNAPSHOT-fat.jar"))
     "packShadow"(kotlin("stdlib"))
     "packShadow"("org.openjdk.nashorn:nashorn-core:15.4")
     "packShadow"("com.alibaba.fastjson2:fastjson2-kotlin:2.0.25")
@@ -154,3 +161,74 @@ publishing {
         }
     }
 }
+
+fun fuckYou(name: String) {
+    val oldFile = File("$buildDir/libs/$name")
+    val newFile = File("$buildDir/libs/Modified$name")
+
+    if (!oldFile.exists()) return
+
+    JarOutputStream(FileOutputStream(newFile)).use { jarOutputStream ->
+        JarFile(oldFile).use { jarFile ->
+            val entries = jarFile.entries()
+            while (entries.hasMoreElements()) {
+                val entry = entries.nextElement()
+                val entryName = entry.name
+
+                if (entryName == "pers/neige/neigeitems/taboolib/platform/BukkitPlugin.class") {
+                    val targetClassBytes = jarFile.getInputStream(entry).readBytes()
+
+                    val classReader = org.objectweb.asm.ClassReader(targetClassBytes)
+                    val classWriter = org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
+                    val classVisitor = object : org.objectweb.asm.ClassVisitor(org.objectweb.asm.Opcodes.ASM9, classWriter) {
+                        override fun visitMethod(
+                            access: Int,
+                            name: String?,
+                            descriptor: String?,
+                            signature: String?,
+                            exceptions: Array<out String>?
+                        ): org.objectweb.asm.MethodVisitor? {
+                            val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
+                            if (name == "<clinit>") {
+                                return object : org.objectweb.asm.MethodVisitor(org.objectweb.asm.Opcodes.ASM9, methodVisitor) {
+                                    override fun visitCode() {
+                                        visitLdcInsn(org.objectweb.asm.Type.getType("Lpers/neige/neigeitems/taboolib/platform/BukkitPlugin;"))
+                                        visitMethodInsn(
+                                            org.objectweb.asm.Opcodes.INVOKESTATIC,
+                                            "pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/loader/CallSiteNbt",
+                                            "install",
+                                            "(Ljava/lang/Class;)V",
+                                            false
+                                        )
+                                        super.visitCode()
+                                    }
+                                }
+                            }
+                            return methodVisitor
+                        }
+                    }
+                    classReader.accept(classVisitor, org.objectweb.asm.ClassReader.EXPAND_FRAMES)
+
+                    jarOutputStream.putNextEntry(JarEntry(entryName))
+                    jarOutputStream.write(classWriter.toByteArray())
+                    jarOutputStream.closeEntry()
+                } else {
+                    jarOutputStream.putNextEntry(entry)
+                    jarFile.getInputStream(entry).copyTo(jarOutputStream)
+                    jarOutputStream.closeEntry()
+                }
+            }
+        }
+    }
+    oldFile.delete()
+    newFile.renameTo(oldFile)
+}
+
+val fuckYouTask = tasks.register("fuckYouTask") {
+    doLast {
+        fuckYou("${rootProject.name}-${project.property("version")}.jar")
+        fuckYou("${rootProject.name}-${project.property("version")}-all.jar")
+    }
+}
+
+tasks.getByName("build").finalizedBy(fuckYouTask)

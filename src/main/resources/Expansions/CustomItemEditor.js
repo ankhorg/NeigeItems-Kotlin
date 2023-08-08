@@ -1,9 +1,6 @@
 // 文件名不重要, 写成啥都行
 // enable函数会自动执行
 function enable() {
-    // 导入相应的类, 这两行看不懂的话直接抄就行
-    const ItemEditorManager = Packages.pers.neige.neigeitems.manager.ItemEditorManager.INSTANCE
-
     // 这是我写这段代码用到的类, 不是每次添加自定义物品编辑函数都要用到
     const ArrayList = Packages.java.util.ArrayList
     const ChatColor = Packages.org.bukkit.ChatColor
