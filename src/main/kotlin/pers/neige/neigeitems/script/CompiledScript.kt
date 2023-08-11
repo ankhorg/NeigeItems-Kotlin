@@ -1,10 +1,7 @@
 package pers.neige.neigeitems.script
 
 import pers.neige.neigeitems.manager.HookerManager.nashornHooker
-import pers.neige.neigeitems.utils.FileUtils
 import java.io.File
-import java.io.FileInputStream
-import java.io.InputStreamReader
 import java.io.Reader
 import javax.script.Invocable
 import javax.script.ScriptEngine
@@ -42,11 +39,9 @@ open class CompiledScript {
     constructor(file: File) {
         scriptEngine = nashornHooker.getNashornEngine()
         loadLib()
-        val input = FileInputStream(file)
-        val reader = InputStreamReader(input, FileUtils.charset(file))
-        compiledScript = nashornHooker.compile(scriptEngine, reader)
-        input.close()
-        reader.close()
+        file.reader().use {
+            compiledScript = nashornHooker.compile(scriptEngine, it)
+        }
         magicFunction()
     }
 

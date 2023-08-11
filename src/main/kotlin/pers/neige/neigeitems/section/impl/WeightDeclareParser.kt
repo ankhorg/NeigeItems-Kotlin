@@ -110,7 +110,7 @@ object WeightDeclareParser : SectionParser() {
                 // 看看有没有预传入对应的声明值
                 val value = cache["$key.$index"]
                 // 如果传入了就挪出待选列表, 同时amount-1
-                info[value]?.also {
+                if (info.containsKey(value)) {
                     info.remove(value)
                     amount--
                 }
@@ -129,14 +129,20 @@ object WeightDeclareParser : SectionParser() {
 
         if (key != null && cache != null) {
             var length = amount
-            var over = 0
+            // 当前声明的索引值
             var index = 0
+            // 列表元素索引值
+            var realIndex = 0
+            // 循环
             while (index < length) {
+                // 如果对应位置已有节点
                 if (cache.contains("$key.$index")) {
+                    // 延长循环
                     length++
-                    over++
+                // 对应位置没有节点
                 } else {
-                    cache["$key.$index"] = realList[index - over]
+                    cache["$key.$index"] = realList[realIndex]
+                    realIndex++
                 }
                 index++
             }
@@ -144,10 +150,8 @@ object WeightDeclareParser : SectionParser() {
 
             if (putElse) {
                 val elseList = info.keys.also { it.removeAll(realList) }
-                index = 0
-                elseList.forEach { element ->
-                    cache["$key.else.$index"] = element
-                    index ++
+                elseList.forEachIndexed { i, element ->
+                    cache["$key.else.$i"] = element
                 }
                 cache["$key.else.length"] = elseList.size.toString()
             }

@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.utils
 
+import bot.inker.bukkit.nbt.NbtCompound
 import com.alibaba.fastjson2.parseObject
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
@@ -8,9 +9,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
-import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
 import pers.neige.neigeitems.utils.StringUtils.split
-import taboolib.module.nms.ItemTag
 import java.awt.Color
 import java.util.*
 import java.util.function.Function
@@ -186,7 +185,7 @@ object SectionUtils {
     @JvmStatic
     fun String.parseItemSection(
         itemStack: ItemStack,
-        itemTag: ItemTag,
+        itemTag: NbtCompound,
         data: MutableMap<String, String>?,
         player: OfflinePlayer
     ): String {
@@ -207,7 +206,7 @@ object SectionUtils {
     @JvmStatic
     fun String.parseItemSection(
         itemStack: ItemStack,
-        itemTag: ItemTag,
+        itemTag: NbtCompound,
         data: MutableMap<String, String>?,
         player: OfflinePlayer,
         cache: MutableMap<String, String>?,
@@ -232,7 +231,7 @@ object SectionUtils {
     @JvmStatic
     fun String.getItemSection(
         itemStack: ItemStack,
-        itemTag: ItemTag,
+        itemTag: NbtCompound,
         data: MutableMap<String, String>?,
         player: OfflinePlayer,
         cache: MutableMap<String, String>? = null,
@@ -281,10 +280,10 @@ object SectionUtils {
                 val param = this.substring(index+2)
                 return when (name.lowercase(Locale.getDefault())) {
                     "nbt" -> {
-                        itemTag.getDeepOrNull(param)?.asString() ?: "<$this>"
+                        itemTag.getDeepString(param) ?: "<$this>"
                     }
                     "data" -> {
-                        (data ?: itemTag["NeigeItems"]?.asCompound()?.get("data")?.asString()?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
+                        (data ?: itemTag.getDeepString("NeigeItems.data")?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
                     }
                     "amount" -> {
                         itemStack.amount.toString()

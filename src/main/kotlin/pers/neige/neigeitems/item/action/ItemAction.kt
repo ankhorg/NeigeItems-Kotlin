@@ -1,11 +1,11 @@
 package pers.neige.neigeitems.item.action
 
+import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.getItemTag
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import java.util.*
 
 /**
@@ -75,7 +75,7 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
         player: Player,
         trigger: ActionTrigger?,
         itemStack: ItemStack,
-        itemTag: ItemTag? = itemStack.getItemTag(),
+        itemTag: NbtCompound? = itemStack.getNbt(),
         data: MutableMap<String, String>? = null,
         event: Event,
         global: MutableMap<String, Any?>
@@ -103,7 +103,7 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
         player: Player,
         trigger: String?,
         itemStack: ItemStack,
-        itemTag: ItemTag? = itemStack.getItemTag(),
+        itemTag: NbtCompound? = itemStack.getNbt(),
         data: MutableMap<String, String>? = null,
         event: Event,
         global: MutableMap<String, Any?>

@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.manager
 
+import bot.inker.bukkit.nbt.NbtCompound
+import bot.inker.bukkit.nbt.NbtItemStack
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -23,6 +25,7 @@ import pers.neige.neigeitems.manager.ItemManager.setMaxCharge
 import pers.neige.neigeitems.manager.ItemManager.setMaxCustomDurability
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.castToItemTagData
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
 import pers.neige.neigeitems.utils.ItemUtils.putDeepWithList
@@ -32,7 +35,6 @@ import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import pers.neige.neigeitems.utils.function.TriFunction
 import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
-import taboolib.module.nms.ItemTag
 import taboolib.module.nms.getItemTag
 import taboolib.platform.util.giveItem
 import java.util.*
@@ -466,7 +468,7 @@ object ItemEditorManager {
 
                                 value.replace("\\$(\\d+)".toRegex()) {
                                     groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                                }.parseItemSection(itemStack, itemStack.getItemTag(), null, player)
+                                }.parseItemSection(itemStack, itemStack.getNbt(), null, player)
                             } else {
                                 matchResult.value
                             }
@@ -580,7 +582,7 @@ object ItemEditorManager {
 
                             value.replace("\\$(\\d+)".toRegex()) {
                                 groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                            }.parseItemSection(itemStack, itemStack.getItemTag(), null, player)
+                            }.parseItemSection(itemStack, itemStack.getNbt(), null, player)
                         }
                     }
 
@@ -1005,7 +1007,7 @@ object ItemEditorManager {
 
                                     value.replace("\\$(\\d+)".toRegex()) {
                                         groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                                    }.parseItemSection(itemStack, itemStack.getItemTag(), null, player)
+                                    }.parseItemSection(itemStack, itemStack.getNbt(), null, player)
                                 } else {
                                     matchResult.value
                                 }
@@ -1188,7 +1190,7 @@ object ItemEditorManager {
 
                                 value.replace("\\$(\\d+)".toRegex()) {
                                     groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                                }.parseItemSection(itemStack, itemStack.getItemTag(), null, player)
+                                }.parseItemSection(itemStack, itemStack.getNbt(), null, player)
                             }
                         }
 
@@ -1596,8 +1598,10 @@ object ItemEditorManager {
             if (itemStack.type != Material.AIR) {
                 // 获取待刷新节点信息
                 val sections = content.split(' ', '\\')
+                // NBT物品
+                val nbtItemStack: NbtItemStack
                 // NI物品数据
-                val neigeItems: ItemTag
+                val neigeItems: NbtCompound
                 // NI物品id
                 val id: String
                 // NI节点数据
@@ -1605,6 +1609,7 @@ object ItemEditorManager {
                 when (val itemInfo = itemStack.isNiItem(true)) {
                     null -> return@addBasicItemEditor true
                     else -> {
+                        nbtItemStack = itemInfo.nbtItemStack
                         neigeItems = itemInfo.neigeItems
                         id = itemInfo.id
                         data = itemInfo.data ?: HashMap<String, String>()
@@ -1612,17 +1617,24 @@ object ItemEditorManager {
                 }
                 sections.forEach { data.remove(it) }
                 ItemManager.getItemStack(id, player, data)?.let { newItemStack ->
-                    newItemStack.getItemTag().also { newItemTag ->
-                        neigeItems["charge"]?.let {
-                            newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                    // 获取新物品的NBT
+                    newItemStack.getNbt().also { newItemTag ->
+                        // 把NeigeItems的特殊NBT掏出来
+                        newItemTag.getCompound("NeigeItems")?.also { newNeigeItems ->
+                            // 还原物品使用次数
+                            if (neigeItems.containsKey("charge")) {
+                                newNeigeItems.putInt("charge", neigeItems.getInt("charge"))
+                            }
+                            // 还原物品自定义耐久
+                            if (neigeItems.containsKey("durability")) {
+                                newNeigeItems.putInt("durability", neigeItems.getInt("durability"))
+                            }
+                            // 将新物品的NBT覆盖至原物品
+                            nbtItemStack.setTag(newItemTag)
                         }
-                        neigeItems["durability"]?.let {
-                            newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
-                        }
-                        newItemTag.saveTo(itemStack)
                     }
+                    // 还原物品类型
                     itemStack.type = newItemStack.type
-                    itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
             }
@@ -1647,8 +1659,10 @@ object ItemEditorManager {
                     itemStack.amount = amount
                     bukkitScheduler.runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
                 }
+                // NBT物品
+                val nbtItemStack: NbtItemStack
                 // NI物品数据
-                val neigeItems: ItemTag
+                val neigeItems: NbtCompound
                 // NI物品id
                 val id: String
                 // NI节点数据
@@ -1656,6 +1670,7 @@ object ItemEditorManager {
                 when (val itemInfo = itemStack.isNiItem(true)) {
                     null -> return@addBasicItemEditor true
                     else -> {
+                        nbtItemStack = itemInfo.nbtItemStack
                         neigeItems = itemInfo.neigeItems
                         id = itemInfo.id
                         data = itemInfo.data ?: HashMap<String, String>()
@@ -1663,17 +1678,24 @@ object ItemEditorManager {
                 }
                 sections.forEach { data.remove(it) }
                 ItemManager.getItemStack(id, player, data)?.let { newItemStack ->
-                    newItemStack.getItemTag().also { newItemTag ->
-                        neigeItems["charge"]?.let {
-                            newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                    // 获取新物品的NBT
+                    newItemStack.getNbt().also { newItemTag ->
+                        // 把NeigeItems的特殊NBT掏出来
+                        newItemTag.getCompound("NeigeItems")?.also { newNeigeItems ->
+                            // 还原物品使用次数
+                            if (neigeItems.containsKey("charge")) {
+                                newNeigeItems.putInt("charge", neigeItems.getInt("charge"))
+                            }
+                            // 还原物品自定义耐久
+                            if (neigeItems.containsKey("durability")) {
+                                newNeigeItems.putInt("durability", neigeItems.getInt("durability"))
+                            }
+                            // 将新物品的NBT覆盖至原物品
+                            nbtItemStack.setTag(newItemTag)
                         }
-                        neigeItems["durability"]?.let {
-                            newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
-                        }
-                        newItemTag.saveTo(itemStack)
                     }
+                    // 还原物品类型
                     itemStack.type = newItemStack.type
-                    itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
             }
@@ -1694,8 +1716,10 @@ object ItemEditorManager {
                     itemStack.amount = amount
                     bukkitScheduler.runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
                 }
+                // NBT物品
+                val nbtItemStack: NbtItemStack
                 // NI物品数据
-                val neigeItems: ItemTag
+                val neigeItems: NbtCompound
                 // NI物品id
                 val id: String
                 // NI节点数据
@@ -1703,6 +1727,7 @@ object ItemEditorManager {
                 when (val itemInfo = itemStack.isNiItem(true)) {
                     null -> return@addBasicItemEditor true
                     else -> {
+                        nbtItemStack = itemInfo.nbtItemStack
                         neigeItems = itemInfo.neigeItems
                         id = itemInfo.id
                         data = itemInfo.data ?: HashMap<String, String>()
@@ -1715,17 +1740,24 @@ object ItemEditorManager {
                     }
                 }
                 ItemManager.getItemStack(id, player, data)?.let { newItemStack ->
-                    newItemStack.getItemTag().also { newItemTag ->
-                        neigeItems["charge"]?.let {
-                            newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
+                    // 获取新物品的NBT
+                    newItemStack.getNbt().also { newItemTag ->
+                        // 把NeigeItems的特殊NBT掏出来
+                        newItemTag.getCompound("NeigeItems")?.also { newNeigeItems ->
+                            // 还原物品使用次数
+                            if (neigeItems.containsKey("charge")) {
+                                newNeigeItems.putInt("charge", neigeItems.getInt("charge"))
+                            }
+                            // 还原物品自定义耐久
+                            if (neigeItems.containsKey("durability")) {
+                                newNeigeItems.putInt("durability", neigeItems.getInt("durability"))
+                            }
+                            // 将新物品的NBT覆盖至原物品
+                            nbtItemStack.setTag(newItemTag)
                         }
-                        neigeItems["durability"]?.let {
-                            newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
-                        }
-                        newItemTag.saveTo(itemStack)
                     }
+                    // 还原物品类型
                     itemStack.type = newItemStack.type
-                    itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
             }
@@ -1841,7 +1873,7 @@ object ItemEditorManager {
                 }
                 // (解析其中的即时声明节点)
                 addItemEditor("${id}Section") { player, itemStack, content ->
-                    return@addItemEditor function.apply(player, itemStack, content.parseItemSection(itemStack, itemStack.getItemTag(), null, player))
+                    return@addItemEditor function.apply(player, itemStack, content.parseItemSection(itemStack, itemStack.getNbt(), null, player))
                 }
             }
         }

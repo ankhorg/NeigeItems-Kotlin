@@ -1,12 +1,13 @@
 package pers.neige.neigeitems.listener
 
+import bot.inker.bukkit.nbt.NbtCompound
+import bot.inker.bukkit.nbt.NbtItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.module.nms.ItemTag
 
 object InventoryClickListener {
     @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -18,16 +19,18 @@ object InventoryClickListener {
         val itemStack = event.cursor
         // 获取NI物品信息(不是NI物品就停止操作)
         val itemInfo = itemStack?.isNiItem(true) ?: return
+        // NBT物品
+        val nbtItemStack: NbtItemStack = itemInfo.nbtItemStack
         // 物品NBT
-        val itemTag: ItemTag = itemInfo.itemTag
+        val itemTag: NbtCompound = itemInfo.itemTag
         // NI物品数据
-        val neigeItems: ItemTag = itemInfo.neigeItems
+        val neigeItems: NbtCompound = itemInfo.neigeItems
         // NI物品id
         val id: String = itemInfo.id
         // NI节点数据
         val data: HashMap<String, String> = itemInfo.data!!
 
-        ActionManager.clickListener(player, itemStack, itemTag, neigeItems, id, data, event)
+        ActionManager.clickListener(player, itemStack, itemInfo, event)
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -39,16 +42,18 @@ object InventoryClickListener {
         val itemStack = event.currentItem
         // 获取NI物品信息(不是NI物品就停止操作)
         val itemInfo = itemStack?.isNiItem(true) ?: return
+        // NBT物品
+        val nbtItemStack: NbtItemStack = itemInfo.nbtItemStack
         // 物品NBT
-        val itemTag: ItemTag = itemInfo.itemTag
+        val itemTag: NbtCompound = itemInfo.itemTag
         // NI物品数据
-        val neigeItems: ItemTag = itemInfo.neigeItems
+        val neigeItems: NbtCompound = itemInfo.neigeItems
         // NI物品id
         val id: String = itemInfo.id
         // NI节点数据
         val data: HashMap<String, String> = itemInfo.data!!
 
         // 执行物品动作
-        ActionManager.beClickedListener(player, itemStack, itemTag, neigeItems, id, data, event)
+        ActionManager.beClickedListener(player, itemStack, itemInfo, event)
     }
 }

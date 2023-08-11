@@ -6,14 +6,11 @@ import pers.neige.neigeitems.event.ItemExpirationEvent
 import pers.neige.neigeitems.event.ItemUpdateEvent
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
-import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.getItemTag
 import taboolib.module.nms.getName
 
 /**
@@ -29,16 +26,17 @@ object ItemCheck {
     fun checkItem(
         player: Player,
         itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
-        id: String,
-        data: MutableMap<String, String>?,
+        itemInfo: ItemInfo
     ) {
         kotlin.runCatching {
+            val id = itemInfo.id
+            val itemTag = itemInfo.itemTag
+            val neigeItems = itemInfo.neigeItems
+            val data = itemInfo.data
+            val nbtItemStack = itemInfo.nbtItemStack
             // 检测过期物品
-            neigeItems["itemTime"]?.asLong()?.let {
-                if (System.currentTimeMillis() >= it) {
+            if (neigeItems.containsKey("itemTime")) {
+                if (System.currentTimeMillis() >= neigeItems.getLong("itemTime")) {
                     val event = ItemExpirationEvent(player, itemStack, itemInfo)
                     event.call()
                     if (event.isCancelled) return
@@ -54,7 +52,7 @@ object ItemCheck {
             // 物品更新
             ItemManager.getItem(id)?.let { item ->
                 // 检测hashCode匹配情况, 不匹配代表需要更新
-                if (item.update && (neigeItems["hashCode"]?.asInt() != item.hashCode)) {
+                if (item.update && neigeItems.containsKey("hashCode") && (neigeItems.getInt("hashCode") != item.hashCode)) {
                     // 获取待重构节点
                     val rebuild = hashMapOf<String, String>().also {
                         item.rebuildData?.forEach { (key, value) ->
@@ -90,23 +88,31 @@ object ItemCheck {
                         if (postGenerateEvent.isCancelled) return
                         // 获取旧物品名称
                         val oldName = itemStack.getName()
-                        // 进行物品重构
-                        newItemStack.getItemTag().also { newItemTag ->
-                            neigeItems["charge"]?.let {
-                                newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
-                            }
-                            neigeItems["durability"]?.let {
-                                newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
-                            }
-                            preGenerateEvent.item.protectNBT.forEach { key ->
-                                itemTag.getDeepOrNull(key)?.also {
-                                    newItemTag.putDeepFixed(key, it)
+
+                        // 获取新物品的NBT
+                        newItemStack.getNbt().also { newItemTag ->
+                            // 把NeigeItems的特殊NBT掏出来
+                            newItemTag.getCompound("NeigeItems")?.also { newNeigeItems ->
+                                // 还原物品使用次数
+                                if (neigeItems.containsKey("charge")) {
+                                    newNeigeItems.putInt("charge", neigeItems.getInt("charge"))
                                 }
+                                // 还原物品自定义耐久
+                                if (neigeItems.containsKey("durability")) {
+                                    newNeigeItems.putInt("durability", neigeItems.getInt("durability"))
+                                }
+                                // 修复保护NBT
+                                preGenerateEvent.item.protectNBT.forEach { key ->
+                                    itemTag.getDeep(key)?.also {
+                                        newItemTag.putDeep(key, it)
+                                    }
+                                }
+                                // 将新物品的NBT覆盖至原物品
+                                nbtItemStack.setTag(newItemTag)
                             }
-                            newItemTag.saveTo(itemStack)
                         }
+                        // 还原物品类型
                         itemStack.type = newItemStack.type
-                        itemStack.durability = newItemStack.durability
                         // 发送提示信息
                         player.sendLang("Messages.legacyItemUpdateMessage", mapOf("{name}" to oldName))
                     }

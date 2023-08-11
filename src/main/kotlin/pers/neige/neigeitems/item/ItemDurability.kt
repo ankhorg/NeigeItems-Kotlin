@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.item
 
+import bot.inker.bukkit.nbt.NbtCompound
+import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -14,11 +16,8 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
-import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.LangUtils.getLang
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.ItemTagData
 import taboolib.platform.util.giveItem
 import taboolib.platform.util.sendActionBar
 import java.util.concurrent.ThreadLocalRandom
@@ -39,11 +38,11 @@ object ItemDurability {
      */
     fun interact(
         player: Player,
-        neigeItems: ItemTag,
+        neigeItems: NbtCompound,
         event: PlayerInteractEvent
     ): Boolean {
         // 对于已损坏物品取消事件
-        if (neigeItems["durability"]?.asInt() == 0) {
+        if (neigeItems.containsKey("durability") && neigeItems.getInt("durability") == 0) {
             event.isCancelled = true
             // 物品损坏提示
             getLang("Messages.brokenItem")?.let {
@@ -60,8 +59,8 @@ object ItemDurability {
     fun igniteTNT(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
+        itemTag: NbtCompound,
+        neigeItems: NbtCompound,
         event: PlayerInteractEvent
     ) {
         // 被交互方块
@@ -109,10 +108,11 @@ object ItemDurability {
      */
     fun interact(
         player: Player,
-        neigeItems: ItemTag,
+        neigeItems: NbtCompound,
         event: PlayerInteractEntityEvent
     ) {
-        if (neigeItems["durability"]?.asInt() == 0) {
+        // 对于已损坏物品取消事件
+        if (neigeItems.containsKey("durability") && neigeItems.getInt("durability") == 0) {
             event.isCancelled = true
             // 物品损坏提示
             getLang("Messages.brokenItem")?.let {
@@ -126,11 +126,11 @@ object ItemDurability {
      */
     fun shootBow(
         player: Player,
-        neigeItems: ItemTag,
+        neigeItems: NbtCompound,
         event: EntityShootBowEvent
     ) {
         // 对于已损坏物品取消事件
-        if (neigeItems["durability"]?.asInt() == 0) {
+        if (neigeItems.containsKey("durability") && neigeItems.getInt("durability") == 0) {
             event.isCancelled = true
             // 物品损坏提示
             getLang("Messages.brokenItem")?.let {
@@ -144,11 +144,11 @@ object ItemDurability {
      */
     fun consume(
         player: Player,
-        neigeItems: ItemTag,
+        neigeItems: NbtCompound,
         event: PlayerItemConsumeEvent
     ) {
         // 对于已损坏物品取消事件
-        if (neigeItems["durability"]?.asInt() == 0) {
+        if (neigeItems.containsKey("durability") && neigeItems.getInt("durability") == 0) {
             event.isCancelled = true
             // 物品损坏提示
             getLang("Messages.brokenItem")?.let {
@@ -162,11 +162,11 @@ object ItemDurability {
      */
     fun entityDamageByEntity(
         player: Player,
-        neigeItems: ItemTag,
+        neigeItems: NbtCompound,
         event: EntityDamageByEntityEvent
     ) {
         // 对于已损坏物品取消事件
-        if (neigeItems["durability"]?.asInt() == 0) {
+        if (neigeItems.containsKey("durability") && neigeItems.getInt("durability") == 0) {
             event.isCancelled = true
             // 物品损坏提示
             getLang("Messages.brokenItem")?.let {
@@ -181,8 +181,8 @@ object ItemDurability {
     fun itemDamage(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
+        itemTag: NbtCompound,
+        neigeItems: NbtCompound,
         event: PlayerItemDamageEvent
     ) {
         // 消耗耐久值
@@ -216,9 +216,9 @@ object ItemDurability {
         // 获取NI物品信息(不是NI物品就停止操作)
         val itemInfo = itemStack.isNiItem(false) ?: return DamageResult.VANILLA
         // 物品NBT
-        val itemTag: ItemTag = itemInfo.itemTag
+        val itemTag: NbtCompound = itemInfo.itemTag
         // NI物品数据
-        val neigeItems: ItemTag = itemInfo.neigeItems
+        val neigeItems: NbtCompound = itemInfo.neigeItems
         // NI物品id
         val id: String = itemInfo.id
         return damage(player, itemStack, itemTag, neigeItems, damage, breakItem, damageEvent)
@@ -240,8 +240,8 @@ object ItemDurability {
     fun damage(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
+        itemTag: NbtCompound,
+        neigeItems: NbtCompound,
         damage: Int = 1,
         breakItem: Boolean = true,
         damageEvent: PlayerItemDamageEvent? = null
@@ -252,7 +252,8 @@ object ItemDurability {
         if (damage == 0) return DamageResult.ZERO_DAMAGE
 
         // 获取物品耐久值(不存在则停止操作)
-        val durability = neigeItems["durability"]?.asInt() ?: return DamageResult.VANILLA
+        if (!neigeItems.containsKey("durability")) return DamageResult.VANILLA
+        val durability = neigeItems.getInt("durability")
         // 检测物品是否损坏
         if (durability == 0) {
             damageEvent?.isCancelled = true
@@ -296,9 +297,9 @@ object ItemDurability {
         // 如果伤害值大于等于耐久值
         if (realDamage >= durability) {
             // 获取物品是否破坏(默认破坏)
-            val itemBreak = neigeItems["itemBreak"]?.asByte() ?: 1.toByte()
+            val itemBreak = neigeItems.getBoolean("itemBreak", true)
             // 如果破坏物品
-            return if (itemBreak == 1.toByte()) {
+            return if (itemBreak) {
                 // 扣除一个物品
                 if (breakItem) {
                     if (damageEvent == null) {
@@ -322,10 +323,12 @@ object ItemDurability {
             // 如果不破坏物品
             } else {
                 // 修改耐久值
-                neigeItems["durability"] = ItemTagData(0)
+                neigeItems.putInt("durability", 0)
                 damageEvent?.let {damageEvent.damage = itemStack.type.maxDurability - itemStack.durability - 1}
                 // 保存NBT
-                itemTag.saveTo(itemStack)
+                if ((itemStack as Any) !is RefCraftItemStack) {
+                    itemTag.saveTo(itemStack)
+                }
                 // 播放物品破碎声
                 player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f)
                 // 物品损坏提示
@@ -338,13 +341,15 @@ object ItemDurability {
         // 如果伤害值小于耐久值
         } else {
             // 修改耐久值
-            neigeItems["durability"] = ItemTagData(durability-realDamage)
+            neigeItems.putInt("durability", durability-realDamage)
             if (damageEvent != null) {
-                val maxDurability = itemTag.getDeepOrNull("NeigeItems.maxDurability")!!.asInt()
+                val maxDurability = neigeItems.getInt("maxDurability")
                 damageEvent.damage = ((realDamage.toDouble() / maxDurability.toDouble()) * itemStack.type.maxDurability).toInt()
             }
             // 保存NBT
-            itemTag.saveTo(itemStack)
+            if ((itemStack as Any) !is RefCraftItemStack) {
+                itemTag.saveTo(itemStack)
+            }
             // 返回耐久消耗成功结果
             return DamageResult.SUCCESS
         }

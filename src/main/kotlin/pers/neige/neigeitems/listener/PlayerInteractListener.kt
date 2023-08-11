@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.listener
 
+import bot.inker.bukkit.nbt.NbtCompound
+import bot.inker.bukkit.nbt.NbtItemStack
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import pers.neige.neigeitems.item.ItemDurability
@@ -7,7 +9,6 @@ import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
-import taboolib.module.nms.ItemTag
 
 object PlayerInteractListener {
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -20,10 +21,12 @@ object PlayerInteractListener {
         if (event.action == Action.PHYSICAL || itemStack == null) return
         // 获取NI物品信息(不是NI物品就停止操作)
         val itemInfo = itemStack.isNiItem(true) ?: return
+        // NBT物品
+        val nbtItemStack: NbtItemStack = itemInfo.nbtItemStack
         // 物品NBT
-        val itemTag: ItemTag = itemInfo.itemTag
+        val itemTag: NbtCompound = itemInfo.itemTag
         // NI物品数据
-        val neigeItems: ItemTag = itemInfo.neigeItems
+        val neigeItems: NbtCompound = itemInfo.neigeItems
         // NI物品id
         val id: String = itemInfo.id
         // NI节点数据
@@ -32,7 +35,7 @@ object PlayerInteractListener {
         // 检测已损坏物品
         if (ItemDurability.interact(player, neigeItems, event)) return
         // 执行物品动作
-        ActionManager.interactListener(player, itemStack, itemTag, neigeItems, id, data, event)
+        ActionManager.interactListener(player, itemStack, itemInfo, event)
         if (event.isCancelled) return
         // 消耗火焰弹耐久
         ItemDurability.igniteTNT(player, itemStack, itemTag, neigeItems, event)

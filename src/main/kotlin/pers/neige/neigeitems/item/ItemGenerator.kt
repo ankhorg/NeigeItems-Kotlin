@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.item
 
+import bot.inker.bukkit.nbt.NbtItemStack
 import com.alibaba.fastjson2.parseObject
 import com.alibaba.fastjson2.toJSONString
 import org.bukkit.*
@@ -22,15 +23,11 @@ import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ConfigUtils.toMap
-import pers.neige.neigeitems.utils.ItemUtils.coverWith
-import pers.neige.neigeitems.utils.ItemUtils.toItemTag
+import pers.neige.neigeitems.utils.ItemUtils.toNbtCompound
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.getItemTag
 import java.util.*
 
 @RuntimeDependencies(
@@ -161,11 +158,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
     private val originStaticItemStack = static?.let {
         var material = static.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) }
         material = material ?: Material.STONE
-        // 创建一个Inventory, set的过程就是一个asNMSCopy的过程, get的过程就是一个asCraftMirror的过程
-        // 此举的目的在于, 不触碰NMS的情况下将ItemStack转换为CraftItemStack
-        val tempInventory = Bukkit.createInventory(null, 9, "")
-        tempInventory.setItem(0, ItemStack(material))
-        val itemStack = tempInventory.getItem(0)!!
+        // CraftItemStack在获取NBT方面具有无与伦比的性能优势
+        val itemStack = NbtItemStack(ItemStack(material)).asCraftCopy()
         // 设置子ID/损伤值
         if (static.contains("damage")) {
             itemStack.durability = static.getInt("damage").toShort()
@@ -235,80 +229,69 @@ class ItemGenerator (val itemConfig: ItemConfig) {
             }
         }
         itemStack.itemMeta = itemMeta
+        // 获取NBT物品
+        val nbtItemStack = NbtItemStack(itemStack)
         // 设置物品NBT
-        val itemTag = itemStack.getItemTag()
-        val neigeItems = ItemTag()
+        val itemTag = nbtItemStack.orCreateTag
+        val neigeItems = itemTag.getOrCreateCompound("NeigeItems")
         // 设置物品使用次数
         if (static.contains("options.charge")) {
-            neigeItems["charge"] = ItemTagData(static.getInt("options.charge"))
-            neigeItems["maxCharge"] = ItemTagData(static.getInt("options.charge"))
+            neigeItems.putInt("charge", static.getInt("options.charge"))
+            neigeItems.putInt("maxCharge", static.getInt("options.charge"))
         }
         // 设置物品最大使用次数
         if (static.contains("options.maxcharge")) {
-            neigeItems["maxCharge"] = ItemTagData(static.getInt("options.maxcharge"))
+            neigeItems.putInt("maxCharge", static.getInt("options.maxCharge"))
         }
         // 设置物品自定义耐久
         if (static.contains("options.durability")) {
-            neigeItems["durability"] = ItemTagData(static.getInt("options.durability"))
-            neigeItems["maxDurability"] = ItemTagData(static.getInt("options.durability"))
+            neigeItems.putInt("durability", static.getInt("options.durability"))
+            neigeItems.putInt("maxDurability", static.getInt("options.durability"))
         }
         // 设置物品最大自定义耐久
         if (static.contains("options.maxdurability")) {
-            neigeItems["maxDurability"] = ItemTagData(static.getInt("options.maxdurability"))
+            neigeItems.putInt("maxDurability", static.getInt("options.maxDurability"))
         }
         // 设置物品自定义耐久为0时是否破坏
         if (static.contains("options.itembreak")) {
-            if (static.getBoolean("options.itembreak", true)) {
-                neigeItems["itemBreak"] = ItemTagData(1.toByte())
-            } else {
-                neigeItems["itemBreak"] = ItemTagData(0.toByte())
-            }
+            neigeItems.putBoolean("itemBreak", static.getBoolean("options.itembreak", true))
         }
         // 设置具有owner的掉落物是否对其他人不可见
         if (static.contains("options.hide")) {
-            if (static.getBoolean("options.hide", false)) {
-                neigeItems["hide"] = ItemTagData(1.toByte())
-            } else {
-                neigeItems["hide"] = ItemTagData(0.toByte())
-            }
+            neigeItems.putBoolean("hide", static.getBoolean("options.hide", true))
         }
         // 首次掉落归属
         if (static.contains("options.owner")) {
-            neigeItems["owner"] = ItemTagData(static.getString("options.owner"))
+            neigeItems.putString("owner", static.getString("options.owner"))
         }
         // 设置掉落物闪光颜色
         if (static.contains("options.color")) {
             static.getString("options.color")?.uppercase(Locale.getDefault())?.let {
                 // 判断你这颜色保不保熟
                 if (ItemColor.colors.containsKey(it)) {
-                    neigeItems["color"] = ItemTagData(it)
+                    neigeItems.putString("color", it)
                 }
             }
         }
         // 设置掉落执行技能
         if (static.contains("options.dropskill")) {
-            neigeItems["dropSkill"] = ItemTagData(static.getString("options.dropskill") ?: "")
+            neigeItems.putString("dropSkill", static.getString("options.dropskill", ""))
         }
         // 设置物品时限
         if (static.contains("options.itemtime")) {
-            neigeItems["itemTime"] = ItemTagData(System.currentTimeMillis() + (static.getLong("options.itemtime", 0) * 1000))
+            neigeItems.putLong("itemTime", System.currentTimeMillis() + (static.getLong("options.itemtime", 0) * 1000))
         }
-        itemTag["NeigeItems"] = neigeItems
         // 设置物品NBT
         if (static.contains("nbt")) {
             // 获取配置NBT
-            val itemNBT = static.getConfigurationSection("nbt")?.toItemTag()
+            val itemNBT = static.getConfigurationSection("nbt")?.toNbtCompound()
             // NBT覆盖
             itemNBT?.let {itemTag.coverWith(it)}
         }
-        itemTag.saveTo(itemStack)
         itemStack
     } ?: let {
-        // 创建一个Inventory, set的过程就是一个asNMSCopy的过程, get的过程就是一个asCraftMirror的过程
-        // 此举的目的在于, 不触碰NMS的情况下将ItemStack转换为CraftItemStack
-        val tempInventory = Bukkit.createInventory(null, 9, "")
-        tempInventory.setItem(0, ItemStack(Material.STONE))
-        tempInventory.getItem(0)!!
+        // CraftItemStack在获取NBT方面具有无与伦比的性能优势
+        NbtItemStack(ItemStack(Material.STONE)).asCraftCopy()
     }
 
     /**
@@ -479,76 +462,68 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                     }
                 }
                 itemStack.itemMeta = itemMeta
+                // 获取NBT物品
+                val nbtItemStack = NbtItemStack(itemStack)
                 // 设置物品NBT
-                val itemTag = itemStack.getItemTag()
-                val neigeItems = itemTag.getOrPut("NeigeItems") { ItemTag() }.asCompound()
-                neigeItems["id"] = ItemTagData(id)
-                neigeItems["data"] = ItemTagData(cache.toJSONString())
-                neigeItems["hashCode"] = ItemTagData(hashCode)
+                val itemTag = nbtItemStack.orCreateTag
+                val neigeItems = itemTag.getOrCreateCompound("NeigeItems")
+                neigeItems.putString("id", id)
+                neigeItems.putString("data", cache.toJSONString())
+                neigeItems.putInt("hashCode", hashCode)
                 // 设置物品使用次数
                 if (configSection.contains("options.charge")) {
-                    neigeItems["charge"] = ItemTagData(configSection.getInt("options.charge"))
-                    neigeItems["maxCharge"] = ItemTagData(configSection.getInt("options.charge"))
+                    neigeItems.putInt("charge", configSection.getInt("options.charge"))
+                    neigeItems.putInt("maxCharge", configSection.getInt("options.charge"))
                 }
                 // 设置物品最大使用次数
                 if (configSection.contains("options.maxcharge")) {
-                    neigeItems["maxCharge"] = ItemTagData(configSection.getInt("options.maxcharge"))
+                    neigeItems.putInt("maxCharge", configSection.getInt("options.maxcharge"))
                 }
                 // 设置物品自定义耐久
                 if (configSection.contains("options.durability")) {
-                    neigeItems["durability"] = ItemTagData(configSection.getInt("options.durability"))
-                    neigeItems["maxDurability"] = ItemTagData(configSection.getInt("options.durability"))
+                    neigeItems.putInt("durability", configSection.getInt("options.durability"))
+                    neigeItems.putInt("maxDurability", configSection.getInt("options.durability"))
                 }
                 // 设置物品最大自定义耐久
                 if (configSection.contains("options.maxdurability")) {
-                    neigeItems["maxDurability"] = ItemTagData(configSection.getInt("options.maxdurability"))
+                    neigeItems.putInt("maxDurability", configSection.getInt("options.maxdurability"))
                 }
                 // 设置物品自定义耐久为0时是否破坏
                 if (configSection.contains("options.itembreak")) {
-                    if (configSection.getBoolean("options.itembreak", true)) {
-                        neigeItems["itemBreak"] = ItemTagData(1.toByte())
-                    } else {
-                        neigeItems["itemBreak"] = ItemTagData(0.toByte())
-                    }
+                    neigeItems.putBoolean("itemBreak", configSection.getBoolean("options.itembreak", true))
                 }
                 // 设置具有owner的掉落物是否对其他人不可见
                 if (configSection.contains("options.hide")) {
-                    if (configSection.getBoolean("options.hide", false)) {
-                        neigeItems["hide"] = ItemTagData(1.toByte())
-                    } else {
-                        neigeItems["hide"] = ItemTagData(0.toByte())
-                    }
+                    neigeItems.putBoolean("hide", configSection.getBoolean("options.hide", true))
                 }
                 // 首次掉落归属
                 if (configSection.contains("options.owner")) {
-                    neigeItems["owner"] = ItemTagData(configSection.getString("options.owner"))
+                    neigeItems.putString("owner", configSection.getString("options.owner"))
                 }
                 // 设置掉落物闪光颜色
                 if (configSection.contains("options.color")) {
                     configSection.getString("options.color")?.uppercase(Locale.getDefault())?.let {
                         // 判断你这颜色保不保熟
                         if (ItemColor.colors.containsKey(it)) {
-                            neigeItems["color"] = ItemTagData(it)
+                            neigeItems.putString("color", it)
                         }
                     }
                 }
                 // 设置掉落执行技能
                 if (configSection.contains("options.dropskill")) {
-                    neigeItems["dropSkill"] = ItemTagData(configSection.getString("options.dropskill") ?: "")
+                    neigeItems.putString("dropSkill", configSection.getString("options.dropskill", ""))
                 }
                 // 设置物品时限
                 if (configSection.contains("options.itemtime")) {
-                    neigeItems["itemTime"] = ItemTagData(System.currentTimeMillis() + (configSection.getLong("options.itemtime", 0) * 1000))
+                    neigeItems.putLong("itemTime", System.currentTimeMillis() + (configSection.getLong("options.itemtime", 0) * 1000))
                 }
-                itemTag["NeigeItems"] = neigeItems
                 // 设置物品NBT
                 if (configSection.contains("nbt")) {
                     // 获取配置NBT
-                    val itemNBT = configSection.getConfigurationSection("nbt")?.toItemTag()
+                    val itemNBT = configSection.getConfigurationSection("nbt")?.toNbtCompound()
                     // NBT覆盖
                     itemNBT?.let {itemTag.coverWith(it)}
                 }
-                itemTag.saveTo(itemStack)
                 // 触发一下物品生成事件
                 val event = ItemGenerateEvent(id, player, itemStack, cache, configSection, sections)
                 event.call()

@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.manager
 
+import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.Bukkit
 import org.bukkit.Bukkit.isPrimaryThread
 import org.bukkit.configuration.ConfigurationSection
@@ -17,6 +18,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.item.action.ComboInfo
 import pers.neige.neigeitems.item.action.ItemAction
 import pers.neige.neigeitems.manager.ConfigManager.comboInterval
@@ -31,14 +33,13 @@ import pers.neige.neigeitems.utils.ActionUtils.consume
 import pers.neige.neigeitems.utils.ActionUtils.consumeAndReturn
 import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.getItemTag
 import taboolib.platform.util.giveItem
 import taboolib.platform.util.sendActionBar
 import java.io.File
@@ -160,7 +161,7 @@ object ActionManager {
         player: Player,
         action: Any?,
         itemStack: ItemStack? = null,
-        itemTag: ItemTag? = itemStack?.getItemTag(),
+        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?> = HashMap<String, Any?>(),
@@ -194,7 +195,7 @@ object ActionManager {
         actionType: String,
         actionContent: String,
         itemStack: ItemStack? = null,
-        itemTag: ItemTag? = itemStack?.getItemTag(),
+        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?>,
@@ -270,7 +271,7 @@ object ActionManager {
         player: Player,
         action: List<*>,
         itemStack: ItemStack? = null,
-        itemTag: ItemTag? = itemStack?.getItemTag(),
+        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?>,
@@ -364,7 +365,7 @@ object ActionManager {
         player: Player,
         action: String,
         itemStack: ItemStack? = null,
-        itemTag: ItemTag? = itemStack?.getItemTag(),
+        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?>,
@@ -411,7 +412,7 @@ object ActionManager {
         player: Player,
         action: ConfigurationSection,
         itemStack: ItemStack? = null,
-        itemTag: ItemTag? = itemStack?.getItemTag(),
+        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?>,
@@ -478,7 +479,7 @@ object ActionManager {
         player: Player,
         action: Map<String, *>,
         itemStack: ItemStack? = null,
-        itemTag: ItemTag? = itemStack?.getItemTag(),
+        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?>,
@@ -570,7 +571,7 @@ object ActionManager {
         condition: String?,
         player: Player?,
         itemStack: ItemStack? = null,
-        itemTag: ItemTag? = itemStack?.getItemTag(),
+        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?> = HashMap<String, Any?>(),
@@ -1013,12 +1014,13 @@ object ActionManager {
     fun interactListener(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
-        id: String,
-        data: HashMap<String, String>?,
+        itemInfo: ItemInfo,
         event: PlayerInteractEvent
     ) {
+        val id = itemInfo.id
+        val itemTag = itemInfo.itemTag
+        val neigeItems = itemInfo.neigeItems
+        val data = itemInfo.data
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1103,12 +1105,13 @@ object ActionManager {
     fun eatListener(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
-        id: String,
-        data: HashMap<String, String>?,
+        itemInfo: ItemInfo,
         event: PlayerItemConsumeEvent
     ) {
+        val id = itemInfo.id
+        val itemTag = itemInfo.itemTag
+        val neigeItems = itemInfo.neigeItems
+        val data = itemInfo.data
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1162,12 +1165,13 @@ object ActionManager {
     fun dropListener(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
-        id: String,
-        data: HashMap<String, String>?,
+        itemInfo: ItemInfo,
         event: PlayerDropItemEvent
     ) {
+        val id = itemInfo.id
+        val itemTag = itemInfo.itemTag
+        val neigeItems = itemInfo.neigeItems
+        val data = itemInfo.data
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1216,12 +1220,13 @@ object ActionManager {
     fun pickListener(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
-        id: String,
-        data: HashMap<String, String>?,
+        itemInfo: ItemInfo,
         event: EntityPickupItemEvent
     ) {
+        val id = itemInfo.id
+        val itemTag = itemInfo.itemTag
+        val neigeItems = itemInfo.neigeItems
+        val data = itemInfo.data
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1270,12 +1275,13 @@ object ActionManager {
     fun clickListener(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
-        id: String,
-        data: HashMap<String, String>?,
+        itemInfo: ItemInfo,
         event: InventoryClickEvent
     ) {
+        val id = itemInfo.id
+        val itemTag = itemInfo.itemTag
+        val neigeItems = itemInfo.neigeItems
+        val data = itemInfo.data
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1323,12 +1329,13 @@ object ActionManager {
     fun beClickedListener(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
-        id: String,
-        data: HashMap<String, String>?,
+        itemInfo: ItemInfo,
         event: InventoryClickEvent
     ) {
+        val id = itemInfo.id
+        val itemTag = itemInfo.itemTag
+        val neigeItems = itemInfo.neigeItems
+        val data = itemInfo.data
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
@@ -1375,12 +1382,13 @@ object ActionManager {
     fun tick(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
-        id: String,
-        data: HashMap<String, String>?,
+        itemInfo: ItemInfo,
         type: String
     ) {
+        val id = itemInfo.id
+        val itemTag = itemInfo.itemTag
+        val neigeItems = itemInfo.neigeItems
+        val data = itemInfo.data
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器

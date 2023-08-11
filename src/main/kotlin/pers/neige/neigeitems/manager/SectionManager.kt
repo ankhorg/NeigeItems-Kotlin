@@ -63,7 +63,8 @@ object SectionManager {
         files.addAll(getAllFiles("GlobalSections"))
         globalSectionMap.clear()
         globalSections.clear()
-        sectionParsers.clear()
+        // 清不得, 单独重载Items的时候如果清了这玩意儿, Expansion注册的自定义节点就补不回来了
+//        sectionParsers.clear()
         loadGlobalSections()
         loadBasicParser()
         loadCustomSections()

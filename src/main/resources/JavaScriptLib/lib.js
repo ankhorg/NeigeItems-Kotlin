@@ -123,12 +123,7 @@ const parseItem = function(text) {
  * @return String NBT值转文本
  */
 const getNBT = function(key) {
-    const result = ItemUtils.getDeepOrNull(itemTag, key)
-    if (result == null) {
-        return result
-    } else {
-        return result.asString()
-    }
+    return itemTag.getDeepString(key)
 }
 
 /**
@@ -138,7 +133,7 @@ const getNBT = function(key) {
  * @return ItemTag NBT值
  */
 const getNBTTag = function(key) {
-    return ItemUtils.getDeepOrNull(itemTag, key)
+    return itemTag.getDeep(key)
 }
 
 /**

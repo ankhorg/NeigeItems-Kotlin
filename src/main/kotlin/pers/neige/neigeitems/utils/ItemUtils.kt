@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.utils
 
+import bot.inker.bukkit.nbt.*
+import bot.inker.bukkit.nbt.internal.ref.*
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -32,7 +34,7 @@ import kotlin.math.sqrt
  * 物品相关工具类
  */
 object ItemUtils {
-    val invalidNBT by lazy { arrayListOf("Enchantments","VARIABLES_DATA","ench","Damage","HideFlags","Unbreakable", "CustomModelData") }
+    val invalidNBT by lazy { arrayListOf("display", "Enchantments","VARIABLES_DATA","ench","Damage","HideFlags","Unbreakable", "CustomModelData") }
 
     /**
      * HashMap 转 ItemTag
@@ -49,11 +51,31 @@ object ItemUtils {
     }
 
     @JvmStatic
+    fun HashMap<*, *>.toNbtCompound(): NbtCompound {
+        val itemTag = NbtCompound()
+        for ((key, value) in this) {
+            itemTag[key as String] = value.toNbt()
+        }
+        return itemTag
+    }
+
+    @JvmStatic
     fun ConfigurationSection.toItemTag(): ItemTag {
         val itemTag = ItemTag()
         this.getKeys(false).forEach { key ->
             this.get(key)?.let { value ->
                 itemTag[key as String] = value.toItemTagData()
+            }
+        }
+        return itemTag
+    }
+
+    @JvmStatic
+    fun ConfigurationSection.toNbtCompound(): NbtCompound {
+        val itemTag = NbtCompound()
+        this.getKeys(false).forEach { key ->
+            this.get(key)?.let { value ->
+                itemTag[key as String] = value.toNbt()
             }
         }
         return itemTag
@@ -148,6 +170,39 @@ object ItemUtils {
         }
     }
 
+    @JvmStatic
+    fun String.castToNbt(): Nbt<*> {
+        return when {
+            this.startsWith("(Byte) ") -> {
+                this.substring(7, this.length).toByteOrNull()?.let { NbtByte.valueOf(it) } ?: NbtString.valueOf(this)
+            }
+            this.startsWith("(Short) ") -> {
+                this.substring(8, this.length).toShortOrNull()?.let { NbtShort.valueOf(it) } ?: NbtString.valueOf(this)
+            }
+            this.startsWith("(Int) ") -> {
+                this.substring(6, this.length).toIntOrNull()?.let { NbtInt.valueOf(it) } ?: NbtString.valueOf(this)
+            }
+            this.startsWith("(Long) ") -> {
+                this.substring(7, this.length).toLongOrNull()?.let { NbtLong.valueOf(it) } ?: NbtString.valueOf(this)
+            }
+            this.startsWith("(Float) ") -> {
+                this.substring(8, this.length).toFloatOrNull()?.let { NbtFloat.valueOf(it) } ?: NbtString.valueOf(this)
+            }
+            this.startsWith("(Double) ") -> {
+                this.substring(9, this.length).toDoubleOrNull()?.let { NbtDouble.valueOf(it) } ?: NbtString.valueOf(this)
+            }
+            this.startsWith("[") && this.endsWith("]") -> {
+                val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
+                when {
+                    list.all { it is Byte } -> NbtByteArray(ByteArray(list.size){ list[it] as Byte })
+                    list.all { it is Int } -> NbtIntArray(IntArray(list.size){ list[it] as Int })
+                    else -> NbtString.valueOf(this)
+                }
+            }
+            else -> NbtString.valueOf(this)
+        }
+    }
+
     /**
      * 转 ItemTagData
      *
@@ -186,6 +241,39 @@ object ItemUtils {
         }
     }
 
+    @JvmStatic
+    fun Any.toNbt(): Nbt<*> {
+        return when (this) {
+            is Nbt<*> -> this
+            is Byte -> NbtByte.valueOf(this)
+            is Short -> NbtShort.valueOf(this)
+            is Int -> NbtInt.valueOf(this)
+            is Long -> NbtLong.valueOf(this)
+            is Float -> NbtFloat.valueOf(this)
+            is Double -> NbtDouble.valueOf(this)
+            is ByteArray -> NbtByteArray(this)
+            is IntArray -> NbtIntArray(this)
+            is String -> this.castToNbt()
+            is List<*> -> {
+                val list = this.map { it?.cast() ?: it }
+                when {
+                    list.all { it is Byte } -> NbtByteArray(ByteArray(list.size){ list[it] as Byte })
+                    list.all { it is Int } -> NbtIntArray(IntArray(list.size){ list[it] as Int })
+                    else -> {
+                        val nbtList = NbtList()
+                        for (obj in list) {
+                            obj?.toNbt()?.let { nbtList.add(it) }
+                        }
+                        nbtList
+                    }
+                }
+            }
+            is HashMap<*, *> -> this.toNbtCompound()
+            is ConfigurationSection -> this.toNbtCompound()
+            else -> NbtString.valueOf("nm的你塞了个什么东西进来，我给你一拖鞋")
+        }
+    }
+
     /**
      * ItemTag 转 HashMap
      *
@@ -215,6 +303,96 @@ object ItemUtils {
             hashMap[key] = value.parseValue()
         }
         return hashMap
+    }
+
+    @JvmStatic
+    fun NbtCompound.toStringMap(invalidNBT: List<String>): HashMap<String, Any> {
+        val hashMap = HashMap<String, Any>()
+        forEach { (key, value) ->
+            if (!invalidNBT.contains(key)) {
+                hashMap[key] = value.toStringValue()
+            }
+        }
+        return hashMap
+    }
+
+    @JvmStatic
+    fun NbtCompound.toStringMap(): HashMap<String, Any> {
+        val hashMap = HashMap<String, Any>()
+        forEach { (key, value) ->
+            hashMap[key] = value.toStringValue()
+        }
+        return hashMap
+    }
+
+    @JvmStatic
+    fun Nbt<*>.toStringValue(): Any {
+        return when (this) {
+            is NbtByte -> "(Byte) ${this.asString}"
+            is NbtShort ->  "(Short) ${this.asString}"
+            is NbtInt ->  "(Int) ${this.asString}"
+            is NbtLong ->  "(Long) ${this.asString}"
+            is NbtFloat ->  "(Float) ${this.asString}"
+            is NbtDouble ->  "(Double) ${this.asString}"
+            is NbtString ->  this.asString
+            is NbtByteArray -> {
+                arrayListOf<String>().also { list ->
+                    this.asByteArray.forEach { list.add("(Byte) $it") }
+                }
+            }
+            is NbtIntArray -> {
+                arrayListOf<String>().also { list ->
+                    this.asIntArray.forEach { list.add("(Int) $it") }
+                }
+            }
+            is NbtLongArray -> {
+                arrayListOf<String>().also { list ->
+                    this.asLongArray.forEach { list.add("(Long) $it") }
+                }
+            }
+            is NbtCompound -> this.toStringMap()
+            is NbtList -> this.map { it.toStringValue() }
+            else -> this.asString
+        }
+    }
+
+    @JvmStatic
+    fun NbtCompound.toMap(invalidNBT: List<String>): HashMap<String, Any> {
+        val hashMap = HashMap<String, Any>()
+        forEach { (key, value) ->
+            if (!invalidNBT.contains(key)) {
+                hashMap[key] = value.toValue()
+            }
+        }
+        return hashMap
+    }
+
+    @JvmStatic
+    fun NbtCompound.toMap(): HashMap<String, Any> {
+        val hashMap = HashMap<String, Any>()
+        forEach { (key, value) ->
+            hashMap[key] = value.toValue()
+        }
+        return hashMap
+    }
+
+    @JvmStatic
+    fun Nbt<*>.toValue(): Any {
+        return when (this) {
+            is NbtByte -> this.asByte
+            is NbtShort ->  this.asShort
+            is NbtInt ->  this.asInt
+            is NbtLong ->  this.asLong
+            is NbtFloat ->  this.asFloat
+            is NbtDouble ->  this.asDouble
+            is NbtString ->  this.asString
+            is NbtByteArray -> this.asByteArray.toList()
+            is NbtIntArray -> this.asIntArray.toList()
+            is NbtLongArray -> this.asLongArray.toList()
+            is NbtCompound -> this.toMap()
+            is NbtList -> this.map { it.toValue() }
+            else -> this.asString
+        }
     }
 
     /**
@@ -280,6 +458,17 @@ object ItemUtils {
     @JvmStatic
     fun getItemTag(itemStack: ItemStack): ItemTag {
         return itemStack.getItemTag()
+    }
+
+    /**
+     * 获取物品NBT
+     *
+     * @param itemStack 待操作物品
+     * @return 物品NBT
+     */
+    @JvmStatic
+    fun ItemStack.getNbt(): NbtCompound {
+        return NbtItemStack(this).orCreateTag
     }
 
     /**
@@ -683,18 +872,20 @@ object ItemUtils {
     fun Location.dropNiItem(
         itemStack: ItemStack,
         entity: Entity? = null,
-        itemTag: ItemTag = itemStack.getItemTag(),
-        neigeItems: ItemTag? = itemTag["NeigeItems"]?.asCompound()
+        itemTag: NbtCompound = itemStack.getNbt(),
+        neigeItems: NbtCompound? = itemTag.getCompound("NeigeItems")
     ): Item? {
         // 记录掉落物拥有者
-        val owner = neigeItems?.get("owner")?.asString()
+        val owner = neigeItems?.getString("owner")
         // 移除相关nbt, 防止物品无法堆叠
         owner?.let {
             neigeItems.remove("owner")
-            itemTag.saveTo(itemStack)
+            if ((itemStack as Any) !is RefCraftItemStack) {
+                itemTag.saveTo(itemStack)
+            }
         }
         // 记录掉落物拥有者
-        val hide = neigeItems?.get("hide")?.asByte()
+        val hide = neigeItems?.get("hide")
         if (Bukkit.isPrimaryThread()) {
             // 掉落物品
             return this.world?.let { world ->
@@ -708,13 +899,11 @@ object ItemUtils {
                         item.setMetadataEZ("NI-Owner", it)
                     }
                     hide?.let {
-                        item.setMetadataEZ("NI-Hide", it)
+                        item.setMetadataEZ("NI-Hide", (it as NbtNumeric).asByte)
                     }
                     // 掉落物技能
-                    neigeItems?.let {
-                        neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
-                            mythicMobsHooker?.castSkill(item, dropSkill, entity)
-                        }
+                    neigeItems?.getString("dropSkill")?.let { dropSkill ->
+                        mythicMobsHooker?.castSkill(item, dropSkill, entity)
                     }
                 }
             }
@@ -732,16 +921,14 @@ object ItemUtils {
                             item.setMetadataEZ("NI-Owner", it)
                         }
                         hide?.let {
-                            item.setMetadataEZ("NI-Hide", it)
+                            item.setMetadataEZ("NI-Hide", (it as NbtNumeric).asByte)
                         }
                     }
                 }
             }.get()?.also { item ->
                 // 掉落物技能
-                neigeItems?.let {
-                    neigeItems["dropSkill"]?.asString()?.let { dropSkill ->
-                        mythicMobsHooker?.castSkill(item, dropSkill, entity)
-                    }
+                neigeItems?.getString("dropSkill")?.let { dropSkill ->
+                    mythicMobsHooker?.castSkill(item, dropSkill, entity)
                 }
             }
         }
@@ -766,17 +953,19 @@ object ItemUtils {
     @JvmStatic
     fun ItemStack.isNiItem(parseData: Boolean): ItemInfo? {
         if (this.type != Material.AIR) {
+            // 读取物品
+            val nbtItemStack = NbtItemStack(this)
             // 获取物品NBT
-            val itemTag = this.getItemTag()
+            val itemTag = nbtItemStack.orCreateTag
             // 如果为非NI物品则终止操作
-            val neigeItems = itemTag["NeigeItems"]?.asCompound() ?: let { return null }
+            val neigeItems = itemTag.getCompound("NeigeItems") ?: return null
             // 获取物品id
-            val id = neigeItems["id"]?.asString() ?: let { return null }
+            val id = neigeItems.getString("id") ?: return null
             val data = when {
-                parseData -> neigeItems["data"]?.asString()?.parseObject<HashMap<String, String>>()
+                parseData -> neigeItems.getString("data")?.parseObject<java.util.HashMap<String, String>>()
                 else -> null
             }
-            return ItemInfo(itemTag, neigeItems, id, data)
+            return ItemInfo(nbtItemStack, itemTag, neigeItems, id, data)
         }
         return null
     }
@@ -1087,8 +1276,7 @@ object ItemUtils {
             }
             // 开始掉落
             dropItems.forEachIndexed { index, itemStack ->
-                val itemTag = itemStack.getItemTag()
-                location.dropNiItem(itemStack, entity, itemTag)?.let { item ->
+                location.dropNiItem(itemStack, entity, itemStack.getNbt())?.let { item ->
                     val vector = Vector(offsetX, offsetY, 0.0)
                     if (angleType == "random") {
                         val angleCos = cos(Math.PI * 2 * ThreadLocalRandom.current().nextDouble())
@@ -1109,8 +1297,7 @@ object ItemUtils {
         } else {
             // 普通掉落
             for (itemStack in dropItems) {
-                val itemTag = itemStack.getItemTag()
-                location.dropNiItem(itemStack, entity, itemTag)
+                location.dropNiItem(itemStack, entity, itemStack.getNbt())
             }
         }
     }

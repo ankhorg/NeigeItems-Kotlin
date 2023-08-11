@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.utils
 
+import bot.inker.bukkit.nbt.NbtCompound
+import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.item.action.ActionTrigger
@@ -8,8 +10,6 @@ import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.ItemTagData
 import taboolib.platform.util.actionBar
 import taboolib.platform.util.giveItem
 
@@ -41,7 +41,7 @@ object ActionUtils {
     fun ActionTrigger.isCoolDown(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag,
+        itemTag: NbtCompound,
         data: MutableMap<String, String>?
     ): Boolean {
         val cd = cooldown?.parseItemSection(itemStack, itemTag, data, player)?.toLongOrNull() ?: 1000
@@ -84,21 +84,23 @@ object ActionUtils {
      * @param amount 消耗数
      * @param itemTag 物品NBT
      * @param neigeItems NI特殊NBT
-     * @param charge 物品使用次数NBT, 不填则主动生成
+     * @param charge 物品剩余使用次数, 不填则主动获取
      * @return 是否消耗成功
      */
     @JvmStatic
     fun ItemStack.consume(
         player: Player,
         amount: Int,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
-        charge: ItemTagData? = neigeItems["charge"]
+        itemTag: NbtCompound,
+        neigeItems: NbtCompound,
+        charge: Int? =
+            if (neigeItems.containsKey("charge"))
+                neigeItems.getInt("charge")
+            else
+                null
     ): Boolean {
         if (charge != null) {
-            // 获取剩余使用次数
-            val chargeInt = charge.asInt()
-            if (chargeInt >= amount) {
+            if (charge >= amount) {
                 var itemClone: ItemStack? = null
                 // 拆分物品
                 if (this.amount != 1) {
@@ -107,11 +109,13 @@ object ActionUtils {
                     this.amount = 1
                 }
                 // 更新次数
-                if (chargeInt == amount) {
+                if (charge == amount) {
                     this.amount = 0
                 } else {
-                    neigeItems["charge"] = ItemTagData(chargeInt - amount)
-                    itemTag.saveTo(this)
+                    neigeItems.putInt("charge", charge - amount)
+                    if ((this as Any) !is RefCraftItemStack) {
+                        itemTag.saveTo(this)
+                    }
                 }
                 if (itemClone != null) player.giveItem(itemClone)
                 return true
@@ -136,11 +140,12 @@ object ActionUtils {
     @JvmStatic
     fun ItemStack.consumeAndReturn(
         amount: Int,
-        itemTag: ItemTag,
-        neigeItems: ItemTag
+        itemTag: NbtCompound,
+        neigeItems: NbtCompound
     ): Array<ItemStack>? {
-        neigeItems["charge"]?.asInt()?.let { chargeInt ->
-            if (chargeInt >= amount) {
+        if (neigeItems.containsKey("charge")) {
+            val charge = neigeItems.getInt("charge")
+            if (charge >= amount) {
                 var itemClone: ItemStack? = null
                 // 拆分物品
                 if (this.amount != 1) {
@@ -149,16 +154,18 @@ object ActionUtils {
                     this.amount = 1
                 }
                 // 更新次数
-                if (chargeInt == amount) {
+                if (charge == amount) {
                     this.amount = 0
                 } else {
-                    neigeItems["charge"] = ItemTagData(chargeInt - amount)
-                    itemTag.saveTo(this)
+                    neigeItems.putInt("charge", charge - amount)
+                    if ((this as Any) !is RefCraftItemStack) {
+                        itemTag.saveTo(this)
+                    }
                 }
                 if (itemClone != null) return arrayOf(this, itemClone)
                 return arrayOf(this)
             }
-        } ?: let {
+        } else {
             if (this.amount >= amount) {
                 this.amount = this.amount - amount
                 return arrayOf(this)

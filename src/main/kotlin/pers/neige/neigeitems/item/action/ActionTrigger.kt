@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.item.action
 
+import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
@@ -7,8 +8,7 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ActionManager
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.getItemTag
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
 
 class ActionTrigger(val id: String, val type: String, val config: ConfigurationSection) {
     /**
@@ -52,7 +52,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
     fun run(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag? = itemStack.getItemTag(),
+        itemTag: NbtCompound? = itemStack.getNbt(),
         data: MutableMap<String, String>? = null,
         event: Event?,
         global: MutableMap<String, Any?>
@@ -74,7 +74,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
     fun async(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag? = itemStack.getItemTag(),
+        itemTag: NbtCompound? = itemStack.getNbt(),
         data: MutableMap<String, String>? = null,
         event: Event?,
         global: MutableMap<String, Any?>
@@ -95,7 +95,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
     fun sync(
         player: Player,
         itemStack: ItemStack,
-        itemTag: ItemTag? = itemStack.getItemTag(),
+        itemTag: NbtCompound? = itemStack.getNbt(),
         data: MutableMap<String, String>? = null,
         event: Event?,
         global: MutableMap<String, Any?>

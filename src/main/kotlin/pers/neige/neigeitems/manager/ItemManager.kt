@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.manager
 
+import bot.inker.bukkit.nbt.NbtItemStack
+import bot.inker.bukkit.nbt.NbtNumeric
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
@@ -10,14 +12,10 @@ import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.utils.ConfigUtils.clone
-import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
-import pers.neige.neigeitems.utils.ItemUtils.toMap
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.getItemTag
+import pers.neige.neigeitems.utils.ItemUtils.toStringMap
 import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -214,10 +212,7 @@ object ItemManager : ItemConfigManager() {
                     // 获取ItemMeta
                     val itemMeta = itemStack.itemMeta
                     // 获取物品NBT
-                    val itemNBT = itemStack.getItemTag()
-                    // 获取显示信息
-                    val display = itemNBT["display"]
-                    itemNBT.remove("display")
+                    val itemNBT = itemStack.getNbt()
                     // 设置CustomModelData
                     try {
                         if (itemMeta?.hasCustomModelData() == true) {
@@ -250,14 +245,13 @@ object ItemManager : ItemConfigManager() {
                         }
                     }
                     // 设置物品颜色
-                    display?.asCompound()?.let {
-                        it["color"]?.asInt()?.let { color ->
-                            configSection.set("color", color.toString(16).uppercase(Locale.getDefault()))
-                        }
+                    val color = itemNBT.getDeepInt("display.color")
+                    if (color != -1) {
+                        configSection.set("color", color.toString(16).uppercase(Locale.getDefault()))
                     }
                     // 设置物品NBT
                     if (!itemNBT.isEmpty()) {
-                        configSection.set("nbt", itemNBT.toMap(invalidNBT))
+                        configSection.set("nbt", itemNBT.toStringMap(invalidNBT))
                     }
                 }
                 // 保存文件
@@ -314,16 +308,21 @@ object ItemManager : ItemConfigManager() {
      */
     @JvmStatic
     fun ItemStack.setCharge(amount: Int) {
-        // 获取物品NBT
-        val itemTag = getItemTag()
-        // 获取物品最大使用次数(不存在则停止操作)
-        val maxCharge = itemTag.getDeepOrNull("NeigeItems.maxCharge")?.asInt() ?: return
+        // 直掏NBT
+        val nbtItemStack = NbtItemStack(this)
+        val directTag = nbtItemStack.directTag
+        // 不是NI物品还加个屁的使用次数
+        val neigeItems = directTag.getCompound("NeigeItems") ?: return
+        // 掏出最大使用次数NBT
+        val maxChargeNbt = neigeItems.get("maxCharge")
+        // 类型检测
+        if (maxChargeNbt !is NbtNumeric<*>) return
+        // 获取物品最大使用次数
+        val maxCharge = maxChargeNbt.asInt
         // 计算新使用次数
         val newCharge = amount.coerceAtMost(maxCharge).coerceAtLeast(0)
         // 修改使用次数
-        itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(maxCharge))
-        // 保存修改
-        itemTag.saveTo(this)
+        neigeItems.putInt("charge", newCharge)
     }
 
     /**
@@ -333,18 +332,30 @@ object ItemManager : ItemConfigManager() {
      */
     @JvmStatic
     fun ItemStack.addCharge(amount: Int) {
-        // 获取物品NBT
-        val itemTag = getItemTag()
-        // 获取物品使用次数(不存在则停止操作)
-        val charge = itemTag.getDeepOrNull("NeigeItems.charge")?.asInt() ?: return
+        // 直掏NBT
+        val nbtItemStack = NbtItemStack(this)
+        val directTag = nbtItemStack.directTag
+        // 不是NI物品还加个屁的使用次数
+        val neigeItems = directTag.getCompound("NeigeItems") ?: return
+        // 掏出使用次数NBT
+        val chargeNbt = neigeItems.get("charge")
+        // 类型检测
+        if (chargeNbt !is NbtNumeric<*>) return
+        // 获取物品使用次数
+        val charge = chargeNbt.asInt
         // 获取物品最大使用次数
-        val maxCharge = itemTag.getDeepOrNull("NeigeItems.maxCharge")!!.asInt()
+        val maxCharge = neigeItems.getInt("maxCharge")
         // 计算新使用次数
         val newCharge = (charge + amount).coerceAtMost(maxCharge).coerceAtLeast(0)
-        // 修改使用次数
-        itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(newCharge))
-        // 保存修改
-        itemTag.saveTo(this)
+        // 最终使用次数为0
+        if (newCharge == 0) {
+            // 扬了
+            this.amount = 0
+        // 不为0
+        } else {
+            // 修改使用次数
+            neigeItems.putInt("charge", newCharge)
+        }
     }
 
     /**
@@ -354,16 +365,21 @@ object ItemManager : ItemConfigManager() {
      */
     @JvmStatic
     fun ItemStack.setMaxCharge(amount: Int) {
-        // 获取物品NBT
-        val itemTag = getItemTag()
-        // 获取物品耐久值(不存在则停止操作)
-        val charge = (itemTag.getDeepOrNull("NeigeItems.charge")?.asInt() ?: return).coerceAtMost(amount.coerceAtLeast(1))
-        // 修改耐久值
-        itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(charge))
-        // 修改最大耐久值
-        itemTag.putDeepFixed("NeigeItems.maxCharge", ItemTagData(amount.coerceAtLeast(1)))
-        // 保存修改
-        itemTag.saveTo(this)
+        // 直掏NBT
+        val nbtItemStack = NbtItemStack(this)
+        val directTag = nbtItemStack.directTag
+        // 不是NI物品还加个屁的使用次数
+        val neigeItems = directTag.getCompound("NeigeItems") ?: return
+        // 掏出使用次数NBT
+        val chargeNbt = neigeItems.get("charge")
+        // 类型检测
+        if (chargeNbt !is NbtNumeric<*>) return
+        // 计算物品使用次数
+        val charge = chargeNbt.asInt.coerceAtMost(amount.coerceAtLeast(1))
+        // 修改使用次数
+        neigeItems.putInt("charge", charge)
+        // 修改最大使用次数
+        neigeItems.putInt("maxCharge", amount.coerceAtLeast(1))
     }
 
     /**
@@ -373,18 +389,23 @@ object ItemManager : ItemConfigManager() {
      */
     @JvmStatic
     fun ItemStack.addMaxCharge(amount: Int) {
-        // 获取物品NBT
-        val itemTag = getItemTag()
-        // 获取物品最大耐久值
-        val maxCharge = ((itemTag.getDeepOrNull("NeigeItems.maxCharge")?.asInt() ?: return) + amount).coerceAtLeast(1)
-        // 获取物品耐久值(不存在则停止操作)
-        val charge = itemTag.getDeepOrNull("NeigeItems.charge")!!.asInt().coerceAtMost(maxCharge)
-        // 修改耐久值
-        itemTag.putDeepFixed("NeigeItems.charge", ItemTagData(charge))
-        // 修改最大耐久值
-        itemTag.putDeepFixed("NeigeItems.maxCharge", ItemTagData(maxCharge))
-        // 保存修改
-        itemTag.saveTo(this)
+        // 直掏NBT
+        val nbtItemStack = NbtItemStack(this)
+        val directTag = nbtItemStack.directTag
+        // 不是NI物品还加个屁的使用次数
+        val neigeItems = directTag.getCompound("NeigeItems") ?: return
+        // 掏出最大使用次数NBT
+        val maxChargeNbt = neigeItems.get("maxCharge")
+        // 类型检测
+        if (maxChargeNbt !is NbtNumeric<*>) return
+        // 计算物品最大使用次数
+        val maxCharge = (maxChargeNbt.asInt + amount).coerceAtLeast(1)
+        // 计算物品使用次数
+        val charge = neigeItems.getInt("charge").coerceAtMost(maxCharge)
+        // 修改使用次数
+        neigeItems.putInt("charge", charge)
+        // 修改最大使用次数
+        neigeItems.putInt("maxCharge", maxCharge)
     }
 
     /**
@@ -394,17 +415,30 @@ object ItemManager : ItemConfigManager() {
      */
     @JvmStatic
     fun ItemStack.setCustomDurability(amount: Int) {
-        // 获取物品NBT
-        val itemTag = getItemTag()
-        // 获取物品最大耐久值(不存在则停止操作)
-        val maxDurability = itemTag.getDeepOrNull("NeigeItems.maxDurability")?.asInt() ?: return
+        // 直掏NBT
+        val nbtItemStack = NbtItemStack(this)
+        val directTag = nbtItemStack.directTag
+        // 不是NI物品还加个屁的自定义耐久
+        val neigeItems = directTag.getCompound("NeigeItems") ?: return
+        // 掏出最大耐久值NBT
+        val maxDurabilityNbt = neigeItems.get("maxDurability")
+        // 类型检测
+        if (maxDurabilityNbt !is NbtNumeric<*>) return
+        // 获取物品最大耐久值
+        val maxDurability = maxDurabilityNbt.asInt
         // 计算新耐久值
         val newDurability = amount.coerceAtMost(maxDurability).coerceAtLeast(0)
-        // 修改耐久值
-        itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(newDurability))
-        this.durability = (this.durability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
-        // 保存修改
-        itemTag.saveTo(this)
+        // 获取物品是否破坏(默认破坏)
+        val itemBreak = neigeItems.getBoolean("itemBreak", true)
+        // 破坏
+        if (newDurability == 0 && itemBreak) {
+            this.amount = 0
+            // 不破坏
+        } else {
+            // 修改耐久值
+            neigeItems.putInt("durability", newDurability)
+            this.durability = (this.durability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
+        }
     }
 
     /**
@@ -414,19 +448,32 @@ object ItemManager : ItemConfigManager() {
      */
     @JvmStatic
     fun ItemStack.addCustomDurability(amount: Int) {
-        // 获取物品NBT
-        val itemTag = getItemTag()
-        // 获取物品耐久值(不存在则停止操作)
-        val durability = itemTag.getDeepOrNull("NeigeItems.durability")?.asInt() ?: return
+        // 直掏NBT
+        val nbtItemStack = NbtItemStack(this)
+        val directTag = nbtItemStack.directTag
+        // 不是NI物品还加个屁的自定义耐久
+        val neigeItems = directTag.getCompound("NeigeItems") ?: return
+        // 掏出耐久值NBT
+        val durabilityNbt = neigeItems.get("durability")
+        // 类型检测
+        if (durabilityNbt !is NbtNumeric<*>) return
+        // 获取物品耐久值
+        val durability = durabilityNbt.asInt
         // 获取物品最大耐久值
-        val maxDurability = itemTag.getDeepOrNull("NeigeItems.maxDurability")!!.asInt()
+        val maxDurability = neigeItems.getInt("maxDurability")
         // 计算新耐久值
         val newDurability = (durability + amount).coerceAtMost(maxDurability).coerceAtLeast(0)
-        // 修改耐久值
-        itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(newDurability))
-        this.durability = (this.durability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
-        // 保存修改
-        itemTag.saveTo(this)
+        // 获取物品是否破坏(默认破坏)
+        val itemBreak = neigeItems.getBoolean("itemBreak", true)
+        // 破坏
+        if (newDurability == 0 && itemBreak) {
+            this.amount = 0
+        // 不破坏
+        } else {
+            // 修改耐久值
+            neigeItems.putInt("durability", newDurability)
+            this.durability = (this.durability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
+        }
     }
 
     /**
@@ -436,17 +483,24 @@ object ItemManager : ItemConfigManager() {
      */
     @JvmStatic
     fun ItemStack.setMaxCustomDurability(amount: Int) {
-        // 获取物品NBT
-        val itemTag = getItemTag()
-        // 获取物品耐久值(不存在则停止操作)
-        val durability = (itemTag.getDeepOrNull("NeigeItems.durability")?.asInt() ?: return).coerceAtMost(amount.coerceAtLeast(1))
+        // 限制下限
+        val realAmount = amount.coerceAtLeast(1)
+        // 直掏NBT
+        val nbtItemStack = NbtItemStack(this)
+        val directTag = nbtItemStack.directTag
+        // 不是NI物品还加个屁的自定义耐久
+        val neigeItems = directTag.getCompound("NeigeItems") ?: return
+        // 掏出耐久值NBT
+        val durabilityNbt = neigeItems.get("durability")
+        // 类型检测
+        if (durabilityNbt !is NbtNumeric<*>) return
+        // 获取物品耐久值
+        val durability = durabilityNbt.asInt.coerceAtMost(realAmount)
         // 修改耐久值
-        itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(durability))
+        neigeItems.putInt("durability", durability)
         // 修改最大耐久值
-        itemTag.putDeepFixed("NeigeItems.maxDurability", ItemTagData(amount.coerceAtLeast(1)))
-        this.durability = (this.durability * (1 - (durability.toDouble()/amount))).toInt().toShort()
-        // 保存修改
-        itemTag.saveTo(this)
+        neigeItems.putInt("maxDurability", realAmount)
+        this.durability = (this.durability * (1 - (durability.toDouble()/realAmount))).toInt().toShort()
     }
 
     /**
@@ -456,19 +510,24 @@ object ItemManager : ItemConfigManager() {
      */
     @JvmStatic
     fun ItemStack.addMaxCustomDurability(amount: Int) {
-        // 获取物品NBT
-        val itemTag = getItemTag()
-        // 获取物品最大耐久值
-        val maxDurability = ((itemTag.getDeepOrNull("NeigeItems.maxDurability")?.asInt() ?: return) + amount).coerceAtLeast(1)
-        // 获取物品耐久值(不存在则停止操作)
-        val durability = itemTag.getDeepOrNull("NeigeItems.durability")!!.asInt().coerceAtMost(maxDurability)
+        // 直掏NBT
+        val nbtItemStack = NbtItemStack(this)
+        val directTag = nbtItemStack.directTag
+        // 不是NI物品还加个屁的自定义耐久
+        val neigeItems = directTag.getCompound("NeigeItems") ?: return
+        // 掏出最大耐久
+        val maxDurabilityNbt = neigeItems.get("maxDurability")
+        // 类型检测
+        if (maxDurabilityNbt !is NbtNumeric<*>) return
+        // 修改后的最大耐久值
+        val maxDurability = (maxDurabilityNbt.asInt + amount).coerceAtLeast(1)
+        // 获取物品耐久值
+        val durability = neigeItems.getInt("durability").coerceAtMost(maxDurability)
         // 修改耐久值
-        itemTag.putDeepFixed("NeigeItems.durability", ItemTagData(durability))
+        neigeItems.putInt("durability", durability)
         // 修改最大耐久值
-        itemTag.putDeepFixed("NeigeItems.maxDurability", ItemTagData(maxDurability))
+        neigeItems.putInt("maxDurability", maxDurability)
         this.durability = (this.durability * (1 - (durability.toDouble()/maxDurability))).toInt().toShort()
-        // 保存修改
-        itemTag.saveTo(this)
     }
 
     /**
@@ -488,74 +547,50 @@ object ItemManager : ItemConfigManager() {
      * @param player 用于重构物品的玩家
      * @param sections 重构节点(值为null代表刷新该节点)
      * @param protectNBT 需要保护的NBT(重构后不刷新), 可以填null
+     * @return 物品是空气时返回false, 其余情况返回true
      */
     @JvmStatic
     fun ItemStack.rebuild(player: OfflinePlayer, sections: MutableMap<String, String?>, protectNBT: List<String>?): Boolean {
         // 判断是不是空气
         if (type != Material.AIR) {
-            return when (val itemInfo = isNiItem(true)) {
-                null -> true
-                else -> {
-                    rebuild(
-                        player,
-                        sections,
-                        protectNBT,
-                        itemInfo.itemTag,
-                        itemInfo.neigeItems,
-                        itemInfo.id,
-                        itemInfo.data ?: HashMap<String, String>()
-                    )
+            // 获取NI物品信息
+            val itemInfo = isNiItem(true) ?: return true
+            // 填入重构节点
+            sections.forEach { (key, value) ->
+                when (value) {
+                    null -> itemInfo.data!!.remove(key)
+                    else -> itemInfo.data!![key] = value
                 }
             }
-        }
-        return false
-    }
-
-    /**
-     * 重构物品
-     *
-     * @param player 用于重构物品的玩家
-     * @param sections 重构节点(值为null代表刷新该节点)
-     * @param protectNBT 需要保护的NBT(重构后不刷新), 可以填null
-     * @param itemTag 物品NBT
-     * @param neigeItems NBT下NeigeItems部分
-     * @param id NI物品ID
-     * @param data NI物品节点信息
-     */
-    @JvmStatic
-    fun ItemStack.rebuild(
-        player: OfflinePlayer,
-        sections: MutableMap<String, String?>?,
-        protectNBT: List<String>?,
-        itemTag: ItemTag,
-        neigeItems: ItemTag,
-        id: String,
-        data: MutableMap<String, String>
-    ): Boolean {
-        sections?.forEach { (key, value) ->
-            when (value) {
-                null -> data.remove(key)
-                else -> data[key] = value
-            }
-        }
-        getItemStack(id, player, data)?.let { newItemStack ->
-            newItemStack.getItemTag().also { newItemTag ->
-                neigeItems["charge"]?.let {
-                    newItemTag["NeigeItems"]?.asCompound()?.set("charge", it)
-                }
-                neigeItems["durability"]?.let {
-                    newItemTag["NeigeItems"]?.asCompound()?.set("durability", it)
-                }
-                protectNBT?.forEach { key ->
-                    itemTag.getDeepOrNull(key)?.also {
-                        newItemTag.putDeepFixed(key, it)
+            // 生成新物品
+            getItemStack(itemInfo.id, player, itemInfo.data)?.let { newItemStack ->
+                // 获取新物品的NBT
+                newItemStack.getNbt().also { newItemTag ->
+                    // 把NeigeItems的特殊NBT掏出来
+                    newItemTag.getCompound("NeigeItems")?.also { newNeigeItems ->
+                        // 还原物品使用次数
+                        if (itemInfo.neigeItems.containsKey("charge")) {
+                            newNeigeItems.putInt("charge", itemInfo.neigeItems.getInt("charge"))
+                        }
+                        // 还原物品自定义耐久
+                        if (itemInfo.neigeItems.containsKey("durability")) {
+                            newNeigeItems.putInt("durability", itemInfo.neigeItems.getInt("durability"))
+                        }
+                        // 修复保护NBT
+                        protectNBT?.forEach { key ->
+                            itemInfo.itemTag.getDeep(key)?.also {
+                                newItemTag.putDeep(key, it)
+                            }
+                        }
+                        // 将新物品的NBT覆盖至原物品
+                        itemInfo.nbtItemStack.setTag(newItemTag)
                     }
                 }
-                newItemTag.saveTo(this)
+                // 还原物品类型
+                type = newItemStack.type
             }
-            type = newItemStack.type
-            durability = newItemStack.durability
+            return true
         }
-        return true
+        return false
     }
 }

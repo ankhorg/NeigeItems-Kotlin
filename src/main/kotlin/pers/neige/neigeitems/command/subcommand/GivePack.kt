@@ -118,7 +118,7 @@ object GivePack {
                                 player.giveItem(itemStack)
                             }
                             dropData?.let {
-                                dropData[itemStack.getParsedName()] = dropData[itemStack.getParsedName()]?.let { it + 1 } ?: let { 1 }
+                                dropData[itemStack.getParsedName()] = dropData[itemStack.getParsedName()]?.let { it + itemStack.amount } ?: itemStack.amount
                             }
                         }
                     }
