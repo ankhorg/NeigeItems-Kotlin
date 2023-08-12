@@ -14,6 +14,10 @@ plugins {
     id("org.jetbrains.dokka") version "1.7.20"
 }
 
+if(!System.getenv("CI").toBoolean()){
+    version = "dev"
+}
+
 taboolib {
 //    relocate("org.openjdk.nashorn","pers.neige.neigeitems.nashorn")
     relocate("javassist","pers.neige.neigeitems.libs.javassist")
