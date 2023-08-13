@@ -395,18 +395,20 @@ abstract class MythicMobsHooker {
                     dropEvent.offsetYString,
                     dropEvent.angleType
                 )
-                // 拟渔获向量计算
-                val caughtVelocity = getCaughtVelocity(entity.location, killer!!.location)
-                // 拟渔获掉落
-                bukkitScheduler.callSyncMethod(plugin) {
-                    dropEvent.fishDropItems?.forEach { itemStack ->
-                        // 掉落
-                        HookerManager.nmsHooker.dropItem(
-                            entity.world,
-                            entity.location,
-                            itemStack
-                        ) { item ->
-                            item.velocity = caughtVelocity
+                if (killer != null) {
+                    // 拟渔获向量计算
+                    val caughtVelocity = getCaughtVelocity(entity.location, killer.location)
+                    // 拟渔获掉落
+                    bukkitScheduler.callSyncMethod(plugin) {
+                        dropEvent.fishDropItems?.forEach { itemStack ->
+                            // 掉落
+                            HookerManager.nmsHooker.dropItem(
+                                entity.world,
+                                entity.location,
+                                itemStack
+                            ) { item ->
+                                item.velocity = caughtVelocity
+                            }
                         }
                     }
                 }
