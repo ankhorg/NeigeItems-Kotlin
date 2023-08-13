@@ -7,6 +7,7 @@ import org.bukkit.entity.Player
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.getItemTag
@@ -86,16 +87,16 @@ object Expansion : PlaceholderExpansion {
                                     }
                                 }
                             } else {
-                                val itemTag = itemStack.getItemTag()
+                                val itemTag = itemStack.getNbt()
                                 when (type) {
-                                    "get" -> return itemTag.getDeepOrNull(content)?.asString() ?: ""
-                                    "has" -> return (itemTag.getDeepOrNull(content) != null).toString()
+                                    "get" -> return itemTag.getDeepString(content) ?: ""
+                                    "has" -> return (itemTag.getDeep(content) != null).toString()
                                     "check" -> {
                                         content.parseObject<java.util.HashMap<String, String?>>().forEach { (key, value) ->
                                             if (value == null) {
-                                                if (itemTag.getDeepOrNull(key) == null) return "false"
+                                                if (itemTag.getDeep(key) == null) return "false"
                                             } else {
-                                                if (itemTag.getDeepOrNull(key)?.asString() != value) return "false"
+                                                if (itemTag.getDeepString(key) != value) return "false"
                                             }
                                         }
                                         return "true"
