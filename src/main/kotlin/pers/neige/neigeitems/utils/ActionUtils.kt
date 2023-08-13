@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.utils
 
 import bot.inker.bukkit.nbt.NbtCompound
-import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack
+import bot.inker.bukkit.nbt.NbtUtils
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.item.action.ActionTrigger
@@ -113,7 +113,7 @@ object ActionUtils {
                     this.amount = 0
                 } else {
                     neigeItems.putInt("charge", charge - amount)
-                    if ((this as Any) !is RefCraftItemStack) {
+                    if (!NbtUtils.isCraftItemStack(this)) {
                         itemTag.saveTo(this)
                     }
                 }
@@ -158,7 +158,7 @@ object ActionUtils {
                     this.amount = 0
                 } else {
                     neigeItems.putInt("charge", charge - amount)
-                    if ((this as Any) !is RefCraftItemStack) {
+                    if (!NbtUtils.isCraftItemStack(this)) {
                         itemTag.saveTo(this)
                     }
                 }

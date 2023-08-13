@@ -1,7 +1,6 @@
 package pers.neige.neigeitems.utils
 
 import bot.inker.bukkit.nbt.*
-import bot.inker.bukkit.nbt.internal.ref.*
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -880,7 +879,7 @@ object ItemUtils {
         // 移除相关nbt, 防止物品无法堆叠
         owner?.let {
             neigeItems.remove("owner")
-            if ((itemStack as Any) !is RefCraftItemStack) {
+            if (!NbtUtils.isCraftItemStack(itemStack)) {
                 itemTag.saveTo(itemStack)
             }
         }

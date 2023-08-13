@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.item
 
 import bot.inker.bukkit.nbt.NbtCompound
-import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack
+import bot.inker.bukkit.nbt.NbtUtils
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -326,7 +326,7 @@ object ItemDurability {
                 neigeItems.putInt("durability", 0)
                 damageEvent?.let {damageEvent.damage = itemStack.type.maxDurability - itemStack.durability - 1}
                 // 保存NBT
-                if ((itemStack as Any) !is RefCraftItemStack) {
+                if (!NbtUtils.isCraftItemStack(itemStack)) {
                     itemTag.saveTo(itemStack)
                 }
                 // 播放物品破碎声
@@ -347,7 +347,7 @@ object ItemDurability {
                 damageEvent.damage = ((realDamage.toDouble() / maxDurability.toDouble()) * itemStack.type.maxDurability).toInt()
             }
             // 保存NBT
-            if ((itemStack as Any) !is RefCraftItemStack) {
+            if (!NbtUtils.isCraftItemStack(itemStack)) {
                 itemTag.saveTo(itemStack)
             }
             // 返回耐久消耗成功结果
