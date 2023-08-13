@@ -75,7 +75,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("io.izzel.taboolib:platform-bukkit:$taboolib_version")
-    taboo("org.ow2.asm:asm:9.4")
+    compileOnly("org.ow2.asm:asm:9.4")
     taboo("org.javassist:javassist:3.20.0-GA")
     taboo(fileTree("libs/callsite-nbt-1.0-dev-SNAPSHOT-fat.jar"))
     "packShadow"(kotlin("stdlib"))
