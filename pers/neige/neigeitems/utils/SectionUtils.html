@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>SectionUtils 1.15.9 API </title>
+    <title>SectionUtils 1.15.10 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -334,7 +334,7 @@ public class <span class="typeNameLabel"><a href=SectionUtils.html>SectionUtils<
                                         <tr id="i11" class="rowColor">
                                             <td class="colFirst"><code>final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=SectionUtils.html#parse(String,Function,Character,Character,Character)>parse</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> $self, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html>Function</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; transform, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> head, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> tail, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> escape) </code>
+                                            <th class="colSecond" scope="row"><code><a href=SectionUtils.html#parse(String,Character,Character,Character,Function)>parse</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> $self, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> head, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> tail, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> escape, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html>Function</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; transform) </code>
                                             </th>
                                             <td class="colLast">对文本进行某种解析</td>
                                         </tr>
@@ -742,7 +742,7 @@ public class <span class="typeNameLabel"><a href=SectionUtils.html>SectionUtils<
                                     </li>
                                 </ul>
                                 
-                                <a id="parse(String,Function,Character,Character,Character)">
+                                <a id="parse(String,Character,Character,Character,Function)">
                                     <!--   -->
                                 </a>
                                 <ul class=
@@ -750,16 +750,12 @@ public class <span class="typeNameLabel"><a href=SectionUtils.html>SectionUtils<
                                           >
                                     <li class="blockList">
                                         <h4>parse</h4>
-                                        <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=SectionUtils.html#parse(String,Function,Character,Character,Character)>parse</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> $self, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html>Function</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; transform, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> head, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> tail, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> escape)</pre>
+                                        <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=SectionUtils.html#parse(String,Character,Character,Character,Function)>parse</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> $self, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> head, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> tail, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html>Character</a> escape, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html>Function</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; transform)</pre>
                                         <div class="block"><p>对文本进行某种解析</p></div>
                                         
                                         <dl>
                                             <dt><span class="paramLabel">Parameters:</span></dt>
                                             
-                                            
-                                            
-                                            
-                                            <dd><code>transform</code> - 解析函数</dd>
                                             
                                             
                                             
@@ -772,6 +768,10 @@ public class <span class="typeNameLabel"><a href=SectionUtils.html>SectionUtils<
                                             
                                             
                                             <dd><code>escape</code> - 转义符</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>transform</code> - 解析函数</dd>
                                             
                                             
                                         </dl>
