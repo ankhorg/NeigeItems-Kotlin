@@ -310,7 +310,7 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.parse(transform: Function<String, String?>): String {
-        return this.parse(transform, '<', '>', '\\')
+        return this.parse('<', '>', '\\', transform)
     }
 
     /**
@@ -323,7 +323,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
-    fun String.parse(transform: Function<String, String?>, head: Char, tail: Char, escape: Char): String {
+    fun String.parse(head: Char, tail: Char, escape: Char, transform: Function<String, String?>): String {
         // 缓存待解析节点
         val stringBuilders = ArrayList<StringBuilder>()
         // 储存解析结果
