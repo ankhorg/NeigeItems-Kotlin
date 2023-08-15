@@ -9,6 +9,7 @@ import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
+import pers.neige.neigeitems.utils.ItemUtils.toValue
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.module.nms.getItemTag
 import taboolib.platform.compat.PlaceholderExpansion
@@ -89,14 +90,14 @@ object Expansion : PlaceholderExpansion {
                             } else {
                                 val itemTag = itemStack.getNbt()
                                 when (type) {
-                                    "get" -> return itemTag.getDeepString(content) ?: ""
+                                    "get" -> return itemTag.getDeep(content)?.toValue()?.toString() ?: ""
                                     "has" -> return (itemTag.getDeep(content) != null).toString()
                                     "check" -> {
                                         content.parseObject<java.util.HashMap<String, String?>>().forEach { (key, value) ->
                                             if (value == null) {
                                                 if (itemTag.getDeep(key) == null) return "false"
                                             } else {
-                                                if (itemTag.getDeepString(key) != value) return "false"
+                                                if (itemTag.getDeep(key)?.toValue()?.toString() != value) return "false"
                                             }
                                         }
                                         return "true"

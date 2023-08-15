@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
+import pers.neige.neigeitems.utils.ItemUtils.toValue
 import pers.neige.neigeitems.utils.StringUtils.split
 import java.awt.Color
 import java.util.*
@@ -280,10 +281,10 @@ object SectionUtils {
                 val param = this.substring(index+2)
                 return when (name.lowercase(Locale.getDefault())) {
                     "nbt" -> {
-                        itemTag.getDeepString(param) ?: "<$this>"
+                        itemTag.getDeep(param)?.toValue()?.toString() ?: "<$this>"
                     }
                     "data" -> {
-                        (data ?: itemTag.getDeepString("NeigeItems.data")?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
+                        (data ?: itemTag.getDeep("NeigeItems.data")?.toValue()?.toString()?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
                     }
                     "amount" -> {
                         itemStack.amount.toString()

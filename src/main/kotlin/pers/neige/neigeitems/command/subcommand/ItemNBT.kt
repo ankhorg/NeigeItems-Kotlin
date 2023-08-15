@@ -1,11 +1,15 @@
 package pers.neige.neigeitems.command.subcommand
 
+import bot.inker.bukkit.nbt.*
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.command.Command
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
+import taboolib.module.chat.ComponentText
+import taboolib.module.chat.Components
 import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData
@@ -31,8 +35,328 @@ object ItemNBT {
         }
     }
 
+//    private fun itemnbtCommandAsyncA (itemStack: ItemStack, sender: Player) {
+//        submit (async = true) {
+//            itemnbtCommandA(itemStack, sender)
+//        }
+//    }
+//
+//    private fun itemnbtCommandA (itemStack: ItemStack, sender: Player) {
+//        if (itemStack.type != Material.AIR) {
+//            itemStack.getNbt().format().forEach {
+//                it.sendTo(Command.bukkitAdapter.adaptCommandSender(sender))
+//            }
+//        }
+//    }
+
     val INDENT = "  "
     val LIST_INDENT = "§e- "
+
+//    fun NbtCompound.format(): ArrayList<ComponentText> {
+//        val result = arrayListOf<ComponentText>()
+//        result.add(Components.text("§e§m                                                                      "))
+//        forEach { (key, value) ->
+//            result.addAll(value.toComponentText(key))
+//        }
+//        result.add(Components.text("§e§m                                                                      "))
+//        return result
+//    }
+//
+//    /**
+//     * Nbt 转 ComponentText.
+//     *
+//     * @param key Nbt键
+//     * @param level 所处层级
+//     */
+//    fun Nbt<*>.toComponentText(key: String, level: Int = 0): ArrayList<ComponentText> {
+//        val result = arrayListOf<ComponentText>()
+//        // 形似"test (String): "
+//        val keyComponent = Components.text("${INDENT.repeat(level)}§6$key${this.postfix()}§e: §f")
+//            .hoverText(key)
+//            .clickSuggestCommand(key)
+//        // 类型检测
+//        when (this) {
+//            is NbtByte -> {
+//                result.add(this.asByte.toString().let {
+//                    keyComponent.append(
+//                        // 形似"test (String): test"
+//                        Components.text(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                            .hoverText(it)
+//                            .clickSuggestCommand(it)
+//                    )
+//                })
+//            }
+//            is NbtShort -> {
+//                result.add(this.asShort.toString().let {
+//                    keyComponent.append(
+//                        // 形似"test (String): test"
+//                        Components.text(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                            .hoverText(it)
+//                            .clickSuggestCommand(it)
+//                    )
+//                })
+//            }
+//            is NbtInt -> {
+//                result.add(this.asInt.toString().let {
+//                    keyComponent.append(
+//                        // 形似"test (String): test"
+//                        Components.text(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                            .hoverText(it)
+//                            .clickSuggestCommand(it)
+//                    )
+//                })
+//            }
+//            is NbtLong -> {
+//                result.add(this.asLong.toString().let {
+//                    keyComponent.append(
+//                        // 形似"test (String): test"
+//                        Components.text(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                            .hoverText(it)
+//                            .clickSuggestCommand(it)
+//                    )
+//                })
+//            }
+//            is NbtFloat -> {
+//                result.add(this.asFloat.toString().let {
+//                    keyComponent.append(
+//                        // 形似"test (String): test"
+//                        Components.text(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                            .hoverText(it)
+//                            .clickSuggestCommand(it)
+//                    )
+//                })
+//            }
+//            is NbtDouble -> {
+//                result.add(this.asDouble.toString().let {
+//                    keyComponent.append(
+//                        // 形似"test (String): test"
+//                        Components.text(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                            .hoverText(it)
+//                            .clickSuggestCommand(it)
+//                    )
+//                })
+//            }
+//            is NbtString -> {
+//                result.add(this.asString.let {
+//                    keyComponent.append(
+//                        // 形似"test (String): test"
+//                        Components.text(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                            .hoverText(it)
+//                            .clickSuggestCommand(it)
+//                    )
+//                })
+//            }
+//            is NbtByteArray -> {
+//                // 先塞key
+//                result.add(keyComponent)
+//                // 挨个塞value
+//                this.asByteArray.forEach {
+//                    val value = it.toString()
+//                    // 形似"- 127"
+//                    result.add(Components.text("${INDENT.repeat(level)}$LIST_INDENT§f$value")
+//                        .hoverText(value)
+//                        .clickSuggestCommand(value)
+//                    )
+//                }
+//            }
+//            is NbtIntArray -> {
+//                result.add(keyComponent)
+//                this.asIntArray.forEach {
+//                    val value = it.toString()
+//                    result.add(Components.text("${INDENT.repeat(level)}$LIST_INDENT§f$value")
+//                        .hoverText(value)
+//                        .clickSuggestCommand(value)
+//                    )
+//                }
+//            }
+//            is NbtLongArray -> {
+//                result.add(keyComponent)
+//                this.asLongArray.forEach {
+//                    val value = it.toString()
+//                    result.add(Components.text("${INDENT.repeat(level)}$LIST_INDENT§f$value")
+//                        .hoverText(value)
+//                        .clickSuggestCommand(value)
+//                    )
+//                }
+//            }
+//            is NbtCompound -> {
+//                result.add(keyComponent)
+//                this.forEach { (key, value) ->
+//                    result.addAll(value.toComponentText(key, level + 1))
+//                }
+//            }
+//            is NbtList -> {
+//                result.add(keyComponent)
+//                this.forEach {
+//                    result.addAll(it.toListComponentText(level))
+//                }
+//            }
+//            else -> result.add(keyComponent.append(" §6(§e妖魔鬼怪§6)"))
+//        }
+//        return result
+//    }
+//
+//    fun Nbt<*>.toListComponentText(level: Int = 0): ArrayList<ComponentText> {
+//        val result = arrayListOf<ComponentText>()
+//        when (this) {
+//            is NbtByte -> {
+//                result.add(this.asByte.toString().let {
+//                    Components.text("${INDENT.repeat(level)}$LIST_INDENT")
+//                        .append(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                        .hoverText(it)
+//                        .clickSuggestCommand(it)
+//                })
+//            }
+//            is NbtShort -> {
+//                result.add(this.asShort.toString().let {
+//                    Components.text("${INDENT.repeat(level)}$LIST_INDENT")
+//                        .append(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                        .hoverText(it)
+//                        .clickSuggestCommand(it)
+//                })
+//            }
+//            is NbtInt -> {
+//                result.add(this.asInt.toString().let {
+//                    Components.text("${INDENT.repeat(level)}$LIST_INDENT")
+//                        .append(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                        .hoverText(it)
+//                        .clickSuggestCommand(it)
+//                })
+//            }
+//            is NbtLong -> {
+//                result.add(this.asLong.toString().let {
+//                    Components.text("${INDENT.repeat(level)}$LIST_INDENT")
+//                        .append(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                        .hoverText(it)
+//                        .clickSuggestCommand(it)
+//                })
+//            }
+//            is NbtFloat -> {
+//                result.add(this.asFloat.toString().let {
+//                    Components.text("${INDENT.repeat(level)}$LIST_INDENT")
+//                        .append(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                        .hoverText(it)
+//                        .clickSuggestCommand(it)
+//                })
+//            }
+//            is NbtDouble -> {
+//                result.add(this.asDouble.toString().let {
+//                    Components.text("${INDENT.repeat(level)}$LIST_INDENT")
+//                        .append(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                        .hoverText(it)
+//                        .clickSuggestCommand(it)
+//                })
+//            }
+//            is NbtString -> {
+//                result.add(this.asString.let {
+//                    Components.text("${INDENT.repeat(level)}$LIST_INDENT")
+//                        .append(if (it.length > 20) "${it.substring(0, 19)}..." else it)
+//                        .hoverText(it)
+//                        .clickSuggestCommand(it)
+//                })
+//            }
+//            is NbtByteArray -> {
+//                var first = true
+//                this.asByteArray.forEach {
+//                    val value = it.toString()
+//                    if (first) {
+//                        result.add(Components.text("${INDENT.repeat(level)}$LIST_INDENT$LIST_INDENT§f$value")
+//                            .hoverText(value)
+//                            .clickSuggestCommand(value)
+//                        )
+//                        first = false
+//                    } else {
+//                        result.add(Components.text("${INDENT.repeat(level+1)}$LIST_INDENT§f$value")
+//                            .hoverText(value)
+//                            .clickSuggestCommand(value)
+//                        )
+//                    }
+//                }
+//            }
+//            is NbtIntArray -> {
+//                var first = true
+//                this.asIntArray.forEach {
+//                    val value = it.toString()
+//                    if (first) {
+//                        result.add(Components.text("${INDENT.repeat(level)}$LIST_INDENT$LIST_INDENT§f$value")
+//                            .hoverText(value)
+//                            .clickSuggestCommand(value)
+//                        )
+//                        first = false
+//                    } else {
+//                        result.add(Components.text("${INDENT.repeat(level+1)}$LIST_INDENT§f$value")
+//                            .hoverText(value)
+//                            .clickSuggestCommand(value)
+//                        )
+//                    }
+//                }
+//            }
+//            is NbtLongArray -> {
+//                var first = true
+//                this.asLongArray.forEach {
+//                    val value = it.toString()
+//                    if (first) {
+//                        result.add(Components.text("${INDENT.repeat(level)}$LIST_INDENT$LIST_INDENT§f$value")
+//                            .hoverText(value)
+//                            .clickSuggestCommand(value)
+//                        )
+//                        first = false
+//                    } else {
+//                        result.add(Components.text("${INDENT.repeat(level+1)}$LIST_INDENT§f$value")
+//                            .hoverText(value)
+//                            .clickSuggestCommand(value)
+//                        )
+//                    }
+//                }
+//            }
+//            is NbtCompound -> {
+//                var first = true
+//                this.forEach { (key, value) ->
+//                    if (first) {
+//                        result.addAll(value.toComponentText("$LIST_INDENT§6$key", level))
+//                        first = false
+//                    } else {
+//                        result.addAll(value.toComponentText(key, level + 1))
+//                    }
+//                }
+//            }
+//            is NbtList -> {
+//                var first = true
+//                this.forEach {
+//                    if (first) {
+//                        val list = it.toListComponentText(level)
+//                        result.add(Components.text("${INDENT.repeat(level)}$LIST_INDENT").append(list.removeFirst()))
+//                        list.forEach {
+//                            result.add(Components.text(INDENT).append(it))
+//                        }
+//                        first = false
+//                    } else {
+//                        result.addAll(it.toListComponentText(level + 1))
+//                    }
+//                }
+//            }
+//            else -> result.add(Components.text(" §6(§e妖魔鬼怪§6)"))
+//        }
+//        return result
+//    }
+//
+//    fun Nbt<*>.postfix(): String {
+//        return when (this) {
+//            is NbtByte -> " §6(§eByte§6)"
+//            is NbtShort -> " §6(§eShort§6)"
+//            is NbtInt -> " §6(§eInt§6)"
+//            is NbtLong -> " §6(§eLong§6)"
+//            is NbtFloat -> " §6(§eFloat§6)"
+//            is NbtDouble -> " §6(§eDouble§6)"
+//            is NbtString -> " §6(§eString§6)"
+//            is NbtByteArray -> " §6(§eByteArray§6)"
+//            is NbtIntArray -> " §6(§eIntArray§6)"
+//            is NbtLongArray -> " §6(§eLongArray§6)"
+//            is NbtCompound -> " §6(§eCompound§6)"
+//            is NbtList -> " §6(§eList§6)"
+//            else -> " §6(§e妖魔鬼怪§6)"
+//        }
+//    }
 
     @JvmStatic
     fun ItemTag.format(): TellrawJson {

@@ -327,12 +327,12 @@ object ItemUtils {
     @JvmStatic
     fun Nbt<*>.toStringValue(): Any {
         return when (this) {
-            is NbtByte -> "(Byte) ${this.asString}"
-            is NbtShort ->  "(Short) ${this.asString}"
-            is NbtInt ->  "(Int) ${this.asString}"
-            is NbtLong ->  "(Long) ${this.asString}"
-            is NbtFloat ->  "(Float) ${this.asString}"
-            is NbtDouble ->  "(Double) ${this.asString}"
+            is NbtByte -> "(Byte) ${this.asByte}"
+            is NbtShort ->  "(Short) ${this.asShort}"
+            is NbtInt ->  "(Int) ${this.asInt}"
+            is NbtLong ->  "(Long) ${this.asLong}"
+            is NbtFloat ->  "(Float) ${this.asFloat}"
+            is NbtDouble ->  "(Double) ${this.asDouble}"
             is NbtString ->  this.asString
             is NbtByteArray -> {
                 arrayListOf<String>().also { list ->
