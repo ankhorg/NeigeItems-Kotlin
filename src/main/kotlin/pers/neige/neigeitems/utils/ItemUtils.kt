@@ -530,7 +530,7 @@ object ItemUtils {
                 }
                 ItemTagType.COMPOUND -> {
                     // 当前Compound不含对应的key将返回null, 其他情况下将返回下一级
-                    value = value!!.asCompound().getOrElse(currentKey, null)
+                    value = value!!.asCompound()[currentKey]
                 }
                 // 可能情况: 数组索引不是数字/数组越界/当前Compound不含对应的key/ItemTag层数不够
                 else -> return null

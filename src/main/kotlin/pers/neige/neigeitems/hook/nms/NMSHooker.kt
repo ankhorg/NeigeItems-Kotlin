@@ -8,6 +8,14 @@ import org.bukkit.inventory.meta.ItemMeta
 import java.util.function.Consumer
 
 abstract class NMSHooker{
+    open fun hasCustomModelData(itemMeta: ItemMeta?): Boolean {
+        return itemMeta?.hasCustomModelData() ?: false
+    }
+
+    open fun getCustomModelData(itemMeta: ItemMeta?): Int? {
+        return itemMeta?.customModelData
+    }
+
     open fun setCustomModelData(itemMeta: ItemMeta?, data: Int) {
         itemMeta?.setCustomModelData(data)
     }

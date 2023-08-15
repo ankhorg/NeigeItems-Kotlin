@@ -15,6 +15,10 @@ import java.util.function.Consumer
 
 
 class NMSHookerV1_12_R1Impl : NMSHooker() {
+    override fun hasCustomModelData(itemMeta: ItemMeta?): Boolean { return false }
+
+    override fun getCustomModelData(itemMeta: ItemMeta?): Int? { return null }
+
     override fun setCustomModelData(itemMeta: ItemMeta?, data: Int) {}
 
     override fun dropItem(

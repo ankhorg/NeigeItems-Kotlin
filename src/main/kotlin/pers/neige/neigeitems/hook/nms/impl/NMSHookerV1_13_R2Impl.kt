@@ -9,11 +9,18 @@ import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack
 import org.bukkit.entity.Item
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.ItemMeta
 import pers.neige.neigeitems.hook.nms.NMSHooker
 import java.util.function.Consumer
 
 
 class NMSHookerV1_13_R2Impl : NMSHooker() {
+    override fun hasCustomModelData(itemMeta: ItemMeta?): Boolean { return false }
+
+    override fun getCustomModelData(itemMeta: ItemMeta?): Int? { return null }
+
+    override fun setCustomModelData(itemMeta: ItemMeta?, data: Int) {}
+
     override fun dropItem(
         world: World,
         location: Location,

@@ -11,6 +11,7 @@ import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.ConfigManager.debug
+import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
@@ -214,11 +215,11 @@ object ItemManager : ItemConfigManager() {
                     // 获取物品NBT
                     val itemNBT = itemStack.getNbt()
                     // 设置CustomModelData
-                    try {
-                        if (itemMeta?.hasCustomModelData() == true) {
-                            configSection.set("custommodeldata", itemMeta.customModelData)
+                    if (nmsHooker.hasCustomModelData(itemMeta)) {
+                        nmsHooker.getCustomModelData(itemMeta)?.let {
+                            configSection.set("custommodeldata", it)
                         }
-                    } catch (_: NoSuchMethodError) {}
+                    }
                     // 设置物品名
                     if (itemMeta?.hasDisplayName() == true) {
                         configSection.set("name", itemMeta.displayName)
