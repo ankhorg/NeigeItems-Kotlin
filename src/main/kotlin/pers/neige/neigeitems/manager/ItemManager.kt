@@ -245,7 +245,7 @@ object ItemManager : ItemConfigManager() {
                         }
                     }
                     // 设置物品颜色
-                    val color = itemNBT.getDeepInt("display.color")
+                    val color = itemNBT.getDeepInt("display.color", -1)
                     if (color != -1) {
                         configSection.set("color", color.toString(16).uppercase(Locale.getDefault()))
                     }
