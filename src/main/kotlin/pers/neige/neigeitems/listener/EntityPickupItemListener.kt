@@ -44,11 +44,15 @@ object EntityPickupItemListener {
         // NI节点数据
         val data: HashMap<String, String> = itemInfo.data!!
 
-        // 检测物品过期, 检测物品更新
-        ItemCheck.checkItem(player, itemStack, itemInfo)
-        if (itemStack.amount != 0 && itemStack.type != Material.AIR) {
-            // 执行物品动作
-            ActionManager.pickListener(player, itemStack, itemInfo, event)
+        try {
+            // 检测物品过期, 检测物品更新
+            ItemCheck.checkItem(player, itemStack, itemInfo)
+            if (itemStack.amount != 0 && itemStack.type != Material.AIR) {
+                // 执行物品动作
+                ActionManager.pickListener(player, itemStack, itemInfo, event)
+            }
+        } catch (error: Throwable) {
+            error.printStackTrace()
         }
 
         // 应用对itemStack的操作

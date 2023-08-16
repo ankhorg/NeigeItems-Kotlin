@@ -5,6 +5,7 @@ import bot.inker.bukkit.nbt.NbtItemStack
 import org.bukkit.Material
 import org.bukkit.event.player.PlayerDropItemEvent
 import pers.neige.neigeitems.item.ItemCheck
+import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import taboolib.common.platform.event.EventPriority
@@ -30,11 +31,15 @@ object PlayerDropItemListener {
         // NI节点数据
         val data: HashMap<String, String> = itemInfo.data!!
 
-        // 检测物品过期, 检测物品更新
-        ItemCheck.checkItem(player, itemStack, itemInfo)
-        if (itemStack.amount != 0 && itemStack.type != Material.AIR) {
-            // 执行物品动作
-            ActionManager.dropListener(player, itemStack, itemInfo, event)
+        try {
+            // 检测物品过期, 检测物品更新
+            ItemCheck.checkItem(player, itemStack, itemInfo)
+            if (itemStack.amount != 0 && itemStack.type != Material.AIR) {
+                // 执行物品动作
+                ActionManager.dropListener(player, itemStack, itemInfo, event)
+            }
+        } catch (error: Throwable) {
+            error.printStackTrace()
         }
 
         // 应用对itemStack的操作
