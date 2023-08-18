@@ -2,10 +2,12 @@ package pers.neige.neigeitems.listener
 
 import bot.inker.bukkit.nbt.NbtCompound
 import bot.inker.bukkit.nbt.NbtItemStack
+import bot.inker.bukkit.nbt.NbtUtils
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.EquipmentSlot
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.manager.ActionManager
+import pers.neige.neigeitems.utils.ActionUtils.consumeAndReturn
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
@@ -45,6 +47,11 @@ object PlayerItemConsumeListener {
             ActionManager.eatListener(player, itemStack, itemInfo, event)
         } catch (error: Throwable) {
             error.printStackTrace()
+        }
+
+        // 他妈的。。。。。
+        if (!NbtUtils.isCraftItemStack(itemStack)) {
+            itemTag.saveTo(itemStack)
         }
 
         // 设置物品
