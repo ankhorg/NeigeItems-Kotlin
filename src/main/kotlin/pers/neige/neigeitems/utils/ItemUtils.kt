@@ -955,7 +955,7 @@ object ItemUtils {
             // 读取物品
             val nbtItemStack = NbtItemStack(this)
             // 获取物品NBT
-            val itemTag = nbtItemStack.orCreateTag
+            val itemTag = nbtItemStack.tag ?: return null
             // 如果为非NI物品则终止操作
             val neigeItems = itemTag.getCompound("NeigeItems") ?: return null
             // 获取物品id
