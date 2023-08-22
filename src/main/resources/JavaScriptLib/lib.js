@@ -125,7 +125,7 @@ const parseItem = function(text) {
 const getNBT = function(key) {
     const result = itemTag.getDeep(key)
     if (result != null) {
-        return result.toValue().toString()
+        return ItemUtils.toValue(result).toString()
     }
     return null
 }
