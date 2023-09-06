@@ -26,9 +26,11 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
 
     override val spawnEventClass = MythicMobSpawnEvent::class.java
 
-    // 4.9.0 -> int
-    // 4.11.0 -> double
-    // 放弃思考，开反
+    // 4.5.9 -> int
+    // 4.9.0 -> double
+    // 由于编写兼容相关内容时并未了解gradle和maven中"模块"的设计, 导致相关兼容类在编译时出现很多难以解决的问题
+    // 如本方法于本地使用IDEA编译, 将优先解析459, 于GitHub使用自动构建, 将优先解析490
+    // 在遥远的未来, 我可能会将相关内容使用"模块"拆分重写
     private val spawnMobLevelMethod = spawnEventClass.getDeclaredMethod("getMobLevel")
 
     override val deathEventClass = MythicMobDeathEvent::class.java

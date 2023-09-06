@@ -14,6 +14,7 @@ import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
 import taboolib.common.platform.function.submit
+import kotlin.math.roundToInt
 
 /**
  * 4.5.9版本MM挂钩
@@ -25,7 +26,16 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
 
     override val spawnEventClass = MythicMobSpawnEvent::class.java
 
+    // 4.5.9 -> int
+    // 4.9.0 -> double
+    // 由于编写兼容相关内容时并未了解gradle和maven中"模块"的设计, 导致相关兼容类在编译时出现很多难以解决的问题
+    // 如本方法于本地使用IDEA编译, 将优先解析459, 于GitHub使用自动构建, 将优先解析490
+    // 在遥远的未来, 我可能会将相关内容使用"模块"拆分重写
+    private val spawnMobLevelMethod = spawnEventClass.getDeclaredMethod("getMobLevel")
+
     override val deathEventClass = MythicMobDeathEvent::class.java
+
+    private val deathMobLevelMethod = deathEventClass.getDeclaredMethod("getMobLevel")
 
     override val reloadEventClass = MythicReloadedEvent::class.java
 
@@ -40,11 +50,17 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
     override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.HIGH) {
         submit(async = true) {
             if (it.entity is LivingEntity) {
+                val mobLevel = spawnMobLevelMethod.invoke(it).let { level ->
+                    if (level is Double) {
+                        level.roundToInt()
+                    } else {
+                        level as Int
+                    }
+                }
                 spawnEvent(
                     it.mobType.internalName,
                     it.entity as LivingEntity,
-                    // 此处别有深意, 切勿修改
-                    it.mobLevel.toInt()
+                    mobLevel
                 )
             }
         }
@@ -53,12 +69,18 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
     override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java) {
         submit(async = true) {
             if (it.entity is LivingEntity) {
+                val mobLevel = deathMobLevelMethod.invoke(it).let { level ->
+                    if (level is Double) {
+                        level.roundToInt()
+                    } else {
+                        level as Int
+                    }
+                }
                 deathEvent(
                     it.killer,
                     it.entity as LivingEntity,
                     it.mobType.internalName,
-                    // 此处别有深意, 切勿修改
-                    it.mobLevel.toInt()
+                    mobLevel
                 )
             }
         }
