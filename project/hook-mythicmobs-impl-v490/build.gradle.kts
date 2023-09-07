@@ -2,7 +2,7 @@ val taboolib_version: String by project
 
 dependencies {
     compileOnly(fileTree("libs"))
-    compileOnly(project(":project:hook-mythicmobs"))
+    compileOnly(project(":project:common"))
 }
 
 configure<JavaPluginConvention> {

@@ -32,11 +32,10 @@ dependencies {
 
     implementation(project(":project:model-bukkit"))
     implementation(project(":project:common"))
-    compileOnly(project(":project:hook-mythicmobs"))
-    compileOnly(project(":project:hook-mythicmobs-impl-v459"))
-    compileOnly(project(":project:hook-mythicmobs-impl-v490"))
-    compileOnly(project(":project:hook-mythicmobs-impl-v502"))
-    compileOnly(project(":project:hook-mythicmobs-impl-v510"))
+    implementation(project(":project:hook-mythicmobs-impl-v459"))
+    implementation(project(":project:hook-mythicmobs-impl-v490"))
+    implementation(project(":project:hook-mythicmobs-impl-v502"))
+    implementation(project(":project:hook-mythicmobs-impl-v510"))
 }
 
 if(!System.getenv("CI").toBoolean()){

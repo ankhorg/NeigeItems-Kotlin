@@ -6,6 +6,7 @@ plugins {
 
 taboolib {
     description {
+        name(rootProject.name)
         contributors {
             name("Neige")
         }
