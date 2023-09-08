@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.hook.nashorn
 
+import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory
 import java.io.Reader
 import javax.script.Compilable
 import javax.script.CompiledScript
@@ -14,14 +15,18 @@ abstract class NashornHooker {
      *
      * @return 一个新的Nashorn引擎
      */
-    abstract fun getNashornEngine(): ScriptEngine
+    fun getNashornEngine(): ScriptEngine {
+        return getNashornEngine(arrayOf("-Dnashorn.args=--language=es6"))
+    }
 
     /**
      * 获取一个共享上下文的Nashorn引擎(不要尝试在这个引擎中声明变量, 出现BUG自行思考)
      *
      * @return 一个新的Nashorn引擎
      */
-    abstract fun getGlobalEngine(): ScriptEngine
+    fun getGlobalEngine(): ScriptEngine {
+        return getNashornEngine(arrayOf("-Dnashorn.args=--language=es6", "--global-per-engine"))
+    }
 
     /**
      * 获取一个新的Nashorn引擎
@@ -29,7 +34,9 @@ abstract class NashornHooker {
      * @param args 应用于引擎的参数
      * @return 一个新的Nashorn引擎
      */
-    abstract fun getNashornEngine(args: Array<String>): ScriptEngine
+    fun getNashornEngine(args: Array<String>): ScriptEngine {
+        return getNashornEngine(args, this::class.java.classLoader)
+    }
 
     /**
      * 获取一个新的Nashorn引擎
@@ -46,7 +53,9 @@ abstract class NashornHooker {
      * @param string 待编译脚本文本
      * @return 已编译JS脚本
      */
-    abstract fun compile(string: String): CompiledScript
+    fun compile(string: String): CompiledScript {
+        return (getNashornEngine() as Compilable).compile(string)
+    }
 
     /**
      * 编译一段js脚本, 返回已编译脚本对象(将创建一个新的ScriptEngine用于解析脚本)
@@ -54,7 +63,9 @@ abstract class NashornHooker {
      * @param reader 待编译脚本文件
      * @return 已编译JS脚本
      */
-    abstract fun compile(reader: Reader): CompiledScript
+    fun compile(reader: Reader): CompiledScript {
+        return (getNashornEngine() as Compilable).compile(reader)
+    }
 
     /**
      * 编译一段js脚本, 返回已编译脚本对象
