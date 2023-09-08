@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>LegacyNashornHookerImpl 1.15.20 API </title>
+    <title>LegacyNashornHookerImpl 1.15.21 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
@@ -246,52 +246,12 @@ extends <a href=../NashornHooker.html>NashornHooker</a>
                                         <tr id="i0" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=LegacyNashornHookerImpl.html#getNashornEngine()>getNashornEngine</a>() </code>
-                                            </th>
-                                            <td class="colLast">获取一个新的Nashorn引擎</td>
-                                        </tr>
-                                        
-                                        <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=LegacyNashornHookerImpl.html#getNashornEngine(Array)>getNashornEngine</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; args) </code>
-                                            </th>
-                                            <td class="colLast">获取一个新的Nashorn引擎</td>
-                                        </tr>
-                                        
-                                        <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a></code>
-                                            </td>
                                             <th class="colSecond" scope="row"><code><a href=LegacyNashornHookerImpl.html#getNashornEngine(Array,ClassLoader)>getNashornEngine</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; args, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html>ClassLoader</a> classLoader) </code>
                                             </th>
                                             <td class="colLast">获取一个新的Nashorn引擎</td>
                                         </tr>
                                         
-                                        <tr id="i3" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=LegacyNashornHookerImpl.html#getGlobalEngine()>getGlobalEngine</a>() </code>
-                                            </th>
-                                            <td class="colLast">获取一个共享上下文的Nashorn引擎(不要尝试在这个引擎中声明变量, 出现BUG自行思考)</td>
-                                        </tr>
-                                        
-                                        <tr id="i4" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/javax/script/CompiledScript.html>CompiledScript</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=LegacyNashornHookerImpl.html#compile(String)>compile</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> string) </code>
-                                            </th>
-                                            <td class="colLast">编译一段js脚本, 返回已编译脚本对象(将创建一个新的ScriptEngine用于解析脚本)</td>
-                                        </tr>
-                                        
-                                        <tr id="i5" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/javax/script/CompiledScript.html>CompiledScript</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=LegacyNashornHookerImpl.html#compile(Reader)>compile</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/io/Reader.html>Reader</a> reader) </code>
-                                            </th>
-                                            <td class="colLast">编译一段js脚本, 返回已编译脚本对象(将创建一个新的ScriptEngine用于解析脚本)</td>
-                                        </tr>
-                                        
-                                        <tr id="i6" class="altColor">
+                                        <tr id="i1" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=LegacyNashornHookerImpl.html#invoke(CompiledScript,String,Map,Object)>invoke</a>(<a href=../../../script/CompiledScript.html>CompiledScript</a> compiledScript, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> function, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; map, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
@@ -299,7 +259,7 @@ extends <a href=../NashornHooker.html>NashornHooker</a>
                                             <td class="colLast">调用脚本中的某个函数, 返回函数返回值 因为内部涉及ScriptObjectMirror的使用, 所以放入nashornHooker</td>
                                         </tr>
                                         
-                                        <tr id="i7" class="rowColor">
+                                        <tr id="i2" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=LegacyNashornHookerImpl.html#isFunction(ScriptEngine,Object)>isFunction</a>(<a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a> engine, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> func) </code>
@@ -316,7 +276,7 @@ extends <a href=../NashornHooker.html>NashornHooker</a>
                                             <!--   -->
                                         </a>
                                             <h3>Methods inherited from class&nbsp;pers.neige.neigeitems.hook.nashorn.NashornHooker</h3>
-                                            <code>compile, compile, isFunction</code></li>
+                                            <code>compile, compile, compile, compile, getGlobalEngine, getNashornEngine, getNashornEngine, isFunction</code></li>
                                  
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
@@ -367,45 +327,6 @@ extends <a href=../NashornHooker.html>NashornHooker</a>
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="getNashornEngine()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getNashornEngine</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a> <a href=LegacyNashornHookerImpl.html#getNashornEngine()>getNashornEngine</a>()</pre>
-                                        <div class="block"><p>获取一个新的Nashorn引擎</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="getNashornEngine(Array)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getNashornEngine</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a> <a href=LegacyNashornHookerImpl.html#getNashornEngine(Array)>getNashornEngine</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; args)</pre>
-                                        <div class="block"><p>获取一个新的Nashorn引擎</p></div>
-                                        
-                                        <dl>
-                                            <dt><span class="paramLabel">Parameters:</span></dt>
-                                            
-                                            
-                                            <dd><code>args</code> - 应用于引擎的参数</dd>
-                                            
-                                            
-                                        </dl>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
                                 <a id="getNashornEngine(Array,ClassLoader)">
                                     <!--   -->
                                 </a>
@@ -426,69 +347,6 @@ extends <a href=../NashornHooker.html>NashornHooker</a>
                                             
                                             
                                             <dd><code>classLoader</code> - 用于生成引擎的classLoader</dd>
-                                            
-                                            
-                                        </dl>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="getGlobalEngine()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getGlobalEngine</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a> <a href=LegacyNashornHookerImpl.html#getGlobalEngine()>getGlobalEngine</a>()</pre>
-                                        <div class="block"><p>获取一个共享上下文的Nashorn引擎(不要尝试在这个引擎中声明变量, 出现BUG自行思考)</p></div>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="compile(String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>compile</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/javax/script/CompiledScript.html>CompiledScript</a> <a href=LegacyNashornHookerImpl.html#compile(String)>compile</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> string)</pre>
-                                        <div class="block"><p>编译一段js脚本, 返回已编译脚本对象(将创建一个新的ScriptEngine用于解析脚本)</p></div>
-                                        
-                                        <dl>
-                                            <dt><span class="paramLabel">Parameters:</span></dt>
-                                            
-                                            
-                                            <dd><code>string</code> - 待编译脚本文本</dd>
-                                            
-                                            
-                                        </dl>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="compile(Reader)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>compile</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/javax/script/CompiledScript.html>CompiledScript</a> <a href=LegacyNashornHookerImpl.html#compile(Reader)>compile</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/io/Reader.html>Reader</a> reader)</pre>
-                                        <div class="block"><p>编译一段js脚本, 返回已编译脚本对象(将创建一个新的ScriptEngine用于解析脚本)</p></div>
-                                        
-                                        <dl>
-                                            <dt><span class="paramLabel">Parameters:</span></dt>
-                                            
-                                            
-                                            <dd><code>reader</code> - 待编译脚本文件</dd>
                                             
                                             
                                         </dl>
