@@ -233,53 +233,56 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         val nbtItemStack = NbtItemStack(itemStack)
         // 设置物品NBT
         val itemTag = nbtItemStack.orCreateTag
-        val neigeItems = itemTag.getOrCreateCompound("NeigeItems")
-        // 设置物品使用次数
-        if (static.contains("options.charge")) {
-            neigeItems.putInt("charge", static.getInt("options.charge"))
-            neigeItems.putInt("maxCharge", static.getInt("options.charge"))
-        }
-        // 设置物品最大使用次数
-        if (static.contains("options.maxcharge")) {
-            neigeItems.putInt("maxCharge", static.getInt("options.maxCharge"))
-        }
-        // 设置物品自定义耐久
-        if (static.contains("options.durability")) {
-            neigeItems.putInt("durability", static.getInt("options.durability"))
-            neigeItems.putInt("maxDurability", static.getInt("options.durability"))
-        }
-        // 设置物品最大自定义耐久
-        if (static.contains("options.maxdurability")) {
-            neigeItems.putInt("maxDurability", static.getInt("options.maxDurability"))
-        }
-        // 设置物品自定义耐久为0时是否破坏
-        if (static.contains("options.itembreak")) {
-            neigeItems.putBoolean("itemBreak", static.getBoolean("options.itembreak", true))
-        }
-        // 设置具有owner的掉落物是否对其他人不可见
-        if (static.contains("options.hide")) {
-            neigeItems.putBoolean("hide", static.getBoolean("options.hide", true))
-        }
-        // 首次掉落归属
-        if (static.contains("options.owner")) {
-            neigeItems.putString("owner", static.getString("options.owner"))
-        }
-        // 设置掉落物闪光颜色
-        if (static.contains("options.color")) {
-            static.getString("options.color")?.uppercase(Locale.getDefault())?.let {
-                // 判断你这颜色保不保熟
-                if (ItemColor.colors.containsKey(it)) {
-                    neigeItems.putString("color", it)
+        // 检测是否移除NI自带NBT
+        if (!static.getBoolean("options.removeNBT", false)) {
+            val neigeItems = itemTag.getOrCreateCompound("NeigeItems")
+            // 设置物品使用次数
+            if (static.contains("options.charge")) {
+                neigeItems.putInt("charge", static.getInt("options.charge"))
+                neigeItems.putInt("maxCharge", static.getInt("options.charge"))
+            }
+            // 设置物品最大使用次数
+            if (static.contains("options.maxcharge")) {
+                neigeItems.putInt("maxCharge", static.getInt("options.maxCharge"))
+            }
+            // 设置物品自定义耐久
+            if (static.contains("options.durability")) {
+                neigeItems.putInt("durability", static.getInt("options.durability"))
+                neigeItems.putInt("maxDurability", static.getInt("options.durability"))
+            }
+            // 设置物品最大自定义耐久
+            if (static.contains("options.maxdurability")) {
+                neigeItems.putInt("maxDurability", static.getInt("options.maxDurability"))
+            }
+            // 设置物品自定义耐久为0时是否破坏
+            if (static.contains("options.itembreak")) {
+                neigeItems.putBoolean("itemBreak", static.getBoolean("options.itembreak", true))
+            }
+            // 设置具有owner的掉落物是否对其他人不可见
+            if (static.contains("options.hide")) {
+                neigeItems.putBoolean("hide", static.getBoolean("options.hide", true))
+            }
+            // 首次掉落归属
+            if (static.contains("options.owner")) {
+                neigeItems.putString("owner", static.getString("options.owner"))
+            }
+            // 设置掉落物闪光颜色
+            if (static.contains("options.color")) {
+                static.getString("options.color")?.uppercase(Locale.getDefault())?.let {
+                    // 判断你这颜色保不保熟
+                    if (ItemColor.colors.containsKey(it)) {
+                        neigeItems.putString("color", it)
+                    }
                 }
             }
-        }
-        // 设置掉落执行技能
-        if (static.contains("options.dropskill")) {
-            neigeItems.putString("dropSkill", static.getString("options.dropskill", ""))
-        }
-        // 设置物品时限
-        if (static.contains("options.itemtime")) {
-            neigeItems.putLong("itemTime", System.currentTimeMillis() + (static.getLong("options.itemtime", 0) * 1000))
+            // 设置掉落执行技能
+            if (static.contains("options.dropskill")) {
+                neigeItems.putString("dropSkill", static.getString("options.dropskill", ""))
+            }
+            // 设置物品时限
+            if (static.contains("options.itemtime")) {
+                neigeItems.putLong("itemTime", System.currentTimeMillis() + (static.getLong("options.itemtime", 0) * 1000))
+            }
         }
         // 设置物品NBT
         if (static.contains("nbt")) {
@@ -466,56 +469,59 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 val nbtItemStack = NbtItemStack(itemStack)
                 // 设置物品NBT
                 val itemTag = nbtItemStack.orCreateTag
-                val neigeItems = itemTag.getOrCreateCompound("NeigeItems")
-                neigeItems.putString("id", id)
-                neigeItems.putString("data", cache.toJSONString())
-                neigeItems.putInt("hashCode", hashCode)
-                // 设置物品使用次数
-                if (configSection.contains("options.charge")) {
-                    neigeItems.putInt("charge", configSection.getInt("options.charge"))
-                    neigeItems.putInt("maxCharge", configSection.getInt("options.charge"))
-                }
-                // 设置物品最大使用次数
-                if (configSection.contains("options.maxcharge")) {
-                    neigeItems.putInt("maxCharge", configSection.getInt("options.maxcharge"))
-                }
-                // 设置物品自定义耐久
-                if (configSection.contains("options.durability")) {
-                    neigeItems.putInt("durability", configSection.getInt("options.durability"))
-                    neigeItems.putInt("maxDurability", configSection.getInt("options.durability"))
-                }
-                // 设置物品最大自定义耐久
-                if (configSection.contains("options.maxdurability")) {
-                    neigeItems.putInt("maxDurability", configSection.getInt("options.maxdurability"))
-                }
-                // 设置物品自定义耐久为0时是否破坏
-                if (configSection.contains("options.itembreak")) {
-                    neigeItems.putBoolean("itemBreak", configSection.getBoolean("options.itembreak", true))
-                }
-                // 设置具有owner的掉落物是否对其他人不可见
-                if (configSection.contains("options.hide")) {
-                    neigeItems.putBoolean("hide", configSection.getBoolean("options.hide", true))
-                }
-                // 首次掉落归属
-                if (configSection.contains("options.owner")) {
-                    neigeItems.putString("owner", configSection.getString("options.owner"))
-                }
-                // 设置掉落物闪光颜色
-                if (configSection.contains("options.color")) {
-                    configSection.getString("options.color")?.uppercase(Locale.getDefault())?.let {
-                        // 判断你这颜色保不保熟
-                        if (ItemColor.colors.containsKey(it)) {
-                            neigeItems.putString("color", it)
+                // 检测是否移除NI自带NBT
+                if (!configSection.getBoolean("options.removeNBT", false)) {
+                    val neigeItems = itemTag.getOrCreateCompound("NeigeItems")
+                    neigeItems.putString("id", id)
+                    neigeItems.putString("data", cache.toJSONString())
+                    neigeItems.putInt("hashCode", hashCode)
+                    // 设置物品使用次数
+                    if (configSection.contains("options.charge")) {
+                        neigeItems.putInt("charge", configSection.getInt("options.charge"))
+                        neigeItems.putInt("maxCharge", configSection.getInt("options.charge"))
+                    }
+                    // 设置物品最大使用次数
+                    if (configSection.contains("options.maxcharge")) {
+                        neigeItems.putInt("maxCharge", configSection.getInt("options.maxcharge"))
+                    }
+                    // 设置物品自定义耐久
+                    if (configSection.contains("options.durability")) {
+                        neigeItems.putInt("durability", configSection.getInt("options.durability"))
+                        neigeItems.putInt("maxDurability", configSection.getInt("options.durability"))
+                    }
+                    // 设置物品最大自定义耐久
+                    if (configSection.contains("options.maxdurability")) {
+                        neigeItems.putInt("maxDurability", configSection.getInt("options.maxdurability"))
+                    }
+                    // 设置物品自定义耐久为0时是否破坏
+                    if (configSection.contains("options.itembreak")) {
+                        neigeItems.putBoolean("itemBreak", configSection.getBoolean("options.itembreak", true))
+                    }
+                    // 设置具有owner的掉落物是否对其他人不可见
+                    if (configSection.contains("options.hide")) {
+                        neigeItems.putBoolean("hide", configSection.getBoolean("options.hide", true))
+                    }
+                    // 首次掉落归属
+                    if (configSection.contains("options.owner")) {
+                        neigeItems.putString("owner", configSection.getString("options.owner"))
+                    }
+                    // 设置掉落物闪光颜色
+                    if (configSection.contains("options.color")) {
+                        configSection.getString("options.color")?.uppercase(Locale.getDefault())?.let {
+                            // 判断你这颜色保不保熟
+                            if (ItemColor.colors.containsKey(it)) {
+                                neigeItems.putString("color", it)
+                            }
                         }
                     }
-                }
-                // 设置掉落执行技能
-                if (configSection.contains("options.dropskill")) {
-                    neigeItems.putString("dropSkill", configSection.getString("options.dropskill", ""))
-                }
-                // 设置物品时限
-                if (configSection.contains("options.itemtime")) {
-                    neigeItems.putLong("itemTime", System.currentTimeMillis() + (configSection.getLong("options.itemtime", 0) * 1000))
+                    // 设置掉落执行技能
+                    if (configSection.contains("options.dropskill")) {
+                        neigeItems.putString("dropSkill", configSection.getString("options.dropskill", ""))
+                    }
+                    // 设置物品时限
+                    if (configSection.contains("options.itemtime")) {
+                        neigeItems.putLong("itemTime", System.currentTimeMillis() + (configSection.getLong("options.itemtime", 0) * 1000))
+                    }
                 }
                 // 设置物品NBT
                 if (configSection.contains("nbt")) {
