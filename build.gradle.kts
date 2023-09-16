@@ -4,7 +4,7 @@ import java.util.jar.JarFile
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
 
-val taboolib_version = "6.0.12-13"
+val taboolib_version = "6.0.12-20"
 
 plugins {
     `java-library`
