@@ -1,8 +1,8 @@
 package pers.neige.neigeitems.section.impl
 
+import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.section.SectionParser
@@ -45,7 +45,7 @@ object CheckParser : SectionParser() {
         actions: Any?
     ): String? {
         player?.player?.let {
-            bukkitScheduler.runTaskAsynchronously(plugin, Runnable {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
                 mutableMapOf(
                     Pair("value", value),
                     Pair("cache", cache),

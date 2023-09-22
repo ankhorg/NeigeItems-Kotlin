@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.utils
 
 import bot.inker.bukkit.nbt.*
+import bot.inker.bukkit.nbt.api.NbtComponentLike
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -12,7 +13,6 @@ import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
@@ -471,6 +471,17 @@ object ItemUtils {
     }
 
     /**
+     * 获取物品NBT(无nbt则返回null)
+     *
+     * @param itemStack 待操作物品
+     * @return 物品NBT
+     */
+    @JvmStatic
+    fun ItemStack.getNbtOrNull(): NbtCompound? {
+        return NbtItemStack(this).tag
+    }
+
+    /**
      * 获取物品显示名, 这个方法的意义在于, 方便让js脚本调用
      *
      * @param itemStack 待操作物品
@@ -879,9 +890,7 @@ object ItemUtils {
         // 移除相关nbt, 防止物品无法堆叠
         owner?.let {
             neigeItems.remove("owner")
-            if (!NbtUtils.isCraftItemStack(itemStack)) {
-                itemTag.saveTo(itemStack)
-            }
+            itemTag.saveToSafe(itemStack)
         }
         // 记录掉落物拥有者
         val hide = neigeItems?.get("hide")
@@ -908,7 +917,7 @@ object ItemUtils {
             }
         } else {
             // 返回结果物品
-            return bukkitScheduler.callSyncMethod(plugin) {
+            return Bukkit.getScheduler().callSyncMethod(plugin) {
                 this.world?.let { world ->
                     nmsHooker.dropItem(
                         world,
@@ -1315,5 +1324,246 @@ object ItemUtils {
         val d2 = playerLocation.z - caughtLocation.z
 
         return Vector(d0 * 0.1, d1 * 0.1 + sqrt(sqrt(d0 * d0 + d1 * d1 + d2 * d2)) * 0.08, d2 * 0.1)
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getByteOrNull(key: String): Byte? {
+        val value: Nbt<*>? = get(key)
+        return if (value is NbtNumeric<*>) {
+            value.asByte
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getShortOrNull(key: String): Short? {
+        val value: Nbt<*>? = get(key)
+        return if (value is NbtNumeric<*>) {
+            value.asShort
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getIntOrNull(key: String): Int? {
+        val value: Nbt<*>? = get(key)
+        return if (value is NbtNumeric<*>) {
+            value.asInt
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getLongOrNull(key: String): Long? {
+        val value: Nbt<*>? = get(key)
+        return if (value is NbtNumeric<*>) {
+            value.asLong
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getFloatOrNull(key: String): Float? {
+        val value: Nbt<*>? = get(key)
+        return if (value is NbtNumeric<*>) {
+            value.asFloat
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getDoubleOrNull(key: String): Double? {
+        val value: Nbt<*>? = get(key)
+        return if (value is NbtNumeric<*>) {
+            value.asDouble
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getStringOrNull(key: String): String? {
+        return when (val value: Nbt<*>? = get(key)) {
+            is NbtString ->  value.asString
+            is NbtByte -> value.asByte.toString()
+            is NbtShort ->  value.asShort.toString()
+            is NbtInt ->  value.asInt.toString()
+            is NbtLong ->  value.asLong.toString()
+            is NbtFloat ->  value.asFloat.toString()
+            is NbtDouble ->  value.asDouble.toString()
+            else -> value?.asString
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getExactStringOrNull(key: String): String? {
+        val value: Nbt<*>? = get(key)
+        return if (value is NbtString) {
+            value.asString
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getDeepByteOrNull(key: String): Byte? {
+        val value: Nbt<*>? = getDeepWithEscape(key)
+        return if (value is NbtNumeric<*>) {
+            value.asByte
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getDeepShortOrNull(key: String): Short? {
+        val value: Nbt<*>? = getDeepWithEscape(key)
+        return if (value is NbtNumeric<*>) {
+            value.asShort
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getDeepIntOrNull(key: String): Int? {
+        val value: Nbt<*>? = getDeepWithEscape(key)
+        return if (value is NbtNumeric<*>) {
+            value.asInt
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getDeepLongOrNull(key: String): Long? {
+        val value: Nbt<*>? = getDeepWithEscape(key)
+        return if (value is NbtNumeric<*>) {
+            value.asLong
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getDeepFloatOrNull(key: String): Float? {
+        val value: Nbt<*>? = getDeepWithEscape(key)
+        return if (value is NbtNumeric<*>) {
+            value.asFloat
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getDeepDoubleOrNull(key: String): Double? {
+        val value: Nbt<*>? = getDeepWithEscape(key)
+        return if (value is NbtNumeric<*>) {
+            value.asDouble
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getDeepStringOrNull(key: String): String? {
+        return when (val value: Nbt<*>? = getDeepWithEscape(key)) {
+            is NbtString ->  value.asString
+            is NbtByte -> value.asByte.toString()
+            is NbtShort ->  value.asShort.toString()
+            is NbtInt ->  value.asInt.toString()
+            is NbtLong ->  value.asLong.toString()
+            is NbtFloat ->  value.asFloat.toString()
+            is NbtDouble ->  value.asDouble.toString()
+            else -> value?.asString
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getDeepExactStringOrNull(key: String): String? {
+        val value: Nbt<*>? = getDeepWithEscape(key)
+        return if (value is NbtString) {
+            value.asString
+        } else {
+            null
+        }
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.getDeepWithEscape(
+        key: String,
+        escape: Char = '\\',
+        separator: Char = '.'
+    ): Nbt<*>? {
+        val keys = key.split(separator, escape)
+        var currentNbtCompound: NbtComponentLike? = this
+        var value: Nbt<*>? = null
+        for (k in keys) {
+            if (currentNbtCompound == null) {
+                return null
+            }
+            if (currentNbtCompound.containsKey(k)) {
+                val obj = currentNbtCompound[k]
+                value = obj
+                currentNbtCompound = if (obj is NbtComponentLike) {
+                    obj
+                } else {
+                    null
+                }
+            } else {
+                return null
+            }
+        }
+        return value
+    }
+
+    @JvmStatic
+    fun NbtComponentLike.putDeepWithEscape(
+        key: String,
+        value: Nbt<*>,
+        force: Boolean = true,
+        escape: Char = '\\',
+        separator: Char = '.'
+    ) {
+        val keys = key.split(separator, escape)
+        var currentNbtCompound: NbtComponentLike = this
+        for (i in keys.indices) {
+            val k = keys[i]
+            if (i == keys.size - 1) {
+                currentNbtCompound[k] = value // is last node
+            } else {
+                if (currentNbtCompound.containsKey(k)) {
+                    var obj = currentNbtCompound[k]
+                    if (obj is NbtComponentLike) {
+                        currentNbtCompound = obj
+                    } else {
+                        // 如果需要强制设置
+                        if (force) {
+                            obj = NbtCompound()
+                            currentNbtCompound[k] = obj
+                            currentNbtCompound = obj
+                        } else {
+                            return
+                        }
+                    }
+                } else {
+                    val obj = NbtCompound()
+                    currentNbtCompound[k] = obj
+                    currentNbtCompound = obj
+                }
+            }
+        }
+    }
+
+    @JvmStatic
+    fun NbtCompound.saveToSafe(itemStack: ItemStack) {
+        if (!NbtUtils.isCraftItemStack(itemStack)) {
+            saveTo(itemStack)
+        }
     }
 }

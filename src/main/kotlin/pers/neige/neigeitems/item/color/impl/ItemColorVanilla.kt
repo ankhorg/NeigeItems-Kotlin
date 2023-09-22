@@ -1,19 +1,12 @@
 package pers.neige.neigeitems.item.color.impl
 
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.Material
 import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.scoreboard.Team
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
-import taboolib.common.platform.function.submit
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.getItemTag
 
 /**
  * 基于Bukkit功能实现的掉落物光效系统

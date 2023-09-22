@@ -6,12 +6,10 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.HookerManager
-import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
+import pers.neige.neigeitems.utils.ItemUtils.getDeepStringOrNull
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import pers.neige.neigeitems.utils.ItemUtils.toValue
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import taboolib.module.nms.getItemTag
 import taboolib.platform.compat.PlaceholderExpansion
 import java.io.InputStreamReader
 import java.util.concurrent.ConcurrentHashMap
@@ -90,14 +88,14 @@ object Expansion : PlaceholderExpansion {
                             } else {
                                 val itemTag = itemStack.getNbt()
                                 when (type) {
-                                    "get" -> return itemTag.getDeep(content)?.toValue()?.toString() ?: ""
+                                    "get" -> return itemTag.getDeepStringOrNull(content) ?: ""
                                     "has" -> return (itemTag.getDeep(content) != null).toString()
                                     "check" -> {
                                         content.parseObject<java.util.HashMap<String, String?>>().forEach { (key, value) ->
                                             if (value == null) {
                                                 if (itemTag.getDeep(key) == null) return "false"
                                             } else {
-                                                if (itemTag.getDeep(key)?.toValue()?.toString() != value) return "false"
+                                                if (itemTag.getDeepStringOrNull(key) != value) return "false"
                                             }
                                         }
                                         return "true"

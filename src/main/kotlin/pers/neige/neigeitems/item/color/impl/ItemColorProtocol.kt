@@ -11,7 +11,6 @@ import com.comphenix.protocol.reflect.FieldAccessException
 import com.comphenix.protocol.utility.MinecraftReflection
 import com.comphenix.protocol.utility.MinecraftVersion
 import org.bukkit.ChatColor
-import org.bukkit.Material
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
@@ -21,7 +20,6 @@ import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
-import taboolib.module.nms.getItemTag
 import java.util.*
 
 
@@ -49,7 +47,7 @@ class ItemColorProtocol : ItemColor() {
     private val checkedScoreboard = HashSet<Scoreboard>()
 
     /**
-     * 根据玩家当前计分板进行Team初始化
+     * 根据玩家当前计分板进行Team初始化.
      * 玩家的计分板不一定一成不变,
      * 可能刚进服时玩家是主计分板,
      * 过一段时间其他插件又根据需要切换了玩家的计分板.

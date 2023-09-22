@@ -3,7 +3,6 @@ package pers.neige.neigeitems.script.tool
 import org.bukkit.Bukkit
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ExpansionManager
 
@@ -104,7 +103,7 @@ class ScriptTask {
                 }
             }
         } else {
-            bukkitScheduler.callSyncMethod(plugin) {
+            Bukkit.getScheduler().callSyncMethod(plugin) {
                 // 如果之前注册过了就先移除并卸载
                 unRegister()
                 // 注册任务
@@ -144,12 +143,12 @@ class ScriptTask {
         // 注册了就取消任务
         if (Bukkit.isPrimaryThread()) {
             bukkitTask?.also {
-                bukkitScheduler.cancelTask(it.taskId)
+                Bukkit.getScheduler().cancelTask(it.taskId)
             }
         } else {
-            bukkitScheduler.callSyncMethod(plugin) {
+            Bukkit.getScheduler().callSyncMethod(plugin) {
                 bukkitTask?.also {
-                    bukkitScheduler.cancelTask(it.taskId)
+                    Bukkit.getScheduler().cancelTask(it.taskId)
                 }
             }
         }

@@ -9,8 +9,10 @@ import org.bukkit.GameMode
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ConfigManager.config
-import pers.neige.neigeitems.utils.ItemUtils.getDeepOrNull
-import taboolib.module.nms.getItemTag
+import pers.neige.neigeitems.utils.ItemUtils.getDeepDoubleOrNull
+import pers.neige.neigeitems.utils.ItemUtils.getDeepIntOrNull
+import pers.neige.neigeitems.utils.ItemUtils.getDeepStringOrNull
+import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import java.util.*
 import java.util.function.BiFunction
 
@@ -60,37 +62,39 @@ class ItemPlaceholder {
         // 加载基础变量
         addExpansion("neigeitems") { itemStack, param ->
             val args = param.split("_", limit = 2)
-            val itemTag = itemStack.getItemTag()
+            val itemTag = itemStack.getNbtOrNull() ?: return@addExpansion null
             when (args[0].lowercase(Locale.getDefault())) {
                 "charge" -> {
-                    itemTag.getDeepOrNull("NeigeItems.charge")?.asString()
+                    itemTag.getDeepIntOrNull("NeigeItems.charge")?.toString()
                 }
                 "maxcharge" -> {
-                    itemTag.getDeepOrNull("NeigeItems.maxCharge")?.asString()
+                    itemTag.getDeepIntOrNull("NeigeItems.maxCharge")?.toString()
                 }
                 "durability" -> {
-                    itemTag.getDeepOrNull("NeigeItems.durability")?.asString()
+                    itemTag.getDeepIntOrNull("NeigeItems.durability")?.toString()
                 }
                 "maxdurability" -> {
-                    itemTag.getDeepOrNull("NeigeItems.maxDurability")?.asString()
+                    itemTag.getDeepIntOrNull("NeigeItems.maxDurability")?.toString()
                 }
                 "itembreak" -> {
                     val info = args.getOrNull(1)?.split("_", limit = 2)
-                    val itemBreak = itemTag.getDeepOrNull("NeigeItems.itemBreak")?.asByte()
-                    // 值为0代表不损坏
-                    if (itemBreak == 0.toByte()) {
-                        info?.getOrNull(0)
-                    // 值为1或不存在代表损坏
-                    } else {
+                    val itemBreak = itemTag.getDeepBoolean("NeigeItems.itemBreak", true)
+                    // 值为1或不存在(这种情况itemBreak是true)代表损坏
+                    if (itemBreak) {
                         info?.getOrNull(1)
+                    // 值为0代表不损坏
+                    } else {
+                        info?.getOrNull(0)
                     }
                 }
                 "nbt" -> {
-                    itemTag.getDeepOrNull(args.getOrNull(1) ?: "")?.asString()
+                    itemTag.getDeepStringOrNull(args.getOrNull(1) ?: "")
                 }
                 "nbtnumber" -> {
                     val info = args.getOrNull(1)?.split("_", limit = 2)
-                    "%.${info?.getOrNull(0)}f".format(itemTag.getDeepOrNull(info?.getOrNull(1) ?: "")?.asDouble())
+                    val value = itemTag.getDeepDoubleOrNull(info?.getOrNull(1) ?: "") ?: return@addExpansion null
+                    "%.${info?.getOrNull(0)}f".format(value)
+
                 }
                 else -> null
             }

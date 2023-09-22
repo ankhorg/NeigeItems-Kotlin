@@ -4,7 +4,6 @@ import bot.inker.bukkit.nbt.NbtItemStack
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.SimplePluginManager
 import taboolib.common.platform.Plugin
 import taboolib.platform.BukkitPlugin
 

@@ -1,15 +1,11 @@
 package pers.neige.neigeitems.command.subcommand
 
-import bot.inker.bukkit.nbt.*
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.command.Command
-import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.module.chat.ComponentText
-import taboolib.module.chat.Components
 import taboolib.module.chat.TellrawJson
 import taboolib.module.nms.ItemTag
 import taboolib.module.nms.ItemTagData

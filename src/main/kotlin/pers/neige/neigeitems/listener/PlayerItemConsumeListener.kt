@@ -2,13 +2,12 @@ package pers.neige.neigeitems.listener
 
 import bot.inker.bukkit.nbt.NbtCompound
 import bot.inker.bukkit.nbt.NbtItemStack
-import bot.inker.bukkit.nbt.NbtUtils
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.EquipmentSlot
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.manager.ActionManager
-import pers.neige.neigeitems.utils.ActionUtils.consumeAndReturn
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
+import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.event.SubscribeEvent
 
@@ -50,9 +49,7 @@ object PlayerItemConsumeListener {
         }
 
         // 他妈的。。。。。
-        if (!NbtUtils.isCraftItemStack(itemStack)) {
-            itemTag.saveTo(itemStack)
-        }
+        itemTag.saveToSafe(itemStack)
 
         // 设置物品
         if (hand == EquipmentSlot.HAND) {

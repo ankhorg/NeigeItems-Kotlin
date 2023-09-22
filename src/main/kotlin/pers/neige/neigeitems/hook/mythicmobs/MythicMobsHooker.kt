@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.hook.mythicmobs
 
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
@@ -8,7 +9,6 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.event.MythicDropEvent
@@ -20,13 +20,15 @@ import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.ItemUtils.getCaughtVelocity
+import pers.neige.neigeitems.utils.ItemUtils.getDoubleOrNull
+import pers.neige.neigeitems.utils.ItemUtils.getExactStringOrNull
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
+import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
+import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import taboolib.common.platform.event.ProxyListener
 import taboolib.common.platform.function.submit
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.getItemTag
 import java.io.File
 import java.text.DecimalFormat
 import java.util.*
@@ -200,9 +202,9 @@ abstract class MythicMobsHooker {
                             ?: HookerManager.easyItemHooker?.getItemStack(args[0])
                             ?: getItemStackSync(args[0]))?.let { itemStack ->
                             dropChance[slot]?.let { chance ->
-                                val itemTag = itemStack.getItemTag()
-                                itemTag.computeIfAbsent("NeigeItems") { ItemTag() }?.asCompound()?.set("dropChance", ItemTagData(chance))
-                                itemTag.saveTo(itemStack)
+                                val itemTag = itemStack.getNbt()
+                                itemTag.putDeepDouble("NeigeItems.dropChance", chance)
+                                itemTag.saveToSafe(itemStack)
                             }
                             val event = MythicEquipEvent(entity, internalName, slot, itemStack)
 
@@ -399,7 +401,7 @@ abstract class MythicMobsHooker {
                     // 拟渔获向量计算
                     val caughtVelocity = getCaughtVelocity(entity.location, killer.location)
                     // 拟渔获掉落
-                    bukkitScheduler.callSyncMethod(plugin) {
+                    Bukkit.getScheduler().callSyncMethod(plugin) {
                         dropEvent.fishDropItems?.forEach { itemStack ->
                             // 掉落
                             HookerManager.nmsHooker.dropItem(
@@ -475,34 +477,33 @@ abstract class MythicMobsHooker {
     ) {
         // 遍历怪物身上的装备, 看看哪个是生成时自带的需要掉落的NI装备
         for (itemStack in equipments) {
-            if (itemStack.type != Material.AIR) {
-                val itemTag = itemStack.getItemTag()
-
-                itemTag["NeigeItems"]?.asCompound()?.let { neigeItems ->
-                    neigeItems["dropChance"]?.asDouble()?.let {
-                        if (ThreadLocalRandom.current().nextDouble() <= it) {
-                            val id = neigeItems["id"]?.asString()
-                            // 处理NI物品(根据玩家信息重新生成)
-                            if (id != null) {
-                                val target = when (player) {
-                                    is OfflinePlayer -> player
-                                    else -> null
-                                }
-                                ItemManager.getItemStack(id, target, neigeItems["data"]?.asString())?.let {
-                                    // 丢进待掉落列表里
-                                    dropItems.add(it)
-                                }
-                                // 处理MM/EI物品(单纯移除NBT)
-                            } else {
-                                neigeItems.remove("dropChance")
-                                if (neigeItems.isEmpty()) {
-                                    itemTag.remove("NeigeItems")
-                                }
-                                itemTag.saveTo(itemStack)
-                                dropItems.add(itemStack)
-                            }
-                        }
+            // 空检测
+            if (itemStack.type == Material.AIR) continue
+            // 获取NBT
+            val itemTag = itemStack.getNbtOrNull() ?: continue
+            // 掏掉落概率
+            val neigeItems = itemTag.getCompound("NeigeItems") ?: continue
+            val dropChance = neigeItems.getDoubleOrNull("dropChance") ?: continue
+            if (ThreadLocalRandom.current().nextDouble() <= dropChance) {
+                val id = neigeItems.getExactStringOrNull("id")
+                // 处理NI物品(根据玩家信息重新生成)
+                if (id != null) {
+                    val target = when (player) {
+                        is OfflinePlayer -> player
+                        else -> null
                     }
+                    ItemManager.getItemStack(id, target, neigeItems.getExactStringOrNull("data"))?.let {
+                        // 丢进待掉落列表里
+                        dropItems.add(it)
+                    }
+                    // 处理MM/EI物品(单纯移除NBT)
+                } else {
+                    neigeItems.remove("dropChance")
+                    if (neigeItems.isEmpty()) {
+                        itemTag.remove("NeigeItems")
+                    }
+                    itemTag.saveToSafe(itemStack)
+                    dropItems.add(itemStack)
                 }
             }
         }

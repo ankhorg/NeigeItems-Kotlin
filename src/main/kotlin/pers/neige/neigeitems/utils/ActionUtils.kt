@@ -1,11 +1,11 @@
 package pers.neige.neigeitems.utils
 
 import bot.inker.bukkit.nbt.NbtCompound
-import bot.inker.bukkit.nbt.NbtUtils
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.item.action.ActionTrigger
 import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
@@ -113,9 +113,7 @@ object ActionUtils {
                     this.amount = 0
                 } else {
                     neigeItems.putInt("charge", charge - amount)
-                    if (!NbtUtils.isCraftItemStack(this)) {
-                        itemTag.saveTo(this)
-                    }
+                    itemTag.saveToSafe(this)
                 }
                 if (itemClone != null) player.giveItem(itemClone)
                 return true
@@ -158,9 +156,7 @@ object ActionUtils {
                     this.amount = 0
                 } else {
                     neigeItems.putInt("charge", charge - amount)
-                    if (!NbtUtils.isCraftItemStack(this)) {
-                        itemTag.saveTo(this)
-                    }
+                    itemTag.saveToSafe(this)
                 }
                 if (itemClone != null) return arrayOf(this, itemClone)
                 return arrayOf(this)

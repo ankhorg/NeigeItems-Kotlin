@@ -4,7 +4,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.PluginCommand
 import org.bukkit.command.TabCompleter
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ExpansionManager
 import taboolib.platform.BukkitCommand
@@ -140,7 +139,7 @@ class ScriptCommand(val name: String) {
             bukkitCommand.commandMap.register(nameSpace, command)
             bukkitCommand.sync()
         } else {
-            bukkitScheduler.callSyncMethod(plugin) {
+            Bukkit.getScheduler().callSyncMethod(plugin) {
                 val bukkitCommand = BukkitCommand()
                 bukkitCommand.commandMap.register(nameSpace, command)
                 bukkitCommand.sync()
@@ -166,7 +165,7 @@ class ScriptCommand(val name: String) {
             }
             bukkitCommand.sync()
         } else {
-            bukkitScheduler.callSyncMethod(plugin) {
+            Bukkit.getScheduler().callSyncMethod(plugin) {
                 val bukkitCommand = BukkitCommand()
                 bukkitCommand.unregisterCommand(name)
                 bukkitCommand.unregisterCommand("${nameSpace}:$name")

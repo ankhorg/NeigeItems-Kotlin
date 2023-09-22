@@ -5,9 +5,6 @@ import org.openjdk.nashorn.api.scripting.ScriptObjectMirror
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
 import taboolib.common.env.RuntimeDependencies
 import taboolib.common.env.RuntimeDependency
-import java.io.Reader
-import javax.script.Compilable
-import javax.script.CompiledScript
 import javax.script.Invocable
 import javax.script.ScriptEngine
 

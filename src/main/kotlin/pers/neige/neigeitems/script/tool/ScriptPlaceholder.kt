@@ -2,7 +2,6 @@ package pers.neige.neigeitems.script.tool
 
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.placeholderapi.PlaceholderExpansion
 import pers.neige.neigeitems.manager.ConfigManager
@@ -76,7 +75,7 @@ class ScriptPlaceholder(private val identifier: String) {
                 placeholderExpansion = it
                 it.register()
             } else {
-                bukkitScheduler.callSyncMethod(plugin) {
+                Bukkit.getScheduler().callSyncMethod(plugin) {
                     placeholderExpansion = it
                     it.register()
                 }
@@ -100,7 +99,7 @@ class ScriptPlaceholder(private val identifier: String) {
                 it.unregister()
             }
         } else {
-            bukkitScheduler.callSyncMethod(plugin) {
+            Bukkit.getScheduler().callSyncMethod(plugin) {
                 placeholderExpansion?.also {
                     it.unregister()
                 }

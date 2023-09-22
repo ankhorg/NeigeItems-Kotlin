@@ -3,9 +3,6 @@ package pers.neige.neigeitems.hook.nashorn.impl
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory
 import jdk.nashorn.api.scripting.ScriptObjectMirror
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
-import java.io.Reader
-import javax.script.Compilable
-import javax.script.CompiledScript
 import javax.script.Invocable
 import javax.script.ScriptEngine
 

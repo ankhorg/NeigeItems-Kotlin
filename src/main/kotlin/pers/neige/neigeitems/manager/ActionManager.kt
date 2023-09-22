@@ -16,7 +16,6 @@ import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.item.action.ComboInfo
@@ -292,11 +291,11 @@ object ActionManager {
             if (delay > 0) {
                 // 线程判断
                 if (isPrimaryThread()) {
-                    bukkitScheduler.runTaskLater(plugin, Runnable {
+                    Bukkit.getScheduler().runTaskLater(plugin, Runnable {
                         runAction(player, action, itemStack, itemTag, data, event, global, index, actionEnd, map)
                     }, delay)
                 } else {
-                    bukkitScheduler.runTaskLaterAsynchronously(plugin, Runnable {
+                    Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, Runnable {
                         runAction(player, action, itemStack, itemTag, data, event, global, index, actionEnd, map)
                     }, delay)
                 }
@@ -1146,7 +1145,7 @@ object ActionManager {
             // 消耗物品
             itemStack.consumeAndReturn(amount, itemTag, neigeItems)?.also {
                 if (it.size > 1) {
-                    bukkitScheduler.runTaskLater(plugin, Runnable {
+                    Bukkit.getScheduler().runTaskLater(plugin, Runnable {
                         player.giveItem(it[1])
                     }, 1)
                 }
@@ -1418,7 +1417,7 @@ object ActionManager {
         if (isPrimaryThread()) {
             task.run()
         } else {
-            bukkitScheduler.runTask(plugin, task)
+            Bukkit.getScheduler().runTask(plugin, task)
         }
     }
 }

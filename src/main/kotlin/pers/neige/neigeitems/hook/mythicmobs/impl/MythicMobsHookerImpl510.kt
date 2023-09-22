@@ -11,7 +11,6 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import taboolib.common.platform.event.EventPriority
@@ -82,7 +81,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
         return if (Bukkit.isPrimaryThread()) {
             itemManager.getItemStack(id)
         } else {
-            bukkitScheduler.callSyncMethod(plugin) {
+            Bukkit.getScheduler().callSyncMethod(plugin) {
                 itemManager.getItemStack(id)
             }.get()
         }

@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.hook.nashorn
 
-import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory
 import java.io.Reader
 import javax.script.Compilable
 import javax.script.CompiledScript

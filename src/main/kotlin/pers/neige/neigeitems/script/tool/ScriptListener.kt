@@ -2,7 +2,6 @@ package pers.neige.neigeitems.script.tool
 
 import org.bukkit.Bukkit
 import org.bukkit.event.Event
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ExpansionManager
 import taboolib.common.platform.event.EventPriority
@@ -74,7 +73,7 @@ class ScriptListener(val event: Class<Event>) {
                 executor.accept(it)
             }
         } else {
-            bukkitScheduler.callSyncMethod(plugin) {
+            Bukkit.getScheduler().callSyncMethod(plugin) {
                 // 如果之前注册过了就先移除并卸载
                 unRegister()
                 // 注册监听器
@@ -100,7 +99,7 @@ class ScriptListener(val event: Class<Event>) {
                 unregisterListener(it)
             }
         } else {
-            bukkitScheduler.callSyncMethod(plugin) {
+            Bukkit.getScheduler().callSyncMethod(plugin) {
                 listener?.also {
                     unregisterListener(it)
                 }

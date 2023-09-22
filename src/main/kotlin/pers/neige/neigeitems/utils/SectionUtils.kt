@@ -9,7 +9,8 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
-import pers.neige.neigeitems.utils.ItemUtils.toValue
+import pers.neige.neigeitems.utils.ItemUtils.getDeepStringOrNull
+import pers.neige.neigeitems.utils.ItemUtils.getExactStringOrNull
 import pers.neige.neigeitems.utils.StringUtils.split
 import java.awt.Color
 import java.util.*
@@ -131,7 +132,7 @@ object SectionUtils {
                 // 尝试读取缓存
                 if (cache?.get(this) != null) {
                     // 直接返回对应节点值
-                    return cache[this] as String
+                    return cache[this].toString()
                     // 读取失败, 尝试主动解析
                 } else {
                     // 尝试解析并返回对应节点值
@@ -241,9 +242,9 @@ object SectionUtils {
         when (val index = this.indexOf("::")) {
             -1 -> {
                 // 尝试读取缓存
-                if (kotlin.runCatching { cache?.get(this) }.getOrNull() != null) {
+                if (cache?.get(this) != null) {
                     // 直接返回对应节点值
-                    return cache?.get(this) as String
+                    return cache[this].toString()
                     // 读取失败, 尝试主动解析
                 } else {
                     // 尝试解析并返回对应节点值
@@ -281,10 +282,10 @@ object SectionUtils {
                 val param = this.substring(index+2)
                 return when (name.lowercase(Locale.getDefault())) {
                     "nbt" -> {
-                        itemTag.getDeep(param)?.toValue()?.toString() ?: "<$this>"
+                        itemTag.getDeepStringOrNull(param) ?: "<$this>"
                     }
                     "data" -> {
-                        (data ?: itemTag.getDeep("NeigeItems.data")?.toValue()?.toString()?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
+                        (data ?: itemTag.getExactStringOrNull("NeigeItems.data")?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
                     }
                     "amount" -> {
                         itemStack.amount.toString()

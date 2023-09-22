@@ -4,7 +4,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.event.ItemPackGiveEvent
@@ -114,7 +113,7 @@ object GivePack {
                     event.call()
                     if (!event.isCancelled) {
                         event.itemStacks.forEach { itemStack ->
-                            bukkitScheduler.callSyncMethod(plugin) {
+                            Bukkit.getScheduler().callSyncMethod(plugin) {
                                 player.giveItem(itemStack)
                             }
                             dropData?.let {

@@ -1,11 +1,7 @@
 package pers.neige.neigeitems.item
 
 import bot.inker.bukkit.nbt.NbtCompound
-import bot.inker.bukkit.nbt.NbtUtils
-import org.bukkit.GameMode
-import org.bukkit.Material
-import org.bukkit.Sound
-import org.bukkit.Statistic
+import org.bukkit.*
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
@@ -13,10 +9,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.player.*
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
+import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.LangUtils.getLang
 import taboolib.platform.util.giveItem
 import taboolib.platform.util.sendActionBar
@@ -97,7 +93,7 @@ object ItemDurability {
                 // 物品数量+1, 让交互TNT事件消耗
                 itemStack.amount += 1
                 // 刷新玩家背包
-                bukkitScheduler.runTaskLater(plugin, Runnable {player.updateInventory()}, 1)
+                Bukkit.getScheduler().runTaskLater(plugin, Runnable {player.updateInventory()}, 1)
             }
             return
         }
@@ -326,9 +322,7 @@ object ItemDurability {
                 neigeItems.putInt("durability", 0)
                 damageEvent?.let {damageEvent.damage = itemStack.type.maxDurability - itemStack.durability - 1}
                 // 保存NBT
-                if (!NbtUtils.isCraftItemStack(itemStack)) {
-                    itemTag.saveTo(itemStack)
-                }
+                itemTag.saveToSafe(itemStack)
                 // 播放物品破碎声
                 player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f)
                 // 物品损坏提示
@@ -347,9 +341,7 @@ object ItemDurability {
                 damageEvent.damage = ((realDamage.toDouble() / maxDurability.toDouble()) * itemStack.type.maxDurability).toInt()
             }
             // 保存NBT
-            if (!NbtUtils.isCraftItemStack(itemStack)) {
-                itemTag.saveTo(itemStack)
-            }
+            itemTag.saveToSafe(itemStack)
             // 返回耐久消耗成功结果
             return DamageResult.SUCCESS
         }

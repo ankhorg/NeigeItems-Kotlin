@@ -3,6 +3,7 @@ package pers.neige.neigeitems.manager
 import bot.inker.bukkit.nbt.NbtCompound
 import bot.inker.bukkit.nbt.NbtItemStack
 import com.alibaba.fastjson2.parseObject
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -10,7 +11,6 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.neosearch.stringsearcher.StringSearcher
-import pers.neige.neigeitems.NeigeItems.bukkitScheduler
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.HookerManager.papi
@@ -25,10 +25,12 @@ import pers.neige.neigeitems.manager.ItemManager.setMaxCharge
 import pers.neige.neigeitems.manager.ItemManager.setMaxCustomDurability
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.castToItemTagData
+import pers.neige.neigeitems.utils.ItemUtils.castToNbt
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import pers.neige.neigeitems.utils.ItemUtils.putDeepFixed
+import pers.neige.neigeitems.utils.ItemUtils.putDeepWithEscape
 import pers.neige.neigeitems.utils.ItemUtils.putDeepWithList
+import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
@@ -1565,13 +1567,13 @@ object ItemEditorManager {
             // 判断是不是空气
             if (itemStack.type != Material.AIR) {
                 // 获取物品NBT
-                val itemTag = itemStack.getItemTag()
+                val itemTag = itemStack.getNbt()
                 // 获取并遍历添加NBT
                 content.parseObject<HashMap<String, String>>().forEach { (key, value) ->
-                    itemTag.putDeepFixed(key, value.castToItemTagData())
+                    itemTag.putDeepWithEscape(key, value.castToNbt())
                 }
                 // 保存物品NBT
-                itemTag.saveTo(itemStack)
+                itemTag.saveToSafe(itemStack)
                 return@addBasicItemEditor true
             }
             return@addBasicItemEditor false
@@ -1657,7 +1659,7 @@ object ItemEditorManager {
                     val itemClone = itemStack.clone()
                     itemClone.amount = itemClone.amount - amount
                     itemStack.amount = amount
-                    bukkitScheduler.runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
+                    Bukkit.getScheduler().runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
                 }
                 // NBT物品
                 val nbtItemStack: NbtItemStack
@@ -1714,7 +1716,7 @@ object ItemEditorManager {
                     val itemClone: ItemStack = itemStack.clone()
                     itemClone.amount = itemClone.amount - amount
                     itemStack.amount = amount
-                    bukkitScheduler.runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
+                    Bukkit.getScheduler().runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
                 }
                 // NBT物品
                 val nbtItemStack: NbtItemStack

@@ -188,7 +188,7 @@ object MMGive {
             amount?.let {
                 // 给物品
                 itemStack?.let {
-                    NeigeItems.bukkitScheduler.callSyncMethod(NeigeItems.plugin) {
+                    Bukkit.getScheduler().callSyncMethod(NeigeItems.plugin) {
                         player.giveItems(itemStack, amount.coerceAtLeast(1))
                     }
                     sender.sendLang("Messages.successInfo", mapOf(
