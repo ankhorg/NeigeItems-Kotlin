@@ -1,17 +1,16 @@
 package pers.neige.neigeitems.hook.mythicmobs.impl
 
-import io.lumine.mythic.api.mobs.MobManager
-import io.lumine.mythic.bukkit.MythicBukkit
-import io.lumine.mythic.bukkit.events.MythicMobDeathEvent
-import io.lumine.mythic.bukkit.events.MythicMobSpawnEvent
-import io.lumine.mythic.bukkit.events.MythicReloadedEvent
-import io.lumine.mythic.core.items.ItemExecutor
-import org.bukkit.Bukkit
+import io.lumine.xikage.mythicmobs.MythicMobs
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
+import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
+import io.lumine.xikage.mythicmobs.items.ItemManager
+import io.lumine.xikage.mythicmobs.mobs.MobManager
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
+import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
@@ -19,12 +18,12 @@ import taboolib.common.platform.function.submit
 import kotlin.math.roundToInt
 
 /**
- * 5.1.0版本MM挂钩
+ * 4.5.9版本MM挂钩
  *
- * @constructor 启用5.1.0版本MM挂钩
+ * @constructor 启用4.5.9版本MM挂钩
  */
-class MythicMobsHookerImpl510 : MythicMobsHooker() {
-    override val version = "510"
+class MythicMobsHookerImpl459 : MythicMobsHooker() {
+    override val version = "459"
 
     override val spawnEventClass = MythicMobSpawnEvent::class.java
 
@@ -32,13 +31,13 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
 
     override val reloadEventClass = MythicReloadedEvent::class.java
 
-    private val itemManager: ItemExecutor = MythicBukkit.inst().itemManager
+    private val itemManager: ItemManager = MythicMobs.inst().itemManager
 
-    private val mobManager: MobManager = MythicBukkit.inst().mobManager
+    private val mobManager: MobManager = MythicMobs.inst().mobManager
 
     override val mobInfos = HashMap<String, ConfigurationSection>()
 
-    private val apiHelper = MythicBukkit.inst().apiHelper
+    private val apiHelper = MythicMobs.inst().apiHelper
 
     override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.HIGH) {
         submit(async = true) {
@@ -46,7 +45,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
                 spawnEvent(
                     it.mobType.internalName,
                     it.entity as LivingEntity,
-                    it.mobLevel.roundToInt()
+                    it.mobLevel
                 )
             }
         }
@@ -59,7 +58,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
                     it.killer,
                     it.entity as LivingEntity,
                     it.mobType.internalName,
-                    it.mobLevel.roundToInt()
+                    it.mobLevel
                 )
             }
         }
@@ -69,22 +68,13 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
         loadMobInfos()
     }
 
-    init {
-        loadMobInfos()
-    }
-
     override fun getItemStack(id: String): ItemStack? {
         return itemManager.getItemStack(id)
     }
 
+    // 这个版本并不需要同步获取物品
     override fun getItemStackSync(id: String): ItemStack? {
-        return if (Bukkit.isPrimaryThread()) {
-            itemManager.getItemStack(id)
-        } else {
-            Bukkit.getScheduler().callSyncMethod(plugin) {
-                itemManager.getItemStack(id)
-            }.get()
-        }
+        return itemManager.getItemStack(id)
     }
 
     override fun castSkill(entity: Entity, skill: String, trigger: Entity?) {
@@ -101,8 +91,39 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
 
     override fun getMythicId(entity: Entity): String? {
         return if (apiHelper.isMythicMob(entity))
-            apiHelper.getMythicMobInstance(entity).type.internalName
+            return apiHelper.getMythicMobInstance(entity).type.internalName
         else
             null
+    }
+
+    override fun getEntity(event: Event): Entity? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.entity
+            is MythicMobDeathEvent -> event.entity
+            else -> null
+        }
+    }
+
+    override fun getKiller(event: Event): LivingEntity? {
+        return when (event) {
+            is MythicMobDeathEvent -> event.killer
+            else -> null
+        }
+    }
+
+    override fun getInternalName(event: Event): String? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.mobType.internalName
+            is MythicMobDeathEvent -> event.mobType.internalName
+            else -> null
+        }
+    }
+
+    override fun getMobLevel(event: Event): Double? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.mobLevel.toDouble()
+            is MythicMobDeathEvent -> event.mobLevel.toDouble()
+            else -> null
+        }
     }
 }

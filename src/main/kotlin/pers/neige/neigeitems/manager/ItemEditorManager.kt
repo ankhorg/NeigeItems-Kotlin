@@ -35,18 +35,10 @@ import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import pers.neige.neigeitems.utils.function.TriFunction
-import taboolib.common.env.RuntimeDependencies
-import taboolib.common.env.RuntimeDependency
 import taboolib.module.nms.getItemTag
 import taboolib.platform.util.giveItem
 import java.util.*
 
-@RuntimeDependencies(
-    RuntimeDependency(
-        "!org.neosearch.stringsearcher:multiple-string-searcher:0.1.1",
-        test = "!org.neosearch.stringsearcher.StringSearcher"
-    )
-)
 /**
  * 用于管理所有物品编辑函数
  */

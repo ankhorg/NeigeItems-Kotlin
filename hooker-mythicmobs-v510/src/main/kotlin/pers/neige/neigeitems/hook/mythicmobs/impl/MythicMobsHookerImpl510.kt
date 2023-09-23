@@ -1,15 +1,18 @@
 package pers.neige.neigeitems.hook.mythicmobs.impl
 
-import io.lumine.xikage.mythicmobs.MythicMobs
-import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent
-import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
-import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
-import io.lumine.xikage.mythicmobs.items.ItemManager
-import io.lumine.xikage.mythicmobs.mobs.MobManager
+import io.lumine.mythic.api.mobs.MobManager
+import io.lumine.mythic.bukkit.MythicBukkit
+import io.lumine.mythic.bukkit.events.MythicMobDeathEvent
+import io.lumine.mythic.bukkit.events.MythicMobSpawnEvent
+import io.lumine.mythic.bukkit.events.MythicReloadedEvent
+import io.lumine.mythic.core.items.ItemExecutor
+import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
+import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import taboolib.common.platform.event.EventPriority
 import taboolib.common.platform.function.registerBukkitListener
@@ -17,50 +20,34 @@ import taboolib.common.platform.function.submit
 import kotlin.math.roundToInt
 
 /**
- * 4.5.9版本MM挂钩
+ * 5.1.0版本MM挂钩
  *
- * @constructor 启用4.5.9版本MM挂钩
+ * @constructor 启用5.1.0版本MM挂钩
  */
-class MythicMobsHookerImpl459 : MythicMobsHooker() {
-    override val version = "459"
+class MythicMobsHookerImpl510 : MythicMobsHooker() {
+    override val version = "510"
 
     override val spawnEventClass = MythicMobSpawnEvent::class.java
 
-    // 4.5.9 -> int
-    // 4.9.0 -> double
-    // 由于编写兼容相关内容时并未了解gradle和maven中"模块"的设计, 导致相关兼容类在编译时出现很多难以解决的问题
-    // 如本方法于本地使用IDEA编译, 将优先解析459, 于GitHub使用自动构建, 将优先解析490
-    // 在遥远的未来, 我可能会将相关内容使用"模块"拆分重写
-    private val spawnMobLevelMethod = spawnEventClass.getDeclaredMethod("getMobLevel")
-
     override val deathEventClass = MythicMobDeathEvent::class.java
-
-    private val deathMobLevelMethod = deathEventClass.getDeclaredMethod("getMobLevel")
 
     override val reloadEventClass = MythicReloadedEvent::class.java
 
-    private val itemManager: ItemManager = MythicMobs.inst().itemManager
+    private val itemManager: ItemExecutor = MythicBukkit.inst().itemManager
 
-    private val mobManager: MobManager = MythicMobs.inst().mobManager
+    private val mobManager: MobManager = MythicBukkit.inst().mobManager
 
     override val mobInfos = HashMap<String, ConfigurationSection>()
 
-    private val apiHelper = MythicMobs.inst().apiHelper
+    private val apiHelper = MythicBukkit.inst().apiHelper
 
     override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.HIGH) {
         submit(async = true) {
             if (it.entity is LivingEntity) {
-                val mobLevel = spawnMobLevelMethod.invoke(it).let { level ->
-                    if (level is Double) {
-                        level.roundToInt()
-                    } else {
-                        level as Int
-                    }
-                }
                 spawnEvent(
                     it.mobType.internalName,
                     it.entity as LivingEntity,
-                    mobLevel
+                    it.mobLevel.roundToInt()
                 )
             }
         }
@@ -69,18 +56,11 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
     override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java) {
         submit(async = true) {
             if (it.entity is LivingEntity) {
-                val mobLevel = deathMobLevelMethod.invoke(it).let { level ->
-                    if (level is Double) {
-                        level.roundToInt()
-                    } else {
-                        level as Int
-                    }
-                }
                 deathEvent(
                     it.killer,
                     it.entity as LivingEntity,
                     it.mobType.internalName,
-                    mobLevel
+                    it.mobLevel.roundToInt()
                 )
             }
         }
@@ -90,13 +70,22 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
         loadMobInfos()
     }
 
+    init {
+        loadMobInfos()
+    }
+
     override fun getItemStack(id: String): ItemStack? {
         return itemManager.getItemStack(id)
     }
 
-    // 这个版本并不需要同步获取物品
     override fun getItemStackSync(id: String): ItemStack? {
-        return itemManager.getItemStack(id)
+        return if (Bukkit.isPrimaryThread()) {
+            itemManager.getItemStack(id)
+        } else {
+            Bukkit.getScheduler().callSyncMethod(plugin) {
+                itemManager.getItemStack(id)
+            }.get()
+        }
     }
 
     override fun castSkill(entity: Entity, skill: String, trigger: Entity?) {
@@ -113,8 +102,39 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
 
     override fun getMythicId(entity: Entity): String? {
         return if (apiHelper.isMythicMob(entity))
-            return apiHelper.getMythicMobInstance(entity).type.internalName
+            apiHelper.getMythicMobInstance(entity).type.internalName
         else
             null
+    }
+
+    override fun getEntity(event: Event): Entity? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.entity
+            is MythicMobDeathEvent -> event.entity
+            else -> null
+        }
+    }
+
+    override fun getKiller(event: Event): LivingEntity? {
+        return when (event) {
+            is MythicMobDeathEvent -> event.killer
+            else -> null
+        }
+    }
+
+    override fun getInternalName(event: Event): String? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.mobType.internalName
+            is MythicMobDeathEvent -> event.mobType.internalName
+            else -> null
+        }
+    }
+
+    override fun getMobLevel(event: Event): Double? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.mobLevel
+            is MythicMobDeathEvent -> event.mobLevel
+            else -> null
+        }
     }
 }

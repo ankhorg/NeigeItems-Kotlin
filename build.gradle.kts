@@ -1,50 +1,54 @@
-import io.izzel.taboolib.gradle.RelocateJar
 import java.io.FileOutputStream
 import java.util.jar.JarFile
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-val taboolib_version = "6.0.12-20"
+val taboolib_version: String by project
 
 plugins {
     `java-library`
     `maven-publish`
-    id("io.izzel.taboolib") version "1.56"
     id("org.jetbrains.kotlin.jvm") version "1.7.20"
     id("org.jetbrains.dokka") version "1.7.20"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 if(!System.getenv("CI").toBoolean()){
     version = "dev"
 }
 
-taboolib {
-//    relocate("org.openjdk.nashorn","pers.neige.neigeitems.nashorn")
-    relocate("javassist","pers.neige.neigeitems.libs.javassist")
-    relocate("bot.inker.bukkit.nbt","pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
-    description {
-        contributors {
-            name("Neige")
-        }
-        dependencies {
-            name("ProtocolLib").with("bukkit").optional(true)
-            name("PlaceholderAPI").with("bukkit").optional(true)
-            name("MythicMobs").with("bukkit").optional(true)
-            name("Vault").with("bukkit").optional(true)
+subprojects {
+    apply<JavaPlugin>()
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "maven-publish")
+    apply(plugin = "com.github.johnrengelman.shadow")
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven("https://maven.aliyun.com/nexus/content/groups/public/")
+        maven("https://hub.spigotmc.org/nexus/content/repositories/public")
+    }
+    dependencies {
+        compileOnly(kotlin("stdlib"))
+        compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
+        compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+    }
+
+    tasks.withType<JavaCompile> {
+        options.encoding = "UTF-8"
+    }
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions {
+            jvmTarget = "1.8"
+            freeCompilerArgs = listOf("-Xjvm-default=all", "-Xextended-compiler-checks")
         }
     }
-    install(
-        "common",
-        "common-5",
-        "module-chat",
-        "module-configuration",
-        "module-nms",
-        "module-nms-util",
-        "module-metrics",
-        "platform-bukkit",
-    )
-    classifier = null
-    version = taboolib_version
+    java{
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
 }
 
 repositories {
@@ -55,14 +59,11 @@ repositories {
     maven("https://repo.dmulloy2.net/repository/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://jitpack.io")
-    // taboo的仓库有时候github自动构建连不上, 丢到最后防止自动构建发生意外
+    maven {
+        url = uri("http://ptms.ink:8081/repository/releases/")
+        isAllowInsecureProtocol = true
+    }
     maven("https://repo.tabooproject.org/storages/public/releases")
-}
-
-configurations{
-    maybeCreate("packShadow")
-    get("compileOnly").extendsFrom(get("packShadow"))
-    get("packShadow").extendsFrom(get("taboo"))
 }
 
 dependencies {
@@ -76,14 +77,64 @@ dependencies {
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("io.izzel.taboolib:platform-bukkit:$taboolib_version")
     compileOnly("org.ow2.asm:asm:9.4")
-    taboo("org.javassist:javassist:3.20.0-GA")
-    taboo(fileTree("libs/callsite-nbt-1.0-dev-SNAPSHOT-fat.jar"))
-    "packShadow"(kotlin("stdlib"))
-    "packShadow"("org.openjdk.nashorn:nashorn-core:15.4")
-    "packShadow"("com.alibaba.fastjson2:fastjson2-kotlin:2.0.25")
-    "packShadow"("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
-//        "packShadow"("com.google.guava:guava:31.1-jre")
-    "packShadow"("org.apache.maven:maven-model:3.9.1")
+
+    // taboolib
+    implementation("io.izzel.taboolib:common:$taboolib_version")
+    implementation("io.izzel.taboolib:common-5:$taboolib_version")
+    implementation("io.izzel.taboolib:module-chat:$taboolib_version")
+    implementation("io.izzel.taboolib:module-configuration:$taboolib_version")
+    implementation("io.izzel.taboolib:module-nms:$taboolib_version")
+    implementation("io.izzel.taboolib:module-nms-util:$taboolib_version")
+    implementation("io.izzel.taboolib:module-metrics:$taboolib_version")
+    implementation("io.izzel.taboolib:platform-bukkit:$taboolib_version")
+
+    // kotlin
+    implementation(kotlin("stdlib"))
+    // javassist
+    implementation("org.javassist:javassist:3.20.0-GA")
+    // callsite-nbt
+    implementation(fileTree("libs/callsite-nbt-1.0-dev-SNAPSHOT-fat.jar"))
+    // openjdk-nashorn
+    implementation(fileTree("libs/relocated-nashorn-15.4.jar"))
+    // fastjson2
+    implementation("com.alibaba.fastjson2:fastjson2-kotlin:2.0.25")
+    // multiple-string-searcher
+    implementation("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
+    // maven-model
+    implementation("org.apache.maven:maven-model:3.9.1")
+}
+
+tasks {
+    withType<ShadowJar> {
+        archiveClassifier.set("")
+        exclude("META-INF/maven/**")
+        exclude("META-INF/tf/**")
+        exclude("module-info.java")
+        // kotlin
+        relocate("kotlin.", "kotlin1720.") {
+            exclude("kotlin.Metadata")
+        }
+        // taboolib
+        relocate("taboolib", "pers.neige.neigeitems.taboolib")
+        // stringsearcher
+        relocate("org.neosearch.stringsearcher","pers.neige.neigeitems.libs.stringsearcher")
+        // javassist
+        relocate("javassist","pers.neige.neigeitems.libs.javassist")
+        // callsitenbt
+        relocate("bot.inker.bukkit.nbt","pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
+        // maven-model
+        relocate("org.codehaus.plexus.util","pers.neige.neigeitems.libs.plexus.util")
+        relocate("org.apache.maven.model","pers.neige.neigeitems.libs.maven.model")
+        // fastjson2
+        relocate("com.alibaba.fastjson2","pers.neige.neigeitems.libs.fastjson2")
+    }
+    kotlinSourcesJar {
+        // include subprojects
+        rootProject.subprojects.forEach { from(it.sourceSets["main"].allSource) }
+    }
+    build {
+        dependsOn(shadowJar)
+    }
 }
 
 java{
@@ -113,35 +164,8 @@ tasks.create("apiJar", Jar::class){
     archiveClassifier.set("api")
 }
 
-afterEvaluate {
-    val relocateAllJarTask = tasks.create("relocateAllJar", RelocateJar::class)
-
-    val allJarTask = tasks.create("allJar", Jar::class) {
-        dependsOn(tasks.compileJava, tasks.compileKotlin, tasks.processResources)
-        from(tasks.compileJava, tasks.compileKotlin, tasks.processResources)
-        with(copySpec {
-            from(configurations["packShadow"].map {
-                if (it.isDirectory) { it }else{ zipTree(it) }
-            })
-            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        })
-        archiveClassifier.set("all")
-        finalizedBy(relocateAllJarTask)
-    }
-
-    relocateAllJarTask.apply {
-        val copyTask = tasks.getByName("tabooRelocateJar", RelocateJar::class)
-        tabooExt = copyTask.tabooExt
-        project = copyTask.project
-        relocations = copyTask.relocations
-        classifier = copyTask.classifier
-        inJar = allJarTask.archiveFile.get().asFile
-    }
-}
-
 tasks.assemble{
     dependsOn(tasks["apiJar"])
-    dependsOn(tasks["allJar"])
 }
 
 publishing {
@@ -166,7 +190,7 @@ publishing {
     }
 }
 
-fun fuckYou(name: String) {
+fun final(name: String) {
     val oldFile = File("$buildDir/libs/$name")
     val newFile = File("$buildDir/libs/Modified$name")
 
@@ -217,9 +241,13 @@ fun fuckYou(name: String) {
                     jarOutputStream.write(classWriter.toByteArray())
                     jarOutputStream.closeEntry()
                 } else {
-                    jarOutputStream.putNextEntry(entry)
-                    jarFile.getInputStream(entry).copyTo(jarOutputStream)
-                    jarOutputStream.closeEntry()
+                    if (!(entryName.startsWith("org/intellij/lang/annotations")
+                        || entryName.startsWith("org/jetbrains/annotations"))
+                    ) {
+                        jarOutputStream.putNextEntry(entry)
+                        jarFile.getInputStream(entry).copyTo(jarOutputStream)
+                        jarOutputStream.closeEntry()
+                    }
                 }
             }
         }
@@ -228,11 +256,10 @@ fun fuckYou(name: String) {
     newFile.renameTo(oldFile)
 }
 
-val fuckYouTask = tasks.register("fuckYouTask") {
+val finalTask = tasks.register("finalTask") {
     doLast {
-        fuckYou("${rootProject.name}-${project.property("version")}.jar")
-        fuckYou("${rootProject.name}-${project.property("version")}-all.jar")
+        final("${rootProject.name}-${project.property("version")}.jar")
     }
 }
 
-tasks.getByName("build").finalizedBy(fuckYouTask)
+tasks.getByName("build").finalizedBy(finalTask)

@@ -10,8 +10,6 @@ import pers.neige.neigeitems.script.tool.ScriptPlaceholder
 import pers.neige.neigeitems.script.tool.ScriptTask
 import pers.neige.neigeitems.utils.ConfigUtils
 import taboolib.common.LifeCycle
-import taboolib.common.env.RuntimeDependencies
-import taboolib.common.env.RuntimeDependency
 import taboolib.common.platform.Awake
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
@@ -19,12 +17,6 @@ import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
 
-@RuntimeDependencies(
-    RuntimeDependency(
-        "!com.google.guava:guava:31.1-jre",
-        test = "!com.google.common.collect.Sets.newConcurrentHashSet"
-    )
-)
 /**
  * 扩展管理器, 用于管理扩展脚本
  */

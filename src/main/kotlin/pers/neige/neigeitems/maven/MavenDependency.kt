@@ -1,7 +1,5 @@
 package pers.neige.neigeitems.maven
 
-import taboolib.common.env.RuntimeDependencies
-import taboolib.common.env.RuntimeDependency
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -10,13 +8,6 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 import java.security.MessageDigest
-
-@RuntimeDependencies(
-    RuntimeDependency(
-        "!org.apache.maven:maven-model:3.9.1",
-        test = "!org.apache.maven.model.Dependency"
-    )
-)
 
 /**
  * maven依赖

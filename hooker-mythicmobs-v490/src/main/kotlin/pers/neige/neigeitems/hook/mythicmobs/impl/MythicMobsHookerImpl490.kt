@@ -9,6 +9,7 @@ import io.lumine.xikage.mythicmobs.mobs.MobManager
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
+import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import taboolib.common.platform.event.EventPriority
@@ -26,16 +27,7 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
 
     override val spawnEventClass = MythicMobSpawnEvent::class.java
 
-    // 4.5.9 -> int
-    // 4.9.0 -> double
-    // 由于编写兼容相关内容时并未了解gradle和maven中"模块"的设计, 导致相关兼容类在编译时出现很多难以解决的问题
-    // 如本方法于本地使用IDEA编译, 将优先解析459, 于GitHub使用自动构建, 将优先解析490
-    // 在遥远的未来, 我可能会将相关内容使用"模块"拆分重写
-    private val spawnMobLevelMethod = spawnEventClass.getDeclaredMethod("getMobLevel")
-
     override val deathEventClass = MythicMobDeathEvent::class.java
-
-    private val deathMobLevelMethod = deathEventClass.getDeclaredMethod("getMobLevel")
 
     override val reloadEventClass = MythicReloadedEvent::class.java
 
@@ -50,17 +42,10 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
     override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.HIGH) {
         submit(async = true) {
             if (it.entity is LivingEntity) {
-                val mobLevel = spawnMobLevelMethod.invoke(it).let { level ->
-                    if (level is Double) {
-                        level.roundToInt()
-                    } else {
-                        level as Int
-                    }
-                }
                 spawnEvent(
                     it.mobType.internalName,
                     it.entity as LivingEntity,
-                    mobLevel
+                    it.mobLevel.roundToInt()
                 )
             }
         }
@@ -69,18 +54,11 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
     override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java) {
         submit(async = true) {
             if (it.entity is LivingEntity) {
-                val mobLevel = deathMobLevelMethod.invoke(it).let { level ->
-                    if (level is Double) {
-                        level.roundToInt()
-                    } else {
-                        level as Int
-                    }
-                }
                 deathEvent(
                     it.killer,
                     it.entity as LivingEntity,
                     it.mobType.internalName,
-                    mobLevel
+                    it.mobLevel.roundToInt()
                 )
             }
         }
@@ -120,5 +98,36 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
             return apiHelper.getMythicMobInstance(entity).type.internalName
         else
             null
+    }
+
+    override fun getEntity(event: Event): Entity? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.entity
+            is MythicMobDeathEvent -> event.entity
+            else -> null
+        }
+    }
+
+    override fun getKiller(event: Event): LivingEntity? {
+        return when (event) {
+            is MythicMobDeathEvent -> event.killer
+            else -> null
+        }
+    }
+
+    override fun getInternalName(event: Event): String? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.mobType.internalName
+            is MythicMobDeathEvent -> event.mobType.internalName
+            else -> null
+        }
+    }
+
+    override fun getMobLevel(event: Event): Double? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.mobLevel
+            is MythicMobDeathEvent -> event.mobLevel
+            else -> null
+        }
     }
 }

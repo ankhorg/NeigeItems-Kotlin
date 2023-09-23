@@ -26,16 +26,8 @@ import pers.neige.neigeitems.utils.ConfigUtils.toMap
 import pers.neige.neigeitems.utils.ItemUtils.toNbtCompound
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import taboolib.common.env.RuntimeDependencies
-import taboolib.common.env.RuntimeDependency
 import java.util.*
 
-@RuntimeDependencies(
-    RuntimeDependency(
-        "!com.alibaba.fastjson2:fastjson2-kotlin:2.0.9",
-        test = "!com.alibaba.fastjson2.filter.Filter"
-    )
-)
 /**
  * 物品生成器
  *

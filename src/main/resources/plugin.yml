@@ -1,0 +1,14 @@
+name: NeigeItems
+main: pers.neige.neigeitems.taboolib.platform.BukkitPlugin
+version: 1.15.26
+
+authors:
+  - 'Neige'
+
+softdepend:
+  - 'ProtocolLib'
+  - 'PlaceholderAPI'
+  - 'MythicMobs'
+  - 'Vault'
+
+api-version: 1.13

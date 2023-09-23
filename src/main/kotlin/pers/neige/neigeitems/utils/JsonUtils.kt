@@ -2,15 +2,7 @@ package pers.neige.neigeitems.utils
 
 import com.alibaba.fastjson2.parseObject
 import com.alibaba.fastjson2.toJSONString
-import taboolib.common.env.RuntimeDependencies
-import taboolib.common.env.RuntimeDependency
 
-@RuntimeDependencies(
-    RuntimeDependency(
-        "!com.alibaba.fastjson2:fastjson2-kotlin:2.0.9",
-        test = "!com.alibaba.fastjson2.filter.Filter"
-    )
-)
 object JsonUtils {
     /**
      * String 转 HashMap<String, String>

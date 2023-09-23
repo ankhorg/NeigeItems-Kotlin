@@ -10,6 +10,7 @@ import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
+import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
@@ -104,5 +105,36 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
             return apiHelper.getMythicMobInstance(entity).type.internalName
         else
             null
+    }
+
+    override fun getEntity(event: Event): Entity? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.entity
+            is MythicMobDeathEvent -> event.entity
+            else -> null
+        }
+    }
+
+    override fun getKiller(event: Event): LivingEntity? {
+        return when (event) {
+            is MythicMobDeathEvent -> event.killer
+            else -> null
+        }
+    }
+
+    override fun getInternalName(event: Event): String? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.mobType.internalName
+            is MythicMobDeathEvent -> event.mobType.internalName
+            else -> null
+        }
+    }
+
+    override fun getMobLevel(event: Event): Double? {
+        return when (event) {
+            is MythicMobSpawnEvent -> event.mobLevel
+            is MythicMobDeathEvent -> event.mobLevel
+            else -> null
+        }
     }
 }

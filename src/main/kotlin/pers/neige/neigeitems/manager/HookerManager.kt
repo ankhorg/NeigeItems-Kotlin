@@ -7,10 +7,6 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.hook.easyitem.EasyItemHooker
 import pers.neige.neigeitems.hook.easyitem.impl.EasyItemHookerImpl
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
-import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl459
-import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl490
-import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl502
-import pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
 import pers.neige.neigeitems.hook.nashorn.impl.LegacyNashornHookerImpl
 import pers.neige.neigeitems.hook.nashorn.impl.NashornHookerImpl
@@ -61,22 +57,22 @@ object HookerManager {
             try {
                 // 5.0.3+
                 Class.forName("io.lumine.mythic.bukkit.utils.config.file.YamlConfiguration")
-                MythicMobsHookerImpl510()
+                Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510").newInstance() as MythicMobsHooker
             } catch (error: Throwable) {
                 try {
                     // 5.0.3-
                     Class.forName("io.lumine.mythic.utils.config.file.YamlConfiguration")
                     Class.forName("io.lumine.mythic.bukkit.MythicBukkit")
-                    MythicMobsHookerImpl502()
+                    Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl502").newInstance() as MythicMobsHooker
                 } catch (error: Throwable) {
                     try {
                         // 5.0.0-
                         Class.forName("io.lumine.xikage.mythicmobs.utils.config.file.YamlConfiguration")
-                        MythicMobsHookerImpl490()
+                        Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl490").newInstance() as MythicMobsHooker
                     } catch (error: Throwable) {
                         // 4.7.2-
                         Class.forName("io.lumine.utils.config.file.YamlConfiguration")
-                        MythicMobsHookerImpl459()
+                        Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl459").newInstance() as MythicMobsHooker
                     }
                 }
             }

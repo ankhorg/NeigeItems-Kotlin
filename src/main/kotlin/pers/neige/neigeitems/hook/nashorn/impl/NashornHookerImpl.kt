@@ -1,19 +1,11 @@
 package pers.neige.neigeitems.hook.nashorn.impl
 
-import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory
-import org.openjdk.nashorn.api.scripting.ScriptObjectMirror
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
-import taboolib.common.env.RuntimeDependencies
-import taboolib.common.env.RuntimeDependency
+import pers.neige.neigeitems.libs.nashorn.api.scripting.NashornScriptEngineFactory
+import pers.neige.neigeitems.libs.nashorn.api.scripting.ScriptObjectMirror
 import javax.script.Invocable
 import javax.script.ScriptEngine
 
-@RuntimeDependencies(
-    RuntimeDependency(
-        "!org.openjdk.nashorn:nashorn-core:15.4",
-        test = "!jdk.nashorn.api.scripting.NashornScriptEngineFactory"
-    )
-)
 /**
  * openjdk nashorn挂钩
  *

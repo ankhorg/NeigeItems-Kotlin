@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
@@ -51,17 +52,17 @@ abstract class MythicMobsHooker {
     /**
      * MM怪物生成事件
      */
-    abstract val spawnEventClass: Class<*>
+    abstract val spawnEventClass: Class<out Event>
 
     /**
      * MM怪物死亡事件
      */
-    abstract val deathEventClass: Class<*>
+    abstract val deathEventClass: Class<out Event>
 
     /**
      * MM重载事件
      */
-    abstract val reloadEventClass: Class<*>
+    abstract val reloadEventClass: Class<out Event>
 
     /**
      * MM怪物生成事件监听器, 监听器优先级HIGH, 得以覆盖MM自身的装备操作
@@ -126,6 +127,38 @@ abstract class MythicMobsHooker {
      */
     abstract fun getMythicId(entity: Entity): String?
 
+    /**
+     * 尝试从MM怪物出生事件或死亡事件中获取entity(非对应事件返回null)
+     *
+     * @param event MM怪物出生事件或死亡事件
+     * @return 事件中的entity字段(非对应事件返回null)
+     */
+    abstract fun getEntity(event: Event): Entity?
+
+    /**
+     * 尝试从MM怪物死亡事件中获取killer(非对应事件返回null)
+     *
+     * @param event MM怪物死亡事件
+     * @return 事件中的killer字段(非对应事件返回null)
+     */
+    abstract fun getKiller(event: Event): LivingEntity?
+
+    /**
+     * 尝试从MM怪物出生事件或死亡事件中获取MM怪物的internalName(非对应事件返回null)
+     *
+     * @param event MM怪物出生事件或死亡事件
+     * @return MM怪物的internalName(非对应事件返回null)
+     */
+    abstract fun getInternalName(event: Event): String?
+
+    /**
+     * 尝试从MM怪物出生事件或死亡事件中获取MM怪物的mobLevel(非对应事件返回null)
+     *
+     * @param event MM怪物出生事件或死亡事件
+     * @return MM怪物的mobLevel(非对应事件返回null)
+     */
+    abstract fun getMobLevel(event: Event): Double?
+
     private val df2 = DecimalFormat("#0.00")
 
     /**
@@ -134,7 +167,7 @@ abstract class MythicMobsHooker {
      * @param entity 怪物实体
      * @param internalName 怪物ID
      */
-    internal fun spawnEvent(
+    fun spawnEvent(
         internalName: String,
         entity: LivingEntity,
         mobLevel: Int
@@ -267,7 +300,7 @@ abstract class MythicMobsHooker {
         }
     }
 
-    internal fun deathEvent(
+    fun deathEvent(
         killer: LivingEntity?,
         entity: LivingEntity,
         internalName: String,
@@ -422,7 +455,7 @@ abstract class MythicMobsHooker {
         loadMobInfos()
     }
 
-    internal fun loadMobInfos() {
+    fun loadMobInfos() {
         submit(async = true) {
             mobInfos.clear()
             for (file: File in ConfigUtils.getAllFiles("MythicMobs", "Mobs")) {
