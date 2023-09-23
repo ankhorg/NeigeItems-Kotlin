@@ -17,7 +17,6 @@ pers.neige.neigeitems.event
 pers.neige.neigeitems.hook.easyitem
 pers.neige.neigeitems.hook.easyitem.impl
 pers.neige.neigeitems.hook.mythicmobs
-pers.neige.neigeitems.hook.mythicmobs.impl
 pers.neige.neigeitems.hook.nashorn
 pers.neige.neigeitems.hook.nashorn.impl
 pers.neige.neigeitems.hook.nms
