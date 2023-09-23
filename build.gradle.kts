@@ -3,6 +3,7 @@ import java.util.jar.JarFile
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import java.io.File
 
 val taboolib_version: String by project
 
@@ -14,6 +15,8 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
+val realVersion = version
+
 if(!System.getenv("CI").toBoolean()){
     version = "dev"
 }
@@ -22,18 +25,30 @@ subprojects {
     apply<JavaPlugin>()
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "maven-publish")
-    apply(plugin = "com.github.johnrengelman.shadow")
 
     repositories {
         mavenLocal()
         mavenCentral()
         maven("https://maven.aliyun.com/nexus/content/groups/public/")
         maven("https://hub.spigotmc.org/nexus/content/repositories/public")
+        maven {
+            url = uri("http://ptms.ink:8081/repository/releases/")
+            isAllowInsecureProtocol = true
+        }
     }
     dependencies {
         compileOnly(kotlin("stdlib"))
         compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
         compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+
+        compileOnly("io.izzel.taboolib:common:$taboolib_version")
+        compileOnly("io.izzel.taboolib:common-5:$taboolib_version")
+        compileOnly("io.izzel.taboolib:module-chat:$taboolib_version")
+        compileOnly("io.izzel.taboolib:module-configuration:$taboolib_version")
+        compileOnly("io.izzel.taboolib:module-nms:$taboolib_version")
+        compileOnly("io.izzel.taboolib:module-nms-util:$taboolib_version")
+        compileOnly("io.izzel.taboolib:module-metrics:$taboolib_version")
+        compileOnly("io.izzel.taboolib:platform-bukkit:$taboolib_version")
     }
 
     tasks.withType<JavaCompile> {
@@ -111,7 +126,7 @@ tasks {
         exclude("META-INF/tf/**")
         exclude("module-info.java")
         // kotlin
-        relocate("kotlin.", "kotlin1720.") {
+        relocate("kotlin.", "pers.neige.neigeitems.libs.kotlin.") {
             exclude("kotlin.Metadata")
         }
         // taboolib
@@ -190,6 +205,8 @@ publishing {
     }
 }
 
+// 向BukkitPlugin的<clinit>块开头插入CallSiteNbt.install(this.getClass())
+// 删除被fastjson2连带打包的annotations类
 fun final(name: String) {
     val oldFile = File("$buildDir/libs/$name")
     val newFile = File("$buildDir/libs/Modified$name")
@@ -263,3 +280,22 @@ val finalTask = tasks.register("finalTask") {
 }
 
 tasks.getByName("build").finalizedBy(finalTask)
+
+// 将plugin.yml中的"${version}"替换为插件版本
+tasks.register("replaceVersionInPluginYml") {
+    doLast {
+        val inputFile = File("src/main/resources/plugin.yml")
+        val outputFile = File("build/resources/main/plugin.yml")
+
+        val inputText = inputFile.readText()
+
+        val projectVersion = realVersion.toString()
+        val replacedText = inputText.replace("\${version}", projectVersion)
+
+        outputFile.writeText(replacedText)
+    }
+}
+
+tasks.named("assemble") {
+    dependsOn("replaceVersionInPluginYml")
+}

@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.manager
 
+import bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
@@ -84,14 +85,15 @@ object HookerManager {
 
     val nmsHooker: NMSHooker =
         try {
-            when {
-                check("net.minecraft.server.v1_12_R1.EntityItem") -> NMSHookerV1_12_R1Impl()
-                check("net.minecraft.server.v1_13_R2.EntityItem") -> NMSHookerV1_13_R2Impl()
-                check("net.minecraft.server.v1_14_R1.EntityItem") -> NMSHookerV1_14_R1Impl()
-                check("net.minecraft.server.v1_15_R1.EntityItem") -> NMSHookerV1_15_R1Impl()
-                check("net.minecraft.server.v1_16_R1.EntityItem") -> NMSHookerV1_16_R1Impl()
-                check("net.minecraft.server.v1_16_R2.EntityItem") -> NMSHookerV1_16_R2Impl()
-                check("net.minecraft.server.v1_16_R3.EntityItem") -> NMSHookerV1_16_R3Impl()
+            when (CbVersion.current()) {
+                CbVersion.v1_12_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_12_R1Impl").newInstance() as NMSHooker
+                CbVersion.v1_13_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_13_R1Impl").newInstance() as NMSHooker
+                CbVersion.v1_13_R2 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_13_R2Impl").newInstance() as NMSHooker
+                CbVersion.v1_14_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_14_R1Impl").newInstance() as NMSHooker
+                CbVersion.v1_15_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_15_R1Impl").newInstance() as NMSHooker
+                CbVersion.v1_16_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_16_R1Impl").newInstance() as NMSHooker
+                CbVersion.v1_16_R2 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_16_R2Impl").newInstance() as NMSHooker
+                CbVersion.v1_16_R3 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_16_R3Impl").newInstance() as NMSHooker
                 else -> NMSHookerOtherImpl()
             }
         } catch (error: Throwable) {

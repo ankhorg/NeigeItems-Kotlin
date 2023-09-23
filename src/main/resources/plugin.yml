@@ -1,6 +1,6 @@
 name: NeigeItems
 main: pers.neige.neigeitems.taboolib.platform.BukkitPlugin
-version: 1.15.26
+version: ${version}
 
 authors:
   - 'Neige'
