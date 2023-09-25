@@ -102,7 +102,7 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
 
     override fun getMythicId(entity: Entity): String? {
         return if (apiHelper.isMythicMob(entity))
-            return apiHelper.getMythicMobInstance(entity).type.internalName
+            apiHelper.getMythicMobInstance(entity).type.internalName
         else
             null
     }

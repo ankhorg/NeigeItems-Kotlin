@@ -86,11 +86,9 @@ dependencies {
     compileOnly(fileTree("libs"))
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
     compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
-    compileOnly("ink.ptms:nms-all:1.0.0")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
-    compileOnly("io.izzel.taboolib:platform-bukkit:$taboolib_version")
     compileOnly("org.ow2.asm:asm:9.4")
 
     // taboolib

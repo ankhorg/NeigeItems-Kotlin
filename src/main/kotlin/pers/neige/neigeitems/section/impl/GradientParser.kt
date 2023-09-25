@@ -9,7 +9,7 @@ import pers.neige.neigeitems.utils.StringUtils.joinToString
 import java.awt.Color
 
 /**
- * papi节点解析器(仅包含即时声明节点)
+ * 渐变色节点解析器
  */
 object GradientParser : SectionParser() {
     override val id: String = "gradient"

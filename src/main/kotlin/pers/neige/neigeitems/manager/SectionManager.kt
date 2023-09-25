@@ -132,6 +132,7 @@ object SectionManager {
      */
     private fun loadBasicParser() {
         CalculationParser.register()
+        ChanceParser.register()
         CheckParser.register()
         FastCalcParser.register()
         GaussianParser.register()
