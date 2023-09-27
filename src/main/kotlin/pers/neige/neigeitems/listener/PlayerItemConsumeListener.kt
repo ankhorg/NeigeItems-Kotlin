@@ -20,16 +20,10 @@ object PlayerItemConsumeListener {
         val itemStack = event.item
         // 获取NI物品信息(不是NI物品就停止操作)
         val itemInfo = itemStack.isNiItem(true) ?: return
-        // NBT物品
-        val nbtItemStack: NbtItemStack = itemInfo.nbtItemStack
         // 物品NBT
         val itemTag: NbtCompound = itemInfo.itemTag
         // NI物品数据
         val neigeItems: NbtCompound = itemInfo.neigeItems
-        // NI物品id
-        val id: String = itemInfo.id
-        // NI节点数据
-        val data: HashMap<String, String> = itemInfo.data!!
 
         // 检测东西在哪只手上
         val hand = if (itemStack.isSimilar(player.inventory.itemInMainHand)) {

@@ -21,17 +21,6 @@ object InventoryOpenListener {
                 // 获取NI物品信息(不是NI物品就停止操作)
                 val itemInfo = itemStack?.isNiItem(true)
                 if (itemInfo != null) {
-                    // NBT物品
-                    val nbtItemStack: NbtItemStack = itemInfo.nbtItemStack
-                    // 物品NBT
-                    val itemTag: NbtCompound = itemInfo.itemTag
-                    // NI物品数据
-                    val neigeItems: NbtCompound = itemInfo.neigeItems
-                    // NI物品id
-                    val id: String = itemInfo.id
-                    // NI节点数据
-                    val data: HashMap<String, String> = itemInfo.data!!
-
                     // 检测物品过期, 检测物品更新
                     ItemCheck.checkItem(player, itemStack, itemInfo)
                 }

@@ -11,6 +11,7 @@ import org.bukkit.event.player.*
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
+import pers.neige.neigeitems.utils.ItemUtils.getIntOrNull
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.LangUtils.getLang
@@ -38,7 +39,7 @@ object ItemDurability {
         event: PlayerInteractEvent
     ): Boolean {
         // 对于已损坏物品取消事件
-        if (neigeItems.containsKey("durability") && neigeItems.getInt("durability") == 0) {
+        if (neigeItems.getIntOrNull("durability") == 0) {
             event.isCancelled = true
             // 物品损坏提示
             getLang("Messages.brokenItem")?.let {
@@ -108,7 +109,7 @@ object ItemDurability {
         event: PlayerInteractEntityEvent
     ) {
         // 对于已损坏物品取消事件
-        if (neigeItems.containsKey("durability") && neigeItems.getInt("durability") == 0) {
+        if (neigeItems.getIntOrNull("durability") == 0) {
             event.isCancelled = true
             // 物品损坏提示
             getLang("Messages.brokenItem")?.let {
@@ -126,7 +127,7 @@ object ItemDurability {
         event: EntityShootBowEvent
     ) {
         // 对于已损坏物品取消事件
-        if (neigeItems.containsKey("durability") && neigeItems.getInt("durability") == 0) {
+        if (neigeItems.getIntOrNull("durability") == 0) {
             event.isCancelled = true
             // 物品损坏提示
             getLang("Messages.brokenItem")?.let {
@@ -144,7 +145,7 @@ object ItemDurability {
         event: PlayerItemConsumeEvent
     ) {
         // 对于已损坏物品取消事件
-        if (neigeItems.containsKey("durability") && neigeItems.getInt("durability") == 0) {
+        if (neigeItems.getIntOrNull("durability") == 0) {
             event.isCancelled = true
             // 物品损坏提示
             getLang("Messages.brokenItem")?.let {
@@ -162,7 +163,7 @@ object ItemDurability {
         event: EntityDamageByEntityEvent
     ) {
         // 对于已损坏物品取消事件
-        if (neigeItems.containsKey("durability") && neigeItems.getInt("durability") == 0) {
+        if (neigeItems.getIntOrNull("durability") == 0) {
             event.isCancelled = true
             // 物品损坏提示
             getLang("Messages.brokenItem")?.let {
@@ -248,8 +249,7 @@ object ItemDurability {
         if (damage == 0) return DamageResult.ZERO_DAMAGE
 
         // 获取物品耐久值(不存在则停止操作)
-        if (!neigeItems.containsKey("durability")) return DamageResult.VANILLA
-        val durability = neigeItems.getInt("durability")
+        val durability = neigeItems.getIntOrNull("durability") ?: return DamageResult.VANILLA
         // 检测物品是否损坏
         if (durability == 0) {
             damageEvent?.isCancelled = true

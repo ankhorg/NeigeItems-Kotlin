@@ -1,14 +1,17 @@
 package pers.neige.neigeitems.manager
 
 import bot.inker.bukkit.nbt.NbtCompound
+import com.sun.org.apache.xpath.internal.operations.Bool
 import org.bukkit.Bukkit
 import org.bukkit.Bukkit.isPrimaryThread
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
+import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -1167,52 +1170,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: PlayerDropItemEvent
     ) {
-        val id = itemInfo.id
-        val itemTag = itemInfo.itemTag
-        val neigeItems = itemInfo.neigeItems
-        val data = itemInfo.data
-        // 获取物品动作
-        val itemAction = itemActions[id] ?: let { return }
-        // 获取基础触发器
-        val trigger = itemAction.triggers["drop"]
-        // 没有对应物品动作就停止判断
-        if (trigger == null) return
-
-        // 获取物品消耗信息
-        val consume =  trigger.consume
-        // 检测冷却
-        if (trigger.isCoolDown(player, itemStack, itemTag, data)) {
-            event.isCancelled = true
-            return
-        }
-        // 用于存储整个动作执行过程中的全局变量
-        val global = HashMap<String, Any?>()
-        // 如果该物品需要被消耗
-        if (consume != null) {
-            // 预执行动作
-            runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
-            // 检测条件
-            consume.getString("condition")?.let {
-                // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
-                    // 跑一下deny动作
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                    // 爬
-                    return
-                }
-            }
-            // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
-            // 消耗物品
-            if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
-                // 跑一下deny动作
-                runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                // 数量不足
-                return
-            }
-        }
-        // 执行动作
-        trigger.run(player, itemStack, itemTag, data, event, global)
+        basicHandler(player, itemStack, itemInfo, event, "drop", cancell = false, cancellIfCooldown = true)
     }
 
     // 拾取物品
@@ -1222,52 +1180,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityPickupItemEvent
     ) {
-        val id = itemInfo.id
-        val itemTag = itemInfo.itemTag
-        val neigeItems = itemInfo.neigeItems
-        val data = itemInfo.data
-        // 获取物品动作
-        val itemAction = itemActions[id] ?: let { return }
-        // 获取基础触发器
-        val trigger = itemAction.triggers["pick"]
-        // 没有对应物品动作就停止判断
-        if (trigger == null) return
-
-        // 获取物品消耗信息
-        val consume =  trigger.consume
-        // 检测冷却
-        if (trigger.isCoolDown(player, itemStack, itemTag, data)) {
-            event.isCancelled = true
-            return
-        }
-        // 用于存储整个动作执行过程中的全局变量
-        val global = HashMap<String, Any?>()
-        // 如果该物品需要被消耗
-        if (consume != null) {
-            // 预执行动作
-            runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
-            // 检测条件
-            consume.getString("condition")?.let {
-                // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
-                    // 跑一下deny动作
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                    // 爬
-                    return
-                }
-            }
-            // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
-            // 消耗物品
-            if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
-                // 跑一下deny动作
-                runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                // 数量不足
-                return
-            }
-        }
-        // 执行动作
-        trigger.run(player, itemStack, itemTag, data, event, global)
+        basicHandler(player, itemStack, itemInfo, event, "pick", cancell = false, cancellIfCooldown = true)
     }
 
     // 点击物品
@@ -1277,51 +1190,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: InventoryClickEvent
     ) {
-        val id = itemInfo.id
-        val itemTag = itemInfo.itemTag
-        val neigeItems = itemInfo.neigeItems
-        val data = itemInfo.data
-        // 获取物品动作
-        val itemAction = itemActions[id] ?: let { return }
-        // 获取基础触发器
-        val trigger = itemAction.triggers["click"]
-        // 没有对应物品动作就停止判断
-        if (trigger == null) return
-
-        // 获取物品消耗信息
-        val consume =  trigger.consume
-        // 取消交互事件
-        event.isCancelled = true
-        // 检测冷却
-        if (trigger.isCoolDown(player, itemStack, itemTag, data)) return
-        // 用于存储整个动作执行过程中的全局变量
-        val global = HashMap<String, Any?>()
-        // 如果该物品需要被消耗
-        if (consume != null) {
-            // 预执行动作
-            runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
-            // 检测条件
-            consume.getString("condition")?.let {
-                // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
-                    // 跑一下deny动作
-                    runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                    // 爬
-                    return
-                }
-            }
-            // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
-            // 消耗物品
-            if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
-                // 跑一下deny动作
-                runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                // 数量不足
-                return
-            }
-        }
-        // 执行动作
-        trigger.run(player, itemStack, itemTag, data, event, global)
+        basicHandler(player, itemStack, itemInfo, event, "click")
     }
 
     // 物品被点击
@@ -1331,6 +1200,39 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: InventoryClickEvent
     ) {
+        basicHandler(player, itemStack, itemInfo, event, "beclicked")
+    }
+
+    // 射箭时由弓触发
+    fun shootBowListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemInfo: ItemInfo,
+        event: EntityShootBowEvent
+    ) {
+        basicHandler(player, itemStack, itemInfo, event, "shoot_bow", cancell = false, cancellIfCooldown = true)
+    }
+
+    // 射箭时由箭触发
+    fun shootArrowListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemInfo: ItemInfo,
+        event: EntityShootBowEvent
+    ) {
+        basicHandler(player, itemStack, itemInfo, event, "shoot_arrow", cancell = false, cancellIfCooldown = true)
+    }
+
+    // 适用于基础情况
+    fun basicHandler(
+        player: Player,
+        itemStack: ItemStack,
+        itemInfo: ItemInfo,
+        event: Event,
+        key: String,
+        cancell: Boolean = true,
+        cancellIfCooldown: Boolean = false
+    ) {
         val id = itemInfo.id
         val itemTag = itemInfo.itemTag
         val neigeItems = itemInfo.neigeItems
@@ -1338,16 +1240,23 @@ object ActionManager {
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
-        val trigger = itemAction.triggers["beclicked"]
+        val trigger = itemAction.triggers[key]
         // 没有对应物品动作就停止判断
         if (trigger == null) return
 
         // 获取物品消耗信息
         val consume =  trigger.consume
-        // 取消交互事件
-        event.isCancelled = true
+        // 取消事件
+        if (event is Cancellable && cancell) {
+            event.isCancelled = true
+        }
         // 检测冷却
-        if (trigger.isCoolDown(player, itemStack, itemTag, data)) return
+        if (trigger.isCoolDown(player, itemStack, itemTag, data)) {
+            if (cancellIfCooldown && event is Cancellable) {
+                event.isCancelled = true
+            }
+            return
+        }
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 如果该物品需要被消耗

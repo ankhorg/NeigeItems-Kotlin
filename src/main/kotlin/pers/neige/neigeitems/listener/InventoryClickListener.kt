@@ -19,17 +19,8 @@ object InventoryClickListener {
         val itemStack = event.cursor
         // 获取NI物品信息(不是NI物品就停止操作)
         val itemInfo = itemStack?.isNiItem(true) ?: return
-        // NBT物品
-        val nbtItemStack: NbtItemStack = itemInfo.nbtItemStack
-        // 物品NBT
-        val itemTag: NbtCompound = itemInfo.itemTag
-        // NI物品数据
-        val neigeItems: NbtCompound = itemInfo.neigeItems
-        // NI物品id
-        val id: String = itemInfo.id
-        // NI节点数据
-        val data: HashMap<String, String> = itemInfo.data!!
 
+        // 执行物品动作
         ActionManager.clickListener(player, itemStack, itemInfo, event)
     }
 
@@ -42,16 +33,6 @@ object InventoryClickListener {
         val itemStack = event.currentItem
         // 获取NI物品信息(不是NI物品就停止操作)
         val itemInfo = itemStack?.isNiItem(true) ?: return
-        // NBT物品
-        val nbtItemStack: NbtItemStack = itemInfo.nbtItemStack
-        // 物品NBT
-        val itemTag: NbtCompound = itemInfo.itemTag
-        // NI物品数据
-        val neigeItems: NbtCompound = itemInfo.neigeItems
-        // NI物品id
-        val id: String = itemInfo.id
-        // NI节点数据
-        val data: HashMap<String, String> = itemInfo.data!!
 
         // 执行物品动作
         ActionManager.beClickedListener(player, itemStack, itemInfo, event)
