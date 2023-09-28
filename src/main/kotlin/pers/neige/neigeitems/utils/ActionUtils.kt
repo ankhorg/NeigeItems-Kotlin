@@ -1,11 +1,16 @@
 package pers.neige.neigeitems.utils
 
 import bot.inker.bukkit.nbt.NbtCompound
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.item.action.ActionTrigger
 import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.neigeitems.utils.ItemUtils.copy
+import pers.neige.neigeitems.utils.ItemUtils.getIntOrNull
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
+import pers.neige.neigeitems.utils.ItemUtils.toNbtItemStack
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
@@ -77,6 +82,23 @@ object ActionUtils {
         return false
     }
 
+    @Deprecated(
+        "已弃用",
+        ReplaceWith(
+            "this.consume(player, amount, itemTag, neigeItems, false)"
+        )
+    )
+    @JvmStatic
+    fun ItemStack.consume(
+        player: Player,
+        amount: Int,
+        itemTag: NbtCompound,
+        neigeItems: NbtCompound,
+        charge: Int? = null
+    ): Boolean {
+        return this.consume(player, amount, itemTag, neigeItems, false)
+    }
+
     /**
      * 消耗一定数量物品
      *
@@ -84,7 +106,26 @@ object ActionUtils {
      * @param amount 消耗数
      * @param itemTag 物品NBT
      * @param neigeItems NI特殊NBT
-     * @param charge 物品剩余使用次数, 不填则主动获取
+     * @return 是否消耗成功
+     */
+    @JvmStatic
+    fun ItemStack.consume(
+        player: Player,
+        amount: Int,
+        itemTag: NbtCompound,
+        neigeItems: NbtCompound
+    ): Boolean {
+        return this.consume(player, amount, itemTag, neigeItems, false)
+    }
+
+    /**
+     * 消耗一定数量物品
+     *
+     * @param player 物品持有者, 用于接收拆分出的物品
+     * @param amount 消耗数
+     * @param itemTag 物品NBT
+     * @param neigeItems NI特殊NBT
+     * @param giveLater 给予剩余物品是否需要延迟1tick
      * @return 是否消耗成功
      */
     @JvmStatic
@@ -93,18 +134,15 @@ object ActionUtils {
         amount: Int,
         itemTag: NbtCompound,
         neigeItems: NbtCompound,
-        charge: Int? =
-            if (neigeItems.containsKey("charge"))
-                neigeItems.getInt("charge")
-            else
-                null
+        giveLater: Boolean = false
     ): Boolean {
+        val charge = neigeItems.getIntOrNull("charge")
         if (charge != null) {
             if (charge >= amount) {
                 var itemClone: ItemStack? = null
                 // 拆分物品
                 if (this.amount != 1) {
-                    itemClone = this.clone()
+                    itemClone = this.copy()
                     itemClone.amount = itemClone.amount - 1
                     this.amount = 1
                 }
@@ -115,7 +153,15 @@ object ActionUtils {
                     neigeItems.putInt("charge", charge - amount)
                     itemTag.saveToSafe(this)
                 }
-                if (itemClone != null) player.giveItem(itemClone)
+                if (itemClone != null) {
+                    if (giveLater) {
+                        Bukkit.getScheduler().runTaskLater(NeigeItems.plugin, Runnable {
+                            player.giveItem(itemClone)
+                        }, 1)
+                    } else {
+                        player.giveItem(itemClone)
+                    }
+                }
                 return true
             }
         } else {
@@ -125,48 +171,5 @@ object ActionUtils {
             }
         }
         return false
-    }
-
-    /**
-     * 消耗一定数量物品, 返回操作后的物品数组
-     *
-     * @param amount 消耗数
-     * @param itemTag 物品NBT
-     * @param neigeItems NI特殊NBT
-     * @return 操作后的物品数组, 消耗失败返回空值
-     */
-    @JvmStatic
-    fun ItemStack.consumeAndReturn(
-        amount: Int,
-        itemTag: NbtCompound,
-        neigeItems: NbtCompound
-    ): Array<ItemStack>? {
-        if (neigeItems.containsKey("charge")) {
-            val charge = neigeItems.getInt("charge")
-            if (charge >= amount) {
-                var itemClone: ItemStack? = null
-                // 拆分物品
-                if (this.amount != 1) {
-                    itemClone = this.clone()
-                    itemClone.amount = itemClone.amount - 1
-                    this.amount = 1
-                }
-                // 更新次数
-                if (charge == amount) {
-                    this.amount = 0
-                } else {
-                    neigeItems.putInt("charge", charge - amount)
-                    itemTag.saveToSafe(this)
-                }
-                if (itemClone != null) return arrayOf(this, itemClone)
-                return arrayOf(this)
-            }
-        } else {
-            if (this.amount >= amount) {
-                this.amount = this.amount - amount
-                return arrayOf(this)
-            }
-        }
-        return null
     }
 }

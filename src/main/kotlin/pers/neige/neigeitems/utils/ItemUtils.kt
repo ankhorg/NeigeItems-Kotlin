@@ -462,7 +462,6 @@ object ItemUtils {
     /**
      * 获取物品NBT
      *
-     * @param itemStack 待操作物品
      * @return 物品NBT
      */
     @JvmStatic
@@ -473,12 +472,51 @@ object ItemUtils {
     /**
      * 获取物品NBT(无nbt则返回null)
      *
-     * @param itemStack 待操作物品
      * @return 物品NBT
      */
     @JvmStatic
     fun ItemStack.getNbtOrNull(): NbtCompound? {
         return NbtItemStack(this).tag
+    }
+
+    /**
+     * 获取NBT物品
+     *
+     * @return NBT物品
+     */
+    @JvmStatic
+    fun ItemStack.toNbtItemStack(): NbtItemStack {
+        return NbtItemStack(this)
+    }
+
+    /**
+     * 获取物品复制
+     *
+     * @return 物品复制
+     */
+    @JvmStatic
+    fun ItemStack.copy(): ItemStack {
+        return NbtUtils.asCopy(this)
+    }
+
+    /**
+     * 获取CraftItemStack形式的物品复制
+     *
+     * @return CraftItemStack形式的物品复制
+     */
+    @JvmStatic
+    fun ItemStack.asBukkitCopy(): ItemStack {
+        return NbtUtils.asBukkitCopy(this)
+    }
+
+    /**
+     * 获取ItemStack形式的物品复制
+     *
+     * @return ItemStack形式的物品复制
+     */
+    @JvmStatic
+    fun ItemStack.asCraftCopy(): ItemStack {
+        return NbtUtils.asCraftCopy(this)
     }
 
     /**
