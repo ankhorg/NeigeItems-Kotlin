@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.block.Action
+import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.EntityShootBowEvent
@@ -1179,6 +1180,16 @@ object ActionManager {
         event: EntityDamageByEntityEvent
     ) {
         basicHandler(player, itemStack, itemInfo, event, "blocking", cancell = false, cancellIfCooldown = true)
+    }
+
+    // 挖掘方块时由主手物品触发
+    fun breakBlockListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemInfo: ItemInfo,
+        event: BlockBreakEvent
+    ) {
+        basicHandler(player, itemStack, itemInfo, event, "break_block", cancell = false, cancellIfCooldown = true)
     }
 
     // 适用于基础情况
