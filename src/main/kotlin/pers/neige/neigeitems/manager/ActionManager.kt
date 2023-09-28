@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
 import org.bukkit.event.Event
 import org.bukkit.event.block.Action
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -1168,6 +1169,16 @@ object ActionManager {
         event: EntityShootBowEvent
     ) {
         basicHandler(player, itemStack, itemInfo, event, "shoot_arrow", cancell = false, cancellIfCooldown = true)
+    }
+
+    // 格挡时由盾触发
+    fun blockingListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemInfo: ItemInfo,
+        event: EntityDamageByEntityEvent
+    ) {
+        basicHandler(player, itemStack, itemInfo, event, "blocking", cancell = false, cancellIfCooldown = true)
     }
 
     // 适用于基础情况

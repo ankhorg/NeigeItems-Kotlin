@@ -4,6 +4,7 @@ import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.*
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.event.Cancellable
 import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityShootBowEvent
@@ -101,67 +102,10 @@ object ItemDurability {
         }
     }
 
-    /**
-     * 交互实体
-     */
-    fun interact(
+    fun basic(
         player: Player,
         neigeItems: NbtCompound,
-        event: PlayerInteractEntityEvent
-    ) {
-        // 对于已损坏物品取消事件
-        if (neigeItems.getIntOrNull("durability") == 0) {
-            event.isCancelled = true
-            // 物品损坏提示
-            getLang("Messages.brokenItem")?.let {
-                if (it != "") player.sendActionBar(it)
-            }
-        }
-    }
-
-    /**
-     * 射箭
-     */
-    fun shootBow(
-        player: Player,
-        neigeItems: NbtCompound,
-        event: EntityShootBowEvent
-    ) {
-        // 对于已损坏物品取消事件
-        if (neigeItems.getIntOrNull("durability") == 0) {
-            event.isCancelled = true
-            // 物品损坏提示
-            getLang("Messages.brokenItem")?.let {
-                if (it != "") player.sendActionBar(it)
-            }
-        }
-    }
-
-    /**
-     * 吃/喝东西
-     */
-    fun consume(
-        player: Player,
-        neigeItems: NbtCompound,
-        event: PlayerItemConsumeEvent
-    ) {
-        // 对于已损坏物品取消事件
-        if (neigeItems.getIntOrNull("durability") == 0) {
-            event.isCancelled = true
-            // 物品损坏提示
-            getLang("Messages.brokenItem")?.let {
-                if (it != "") player.sendActionBar(it)
-            }
-        }
-    }
-
-    /**
-     * 伤害事件
-     */
-    fun entityDamageByEntity(
-        player: Player,
-        neigeItems: NbtCompound,
-        event: EntityDamageByEntityEvent
+        event: Cancellable
     ) {
         // 对于已损坏物品取消事件
         if (neigeItems.getIntOrNull("durability") == 0) {

@@ -33,7 +33,7 @@ object PlayerItemConsumeListener {
 
         try {
             // 检测已损坏物品
-            ItemDurability.consume(player, neigeItems, event)
+            ItemDurability.basic(player, neigeItems, event)
             if (event.isCancelled) return
             // 执行物品动作
             ActionManager.eatListener(player, itemStack, itemInfo, event)

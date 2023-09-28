@@ -23,7 +23,7 @@ object PlayerInteractEntityListener {
         val neigeItems: NbtCompound = itemInfo.neigeItems
 
         // 检测已损坏物品
-        ItemDurability.interact(player, neigeItems, event)
+        ItemDurability.basic(player, neigeItems, event)
         if (event.isCancelled) return
     }
 }

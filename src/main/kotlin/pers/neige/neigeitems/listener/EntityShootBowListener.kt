@@ -23,7 +23,7 @@ object EntityShootBowListener {
         val neigeItems: NbtCompound = itemInfo.neigeItems
 
         // 检测已损坏物品
-        ItemDurability.shootBow(player, neigeItems, event)
+        ItemDurability.basic(player, neigeItems, event)
         if (event.isCancelled) return
         // 执行物品动作
         ActionManager.shootBowListener(player, itemStack, itemInfo, event)
@@ -43,7 +43,7 @@ object EntityShootBowListener {
         val neigeItems: NbtCompound = itemInfo.neigeItems
 
         // 检测已损坏物品
-        ItemDurability.shootBow(player, neigeItems, event)
+        ItemDurability.basic(player, neigeItems, event)
         if (event.isCancelled) return
         // 执行物品动作
         ActionManager.shootArrowListener(player, itemStack, itemInfo, event)
