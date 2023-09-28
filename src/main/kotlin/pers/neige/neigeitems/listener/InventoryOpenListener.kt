@@ -1,7 +1,5 @@
 package pers.neige.neigeitems.listener
 
-import bot.inker.bukkit.nbt.NbtCompound
-import bot.inker.bukkit.nbt.NbtItemStack
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryOpenEvent
 import pers.neige.neigeitems.item.ItemCheck

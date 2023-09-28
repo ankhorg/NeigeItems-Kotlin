@@ -20,6 +20,7 @@ import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils
+import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getCaughtVelocity
 import pers.neige.neigeitems.utils.ItemUtils.getDoubleOrNull
 import pers.neige.neigeitems.utils.ItemUtils.getExactStringOrNull
@@ -486,12 +487,12 @@ abstract class MythicMobsHooker {
         val entityEquipment = entity.equipment
         // 一个个的全掏出来, 等会儿挨个康康
         val equipments = ArrayList<ItemStack>()
-        entityEquipment?.helmet?.clone()?.let { equipments.add(it) }
-        entityEquipment?.chestplate?.clone()?.let { equipments.add(it) }
-        entityEquipment?.leggings?.clone()?.let { equipments.add(it) }
-        entityEquipment?.boots?.clone()?.let { equipments.add(it) }
-        entityEquipment?.itemInMainHand?.clone()?.let { equipments.add(it) }
-        entityEquipment?.itemInOffHand?.clone()?.let { equipments.add(it) }
+        entityEquipment?.helmet?.copy()?.let { equipments.add(it) }
+        entityEquipment?.chestplate?.copy()?.let { equipments.add(it) }
+        entityEquipment?.leggings?.copy()?.let { equipments.add(it) }
+        entityEquipment?.boots?.copy()?.let { equipments.add(it) }
+        entityEquipment?.itemInMainHand?.copy()?.let { equipments.add(it) }
+        entityEquipment?.itemInOffHand?.copy()?.let { equipments.add(it) }
 
         loadEquipmentDrop(equipments, dropItems, player)
     }

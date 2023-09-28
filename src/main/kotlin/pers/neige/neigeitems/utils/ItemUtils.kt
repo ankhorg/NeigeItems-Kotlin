@@ -893,7 +893,7 @@ object ItemUtils {
         val leftAmount = (amount ?: 1) % maxStackSize
         // 整组给予
         if (repeat > 0) {
-            val cloneItemStack = itemStack.clone()
+            val cloneItemStack = itemStack.copy()
             cloneItemStack.amount = maxStackSize
             repeat(repeat) {
                 this.dropNiItem(cloneItemStack, entity)
@@ -901,7 +901,7 @@ object ItemUtils {
         }
         // 单独给予
         if (leftAmount > 0) {
-            val itemLeft = itemStack.clone()
+            val itemLeft = itemStack.copy()
             itemLeft.amount = leftAmount
             this.dropNiItem(itemLeft, entity)
         }
@@ -1026,7 +1026,7 @@ object ItemUtils {
     fun ItemStack.getItems(amount: Int?): ArrayList<ItemStack> {
         val list = ArrayList<ItemStack>()
         amount?.let {
-            val item = this.clone()
+            val item = this.copy()
             val maxStackSize = item.maxStackSize
             item.amount = maxStackSize
             val leftAmount = amount % maxStackSize
@@ -1035,7 +1035,7 @@ object ItemUtils {
                 list.add(item)
             }
             if (leftAmount != 0) {
-                val itemLeft = this.clone()
+                val itemLeft = this.copy()
                 itemLeft.amount = leftAmount
                 list.add(itemLeft)
             }

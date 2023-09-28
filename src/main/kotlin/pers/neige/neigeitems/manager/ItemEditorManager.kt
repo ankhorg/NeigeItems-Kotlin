@@ -26,6 +26,7 @@ import pers.neige.neigeitems.manager.ItemManager.setMaxCustomDurability
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.castToItemTagData
 import pers.neige.neigeitems.utils.ItemUtils.castToNbt
+import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.putDeepWithEscape
@@ -1648,7 +1649,7 @@ object ItemEditorManager {
                 // 获取待刷新节点信息
                 val sections = info.drop(1)
                 if (amount < itemStack.amount) {
-                    val itemClone = itemStack.clone()
+                    val itemClone = itemStack.copy()
                     itemClone.amount = itemClone.amount - amount
                     itemStack.amount = amount
                     Bukkit.getScheduler().runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
@@ -1705,7 +1706,7 @@ object ItemEditorManager {
                 // 获取待刷新节点信息
                 val sections = (info.getOrNull(1) ?: "").parseObject<HashMap<String, String?>>()
                 if (amount < itemStack.amount) {
-                    val itemClone: ItemStack = itemStack.clone()
+                    val itemClone: ItemStack = itemStack.copy()
                     itemClone.amount = itemClone.amount - amount
                     itemStack.amount = amount
                     Bukkit.getScheduler().runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)

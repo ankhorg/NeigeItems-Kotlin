@@ -23,6 +23,7 @@ import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ConfigUtils.toMap
+import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.toNbtCompound
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -292,7 +293,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
     /**
      * 获取静态物品
      */
-    val staticItemStack get() = originStaticItemStack.clone()
+    val staticItemStack get() = originStaticItemStack.copy()
 
     private fun inherit(configSection: ConfigurationSection, originConfigSection: ConfigurationSection): ConfigurationSection {
         // 检测是否需要进行继承

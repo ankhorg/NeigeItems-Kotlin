@@ -11,6 +11,7 @@ import org.bukkit.event.player.*
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
+import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getIntOrNull
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
@@ -282,7 +283,7 @@ object ItemDurability {
         // 如果是堆叠物品
         if (itemStack.amount != 1) {
             // 获取物品克隆
-            val itemClone = itemStack.clone()
+            val itemClone = itemStack.copy()
             // 将克隆的数量-1
             itemClone.amount = itemClone.amount - 1
             // 将本体的数量设置为1
