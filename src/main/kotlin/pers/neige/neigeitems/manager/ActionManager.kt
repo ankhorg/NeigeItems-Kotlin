@@ -1182,6 +1182,16 @@ object ActionManager {
         basicHandler(player, itemStack, itemInfo, event, "blocking", cancell = false, cancellIfCooldown = true)
     }
 
+    // 攻击实体时由主手物品触发
+    fun damageListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemInfo: ItemInfo,
+        event: EntityDamageByEntityEvent
+    ) {
+        basicHandler(player, itemStack, itemInfo, event, "damage", cancell = false, cancellIfCooldown = true)
+    }
+
     // 挖掘方块时由主手物品触发
     fun breakBlockListener(
         player: Player,

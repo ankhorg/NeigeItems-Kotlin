@@ -1,9 +1,8 @@
-import java.io.FileOutputStream
-import java.util.jar.JarFile
-import java.util.jar.JarEntry
-import java.util.jar.JarOutputStream
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import java.io.File
+import java.io.FileOutputStream
+import java.util.jar.JarEntry
+import java.util.jar.JarFile
+import java.util.jar.JarOutputStream
 
 val taboolib_version: String by project
 

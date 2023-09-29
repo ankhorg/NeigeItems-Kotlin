@@ -2,10 +2,7 @@ package pers.neige.neigeitems.listener
 
 import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.Material
-import org.bukkit.entity.Player
 import org.bukkit.event.block.BlockBreakEvent
-import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem

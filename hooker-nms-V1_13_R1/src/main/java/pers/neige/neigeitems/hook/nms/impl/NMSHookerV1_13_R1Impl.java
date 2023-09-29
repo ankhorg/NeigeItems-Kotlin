@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.hook.nms.NMSHooker;
+
 import java.util.function.Consumer;
 
 public final class NMSHookerV1_13_R1Impl extends NMSHooker {

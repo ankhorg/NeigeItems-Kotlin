@@ -27,6 +27,9 @@ object EntityDamageByEntityListener {
         // 检测已损坏物品
         ItemDurability.basic(player, neigeItems, event)
         if (event.isCancelled) return
+        // 执行物品动作
+        ActionManager.damageListener(player, itemStack, itemInfo, event)
+        if (event.isCancelled) return
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)

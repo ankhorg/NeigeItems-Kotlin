@@ -11,6 +11,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.hook.nms.NMSHooker;
+
 import java.util.function.Consumer;
 
 public final class NMSHookerV1_16_R3Impl extends NMSHooker {
