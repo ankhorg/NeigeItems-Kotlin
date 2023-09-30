@@ -22,18 +22,16 @@ public final class NMSHookerV1_13_R1Impl extends NMSHooker {
         return false;
     }
 
-    @Nullable
     @Override
-    public Integer getCustomModelData(@Nullable ItemMeta itemMeta) {
+    public @Nullable Integer getCustomModelData(@Nullable ItemMeta itemMeta) {
         return null;
     }
 
     @Override
     public void setCustomModelData(@Nullable ItemMeta itemMeta, int data) {}
 
-    @NotNull
     @Override
-    public Item dropItem(
+    public @NotNull Item dropItem(
             @NotNull World world,
             @NotNull Location location,
             @NotNull ItemStack itemStack,

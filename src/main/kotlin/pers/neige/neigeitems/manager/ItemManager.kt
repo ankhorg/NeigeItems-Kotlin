@@ -215,10 +215,8 @@ object ItemManager : ItemConfigManager() {
                     // 获取物品NBT
                     val itemNBT = itemStack.getNbt()
                     // 设置CustomModelData
-                    if (nmsHooker.hasCustomModelData(itemMeta)) {
-                        nmsHooker.getCustomModelData(itemMeta)?.let {
-                            configSection.set("custommodeldata", it)
-                        }
+                    nmsHooker.getCustomModelData(itemMeta)?.let {
+                        configSection.set("custommodeldata", it)
                     }
                     // 设置物品名
                     if (itemMeta?.hasDisplayName() == true) {

@@ -15,9 +15,8 @@ import pers.neige.neigeitems.hook.nms.NMSHooker;
 import java.util.function.Consumer;
 
 public final class NMSHookerV1_16_R1Impl extends NMSHooker {
-    @NotNull
     @Override
-    public Item dropItem(
+    public @NotNull Item dropItem(
             @NotNull World world,
             @NotNull Location location,
             @NotNull ItemStack itemStack,
