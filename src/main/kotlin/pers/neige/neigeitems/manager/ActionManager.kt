@@ -1129,7 +1129,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityPickupItemEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "pick", cancell = false, cancellIfCooldown = true)
+        basicHandler(player, itemStack, itemInfo, event, "pick", cancell = false, cancellIfCooldown = true, consumeItem = false)
     }
 
     // 点击物品
@@ -1211,7 +1211,8 @@ object ActionManager {
         key: String,
         cancell: Boolean = true,
         cancellIfCooldown: Boolean = false,
-        giveLater: Boolean = false
+        giveLater: Boolean = false,
+        consumeItem: Boolean = true
     ) {
         val id = itemInfo.id
         val itemTag = itemInfo.itemTag
@@ -1224,8 +1225,6 @@ object ActionManager {
         // 没有对应物品动作就停止判断
         if (trigger == null) return
 
-        // 获取物品消耗信息
-        val consume =  trigger.consume
         // 取消事件
         if (event is Cancellable && cancell) {
             event.isCancelled = true
@@ -1239,28 +1238,32 @@ object ActionManager {
         }
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
-        // 如果该物品需要被消耗
-        if (consume != null) {
-            // 预执行动作
-            runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
-            // 检测条件
-            consume.getString("condition")?.let {
-                // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
+        if (consumeItem) {
+            // 获取物品消耗信息
+            val consume =  trigger.consume
+            // 如果该物品需要被消耗
+            if (consume != null) {
+                // 预执行动作
+                runAction(player, consume.get("pre"), itemStack, itemTag, data, event, global)
+                // 检测条件
+                consume.getString("condition")?.let {
+                    // 不满足条件就爬
+                    if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
+                        // 跑一下deny动作
+                        runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
+                        // 爬
+                        return
+                    }
+                }
+                // 获取待消耗数量
+                val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
+                // 消耗物品
+                if (!itemStack.consume(player, amount, itemTag, neigeItems, giveLater)) {
                     // 跑一下deny动作
                     runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                    // 爬
+                    // 数量不足
                     return
                 }
-            }
-            // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
-            // 消耗物品
-            if (!itemStack.consume(player, amount, itemTag, neigeItems, giveLater)) {
-                // 跑一下deny动作
-                runAction(player, consume.get("deny"), itemStack, itemTag, data, event, global)
-                // 数量不足
-                return
             }
         }
         // 执行动作

@@ -86,38 +86,11 @@ public abstract class NMSHooker{
     }
 
     /**
-     * 通过物品材质, 获取用于创建 HoverEvent.Action 子类 Item 的物品id.
-     *
-     * @param material 待获取材质
-     */
-    public String getComponentKey(Material material) {
-        return material.getKey().getKey();
-    }
-
-    /**
      * 通过物品材质, 获取 NamespacedKey.
      *
      * @param material 待获取材质
      */
     public NamespacedKey getNamespacedKey(Material material) {
         return materialNamespacedKeys.get(material);
-    }
-
-    /**
-     * 通过物品材质, 获取 mojang 命名方式中该物品材质的命名空间.
-     *
-     * @param material 待获取材质
-     */
-    public String getNamespace(Material material) {
-        return material.getKey().getNamespace();
-    }
-
-    /**
-     * 通过物品材质, 获取 mojang 命名方式中该物品材质的键.
-     *
-     * @param material 待获取材质
-     */
-    public String getKey(Material material) {
-        return material.getKey().getKey();
     }
 }

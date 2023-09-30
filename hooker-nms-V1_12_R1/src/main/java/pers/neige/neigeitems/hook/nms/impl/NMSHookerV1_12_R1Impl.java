@@ -19,42 +19,11 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.hook.nms.NMSHooker;
 import pers.neige.neigeitems.hook.nms.NamespacedKey;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
 public final class NMSHookerV1_12_R1Impl extends NMSHooker {
-    private final Map<Material, String> materialComponentKeys = new HashMap<>();
-
-    public NMSHookerV1_12_R1Impl() {
-        super();
-        try {
-            Field nameField = net.minecraft.server.v1_12_R1.Item.class.getDeclaredField("name");
-            nameField.setAccessible(true);
-
-            for (Material material : Material.values()) {
-                try {
-                    net.minecraft.server.v1_12_R1.Item item = CraftMagicNumbers.getItem(material);
-                    if (item != null) {
-                        String name = (String)nameField.get(item);
-                        StringBuilder stringBuilder = new StringBuilder();
-                        for (char c : name.toCharArray()) {
-                            if (Character.isUpperCase(c)) {
-                                stringBuilder.append("_").append(Character.toLowerCase(c));
-                            } else {
-                                stringBuilder.append(c);
-                            }
-                        }
-                        materialComponentKeys.put(material, stringBuilder.toString());
-                    }
-                } catch(Throwable ignored) {}
-            }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     protected Map<Material, NamespacedKey> loadNamespacedKeys() {
         RegistryMaterials<MinecraftKey, net.minecraft.server.v1_12_R1.Item> REGISTRY = net.minecraft.server.v1_12_R1.Item.REGISTRY;
@@ -106,20 +75,5 @@ public final class NMSHookerV1_12_R1Impl extends NMSHooker {
         function.accept(((Item) entity.getBukkitEntity()));
         nmsWorld.addEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return (Item) entity.getBukkitEntity();
-    }
-
-    @Override
-    public String getComponentKey(Material material) {
-        return materialComponentKeys.get(material);
-    }
-
-    @Override
-    public String getNamespace(Material material) {
-        return materialNamespacedKeys.get(material).getNamespace();
-    }
-
-    @Override
-    public String getKey(Material material) {
-        return materialNamespacedKeys.get(material).getKey();
     }
 }

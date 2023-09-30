@@ -33,8 +33,6 @@ object EntityPickupItemListener {
         val itemInfo = itemStack.isNiItem(true) ?: return
 
         try {
-            // 检测物品过期, 检测物品更新
-            ItemCheck.checkItem(player, itemStack, itemInfo)
             if (itemStack.amount != 0 && itemStack.type != Material.AIR) {
                 // 执行物品动作
                 ActionManager.pickListener(player, itemStack, itemInfo, event)
@@ -48,8 +46,6 @@ object EntityPickupItemListener {
             event.item.remove()
             // 就让Item保持AIR会导致后面监听事件的插件报错, 不如干脆取消事件算了
             event.isCancelled = true
-        } else {
-            event.item.itemStack = itemStack
         }
     }
 }
