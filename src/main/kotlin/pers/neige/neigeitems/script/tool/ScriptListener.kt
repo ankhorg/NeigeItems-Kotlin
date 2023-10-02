@@ -2,12 +2,12 @@ package pers.neige.neigeitems.script.tool
 
 import org.bukkit.Bukkit
 import org.bukkit.event.Event
-import pers.neige.neigeitems.NeigeItems.plugin
+import org.bukkit.event.EventPriority
+import org.bukkit.event.HandlerList
+import org.bukkit.event.Listener
+import org.bukkit.plugin.java.JavaPlugin
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.ExpansionManager
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.ProxyListener
-import taboolib.common.platform.function.registerBukkitListener
-import taboolib.common.platform.function.unregisterListener
 import java.util.function.Consumer
 
 /**
@@ -23,7 +23,20 @@ class ScriptListener(val event: Class<Event>) {
 
     private var executor: Consumer<Event> = Consumer<Event> {}
 
-    private var listener: ProxyListener? = null
+    private var listener: Listener? = null
+
+    private var plugin: JavaPlugin = NeigeItems.plugin
+
+    /**
+     * 设置注册监听器的插件
+     *
+     * @param plugin 任务
+     * @return ScriptListener本身
+     */
+    fun setPlugin(plugin: JavaPlugin): ScriptListener {
+        this.plugin = plugin
+        return this
+    }
 
     /**
      * 设置监听优先级
@@ -68,17 +81,33 @@ class ScriptListener(val event: Class<Event>) {
         listener = if (Bukkit.isPrimaryThread()) {
             // 如果之前注册过了就先移除并卸载
             unRegister()
-            // 注册监听器
-            registerBukkitListener(event, priority, ignoreCancelled) {
-                executor.accept(it)
+            object : Listener {}.also {
+                // 注册监听器
+                Bukkit.getPluginManager().registerEvent(
+                    event,
+                    it,
+                    priority,
+                    { _, event ->
+                        executor.accept(event)
+                    },
+                    plugin
+                )
             }
         } else {
             Bukkit.getScheduler().callSyncMethod(plugin) {
                 // 如果之前注册过了就先移除并卸载
                 unRegister()
                 // 注册监听器
-                return@callSyncMethod registerBukkitListener(event, priority, ignoreCancelled) {
-                    executor.accept(it)
+                return@callSyncMethod object : Listener {}.also {
+                    Bukkit.getPluginManager().registerEvent(
+                        event,
+                        it,
+                        priority,
+                        { _, event ->
+                            executor.accept(event)
+                        },
+                        plugin
+                    )
                 }
             }.get()
         }
@@ -96,12 +125,12 @@ class ScriptListener(val event: Class<Event>) {
         // 注册了就取消监听
         if (Bukkit.isPrimaryThread()) {
             listener?.also {
-                unregisterListener(it)
+                HandlerList.unregisterAll(it)
             }
         } else {
             Bukkit.getScheduler().callSyncMethod(plugin) {
                 listener?.also {
-                    unregisterListener(it)
+                    HandlerList.unregisterAll(it)
                 }
             }
         }

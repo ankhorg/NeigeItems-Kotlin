@@ -1,9 +1,10 @@
 package pers.neige.neigeitems.script.tool
 
 import org.bukkit.Bukkit
+import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
-import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.ExpansionManager
 
 /**
@@ -22,6 +23,8 @@ class ScriptTask {
 
     private var bukkitTask: BukkitTask? = null
 
+    private var plugin: JavaPlugin = NeigeItems.plugin
+
     /**
      * 设置任务
      *
@@ -30,6 +33,17 @@ class ScriptTask {
      */
     fun setTask(task: Runnable): ScriptTask {
         this.task = task
+        return this
+    }
+
+    /**
+     * 设置触发任务调度的插件
+     *
+     * @param plugin 任务
+     * @return ScriptTask本身
+     */
+    fun setPlugin(plugin: JavaPlugin): ScriptTask {
+        this.plugin = plugin
         return this
     }
 

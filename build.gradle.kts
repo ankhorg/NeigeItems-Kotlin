@@ -74,6 +74,7 @@ repositories {
     maven("https://repo.dmulloy2.net/repository/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://jitpack.io")
+    maven("https://repo.codemc.io/repository/nms")
     maven {
         url = uri("http://ptms.ink:8081/repository/releases/")
         isAllowInsecureProtocol = true
@@ -85,7 +86,7 @@ dependencies {
     dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
     compileOnly(fileTree("libs"))
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
-    compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot:1.16.5-R0.1-SNAPSHOT")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
@@ -107,6 +108,7 @@ dependencies {
     implementation("org.javassist:javassist:3.20.0-GA")
     // callsite-nbt
     implementation(fileTree("libs/callsite-nbt-1.0-dev-SNAPSHOT-fat.jar"))
+    implementation(project(":hooker-callsitenbt"))
     // openjdk-nashorn
     implementation(fileTree("libs/relocated-nashorn-15.4.jar"))
     // fastjson2

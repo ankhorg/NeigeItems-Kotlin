@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.hook.nms;
 
+import bot.inker.bukkit.nbt.neigeitems.WorldUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -48,7 +49,8 @@ public abstract class NMSHooker{
      * @param itemMeta 待操作 ItemMeta
      * @return 是否存在 CustomModelData
      */
-    public @Nullable Integer getCustomModelData(@Nullable ItemMeta itemMeta) {
+    @Nullable
+    public Integer getCustomModelData(@Nullable ItemMeta itemMeta) {
         if (itemMeta == null || !hasCustomModelData(itemMeta)) {
             return null;
         } else {
@@ -69,28 +71,31 @@ public abstract class NMSHooker{
     }
 
     /**
-     * 在指定世界的指定位置掉落一个物品, 在将物品实体添加到世界中之前, 对物品进行某些操作.
-     *
-     * @param world 掉落物品的世界
-     * @param location 掉落物品的坐标
-     * @param itemStack 待掉落物品
-     * @param function 对掉落物品执行的操作
-     */
-    public @NotNull Item dropItem(
-            @NotNull World world,
-            @NotNull Location location,
-            @NotNull ItemStack itemStack,
-            @NotNull Consumer<Item> function
-    ) {
-        return world.dropItem(location, itemStack, function::accept);
-    }
-
-    /**
      * 通过物品材质, 获取 NamespacedKey.
      *
      * @param material 待获取材质
      */
     public NamespacedKey getNamespacedKey(Material material) {
         return materialNamespacedKeys.get(material);
+    }
+
+    /**
+     * 在指定世界的指定坐标生成一个掉落物, 生成实体前对实体进行一些操作.
+     *
+     * @param world 待掉落世界.
+     * @param location 待掉落坐标.
+     * @param itemStack 待掉落物品.
+     * @param function 掉落前对物品执行的操作.
+     * @return 生成的掉落物.
+     */
+    @Deprecated
+    @NotNull
+    public Item dropItem(
+            @NotNull World world,
+            @NotNull Location location,
+            @NotNull ItemStack itemStack,
+            @NotNull Consumer<Item> function
+    ) {
+        return WorldUtils.dropItem(world, location, itemStack, function);
     }
 }

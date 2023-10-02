@@ -3,7 +3,6 @@ package pers.neige.neigeitems.listener
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityPickupItemEvent
-import pers.neige.neigeitems.item.ItemCheck
 import pers.neige.neigeitems.item.ItemOwner
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem

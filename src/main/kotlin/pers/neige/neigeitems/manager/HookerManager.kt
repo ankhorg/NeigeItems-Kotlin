@@ -89,11 +89,6 @@ object HookerManager {
                 CbVersion.v1_12_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_12_R1Impl").newInstance() as NMSHooker
                 CbVersion.v1_13_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_13_R1Impl").newInstance() as NMSHooker
                 CbVersion.v1_13_R2 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_13_R2Impl").newInstance() as NMSHooker
-                CbVersion.v1_14_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_14_R1Impl").newInstance() as NMSHooker
-                CbVersion.v1_15_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_15_R1Impl").newInstance() as NMSHooker
-                CbVersion.v1_16_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_16_R1Impl").newInstance() as NMSHooker
-                CbVersion.v1_16_R2 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_16_R2Impl").newInstance() as NMSHooker
-                CbVersion.v1_16_R3 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_16_R3Impl").newInstance() as NMSHooker
                 else -> NMSHookerOtherImpl()
             }
         } catch (error: Throwable) {

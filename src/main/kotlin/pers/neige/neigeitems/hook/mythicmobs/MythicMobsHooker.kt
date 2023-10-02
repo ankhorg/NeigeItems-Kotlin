@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.hook.mythicmobs
 
+import bot.inker.bukkit.nbt.neigeitems.WorldUtils
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
@@ -438,7 +439,7 @@ abstract class MythicMobsHooker {
                     Bukkit.getScheduler().callSyncMethod(plugin) {
                         dropEvent.fishDropItems?.forEach { itemStack ->
                             // 掉落
-                            HookerManager.nmsHooker.dropItem(
+                            WorldUtils.dropItem(
                                 entity.world,
                                 entity.location,
                                 itemStack

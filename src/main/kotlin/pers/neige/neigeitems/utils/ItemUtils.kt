@@ -2,6 +2,7 @@ package pers.neige.neigeitems.utils
 
 import bot.inker.bukkit.nbt.*
 import bot.inker.bukkit.nbt.api.NbtComponentLike
+import bot.inker.bukkit.nbt.neigeitems.WorldUtils
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -17,7 +18,6 @@ import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
-import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -935,7 +935,7 @@ object ItemUtils {
         if (Bukkit.isPrimaryThread()) {
             // 掉落物品
             return this.world?.let { world ->
-                nmsHooker.dropItem(
+                WorldUtils.dropItem(
                     world,
                     this,
                     itemStack
@@ -957,7 +957,7 @@ object ItemUtils {
             // 返回结果物品
             return Bukkit.getScheduler().callSyncMethod(plugin) {
                 this.world?.let { world ->
-                    nmsHooker.dropItem(
+                    WorldUtils.dropItem(
                         world,
                         this,
                         itemStack

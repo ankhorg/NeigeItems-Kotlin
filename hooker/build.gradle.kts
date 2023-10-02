@@ -15,11 +15,6 @@ dependencies {
     implementation(project(":hooker-nms-V1_12_R1"))
     implementation(project(":hooker-nms-V1_13_R1"))
     implementation(project(":hooker-nms-V1_13_R2"))
-    implementation(project(":hooker-nms-V1_14_R1"))
-    implementation(project(":hooker-nms-V1_15_R1"))
-    implementation(project(":hooker-nms-V1_16_R1"))
-    implementation(project(":hooker-nms-V1_16_R2"))
-    implementation(project(":hooker-nms-V1_16_R3"))
 }
 
 tasks {
