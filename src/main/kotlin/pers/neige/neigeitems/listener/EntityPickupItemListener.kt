@@ -29,7 +29,7 @@ object EntityPickupItemListener {
         // 获取拾取物品
         val itemStack = event.item.itemStack
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack.isNiItem(true) ?: return
+        val itemInfo = itemStack.isNiItem() ?: return
 
         try {
             if (itemStack.amount != 0 && itemStack.type != Material.AIR) {

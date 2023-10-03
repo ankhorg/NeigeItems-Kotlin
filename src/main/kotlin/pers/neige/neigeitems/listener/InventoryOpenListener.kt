@@ -17,7 +17,7 @@ object InventoryOpenListener {
         if (player.couldCheckInventory()) {
             inventory.contents.forEach { itemStack ->
                 // 获取NI物品信息(不是NI物品就停止操作)
-                val itemInfo = itemStack?.isNiItem(true)
+                val itemInfo = itemStack?.isNiItem()
                 if (itemInfo != null) {
                     // 检测物品过期, 检测物品更新
                     ItemCheck.checkItem(player, itemStack, itemInfo)

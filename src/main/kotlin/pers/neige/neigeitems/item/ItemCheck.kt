@@ -32,7 +32,6 @@ object ItemCheck {
             val id = itemInfo.id
             val itemTag = itemInfo.itemTag
             val neigeItems = itemInfo.neigeItems
-            val data = itemInfo.data
             val nbtItemStack = itemInfo.nbtItemStack
             // 检测过期物品
             if (neigeItems.containsKey("itemTime")) {
@@ -53,6 +52,7 @@ object ItemCheck {
             ItemManager.getItem(id)?.let { item ->
                 // 检测hashCode匹配情况, 不匹配代表需要更新
                 if (item.update && neigeItems.containsKey("hashCode") && (neigeItems.getInt("hashCode") != item.hashCode)) {
+                    val data = itemInfo.data
                     // 获取待重构节点
                     val rebuild = hashMapOf<String, String>().also {
                         item.rebuildData?.forEach { (key, value) ->

@@ -20,7 +20,7 @@ object EntityDamageByEntityListener {
         // 获取凶器
         val itemStack = player.inventory.itemInMainHand
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack.isNiItem(true) ?: return
+        val itemInfo = itemStack.isNiItem() ?: return
         // NI物品数据
         val neigeItems: NbtCompound = itemInfo.neigeItems
 
@@ -50,7 +50,7 @@ object EntityDamageByEntityListener {
             if (itemStack.type != Material.SHIELD) return
         }
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack.isNiItem(true) ?: return
+        val itemInfo = itemStack.isNiItem() ?: return
         // NI物品数据
         val neigeItems: NbtCompound = itemInfo.neigeItems
 

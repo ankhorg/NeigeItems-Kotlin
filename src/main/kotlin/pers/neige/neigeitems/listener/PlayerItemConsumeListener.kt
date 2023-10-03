@@ -18,7 +18,7 @@ object PlayerItemConsumeListener {
         // 获取手持物品
         val itemStack = event.item
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack.isNiItem(true) ?: return
+        val itemInfo = itemStack.isNiItem() ?: return
         // 物品NBT
         val itemTag: NbtCompound = itemInfo.itemTag
         // NI物品数据

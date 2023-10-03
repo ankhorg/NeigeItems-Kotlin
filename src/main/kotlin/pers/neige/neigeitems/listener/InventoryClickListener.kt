@@ -16,7 +16,7 @@ object InventoryClickListener {
         // 获取点击物品
         val itemStack = event.cursor
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack?.isNiItem(true) ?: return
+        val itemInfo = itemStack?.isNiItem() ?: return
 
         // 执行物品动作
         ActionManager.clickListener(player, itemStack, itemInfo, event)
@@ -30,7 +30,7 @@ object InventoryClickListener {
         // 获取点击物品
         val itemStack = event.currentItem
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack?.isNiItem(true) ?: return
+        val itemInfo = itemStack?.isNiItem() ?: return
 
         // 执行物品动作
         ActionManager.beClickedListener(player, itemStack, itemInfo, event)

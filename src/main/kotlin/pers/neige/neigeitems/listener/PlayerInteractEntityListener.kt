@@ -18,7 +18,7 @@ object PlayerInteractEntityListener {
             else -> player.inventory.itemInOffHand
         }
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack.isNiItem(true) ?: return
+        val itemInfo = itemStack.isNiItem() ?: return
         // NI物品数据
         val neigeItems: NbtCompound = itemInfo.neigeItems
 

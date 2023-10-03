@@ -1019,9 +1019,7 @@ object ActionManager {
         event: PlayerInteractEvent
     ) {
         val id = itemInfo.id
-        val itemTag = itemInfo.itemTag
-        val neigeItems = itemInfo.neigeItems
-        val data = itemInfo.data
+
         // 获取物品动作
         val itemAction = itemActions[id] ?: return
         // 获取基础触发器
@@ -1064,6 +1062,10 @@ object ActionManager {
             player.isSneaking -> itemAction.triggers["shift_all"]
             else -> itemAction.triggers["all"]
         }
+
+        val itemTag = itemInfo.itemTag
+        val neigeItems = itemInfo.neigeItems
+        val data = itemInfo.data
 
         // 获取消耗信息
         val consume = basicTrigger?.consume ?: allTrigger?.consume
@@ -1215,15 +1217,16 @@ object ActionManager {
         consumeItem: Boolean = true
     ) {
         val id = itemInfo.id
-        val itemTag = itemInfo.itemTag
-        val neigeItems = itemInfo.neigeItems
-        val data = itemInfo.data
         // 获取物品动作
         val itemAction = itemActions[id] ?: return
         // 获取基础触发器
         val trigger = itemAction.triggers[key]
         // 没有对应物品动作就停止判断
         if (trigger == null) return
+
+        val itemTag = itemInfo.itemTag
+        val neigeItems = itemInfo.neigeItems
+        val data = itemInfo.data
 
         // 取消事件
         if (event is Cancellable && cancell) {
@@ -1277,15 +1280,15 @@ object ActionManager {
         type: String
     ) {
         val id = itemInfo.id
-        val itemTag = itemInfo.itemTag
-        val neigeItems = itemInfo.neigeItems
-        val data = itemInfo.data
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
         // 获取基础触发器
         val trigger = itemAction.triggers[type]
         // 没有对应物品动作就停止判断
         if (trigger == null) return
+
+        val itemTag = itemInfo.itemTag
+        val data = itemInfo.data
 
         // 检测冷却
         val tick = trigger.tick?.parseItemSection(itemStack, itemTag, data, player)?.toLongOrNull() ?: 1000

@@ -16,7 +16,7 @@ object PlayerDropItemListener {
         // 获取掉落物品
         val itemStack = event.itemDrop.itemStack
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack.isNiItem(true) ?: return
+        val itemInfo = itemStack.isNiItem() ?: return
 
         try {
             // 检测物品过期, 检测物品更新

@@ -17,7 +17,7 @@ object TickInventory {
                     // 获取物品
                     val itemStack = inventory.getItem(index)
                     // 获取NI物品信息(不是NI物品就停止操作)
-                    val itemInfo = itemStack?.isNiItem(true) ?: return@runCatching
+                    val itemInfo = itemStack?.isNiItem() ?: return@runCatching
 
                     // 检测物品过期, 检测物品更新
                     ItemCheck.checkItem(player, itemStack, itemInfo)

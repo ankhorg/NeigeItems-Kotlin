@@ -15,7 +15,7 @@ object PlayerItemDamageListener {
         // 获取消耗耐久物品
         val itemStack = event.item
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack.isNiItem(true) ?: return
+        val itemInfo = itemStack.isNiItem() ?: return
         // 物品NBT
         val itemTag: NbtCompound = itemInfo.itemTag
         // NI物品数据

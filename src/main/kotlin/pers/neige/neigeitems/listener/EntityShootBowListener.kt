@@ -18,7 +18,7 @@ object EntityShootBowListener {
         // 获取弓
         val itemStack = event.bow
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack?.isNiItem(true) ?: return
+        val itemInfo = itemStack?.isNiItem() ?: return
         // NI物品数据
         val neigeItems: NbtCompound = itemInfo.neigeItems
 
@@ -38,7 +38,7 @@ object EntityShootBowListener {
         // 获取箭
         val itemStack = event.consumable
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack?.isNiItem(true) ?: return
+        val itemInfo = itemStack?.isNiItem() ?: return
         // NI物品数据
         val neigeItems: NbtCompound = itemInfo.neigeItems
 

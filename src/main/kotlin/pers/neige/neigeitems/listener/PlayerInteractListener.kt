@@ -19,7 +19,7 @@ object PlayerInteractListener {
         // 类型不对劲/物品为空则终止操作
         if (event.action == Action.PHYSICAL || itemStack == null) return
         // 获取NI物品信息(不是NI物品就停止操作)
-        val itemInfo = itemStack.isNiItem(true) ?: return
+        val itemInfo = itemStack.isNiItem() ?: return
         // 物品NBT
         val itemTag: NbtCompound = itemInfo.itemTag
         // NI物品数据
