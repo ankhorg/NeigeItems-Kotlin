@@ -11,7 +11,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.spigotmc.SpigotWorldConfig;
 
 import java.util.function.Consumer;
 

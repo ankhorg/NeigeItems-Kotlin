@@ -87,8 +87,10 @@ class ScriptListener(val event: Class<Event>) {
                     event,
                     it,
                     priority,
-                    { _, event ->
-                        executor.accept(event)
+                    { _, e ->
+                        if (e::class.java.isAssignableFrom(event)) {
+                            executor.accept(e)
+                        }
                     },
                     plugin
                 )
@@ -103,8 +105,10 @@ class ScriptListener(val event: Class<Event>) {
                         event,
                         it,
                         priority,
-                        { _, event ->
-                            executor.accept(event)
+                        { _, e ->
+                            if (e::class.java.isAssignableFrom(event)) {
+                                executor.accept(e)
+                            }
                         },
                         plugin
                     )
