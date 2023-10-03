@@ -15,12 +15,22 @@ object JsonUtils {
     }
 
     /**
-     * Map<String, String> 转 String
+     * String 转 HashMap<String, Int>
      *
      * @return 转换结果
      */
     @JvmStatic
-    fun toString(map: Map<String, String>): String {
+    fun toStringIntMap(string: String): HashMap<String, Int> {
+        return string.parseObject<HashMap<String, Int>>()
+    }
+
+    /**
+     * Map<*, *> 转 String
+     *
+     * @return 转换结果
+     */
+    @JvmStatic
+    fun toString(map: Map<*, *>): String {
         return map.toJSONString()
     }
 }
