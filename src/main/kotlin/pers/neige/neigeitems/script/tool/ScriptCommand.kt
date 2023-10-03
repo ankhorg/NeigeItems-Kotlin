@@ -1,35 +1,45 @@
 package pers.neige.neigeitems.script.tool
 
+import pers.neige.neigeitems.utils.CommandUtils
+import bot.inker.bukkit.nbt.neigeitems.ServerUtils
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.PluginCommand
 import org.bukkit.command.TabCompleter
+import org.bukkit.plugin.java.JavaPlugin
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ExpansionManager
-import taboolib.platform.BukkitCommand
 
 /**
- * bukkit指令
+ * Bukkit 指令
  *
  * @property name 指令名
- * @constructor bukkit指令
+ * @constructor Bukkit 指令
  */
 class ScriptCommand(val name: String) {
     /**
-     * bukkit PluginCommand对象
+     * Bukkit PluginCommand 对象
      */
-    val command: PluginCommand = with (BukkitCommand()) {
-        sync()
-        constructor.newInstance(name, plugin)
-    }
+    val command: PluginCommand = CommandUtils.newPluginCommand(name, plugin)!!
 
     private var nameSpace = name
+
+    /**
+     * 设置注册指令的插件
+     *
+     * @param plugin 任务
+     * @return ScriptCommand 本身
+     */
+    fun setPlugin(plugin: JavaPlugin): ScriptCommand {
+        CommandUtils.setPlugin(command, plugin)
+        return this
+    }
 
     /**
      * 设置指令命名空间
      *
      * @param nameSpace 设置指令所需权限
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun setNameSpace(nameSpace: String): ScriptCommand {
         this.nameSpace = nameSpace
@@ -40,7 +50,7 @@ class ScriptCommand(val name: String) {
      * 设置指令执行器
      *
      * @param executor 指令执行器
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun setExecutor(executor: CommandExecutor): ScriptCommand {
         command.setExecutor(executor)
@@ -51,7 +61,7 @@ class ScriptCommand(val name: String) {
      * 设置指令补全函数
      *
      * @param tabCompleter 设置指令补全函数
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun setTabCompleter(tabCompleter: TabCompleter): ScriptCommand {
         command.tabCompleter = tabCompleter
@@ -62,7 +72,7 @@ class ScriptCommand(val name: String) {
      * 设置指令所需权限
      *
      * @param permission 设置指令所需权限
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun setPermission(permission: String): ScriptCommand {
         command.permission = permission
@@ -73,7 +83,7 @@ class ScriptCommand(val name: String) {
      * 设置无权限提示信息
      *
      * @param permissionMessage 无权限提示信息
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun setPermissionMessage(permissionMessage: String): ScriptCommand {
         command.permissionMessage = permissionMessage
@@ -84,7 +94,7 @@ class ScriptCommand(val name: String) {
      * 设置label
      *
      * @param label label
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun setLabel(label: String): ScriptCommand {
         command.label = label
@@ -95,7 +105,7 @@ class ScriptCommand(val name: String) {
      * 设置指令别名
      *
      * @param aliases 指令别名
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun setAliases(aliases: List<String>): ScriptCommand {
         command.aliases = aliases
@@ -106,7 +116,7 @@ class ScriptCommand(val name: String) {
      * 设置指令描述
      *
      * @param description 指令描述
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun setDescription(description: String): ScriptCommand {
         command.description = description
@@ -117,7 +127,7 @@ class ScriptCommand(val name: String) {
      * 设置指令用法(/help中显示)
      *
      * @param usage 指令用法
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun setUsage(usage: String): ScriptCommand {
         command.usage = usage
@@ -127,7 +137,7 @@ class ScriptCommand(val name: String) {
     /**
      * 注册指令
      *
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun register(): ScriptCommand {
         // 存入ExpansionManager, 插件重载时自动取消注册
@@ -135,14 +145,12 @@ class ScriptCommand(val name: String) {
         ExpansionManager.commands["${nameSpace}:$name"] = this
         // 这玩意儿必须同步跑, 不然服会爆炸
         if (Bukkit.isPrimaryThread()) {
-            val bukkitCommand = BukkitCommand()
-            bukkitCommand.commandMap.register(nameSpace, command)
-            bukkitCommand.sync()
+            CommandUtils.getCommandMap().register(nameSpace, command)
+            ServerUtils.syncCommands()
         } else {
             Bukkit.getScheduler().callSyncMethod(plugin) {
-                val bukkitCommand = BukkitCommand()
-                bukkitCommand.commandMap.register(nameSpace, command)
-                bukkitCommand.sync()
+                CommandUtils.getCommandMap().register(nameSpace, command)
+                ServerUtils.syncCommands()
             }
         }
         return this
@@ -151,29 +159,27 @@ class ScriptCommand(val name: String) {
     /**
      * 取消注册指令
      *
-     * @return ScriptCommand本身
+     * @return ScriptCommand 本身
      */
     fun unRegister(): ScriptCommand {
         // 这玩意儿必须同步跑, 不然服会爆炸
         if (Bukkit.isPrimaryThread()) {
-            val bukkitCommand = BukkitCommand()
-            bukkitCommand.unregisterCommand(name)
-            bukkitCommand.unregisterCommand("${nameSpace}:$name")
+            CommandUtils.unRegisterCommand(name)
+            CommandUtils.unRegisterCommand("${nameSpace}:$name")
             command.aliases.forEach {
-                bukkitCommand.unregisterCommand(it)
-                bukkitCommand.unregisterCommand("${nameSpace}:$it")
+                CommandUtils.unRegisterCommand(it)
+                CommandUtils.unRegisterCommand("${nameSpace}:$it")
             }
-            bukkitCommand.sync()
+            ServerUtils.syncCommands()
         } else {
             Bukkit.getScheduler().callSyncMethod(plugin) {
-                val bukkitCommand = BukkitCommand()
-                bukkitCommand.unregisterCommand(name)
-                bukkitCommand.unregisterCommand("${nameSpace}:$name")
+                CommandUtils.unRegisterCommand(name)
+                CommandUtils.unRegisterCommand("${nameSpace}:$name")
                 command.aliases.forEach {
-                    bukkitCommand.unregisterCommand(it)
-                    bukkitCommand.unregisterCommand("${nameSpace}:$it")
+                    CommandUtils.unRegisterCommand(it)
+                    CommandUtils.unRegisterCommand("${nameSpace}:$it")
                 }
-                bukkitCommand.sync()
+                ServerUtils.syncCommands()
             }
         }
         return this

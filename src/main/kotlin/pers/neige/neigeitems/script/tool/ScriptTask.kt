@@ -8,9 +8,9 @@ import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.ExpansionManager
 
 /**
- * bukkit任务
+ * Bukkit 任务
  *
- * @constructor bukkit监听器
+ * @constructor Bukkit 任务
  */
 class ScriptTask {
     private var task: Runnable? = null
@@ -29,7 +29,7 @@ class ScriptTask {
      * 设置任务
      *
      * @param task 任务
-     * @return ScriptTask本身
+     * @return ScriptTask 本身
      */
     fun setTask(task: Runnable): ScriptTask {
         this.task = task
@@ -40,7 +40,7 @@ class ScriptTask {
      * 设置触发任务调度的插件
      *
      * @param plugin 任务
-     * @return ScriptTask本身
+     * @return ScriptTask 本身
      */
     fun setPlugin(plugin: JavaPlugin): ScriptTask {
         this.plugin = plugin
@@ -51,7 +51,7 @@ class ScriptTask {
      * 设置是否异步执行
      *
      * @param async 是否异步
-     * @return ScriptTask本身
+     * @return ScriptTask 本身
      */
     fun setAsync(async: Boolean): ScriptTask {
         this.async = async
@@ -62,7 +62,7 @@ class ScriptTask {
      * 设置任务执行间隔
      *
      * @param period 执行间隔
-     * @return ScriptTask本身
+     * @return ScriptTask 本身
      */
     fun setPeriod(period: Long): ScriptTask {
         this.period = period.coerceAtLeast(-1)
@@ -73,7 +73,7 @@ class ScriptTask {
      * 设置任务执行延迟
      *
      * @param delay 执行延迟
-     * @return ScriptTask本身
+     * @return ScriptTask 本身
      */
     fun setDelay(delay: Long): ScriptTask {
         this.delay = delay.coerceAtLeast(-1)
@@ -83,7 +83,7 @@ class ScriptTask {
     /**
      * 注册任务
      *
-     * @return ScriptTask本身
+     * @return ScriptTask 本身
      */
     fun register(): ScriptTask {
         val bukkitRunnable = object : BukkitRunnable() {
@@ -151,7 +151,7 @@ class ScriptTask {
     /**
      * 卸载任务
      *
-     * @return ScriptTask本身
+     * @return ScriptTask 本身
      */
     fun unRegister(): ScriptTask {
         // 注册了就取消任务

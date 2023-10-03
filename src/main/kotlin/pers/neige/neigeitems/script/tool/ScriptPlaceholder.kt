@@ -10,10 +10,10 @@ import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import java.util.function.BiFunction
 
 /**
- * papi扩展
+ * PAPI 扩展
  *
  * @property identifier 扩展名
- * @constructor papi扩展
+ * @constructor PAPI 扩展
  */
 class ScriptPlaceholder(private val identifier: String) {
     private var author: String = "unknown"
@@ -31,7 +31,7 @@ class ScriptPlaceholder(private val identifier: String) {
      * 设置作者
      *
      * @param author 作者
-     * @return ScriptPlaceholder本身
+     * @return ScriptPlaceholder 本身
      */
     fun setAuthor(author: String): ScriptPlaceholder {
         this.author = author
@@ -42,7 +42,7 @@ class ScriptPlaceholder(private val identifier: String) {
      * 设置版本
      *
      * @param version 版本
-     * @return ScriptPlaceholder本身
+     * @return ScriptPlaceholder 本身
      */
     fun setVersion(version: String): ScriptPlaceholder {
         this.version = version
@@ -50,9 +50,9 @@ class ScriptPlaceholder(private val identifier: String) {
     }
 
     /**
-     * 设置papi变量处理器
+     * 设置 PAPI 变量处理器
      *
-     * @param executor papi变量处理器
+     * @param executor PAPI 变量处理器
      * @return ScriptPlaceholder本身
      */
     fun setExecutor(executor: BiFunction<OfflinePlayer, String, String>): ScriptPlaceholder {
@@ -61,9 +61,9 @@ class ScriptPlaceholder(private val identifier: String) {
     }
 
     /**
-     * 注册papi扩展
+     * 注册 PAPI 扩展
      *
-     * @return ScriptPlaceholder本身
+     * @return ScriptPlaceholder 本身
      */
     fun register(): ScriptPlaceholder {
         // 存入ExpansionManager, 插件重载时自动取消注册
@@ -91,7 +91,7 @@ class ScriptPlaceholder(private val identifier: String) {
     /**
      * 卸载监听器
      *
-     * @return ScriptListener本身
+     * @return ScriptListener 本身
      */
     fun unRegister(): ScriptPlaceholder {
         if (Bukkit.isPrimaryThread()) {
