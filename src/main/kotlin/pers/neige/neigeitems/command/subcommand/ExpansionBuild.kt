@@ -2,12 +2,15 @@ package pers.neige.neigeitems.command.subcommand
 
 import javassist.ClassClassPath
 import javassist.ClassPool
+import javassist.CtClass
 import javassist.CtNewMethod
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.command.subcommand.Help.help
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ExpansionManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.script.ScriptExpansion
@@ -76,20 +79,53 @@ object ExpansionBuild {
                         val ctMethod = CtNewMethod.make(methodCode, ctClass)
                         ctClass.addMethod(ctMethod)
 
+                        val customClasses = arrayListOf<CtClass>()
+
+                        if (HookerManager.nashornHooker.isFunction(script.scriptEngine, "loadClasses")) {
+                            try {
+                                val classes = script.invoke("loadClasses", null, pool)
+                                if (classes is Iterable<*>) {
+                                    classes.forEach { clazz ->
+                                        if (clazz is CtClass) {
+                                            customClasses.add(clazz)
+                                        }
+                                    }
+                                } else if (classes is CtClass) {
+                                    customClasses.add(classes)
+                                }
+                            } catch (error: Throwable) {
+                                Bukkit.getLogger().info(
+                                    ConfigManager.config.getString("Messages.expansionError")
+                                        ?.replace("{expansion}", pluginName)
+                                        ?.replace("{function}", "loadClasses")
+                                )
+                                error.printStackTrace()
+                            }
+                        }
+
                         JarOutputStream(FileOutputStream(getFileOrCreate("Build${File.separator}$pluginName-$version.jar"))).use { outputStream ->
-                            outputStream.putNextEntry(JarEntry("pers/neige/${pluginName.lowercase(Locale.getDefault())}/Main.class"))
+                            outputStream.putNextEntry(JarEntry(ctClass.name.replace(".", "/") + ".class"))
                             ByteArrayInputStream(ctClass.toBytecode()).use { it.copyTo(outputStream) }
                             outputStream.closeEntry()
+
+                            customClasses.forEach { clazz ->
+                                outputStream.putNextEntry(JarEntry(clazz.name.replace(".", "/") + ".class"))
+                                ByteArrayInputStream(clazz.toBytecode()).use { it.copyTo(outputStream) }
+                                outputStream.closeEntry()
+                            }
+
                             outputStream.putNextEntry(JarEntry("Main.js"))
                             getFileOrNull("Expansions${File.separator}$argument")?.let { file ->
                                 FileInputStream(file).use { it.copyTo(outputStream) }
                             }
                             outputStream.closeEntry()
+
                             for (file in ConfigUtils.getAllFiles("Expansions${File.separator}$pluginName")) {
                                 outputStream.putNextEntry(JarEntry(file.name))
                                 FileInputStream(file).use { it.copyTo(outputStream) }
                                 outputStream.closeEntry()
                             }
+
                             outputStream.putNextEntry(JarEntry("plugin.yml"))
                             YamlConfiguration().also {
                                 it.set("name", pluginName)
@@ -104,6 +140,7 @@ object ExpansionBuild {
                                 }
                             }
                             outputStream.closeEntry()
+
                             sender.sendLang("Messages.buildExpansionMessage", mapOf(
                                 Pair("{expansion}", argument),
                                 Pair("{file}", "$pluginName-$version.jar")
