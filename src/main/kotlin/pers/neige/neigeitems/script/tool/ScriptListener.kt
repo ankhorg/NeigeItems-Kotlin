@@ -88,7 +88,7 @@ class ScriptListener(val event: Class<Event>) {
                     it,
                     priority,
                     { _, e ->
-                        if (e::class.java == event) {
+                        if (event.isAssignableFrom(e::class.java)) {
                             executor.accept(e)
                         }
                     },
@@ -106,7 +106,7 @@ class ScriptListener(val event: Class<Event>) {
                         it,
                         priority,
                         { _, e ->
-                            if (e::class.java == event) {
+                            if (event.isAssignableFrom(e::class.java)) {
                                 executor.accept(e)
                             }
                         },

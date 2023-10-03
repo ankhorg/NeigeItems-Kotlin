@@ -53,6 +53,7 @@ public class EntityItemUtils {
 
     /**
      * 获取掉落物实体的拥有者(不存在或无法获取则返回 null).
+     * 1.12.2 的 owner 是 String, 1.13+ 的 owner 是 UUID, 所以返回 OfflinePlayer.
      *
      * @param item 待设置物品.
      * @return 物品拥有者.
@@ -81,6 +82,7 @@ public class EntityItemUtils {
 
     /**
      * 设置掉落物实体的拥有者.
+     * 1.12.2 的 owner 是 String, 1.13+ 的 owner 是 UUID, 所以需要 OfflinePlayer.
      *
      * @param item 待设置物品.
      * @param player 物品拥有者.
@@ -101,6 +103,7 @@ public class EntityItemUtils {
 
     /**
      * 获取掉落物实体的丢出者(不存在或无法获取则返回 null).
+     * 1.12.2 的 thrower 是 String, 1.13+ 的 thrower 是 UUID, 所以返回 OfflinePlayer.
      *
      * @param item 待设置物品.
      * @return 物品丢出者.
@@ -129,6 +132,7 @@ public class EntityItemUtils {
 
     /**
      * 设置掉落物实体的丢出者.
+     * 1.12.2 的 thrower 是 String, 1.13+ 的 thrower 是 UUID, 所以需要 OfflinePlayer.
      *
      * @param item 待设置物品.
      * @param player 物品丢出者.

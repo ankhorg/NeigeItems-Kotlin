@@ -442,10 +442,9 @@ abstract class MythicMobsHooker {
                             WorldUtils.dropItem(
                                 entity.world,
                                 entity.location,
-                                itemStack
-                            ) { item ->
-                                item.velocity = caughtVelocity
-                            }
+                                itemStack,
+                                caughtVelocity
+                            )
                         }
                     }
                 }
