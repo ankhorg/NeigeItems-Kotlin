@@ -12,6 +12,11 @@ import java.util.UUID;
 
 public class EntityItemUtils {
     /**
+     * 1.17+ 版本起, EntityItem 内部 despawnRate 字段即表示掉落物的最大存活时长.
+     * 此前版本需要从掉落物所在世界实例中获取 SpigotWorldConfig, 获取世界配置中掉落物的最大存活时长.
+     */
+    private static final boolean HAS_DESPAWN_RATE = CbVersion.v1_17_R1.isSupport();
+    /**
      * 1.13+ 版本起, owner 和 thrower 以 UUID 形式存储, 1.12.2 版本则为 String 形式的玩家名.
      */
     private static final boolean UUID_SUPPORT = CbVersion.v1_13_R1.isSupport();
@@ -62,7 +67,11 @@ public class EntityItemUtils {
     public static int getDespawnRate(
             @NotNull Item item
     ) {
-        return WorldUtils.getDespawnRate(item.getWorld());
+        if (HAS_DESPAWN_RATE && ((Object) item instanceof RefCraftItem)) {
+            return ((RefCraftItem) (Object) item).item.despawnRate;
+        } else {
+            return WorldUtils.getDespawnRate(item.getWorld());
+        }
     }
 
     /**

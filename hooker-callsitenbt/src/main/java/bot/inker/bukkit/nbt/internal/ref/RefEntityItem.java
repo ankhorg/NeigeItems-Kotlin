@@ -2,6 +2,7 @@ package bot.inker.bukkit.nbt.internal.ref;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.util.UUID;
 
@@ -13,6 +14,17 @@ public final class RefEntityItem extends RefEntity {
     public RefEntityItem(RefWorld world, double x, double y, double z, RefNmsItemStack itemstack) {
         throw new UnsupportedOperationException();
     }
+
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityItem;getItemStack()Lnet/minecraft/server/v1_12_R1/ItemStack;")
+    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/item/ItemEntity;getItem()Lnet/minecraft/world/item/ItemStack;")
+    public native RefNmsItemStack getItemStack();
+
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityItem;setItemStack(Lnet/minecraft/server/v1_12_R1/ItemStack;)V")
+    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/item/ItemEntity;setItem(Lnet/minecraft/world/item/ItemStack;)V")
+    public native void setItemStack(RefNmsItemStack itemStack);
+
+    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/item/ItemEntity;despawnRate:I", accessor = true)
+    public int despawnRate;
 
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityItem;age:I", accessor = true)
     @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/EntityItem;age:I")

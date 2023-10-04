@@ -7,10 +7,11 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class EventUtils {
+public class ListenerUtils {
     /**
      * 注册一个事件监听器.
      * eventPriority 取默认值 EventPriority.NORMAL.
@@ -90,8 +91,10 @@ public class EventUtils {
      * @param listener 待卸载监听器.
      */
     public static void unregisterListener(
-            @NotNull Listener listener
+            @Nullable Listener listener
     ) {
-        HandlerList.unregisterAll(listener);
+        if (listener != null) {
+            HandlerList.unregisterAll(listener);
+        }
     }
 }

@@ -16,11 +16,11 @@ import pers.neige.neigeitems.utils.CommandUtils
  * @property name 指令名
  * @constructor Bukkit 指令
  */
-class ScriptCommand(val name: String) {
+class ScriptCommand(private val name: String) {
     /**
      * Bukkit PluginCommand 对象
      */
-    val command: PluginCommand = CommandUtils.newPluginCommand(name, plugin)!!
+    private val command: PluginCommand = CommandUtils.newPluginCommand(name, plugin)!!
 
     private var nameSpace = name
 
