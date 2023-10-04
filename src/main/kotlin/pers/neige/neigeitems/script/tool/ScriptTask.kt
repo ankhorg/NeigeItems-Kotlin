@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.script.tool
 
 import org.bukkit.Bukkit
-import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import pers.neige.neigeitems.NeigeItems
@@ -23,7 +23,7 @@ class ScriptTask {
 
     private var bukkitTask: BukkitTask? = null
 
-    private var plugin: JavaPlugin = NeigeItems.plugin
+    private var plugin: Plugin = NeigeItems.plugin
 
     /**
      * 设置任务
@@ -42,7 +42,7 @@ class ScriptTask {
      * @param plugin 任务
      * @return ScriptTask 本身
      */
-    fun setPlugin(plugin: JavaPlugin): ScriptTask {
+    fun setPlugin(plugin: Plugin): ScriptTask {
         this.plugin = plugin
         return this
     }
@@ -94,7 +94,7 @@ class ScriptTask {
         // 我没研究过能不能异步注册, 所以直接同步, 稳妥一点
         bukkitTask = if (Bukkit.isPrimaryThread()) {
             // 如果之前注册过了就先移除并卸载
-            unRegister()
+            unregister()
             // 注册任务
             when {
                 async && period > 0 -> {
@@ -119,7 +119,7 @@ class ScriptTask {
         } else {
             Bukkit.getScheduler().callSyncMethod(plugin) {
                 // 如果之前注册过了就先移除并卸载
-                unRegister()
+                unregister()
                 // 注册任务
                 return@callSyncMethod when {
                     async && period > 0 -> {
@@ -153,7 +153,7 @@ class ScriptTask {
      *
      * @return ScriptTask 本身
      */
-    fun unRegister(): ScriptTask {
+    fun unregister(): ScriptTask {
         // 注册了就取消任务
         if (Bukkit.isPrimaryThread()) {
             bukkitTask?.also {

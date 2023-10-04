@@ -11,8 +11,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class EntityItemUtils {
-    private static final boolean UUID_OWNER_SUPPORT = CbVersion.v1_13_R1.isSupport();
-    private static final boolean SET_OWNER_SUPPORT = CbVersion.v1_16_R3.isSupport();
+    /**
+     * 1.13+ 版本起, owner 和 thrower 以 UUID 形式存储, 1.12.2 版本则为 String 形式的玩家名.
+     */
+    private static final boolean UUID_SUPPORT = CbVersion.v1_13_R1.isSupport();
+    /**
+     * 1.16.3+ 版本起, Item 类提供获取和设置 owner/thrower 的方法.
+     * 1.16.2 和 1.16.3 都是 v1_16_R2, 所以按 v1_16_R3 起算.
+     */
+    private static final boolean GET_AND_SET_SUPPORT = CbVersion.v1_16_R3.isSupport();
 
     /**
      * 获取掉落物实体的已存活时长(tick).
@@ -22,7 +29,9 @@ public class EntityItemUtils {
      * @return 掉落物实体的已存活时长(tick).
      */
     @Nullable
-    public static Integer getAge(@NotNull Item item) {
+    public static Integer getAge(
+            @NotNull Item item
+    ) {
         if ((Object) item instanceof RefCraftItem) {
             return ((RefCraftItem) (Object) item).item.age;
         }
@@ -35,7 +44,10 @@ public class EntityItemUtils {
      * @param item 待检测物品.
      * @param age 掉落物实体的已存活时长(tick).
      */
-    public static void setAge(@NotNull Item item, int age) {
+    public static void setAge(
+            @NotNull Item item,
+            int age
+    ) {
         if ((Object) item instanceof RefCraftItem) {
             ((RefCraftItem) (Object) item).item.age = age;
         }
@@ -47,7 +59,9 @@ public class EntityItemUtils {
      * @param item 待检测物品.
      * @return 掉落物实体的最大存活时长(tick).
      */
-    public static int getDespawnRate(@NotNull Item item) {
+    public static int getDespawnRate(
+            @NotNull Item item
+    ) {
         return WorldUtils.getDespawnRate(item.getWorld());
     }
 
@@ -55,18 +69,20 @@ public class EntityItemUtils {
      * 获取掉落物实体的拥有者(不存在或无法获取则返回 null).
      * 1.12.2 的 owner 是 String, 1.13+ 的 owner 是 UUID, 所以返回 OfflinePlayer.
      *
-     * @param item 待设置物品.
+     * @param item 待检测物品.
      * @return 物品拥有者.
      */
     @Nullable
-    public static OfflinePlayer getOwner(@NotNull Item item) {
-        if (SET_OWNER_SUPPORT) {
+    public static OfflinePlayer getOwner(
+            @NotNull Item item
+    ) {
+        if (GET_AND_SET_SUPPORT) {
             UUID owner = item.getOwner();
             if (owner == null) return null;
             return Bukkit.getOfflinePlayer(owner);
         } else {
             if ((Object) item instanceof RefCraftItem) {
-                if (UUID_OWNER_SUPPORT) {
+                if (UUID_SUPPORT) {
                     UUID ownerUUID = ((RefCraftItem) (Object) item).item.ownerUUID;
                     if (ownerUUID == null) return null;
                     return Bukkit.getOfflinePlayer(ownerUUID);
@@ -81,18 +97,59 @@ public class EntityItemUtils {
     }
 
     /**
+     * 获取掉落物实体的拥有者玩家名(不存在或无法获取则返回 null).
+     * 1.13+ 版本永远返回 null.
+     *
+     * @param item 待检测物品.
+     * @return 物品拥有者玩家名.
+     */
+    @Nullable
+    public static String getOwnerName(
+            @NotNull Item item
+    ) {
+        if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
+            return ((RefCraftItem) (Object) item).item.ownerName;
+        }
+        return null;
+    }
+
+    /**
+     * 获取掉落物实体的拥有者UUID(不存在或无法获取则返回 null).
+     * 1.12.2 版本永远返回 null.
+     *
+     * @param item 待检测物品.
+     * @return 物品拥有者UUID.
+     */
+    @Nullable
+    public static UUID getOwnerUUID(
+            @NotNull Item item
+    ) {
+        if (GET_AND_SET_SUPPORT) {
+            return item.getOwner();
+        } else {
+            if ((Object) item instanceof RefCraftItem && UUID_SUPPORT) {
+                return ((RefCraftItem) (Object) item).item.ownerUUID;
+            }
+        }
+        return null;
+    }
+
+    /**
      * 设置掉落物实体的拥有者.
      * 1.12.2 的 owner 是 String, 1.13+ 的 owner 是 UUID, 所以需要 OfflinePlayer.
      *
      * @param item 待设置物品.
      * @param player 物品拥有者.
      */
-    public static void setOwner(@NotNull Item item, @NotNull OfflinePlayer player) {
-        if (SET_OWNER_SUPPORT) {
+    public static void setOwner(
+            @NotNull Item item,
+            @NotNull OfflinePlayer player
+    ) {
+        if (GET_AND_SET_SUPPORT) {
             item.setOwner(player.getUniqueId());
         } else {
             if ((Object) item instanceof RefCraftItem) {
-                if (UUID_OWNER_SUPPORT) {
+                if (UUID_SUPPORT) {
                     ((RefCraftItem) (Object) item).item.ownerUUID = player.getUniqueId();
                 } else {
                     ((RefCraftItem) (Object) item).item.ownerName = player.getName();
@@ -102,21 +159,59 @@ public class EntityItemUtils {
     }
 
     /**
+     * 设置掉落物实体的拥有者.
+     * 1.13+ 版本调用该方法将不会产生任何效果.
+     *
+     * @param item 待设置物品.
+     * @param name 物品拥有者玩家名.
+     */
+    public static void setOwnerName(
+            @NotNull Item item,
+            @NotNull String name
+    ) {
+        if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
+            ((RefCraftItem) (Object) item).item.ownerName = name;
+        }
+    }
+
+    /**
+     * 设置掉落物实体的拥有者.
+     * 1.12.2 版本调用该方法将不会产生任何效果.
+     *
+     * @param item 待设置物品.
+     * @param uuid 物品拥有者UUID.
+     */
+    public static void setOwnerUUID(
+            @NotNull Item item,
+            @NotNull UUID uuid
+    ) {
+        if (GET_AND_SET_SUPPORT) {
+            item.setOwner(uuid);
+        } else {
+            if ((Object) item instanceof RefCraftItem && UUID_SUPPORT) {
+                ((RefCraftItem) (Object) item).item.ownerUUID = uuid;
+            }
+        }
+    }
+
+    /**
      * 获取掉落物实体的丢出者(不存在或无法获取则返回 null).
      * 1.12.2 的 thrower 是 String, 1.13+ 的 thrower 是 UUID, 所以返回 OfflinePlayer.
      *
-     * @param item 待设置物品.
+     * @param item 待检测物品.
      * @return 物品丢出者.
      */
     @Nullable
-    public static OfflinePlayer getThrower(@NotNull Item item) {
-        if (SET_OWNER_SUPPORT) {
+    public static OfflinePlayer getThrower(
+            @NotNull Item item
+    ) {
+        if (GET_AND_SET_SUPPORT) {
             UUID thrower = item.getThrower();
             if (thrower == null) return null;
             return Bukkit.getOfflinePlayer(thrower);
         } else {
             if ((Object) item instanceof RefCraftItem) {
-                if (UUID_OWNER_SUPPORT) {
+                if (UUID_SUPPORT) {
                     UUID throwerUUID = ((RefCraftItem) (Object) item).item.throwerUUID;
                     if (throwerUUID == null) return null;
                     return Bukkit.getOfflinePlayer(throwerUUID);
@@ -131,22 +226,99 @@ public class EntityItemUtils {
     }
 
     /**
+     * 获取掉落物实体的丢出者玩家名(不存在或无法获取则返回 null).
+     * 1.13+ 版本永远返回 null.
+     *
+     * @param item 待检测物品.
+     * @return 物品丢出者玩家名.
+     */
+    @Nullable
+    public static String getThrowerName(
+            @NotNull Item item
+    ) {
+        if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
+            return ((RefCraftItem) (Object) item).item.throwerName;
+        }
+        return null;
+    }
+
+    /**
+     * 获取掉落物实体的丢出者UUID(不存在或无法获取则返回 null).
+     * 1.12.2 版本永远返回 null.
+     *
+     * @param item 待检测物品.
+     * @return 物品丢出者UUID.
+     */
+    @Nullable
+    public static UUID getThrowerUUID(
+            @NotNull Item item
+    ) {
+        if (GET_AND_SET_SUPPORT) {
+            return item.getThrower();
+        } else {
+            if ((Object) item instanceof RefCraftItem && UUID_SUPPORT) {
+                return ((RefCraftItem) (Object) item).item.throwerUUID;
+            }
+        }
+        return null;
+    }
+
+    /**
      * 设置掉落物实体的丢出者.
      * 1.12.2 的 thrower 是 String, 1.13+ 的 thrower 是 UUID, 所以需要 OfflinePlayer.
      *
      * @param item 待设置物品.
      * @param player 物品丢出者.
      */
-    public static void setThrower(@NotNull Item item, @NotNull OfflinePlayer player) {
-        if (SET_OWNER_SUPPORT) {
+    public static void setThrower(
+            @NotNull Item item,
+            @NotNull OfflinePlayer player
+    ) {
+        if (GET_AND_SET_SUPPORT) {
             item.setThrower(player.getUniqueId());
         } else {
             if ((Object) item instanceof RefCraftItem) {
-                if (UUID_OWNER_SUPPORT) {
+                if (UUID_SUPPORT) {
                     ((RefCraftItem) (Object) item).item.throwerUUID = player.getUniqueId();
                 } else {
                     ((RefCraftItem) (Object) item).item.throwerName = player.getName();
                 }
+            }
+        }
+    }
+
+    /**
+     * 设置掉落物实体的丢出者.
+     * 1.13+ 版本调用该方法将不会产生任何效果.
+     *
+     * @param item 待设置物品.
+     * @param name 物品丢出者玩家名.
+     */
+    public static void setThrowerName(
+            @NotNull Item item,
+            @NotNull String name
+    ) {
+        if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
+            ((RefCraftItem) (Object) item).item.throwerName = name;
+        }
+    }
+
+    /**
+     * 设置掉落物实体的丢出者.
+     * 1.12.2 版本调用该方法将不会产生任何效果.
+     *
+     * @param item 待设置物品.
+     * @param uuid 物品丢出者UUID.
+     */
+    public static void setThrowerUUID(
+            @NotNull Item item,
+            @NotNull UUID uuid
+    ) {
+        if (GET_AND_SET_SUPPORT) {
+            item.setThrower(uuid);
+        } else {
+            if ((Object) item instanceof RefCraftItem && UUID_SUPPORT) {
+                ((RefCraftItem) (Object) item).item.throwerUUID = uuid;
             }
         }
     }

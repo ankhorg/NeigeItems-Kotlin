@@ -5,7 +5,6 @@ import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack;
 import bot.inker.bukkit.nbt.internal.ref.RefCraftWorld;
 import bot.inker.bukkit.nbt.internal.ref.RefEntityItem;
 import bot.inker.bukkit.nbt.internal.ref.RefWorldServer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
@@ -14,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.NeigeItems;
 
 import java.util.function.Consumer;
 
@@ -27,7 +25,9 @@ public class WorldUtils {
      * @param world 待检测世界.
      * @return 世界中掉落物实体的最大存活时长(tick).
      */
-    public static int getDespawnRate(World world) {
+    public static int getDespawnRate(
+            World world
+    ) {
         return ((RefCraftWorld) (Object) world).getHandle().spigotConfig.itemDespawnRate;
     }
 

@@ -67,7 +67,7 @@ class ScriptPlaceholder(private val identifier: String) {
      */
     fun register(): ScriptPlaceholder {
         // 存入ExpansionManager, 插件重载时自动取消注册
-        ExpansionManager.placeholders[identifier]?.unRegister()
+        ExpansionManager.placeholders[identifier]?.unregister()
         ExpansionManager.placeholders[identifier] = this
         papiHooker?.newPlaceholderExpansion(identifier, author, version, executor)?.also {
             // papi是用HashMap存的扩展, 得主线程注册, 防止出现线程安全问题
@@ -93,7 +93,7 @@ class ScriptPlaceholder(private val identifier: String) {
      *
      * @return ScriptListener 本身
      */
-    fun unRegister(): ScriptPlaceholder {
+    fun unregister(): ScriptPlaceholder {
         if (Bukkit.isPrimaryThread()) {
             placeholderExpansion?.also {
                 it.unregister()

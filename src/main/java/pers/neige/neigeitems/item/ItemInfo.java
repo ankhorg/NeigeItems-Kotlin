@@ -1,12 +1,12 @@
 package pers.neige.neigeitems.item;
 
-import java.util.HashMap;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import bot.inker.bukkit.nbt.NbtCompound;
 import bot.inker.bukkit.nbt.NbtItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.JsonUtils;
+
+import java.util.HashMap;
 
 /**
  * 用于在判断NI物品后返回NI物品信息, 详见ItemUtils#isNiItem

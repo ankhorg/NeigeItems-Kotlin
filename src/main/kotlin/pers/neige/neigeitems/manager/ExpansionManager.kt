@@ -71,22 +71,22 @@ object ExpansionManager {
     fun unload() {
         // 卸载脚本指令
         commands.values.forEach {
-            it.unRegister()
+            it.unregister()
         }
         commands.clear()
         // 卸载脚本监听器
         listeners.forEach {
-            it.unRegister()
+            it.unregister()
         }
         listeners.clear()
         // 卸载papi扩展
         placeholders.values.forEach {
-            it.unRegister()
+            it.unregister()
         }
         placeholders.clear()
         // 卸载Bukkit任务
         tasks.forEach {
-            it.unRegister()
+            it.unregister()
         }
         tasks.clear()
         // 清除脚本扩展

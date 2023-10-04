@@ -1,14 +1,14 @@
 package pers.neige.neigeitems.script.tool
 
-import pers.neige.neigeitems.utils.CommandUtils
 import bot.inker.bukkit.nbt.neigeitems.ServerUtils
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.PluginCommand
 import org.bukkit.command.TabCompleter
-import org.bukkit.plugin.java.JavaPlugin
+import org.bukkit.plugin.Plugin
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ExpansionManager
+import pers.neige.neigeitems.utils.CommandUtils
 
 /**
  * Bukkit 指令
@@ -30,7 +30,7 @@ class ScriptCommand(val name: String) {
      * @param plugin 任务
      * @return ScriptCommand 本身
      */
-    fun setPlugin(plugin: JavaPlugin): ScriptCommand {
+    fun setPlugin(plugin: Plugin): ScriptCommand {
         CommandUtils.setPlugin(command, plugin)
         return this
     }
@@ -141,7 +141,7 @@ class ScriptCommand(val name: String) {
      */
     fun register(): ScriptCommand {
         // 存入ExpansionManager, 插件重载时自动取消注册
-        ExpansionManager.commands["${nameSpace}:$name"]?.unRegister()
+        ExpansionManager.commands["${nameSpace}:$name"]?.unregister()
         ExpansionManager.commands["${nameSpace}:$name"] = this
         // 这玩意儿必须同步跑, 不然服会爆炸
         if (Bukkit.isPrimaryThread()) {
@@ -161,23 +161,23 @@ class ScriptCommand(val name: String) {
      *
      * @return ScriptCommand 本身
      */
-    fun unRegister(): ScriptCommand {
+    fun unregister(): ScriptCommand {
         // 这玩意儿必须同步跑, 不然服会爆炸
         if (Bukkit.isPrimaryThread()) {
-            CommandUtils.unRegisterCommand(name)
-            CommandUtils.unRegisterCommand("${nameSpace}:$name")
+            CommandUtils.unregisterCommand(name)
+            CommandUtils.unregisterCommand("${nameSpace}:$name")
             command.aliases.forEach {
-                CommandUtils.unRegisterCommand(it)
-                CommandUtils.unRegisterCommand("${nameSpace}:$it")
+                CommandUtils.unregisterCommand(it)
+                CommandUtils.unregisterCommand("${nameSpace}:$it")
             }
             ServerUtils.syncCommands()
         } else {
             Bukkit.getScheduler().callSyncMethod(plugin) {
-                CommandUtils.unRegisterCommand(name)
-                CommandUtils.unRegisterCommand("${nameSpace}:$name")
+                CommandUtils.unregisterCommand(name)
+                CommandUtils.unregisterCommand("${nameSpace}:$name")
                 command.aliases.forEach {
-                    CommandUtils.unRegisterCommand(it)
-                    CommandUtils.unRegisterCommand("${nameSpace}:$it")
+                    CommandUtils.unregisterCommand(it)
+                    CommandUtils.unregisterCommand("${nameSpace}:$it")
                 }
                 ServerUtils.syncCommands()
             }

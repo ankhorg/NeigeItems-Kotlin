@@ -71,7 +71,10 @@ public class CommandUtils {
      * @return 对应的 PluginCommand 对象.
      */
     @Nullable
-    public static PluginCommand newPluginCommand(@NotNull String name, @NotNull Plugin owner) {
+    public static PluginCommand newPluginCommand(
+            @NotNull String name,
+            @NotNull Plugin owner
+    ) {
         try {
             return constructor.newInstance(name, owner);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -105,7 +108,9 @@ public class CommandUtils {
      *
      * @param command 待卸载指令.
      */
-    public static void unRegisterCommand(String command) {
+    public static void unregisterCommand(
+            String command
+    ) {
         getKnownCommands().remove(command);
     }
 
@@ -114,7 +119,10 @@ public class CommandUtils {
      *
      * @param command 待设置指令.
      */
-    public static void setPlugin(PluginCommand command, Plugin plugin) {
+    public static void setPlugin(
+            PluginCommand command,
+            Plugin plugin
+    ) {
         try {
             ownPluginField.set(command, plugin);
         } catch (IllegalAccessException e) {
