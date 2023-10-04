@@ -6,7 +6,6 @@ import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicReloadedEvent
 import io.lumine.xikage.mythicmobs.items.ItemManager
 import io.lumine.xikage.mythicmobs.mobs.MobManager
-import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
@@ -34,8 +33,6 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
     private val itemManager: ItemManager = MythicMobs.inst().itemManager
 
     private val mobManager: MobManager = MythicMobs.inst().mobManager
-
-    override val mobInfos = HashMap<String, ConfigurationSection>()
 
     private val apiHelper = MythicMobs.inst().apiHelper
 

@@ -25,10 +25,10 @@ public class ListenerUtils {
     @NotNull
     public static <T extends Event> Listener registerListener(
             @NotNull Class<T> eventClass,
-            @NotNull Consumer<T> eventExecutor,
-            @NotNull Plugin plugin
+            @NotNull Plugin plugin,
+            @NotNull Consumer<T> eventExecutor
     ) {
-        return registerListener(eventClass, EventPriority.NORMAL, eventExecutor, plugin, true);
+        return registerListener(eventClass, EventPriority.NORMAL, plugin, true, eventExecutor);
     }
 
     /**
@@ -45,10 +45,10 @@ public class ListenerUtils {
     public static <T extends Event> Listener registerListener(
             @NotNull Class<T> eventClass,
             @NotNull EventPriority eventPriority,
-            @NotNull Consumer<T> eventExecutor,
-            @NotNull Plugin plugin
+            @NotNull Plugin plugin,
+            @NotNull Consumer<T> eventExecutor
     ) {
-        return registerListener(eventClass, eventPriority, eventExecutor, plugin, true);
+        return registerListener(eventClass, eventPriority, plugin, true, eventExecutor);
     }
 
     /**
@@ -65,9 +65,9 @@ public class ListenerUtils {
     public static <T extends Event> Listener registerListener(
             @NotNull Class<T> eventClass,
             @NotNull EventPriority eventPriority,
-            @NotNull Consumer<T> eventExecutor,
             @NotNull Plugin plugin,
-            boolean ignoreCancelled
+            boolean ignoreCancelled,
+            @NotNull Consumer<T> eventExecutor
     ) {
         Listener listener = new Listener(){};
         Bukkit.getPluginManager().registerEvent(

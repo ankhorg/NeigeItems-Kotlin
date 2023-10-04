@@ -35,6 +35,7 @@ import taboolib.common.platform.function.submit
 import java.io.File
 import java.text.DecimalFormat
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom
 
 /**
@@ -49,7 +50,7 @@ abstract class MythicMobsHooker {
     /**
      * MM怪物信息
      */
-    abstract val mobInfos: HashMap<String, ConfigurationSection>
+    val mobInfos: ConcurrentHashMap<String, ConfigurationSection> = ConcurrentHashMap<String, ConfigurationSection>()
 
     /**
      * MM怪物生成事件

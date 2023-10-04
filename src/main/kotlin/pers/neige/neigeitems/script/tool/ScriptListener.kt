@@ -3,7 +3,6 @@ package pers.neige.neigeitems.script.tool
 import org.bukkit.Bukkit
 import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
-import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import pers.neige.neigeitems.NeigeItems
@@ -85,9 +84,9 @@ class ScriptListener(private val event: Class<Event>) {
             ListenerUtils.registerListener(
                 event,
                 priority,
-                executor,
                 plugin,
-                ignoreCancelled
+                ignoreCancelled,
+                executor
             )
         } else {
             Bukkit.getScheduler().callSyncMethod(plugin) {
@@ -97,9 +96,9 @@ class ScriptListener(private val event: Class<Event>) {
                 return@callSyncMethod ListenerUtils.registerListener(
                     event,
                     priority,
-                    executor,
                     plugin,
-                    ignoreCancelled
+                    ignoreCancelled,
+                    executor
                 )
             }.get()
         }

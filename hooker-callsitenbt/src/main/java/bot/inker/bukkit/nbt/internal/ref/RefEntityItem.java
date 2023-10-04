@@ -2,7 +2,6 @@ package bot.inker.bukkit.nbt.internal.ref;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.util.UUID;
 
