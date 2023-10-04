@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>EntityItemUtils 1.15.44 API </title>
+    <title>EntityItemUtils 1.15.45 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
@@ -270,6 +270,22 @@ public class <span class="typeNameLabel"><a href=EntityItemUtils.html>EntityItem
                                         </tr>
                                         
                                         <tr id="i4" class="altColor">
+                                            <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#getOwnerName(Item)>getOwnerName</a>(@NotNull() Item item) </code>
+                                            </th>
+                                            <td class="colLast">获取掉落物实体的拥有者玩家名(不存在或无法获取则返回 null).</td>
+                                        </tr>
+                                        
+                                        <tr id="i5" class="rowColor">
+                                            <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#getOwnerUUID(Item)>getOwnerUUID</a>(@NotNull() Item item) </code>
+                                            </th>
+                                            <td class="colLast">获取掉落物实体的拥有者UUID(不存在或无法获取则返回 null).</td>
+                                        </tr>
+                                        
+                                        <tr id="i6" class="altColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#setOwner(Item,OfflinePlayer)>setOwner</a>(@NotNull() Item item, @NotNull() OfflinePlayer player) </code>
@@ -277,7 +293,23 @@ public class <span class="typeNameLabel"><a href=EntityItemUtils.html>EntityItem
                                             <td class="colLast">设置掉落物实体的拥有者.</td>
                                         </tr>
                                         
-                                        <tr id="i5" class="rowColor">
+                                        <tr id="i7" class="rowColor">
+                                            <td class="colFirst"><code>static void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#setOwnerName(Item,String)>setOwnerName</a>(@NotNull() Item item, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name) </code>
+                                            </th>
+                                            <td class="colLast">设置掉落物实体的拥有者.</td>
+                                        </tr>
+                                        
+                                        <tr id="i8" class="altColor">
+                                            <td class="colFirst"><code>static void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#setOwnerUUID(Item,UUID)>setOwnerUUID</a>(@NotNull() Item item, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> uuid) </code>
+                                            </th>
+                                            <td class="colLast">设置掉落物实体的拥有者.</td>
+                                        </tr>
+                                        
+                                        <tr id="i9" class="rowColor">
                                             <td class="colFirst"><code>static OfflinePlayer</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#getThrower(Item)>getThrower</a>(@NotNull() Item item) </code>
@@ -285,10 +317,42 @@ public class <span class="typeNameLabel"><a href=EntityItemUtils.html>EntityItem
                                             <td class="colLast">获取掉落物实体的丢出者(不存在或无法获取则返回 null).</td>
                                         </tr>
                                         
-                                        <tr id="i6" class="altColor">
+                                        <tr id="i10" class="altColor">
+                                            <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#getThrowerName(Item)>getThrowerName</a>(@NotNull() Item item) </code>
+                                            </th>
+                                            <td class="colLast">获取掉落物实体的丢出者玩家名(不存在或无法获取则返回 null).</td>
+                                        </tr>
+                                        
+                                        <tr id="i11" class="rowColor">
+                                            <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#getThrowerUUID(Item)>getThrowerUUID</a>(@NotNull() Item item) </code>
+                                            </th>
+                                            <td class="colLast">获取掉落物实体的丢出者UUID(不存在或无法获取则返回 null).</td>
+                                        </tr>
+                                        
+                                        <tr id="i12" class="altColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#setThrower(Item,OfflinePlayer)>setThrower</a>(@NotNull() Item item, @NotNull() OfflinePlayer player) </code>
+                                            </th>
+                                            <td class="colLast">设置掉落物实体的丢出者.</td>
+                                        </tr>
+                                        
+                                        <tr id="i13" class="rowColor">
+                                            <td class="colFirst"><code>static void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#setThrowerName(Item,String)>setThrowerName</a>(@NotNull() Item item, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name) </code>
+                                            </th>
+                                            <td class="colLast">设置掉落物实体的丢出者.</td>
+                                        </tr>
+                                        
+                                        <tr id="i14" class="altColor">
+                                            <td class="colFirst"><code>static void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityItemUtils.html#setThrowerUUID(Item,UUID)>setThrowerUUID</a>(@NotNull() Item item, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> uuid) </code>
                                             </th>
                                             <td class="colLast">设置掉落物实体的丢出者.</td>
                                         </tr>
@@ -428,7 +492,55 @@ public class <span class="typeNameLabel"><a href=EntityItemUtils.html>EntityItem
                                             <dt><span class="paramLabel">Parameters:</span></dt>
                                             
                                             
-                                            <dd><code>item</code> - 待设置物品.</dd>
+                                            <dd><code>item</code> - 待检测物品.</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getOwnerName(Item)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getOwnerName</h4>
+                                        <pre class="methodSignature">@Nullable() static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=EntityItemUtils.html#getOwnerName(Item)>getOwnerName</a>(@NotNull() Item item)</pre>
+                                        <div class="block"><p>获取掉落物实体的拥有者玩家名(不存在或无法获取则返回 null). 1.13+ 版本永远返回 null.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>item</code> - 待检测物品.</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getOwnerUUID(Item)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getOwnerUUID</h4>
+                                        <pre class="methodSignature">@Nullable() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> <a href=EntityItemUtils.html#getOwnerUUID(Item)>getOwnerUUID</a>(@NotNull() Item item)</pre>
+                                        <div class="block"><p>获取掉落物实体的拥有者UUID(不存在或无法获取则返回 null). 1.12.2 版本永远返回 null.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>item</code> - 待检测物品.</dd>
                                             
                                             
                                         </dl>
@@ -465,6 +577,62 @@ public class <span class="typeNameLabel"><a href=EntityItemUtils.html>EntityItem
                                     </li>
                                 </ul>
                                 
+                                <a id="setOwnerName(Item,String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setOwnerName</h4>
+                                        <pre class="methodSignature"> static void <a href=EntityItemUtils.html#setOwnerName(Item,String)>setOwnerName</a>(@NotNull() Item item, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name)</pre>
+                                        <div class="block"><p>设置掉落物实体的拥有者. 1.13+ 版本调用该方法将不会产生任何效果.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>item</code> - 待设置物品.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>name</code> - 物品拥有者玩家名.</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setOwnerUUID(Item,UUID)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setOwnerUUID</h4>
+                                        <pre class="methodSignature"> static void <a href=EntityItemUtils.html#setOwnerUUID(Item,UUID)>setOwnerUUID</a>(@NotNull() Item item, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> uuid)</pre>
+                                        <div class="block"><p>设置掉落物实体的拥有者. 1.12.2 版本调用该方法将不会产生任何效果.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>item</code> - 待设置物品.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>uuid</code> - 物品拥有者UUID.</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
                                 <a id="getThrower(Item)">
                                     <!--   -->
                                 </a>
@@ -480,7 +648,55 @@ public class <span class="typeNameLabel"><a href=EntityItemUtils.html>EntityItem
                                             <dt><span class="paramLabel">Parameters:</span></dt>
                                             
                                             
-                                            <dd><code>item</code> - 待设置物品.</dd>
+                                            <dd><code>item</code> - 待检测物品.</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getThrowerName(Item)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getThrowerName</h4>
+                                        <pre class="methodSignature">@Nullable() static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=EntityItemUtils.html#getThrowerName(Item)>getThrowerName</a>(@NotNull() Item item)</pre>
+                                        <div class="block"><p>获取掉落物实体的丢出者玩家名(不存在或无法获取则返回 null). 1.13+ 版本永远返回 null.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>item</code> - 待检测物品.</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getThrowerUUID(Item)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getThrowerUUID</h4>
+                                        <pre class="methodSignature">@Nullable() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> <a href=EntityItemUtils.html#getThrowerUUID(Item)>getThrowerUUID</a>(@NotNull() Item item)</pre>
+                                        <div class="block"><p>获取掉落物实体的丢出者UUID(不存在或无法获取则返回 null). 1.12.2 版本永远返回 null.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>item</code> - 待检测物品.</dd>
                                             
                                             
                                         </dl>
@@ -493,7 +709,7 @@ public class <span class="typeNameLabel"><a href=EntityItemUtils.html>EntityItem
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>setThrower</h4>
@@ -509,6 +725,62 @@ public class <span class="typeNameLabel"><a href=EntityItemUtils.html>EntityItem
                                             
                                             
                                             <dd><code>player</code> - 物品丢出者.</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setThrowerName(Item,String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setThrowerName</h4>
+                                        <pre class="methodSignature"> static void <a href=EntityItemUtils.html#setThrowerName(Item,String)>setThrowerName</a>(@NotNull() Item item, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name)</pre>
+                                        <div class="block"><p>设置掉落物实体的丢出者. 1.13+ 版本调用该方法将不会产生任何效果.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>item</code> - 待设置物品.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>name</code> - 物品丢出者玩家名.</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setThrowerUUID(Item,UUID)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setThrowerUUID</h4>
+                                        <pre class="methodSignature"> static void <a href=EntityItemUtils.html#setThrowerUUID(Item,UUID)>setThrowerUUID</a>(@NotNull() Item item, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> uuid)</pre>
+                                        <div class="block"><p>设置掉落物实体的丢出者. 1.12.2 版本调用该方法将不会产生任何效果.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>item</code> - 待设置物品.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>uuid</code> - 物品丢出者UUID.</dd>
                                             
                                             
                                         </dl>
