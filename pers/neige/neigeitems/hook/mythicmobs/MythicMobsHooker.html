@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>MythicMobsHooker 1.15.48 API </title>
+    <title>MythicMobsHooker 1.15.49 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
@@ -195,19 +195,19 @@ public abstract class <span class="typeNameLabel"><a href=MythicMobsHooker.html>
                                         </tr>
                                         
                                         <tr class="rowColor">
-                                            <td class="colFirst"><code>private final ProxyListener</code></td>
+                                            <td class="colFirst"><code>private final Listener</code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicMobsHooker.html#spawnListener>spawnListener</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr class="altColor">
-                                            <td class="colFirst"><code>private final ProxyListener</code></td>
+                                            <td class="colFirst"><code>private final Listener</code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicMobsHooker.html#deathListener>deathListener</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr class="rowColor">
-                                            <td class="colFirst"><code>private final ProxyListener</code></td>
+                                            <td class="colFirst"><code>private final Listener</code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicMobsHooker.html#reloadListener>reloadListener</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -332,7 +332,7 @@ public abstract class <span class="typeNameLabel"><a href=MythicMobsHooker.html>
                                         </tr>
                                         
                                         <tr id="i5" class="rowColor">
-                                            <td class="colFirst"><code>abstract ProxyListener</code>
+                                            <td class="colFirst"><code>abstract Listener</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MythicMobsHooker.html#getSpawnListener()>getSpawnListener</a>() </code>
                                             </th>
@@ -340,7 +340,7 @@ public abstract class <span class="typeNameLabel"><a href=MythicMobsHooker.html>
                                         </tr>
                                         
                                         <tr id="i6" class="altColor">
-                                            <td class="colFirst"><code>abstract ProxyListener</code>
+                                            <td class="colFirst"><code>abstract Listener</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MythicMobsHooker.html#getDeathListener()>getDeathListener</a>() </code>
                                             </th>
@@ -348,7 +348,7 @@ public abstract class <span class="typeNameLabel"><a href=MythicMobsHooker.html>
                                         </tr>
                                         
                                         <tr id="i7" class="rowColor">
-                                            <td class="colFirst"><code>abstract ProxyListener</code>
+                                            <td class="colFirst"><code>abstract Listener</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MythicMobsHooker.html#getReloadListener()>getReloadListener</a>() </code>
                                             </th>
@@ -596,7 +596,7 @@ public abstract class <span class="typeNameLabel"><a href=MythicMobsHooker.html>
                                           >
                                     <li class="blockList">
                                         <h4>getSpawnListener</h4>
-                                        <pre class="methodSignature"> abstract ProxyListener <a href=MythicMobsHooker.html#getSpawnListener()>getSpawnListener</a>()</pre>
+                                        <pre class="methodSignature"> abstract Listener <a href=MythicMobsHooker.html#getSpawnListener()>getSpawnListener</a>()</pre>
                                         <div class="block"><p>MM怪物生成事件监听器, 监听器优先级HIGH, 得以覆盖MM自身的装备操作</p></div>
                                         
                                         <!-- TODO missing return annotation -->
@@ -611,7 +611,7 @@ public abstract class <span class="typeNameLabel"><a href=MythicMobsHooker.html>
                                           >
                                     <li class="blockList">
                                         <h4>getDeathListener</h4>
-                                        <pre class="methodSignature"> abstract ProxyListener <a href=MythicMobsHooker.html#getDeathListener()>getDeathListener</a>()</pre>
+                                        <pre class="methodSignature"> abstract Listener <a href=MythicMobsHooker.html#getDeathListener()>getDeathListener</a>()</pre>
                                         <div class="block"><p>MM怪物死亡事件监听器, 监听器优先级NORMAL</p></div>
                                         
                                         <!-- TODO missing return annotation -->
@@ -626,7 +626,7 @@ public abstract class <span class="typeNameLabel"><a href=MythicMobsHooker.html>
                                           >
                                     <li class="blockList">
                                         <h4>getReloadListener</h4>
-                                        <pre class="methodSignature"> abstract ProxyListener <a href=MythicMobsHooker.html#getReloadListener()>getReloadListener</a>()</pre>
+                                        <pre class="methodSignature"> abstract Listener <a href=MythicMobsHooker.html#getReloadListener()>getReloadListener</a>()</pre>
                                         <div class="block"><p>MM重载事件监听器, 监听器优先级NORMAL</p></div>
                                         
                                         <!-- TODO missing return annotation -->
