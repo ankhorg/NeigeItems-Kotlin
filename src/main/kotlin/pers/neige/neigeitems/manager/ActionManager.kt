@@ -1161,7 +1161,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityShootBowEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "shoot_bow", cancell = false, cancellIfCooldown = true)
+        basicHandler(player, itemStack, itemInfo, event, "shoot_bow", cancell = false, cancellIfCooldown = true, consumeItem = false)
     }
 
     // 射箭时由箭触发
@@ -1171,7 +1171,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityShootBowEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "shoot_arrow", cancell = false, cancellIfCooldown = true)
+        basicHandler(player, itemStack, itemInfo, event, "shoot_arrow", cancell = false, cancellIfCooldown = true, consumeItem = false)
     }
 
     // 格挡时由盾触发
