@@ -13,8 +13,7 @@ import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.function.registerBukkitListener
+import pers.neige.neigeitems.utils.ListenerUtils
 import taboolib.common.platform.function.submit
 import kotlin.math.roundToInt
 
@@ -38,32 +37,42 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
 
     private val apiHelper = MythicBukkit.inst().apiHelper
 
-    override val spawnListener = registerBukkitListener(MythicMobSpawnEvent::class.java, EventPriority.HIGH) {
+    override val spawnListener = ListenerUtils.registerListener(
+        MythicMobSpawnEvent::class.java,
+        org.bukkit.event.EventPriority.HIGH,
+        plugin
+    ) { event ->
         submit(async = true) {
-            if (it.entity is LivingEntity) {
+            if (event.entity is LivingEntity) {
                 spawnEvent(
-                    it.mobType.internalName,
-                    it.entity as LivingEntity,
-                    it.mobLevel.roundToInt()
+                    event.mobType.internalName,
+                    event.entity as LivingEntity,
+                    event.mobLevel.roundToInt()
                 )
             }
         }
     }
 
-    override val deathListener = registerBukkitListener(MythicMobDeathEvent::class.java) {
+    override val deathListener = ListenerUtils.registerListener(
+        MythicMobDeathEvent::class.java,
+        plugin
+    ) { event ->
         submit(async = true) {
-            if (it.entity is LivingEntity) {
+            if (event.entity is LivingEntity) {
                 deathEvent(
-                    it.killer,
-                    it.entity as LivingEntity,
-                    it.mobType.internalName,
-                    it.mobLevel.roundToInt()
+                    event.killer,
+                    event.entity as LivingEntity,
+                    event.mobType.internalName,
+                    event.mobLevel.roundToInt()
                 )
             }
         }
     }
 
-    override val reloadListener = registerBukkitListener(MythicReloadedEvent::class.java) {
+    override val reloadListener = ListenerUtils.registerListener(
+        MythicReloadedEvent::class.java,
+        plugin
+    ) { _ ->
         loadMobInfos()
     }
 

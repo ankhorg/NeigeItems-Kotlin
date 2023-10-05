@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
+import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
@@ -30,7 +31,6 @@ import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import taboolib.common.platform.event.ProxyListener
 import taboolib.common.platform.function.submit
 import java.io.File
 import java.text.DecimalFormat
@@ -70,17 +70,17 @@ abstract class MythicMobsHooker {
     /**
      * MM怪物生成事件监听器, 监听器优先级HIGH, 得以覆盖MM自身的装备操作
      */
-    abstract val spawnListener: ProxyListener
+    abstract val spawnListener: Listener
 
     /**
      * MM怪物死亡事件监听器, 监听器优先级NORMAL
      */
-    abstract val deathListener: ProxyListener
+    abstract val deathListener: Listener
 
     /**
      * MM重载事件监听器, 监听器优先级NORMAL
      */
-    abstract val reloadListener: ProxyListener
+    abstract val reloadListener: Listener
 
     /**
      * 获取MM物品, 不存在对应ID的MM物品则返回null
