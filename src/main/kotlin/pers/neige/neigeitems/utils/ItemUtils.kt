@@ -2,6 +2,8 @@ package pers.neige.neigeitems.utils
 
 import bot.inker.bukkit.nbt.*
 import bot.inker.bukkit.nbt.api.NbtComponentLike
+import bot.inker.bukkit.nbt.api.NbtLike
+import bot.inker.bukkit.nbt.api.NbtListLike
 import bot.inker.bukkit.nbt.neigeitems.WorldUtils
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.Bukkit
@@ -1539,16 +1541,25 @@ object ItemUtils {
         separator: Char = '.'
     ): Nbt<*>? {
         val keys = key.split(separator, escape)
-        var currentNbtCompound: NbtComponentLike? = this
+        var currentNbt: NbtLike? = this
         var value: Nbt<*>? = null
         for (k in keys) {
-            if (currentNbtCompound == null) {
+            if (currentNbt == null) {
                 return null
             }
-            if (currentNbtCompound.containsKey(k)) {
-                val obj = currentNbtCompound[k]
+            if (currentNbt is NbtComponentLike && currentNbt.containsKey(k)) {
+                val obj = currentNbt[k]
                 value = obj
-                currentNbtCompound = if (obj is NbtComponentLike) {
+                currentNbt = if (obj is NbtComponentLike || obj is NbtListLike) {
+                    obj
+                } else {
+                    null
+                }
+            } else if (currentNbt is NbtListLike) {
+                val index = k.toIntOrNull() ?: return null
+                val obj = currentNbt.getOrNull(index) ?: return null
+                value = obj
+                currentNbt = if (obj is NbtComponentLike || obj is NbtListLike) {
                     obj
                 } else {
                     null
