@@ -24,7 +24,6 @@ import pers.neige.neigeitems.manager.ItemManager.setCustomDurability
 import pers.neige.neigeitems.manager.ItemManager.setMaxCharge
 import pers.neige.neigeitems.manager.ItemManager.setMaxCustomDurability
 import pers.neige.neigeitems.utils.ConfigUtils
-import pers.neige.neigeitems.utils.ItemUtils.castToItemTagData
 import pers.neige.neigeitems.utils.ItemUtils.castToNbt
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
@@ -36,7 +35,6 @@ import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import pers.neige.neigeitems.utils.function.TriFunction
-import taboolib.module.nms.getItemTag
 import taboolib.platform.util.giveItem
 import java.util.*
 
@@ -1576,13 +1574,13 @@ object ItemEditorManager {
             // 判断是不是空气
             if (itemStack.type != Material.AIR) {
                 // 获取物品NBT
-                val itemTag = itemStack.getItemTag()
+                val itemTag = itemStack.getNbt()
                 // 获取并遍历添加NBT
                 content.parseObject<HashMap<String, String>>().forEach { (key, value) ->
-                    itemTag.putDeepWithList(key, value.castToItemTagData())
+                    itemTag.putDeepWithList(key, value.castToNbt())
                 }
                 // 保存物品NBT
-                itemTag.saveTo(itemStack)
+                itemTag.saveToSafe(itemStack)
                 return@addBasicItemEditor true
             }
             return@addBasicItemEditor false
