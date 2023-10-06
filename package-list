@@ -12,6 +12,7 @@ $dokka.location:pers.neige.neigeitems.item/ItemDurability.DamageResult///Pointin
 $dokka.location:pers.neige.neigeitems.item/ItemPack.ItemInfo///PointingToDeclaration/pers/neige/neigeitems/item/ItemPack.ItemInfo.html
 bot.inker.bukkit.nbt.neigeitems
 pers.neige.neigeitems
+pers.neige.neigeitems.annotations
 pers.neige.neigeitems.command
 pers.neige.neigeitems.command.subcommand
 pers.neige.neigeitems.event
