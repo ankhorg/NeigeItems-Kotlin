@@ -2,15 +2,16 @@ package pers.neige.neigeitems.listener
 
 import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.Material
+import org.bukkit.event.EventPriority
 import org.bukkit.event.block.BlockBreakEvent
+import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 
 object BlockBreakListener {
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
     fun blocking(event: BlockBreakEvent) {
         // 获取受击者
         val player = event.player

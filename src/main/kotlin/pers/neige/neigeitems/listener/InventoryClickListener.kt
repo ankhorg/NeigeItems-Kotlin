@@ -1,14 +1,15 @@
 package pers.neige.neigeitems.listener
 
 import org.bukkit.entity.Player
+import org.bukkit.event.EventPriority
 import org.bukkit.event.inventory.InventoryClickEvent
+import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 
 object InventoryClickListener {
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
     fun click(event: InventoryClickEvent) {
         // 获取玩家
         val player = event.whoClicked
@@ -22,7 +23,8 @@ object InventoryClickListener {
         ActionManager.clickListener(player, itemStack, itemInfo, event)
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
     fun beClicked(event: InventoryClickEvent) {
         // 获取玩家
         val player = event.whoClicked

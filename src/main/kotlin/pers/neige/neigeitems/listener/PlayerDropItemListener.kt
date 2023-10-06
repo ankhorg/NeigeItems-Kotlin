@@ -1,15 +1,16 @@
 package pers.neige.neigeitems.listener
 
 import org.bukkit.Material
+import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerDropItemEvent
+import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.item.ItemCheck
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 
 object PlayerDropItemListener {
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST, ignoreCancelled = true)
     fun listener(event: PlayerDropItemEvent) {
         // 获取玩家
         val player = event.player

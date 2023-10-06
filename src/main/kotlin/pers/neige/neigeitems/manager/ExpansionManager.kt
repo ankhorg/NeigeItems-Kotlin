@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.Bukkit
+import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.event.PluginReloadEvent
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.script.ScriptExpansion
@@ -11,7 +12,6 @@ import pers.neige.neigeitems.script.tool.ScriptTask
 import pers.neige.neigeitems.utils.ConfigUtils
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
-import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.submit
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
@@ -135,7 +135,8 @@ object ExpansionManager {
      * 触发enable
      * PluginReloadEvent是异步触发的, 所以内部没有runTaskAsynchronously
      */
-    @SubscribeEvent(ignoreCancelled = true)
+    @JvmStatic
+    @Listener
     fun enable(event: PluginReloadEvent.Post) {
         if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION ) {
             return
@@ -170,7 +171,8 @@ object ExpansionManager {
      * 触发disable
      * PluginReloadEvent是异步触发的, 所以内部没有runTaskAsynchronously
      */
-    @SubscribeEvent(ignoreCancelled = true)
+    @JvmStatic
+    @Listener
     fun disable(event: PluginReloadEvent.Pre) {
         if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION ) {
             return

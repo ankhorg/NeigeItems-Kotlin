@@ -3,16 +3,17 @@ package pers.neige.neigeitems.listener
 import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 
 object EntityDamageByEntityListener {
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: EntityDamageByEntityEvent) {
         if (event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK || event.damager !is Player) return
         // 获取玩家(攻击者)
@@ -32,7 +33,8 @@ object EntityDamageByEntityListener {
         if (event.isCancelled) return
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
     fun blocking(event: EntityDamageByEntityEvent) {
         // 获取受击者
         val player = event.entity

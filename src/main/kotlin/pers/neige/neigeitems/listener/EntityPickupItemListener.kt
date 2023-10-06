@@ -2,15 +2,16 @@ package pers.neige.neigeitems.listener
 
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityPickupItemEvent
+import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.item.ItemOwner
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 
 object EntityPickupItemListener {
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
     fun owner(event: EntityPickupItemEvent) {
         // 获取玩家
         val player = event.entity
@@ -21,7 +22,8 @@ object EntityPickupItemListener {
         if (event.isCancelled) return
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.HIGH)
     fun listener(event: EntityPickupItemEvent) {
         // 获取玩家
         val player = event.entity

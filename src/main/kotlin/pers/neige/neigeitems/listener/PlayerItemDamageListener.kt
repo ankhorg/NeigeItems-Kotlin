@@ -1,14 +1,15 @@
 package pers.neige.neigeitems.listener
 
 import bot.inker.bukkit.nbt.NbtCompound
+import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerItemDamageEvent
+import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 
 object PlayerItemDamageListener {
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: PlayerItemDamageEvent) {
         // 获取玩家
         val player = event.player

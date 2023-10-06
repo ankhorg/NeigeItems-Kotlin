@@ -1,16 +1,17 @@
 package pers.neige.neigeitems.listener
 
 import bot.inker.bukkit.nbt.NbtCompound
+import org.bukkit.event.EventPriority
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 
 object PlayerInteractListener {
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST, ignoreCancelled = false)
     fun listener(event: PlayerInteractEvent) {
         // 获取玩家
         val player = event.player

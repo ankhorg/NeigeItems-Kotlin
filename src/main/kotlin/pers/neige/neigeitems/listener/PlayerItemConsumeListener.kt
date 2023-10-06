@@ -1,17 +1,18 @@
 package pers.neige.neigeitems.listener
 
 import bot.inker.bukkit.nbt.NbtCompound
+import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.EquipmentSlot
+import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 
 object PlayerItemConsumeListener {
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: PlayerItemConsumeEvent) {
         // 获取玩家
         val player = event.player

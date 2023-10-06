@@ -1,12 +1,13 @@
 package pers.neige.neigeitems.listener
 
+import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerItemMendEvent
+import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.item.ItemDurability
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.event.SubscribeEvent
 
 object PlayerItemMendListener {
-    @SubscribeEvent(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: PlayerItemMendEvent) {
         ItemDurability.itemMend(event)
     }
