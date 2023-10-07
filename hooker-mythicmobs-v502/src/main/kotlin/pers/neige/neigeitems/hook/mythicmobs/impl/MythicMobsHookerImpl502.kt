@@ -72,7 +72,7 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
     override val reloadListener = ListenerUtils.registerListener(
         MythicReloadedEvent::class.java,
         plugin
-    ) { _ ->
+    ) {
         loadMobInfos()
     }
 

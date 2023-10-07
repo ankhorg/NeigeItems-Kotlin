@@ -53,15 +53,16 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
     }
 
     override val deathListener = ListenerUtils.registerListener(
-        MythicMobSpawnEvent::class.java,
+        MythicMobDeathEvent::class.java,
         org.bukkit.event.EventPriority.HIGH,
         plugin
     ) { event ->
         submit(async = true) {
             if (event.entity is LivingEntity) {
-                spawnEvent(
-                    event.mobType.internalName,
+                deathEvent(
+                    event.killer,
                     event.entity as LivingEntity,
+                    event.mobType.internalName,
                     event.mobLevel.roundToInt()
                 )
             }
@@ -71,7 +72,7 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
     override val reloadListener = ListenerUtils.registerListener(
         MythicReloadedEvent::class.java,
         plugin
-    ) { _ ->
+    ) {
         loadMobInfos()
     }
 
