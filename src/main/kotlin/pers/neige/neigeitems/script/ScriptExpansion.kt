@@ -56,7 +56,10 @@ class ScriptExpansion : CompiledScript {
                 const StringUtils = Packages.pers.neige.neigeitems.utils.StringUtils
                 
                 const EntityItemUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.EntityItemUtils
+                const EntityPlayerUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.EntityPlayerUtils
                 const WorldUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.WorldUtils
+                
+                const EnumHand = Packages.pers.neige.neigeitems.EnumHand
                 
                 const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
                 const ConfigManager = Packages.pers.neige.neigeitems.manager.ConfigManager.INSTANCE
