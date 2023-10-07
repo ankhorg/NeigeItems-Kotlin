@@ -66,7 +66,7 @@ public class EntityPlayerUtils {
         }
     }
 
-    public static void swing(
+    private static void swing(
             @NotNull RefEntityPlayer player,
             @NotNull RefEnumHand hand
     ) {
