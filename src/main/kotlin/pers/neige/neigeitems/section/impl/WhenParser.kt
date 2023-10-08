@@ -32,7 +32,7 @@ object WhenParser : SectionParser() {
      * @param player 待解析玩家
      * @param sections 节点池
      * @param value 待检查文本
-     * @param actions 动作
+     * @param conditions 条件组
      * @return 解析值
      */
     private fun handler(
@@ -53,7 +53,7 @@ object WhenParser : SectionParser() {
                         val condition = info["condition"]
                         val result = info["result"]
                         // 确认类型正确
-                        if (condition is String? && result is String) {
+                        if (condition is String?) {
                             // 如果符合条件
                             if (parseCondition(condition, player?.player, map = mapOf(
                                     Pair("value", value),
@@ -61,12 +61,12 @@ object WhenParser : SectionParser() {
                                     Pair("sections", sections)
                                 ))) {
                                 // 返回
-                                return result.parseSection(cache, player, sections).also { cache?.remove("value") }
+                                return result.toString().parseSection(cache, player, sections).also { cache?.remove("value") }
                             }
                         }
                     }
-                    // 是String说明可以直接返回
-                    is String -> return info.parseSection(cache, player, sections).also { cache?.remove("value") }
+                    // 其他情况说明可以直接返回
+                    else -> return info.toString().parseSection(cache, player, sections).also { cache?.remove("value") }
                 }
             }
         }
