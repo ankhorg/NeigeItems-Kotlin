@@ -1364,7 +1364,11 @@ object ItemUtils {
 
     @JvmStatic
     fun NbtCompound.saveToSafe(itemStack: ItemStack) {
-        if (!NbtUtils.isCraftItemStack(itemStack)) {
+        if (
+            itemStack.type != Material.AIR
+            && itemStack.amount != 0
+            && !NbtUtils.isCraftItemStack(itemStack)
+        ) {
             saveTo(itemStack)
         }
     }
