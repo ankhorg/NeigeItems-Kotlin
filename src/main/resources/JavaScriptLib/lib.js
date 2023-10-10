@@ -19,9 +19,10 @@ const ScriptUtils = Packages.pers.neige.neigeitems.utils.ScriptUtils
 const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
 const StringUtils = Packages.pers.neige.neigeitems.utils.StringUtils
 
-const EntityItemUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.EntityItemUtils
-const EntityPlayerUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.EntityPlayerUtils
-const WorldUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.WorldUtils
+const EnchantmentUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EnchantmentUtils
+const EntityItemUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityItemUtils
+const EntityPlayerUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils
+const WorldUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 
 const EnumHand = Packages.pers.neige.neigeitems.EnumHand
 

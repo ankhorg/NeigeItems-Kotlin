@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.script.tool
 
-import bot.inker.bukkit.nbt.neigeitems.ServerUtils
+import bot.inker.bukkit.nbt.neigeitems.utils.ServerUtils
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.PluginCommand

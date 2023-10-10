@@ -4,7 +4,7 @@ import bot.inker.bukkit.nbt.*
 import bot.inker.bukkit.nbt.api.NbtComponentLike
 import bot.inker.bukkit.nbt.api.NbtLike
 import bot.inker.bukkit.nbt.api.NbtListLike
-import bot.inker.bukkit.nbt.neigeitems.WorldUtils
+import bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -24,7 +24,7 @@ import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
-import taboolib.module.nms.*
+import taboolib.module.nms.getName
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.cos
 import kotlin.math.sin
@@ -529,9 +529,9 @@ object ItemUtils {
     @JvmStatic
     fun ItemStack.getItems(amount: Int?): ArrayList<ItemStack> {
         val list = ArrayList<ItemStack>()
+        val maxStackSize = maxStackSize.coerceAtLeast(1)
         amount?.let {
             val item = this.copy()
-            val maxStackSize = item.maxStackSize
             item.amount = maxStackSize
             val leftAmount = amount % maxStackSize
             val repeat = amount / maxStackSize

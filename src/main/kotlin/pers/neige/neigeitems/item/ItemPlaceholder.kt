@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.item
 
+import bot.inker.bukkit.nbt.*
+import bot.inker.bukkit.nbt.api.NbtComponentLike
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.events.ListenerPriority
@@ -9,9 +11,8 @@ import org.bukkit.GameMode
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ConfigManager.config
-import pers.neige.neigeitems.utils.ItemUtils.getDeepDoubleOrNull
 import pers.neige.neigeitems.utils.ItemUtils.getDeepIntOrNull
-import pers.neige.neigeitems.utils.ItemUtils.getDeepStringOrNull
+import pers.neige.neigeitems.utils.ItemUtils.getDeepWithEscape
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import java.util.*
 import java.util.function.BiFunction
@@ -41,20 +42,17 @@ class ItemPlaceholder {
      * @param itemStack 待解析物品
      */
     fun itemParse(itemStack: ItemStack) {
-        itemStack.itemMeta?.let { itemMeta ->
-            if (itemMeta.hasDisplayName()) {
-                itemMeta.setDisplayName(parse(itemStack, itemMeta.displayName))
+        if (NbtUtils.isCraftItemStack(itemStack)) {
+            val nbt = itemStack.getNbtOrNull() ?: return
+            val display = nbt.getCompound("display") ?: return
+            display.getString("Name")?.let { name ->
+                display.putString("Name", parse(itemStack, name))
             }
-            if (itemMeta.hasLore()) {
-                val lore = itemMeta.lore
-                if (lore != null) {
-                    for (index in lore.indices) {
-                        lore[index] = parse(itemStack, lore[index])
-                    }
+            display.getList("Lore")?.let { lore ->
+                lore.forEachIndexed { index, nbt ->
+                    lore[index] = NbtString.valueOf(parse(itemStack, nbt.asString))
                 }
-                itemMeta.lore = lore
             }
-            itemStack.setItemMeta(itemMeta)
         }
     }
 
@@ -106,7 +104,7 @@ class ItemPlaceholder {
             ProtocolLibrary.getProtocolManager().addPacketListener(object :
                 PacketAdapter(
                     plugin,
-                    ListenerPriority.NORMAL,
+                    ListenerPriority.LOWEST,
                     PacketType.Play.Server.WINDOW_ITEMS,
                     PacketType.Play.Server.SET_SLOT) {
                 override fun onPacketSending(event: PacketEvent) {
@@ -128,6 +126,28 @@ class ItemPlaceholder {
                 override fun onPacketReceiving(event: PacketEvent) {}
             }
             )
+        }
+    }
+
+    private fun NbtComponentLike.getDeepDoubleOrNull(key: String): Double? {
+        val value: Nbt<*>? = getDeepWithEscape(key, separator = '`')
+        return if (value is NbtNumeric<*>) {
+            value.asDouble
+        } else {
+            null
+        }
+    }
+
+    private fun NbtComponentLike.getDeepStringOrNull(key: String): String? {
+        return when (val value: Nbt<*>? = getDeepWithEscape(key, separator = '`')) {
+            is NbtString ->  value.asString
+            is NbtByte -> value.asByte.toString()
+            is NbtShort ->  value.asShort.toString()
+            is NbtInt ->  value.asInt.toString()
+            is NbtLong ->  value.asLong.toString()
+            is NbtFloat ->  value.asFloat.toString()
+            is NbtDouble ->  value.asDouble.toString()
+            else -> value?.asString
         }
     }
 

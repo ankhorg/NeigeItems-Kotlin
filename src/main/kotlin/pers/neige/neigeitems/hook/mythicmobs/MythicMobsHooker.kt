@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.hook.mythicmobs
 
-import bot.inker.bukkit.nbt.neigeitems.WorldUtils
+import bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer

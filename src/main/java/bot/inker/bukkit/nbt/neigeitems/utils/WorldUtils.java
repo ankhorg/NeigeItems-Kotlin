@@ -1,4 +1,4 @@
-package bot.inker.bukkit.nbt.neigeitems;
+package bot.inker.bukkit.nbt.neigeitems.utils;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack;
