@@ -10,7 +10,8 @@ $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Type///PointingToD
 $dokka.location:pers.neige.neigeitems.item.color/ItemColor.Companion///PointingToDeclaration/pers/neige/neigeitems/item/color/ItemColor.Companion.html
 $dokka.location:pers.neige.neigeitems.item/ItemDurability.DamageResult///PointingToDeclaration/pers/neige/neigeitems/item/ItemDurability.DamageResult.html
 $dokka.location:pers.neige.neigeitems.item/ItemPack.ItemInfo///PointingToDeclaration/pers/neige/neigeitems/item/ItemPack.ItemInfo.html
-bot.inker.bukkit.nbt.neigeitems
+bot.inker.bukkit.nbt.neigeitems.enchantment
+bot.inker.bukkit.nbt.neigeitems.utils
 pers.neige.neigeitems
 pers.neige.neigeitems.annotations
 pers.neige.neigeitems.command

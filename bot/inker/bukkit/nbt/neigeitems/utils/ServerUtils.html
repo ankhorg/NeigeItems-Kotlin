@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>NashornHookerImpl 1.15.58 API </title>
+    <title>ServerUtils 1.15.58 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
@@ -89,7 +89,7 @@ var pathtoroot = "../../../../../../";
 <main role="main">
     <div class="header">
         <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html"></a></div>
-        <h2 title="Class NashornHookerImpl" class="title">Class NashornHookerImpl</h2>
+        <h2 title="Class ServerUtils" class="title">Class ServerUtils</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -114,10 +114,10 @@ var pathtoroot = "../../../../../../";
                     <hr>
                     <pre class="wrap-overflow">
 
-public final class <span class="typeNameLabel"><a href=NashornHookerImpl.html>NashornHookerImpl</a></span>
-extends <a href=../NashornHooker.html>NashornHooker</a>
+public class <span class="typeNameLabel"><a href=ServerUtils.html>ServerUtils</a></span>
+
                     </pre>
-                    <div class="block"><p>openjdk nashorn挂钩</p></div>
+                    <div class="block"></div>
                 </li>
             </ul>
         </div>
@@ -188,12 +188,6 @@ extends <a href=../NashornHooker.html>NashornHooker</a>
                                         </tr>
 
                                         
-                                            <tr class="altColor">
-                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#NashornHookerImpl()">NashornHookerImpl</a></span>()</code></th>
-                                                <td class="colLast">启用openjdk nashorn挂钩</td>
-                                            </tr>
-                                        
 
                                         </tbody>
                                     </table>
@@ -244,27 +238,11 @@ extends <a href=../NashornHooker.html>NashornHooker</a>
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a></code>
+                                            <td class="colFirst"><code>static void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=NashornHookerImpl.html#getNashornEngine(Array,ClassLoader)>getNashornEngine</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; args, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html>ClassLoader</a> classLoader) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ServerUtils.html#syncCommands()>syncCommands</a>() </code>
                                             </th>
-                                            <td class="colLast">获取一个新的Nashorn引擎</td>
-                                        </tr>
-                                        
-                                        <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=NashornHookerImpl.html#invoke(CompiledScript,String,Map,Object)>invoke</a>(<a href=../../../script/CompiledScript.html>CompiledScript</a> compiledScript, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> function, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; map, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
-                                            </th>
-                                            <td class="colLast">调用脚本中的某个函数, 返回函数返回值 因为内部涉及ScriptObjectMirror的使用, 所以放入nashornHooker</td>
-                                        </tr>
-                                        
-                                        <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=NashornHookerImpl.html#isFunction(ScriptEngine,Object)>isFunction</a>(<a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a> engine, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> func) </code>
-                                            </th>
-                                            <td class="colLast">检测引擎中是否包含对应函数</td>
+                                            <td class="colLast">与客户端玩家同步指令列表.</td>
                                         </tr>
                                         
                                         </tbody>
@@ -272,12 +250,6 @@ extends <a href=../NashornHooker.html>NashornHooker</a>
                                 </div>
                                 <ul class="blockList">
                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.pers.neige.neigeitems.hook.nashorn.NashornHooker">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;pers.neige.neigeitems.hook.nashorn.NashornHooker</h3>
-                                            <code>compile, compile, compile, compile, getGlobalEngine, getNashornEngine, getNashornEngine, isFunction</code></li>
-                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
                                     </a>
@@ -304,16 +276,6 @@ extends <a href=../NashornHooker.html>NashornHooker</a>
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="NashornHookerImpl()"></a>
-                                <ul class="blockList">
-                                    <li class="blockList">
-                                        <h4>NashornHookerImpl</h4>
-                                        <pre>NashornHookerImpl()</pre>
-                                        <div class="block">启用openjdk nashorn挂钩</div>
-                                        
-                                    </li>
-                                </ul>
-                                
                             </li>
                         </ul>
                     </section>
@@ -327,93 +289,16 @@ extends <a href=../NashornHooker.html>NashornHooker</a>
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="getNashornEngine(Array,ClassLoader)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getNashornEngine</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a> <a href=NashornHookerImpl.html#getNashornEngine(Array,ClassLoader)>getNashornEngine</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; args, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html>ClassLoader</a> classLoader)</pre>
-                                        <div class="block"><p>获取一个新的Nashorn引擎</p></div>
-                                        
-                                        <dl>
-                                            <dt><span class="paramLabel">Parameters:</span></dt>
-                                            
-                                            
-                                            <dd><code>args</code> - 应用于引擎的参数</dd>
-                                            
-                                            
-                                            
-                                            <dd><code>classLoader</code> - 用于生成引擎的classLoader</dd>
-                                            
-                                            
-                                        </dl>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="invoke(CompiledScript,String,Map,Object)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>invoke</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> <a href=NashornHookerImpl.html#invoke(CompiledScript,String,Map,Object)>invoke</a>(<a href=../../../script/CompiledScript.html>CompiledScript</a> compiledScript, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> function, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; map, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args)</pre>
-                                        <div class="block"><p>调用脚本中的某个函数, 返回函数返回值 因为内部涉及ScriptObjectMirror的使用, 所以放入nashornHooker</p></div>
-                                        
-                                        <dl>
-                                            <dt><span class="paramLabel">Parameters:</span></dt>
-                                            
-                                            
-                                            <dd><code>compiledScript</code> - 待调用脚本</dd>
-                                            
-                                            
-                                            
-                                            <dd><code>function</code> - 待调用函数名</dd>
-                                            
-                                            
-                                            
-                                            <dd><code>map</code> - 顶级变量</dd>
-                                            
-                                            
-                                            
-                                            <dd><code>args</code> - 传入函数的参数</dd>
-                                            
-                                            
-                                        </dl>
-                                        
-                                        <!-- TODO missing return annotation -->
-                                    </li>
-                                </ul>
-                                
-                                <a id="isFunction(ScriptEngine,Object)">
+                                <a id="syncCommands()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>isFunction</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> <a href=NashornHookerImpl.html#isFunction(ScriptEngine,Object)>isFunction</a>(<a href=https://docs.oracle.com/javase/8/docs/api/javax/script/ScriptEngine.html>ScriptEngine</a> engine, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> func)</pre>
-                                        <div class="block"><p>检测引擎中是否包含对应函数</p></div>
-                                        
-                                        <dl>
-                                            <dt><span class="paramLabel">Parameters:</span></dt>
-                                            
-                                            
-                                            <dd><code>engine</code> - 函数所在引擎</dd>
-                                            
-                                            
-                                            
-                                            <dd><code>func</code> - 待检测函数</dd>
-                                            
-                                            
-                                        </dl>
+                                        <h4>syncCommands</h4>
+                                        <pre class="methodSignature"> static void <a href=ServerUtils.html#syncCommands()>syncCommands</a>()</pre>
+                                        <div class="block"><p>与客户端玩家同步指令列表.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
