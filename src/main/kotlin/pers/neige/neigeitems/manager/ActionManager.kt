@@ -1234,7 +1234,7 @@ object ActionManager {
         }
         // 检测冷却
         if (trigger.isCoolDown(player, itemStack, itemTag, data)) {
-            if (cancellIfCooldown && event is Cancellable) {
+            if ((cancell || cancellIfCooldown) && event is Cancellable) {
                 event.isCancelled = true
             }
             return

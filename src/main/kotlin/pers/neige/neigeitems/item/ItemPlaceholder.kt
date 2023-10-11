@@ -8,6 +8,7 @@ import com.comphenix.protocol.events.ListenerPriority
 import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketEvent
 import org.bukkit.GameMode
+import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ConfigManager.config
@@ -42,7 +43,7 @@ class ItemPlaceholder {
      * @param itemStack 待解析物品
      */
     fun itemParse(itemStack: ItemStack) {
-        if (NbtUtils.isCraftItemStack(itemStack)) {
+        if (itemStack.type != Material.AIR && NbtUtils.isCraftItemStack(itemStack)) {
             val nbt = itemStack.getNbtOrNull() ?: return
             val display = nbt.getCompound("display") ?: return
             display.getString("Name")?.let { name ->
