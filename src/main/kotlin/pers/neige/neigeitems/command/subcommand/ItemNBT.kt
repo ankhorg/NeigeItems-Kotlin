@@ -1,16 +1,17 @@
 package pers.neige.neigeitems.command.subcommand
 
+import bot.inker.bukkit.nbt.*
+import net.md_5.bungee.api.chat.*
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.command.Command
+import pers.neige.neigeitems.manager.HookerManager.append
+import pers.neige.neigeitems.manager.HookerManager.hoverText
+import pers.neige.neigeitems.manager.HookerManager.runCommand
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
+import pers.neige.neigeitems.utils.PlayerUtils.sendMessage
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.module.chat.TellrawJson
-import taboolib.module.nms.ItemTag
-import taboolib.module.nms.ItemTagData
-import taboolib.module.nms.ItemTagType
-import taboolib.module.nms.getItemTag
 
 object ItemNBT {
     val itemNBT = subCommand {
@@ -27,7 +28,7 @@ object ItemNBT {
 
     private fun itemnbtCommand (itemStack: ItemStack, sender: Player) {
         if (itemStack.type != Material.AIR) {
-            itemStack.getItemTag().format().sendTo(Command.bukkitAdapter.adaptCommandSender(sender))
+            sender.sendMessage(itemStack.getNbt().format())
         }
     }
 
@@ -35,18 +36,18 @@ object ItemNBT {
     val LIST_INDENT = "§e- "
 
     @JvmStatic
-    fun ItemTag.format(): TellrawJson {
-        val result = TellrawJson().append("§e§m                                                                      \n")
+    fun NbtCompound.format(): ComponentBuilder {
+        val result = ComponentBuilder().append("§e§m                                                                      \n")
         val iterator = this.iterator()
         while (iterator.hasNext()) {
             iterator.next().let { (key, value) ->
                 result.append(
-                    TellrawJson()
-                        .append("§6$key${value.type.asPostfix()}§e: §f")
+                    ComponentBuilder()
+                        .append("§6$key${value.asPostfix()}§e: §f")
                         .hoverText(key)
-                        .suggestCommand(key)
+                        .runCommand(key)
                 )
-                if (value.type == ItemTagType.COMPOUND) {
+                if (value is NbtCompound) {
                     result.append("\n").append(INDENT)
                 }
                 result.append(value.asValueString(1))
@@ -56,52 +57,55 @@ object ItemNBT {
         return result.append("\n§e§m                                                                      ")
     }
 
-    fun ItemTagType.asPostfix(): String {
+    @JvmStatic
+    fun Nbt<*>.asPostfix(): String {
         return when (this) {
-            ItemTagType.BYTE -> " §6(§eByte§6)"
-            ItemTagType.SHORT ->  " §6(§eShort§6)"
-            ItemTagType.INT ->  " §6(§eInt§6)"
-            ItemTagType.LONG ->  " §6(§eLong§6)"
-            ItemTagType.FLOAT ->  " §6(§eFloat§6)"
-            ItemTagType.DOUBLE ->  " §6(§eDouble§6)"
-            ItemTagType.STRING ->  " §6(§eString§6)"
-            ItemTagType.BYTE_ARRAY -> " §6(§eByteArray§6)"
-            ItemTagType.INT_ARRAY -> " §6(§eIntArray§6)"
-            ItemTagType.COMPOUND -> " §6(§eCompound§6)"
-            ItemTagType.LIST -> " §6(§eList§6)"
+            is NbtByte -> " §6(§eByte§6)"
+            is NbtShort ->  " §6(§eShort§6)"
+            is NbtInt ->  " §6(§eInt§6)"
+            is NbtLong ->  " §6(§eLong§6)"
+            is NbtFloat ->  " §6(§eFloat§6)"
+            is NbtDouble ->  " §6(§eDouble§6)"
+            is NbtString ->  " §6(§eString§6)"
+            is NbtByteArray -> " §6(§eByteArray§6)"
+            is NbtIntArray -> " §6(§eIntArray§6)"
+            is NbtLongArray -> " §6(§eLongArray§6)"
+            is NbtCompound -> " §6(§eCompound§6)"
+            is NbtList -> " §6(§eList§6)"
             else -> " §6(§e妖魔鬼怪§6)"
         }
     }
 
     @JvmStatic
-    fun ItemTagData.asValueString(level: Int): TellrawJson {
-        return when (this.type) {
-            ItemTagType.BYTE,
-            ItemTagType.SHORT,
-            ItemTagType.INT,
-            ItemTagType.LONG,
-            ItemTagType.FLOAT,
-            ItemTagType.DOUBLE,
-            ItemTagType.STRING -> {
-                this.asString().let {
-                    TellrawJson()
-                        .append(if (it.length > 20) "${it.substring(0, 19)}..." else it)
-                        .hoverText(it)
-                        .suggestCommand(it)
-                }
-            }
-            ItemTagType.BYTE_ARRAY -> {
-                TellrawJson().also { result ->
+    fun String.toBuilder(): ComponentBuilder {
+        return ComponentBuilder()
+            .append(if (length > 20) "${substring(0, 19)}..." else this)
+            .hoverText(this)
+            .runCommand(this)
+    }
+
+    @JvmStatic
+    fun Nbt<*>.asValueString(level: Int): ComponentBuilder {
+        return when (this) {
+            is NbtByte -> asByte.toString().toBuilder()
+            is NbtShort -> asShort.toString().toBuilder()
+            is NbtInt -> asInt.toString().toBuilder()
+            is NbtLong -> asLong.toString().toBuilder()
+            is NbtFloat -> asFloat.toString().toBuilder()
+            is NbtDouble -> asDouble.toString().toBuilder()
+            is NbtString -> asString.toBuilder()
+            is NbtByteArray -> {
+                ComponentBuilder().also { result ->
                     result.append("\n")
-                    val iterator = this.asByteArray().iterator()
+                    val iterator = this.asByteArray.iterator()
                     while (iterator.hasNext()) {
                         iterator.next().toString().let { byte ->
                             result.append(
-                                with (TellrawJson()) {
+                                with(ComponentBuilder()) {
                                     repeat (level-1) { append(INDENT) }
                                     append("$LIST_INDENT§f$byte")
                                     hoverText(byte)
-                                    suggestCommand(byte)
+                                    runCommand(byte)
                                 }
                             )
                         }
@@ -109,18 +113,18 @@ object ItemNBT {
                     }
                 }
             }
-            ItemTagType.INT_ARRAY -> {
-                TellrawJson().also { result ->
+            is NbtIntArray -> {
+                ComponentBuilder().also { result ->
                     result.append("\n")
-                    val iterator = this.asIntArray().iterator()
+                    val iterator = this.asIntArray.iterator()
                     while (iterator.hasNext()) {
                         iterator.next().toString().let { int ->
                             result.append(
-                                with (TellrawJson()) {
+                                with(ComponentBuilder()) {
                                     repeat (level-1) { append(INDENT) }
                                     append("$LIST_INDENT§f$int")
                                     hoverText(int)
-                                    suggestCommand(int)
+                                    runCommand(int)
                                 }
                             )
                         }
@@ -128,14 +132,33 @@ object ItemNBT {
                     }
                 }
             }
-            ItemTagType.LIST -> {
-                TellrawJson().also { result ->
+            is NbtLongArray -> {
+                ComponentBuilder().also { result ->
                     result.append("\n")
-                    val iterator = this.asList().iterator()
+                    val iterator = this.asLongArray.iterator()
+                    while (iterator.hasNext()) {
+                        iterator.next().toString().let { long ->
+                            result.append(
+                                with(ComponentBuilder()) {
+                                    repeat (level-1) { append(INDENT) }
+                                    append("$LIST_INDENT§f$long")
+                                    hoverText(long)
+                                    runCommand(long)
+                                }
+                            )
+                        }
+                        if (iterator.hasNext()) result.append("\n")
+                    }
+                }
+            }
+            is NbtList -> {
+                ComponentBuilder().also { result ->
+                    result.append("\n")
+                    val iterator = this.iterator()
                     while (iterator.hasNext()) {
                         iterator.next().asValueString(level).let {
                             result.append(
-                                TellrawJson().also { json ->
+                                ComponentBuilder().also { json ->
                                     repeat (level-1) { json.append(INDENT) }
                                     json.append(LIST_INDENT)
                                     json.append(it)
@@ -146,25 +169,25 @@ object ItemNBT {
                     }
                 }
             }
-            ItemTagType.COMPOUND -> {
-                val result = TellrawJson()
-                val iterator = this.asCompound().iterator()
+            is NbtCompound -> {
+                val result = ComponentBuilder()
+                val iterator = this.iterator()
                 var first = true
                 while (iterator.hasNext()) {
                     iterator.next().let { (key, value) ->
                         result.append(
-                            TellrawJson().also { json ->
+                            with(ComponentBuilder()) {
                                 if (first) {
                                     first = false
                                 } else {
-                                    repeat (level) { json.append(INDENT) }
+                                    repeat (level) { append(INDENT) }
                                 }
-                                json.append("§6$key${value.type.asPostfix()}§e: §f")
-                                json.hoverText(key)
-                                json.suggestCommand(key)
+                                append("§6$key${value.asPostfix()}§e: §f")
+                                hoverText(key)
+                                runCommand(key)
                             }
                         )
-                        if (value.type == ItemTagType.COMPOUND) {
+                        if (value is NbtCompound) {
                             result.append("\n")
                             repeat (level+1) { result.append(INDENT) }
                         }
@@ -174,7 +197,7 @@ object ItemNBT {
                 }
                 result
             }
-            else -> TellrawJson().append("妖魔鬼怪")
+            else -> ComponentBuilder("妖魔鬼怪")
         }
     }
 }

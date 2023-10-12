@@ -1,6 +1,8 @@
 package pers.neige.neigeitems.manager
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion
+import net.md_5.bungee.api.chat.ClickEvent
+import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
@@ -12,7 +14,6 @@ import pers.neige.neigeitems.hook.nashorn.NashornHooker
 import pers.neige.neigeitems.hook.nashorn.impl.LegacyNashornHookerImpl
 import pers.neige.neigeitems.hook.nashorn.impl.NashornHookerImpl
 import pers.neige.neigeitems.hook.nms.NMSHooker
-import pers.neige.neigeitems.hook.nms.impl.*
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker
 import pers.neige.neigeitems.hook.placeholderapi.impl.LegacyPapiHookerImpl
 import pers.neige.neigeitems.hook.placeholderapi.impl.PapiHookerImpl
@@ -85,14 +86,14 @@ object HookerManager {
 
     val nmsHooker: NMSHooker =
         try {
-            when (CbVersion.current()) {
-                CbVersion.v1_12_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_12_R1Impl").newInstance() as NMSHooker
-                CbVersion.v1_13_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_13_R1Impl").newInstance() as NMSHooker
-                CbVersion.v1_13_R2 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerV1_13_R2Impl").newInstance() as NMSHooker
-                else -> NMSHookerOtherImpl()
+            when {
+                CbVersion.current() == CbVersion.v1_12_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerNamespacedKey").newInstance() as NMSHooker
+                CbVersion.current().ordinal < CbVersion.v1_14_R1.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerCustomModelData").newInstance() as NMSHooker
+                CbVersion.current().ordinal < CbVersion.v1_16_R2.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerHoverEvent").newInstance() as NMSHooker
+                else -> NMSHooker()
             }
         } catch (error: Throwable) {
-            NMSHookerOtherImpl()
+            NMSHooker()
         }
 
     /**
@@ -329,5 +330,30 @@ object HookerManager {
     @JvmStatic
     fun addItemPlaceholderExpansion(id: String, function: BiFunction<ItemStack, String, String?>) {
         itemPlaceholder?.let { itemPlaceholder.addExpansion(id, function) }
+    }
+
+    @JvmStatic
+    fun ComponentBuilder.hoverText(text: String): ComponentBuilder {
+        return event(nmsHooker.hoverText(text))
+    }
+
+    @JvmStatic
+    fun ComponentBuilder.hoverItem(itemStack: ItemStack): ComponentBuilder {
+        return event(nmsHooker.hoverItem(itemStack))
+    }
+
+    @JvmStatic
+    fun ComponentBuilder.runCommand(text: String): ComponentBuilder {
+        return event(ClickEvent(ClickEvent.Action.RUN_COMMAND, text))
+    }
+
+    @JvmStatic
+    fun ComponentBuilder.suggestCommand(text: String): ComponentBuilder {
+        return event(ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, text))
+    }
+
+    @JvmStatic
+    fun ComponentBuilder.append(builder: ComponentBuilder): ComponentBuilder {
+        return append(builder.create())
     }
 }

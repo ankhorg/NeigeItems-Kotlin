@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.utils
 
+import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
@@ -75,5 +76,10 @@ object PlayerUtils {
     @JvmStatic
     fun Metadatable.setMetadataEZ(key: String, value: Any) {
         this.setMetadata(key, FixedMetadataValue(plugin, value))
+    }
+
+    @JvmStatic
+    fun Player.sendMessage(builder: ComponentBuilder) {
+        this.spigot().sendMessage(*builder.create())
     }
 }

@@ -12,9 +12,9 @@ dependencies {
     implementation(project(":hooker-mythicmobs-v502"))
     implementation(project(":hooker-mythicmobs-v510"))
 
-    implementation(project(":hooker-nms-V1_12_R1"))
-    implementation(project(":hooker-nms-V1_13_R1"))
-    implementation(project(":hooker-nms-V1_13_R2"))
+    implementation(project(":hooker-nms-NamespacedKey"))
+    implementation(project(":hooker-nms-CustomModelData"))
+    implementation(project(":hooker-nms-HoverEvent"))
 }
 
 tasks {

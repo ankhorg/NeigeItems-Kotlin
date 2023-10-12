@@ -7,9 +7,9 @@ include("hooker-mythicmobs-v490")
 include("hooker-mythicmobs-v502")
 include("hooker-mythicmobs-v510")
 
-include("hooker-nms-V1_12_R1")
-include("hooker-nms-V1_13_R1")
-include("hooker-nms-V1_13_R2")
+include("hooker-nms-NamespacedKey")
+include("hooker-nms-CustomModelData")
+include("hooker-nms-HoverEvent")
 
 include("hooker-callsitenbt")
 

@@ -1,6 +1,9 @@
 package pers.neige.neigeitems.hook.nms;
 
 import bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.ItemTag;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -9,12 +12,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public abstract class NMSHooker{
+public class NMSHooker{
     protected Map<Material, NamespacedKey> loadNamespacedKeys() {
         Map<Material, NamespacedKey> result = new HashMap<>();
         for (Material material : Material.values()) {
@@ -97,5 +101,47 @@ public abstract class NMSHooker{
             @NotNull Consumer<Item> function
     ) {
         return WorldUtils.dropItem(world, location, itemStack, function);
+    }
+
+    /**
+     * 根据给定的文本生成一个 HoverEvent.
+     *
+     * @param text 待操作物品.
+     * @return 生成的 HoverEvent.
+     */
+    @NotNull
+    public HoverEvent hoverText(
+            @NotNull String text
+    ) {
+        return new HoverEvent(
+                HoverEvent.Action.SHOW_TEXT,
+                new Text(text)
+        );
+    }
+
+    /**
+     * 根据给定的物品生成一个 HoverEvent.
+     *
+     * @param itemStack 待操作物品.
+     * @return 生成的 HoverEvent.
+     */
+    @NotNull
+    public HoverEvent hoverItem(
+            @NotNull ItemStack itemStack
+    ) {
+        String nbtString;
+        if (itemStack.getType() == Material.AIR) {
+            nbtString = "{}";
+        } else {
+            nbtString = ItemUtils.getNbt(itemStack).toString();
+        }
+        return new HoverEvent(
+                HoverEvent.Action.SHOW_ITEM,
+                new net.md_5.bungee.api.chat.hover.content.Item(
+                         getNamespacedKey(itemStack.getType()).getKey(),
+                         itemStack.getAmount(),
+                         ItemTag.ofNbt(nbtString)
+                 )
+        );
     }
 }
