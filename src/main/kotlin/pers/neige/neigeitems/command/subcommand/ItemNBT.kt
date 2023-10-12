@@ -37,13 +37,12 @@ object ItemNBT {
 
     @JvmStatic
     fun NbtCompound.format(): ComponentBuilder {
-        val result = ComponentBuilder().append("§e§m                                                                      \n")
+        val result = ComponentBuilder("§e§m                                                                      \n")
         val iterator = this.iterator()
         while (iterator.hasNext()) {
             iterator.next().let { (key, value) ->
                 result.append(
-                    ComponentBuilder()
-                        .append("§6$key${value.asPostfix()}§e: §f")
+                    ComponentBuilder("§6$key${value.asPostfix()}§e: §f")
                         .hoverText(key)
                         .runCommand(key)
                 )
@@ -78,8 +77,7 @@ object ItemNBT {
 
     @JvmStatic
     fun String.toBuilder(): ComponentBuilder {
-        return ComponentBuilder()
-            .append(if (length > 20) "${substring(0, 19)}..." else this)
+        return ComponentBuilder(if (length > 20) "${substring(0, 19)}..." else this)
             .hoverText(this)
             .runCommand(this)
     }
@@ -95,13 +93,13 @@ object ItemNBT {
             is NbtDouble -> asDouble.toString().toBuilder()
             is NbtString -> asString.toBuilder()
             is NbtByteArray -> {
-                ComponentBuilder().also { result ->
+                ComponentBuilder("").also { result ->
                     result.append("\n")
                     val iterator = this.asByteArray.iterator()
                     while (iterator.hasNext()) {
                         iterator.next().toString().let { byte ->
                             result.append(
-                                with(ComponentBuilder()) {
+                                with(ComponentBuilder("")) {
                                     repeat (level-1) { append(INDENT) }
                                     append("$LIST_INDENT§f$byte")
                                     hoverText(byte)
@@ -114,13 +112,13 @@ object ItemNBT {
                 }
             }
             is NbtIntArray -> {
-                ComponentBuilder().also { result ->
+                ComponentBuilder("").also { result ->
                     result.append("\n")
                     val iterator = this.asIntArray.iterator()
                     while (iterator.hasNext()) {
                         iterator.next().toString().let { int ->
                             result.append(
-                                with(ComponentBuilder()) {
+                                with(ComponentBuilder("")) {
                                     repeat (level-1) { append(INDENT) }
                                     append("$LIST_INDENT§f$int")
                                     hoverText(int)
@@ -133,13 +131,13 @@ object ItemNBT {
                 }
             }
             is NbtLongArray -> {
-                ComponentBuilder().also { result ->
+                ComponentBuilder("").also { result ->
                     result.append("\n")
                     val iterator = this.asLongArray.iterator()
                     while (iterator.hasNext()) {
                         iterator.next().toString().let { long ->
                             result.append(
-                                with(ComponentBuilder()) {
+                                with(ComponentBuilder("")) {
                                     repeat (level-1) { append(INDENT) }
                                     append("$LIST_INDENT§f$long")
                                     hoverText(long)
@@ -152,13 +150,13 @@ object ItemNBT {
                 }
             }
             is NbtList -> {
-                ComponentBuilder().also { result ->
+                ComponentBuilder("").also { result ->
                     result.append("\n")
                     val iterator = this.iterator()
                     while (iterator.hasNext()) {
                         iterator.next().asValueString(level).let {
                             result.append(
-                                ComponentBuilder().also { json ->
+                                ComponentBuilder("").also { json ->
                                     repeat (level-1) { json.append(INDENT) }
                                     json.append(LIST_INDENT)
                                     json.append(it)
@@ -170,13 +168,13 @@ object ItemNBT {
                 }
             }
             is NbtCompound -> {
-                val result = ComponentBuilder()
+                val result = ComponentBuilder("")
                 val iterator = this.iterator()
                 var first = true
                 while (iterator.hasNext()) {
                     iterator.next().let { (key, value) ->
                         result.append(
-                            with(ComponentBuilder()) {
+                            with(ComponentBuilder("")) {
                                 if (first) {
                                     first = false
                                 } else {
