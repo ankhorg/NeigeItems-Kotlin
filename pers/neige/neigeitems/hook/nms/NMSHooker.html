@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>NMSHooker 1.15.59 API </title>
+    <title>NMSHooker 1.15.60 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
@@ -114,7 +114,7 @@ var pathtoroot = "../../../../../";
                     <hr>
                     <pre class="wrap-overflow">
 
-public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></span>
+public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></span>
 
                     </pre>
                     <div class="block"></div>
@@ -246,7 +246,7 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                         <tr id="i0" class="altColor">
                                             <td class="colFirst"><code>boolean</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=impl/NMSHookerOtherImpl.html#hasCustomModelData(ItemMeta)>hasCustomModelData</a>(@Nullable() ItemMeta itemMeta) </code>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#hasCustomModelData(ItemMeta)>hasCustomModelData</a>(@Nullable() ItemMeta itemMeta) </code>
                                             </th>
                                             <td class="colLast">检测 ItemMeta 是否存在 CustomModelData.</td>
                                         </tr>
@@ -254,7 +254,7 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                         <tr id="i1" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=impl/NMSHookerOtherImpl.html#getCustomModelData(ItemMeta)>getCustomModelData</a>(@Nullable() ItemMeta itemMeta) </code>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#getCustomModelData(ItemMeta)>getCustomModelData</a>(@Nullable() ItemMeta itemMeta) </code>
                                             </th>
                                             <td class="colLast">获取 ItemMeta 中的 CustomModelData.</td>
                                         </tr>
@@ -262,7 +262,7 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                         <tr id="i2" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=impl/NMSHookerOtherImpl.html#setCustomModelData(ItemMeta,int)>setCustomModelData</a>(@Nullable() ItemMeta itemMeta, int data) </code>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#setCustomModelData(ItemMeta,int)>setCustomModelData</a>(@Nullable() ItemMeta itemMeta, int data) </code>
                                             </th>
                                             <td class="colLast">设置 ItemMeta 中的 CustomModelData.</td>
                                         </tr>
@@ -270,7 +270,7 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                         <tr id="i3" class="rowColor">
                                             <td class="colFirst"><code><a href=NamespacedKey.html>NamespacedKey</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=impl/NMSHookerOtherImpl.html#getNamespacedKey(Material)>getNamespacedKey</a>(Material material) </code>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#getNamespacedKey(Material)>getNamespacedKey</a>(Material material) </code>
                                             </th>
                                             <td class="colLast">通过物品材质, 获取 NamespacedKey.</td>
                                         </tr>
@@ -278,9 +278,25 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                         <tr id="i4" class="altColor">
                                             <td class="colFirst"><code>Item</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=impl/NMSHookerOtherImpl.html#dropItem(World,Location,ItemStack,Consumer)>dropItem</a>(@NotNull() World world, @NotNull() Location location, @NotNull() ItemStack itemStack, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function) </code>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#dropItem(World,Location,ItemStack,Consumer)>dropItem</a>(@NotNull() World world, @NotNull() Location location, @NotNull() ItemStack itemStack, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function) </code>
                                             </th>
                                             <td class="colLast">在指定世界的指定坐标生成一个掉落物, 生成实体前对实体进行一些操作.</td>
+                                        </tr>
+                                        
+                                        <tr id="i5" class="rowColor">
+                                            <td class="colFirst"><code>HoverEvent</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#hoverText(String)>hoverText</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text) </code>
+                                            </th>
+                                            <td class="colLast">根据给定的文本生成一个 HoverEvent.</td>
+                                        </tr>
+                                        
+                                        <tr id="i6" class="altColor">
+                                            <td class="colFirst"><code>HoverEvent</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#hoverItem(ItemStack)>hoverItem</a>(@NotNull() ItemStack itemStack) </code>
+                                            </th>
+                                            <td class="colLast">根据给定的物品生成一个 HoverEvent.</td>
                                         </tr>
                                         
                                         </tbody>
@@ -345,7 +361,7 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                           >
                                     <li class="blockList">
                                         <h4>hasCustomModelData</h4>
-                                        <pre class="methodSignature"> boolean <a href=impl/NMSHookerOtherImpl.html#hasCustomModelData(ItemMeta)>hasCustomModelData</a>(@Nullable() ItemMeta itemMeta)</pre>
+                                        <pre class="methodSignature"> boolean <a href=NMSHooker.html#hasCustomModelData(ItemMeta)>hasCustomModelData</a>(@Nullable() ItemMeta itemMeta)</pre>
                                         <div class="block"><p>检测 ItemMeta 是否存在 CustomModelData. 对于不存在 CustomModelData 的版本, 将永远返回 false.</p></div>
                                         
                                         <dl>
@@ -369,7 +385,7 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                           >
                                     <li class="blockList">
                                         <h4>getCustomModelData</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=impl/NMSHookerOtherImpl.html#getCustomModelData(ItemMeta)>getCustomModelData</a>(@Nullable() ItemMeta itemMeta)</pre>
+                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> <a href=NMSHooker.html#getCustomModelData(ItemMeta)>getCustomModelData</a>(@Nullable() ItemMeta itemMeta)</pre>
                                         <div class="block"><p>获取 ItemMeta 中的 CustomModelData. 如果 ItemMeta 中不存在 CustomModelData, 将返回 null. 对于不存在 CustomModelData 的版本, 将永远返回 null.</p></div>
                                         
                                         <dl>
@@ -393,7 +409,7 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                           >
                                     <li class="blockList">
                                         <h4>setCustomModelData</h4>
-                                        <pre class="methodSignature"> void <a href=impl/NMSHookerOtherImpl.html#setCustomModelData(ItemMeta,int)>setCustomModelData</a>(@Nullable() ItemMeta itemMeta, int data)</pre>
+                                        <pre class="methodSignature"> void <a href=NMSHooker.html#setCustomModelData(ItemMeta,int)>setCustomModelData</a>(@Nullable() ItemMeta itemMeta, int data)</pre>
                                         <div class="block"><p>设置 ItemMeta 中的 CustomModelData. 对于不存在 CustomModelData 的版本, 将等同于空方法.</p></div>
                                         
                                         <dl>
@@ -419,7 +435,7 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                           >
                                     <li class="blockList">
                                         <h4>getNamespacedKey</h4>
-                                        <pre class="methodSignature"> <a href=NamespacedKey.html>NamespacedKey</a> <a href=impl/NMSHookerOtherImpl.html#getNamespacedKey(Material)>getNamespacedKey</a>(Material material)</pre>
+                                        <pre class="methodSignature"> <a href=NamespacedKey.html>NamespacedKey</a> <a href=NMSHooker.html#getNamespacedKey(Material)>getNamespacedKey</a>(Material material)</pre>
                                         <div class="block"><p>通过物品材质, 获取 NamespacedKey.</p></div>
                                         
                                         <dl>
@@ -439,11 +455,11 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>dropItem</h4>
-                                        <pre class="methodSignature">@<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html>Deprecated</a>()@NotNull() Item <a href=impl/NMSHookerOtherImpl.html#dropItem(World,Location,ItemStack,Consumer)>dropItem</a>(@NotNull() World world, @NotNull() Location location, @NotNull() ItemStack itemStack, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function)</pre>
+                                        <pre class="methodSignature">@<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html>Deprecated</a>()@NotNull() Item <a href=NMSHooker.html#dropItem(World,Location,ItemStack,Consumer)>dropItem</a>(@NotNull() World world, @NotNull() Location location, @NotNull() ItemStack itemStack, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function)</pre>
                                         <div class="block"><p>在指定世界的指定坐标生成一个掉落物, 生成实体前对实体进行一些操作.</p></div>
                                         
                                         <dl>
@@ -463,6 +479,54 @@ public abstract class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHook
                                             
                                             
                                             <dd><code>function</code> - 掉落前对物品执行的操作.</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="hoverText(String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>hoverText</h4>
+                                        <pre class="methodSignature">@NotNull() HoverEvent <a href=NMSHooker.html#hoverText(String)>hoverText</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text)</pre>
+                                        <div class="block"><p>根据给定的文本生成一个 HoverEvent.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>text</code> - 待操作物品.</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="hoverItem(ItemStack)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>hoverItem</h4>
+                                        <pre class="methodSignature">@NotNull() HoverEvent <a href=NMSHooker.html#hoverItem(ItemStack)>hoverItem</a>(@NotNull() ItemStack itemStack)</pre>
+                                        <div class="block"><p>根据给定的物品生成一个 HoverEvent.</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>itemStack</code> - 待操作物品.</dd>
                                             
                                             
                                         </dl>
