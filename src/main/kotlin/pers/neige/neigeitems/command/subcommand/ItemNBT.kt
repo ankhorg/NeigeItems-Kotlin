@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.command.subcommand
 
 import bot.inker.bukkit.nbt.*
-import net.md_5.bungee.api.chat.*
+import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack

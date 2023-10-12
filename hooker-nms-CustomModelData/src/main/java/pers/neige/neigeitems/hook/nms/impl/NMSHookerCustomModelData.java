@@ -1,13 +1,7 @@
 package pers.neige.neigeitems.hook.nms.impl;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.hook.nms.NMSHooker;
-import pers.neige.neigeitems.hook.nms.NamespacedKey;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 1.14- 版本, CustomModelData 特殊兼容

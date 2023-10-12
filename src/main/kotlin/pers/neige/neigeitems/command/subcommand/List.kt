@@ -1,19 +1,22 @@
 package pers.neige.neigeitems.command.subcommand
 
+import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.command.Command
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
+import pers.neige.neigeitems.manager.HookerManager.append
 import pers.neige.neigeitems.manager.HookerManager.getParsedName
+import pers.neige.neigeitems.manager.HookerManager.hoverItem
+import pers.neige.neigeitems.manager.HookerManager.hoverText
+import pers.neige.neigeitems.manager.HookerManager.runCommand
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.PlayerUtils.sendMessage
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.module.chat.RawMessage
 import taboolib.module.nms.getName
-import taboolib.platform.util.hoverItem
 import java.util.*
 import kotlin.math.ceil
 
@@ -49,7 +52,7 @@ object List {
         // 发送前缀
         ConfigManager.config.getString("ItemList.Prefix")?.let { sender.sendMessage(it) }
         // 预构建待发送信息
-        val listMessage = RawMessage()
+        val listMessage = ComponentBuilder("")
         // 获取当前序号
         val prevItemAmount = ((realPage-1)* ConfigManager.config.getInt("ItemList.ItemAmount"))+1
         // 逐个获取物品
@@ -64,11 +67,10 @@ object List {
             if (sender is Player) {
                 kotlin.runCatching { ItemManager.getItemStack(id, sender) }.getOrNull()?.let { itemStack ->
                     val listItemMessageList = listItemMessage.split("{name}")
-                    val listItemRaw = RawMessage()
+                    val listItemRaw = ComponentBuilder("")
                     for ((i, it) in listItemMessageList.withIndex()) {
                         listItemRaw.append(
-                            RawMessage()
-                                .append(it)
+                            ComponentBuilder(it)
                                 .runCommand("/ni get $id")
                                 .hoverText(ConfigManager.config.getString("Messages.clickGiveMessage")?:"")
                         )
@@ -77,22 +79,20 @@ object List {
                             kotlin.runCatching {
                                 // 解析物品变量
                                 HookerManager.parseItemPlaceholders(itemStack)
-                                RawMessage()
-                                    .append(itemStack.getParsedName())
+                                ComponentBuilder(itemStack.getParsedName())
                                     .hoverItem(itemStack)
                                     .runCommand("/ni get $id")
                             }.getOrNull()?.let {
                                 listItemRaw.append(it)
                             } ?: let {
                                 listItemRaw.append(
-                                    RawMessage()
-                                        .append(itemStack.getParsedName())
+                                    ComponentBuilder(itemStack.getParsedName())
                                         .runCommand("/ni get $id")
                                 )
                             }
                         }
                     }
-                    listItemRaw.sendTo(Command.bukkitAdapter.adaptCommandSender(sender))
+                    sender.sendMessage(listItemRaw)
                 }
             } else {
                 // 在不传入玩家变量的情况下尝试构建物品获取物品名
@@ -111,15 +111,13 @@ object List {
                 }
             }
         }
-        val prevRaw = RawMessage()
-            .append(ConfigManager.config.getString("ItemList.Prev")?:"")
+        val prevRaw = ComponentBuilder(ConfigManager.config.getString("ItemList.Prev")?:"")
         if (realPage != 1) {
             prevRaw
                 .hoverText((ConfigManager.config.getString("ItemList.Prev")?:"") + ": " + (realPage-1).toString())
                 .runCommand("/ni list ${realPage-1}")
         }
-        val nextRaw = RawMessage()
-            .append(ConfigManager.config.getString("ItemList.Next")?:"")
+        val nextRaw = ComponentBuilder(ConfigManager.config.getString("ItemList.Next")?:"")
         if (realPage != pageAmount) {
             nextRaw.hoverText((ConfigManager.config.getString("ItemList.Next")?:"") + ": " + (realPage+1))
             nextRaw.runCommand("/ni list ${realPage+1}")
@@ -140,7 +138,7 @@ object List {
                 }
             }
             // 向玩家发送信息
-            listMessage.sendTo(Command.bukkitAdapter.adaptCommandSender(sender))
+            sender.sendMessage(listMessage)
         } else {
             sender.sendMessage(listSuffixMessage
                 .replace("{prev}", ConfigManager.config.getString("ItemList.Prev")?:"")

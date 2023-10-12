@@ -12,15 +12,12 @@ import taboolib.common.platform.command.CommandHeader
 import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.platform.BukkitAdapter
 
 /**
  * 插件指令
  */
 @CommandHeader(name = "NeigeItems", aliases = ["ni"])
 object Command {
-    val bukkitAdapter = BukkitAdapter()
-
     @CommandBody
     val main = mainCommand {
         execute<CommandSender> { sender, _, _ ->

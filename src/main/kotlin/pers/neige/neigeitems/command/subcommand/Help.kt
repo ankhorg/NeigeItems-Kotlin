@@ -1,12 +1,15 @@
 package pers.neige.neigeitems.command.subcommand
 
+import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import pers.neige.neigeitems.command.Command
 import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.neigeitems.manager.HookerManager.append
+import pers.neige.neigeitems.manager.HookerManager.hoverText
+import pers.neige.neigeitems.manager.HookerManager.runCommand
+import pers.neige.neigeitems.utils.PlayerUtils.sendMessage
 import taboolib.common.platform.ProxyCommandSender
 import taboolib.common.platform.command.subCommand
-import taboolib.module.chat.TellrawJson
 import kotlin.math.ceil
 
 object Help {
@@ -55,15 +58,13 @@ object Help {
                     .replace("{command}", commandsSection.getString("$command.command") ?: "")
                     .replace("{description}", commandsSection.getString("$command.description") ?: ""))
             }
-            val prevRaw = TellrawJson()
-                .append(ConfigManager.config.getString("Help.prev")?:"")
+            val prevRaw = ComponentBuilder(ConfigManager.config.getString("Help.prev")?:"")
             if (realPage != 1) {
                 prevRaw
                     .hoverText((ConfigManager.config.getString("Help.prev")?:"") + ": " + (realPage-1).toString())
                     .runCommand("/ni help ${realPage-1}")
             }
-            val nextRaw = TellrawJson()
-                .append(ConfigManager.config.getString("Help.next")?:"")
+            val nextRaw = ComponentBuilder(ConfigManager.config.getString("Help.next")?:"")
             if (realPage != pageAmount) {
                 nextRaw.hoverText((ConfigManager.config.getString("Help.next")?:"") + ": " + (realPage+1))
                 nextRaw.runCommand("/ni help ${realPage+1}")
@@ -71,7 +72,7 @@ object Help {
             var listSuffixMessage = (ConfigManager.config.getString("Help.suffix")?:"")
                 .replace("{current}", realPage.toString())
                 .replace("{total}", pageAmount.toString())
-            val listMessage = TellrawJson()
+            val listMessage = ComponentBuilder("")
             if (sender is Player) {
                 listSuffixMessage = listSuffixMessage
                     .replace("{prev}", "!@#$%{prev}!@#$%")
@@ -85,7 +86,7 @@ object Help {
                     }
                 }
                 // 向玩家发送信息
-                listMessage.sendTo(Command.bukkitAdapter.adaptCommandSender(sender))
+                sender.sendMessage(listMessage)
             } else {
                 sender.sendMessage(listSuffixMessage
                     .replace("{prev}", ConfigManager.config.getString("ItemList.Prev")?:"")
@@ -123,15 +124,13 @@ object Help {
                     .replace("{command}", commandsSection.getString("$command.command") ?: "")
                     .replace("{description}", commandsSection.getString("$command.description") ?: ""))
             }
-            val prevRaw = TellrawJson()
-                .append(ConfigManager.config.getString("Help.prev")?:"")
+            val prevRaw = ComponentBuilder(ConfigManager.config.getString("Help.prev")?:"")
             if (realPage != 1) {
                 prevRaw
                     .hoverText((ConfigManager.config.getString("Help.prev")?:"") + ": " + (realPage-1).toString())
                     .runCommand("/ni help ${realPage-1}")
             }
-            val nextRaw = TellrawJson()
-                .append(ConfigManager.config.getString("Help.next")?:"")
+            val nextRaw = ComponentBuilder(ConfigManager.config.getString("Help.next")?:"")
             if (realPage != pageAmount) {
                 nextRaw.hoverText((ConfigManager.config.getString("Help.next")?:"") + ": " + (realPage+1))
                 nextRaw.runCommand("/ni help ${realPage+1}")
@@ -139,7 +138,7 @@ object Help {
             var listSuffixMessage = (ConfigManager.config.getString("Help.suffix")?:"")
                 .replace("{current}", realPage.toString())
                 .replace("{total}", pageAmount.toString())
-            val listMessage = TellrawJson()
+            val listMessage = ComponentBuilder("")
             if (sender is Player) {
                 listSuffixMessage = listSuffixMessage
                     .replace("{prev}", "!@#$%{prev}!@#$%")
@@ -153,7 +152,7 @@ object Help {
                     }
                 }
                 // 向玩家发送信息
-                listMessage.sendTo(Command.bukkitAdapter.adaptCommandSender(sender))
+                sender.sendMessage(listMessage)
             } else {
                 sender.sendMessage(listSuffixMessage
                     .replace("{prev}", ConfigManager.config.getString("ItemList.Prev")?:"")

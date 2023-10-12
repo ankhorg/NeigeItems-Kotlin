@@ -1,7 +1,5 @@
 package bot.inker.bukkit.nbt.neigeitems.enchantment;
 
-import bot.inker.bukkit.nbt.internal.ref.*;
-
 /**
  * 仅作测试, 存在问题, 尚未实装
  */

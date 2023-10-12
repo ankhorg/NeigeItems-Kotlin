@@ -105,7 +105,7 @@ ExampleItem3:
   material: STONE
 ExampleItem4:
   material: STONE
-  name: "&f%neigeitems_nbt_NeigeItems.id%"
+  name: "&f%neigeitems_nbt_NeigeItems`id%"
   lore:
   - '&f物品使用次数: %neigeitems_charge%/%neigeitems_maxCharge%'
   options:

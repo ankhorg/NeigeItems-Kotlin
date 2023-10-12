@@ -4,9 +4,6 @@ import net.minecraft.server.v1_12_R1.MinecraftKey;
 import net.minecraft.server.v1_12_R1.RegistryMaterials;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.hook.nms.NMSHooker;
 import pers.neige.neigeitems.hook.nms.NamespacedKey;
 
 import java.util.HashMap;
