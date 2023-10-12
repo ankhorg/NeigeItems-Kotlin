@@ -11,9 +11,9 @@ import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.LangUtils.getLang
 import pers.neige.neigeitems.utils.LangUtils.sendLang
+import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import taboolib.common.platform.command.subCommand
 import taboolib.common.platform.function.submit
-import taboolib.platform.util.giveItem
 
 object GivePack {
     // ni givePack [玩家ID] [物品包ID] (数量) (指向数据) > 根据ID给予NI物品包

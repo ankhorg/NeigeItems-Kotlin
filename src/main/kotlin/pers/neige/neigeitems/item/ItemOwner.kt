@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityPickupItemEvent
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
-import taboolib.platform.util.actionBar
+import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
 
 /**
  * 用于实现掉落物归属功能
@@ -30,7 +30,7 @@ object ItemOwner {
                     // 通过actionbar进行对应提示
                     config.getString("Messages.invalidOwnerMessage")?.let {
                         when (config.getString("ItemOwner.messageType")) {
-                            "actionbar" -> player.actionBar(it.replace("{name}", owner))
+                            "actionbar" -> player.sendActionBar(it.replace("{name}", owner))
                             "message" -> player.sendMessage(it.replace("{name}", owner))
                         }
                     }

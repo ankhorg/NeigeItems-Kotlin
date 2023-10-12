@@ -37,12 +37,12 @@ import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
+import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
-import taboolib.platform.util.sendActionBar
 import java.io.File
 import java.io.InputStreamReader
 import java.util.*

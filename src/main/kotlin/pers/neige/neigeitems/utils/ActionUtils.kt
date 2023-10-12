@@ -11,11 +11,11 @@ import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getIntOrNull
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
+import pers.neige.neigeitems.utils.PlayerUtils.giveItem
+import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import taboolib.platform.util.actionBar
-import taboolib.platform.util.giveItem
 
 /**
  * 物品动作相关工具类
@@ -71,7 +71,7 @@ object ActionUtils {
             if (lastTime > time) {
                 ConfigManager.config.getString("Messages.itemCooldown")?.let {
                     val message = it.replace("{time}", "%.1f".format((lastTime - time).toDouble()/1000))
-                    player.actionBar(message)
+                    player.sendActionBar(message)
                 }
                 // 冷却中
                 return true

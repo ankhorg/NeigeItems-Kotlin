@@ -17,8 +17,8 @@ import pers.neige.neigeitems.utils.ItemUtils.getIntOrNull
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.LangUtils.getLang
-import taboolib.platform.util.giveItem
-import taboolib.platform.util.sendActionBar
+import pers.neige.neigeitems.utils.PlayerUtils.giveItem
+import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
 import java.util.concurrent.ThreadLocalRandom
 
 object ItemDurability {

@@ -31,11 +31,11 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.putDeepWithEscape
 import pers.neige.neigeitems.utils.ItemUtils.putDeepWithList
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
+import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import pers.neige.neigeitems.utils.function.TriFunction
-import taboolib.platform.util.giveItem
 import java.util.*
 
 /**
