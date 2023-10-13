@@ -6,6 +6,8 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.ExpansionManager
+import pers.neige.neigeitems.utils.SchedulerUtils.sync
+import pers.neige.neigeitems.utils.SchedulerUtils.syncAndGet
 
 /**
  * Bukkit 任务
@@ -92,7 +94,7 @@ class ScriptTask {
             }
         }
         // 我没研究过能不能异步注册, 所以直接同步, 稳妥一点
-        bukkitTask = if (Bukkit.isPrimaryThread()) {
+        bukkitTask = syncAndGet {
             // 如果之前注册过了就先移除并卸载
             unregister()
             // 注册任务
@@ -116,32 +118,6 @@ class ScriptTask {
                     bukkitRunnable.runTask(plugin)
                 }
             }
-        } else {
-            Bukkit.getScheduler().callSyncMethod(plugin) {
-                // 如果之前注册过了就先移除并卸载
-                unregister()
-                // 注册任务
-                return@callSyncMethod when {
-                    async && period > 0 -> {
-                        bukkitRunnable.runTaskTimerAsynchronously(plugin, delay.coerceAtLeast(0), period)
-                    }
-                    async && delay > 0 -> {
-                        bukkitRunnable.runTaskLaterAsynchronously(plugin, delay)
-                    }
-                    async -> {
-                        bukkitRunnable.runTaskAsynchronously(plugin)
-                    }
-                    period > 0 -> {
-                        bukkitRunnable.runTaskTimer(plugin, delay.coerceAtLeast(0), period)
-                    }
-                    delay > 0 -> {
-                        bukkitRunnable.runTaskLater(plugin, delay)
-                    }
-                    else -> {
-                        bukkitRunnable.runTask(plugin)
-                    }
-                }
-            }.get()
         }
         // 存入ExpansionManager, 插件重载时自动取消注册
         ExpansionManager.tasks.add(this)
@@ -155,15 +131,9 @@ class ScriptTask {
      */
     fun unregister(): ScriptTask {
         // 注册了就取消任务
-        if (Bukkit.isPrimaryThread()) {
+        sync {
             bukkitTask?.also {
                 Bukkit.getScheduler().cancelTask(it.taskId)
-            }
-        } else {
-            Bukkit.getScheduler().callSyncMethod(plugin) {
-                bukkitTask?.also {
-                    Bukkit.getScheduler().cancelTask(it.taskId)
-                }
             }
         }
         return this

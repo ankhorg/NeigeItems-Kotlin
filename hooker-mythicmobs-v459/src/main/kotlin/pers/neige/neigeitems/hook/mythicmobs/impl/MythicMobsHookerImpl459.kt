@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.utils.ListenerUtils
-import taboolib.common.platform.function.submit
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 
 /**
  * 4.5.9版本MM挂钩
@@ -40,7 +40,7 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
         org.bukkit.event.EventPriority.HIGH,
         plugin
     ) { event ->
-        submit(async = true) {
+        async {
             if (event.entity is LivingEntity) {
                 spawnEvent(
                     event.mobType.internalName,
@@ -55,7 +55,7 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
         MythicMobDeathEvent::class.java,
         plugin
     ) { event ->
-        submit(async = true) {
+        async {
             if (event.entity is LivingEntity) {
                 deathEvent(
                     event.killer,

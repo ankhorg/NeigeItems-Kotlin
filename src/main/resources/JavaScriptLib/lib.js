@@ -23,6 +23,7 @@ const EnchantmentUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nb
 const EntityItemUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityItemUtils
 const EntityPlayerUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils
 const WorldUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
+const SchedulerUtils = Packages.pers.neige.neigeitems.utils.SchedulerUtils
 
 const EnumHand = Packages.pers.neige.neigeitems.EnumHand
 
@@ -252,22 +253,14 @@ const runAction = function(action) {
  *
  * @param func 待执行函数
  */
-const sync = function(func) {
-    if (Bukkit.isPrimaryThread()) {
-        func()
-    } else {
-        bukkitScheduler.callSyncMethod(plugin, func)
-    }
-}
+const sync = SchedulerUtils.sync
 
 /**
  * 异步执行一个函数
  *
  * @param func 待执行函数
  */
-const async = function(func) {
-    bukkitScheduler["runTaskAsynchronously(Plugin,Runnable)"](plugin, func)
-}
+const async = SchedulerUtils.async
 
 /**
  * 获取玩家IP

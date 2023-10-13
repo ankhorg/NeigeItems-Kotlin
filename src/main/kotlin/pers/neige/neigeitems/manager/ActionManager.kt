@@ -2,7 +2,6 @@ package pers.neige.neigeitems.manager
 
 import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.Bukkit
-import org.bukkit.Bukkit.isPrimaryThread
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -39,6 +38,8 @@ import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
+import pers.neige.neigeitems.utils.SchedulerUtils.runLater
+import pers.neige.neigeitems.utils.SchedulerUtils.sync
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
@@ -291,15 +292,8 @@ object ActionManager {
         for (index in actionStart until actionEnd) {
             // 延迟执行
             if (delay > 0) {
-                // 线程判断
-                if (isPrimaryThread()) {
-                    Bukkit.getScheduler().runTaskLater(plugin, Runnable {
-                        runAction(player, action, itemStack, itemTag, data, event, global, index, actionEnd, map)
-                    }, delay)
-                } else {
-                    Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, Runnable {
-                        runAction(player, action, itemStack, itemTag, data, event, global, index, actionEnd, map)
-                    }, delay)
+                runLater(delay) {
+                    runAction(player, action, itemStack, itemTag, data, event, global, index, actionEnd, map)
                 }
                 // 停止当前操作
                 return true
@@ -740,21 +734,21 @@ object ActionManager {
         }
         // 强制玩家发送消息
         addAction("chat") { player, string ->
-            runThreadSafe {
+            sync {
                 player.chat(papi(player, string))
             }
             true
         }
         // 强制玩家发送消息(将&解析为颜色符号)
         addAction("chatWithColor") { player, string ->
-            runThreadSafe {
+            sync {
                 player.chat(papiColor(player, string))
             }
             true
         }
         // 强制玩家执行指令
         addAction("command") { player, string ->
-            runThreadSafe {
+            sync {
                 Bukkit.dispatchCommand(player, papiColor(player, string))
             }
             true
@@ -763,28 +757,28 @@ object ActionManager {
         actions["command"]?.let { addAction("player", it) }
         // 强制玩家执行指令(不将&解析为颜色符号)
         addAction("commandNoColor") { player, string ->
-            runThreadSafe {
+            sync {
                 Bukkit.dispatchCommand(player, papi(player, string))
             }
             true
         }
         // 后台执行指令
         addAction("console") { player, string ->
-            runThreadSafe {
+            sync {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papiColor(player, string))
             }
             true
         }
         // 后台执行指令(不将&解析为颜色符号)
         addAction("consoleNoColor") { player, string ->
-            runThreadSafe {
+            sync {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), papi(player, string))
             }
             true
         }
         // 发送Title
         addAction("title") { player, string ->
-            runThreadSafe {
+            sync {
                 papiColor(player, string).split(' ', '\\').also { args ->
                     val title = args.getOrNull(0)
                     val subtitle = args.getOrNull(1) ?: ""
@@ -798,7 +792,7 @@ object ActionManager {
         }
         // 发送Title(不将&解析为颜色符号)
         addAction("titleNoColor") { player, string ->
-            runThreadSafe {
+            sync {
                 papi(player, string).split(' ', '\\').also { args ->
                     val title = args.getOrNull(0)
                     val subtitle = args.getOrNull(1) ?: ""
@@ -812,14 +806,14 @@ object ActionManager {
         }
         // 发送ActionBar
         addAction("actionBar") { player, string ->
-            runThreadSafe {
+            sync {
                 player.sendActionBar(papiColor(player, string))
             }
             true
         }
         // 发送ActionBar(不将&解析为颜色符号)
         addAction("actionBarNoColor") { player, string ->
-            runThreadSafe {
+            sync {
                 player.sendActionBar(papi(player, string))
             }
             true
@@ -836,105 +830,105 @@ object ActionManager {
         }
         // 给予玩家经验
         addAction("giveExp") { player, string ->
-            runThreadSafe {
+            sync {
                 player.giveExp(papi(player, string).toIntOrNull() ?: 0)
             }
             true
         }
         // 扣除玩家经验
         addAction("takeExp") { player, string ->
-            runThreadSafe {
+            sync {
                 player.giveExp((papi(player, string).toIntOrNull() ?: 0) * -1)
             }
             true
         }
         // 设置玩家经验
         addAction("setExp") { player, string ->
-            runThreadSafe {
+            sync {
                 player.totalExperience = papi(player, string).toIntOrNull() ?: 0
             }
             true
         }
         // 给予玩家经验等级
         addAction("giveLevel") { player, string ->
-            runThreadSafe {
+            sync {
                 player.giveExpLevels(papi(player, string).toIntOrNull() ?: 0)
             }
             true
         }
         // 扣除玩家经验等级
         addAction("takeLevel") { player, string ->
-            runThreadSafe {
+            sync {
                 player.giveExpLevels((papi(player, string).toIntOrNull() ?: 0) * -1)
             }
             true
         }
         // 设置玩家经验等级
         addAction("setLevel") { player, string ->
-            runThreadSafe {
+            sync {
                 player.level = papi(player, string).toIntOrNull() ?: 0
             }
             true
         }
         // 给予玩家饱食度
         addAction("giveFood") { player, string ->
-            runThreadSafe {
+            sync {
                 player.foodLevel = (player.foodLevel + (papi(player, string).toIntOrNull() ?: 0)).coerceAtLeast(0).coerceAtMost(20)
             }
             true
         }
         // 扣除玩家饱食度
         addAction("takeFood") { player, string ->
-            runThreadSafe {
+            sync {
                 player.foodLevel = (player.foodLevel - (papi(player, string).toIntOrNull() ?: 0)).coerceAtLeast(0).coerceAtMost(20)
             }
             true
         }
         // 设置玩家饱食度
         addAction("setFood") { player, string ->
-            runThreadSafe {
+            sync {
                 player.foodLevel = (papi(player, string).toIntOrNull() ?: 0).coerceAtLeast(0).coerceAtMost(20)
             }
             true
         }
         // 给予玩家饱和度
         addAction("giveSaturation") { player, string ->
-            runThreadSafe {
+            sync {
                 player.saturation = (player.saturation + (papi(player, string).toFloatOrNull() ?: 0F)).coerceAtLeast(0F).coerceAtMost(player.foodLevel.toFloat())
             }
             true
         }
         // 扣除玩家饱和度
         addAction("takeSaturation") { player, string ->
-            runThreadSafe {
+            sync {
                 player.saturation = (player.saturation - (papi(player, string).toFloatOrNull() ?: 0F)).coerceAtLeast(0F).coerceAtMost(player.foodLevel.toFloat())
             }
             true
         }
         // 设置玩家饱和度
         addAction("setSaturation") { player, string ->
-            runThreadSafe {
+            sync {
                 player.saturation = (papi(player, string).toFloatOrNull() ?: 0F).coerceAtLeast(0F).coerceAtMost(player.foodLevel.toFloat())
             }
             true
         }
         // 给予玩家生命
         addAction("giveHealth") { player, string ->
-            runThreadSafe {
+            sync {
                 player.health = (player.health + (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtMost(player.maxHealth)
             }
             true
         }
         // 扣除玩家生命
         addAction("takeHealth") { player, string ->
-            runThreadSafe {
+            sync {
                 player.health = (player.health - (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtLeast(0.toDouble())
             }
             true
         }
         // 设置玩家生命
         addAction("setHealth") { player, string ->
-            runThreadSafe {
+            sync {
                 player.health = (papi(player, string).toDoubleOrNull() ?: 0.toDouble()).coerceAtLeast(0.toDouble()).coerceAtMost(player.maxHealth)
             }
             true
@@ -984,7 +978,7 @@ object ActionManager {
                 val amplifier = args[1].toIntOrNull()
                 val duration = args[2].toIntOrNull()
                 if (type != null && duration != null && amplifier != null) {
-                    runThreadSafe {
+                    sync {
                         player.addPotionEffect(PotionEffect(type, duration * 20, amplifier - 1), true)
                     }
                 }
@@ -995,7 +989,7 @@ object ActionManager {
         addAction("removePotionEffect") { player, string ->
             val type = PotionEffectType.getByName(string.uppercase())
             if (type != null) {
-                runThreadSafe {
+                sync {
                     player.removePotionEffect(type)
                 }
             }
@@ -1306,13 +1300,5 @@ object ActionManager {
         }
         // 执行动作
         trigger.run(player, itemStack, itemTag, data, null, HashMap<String, Any?>())
-    }
-
-    private fun runThreadSafe(task: Runnable) {
-        if (isPrimaryThread()) {
-            task.run()
-        } else {
-            Bukkit.getScheduler().runTask(plugin, task)
-        }
     }
 }

@@ -1,14 +1,13 @@
 package pers.neige.neigeitems.item.action
 
 import bot.inker.bukkit.nbt.NbtCompound
-import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
+import pers.neige.neigeitems.utils.SchedulerUtils
 
 class ActionTrigger(val id: String, val type: String, val config: ConfigurationSection) {
     /**
@@ -79,9 +78,9 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         event: Event?,
         global: MutableMap<String, Any?>
     ) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+        SchedulerUtils.async {
             ActionManager.runAction(player, actions, itemStack, itemTag, data, event, global)
-        })
+        }
     }
 
     /**

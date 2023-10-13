@@ -1,7 +1,6 @@
 package pers.neige.neigeitems.script.tool
 
 import bot.inker.bukkit.nbt.neigeitems.utils.ServerUtils
-import org.bukkit.Bukkit
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.PluginCommand
 import org.bukkit.command.TabCompleter
@@ -9,6 +8,7 @@ import org.bukkit.plugin.Plugin
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ExpansionManager
 import pers.neige.neigeitems.utils.CommandUtils
+import pers.neige.neigeitems.utils.SchedulerUtils.sync
 
 /**
  * Bukkit 指令
@@ -144,14 +144,9 @@ class ScriptCommand(private val name: String) {
         ExpansionManager.commands["${nameSpace}:$name"]?.unregister()
         ExpansionManager.commands["${nameSpace}:$name"] = this
         // 这玩意儿必须同步跑, 不然服会爆炸
-        if (Bukkit.isPrimaryThread()) {
+        sync {
             CommandUtils.getCommandMap().register(nameSpace, command)
             ServerUtils.syncCommands()
-        } else {
-            Bukkit.getScheduler().callSyncMethod(plugin) {
-                CommandUtils.getCommandMap().register(nameSpace, command)
-                ServerUtils.syncCommands()
-            }
         }
         return this
     }
@@ -163,7 +158,7 @@ class ScriptCommand(private val name: String) {
      */
     fun unregister(): ScriptCommand {
         // 这玩意儿必须同步跑, 不然服会爆炸
-        if (Bukkit.isPrimaryThread()) {
+        sync {
             CommandUtils.unregisterCommand(name)
             CommandUtils.unregisterCommand("${nameSpace}:$name")
             command.aliases.forEach {
@@ -171,16 +166,6 @@ class ScriptCommand(private val name: String) {
                 CommandUtils.unregisterCommand("${nameSpace}:$it")
             }
             ServerUtils.syncCommands()
-        } else {
-            Bukkit.getScheduler().callSyncMethod(plugin) {
-                CommandUtils.unregisterCommand(name)
-                CommandUtils.unregisterCommand("${nameSpace}:$name")
-                command.aliases.forEach {
-                    CommandUtils.unregisterCommand(it)
-                    CommandUtils.unregisterCommand("${nameSpace}:$it")
-                }
-                ServerUtils.syncCommands()
-            }
         }
         return this
     }

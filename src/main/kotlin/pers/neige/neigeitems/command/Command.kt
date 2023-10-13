@@ -7,11 +7,11 @@ import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemManager.getItemStack
 import pers.neige.neigeitems.utils.LangUtils.sendLang
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 import taboolib.common.platform.command.CommandBody
 import taboolib.common.platform.command.CommandHeader
 import taboolib.common.platform.command.mainCommand
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 
 /**
  * 插件指令
@@ -21,7 +21,7 @@ object Command {
     @CommandBody
     val main = mainCommand {
         execute<CommandSender> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -41,7 +41,7 @@ object Command {
             }
             dynamic(optional = true) {
                 execute<Player> { sender, context, argument ->
-                    submit(async = true) {
+                    async {
                         val time = System.currentTimeMillis()
                         repeat(argument.toIntOrNull() ?: 1) {
                             getItemStack(context.argument(-1), sender)

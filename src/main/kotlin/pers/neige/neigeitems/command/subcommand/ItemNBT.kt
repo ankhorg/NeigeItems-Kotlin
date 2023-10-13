@@ -8,12 +8,10 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.HookerManager.append
 import pers.neige.neigeitems.manager.HookerManager.hoverText
-import pers.neige.neigeitems.manager.HookerManager.runCommand
 import pers.neige.neigeitems.manager.HookerManager.suggestCommand
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
-import pers.neige.neigeitems.utils.PlayerUtils.sendMessage
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 
 object ItemNBT {
     val itemNBT = subCommand {
@@ -23,7 +21,7 @@ object ItemNBT {
     }
 
     private fun itemnbtCommandAsync (itemStack: ItemStack, sender: Player) {
-        submit (async = true) {
+        async {
             itemnbtCommand(itemStack, sender)
         }
     }
@@ -33,6 +31,10 @@ object ItemNBT {
             val components = itemStack.getNbt().format().create()
             var temp = TextComponent()
             var length = 0
+            // 我这么搞不是闲得蛋疼, 我知道 Player.Spigot#sendMessage 可以直接传数组
+            // 这样操作是为了把一个大号的复合文本以行为单位进行拆分
+            // 1.12.2 对聊天包的大小有限制, 超过 32767 就直接踹人
+            // 拆成一行一行的, 大小超限制的可能性就大大降低了
             components.forEach { component ->
                 val plainText = component.toPlainText()
                 if (plainText == "\n") {

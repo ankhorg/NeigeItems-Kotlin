@@ -59,6 +59,7 @@ class ScriptExpansion : CompiledScript {
                 const EntityItemUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityItemUtils
                 const EntityPlayerUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils
                 const WorldUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
+                const SchedulerUtils = Packages.pers.neige.neigeitems.utils.SchedulerUtils
                 
                 const EnumHand = Packages.pers.neige.neigeitems.EnumHand
                 
@@ -73,17 +74,8 @@ class ScriptExpansion : CompiledScript {
                 const pluginManager = Bukkit.getPluginManager()
                 const scheduler = Bukkit.getScheduler()
                 
-                function sync(task) {
-                    if (Bukkit.isPrimaryThread()) {
-                        task()
-                    } else {
-                        scheduler.callSyncMethod(plugin, task)
-                    }
-                }
-                
-                function async(task) {
-                    scheduler["runTaskAsynchronously(Plugin,Runnable)"](plugin, task)
-                }
+                let sync = SchedulerUtils.sync
+                let async = SchedulerUtils.async
             """.trimIndent()
         )
     }

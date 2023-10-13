@@ -5,8 +5,8 @@ import pers.neige.neigeitems.event.PluginReloadEvent
 import pers.neige.neigeitems.manager.*
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.utils.LangUtils.sendLang
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 
 object Reload {
     val reload = subCommand {
@@ -32,7 +32,7 @@ object Reload {
     }
 
     private fun reloadCommand(sender: CommandSender, type: String? = null) {
-        submit(async = true) {
+        async {
             // 重载类型
             val reloadType = when (type) {
                 "config" -> PluginReloadEvent.Type.CONFIG

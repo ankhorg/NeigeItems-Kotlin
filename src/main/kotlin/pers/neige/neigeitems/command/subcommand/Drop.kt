@@ -10,8 +10,8 @@ import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
 import pers.neige.neigeitems.utils.LangUtils.sendLang
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 
 object Drop {
     val drop = subCommand {
@@ -21,7 +21,7 @@ object Drop {
                 ItemManager.items.keys.toList()
             }
             execute<CommandSender> { sender, _, _ ->
-                submit(async = true) {
+                async {
                     help(sender)
                 }
             }
@@ -31,7 +31,7 @@ object Drop {
                     arrayListOf("amount")
                 }
                 execute<CommandSender> { sender, _, _ ->
-                    submit(async = true) {
+                    async {
                         help(sender)
                     }
                 }
@@ -41,7 +41,7 @@ object Drop {
                         Bukkit.getWorlds().map { it.name }
                     }
                     execute<CommandSender> { sender, _, _ ->
-                        submit(async = true) {
+                        async {
                             help(sender)
                         }
                     }
@@ -51,7 +51,7 @@ object Drop {
                             arrayListOf("x")
                         }
                         execute<CommandSender> { sender, _, _ ->
-                            submit(async = true) {
+                            async {
                                 help(sender)
                             }
                         }
@@ -61,7 +61,7 @@ object Drop {
                                 arrayListOf("y")
                             }
                             execute<CommandSender> { sender, _, _ ->
-                                submit(async = true) {
+                                async {
                                     help(sender)
                                 }
                             }
@@ -71,7 +71,7 @@ object Drop {
                                     arrayListOf("z")
                                 }
                                 execute<CommandSender> { sender, _, _ ->
-                                    submit(async = true) {
+                                    async {
                                         help(sender)
                                     }
                                 }
@@ -81,7 +81,7 @@ object Drop {
                                         arrayListOf("true", "false")
                                     }
                                     execute<CommandSender> { sender, _, _ ->
-                                        submit(async = true) {
+                                        async {
                                             help(sender)
                                         }
                                     }
@@ -160,7 +160,7 @@ object Drop {
         parser: String,
         data: String? = null
     ) {
-        submit(async = true) {
+        async {
             dropCommand(sender, id, amount, worldName, xString, yString, zString, random, parser, data)
         }
     }

@@ -1,10 +1,8 @@
 package pers.neige.neigeitems.utils
 
 import bot.inker.bukkit.nbt.NbtCompound
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.item.action.ActionTrigger
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.utils.ItemUtils.copy
@@ -14,6 +12,7 @@ import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
+import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
@@ -154,9 +153,9 @@ object ActionUtils {
                 }
                 if (itemClone != null) {
                     if (giveLater) {
-                        Bukkit.getScheduler().runTaskLater(NeigeItems.plugin, Runnable {
+                        syncLater(1) {
                             player.giveItem(itemClone)
-                        }, 1)
+                        }
                     } else {
                         player.giveItem(itemClone)
                     }

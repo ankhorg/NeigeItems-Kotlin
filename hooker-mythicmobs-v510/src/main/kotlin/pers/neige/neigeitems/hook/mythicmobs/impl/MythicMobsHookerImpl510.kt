@@ -6,7 +6,6 @@ import io.lumine.mythic.bukkit.events.MythicMobDeathEvent
 import io.lumine.mythic.bukkit.events.MythicMobSpawnEvent
 import io.lumine.mythic.bukkit.events.MythicReloadedEvent
 import io.lumine.mythic.core.items.ItemExecutor
-import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
@@ -14,7 +13,8 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.utils.ListenerUtils
-import taboolib.common.platform.function.submit
+import pers.neige.neigeitems.utils.SchedulerUtils.async
+import pers.neige.neigeitems.utils.SchedulerUtils.syncAndGet
 import kotlin.math.roundToInt
 
 /**
@@ -42,7 +42,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
         org.bukkit.event.EventPriority.HIGH,
         plugin
     ) { event ->
-        submit(async = true) {
+        async {
             if (event.entity is LivingEntity) {
                 spawnEvent(
                     event.mobType.internalName,
@@ -57,7 +57,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
         MythicMobDeathEvent::class.java,
         plugin
     ) { event ->
-        submit(async = true) {
+        async {
             if (event.entity is LivingEntity) {
                 deathEvent(
                     event.killer,
@@ -85,12 +85,8 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
     }
 
     override fun getItemStackSync(id: String): ItemStack? {
-        return if (Bukkit.isPrimaryThread()) {
+        return syncAndGet {
             itemManager.getItemStack(id)
-        } else {
-            Bukkit.getScheduler().callSyncMethod(plugin) {
-                itemManager.getItemStack(id)
-            }.get()
         }
     }
 

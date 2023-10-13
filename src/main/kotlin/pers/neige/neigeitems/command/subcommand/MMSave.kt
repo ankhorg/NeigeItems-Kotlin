@@ -8,8 +8,8 @@ import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.LangUtils.sendLang
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 import taboolib.module.nms.getName
 import java.io.File
 
@@ -17,7 +17,7 @@ object MMSave {
     // ni mm load [物品ID] (保存路径) > 将对应ID的MM物品保存为NI物品
     val load = subCommand {
         execute<Player> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -27,7 +27,7 @@ object MMSave {
                 mythicMobsHooker!!.getItemIds()
             }
             execute<Player> { sender, _, argument ->
-                submit(async = true) {
+                async {
                     try {
                         mythicMobsHooker!!.getItemStackSync(argument)?.let { itemStack ->
                             when (ItemManager.saveItem(itemStack, argument, "$argument.yml", false)) {
@@ -66,7 +66,7 @@ object MMSave {
                     ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
                 }
                 execute<Player> { sender, context, argument ->
-                    submit(async = true) {
+                    async {
                         try {
                             mythicMobsHooker!!.getItemStackSync(context.argument(-1))?.let { itemStack ->
                                 when (ItemManager.saveItem(itemStack, context.argument(-1), argument, false)) {
@@ -106,7 +106,7 @@ object MMSave {
     // ni mm cover [物品ID] (保存路径) > 将对应ID的MM物品覆盖为NI物品
     val cover = subCommand {
         execute<Player> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -116,7 +116,7 @@ object MMSave {
                 mythicMobsHooker!!.getItemIds()
             }
             execute<Player> { sender, _, argument ->
-                submit(async = true) {
+                async {
                     try {
                         mythicMobsHooker!!.getItemStackSync(argument)?.let { itemStack ->
                             if (ItemManager.saveItem(itemStack, argument, "$argument.yml", true) != 2) {
@@ -147,7 +147,7 @@ object MMSave {
                     ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
                 }
                 execute<Player> { sender, context, argument ->
-                    submit(async = true) {
+                    async {
                         try {
                             mythicMobsHooker!!.getItemStackSync(context.argument(-1))?.let { itemStack ->
                                 if (ItemManager.saveItem(itemStack, context.argument(-1), argument, true) != 2) {
@@ -180,7 +180,7 @@ object MMSave {
     val loadAll = subCommand {
         // ni mm loadAll
         execute<Player> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 val path = ConfigManager.config.getString("Main.MMItemsPath") ?: "MMItems.yml"
                 val file = File(NeigeItems.plugin.dataFolder, "${File.separator}Items${File.separator}$path")
                 if(!file.exists()) { file.createNewFile() }
@@ -220,7 +220,7 @@ object MMSave {
                 ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
             }
             execute<Player> { sender, _, argument ->
-                submit(async = true) {
+                async {
                     val file = File(NeigeItems.plugin.dataFolder, "${File.separator}Items${File.separator}$argument")
                     if(!file.exists()) { file.createNewFile() }
                     val config = YamlConfiguration.loadConfiguration(file)

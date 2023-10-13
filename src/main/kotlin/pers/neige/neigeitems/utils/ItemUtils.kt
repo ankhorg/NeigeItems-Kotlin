@@ -6,7 +6,6 @@ import bot.inker.bukkit.nbt.api.NbtLike
 import bot.inker.bukkit.nbt.api.NbtListLike
 import bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import com.alibaba.fastjson2.parseObject
-import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
@@ -16,12 +15,12 @@ import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
+import pers.neige.neigeitems.utils.SchedulerUtils.syncAndGet
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import taboolib.module.nms.getName
@@ -436,9 +435,8 @@ object ItemUtils {
         }
         // 记录掉落物拥有者
         val hide = neigeItems?.get("hide")
-        if (Bukkit.isPrimaryThread()) {
-            // 掉落物品
-            return this.world?.let { world ->
+        return syncAndGet {
+            this.world?.let { world ->
                 WorldUtils.dropItem(
                     world,
                     this,
@@ -455,30 +453,6 @@ object ItemUtils {
                     neigeItems?.getString("dropSkill")?.let { dropSkill ->
                         mythicMobsHooker?.castSkill(item, dropSkill, entity)
                     }
-                }
-            }
-        } else {
-            // 返回结果物品
-            return Bukkit.getScheduler().callSyncMethod(plugin) {
-                this.world?.let { world ->
-                    WorldUtils.dropItem(
-                        world,
-                        this,
-                        itemStack
-                    ) { item ->
-                        // 设置拥有者相关Metadata
-                        owner?.let {
-                            item.setMetadataEZ("NI-Owner", it)
-                        }
-                        hide?.let {
-                            item.setMetadataEZ("NI-Hide", (it as NbtNumeric).asByte)
-                        }
-                    }
-                }
-            }.get()?.also { item ->
-                // 掉落物技能
-                neigeItems?.getString("dropSkill")?.let { dropSkill ->
-                    mythicMobsHooker?.castSkill(item, dropSkill, entity)
                 }
             }
         }

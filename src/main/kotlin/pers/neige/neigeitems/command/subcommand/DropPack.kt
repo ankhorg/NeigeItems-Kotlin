@@ -10,8 +10,8 @@ import pers.neige.neigeitems.event.ItemPackDropEvent
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.LangUtils.sendLang
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 
 object DropPack {
     val dropPack = subCommand {
@@ -21,7 +21,7 @@ object DropPack {
                 ItemPackManager.itemPackIds
             }
             execute<CommandSender> { sender, _, _ ->
-                submit(async = true) {
+                async {
                     help(sender)
                 }
             }
@@ -31,7 +31,7 @@ object DropPack {
                     arrayListOf("amount")
                 }
                 execute<CommandSender> { sender, _, _ ->
-                    submit(async = true) {
+                    async {
                         help(sender)
                     }
                 }
@@ -41,7 +41,7 @@ object DropPack {
                         Bukkit.getWorlds().map { it.name }
                     }
                     execute<CommandSender> { sender, _, _ ->
-                        submit(async = true) {
+                        async {
                             help(sender)
                         }
                     }
@@ -51,7 +51,7 @@ object DropPack {
                             arrayListOf("x")
                         }
                         execute<CommandSender> { sender, _, _ ->
-                            submit(async = true) {
+                            async {
                                 help(sender)
                             }
                         }
@@ -61,7 +61,7 @@ object DropPack {
                                 arrayListOf("y")
                             }
                             execute<CommandSender> { sender, _, _ ->
-                                submit(async = true) {
+                                async {
                                     help(sender)
                                 }
                             }
@@ -71,7 +71,7 @@ object DropPack {
                                     arrayListOf("z")
                                 }
                                 execute<CommandSender> { sender, _, _ ->
-                                    submit(async = true) {
+                                    async {
                                         help(sender)
                                     }
                                 }
@@ -112,7 +112,7 @@ object DropPack {
         parser: String,
         data: String? = null
     ) {
-        submit(async = true) {
+        async {
             dropPackCommand(sender, id, repeat, worldName, xString, yString, zString, parser, data)
         }
     }

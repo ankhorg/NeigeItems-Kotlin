@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.script.tool
 
-import org.bukkit.Bukkit
 import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -8,6 +7,8 @@ import org.bukkit.plugin.Plugin
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.ExpansionManager
 import pers.neige.neigeitems.utils.ListenerUtils
+import pers.neige.neigeitems.utils.SchedulerUtils.sync
+import pers.neige.neigeitems.utils.SchedulerUtils.syncAndGet
 import java.util.function.Consumer
 
 /**
@@ -78,7 +79,7 @@ class ScriptListener(private val event: Class<Event>) {
      */
     fun register(): ScriptListener {
         // HandlerList是非线程安全的, 需要同步注册
-        listener = if (Bukkit.isPrimaryThread()) {
+        listener = syncAndGet {
             // 如果之前注册过了就先移除并卸载
             unregister()
             ListenerUtils.registerListener(
@@ -88,19 +89,6 @@ class ScriptListener(private val event: Class<Event>) {
                 ignoreCancelled,
                 executor
             )
-        } else {
-            Bukkit.getScheduler().callSyncMethod(plugin) {
-                // 如果之前注册过了就先移除并卸载
-                unregister()
-                // 注册监听器
-                return@callSyncMethod ListenerUtils.registerListener(
-                    event,
-                    priority,
-                    plugin,
-                    ignoreCancelled,
-                    executor
-                )
-            }.get()
         }
         // 存入ExpansionManager, 插件重载时自动取消注册
         ExpansionManager.listeners.add(this)
@@ -114,12 +102,8 @@ class ScriptListener(private val event: Class<Event>) {
      */
     fun unregister(): ScriptListener {
         // 注册了就取消监听
-        if (Bukkit.isPrimaryThread()) {
+        sync {
             ListenerUtils.unregisterListener(listener)
-        } else {
-            Bukkit.getScheduler().callSyncMethod(plugin) {
-                ListenerUtils.unregisterListener(listener)
-            }
         }
         return this
     }

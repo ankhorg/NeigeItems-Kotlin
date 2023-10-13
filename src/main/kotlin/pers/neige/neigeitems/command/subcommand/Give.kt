@@ -3,7 +3,6 @@ package pers.neige.neigeitems.command.subcommand
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.event.ItemGiveEvent
 import pers.neige.neigeitems.manager.ConfigManager
@@ -13,14 +12,15 @@ import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
+import pers.neige.neigeitems.utils.SchedulerUtils.async
+import pers.neige.neigeitems.utils.SchedulerUtils.sync
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 
 object Give {
     // ni get [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID获取NI物品
     val get = subCommand {
         execute<Player> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -65,7 +65,7 @@ object Give {
     // ni give [玩家ID] [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予NI物品
     val give = subCommand {
         execute<CommandSender> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -74,7 +74,7 @@ object Give {
                 Bukkit.getOnlinePlayers().map { it.name }
             }
             execute<CommandSender> { sender, _, _ ->
-                submit(async = true) {
+                async {
                     help(sender)
                 }
             }
@@ -120,7 +120,7 @@ object Give {
     // ni giveAll [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予所有人NI物品
     val giveAll = subCommand {
         execute<CommandSender> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -187,7 +187,7 @@ object Give {
         random: String? = null,
         data: String? = null
     ) {
-        submit(async = true) {
+        async {
             giveCommand(sender, player, id, amount, random, data)
         }
     }
@@ -199,7 +199,7 @@ object Give {
         random: String? = null,
         data: String? = null
     ) {
-        submit(async = true) {
+        async {
             Bukkit.getOnlinePlayers().forEach { player ->
                 giveCommand(sender, player, id, amount, random, data)
             }
@@ -233,7 +233,7 @@ object Give {
                             val event = ItemGiveEvent(id, player, itemStack, amount.coerceAtLeast(1))
                             event.call()
                             if (event.isCancelled) return
-                            Bukkit.getScheduler().callSyncMethod(NeigeItems.plugin) {
+                            sync {
                                 player.giveItems(event.itemStack, event.amount)
                             }
                             sender.sendLang("Messages.successInfo", mapOf(
@@ -276,7 +276,7 @@ object Give {
                                     val event = ItemGiveEvent(id, player, itemStack, 1)
                                     event.call()
                                     if (event.isCancelled) return@letItem
-                                    Bukkit.getScheduler().callSyncMethod(NeigeItems.plugin) {
+                                    sync {
                                         player.giveItems(event.itemStack, event.amount)
                                     }
                                     dropData[event.itemStack.getParsedName()] = dropData[event.itemStack.getParsedName()]?.let { it + event.amount } ?: event.amount

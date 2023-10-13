@@ -14,8 +14,8 @@ import pers.neige.neigeitems.manager.HookerManager.hoverText
 import pers.neige.neigeitems.manager.HookerManager.runCommand
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.PlayerUtils.sendMessage
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 import taboolib.module.nms.getName
 import java.util.*
 import kotlin.math.ceil
@@ -36,7 +36,7 @@ object List {
     }
 
     private fun listCommandAsync (sender: CommandSender, page: Int) {
-        submit (async = true) {
+        async {
             listCommand(sender, page)
         }
     }

@@ -5,9 +5,9 @@ import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.section.impl.*
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import pers.neige.neigeitems.utils.ConfigUtils.loadConfiguration
+import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
-import taboolib.common.platform.function.submit
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -76,7 +76,7 @@ object SectionManager {
     @Awake(LifeCycle.ACTIVE)
     private fun update() {
         // 延迟3秒执行, 等待PAPI扩展加载
-        submit(delay = 60) {
+        syncLater(60) {
             HookerManager.papiHooker?.let {
                 for (file: File in files) {
                     // 仅加载.yml文件
@@ -85,7 +85,7 @@ object SectionManager {
                     if (HookerManager.papiHooker.hasPapi(text)) {
                         reload()
                         ItemManager.reload()
-                        return@submit
+                        return@syncLater
                     }
                 }
                 for (file: File in ItemManager.files) {
@@ -95,7 +95,7 @@ object SectionManager {
                     if (HookerManager.papiHooker.hasPapi(text)) {
                         reload()
                         ItemManager.reload()
-                        return@submit
+                        return@syncLater
                     }
                 }
             }

@@ -1,11 +1,10 @@
 package pers.neige.neigeitems.section.impl
 
-import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.section.SectionParser
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 /**
@@ -45,7 +44,7 @@ object CheckParser : SectionParser() {
         actions: Any?
     ): String? {
         player?.player?.let {
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
+            async {
                 mutableMapOf(
                     Pair("value", value),
                     Pair("cache", cache),
@@ -58,7 +57,7 @@ object CheckParser : SectionParser() {
                         params
                     )
                 }
-            })
+            }
         }
         return value
     }

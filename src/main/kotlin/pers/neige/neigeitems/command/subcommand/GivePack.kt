@@ -4,7 +4,6 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.event.ItemPackGiveEvent
 import pers.neige.neigeitems.manager.HookerManager.getParsedName
@@ -12,14 +11,15 @@ import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.LangUtils.getLang
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
+import pers.neige.neigeitems.utils.SchedulerUtils.async
+import pers.neige.neigeitems.utils.SchedulerUtils.sync
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 
 object GivePack {
     // ni givePack [玩家ID] [物品包ID] (数量) (指向数据) > 根据ID给予NI物品包
     val givePack = subCommand {
         execute<CommandSender> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -28,7 +28,7 @@ object GivePack {
                 Bukkit.getOnlinePlayers().map { it.name }
             }
             execute<CommandSender> { sender, _, _ ->
-                submit(async = true) {
+                async {
                     help(sender)
                 }
             }
@@ -69,7 +69,7 @@ object GivePack {
         repeat: String?,
         data: String? = null
     ) {
-        submit(async = true) {
+        async {
             givePackCommand(sender, player, id, repeat, data)
         }
     }
@@ -113,7 +113,7 @@ object GivePack {
                     event.call()
                     if (!event.isCancelled) {
                         event.itemStacks.forEach { itemStack ->
-                            Bukkit.getScheduler().callSyncMethod(plugin) {
+                            sync {
                                 player.giveItem(itemStack)
                             }
                             dropData?.let {

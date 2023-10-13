@@ -3,7 +3,6 @@ package pers.neige.neigeitems.manager
 import bot.inker.bukkit.nbt.NbtCompound
 import bot.inker.bukkit.nbt.NbtItemStack
 import com.alibaba.fastjson2.parseObject
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -11,7 +10,6 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.neosearch.stringsearcher.StringSearcher
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.ItemManager.addCharge
@@ -32,6 +30,7 @@ import pers.neige.neigeitems.utils.ItemUtils.putDeepWithEscape
 import pers.neige.neigeitems.utils.ItemUtils.putDeepWithList
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
+import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
@@ -1650,7 +1649,9 @@ object ItemEditorManager {
                     val itemClone = itemStack.copy()
                     itemClone.amount = itemClone.amount - amount
                     itemStack.amount = amount
-                    Bukkit.getScheduler().runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
+                    syncLater(1) {
+                        player.giveItem(itemClone)
+                    }
                 }
                 // NBT物品
                 val nbtItemStack: NbtItemStack
@@ -1707,7 +1708,9 @@ object ItemEditorManager {
                     val itemClone: ItemStack = itemStack.copy()
                     itemClone.amount = itemClone.amount - amount
                     itemStack.amount = amount
-                    Bukkit.getScheduler().runTaskLater(plugin, Runnable { player.giveItem(itemClone) }, 1)
+                    syncLater(1) {
+                        player.giveItem(itemClone)
+                    }
                 }
                 // NBT物品
                 val nbtItemStack: NbtItemStack

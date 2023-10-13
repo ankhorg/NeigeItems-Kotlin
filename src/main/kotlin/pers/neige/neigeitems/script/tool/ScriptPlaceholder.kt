@@ -2,11 +2,11 @@ package pers.neige.neigeitems.script.tool
 
 import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.placeholderapi.PlaceholderExpansion
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ExpansionManager
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
+import pers.neige.neigeitems.utils.SchedulerUtils.sync
 import java.util.function.BiFunction
 
 /**
@@ -71,14 +71,9 @@ class ScriptPlaceholder(private val identifier: String) {
         ExpansionManager.placeholders[identifier] = this
         papiHooker?.newPlaceholderExpansion(identifier, author, version, executor)?.also {
             // papi是用HashMap存的扩展, 得主线程注册, 防止出现线程安全问题
-            if (Bukkit.isPrimaryThread()) {
+            sync {
                 placeholderExpansion = it
                 it.register()
-            } else {
-                Bukkit.getScheduler().callSyncMethod(plugin) {
-                    placeholderExpansion = it
-                    it.register()
-                }
             }
             // papiHooker为null说明没安装PlaceholderAPI
         } ?: let {
@@ -94,15 +89,9 @@ class ScriptPlaceholder(private val identifier: String) {
      * @return ScriptListener 本身
      */
     fun unregister(): ScriptPlaceholder {
-        if (Bukkit.isPrimaryThread()) {
+        sync {
             placeholderExpansion?.also {
                 it.unregister()
-            }
-        } else {
-            Bukkit.getScheduler().callSyncMethod(plugin) {
-                placeholderExpansion?.also {
-                    it.unregister()
-                }
             }
         }
         return this

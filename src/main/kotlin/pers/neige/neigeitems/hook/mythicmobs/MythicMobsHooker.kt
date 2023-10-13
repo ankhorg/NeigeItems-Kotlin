@@ -1,7 +1,6 @@
 package pers.neige.neigeitems.hook.mythicmobs
 
 import bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
-import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
@@ -12,7 +11,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.event.MythicDropEvent
 import pers.neige.neigeitems.event.MythicEquipEvent
@@ -30,8 +28,9 @@ import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
+import pers.neige.neigeitems.utils.SchedulerUtils.async
+import pers.neige.neigeitems.utils.SchedulerUtils.sync
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import taboolib.common.platform.function.submit
 import java.io.File
 import java.text.DecimalFormat
 import java.util.*
@@ -437,7 +436,7 @@ abstract class MythicMobsHooker {
                     // 拟渔获向量计算
                     val caughtVelocity = getCaughtVelocity(entity.location, killer.location)
                     // 拟渔获掉落
-                    Bukkit.getScheduler().callSyncMethod(plugin) {
+                    sync {
                         dropEvent.fishDropItems?.forEach { itemStack ->
                             // 掉落
                             WorldUtils.dropItem(
@@ -458,7 +457,7 @@ abstract class MythicMobsHooker {
     }
 
     fun loadMobInfos() {
-        submit(async = true) {
+        async {
             mobInfos.clear()
             for (file: File in ConfigUtils.getAllFiles("MythicMobs", "Mobs")) {
                 val config = YamlConfiguration.loadConfiguration(file)

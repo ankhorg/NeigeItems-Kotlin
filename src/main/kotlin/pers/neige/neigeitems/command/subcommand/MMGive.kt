@@ -4,20 +4,20 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItems
+import pers.neige.neigeitems.utils.SchedulerUtils.async
+import pers.neige.neigeitems.utils.SchedulerUtils.sync
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 import taboolib.module.nms.getName
 
 object MMGive {
     // ni mm get [物品ID] (数量) > 根据ID获取MM物品
     val get = subCommand {
         execute<Player> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -56,7 +56,7 @@ object MMGive {
     // ni mm give [玩家ID] [物品ID] (数量) > 根据ID给予MM物品
     val give = subCommand {
         execute<CommandSender> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -65,7 +65,7 @@ object MMGive {
                 Bukkit.getOnlinePlayers().map { it.name }
             }
             execute<CommandSender> { sender, _, _ ->
-                submit(async = true) {
+                async {
                     help(sender)
                 }
             }
@@ -105,7 +105,7 @@ object MMGive {
     // ni mm giveAll [物品ID] (数量) > 根据ID给予所有人MM物品
     val giveAll = subCommand {
         execute<CommandSender> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -145,7 +145,7 @@ object MMGive {
         itemStack: ItemStack?,
         amount: Int?
     ) {
-        submit(async = true) {
+        async {
             Bukkit.getOnlinePlayers().forEach { player ->
                 giveAddonCommand(
                     sender,
@@ -165,7 +165,7 @@ object MMGive {
         itemStack: ItemStack?,
         amount: Int?
     ) {
-        submit (async = true) {
+        async {
             giveAddonCommand(
                 sender,
                 player,
@@ -188,7 +188,7 @@ object MMGive {
             amount?.let {
                 // 给物品
                 itemStack?.let {
-                    Bukkit.getScheduler().callSyncMethod(NeigeItems.plugin) {
+                    sync {
                         player.giveItems(itemStack, amount.coerceAtLeast(1))
                     }
                     sender.sendLang("Messages.successInfo", mapOf(

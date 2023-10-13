@@ -18,8 +18,8 @@ import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
 import pers.neige.neigeitems.utils.LangUtils.sendLang
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 import taboolib.common.platform.command.subCommand
-import taboolib.common.platform.function.submit
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -40,7 +40,7 @@ object ExpansionBuild {
     // ni expansion build [扩展路径] > 将对应扩展打包为jar插件
     val build = subCommand {
         execute<CommandSender> { sender, _, _ ->
-            submit(async = true) {
+            async {
                 help(sender)
             }
         }
@@ -49,7 +49,7 @@ object ExpansionBuild {
                 ExpansionManager.expansions.keys().toList()
             }
             execute<CommandSender> { sender, _, argument ->
-                submit(async = true) {
+                async {
                     ExpansionManager.expansions[argument]?.also { script ->
                         val pluginName = script.scriptEngine.get("name") as? String ?: argument.split(File.separator).last().split(".").first()
                         val authors = script.scriptEngine.get("authors") as? ArrayList<String> ?: ArrayList<String>().also { it.add("unnamed") }

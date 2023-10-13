@@ -10,9 +10,9 @@ import pers.neige.neigeitems.script.tool.ScriptListener
 import pers.neige.neigeitems.script.tool.ScriptPlaceholder
 import pers.neige.neigeitems.script.tool.ScriptTask
 import pers.neige.neigeitems.utils.ConfigUtils
+import pers.neige.neigeitems.utils.SchedulerUtils.async
 import taboolib.common.LifeCycle
 import taboolib.common.platform.Awake
-import taboolib.common.platform.function.submit
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -155,7 +155,7 @@ object ExpansionManager {
      */
     @Awake(LifeCycle.ACTIVE)
     fun serverEnable() {
-        submit(async = true) {
+        async {
             permanentExpansion.forEach { (scriptName, scriptExpansion) ->
                 scriptExpansion.run("enable", scriptName)
                 scriptExpansion.run("serverEnable", scriptName)

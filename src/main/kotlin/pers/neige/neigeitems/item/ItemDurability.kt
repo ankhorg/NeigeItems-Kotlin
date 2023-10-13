@@ -1,7 +1,10 @@
 package pers.neige.neigeitems.item
 
 import bot.inker.bukkit.nbt.NbtCompound
-import org.bukkit.*
+import org.bukkit.GameMode
+import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.Statistic
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.Cancellable
@@ -10,7 +13,6 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemDamageEvent
 import org.bukkit.event.player.PlayerItemMendEvent
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getIntOrNull
@@ -19,6 +21,7 @@ import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.LangUtils.getLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
+import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
 import java.util.concurrent.ThreadLocalRandom
 
 object ItemDurability {
@@ -96,7 +99,9 @@ object ItemDurability {
                 // 物品数量+1, 让交互TNT事件消耗
                 itemStack.amount += 1
                 // 刷新玩家背包
-                Bukkit.getScheduler().runTaskLater(plugin, Runnable {player.updateInventory()}, 1)
+                syncLater(1) {
+                    player.updateInventory()
+                }
             }
             return
         }
