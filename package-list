@@ -1,5 +1,6 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
+$dokka.location:pers.neige.neigeitems.annotations/Awake.LifeCycle///PointingToDeclaration/pers/neige/neigeitems/annotations/Awake.LifeCycle.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PostGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PostGenerate.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PreGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PreGenerate.html
 $dokka.location:pers.neige.neigeitems.event/MythicDropEvent.ConfigLoaded///PointingToDeclaration/pers/neige/neigeitems/event/MythicDropEvent.ConfigLoaded.html
