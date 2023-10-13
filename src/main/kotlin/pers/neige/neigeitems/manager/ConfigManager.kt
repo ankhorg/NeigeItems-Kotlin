@@ -42,7 +42,6 @@ object ConfigManager {
     /**
      * 加载默认配置文件
      */
-    @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
     private fun saveResource() {
         if (getFileOrNull("Expansions") == null) {

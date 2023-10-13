@@ -9,7 +9,6 @@ import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object PlayerInteractEntityListener {
-    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST, ignoreCancelled = true)
     fun listener(event: PlayerInteractEntityEvent) {
         val player = event.player

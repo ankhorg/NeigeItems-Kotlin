@@ -106,7 +106,7 @@ public final class MythicDropEvent {
         }
 
         /**
-         * 获取 NeigeItems.Drop
+         * 获取 NeigeItems.Drop.
          */
         @Nullable
         public List<String> getDrops() {
@@ -114,9 +114,9 @@ public final class MythicDropEvent {
         }
 
         /**
-         * 设置 NeigeItems.Drop
+         * 设置 NeigeItems.Drop.
          *
-         * @param drops NeigeItems.Drop
+         * @param drops NeigeItems.Drop.
          */
         public void setDrops(
                 @Nullable List<String> drops
@@ -125,7 +125,7 @@ public final class MythicDropEvent {
         }
 
         /**
-         * 获取 NeigeItems.FishDrop
+         * 获取 NeigeItems.FishDrop.
          */
         @Nullable
         public List<String> getFishDrops() {
@@ -133,9 +133,9 @@ public final class MythicDropEvent {
         }
 
         /**
-         * 设置 NeigeItems.FishDrop
+         * 设置 NeigeItems.FishDrop.
          *
-         * @param fishDrops NeigeItems.FishDrop
+         * @param fishDrops NeigeItems.FishDrop.
          */
         public void setFishDrops(
                 @Nullable List<String> fishDrops
@@ -144,7 +144,7 @@ public final class MythicDropEvent {
         }
 
         /**
-         * 获取 NeigeItems.DropPacks
+         * 获取 NeigeItems.DropPacks.
          */
         @Nullable
         public List<String> getDropPacks() {
@@ -152,9 +152,9 @@ public final class MythicDropEvent {
         }
 
         /**
-         * 设置 NeigeItems.DropPacks
+         * 设置 NeigeItems.DropPacks.
          *
-         * @param dropPacks NeigeItems.DropPacks
+         * @param dropPacks NeigeItems.DropPacks.
          */
         public void setDropPacks(
                 @Nullable List<String> dropPacks
@@ -171,9 +171,9 @@ public final class MythicDropEvent {
         }
 
         /**
-         * 设置 NeigeItems.FancyDrop.offset.x
+         * 设置 NeigeItems.FancyDrop.offset.x.
          *
-         * @param offsetXString NeigeItems.FancyDrop.offset.x
+         * @param offsetXString NeigeItems.FancyDrop.offset.x.
          */
         public void setOffsetXString(
                 @Nullable String offsetXString
@@ -190,9 +190,9 @@ public final class MythicDropEvent {
         }
 
         /**
-         * 设置 NeigeItems.FancyDrop.offset.y
+         * 设置 NeigeItems.FancyDrop.offset.y.
          *
-         * @param offsetYString NeigeItems.FancyDrop.offset.y
+         * @param offsetYString NeigeItems.FancyDrop.offset.y.
          */
         public void setOffsetYString(
                 @Nullable String offsetYString
@@ -209,9 +209,9 @@ public final class MythicDropEvent {
         }
 
         /**
-         * 设置 NeigeItems.FancyDrop.offset.angle.type
+         * 设置 NeigeItems.FancyDrop.offset.angle.type.
          *
-         * @param angleType NeigeItems.FancyDrop.offset.angle.type
+         * @param angleType NeigeItems.FancyDrop.offset.angle.type.
          */
         public void setAngleType(
                 @Nullable String angleType

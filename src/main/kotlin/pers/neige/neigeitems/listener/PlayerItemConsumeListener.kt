@@ -11,7 +11,6 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 
 object PlayerItemConsumeListener {
-    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: PlayerItemConsumeEvent) {
         // 获取玩家

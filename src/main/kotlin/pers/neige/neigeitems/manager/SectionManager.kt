@@ -72,7 +72,6 @@ object SectionManager {
     /**
      * 检测替换PAPI变量
      */
-    @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
     private fun update() {
         // 延迟3秒执行, 等待PAPI扩展加载

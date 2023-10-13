@@ -12,7 +12,6 @@ import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object EntityDamageByEntityListener {
-    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: EntityDamageByEntityEvent) {
         if (event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK || event.damager !is Player) return
@@ -33,7 +32,6 @@ object EntityDamageByEntityListener {
         if (event.isCancelled) return
     }
 
-    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun blocking(event: EntityDamageByEntityEvent) {
         // 获取受击者

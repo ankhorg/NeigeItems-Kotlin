@@ -18,7 +18,7 @@ public final class PluginReloadEvent {
         private final Type type;
 
         /**
-         * type 取默认值 Type.ALL
+         * type 取默认值 Type.ALL.
          */
         public Pre() {
             this.type = Type.ALL;
@@ -60,7 +60,7 @@ public final class PluginReloadEvent {
         private final Type type;
 
         /**
-         * type 取默认值 Type.ALL
+         * type 取默认值 Type.ALL.
          */
         public Post() {
             this.type = Type.ALL;

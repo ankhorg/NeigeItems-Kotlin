@@ -12,6 +12,7 @@ import pers.neige.neigeitems.utils.ListenerUtils
 import taboolib.common.platform.Plugin
 import taboolib.platform.BukkitPlugin
 import java.lang.reflect.Method
+import java.lang.reflect.Modifier
 import java.util.jar.JarFile
 
 /**
@@ -111,34 +112,30 @@ object NeigeItems : Plugin() {
                 // 监听器方法
                 if (method.isAnnotationPresent(Listener::class.java)) {
                     if (method.parameterCount == 1 && Event::class.java.isAssignableFrom(method.parameterTypes[0])) {
-                        if (!method.isAccessible) {
-                            method.isAccessible = true
+                        if (method.check("错误的监听器注解")) {
+                            listenerMethods.add(method)
                         }
-                        listenerMethods.add(method)
                     }
                 }
                 // 生命周期方法
                 if (method.isAnnotationPresent(Awake::class.java)) {
                     if (method.parameterCount == 0) {
-                        if (!method.isAccessible) {
-                            method.isAccessible = true
-                        }
-                        val annotation = method.getAnnotation(Awake::class.java)
-                        when (annotation.lifeCycle) {
-                            Awake.LifeCycle.ENABLE -> enableMethods.add(method)
-                            Awake.LifeCycle.ACTIVE -> activeMethods.add(method)
-                            Awake.LifeCycle.DISABLE -> disableMethods.add(method)
-                            else -> {}
+                        if (method.check("错误的生命周期注解")) {
+                            val annotation = method.getAnnotation(Awake::class.java)
+                            when (annotation.lifeCycle) {
+                                Awake.LifeCycle.ENABLE -> enableMethods.add(method)
+                                Awake.LifeCycle.ACTIVE -> activeMethods.add(method)
+                                Awake.LifeCycle.DISABLE -> disableMethods.add(method)
+                            }
                         }
                     }
                 }
                 // 周期触发方法
                 if (method.isAnnotationPresent(Schedule::class.java)) {
                     if (method.parameterCount == 0) {
-                        if (!method.isAccessible) {
-                            method.isAccessible = true
+                        if (method.check("错误的周期触发注解")) {
+                            scheduleMethods.add(method)
                         }
-                        scheduleMethods.add(method)
                     }
                 }
             }
@@ -154,17 +151,17 @@ object NeigeItems : Plugin() {
                 eventPriority,
                 ignoreCancelled
             ) {
-                method.invoke(null, it)
+                method.invokeSafe(it)
             }
         }
 
         enableMethods.forEach { method ->
-            method.invoke(null)
+            method.invokeSafe()
         }
 
         Bukkit.getScheduler().runTask(plugin, Runnable {
             activeMethods.forEach { method ->
-                method.invoke(null)
+                method.invokeSafe()
             }
         })
 
@@ -172,11 +169,11 @@ object NeigeItems : Plugin() {
             val annotation = method.getAnnotation(Schedule::class.java)
             if (annotation.async) {
                 Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, Runnable {
-                    method.invoke(null)
+                    method.invokeSafe()
                 }, 0, annotation.period)
             } else {
                 Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
-                    method.invoke(null)
+                    method.invokeSafe()
                 }, 0, annotation.period)
             }
         }
@@ -184,7 +181,33 @@ object NeigeItems : Plugin() {
 
     override fun onDisable() {
         disableMethods.forEach { method ->
-            method.invoke(null)
+            method.invokeSafe()
+        }
+    }
+
+    private fun Method.check(msg: String): Boolean {
+        if (!isAccessible) {
+            isAccessible = true
+        }
+        return if (!Modifier.isStatic(modifiers)) {
+            try {
+                declaringClass.getDeclaredField("INSTANCE").get(null)
+                true
+            } catch (error: Throwable) {
+                plugin.logger.warning(msg)
+                error.printStackTrace()
+                false
+            }
+        } else {
+            true
+        }
+    }
+
+    private fun Method.invokeSafe(vararg args: Any) {
+        if (Modifier.isStatic(modifiers)) {
+            invoke(null, *args)
+        } else {
+            invoke(declaringClass.getDeclaredField("INSTANCE").get(null), *args)
         }
     }
 }

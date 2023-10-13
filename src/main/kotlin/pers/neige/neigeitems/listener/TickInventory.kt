@@ -8,7 +8,6 @@ import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object TickInventory {
-    @JvmStatic
     @Schedule(period = 1, async = true)
     fun schedule() {
         Bukkit.getOnlinePlayers().forEach { player ->

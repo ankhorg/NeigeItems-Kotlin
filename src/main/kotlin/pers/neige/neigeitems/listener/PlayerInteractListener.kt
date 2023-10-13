@@ -10,7 +10,6 @@ import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object PlayerInteractListener {
-    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST, ignoreCancelled = false)
     fun listener(event: PlayerInteractEvent) {
         // 获取玩家

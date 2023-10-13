@@ -9,7 +9,6 @@ import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object PlayerDropItemListener {
-    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST, ignoreCancelled = true)
     fun listener(event: PlayerDropItemEvent) {
         // 获取玩家
