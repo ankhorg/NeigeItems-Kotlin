@@ -2,6 +2,7 @@ package pers.neige.neigeitems.command.subcommand
 
 import bot.inker.bukkit.nbt.*
 import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -28,7 +29,23 @@ object ItemNBT {
 
     private fun itemnbtCommand (itemStack: ItemStack, sender: Player) {
         if (itemStack.type != Material.AIR) {
-            sender.sendMessage(itemStack.getNbt().format())
+            val components = itemStack.getNbt().format().create()
+            var temp = TextComponent()
+            var length = 0
+            components.forEach { component ->
+                val plainText = component.toPlainText()
+                if (plainText == "\n") {
+                    sender.spigot().sendMessage(temp)
+                    temp = TextComponent()
+                    length = 0
+                } else {
+                    temp.addExtra(component)
+                    length++
+                }
+            }
+            if (length != 0) {
+                sender.spigot().sendMessage(temp)
+            }
         }
     }
 
@@ -37,7 +54,8 @@ object ItemNBT {
 
     @JvmStatic
     fun NbtCompound.format(): ComponentBuilder {
-        val result = ComponentBuilder("§e§m                                                                      \n")
+        val result = ComponentBuilder("§e§m                                                                      ")
+            .append("\n")
         val iterator = this.iterator()
         while (iterator.hasNext()) {
             iterator.next().let { (key, value) ->
@@ -53,7 +71,7 @@ object ItemNBT {
                 if (iterator.hasNext()) result.append("\n")
             }
         }
-        return result.append("\n§e§m                                                                      ")
+        return result.append("\n").append("§e§m                                                                      ")
     }
 
     @JvmStatic
