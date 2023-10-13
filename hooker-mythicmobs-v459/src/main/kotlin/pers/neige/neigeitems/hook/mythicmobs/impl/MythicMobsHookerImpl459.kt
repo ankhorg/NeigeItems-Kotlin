@@ -10,7 +10,6 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.utils.ListenerUtils
 import pers.neige.neigeitems.utils.SchedulerUtils.async
@@ -37,8 +36,7 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
 
     override val spawnListener = ListenerUtils.registerListener(
         MythicMobSpawnEvent::class.java,
-        org.bukkit.event.EventPriority.HIGH,
-        plugin
+        org.bukkit.event.EventPriority.HIGH
     ) { event ->
         async {
             if (event.entity is LivingEntity) {
@@ -52,8 +50,7 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
     }
 
     override val deathListener = ListenerUtils.registerListener(
-        MythicMobDeathEvent::class.java,
-        plugin
+        MythicMobDeathEvent::class.java
     ) { event ->
         async {
             if (event.entity is LivingEntity) {
@@ -68,8 +65,7 @@ class MythicMobsHookerImpl459 : MythicMobsHooker() {
     }
 
     override val reloadListener = ListenerUtils.registerListener(
-        MythicReloadedEvent::class.java,
-        plugin
+        MythicReloadedEvent::class.java
     ) {
         loadMobInfos()
     }

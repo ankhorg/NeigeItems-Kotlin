@@ -4,9 +4,9 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
+import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.SectionManager
-import taboolib.common.platform.function.getDataFolder
-import taboolib.platform.BukkitPlugin
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -45,7 +45,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getAllFiles(dir: String): ArrayList<File> {
-        return getAllFiles(File(getDataFolder(), File.separator + dir))
+        return getAllFiles(File(plugin.dataFolder, File.separator + dir))
     }
 
     /**
@@ -56,7 +56,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFile(file: String): File {
-        return File(getDataFolder(), File.separator + file)
+        return File(plugin.dataFolder, File.separator + file)
     }
 
     /**
@@ -67,7 +67,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrNull(file: String): File? {
-        return File(getDataFolder(), File.separator + file).let {
+        return File(plugin.dataFolder, File.separator + file).let {
             if (!it.exists()) null
             else it
         }
@@ -81,7 +81,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrCreate(file: String): File {
-        return File(getDataFolder(), File.separator + file).also {
+        return File(plugin.dataFolder, File.separator + file).also {
             if (!it.exists()) {
                 val parent = it.parentFile
                 if (!parent.exists()) parent.mkdirs()
@@ -111,7 +111,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getAllFiles(plugin: String, dir: String): ArrayList<File> {
-        return getAllFiles(File(File(getDataFolder().parent, File.separator + plugin), File.separator + dir))
+        return getAllFiles(File(File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin), File.separator + dir))
     }
 
     /**
@@ -123,7 +123,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFile(plugin: String, file: String): File {
-        return File(File(getDataFolder().parent, File.separator + plugin), File.separator + file)
+        return File(File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin), File.separator + file)
     }
 
     /**
@@ -135,7 +135,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrNull(plugin: String, file: String): File? {
-        return File(File(getDataFolder().parent, File.separator + plugin), File.separator + file).let {
+        return File(File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin), File.separator + file).let {
             if (!it.exists()) null
             else it
         }
@@ -150,7 +150,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrCreate(plugin: String, file: String): File {
-        return File(File(getDataFolder().parent, File.separator + plugin), File.separator + file).also {
+        return File(File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin), File.separator + file).also {
             if (!it.exists()) {
                 val parent = it.parentFile
                 if (!parent.exists()) parent.mkdirs()
@@ -424,22 +424,6 @@ object ConfigUtils {
             if (remove) configSection.set("globalsections", null)
         }
         return configSection
-    }
-
-    /**
-     * 保存默认文件(不进行替换)
-     */
-    @JvmStatic
-    @Deprecated(
-        "年少不懂事, 参数不知填父类",
-        ReplaceWith(
-            "(this as JavaPlugin).saveResourceNotWarn(resourcePath)",
-            "org.bukkit.plugin.java.JavaPlugin",
-            "pers.neige.neigeitems.utils.ConfigUtils.saveResourceNotWarn"
-        )
-    )
-    fun BukkitPlugin.saveResourceNotWarn(resourcePath: String) {
-        (this as JavaPlugin).saveResourceNotWarn(resourcePath)
     }
 
     /**

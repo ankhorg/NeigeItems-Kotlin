@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.Bukkit
+import pers.neige.neigeitems.annotations.Awake
 import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.event.PluginReloadEvent
 import pers.neige.neigeitems.manager.ConfigManager.debug
@@ -11,8 +12,6 @@ import pers.neige.neigeitems.script.tool.ScriptPlaceholder
 import pers.neige.neigeitems.script.tool.ScriptTask
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.SchedulerUtils.async
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -137,7 +136,7 @@ object ExpansionManager {
      */
     @JvmStatic
     @Listener
-    fun enable(event: PluginReloadEvent.Post) {
+    private fun enable(event: PluginReloadEvent.Post) {
         if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION ) {
             return
         }
@@ -153,8 +152,9 @@ object ExpansionManager {
      * 触发serverEnable(同时也会触发enable)
      * 内部runTaskAsynchronously了
      */
-    @Awake(LifeCycle.ACTIVE)
-    fun serverEnable() {
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
+    private fun serverEnable() {
         async {
             permanentExpansion.forEach { (scriptName, scriptExpansion) ->
                 scriptExpansion.run("enable", scriptName)
@@ -173,7 +173,7 @@ object ExpansionManager {
      */
     @JvmStatic
     @Listener
-    fun disable(event: PluginReloadEvent.Pre) {
+    private fun disable(event: PluginReloadEvent.Pre) {
         if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION ) {
             return
         }
@@ -189,8 +189,9 @@ object ExpansionManager {
      * 触发serverDisable(同时也会触发disable)
      * 关服的时候不能开新任务，所以是在主线程触发的
      */
-    @Awake(LifeCycle.DISABLE)
-    fun serverDisable() {
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.DISABLE)
+    private fun serverDisable() {
         permanentExpansion.forEach { (scriptName, scriptExpansion) ->
             scriptExpansion.run("disable", scriptName)
             scriptExpansion.run("serverDisable", scriptName)

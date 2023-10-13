@@ -5,7 +5,6 @@ import bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityShootBowEvent
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.manager.ActionManager
@@ -39,8 +38,7 @@ object EntityShootBowListener {
     val shootArrowListener = if (GET_CONSUMABLE_SUPPORT) {
         ListenerUtils.registerListener(
             EntityShootBowEvent::class.java,
-            EventPriority.LOWEST,
-            plugin
+            EventPriority.LOWEST
         ) { event ->
             // 获取玩家
             val player = event.entity

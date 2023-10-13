@@ -5,8 +5,7 @@ import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.scoreboard.Team
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.function.registerBukkitListener
+import pers.neige.neigeitems.utils.ListenerUtils
 
 /**
  * 基于Bukkit功能实现的掉落物光效系统
@@ -39,12 +38,12 @@ class ItemColorVanilla : ItemColor() {
     init {
         loadTeams()
 
-        registerBukkitListener(ItemSpawnEvent::class.java, EventPriority.NORMAL, false) {
+        ListenerUtils.registerListener(ItemSpawnEvent::class.java) {
             val item = it.entity
             val itemStack = item.itemStack
-            val itemInfo = itemStack.isNiItem() ?: return@registerBukkitListener
-            val colorString = itemInfo.neigeItems.getString("color") ?: return@registerBukkitListener
-            val color = colors[colorString] ?: return@registerBukkitListener
+            val itemInfo = itemStack.isNiItem() ?: return@registerListener
+            val colorString = itemInfo.neigeItems.getString("color") ?: return@registerListener
+            val color = colors[colorString] ?: return@registerListener
             // 挪入相关颜色的Team
             teams[color.toString()]?.addEntry(item.uniqueId.toString())
             // 设置物品发光

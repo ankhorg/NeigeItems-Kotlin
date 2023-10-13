@@ -7,6 +7,7 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.annotations.Awake
 import pers.neige.neigeitems.hook.easyitem.EasyItemHooker
 import pers.neige.neigeitems.hook.easyitem.impl.EasyItemHookerImpl
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
@@ -25,8 +26,6 @@ import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.item.color.impl.ItemColorProtocol
 import pers.neige.neigeitems.item.color.impl.ItemColorVanilla
 import pers.neige.neigeitems.manager.ConfigManager.config
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
 import taboolib.module.nms.getName
 import java.util.*
 import java.util.function.BiFunction
@@ -99,8 +98,9 @@ object HookerManager {
     /**
      * 加载MM挂钩功能
      */
-    @Awake(LifeCycle.ACTIVE)
-    fun loadMythicMobsHooker() {
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
+    private fun loadMythicMobsHooker() {
         mythicMobsHooker
     }
 
@@ -149,8 +149,9 @@ object HookerManager {
     /**
      * 加载EI挂钩功能
      */
-    @Awake(LifeCycle.ACTIVE)
-    fun loadEasyItemHooker() {
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
+    private fun loadEasyItemHooker() {
         easyItemHooker
     }
 
@@ -205,8 +206,9 @@ object HookerManager {
     /**
      * 掉落物光效功能
      */
-    @Awake(LifeCycle.ACTIVE)
-    fun loadItemColor() {
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
+    private fun loadItemColor() {
         itemColor
     }
 

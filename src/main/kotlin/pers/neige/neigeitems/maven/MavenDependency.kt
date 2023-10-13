@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.maven
 
+import pers.neige.neigeitems.NeigeItems
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -169,13 +170,13 @@ class MavenDependency {
                         Files.copy(connection.getInputStream(), it.toPath(), StandardCopyOption.REPLACE_EXISTING)
                         if (extension == "jar") {
                             // 后台发送信息
-                            println("Successfully downloaded $groupId:$artifactId:$version:jar")
+                            NeigeItems.plugin.logger.info("Successfully downloaded $groupId:$artifactId:$version:jar")
                         }
                         // 文件下载成功，退出循环
                         return@also
                     } catch (e: IOException) {
                         // 如果下载失败，则继续迭代下一个仓库地址
-                        println("Failed to download $groupId:$artifactId:$version:$extension from $repoUrl")
+                        NeigeItems.plugin.logger.info("Failed to download $groupId:$artifactId:$version:$extension from $repoUrl")
                     }
                 }
 

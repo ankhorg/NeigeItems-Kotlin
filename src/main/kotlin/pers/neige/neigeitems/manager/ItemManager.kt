@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
@@ -52,7 +53,7 @@ object ItemManager : ItemConfigManager() {
             if (debug) {
                 val current = System.currentTimeMillis() - time
                 if (current > 1) {
-                    println("  物品-$id-加载耗时: ${current}ms")
+                    NeigeItems.plugin.logger.info("  物品-$id-加载耗时: ${current}ms")
                 }
                 time = System.currentTimeMillis()
             }

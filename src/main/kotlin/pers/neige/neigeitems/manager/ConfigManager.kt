@@ -5,10 +5,9 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.annotations.Awake
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
 import pers.neige.neigeitems.utils.ConfigUtils.saveResourceNotWarn
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
 import taboolib.common.platform.Platform
 import taboolib.module.metrics.Metrics
 import taboolib.module.metrics.charts.SingleLineChart
@@ -43,8 +42,9 @@ object ConfigManager {
     /**
      * 加载默认配置文件
      */
-    @Awake(LifeCycle.INIT)
-    fun saveResource() {
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
+    private fun saveResource() {
         if (getFileOrNull("Expansions") == null) {
             plugin.saveResourceNotWarn("Expansions${File.separator}CustomAction.js")
             plugin.saveResourceNotWarn("Expansions${File.separator}CustomItemEditor.js")
@@ -74,12 +74,13 @@ object ConfigManager {
         metrics.addCustomChart(SingleLineChart("items") {
             ItemManager.itemIds.size
         })
+        // 对当前Config查缺补漏
+        loadConfig()
     }
 
     /**
      * 对当前Config查缺补漏
      */
-    @Awake(LifeCycle.LOAD)
     fun loadConfig() {
         originConfig.getKeys(true).forEach { key ->
             if (!plugin.config.contains(key)) {

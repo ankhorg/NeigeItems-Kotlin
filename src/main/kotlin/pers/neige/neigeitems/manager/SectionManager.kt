@@ -1,13 +1,12 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.configuration.ConfigurationSection
+import pers.neige.neigeitems.annotations.Awake
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.section.impl.*
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles
 import pers.neige.neigeitems.utils.ConfigUtils.loadConfiguration
 import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
-import taboolib.common.LifeCycle
-import taboolib.common.platform.Awake
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -73,7 +72,8 @@ object SectionManager {
     /**
      * 检测替换PAPI变量
      */
-    @Awake(LifeCycle.ACTIVE)
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
     private fun update() {
         // 延迟3秒执行, 等待PAPI扩展加载
         syncLater(60) {

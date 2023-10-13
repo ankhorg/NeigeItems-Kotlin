@@ -11,6 +11,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.event.MythicDropEvent
 import pers.neige.neigeitems.event.MythicEquipEvent
@@ -291,7 +292,7 @@ abstract class MythicMobsHooker {
                         }
                     } catch (error: Throwable) {
                         ConfigManager.config.getString("Messages.equipFailed")?.let { message ->
-                            println(message
+                            NeigeItems.plugin.logger.info(message
                                 .replace("{mobID}", internalName)
                                 .replace("{itemID}", args[0]))
                         }

@@ -18,8 +18,7 @@ import org.bukkit.scoreboard.Scoreboard
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import taboolib.common.platform.event.EventPriority
-import taboolib.common.platform.function.registerBukkitListener
+import pers.neige.neigeitems.utils.ListenerUtils
 import java.util.*
 
 
@@ -75,7 +74,7 @@ class ItemColorProtocol : ItemColor() {
 
     init {
         // 玩家登录时根据玩家当前计分板进行Team初始化
-        registerBukkitListener(PlayerJoinEvent::class.java, EventPriority.NORMAL, false) {
+        ListenerUtils.registerListener(PlayerJoinEvent::class.java) {
             initTeam(it.player)
         }
 

@@ -2,8 +2,8 @@ package pers.neige.neigeitems.section
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.SectionManager
-import taboolib.common.platform.function.info
 
 /**
  * 用于对节点的ConfigurationSection进行包装, 方便地获取或缓存解析值
@@ -46,10 +46,10 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
                 parser.onRequest(data, cache, player, sections)?.let {
                     return it
                 }
-                info("$type 节点 $id 无法获取解析值")
+                plugin.logger.info("$type 节点 $id 无法获取解析值")
                 return null
             }
-            info("$id 拥有未知节点类型 $type")
+            plugin.logger.info("$id 拥有未知节点类型 $type")
         }
         return null
     }

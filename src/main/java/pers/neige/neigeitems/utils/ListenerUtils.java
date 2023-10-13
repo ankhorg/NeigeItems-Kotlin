@@ -8,10 +8,29 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.NeigeItems;
 
 import java.util.function.Consumer;
 
 public class ListenerUtils {
+    /**
+     * 注册一个事件监听器.
+     * eventPriority 取默认值 EventPriority.NORMAL.
+     * plugin 取默认值 NeigeItems.INSTANCE.getPlugin().
+     * ignoreCancelled 取默认值 true.
+     *
+     * @param eventClass 事件类.
+     * @param eventExecutor 事件处理器.
+     * @return 对应的 Listener 对象.
+     */
+    @NotNull
+    public static <T extends Event> Listener registerListener(
+            @NotNull Class<T> eventClass,
+            @NotNull Consumer<T> eventExecutor
+    ) {
+        return registerListener(eventClass, EventPriority.NORMAL, NeigeItems.INSTANCE.getPlugin(), true, eventExecutor);
+    }
+
     /**
      * 注册一个事件监听器.
      * eventPriority 取默认值 EventPriority.NORMAL.
@@ -33,6 +52,25 @@ public class ListenerUtils {
 
     /**
      * 注册一个事件监听器.
+     * plugin 取默认值 NeigeItems.INSTANCE.getPlugin().
+     * ignoreCancelled 取默认值 true.
+     *
+     * @param eventClass 事件类.
+     * @param eventPriority 监听优先级.
+     * @param eventExecutor 事件处理器.
+     * @return 对应的 Listener 对象.
+     */
+    @NotNull
+    public static <T extends Event> Listener registerListener(
+            @NotNull Class<T> eventClass,
+            @NotNull EventPriority eventPriority,
+            @NotNull Consumer<T> eventExecutor
+    ) {
+        return registerListener(eventClass, eventPriority, NeigeItems.INSTANCE.getPlugin(), true, eventExecutor);
+    }
+
+    /**
+     * 注册一个事件监听器.
      * ignoreCancelled 取默认值 true.
      *
      * @param eventClass 事件类.
@@ -49,6 +87,26 @@ public class ListenerUtils {
             @NotNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, eventPriority, plugin, true, eventExecutor);
+    }
+
+    /**
+     * 注册一个事件监听器.
+     * plugin 取默认值 NeigeItems.INSTANCE.getPlugin().
+     *
+     * @param eventClass 事件类.
+     * @param eventPriority 监听优先级.
+     * @param eventExecutor 事件处理器.
+     * @param ignoreCancelled 是否忽略已取消事件.
+     * @return 对应的 Listener 对象.
+     */
+    @NotNull
+    public static <T extends Event> Listener registerListener(
+            @NotNull Class<T> eventClass,
+            @NotNull EventPriority eventPriority,
+            boolean ignoreCancelled,
+            @NotNull Consumer<T> eventExecutor
+    ) {
+        return registerListener(eventClass, eventPriority, NeigeItems.INSTANCE.getPlugin(), ignoreCancelled, eventExecutor);
     }
 
     /**

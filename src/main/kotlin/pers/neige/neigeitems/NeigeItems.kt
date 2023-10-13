@@ -5,10 +5,12 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.annotations.Awake
 import pers.neige.neigeitems.annotations.Listener
 import pers.neige.neigeitems.utils.ListenerUtils
 import taboolib.common.platform.Plugin
 import taboolib.platform.BukkitPlugin
+import java.lang.reflect.Method
 import java.util.jar.JarFile
 
 /**
@@ -16,6 +18,30 @@ import java.util.jar.JarFile
  */
 object NeigeItems : Plugin() {
     val plugin by lazy { BukkitPlugin.getInstance() }
+    /**
+     * 所有插件类
+     */
+    private val classes = mutableListOf<Class<*>>()
+
+    /**
+     * 待加载监听器方法
+     */
+    private val listenerMethods = mutableListOf<Method>()
+
+    /**
+     * ENABLE 加载方法
+     */
+    private val enableMethods = mutableListOf<Method>()
+
+    /**
+     * ACTIVE 加载方法
+     */
+    private val activeMethods = mutableListOf<Method>()
+
+    /**
+     * DISABLE 加载方法
+     */
+    private val disableMethods = mutableListOf<Method>()
 
     override fun onEnable() {
         try {
@@ -34,8 +60,7 @@ object NeigeItems : Plugin() {
             return
         }
 
-        val classes = mutableListOf<Class<*>>()
-
+        // 扫描加载所有插件类
         val pluginClassLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader")
         val classLoader: ClassLoader = NeigeItems::class.java.classLoader
         if (classLoader.javaClass != pluginClassLoaderClass) {
@@ -61,34 +86,77 @@ object NeigeItems : Plugin() {
                 && !entryName.startsWith("pers.neige.neigeitems.taboolib")
             ) {
                 entryName = entryName.substring(0, entry.name.length - 6)
-                classes.add(Class.forName(entryName))
+                try {
+                    classes.add(Class.forName(entryName))
+                } catch (error: Throwable) {
+                    error.printStackTrace()
+                }
             }
         }
 
-        classes.forEach{ clazz ->
+        // 扫描注解
+        classes.forEach { clazz ->
             val methods = try {
                 clazz.declaredMethods
             } catch (error: Throwable) {
                 null
             }
             methods?.forEach { method ->
+                // 监听器方法
                 if (method.isAnnotationPresent(Listener::class.java)) {
                     if (method.parameterCount == 1 && Event::class.java.isAssignableFrom(method.parameterTypes[0])) {
-                        val annotation = method.getAnnotation(Listener::class.java)
-                        val eventClass = method.parameterTypes[0]
-                        val eventPriority = annotation.eventPriority
-                        val ignoreCancelled = annotation.ignoreCancelled
-                        ListenerUtils.registerListener(
-                            eventClass as Class<Event>,
-                            eventPriority,
-                            plugin,
-                            ignoreCancelled
-                        ) {
-                            method.invoke(null, it)
+                        if (!method.isAccessible) {
+                            method.isAccessible = true
+                        }
+                        listenerMethods.add(method)
+                    }
+                }
+                // 周期触发方法
+                if (method.isAnnotationPresent(Awake::class.java)) {
+                    if (method.parameterCount == 0) {
+                        if (!method.isAccessible) {
+                            method.isAccessible = true
+                        }
+                        val annotation = method.getAnnotation(Awake::class.java)
+                        when (annotation.lifeCycle) {
+                            Awake.LifeCycle.ENABLE -> enableMethods.add(method)
+                            Awake.LifeCycle.ACTIVE -> activeMethods.add(method)
+                            Awake.LifeCycle.DISABLE -> disableMethods.add(method)
+                            else -> {}
                         }
                     }
                 }
             }
+        }
+
+        listenerMethods.forEach { method ->
+            val annotation = method.getAnnotation(Listener::class.java)
+            val eventClass = method.parameterTypes[0]
+            val eventPriority = annotation.eventPriority
+            val ignoreCancelled = annotation.ignoreCancelled
+            ListenerUtils.registerListener(
+                eventClass as Class<Event>,
+                eventPriority,
+                ignoreCancelled
+            ) {
+                method.invoke(null, it)
+            }
+        }
+
+        enableMethods.forEach { method ->
+            method.invoke(null)
+        }
+
+        Bukkit.getScheduler().runTask(plugin, Runnable {
+            activeMethods.forEach { method ->
+                method.invoke(null)
+            }
+        })
+    }
+
+    override fun onDisable() {
+        disableMethods.forEach { method ->
+            method.invoke(null)
         }
     }
 }
