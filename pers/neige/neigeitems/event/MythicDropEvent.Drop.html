@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>Drop 1.15.63 API </title>
+    <title>Drop 1.15.64 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -117,10 +117,10 @@ var pathtoroot = "../../../../";
                     <hr>
                     <pre class="wrap-overflow">
 
-public final class <span class="typeNameLabel"><a href=MythicDropEvent.Drop.html>MythicDropEvent.Drop</a></span>
-extends BukkitProxyEvent
+public class <span class="typeNameLabel"><a href=MythicDropEvent.Drop.html>MythicDropEvent.Drop</a></span>
+extends <a href=CancellableEvent.html>CancellableEvent</a>
                     </pre>
-                    <div class="block"><p>生成物品后, 准备掉落前触发</p></div>
+                    <div class="block"><p>MM怪物掉落NI装备事件, MM怪物死亡时异步触发. 生成物品后, 准备掉落前触发.</p></div>
                 </li>
             </ul>
         </div>
@@ -168,62 +168,68 @@ extends BukkitProxyEvent
                                         </tr>
                                         
                                         <tr class="altColor">
-                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
+                                            <td class="colFirst"><code>public final static HandlerList</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#handlers>handlers</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>public final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#internalName>internalName</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
-                                            <td class="colFirst"><code>private final LivingEntity</code></td>
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public final LivingEntity</code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#entity>entity</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>private final Player</code></td>
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>public final Player</code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#player>player</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
-                                            <td class="colFirst"><code>private  <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt;</code></td>
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public  <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt;</code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#dropItems>dropItems</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>private  <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt;</code></td>
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>public  <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt;</code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#fishDropItems>fishDropItems</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
-                                            <td class="colFirst"><code>private  <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public  <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#offsetXString>offsetXString</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>private  <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>public  <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#offsetYString>offsetYString</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
-                                            <td class="colFirst"><code>private  <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public  <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#angleType>angleType</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicEquipEvent.html#allowCancelled>allowCancelled</a></code></th>
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>public final static HandlerList</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=ItemDropEvent.html#handlers>handlers</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
-                                            <td class="colFirst"><code>private final ProxyEvent</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=PluginReloadEvent.Post.html#proxyEvent>proxyEvent</a></code></th>
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>private  boolean</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=ItemDropEvent.html#cancelled>cancelled</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -254,7 +260,7 @@ extends BukkitProxyEvent
                                             <tr class="altColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
                                                         href="#MythicDropEvent.Drop(String,LivingEntity,Player,List,List,String,String,String)">MythicDropEvent.Drop</a></span>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> internalName, LivingEntity entity, Player player, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; dropItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; fishDropItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetXString, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetYString, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> angleType)</code></th>
-                                                <td class="colLast">MM怪物掉落NI装备事件</td>
+                                                <td class="colLast"></td>
                                             </tr>
                                         
 
@@ -307,107 +313,123 @@ extends BukkitProxyEvent
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>HandlerList</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getInternalName()>getInternalName</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getHandlers()>getHandlers</a>() </code>
                                             </th>
-                                            <td class="colLast">怪物ID</td>
+                                            <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>final LivingEntity</code>
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getEntity()>getEntity</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getInternalName()>getInternalName</a>() </code>
                                             </th>
-                                            <td class="colLast">怪物实体</td>
+                                            <td class="colLast">获取怪物ID</td>
                                         </tr>
                                         
                                         <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code>final Player</code>
+                                            <td class="colFirst"><code>LivingEntity</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getPlayer()>getPlayer</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getEntity()>getEntity</a>() </code>
                                             </th>
-                                            <td class="colLast">怪物击杀者</td>
+                                            <td class="colLast">获取怪物实体</td>
                                         </tr>
                                         
                                         <tr id="i3" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt;</code>
+                                            <td class="colFirst"><code>Player</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getDropItems()>getDropItems</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getPlayer()>getPlayer</a>() </code>
                                             </th>
-                                            <td class="colLast">待掉落物品</td>
+                                            <td class="colLast">获取怪物击杀者</td>
                                         </tr>
                                         
                                         <tr id="i4" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#setDropItems(List)>setDropItems</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; dropItems) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getDropItems()>getDropItems</a>() </code>
                                             </th>
-                                            <td class="colLast">待掉落物品</td>
+                                            <td class="colLast">获取待掉落物品</td>
                                         </tr>
                                         
                                         <tr id="i5" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt;</code>
+                                            <td class="colFirst"><code>void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getFishDropItems()>getFishDropItems</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#setDropItems(List)>setDropItems</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; dropItems) </code>
                                             </th>
-                                            <td class="colLast">拟渔获掉落物品(不存在击杀者时并入dropItems)</td>
+                                            <td class="colLast">设置待掉落物品</td>
                                         </tr>
                                         
                                         <tr id="i6" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#setFishDropItems(List)>setFishDropItems</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; fishDropItems) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getFishDropItems()>getFishDropItems</a>() </code>
                                             </th>
-                                            <td class="colLast">拟渔获掉落物品(不存在击杀者时并入dropItems)</td>
+                                            <td class="colLast">获取拟渔获掉落物品(不存在击杀者时并入dropItems)</td>
                                         </tr>
                                         
                                         <tr id="i7" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getOffsetXString()>getOffsetXString</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#setFishDropItems(List)>setFishDropItems</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; fishDropItems) </code>
                                             </th>
-                                            <td class="colLast">多彩掉落横向偏移</td>
+                                            <td class="colLast">设置拟渔获掉落物品</td>
                                         </tr>
                                         
                                         <tr id="i8" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#setOffsetXString(String)>setOffsetXString</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetXString) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getOffsetXString()>getOffsetXString</a>() </code>
                                             </th>
-                                            <td class="colLast">多彩掉落横向偏移</td>
+                                            <td class="colLast">获取多彩掉落横向偏移</td>
                                         </tr>
                                         
                                         <tr id="i9" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getOffsetYString()>getOffsetYString</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#setOffsetXString(String)>setOffsetXString</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetXString) </code>
                                             </th>
-                                            <td class="colLast">多彩掉落纵向偏移</td>
+                                            <td class="colLast">设置多彩掉落横向偏移</td>
                                         </tr>
                                         
                                         <tr id="i10" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#setOffsetYString(String)>setOffsetYString</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetYString) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getOffsetYString()>getOffsetYString</a>() </code>
                                             </th>
-                                            <td class="colLast">多彩掉落纵向偏移</td>
+                                            <td class="colLast">获取多彩掉落纵向偏移</td>
                                         </tr>
                                         
                                         <tr id="i11" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getAngleType()>getAngleType</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#setOffsetYString(String)>setOffsetYString</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetYString) </code>
                                             </th>
-                                            <td class="colLast">多彩掉落喷射模式</td>
+                                            <td class="colLast">设置多彩掉落纵向偏移</td>
                                         </tr>
                                         
                                         <tr id="i12" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#setAngleType(String)>setAngleType</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> angleType) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getAngleType()>getAngleType</a>() </code>
                                             </th>
-                                            <td class="colLast">多彩掉落喷射模式</td>
+                                            <td class="colLast">获取多彩掉落喷射模式</td>
+                                        </tr>
+                                        
+                                        <tr id="i13" class="rowColor">
+                                            <td class="colFirst"><code>void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#setAngleType(String)>setAngleType</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> angleType) </code>
+                                            </th>
+                                            <td class="colLast">设置多彩掉落喷射模式</td>
+                                        </tr>
+                                        
+                                        <tr id="i14" class="altColor">
+                                            <td class="colFirst"><code>static HandlerList</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=MythicDropEvent.Drop.html#getHandlerList()>getHandlerList</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
                                         </tr>
                                         
                                         </tbody>
@@ -415,17 +437,23 @@ extends BukkitProxyEvent
                                 </div>
                                 <ul class="blockList">
                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.taboolib.platform.type.BukkitProxyEvent">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;taboolib.platform.type.BukkitProxyEvent</h3>
-                                            <code>call, getAllowCancelled, getHandlers, getProxyEvent, isCancelled, setCancelled</code></li>
-                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.org.bukkit.event.Event">
                                             <!--   -->
                                         </a>
                                             <h3>Methods inherited from class&nbsp;org.bukkit.event.Event</h3>
-                                            <code>getEventName, isAsynchronous</code></li>
+                                            <code>getEventName, getHandlers, isAsynchronous</code></li>
+                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.pers.neige.neigeitems.event.CancellableEvent">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;pers.neige.neigeitems.event.CancellableEvent</h3>
+                                            <code>call, isCancelled, setCancelled</code></li>
+                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.org.bukkit.event.Cancellable">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;org.bukkit.event.Cancellable</h3>
+                                            <code>isCancelled</code></li>
                                  
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
@@ -458,7 +486,44 @@ extends BukkitProxyEvent
                                     <li class="blockList">
                                         <h4>MythicDropEvent.Drop</h4>
                                         <pre>MythicDropEvent.Drop(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> internalName, LivingEntity entity, Player player, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; dropItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; fishDropItems, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetXString, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetYString, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> angleType)</pre>
-                                        <div class="block">MM怪物掉落NI装备事件</div>
+                                        <div class="block"></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>internalName</code> - 怪物ID</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>entity</code> - 怪物实体</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>player</code> - 怪物击杀者</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>dropItems</code> - 待掉落物品</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>fishDropItems</code> - 拟渔获掉落物品(不存在击杀者时并入dropItems)</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>offsetXString</code> - 多彩掉落横向偏移</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>offsetYString</code> - 多彩掉落纵向偏移</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>angleType</code> - 多彩掉落喷射模式</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                     </li>
                                 </ul>
@@ -476,6 +541,21 @@ extends BukkitProxyEvent
                             </a>
                                 <h3>Method Detail</h3>
                                 
+                                <a id="getHandlers()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getHandlers</h4>
+                                        <pre class="methodSignature">@NotNull() HandlerList <a href=MythicDropEvent.Drop.html#getHandlers()>getHandlers</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
                                 <a id="getInternalName()">
                                     <!--   -->
                                 </a>
@@ -484,8 +564,8 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>getInternalName</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=MythicDropEvent.Drop.html#getInternalName()>getInternalName</a>()</pre>
-                                        <div class="block"><p>怪物ID</p></div>
+                                        <pre class="methodSignature">@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=MythicDropEvent.Drop.html#getInternalName()>getInternalName</a>()</pre>
+                                        <div class="block"><p>获取怪物ID</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -499,8 +579,8 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>getEntity</h4>
-                                        <pre class="methodSignature"> final LivingEntity <a href=MythicDropEvent.Drop.html#getEntity()>getEntity</a>()</pre>
-                                        <div class="block"><p>怪物实体</p></div>
+                                        <pre class="methodSignature">@NotNull() LivingEntity <a href=MythicDropEvent.Drop.html#getEntity()>getEntity</a>()</pre>
+                                        <div class="block"><p>获取怪物实体</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -514,8 +594,8 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>getPlayer</h4>
-                                        <pre class="methodSignature"> final Player <a href=MythicDropEvent.Drop.html#getPlayer()>getPlayer</a>()</pre>
-                                        <div class="block"><p>怪物击杀者</p></div>
+                                        <pre class="methodSignature">@Nullable() Player <a href=MythicDropEvent.Drop.html#getPlayer()>getPlayer</a>()</pre>
+                                        <div class="block"><p>获取怪物击杀者</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -529,8 +609,8 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>getDropItems</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; <a href=MythicDropEvent.Drop.html#getDropItems()>getDropItems</a>()</pre>
-                                        <div class="block"><p>待掉落物品</p></div>
+                                        <pre class="methodSignature">@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; <a href=MythicDropEvent.Drop.html#getDropItems()>getDropItems</a>()</pre>
+                                        <div class="block"><p>获取待掉落物品</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -544,8 +624,17 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>setDropItems</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MythicDropEvent.Drop.html#setDropItems(List)>setDropItems</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; dropItems)</pre>
-                                        <div class="block"><p>待掉落物品</p></div>
+                                        <pre class="methodSignature"> void <a href=MythicDropEvent.Drop.html#setDropItems(List)>setDropItems</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; dropItems)</pre>
+                                        <div class="block"><p>设置待掉落物品</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>dropItems</code> - 待掉落物品</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -559,8 +648,8 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>getFishDropItems</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; <a href=MythicDropEvent.Drop.html#getFishDropItems()>getFishDropItems</a>()</pre>
-                                        <div class="block"><p>拟渔获掉落物品(不存在击杀者时并入dropItems)</p></div>
+                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; <a href=MythicDropEvent.Drop.html#getFishDropItems()>getFishDropItems</a>()</pre>
+                                        <div class="block"><p>获取拟渔获掉落物品(不存在击杀者时并入dropItems)</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -574,8 +663,17 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>setFishDropItems</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MythicDropEvent.Drop.html#setFishDropItems(List)>setFishDropItems</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; fishDropItems)</pre>
-                                        <div class="block"><p>拟渔获掉落物品(不存在击杀者时并入dropItems)</p></div>
+                                        <pre class="methodSignature"> void <a href=MythicDropEvent.Drop.html#setFishDropItems(List)>setFishDropItems</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ItemStack&gt; fishDropItems)</pre>
+                                        <div class="block"><p>设置拟渔获掉落物品</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>fishDropItems</code> - 拟渔获掉落物品</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -589,8 +687,8 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>getOffsetXString</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=MythicDropEvent.Drop.html#getOffsetXString()>getOffsetXString</a>()</pre>
-                                        <div class="block"><p>多彩掉落横向偏移</p></div>
+                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=MythicDropEvent.Drop.html#getOffsetXString()>getOffsetXString</a>()</pre>
+                                        <div class="block"><p>获取多彩掉落横向偏移</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -604,8 +702,17 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>setOffsetXString</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MythicDropEvent.Drop.html#setOffsetXString(String)>setOffsetXString</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetXString)</pre>
-                                        <div class="block"><p>多彩掉落横向偏移</p></div>
+                                        <pre class="methodSignature"> void <a href=MythicDropEvent.Drop.html#setOffsetXString(String)>setOffsetXString</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetXString)</pre>
+                                        <div class="block"><p>设置多彩掉落横向偏移</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>offsetXString</code> - 多彩掉落横向偏移</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -619,8 +726,8 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>getOffsetYString</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=MythicDropEvent.Drop.html#getOffsetYString()>getOffsetYString</a>()</pre>
-                                        <div class="block"><p>多彩掉落纵向偏移</p></div>
+                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=MythicDropEvent.Drop.html#getOffsetYString()>getOffsetYString</a>()</pre>
+                                        <div class="block"><p>获取多彩掉落纵向偏移</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -634,8 +741,17 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>setOffsetYString</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MythicDropEvent.Drop.html#setOffsetYString(String)>setOffsetYString</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetYString)</pre>
-                                        <div class="block"><p>多彩掉落纵向偏移</p></div>
+                                        <pre class="methodSignature"> void <a href=MythicDropEvent.Drop.html#setOffsetYString(String)>setOffsetYString</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> offsetYString)</pre>
+                                        <div class="block"><p>设置多彩掉落纵向偏移</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>offsetYString</code> - 多彩掉落纵向偏移</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -649,8 +765,8 @@ extends BukkitProxyEvent
                                           >
                                     <li class="blockList">
                                         <h4>getAngleType</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=MythicDropEvent.Drop.html#getAngleType()>getAngleType</a>()</pre>
-                                        <div class="block"><p>多彩掉落喷射模式</p></div>
+                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=MythicDropEvent.Drop.html#getAngleType()>getAngleType</a>()</pre>
+                                        <div class="block"><p>获取多彩掉落喷射模式</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -660,12 +776,36 @@ extends BukkitProxyEvent
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>setAngleType</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MythicDropEvent.Drop.html#setAngleType(String)>setAngleType</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> angleType)</pre>
-                                        <div class="block"><p>多彩掉落喷射模式</p></div>
+                                        <pre class="methodSignature"> void <a href=MythicDropEvent.Drop.html#setAngleType(String)>setAngleType</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> angleType)</pre>
+                                        <div class="block"><p>设置多彩掉落喷射模式</p></div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>angleType</code> - 多彩掉落喷射模式</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getHandlerList()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getHandlerList</h4>
+                                        <pre class="methodSignature">@NotNull() static HandlerList <a href=MythicDropEvent.Drop.html#getHandlerList()>getHandlerList</a>()</pre>
+                                        <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
