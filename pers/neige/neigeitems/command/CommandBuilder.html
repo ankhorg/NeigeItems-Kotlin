@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>BasicEvent 1.15.68 API </title>
+    <title>CommandBuilder 1.15.68 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -89,7 +89,7 @@ var pathtoroot = "../../../../";
 <main role="main">
     <div class="header">
         <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html"></a></div>
-        <h2 title="Class BasicEvent" class="title">Class BasicEvent</h2>
+        <h2 title="Class CommandBuilder" class="title">Class CommandBuilder</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -114,8 +114,8 @@ var pathtoroot = "../../../../";
                     <hr>
                     <pre class="wrap-overflow">
 
-public class <span class="typeNameLabel"><a href=BasicEvent.html>BasicEvent</a></span>
-extends Event
+public final class <span class="typeNameLabel"><a href=CommandBuilder.html>CommandBuilder</a></span>
+
                     </pre>
                     <div class="block"></div>
                 </li>
@@ -164,12 +164,6 @@ extends Event
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
                                         
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>public final static HandlerList</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemGenerateEvent.html#handlers>handlers</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
                                     </table>
                                 </div>
                             </li>
@@ -196,7 +190,7 @@ extends Event
                                         
                                             <tr class="altColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#BasicEvent()">BasicEvent</a></span>()</code></th>
+                                                        href="#CommandBuilder(String)">CommandBuilder</a></span>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name)</code></th>
                                                 <td class="colLast"></td>
                                             </tr>
                                         
@@ -250,25 +244,97 @@ extends Event
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code>HandlerList</code>
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=BasicEvent.html#getHandlers()>getHandlers</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#setPlugin(Plugin)>setPlugin</a>(Plugin plugin) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>boolean</code>
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemGenerateEvent.html#call()>call</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#setNameSpace(String)>setNameSpace</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> nameSpace) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code>static HandlerList</code>
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=BasicEvent.html#getHandlerList()>getHandlerList</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#setExecutor(CommandExecutor)>setExecutor</a>(CommandExecutor executor) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i3" class="rowColor">
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#setTabCompleter(TabCompleter)>setTabCompleter</a>(TabCompleter tabCompleter) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i4" class="altColor">
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#setPermission(String)>setPermission</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> permission) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i5" class="rowColor">
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#setPermissionMessage(String)>setPermissionMessage</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> permissionMessage) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i6" class="altColor">
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#setLabel(String)>setLabel</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> label) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i7" class="rowColor">
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#setAliases(List)>setAliases</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; aliases) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i8" class="altColor">
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#setDescription(String)>setDescription</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> description) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i9" class="rowColor">
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#setUsage(String)>setUsage</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> usage) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i10" class="altColor">
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#register()>register</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i11" class="rowColor">
+                                            <td class="colFirst"><code>final <a href=CommandBuilder.html>CommandBuilder</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=CommandBuilder.html#unregister()>unregister</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -278,12 +344,6 @@ extends Event
                                 </div>
                                 <ul class="blockList">
                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.org.bukkit.event.Event">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;org.bukkit.event.Event</h3>
-                                            <code>getEventName, getHandlers, isAsynchronous</code></li>
-                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
                                     </a>
@@ -310,11 +370,11 @@ extends Event
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="BasicEvent()"></a>
+                                <a name="CommandBuilder(String)"></a>
                                 <ul class="blockList">
                                     <li class="blockList">
-                                        <h4>BasicEvent</h4>
-                                        <pre>BasicEvent()</pre>
+                                        <h4>CommandBuilder</h4>
+                                        <pre>CommandBuilder(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name)</pre>
                                         <div class="block"></div>
                                         
                                     </li>
@@ -333,45 +393,180 @@ extends Event
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="getHandlers()">
+                                <a id="setPlugin(Plugin)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getHandlers</h4>
-                                        <pre class="methodSignature">@NotNull() HandlerList <a href=BasicEvent.html#getHandlers()>getHandlers</a>()</pre>
+                                        <h4>setPlugin</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#setPlugin(Plugin)>setPlugin</a>(Plugin plugin)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="call()">
+                                <a id="setNameSpace(String)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>call</h4>
-                                        <pre class="methodSignature"> boolean <a href=ItemGenerateEvent.html#call()>call</a>()</pre>
+                                        <h4>setNameSpace</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#setNameSpace(String)>setNameSpace</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> nameSpace)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="getHandlerList()">
+                                <a id="setExecutor(CommandExecutor)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setExecutor</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#setExecutor(CommandExecutor)>setExecutor</a>(CommandExecutor executor)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setTabCompleter(TabCompleter)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setTabCompleter</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#setTabCompleter(TabCompleter)>setTabCompleter</a>(TabCompleter tabCompleter)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setPermission(String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setPermission</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#setPermission(String)>setPermission</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> permission)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setPermissionMessage(String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setPermissionMessage</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#setPermissionMessage(String)>setPermissionMessage</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> permissionMessage)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setLabel(String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setLabel</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#setLabel(String)>setLabel</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> label)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setAliases(List)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setAliases</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#setAliases(List)>setAliases</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; aliases)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setDescription(String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setDescription</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#setDescription(String)>setDescription</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> description)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="setUsage(String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setUsage</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#setUsage(String)>setUsage</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> usage)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="register()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>register</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#register()>register</a>()</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="unregister()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>getHandlerList</h4>
-                                        <pre class="methodSignature">@NotNull() static HandlerList <a href=BasicEvent.html#getHandlerList()>getHandlerList</a>()</pre>
+                                        <h4>unregister</h4>
+                                        <pre class="methodSignature"> final <a href=CommandBuilder.html>CommandBuilder</a> <a href=CommandBuilder.html#unregister()>unregister</a>()</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
