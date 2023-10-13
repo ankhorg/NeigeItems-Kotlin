@@ -16,6 +16,13 @@ public class EntityPlayerUtils {
     private static final boolean SWING_AND_SEND_SUPPORT = CbVersion.v1_15_R1.isSupport();
 
     /**
+     * 1.16.2+ 版本起, Damageable 接口下添加 getAbsorptionAmount 及 setAbsorptionAmount 方法, 用于操作伤害吸收的黄心数值.
+     * 高版本的 getAbsorptionAmount 返回的是 double, 而 NMS 内部返回的实质上是 float, 是 OBC 将 float 强转为 double 并返回.
+     * 总觉得有一种小脑发育不完全的美, 所以本工具类的 getAbsorptionAmount 干脆全盘使用 NMS 操作, 不在 1.16.2+ 版本调用 BukkitAPI 了.
+     */
+    private static final boolean ABSORPTION_SUPPORT = CbVersion.v1_16_R2.isSupport();
+
+    /**
      * 让指定玩家使用对应手持物品.
      *
      * @param player 待操作玩家.
@@ -63,6 +70,35 @@ public class EntityPlayerUtils {
             RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
             RefEnumHand enumHand = toRefEnumHand(hand);
             swing(entityPlayer, enumHand, fromServerPlayer);
+        }
+    }
+
+    /**
+     * 获取玩家的伤害吸收数值.
+     *
+     * @param player 待获取玩家.
+     */
+    public float getAbsorptionAmount(
+            @NotNull Player player
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            return ((RefCraftPlayer) (Object) player).getHandle().getAbsorptionAmount();
+        }
+        return 0;
+    }
+
+    /**
+     * 设置玩家的伤害吸收数值.
+     *
+     * @param player 待操作玩家.
+     * @param amount 伤害吸收数值.
+     */
+    public void setAbsorptionAmount(
+            @NotNull Player player,
+            float amount
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            ((RefCraftPlayer) (Object) player).getHandle().setAbsorptionAmount(amount);
         }
     }
 
