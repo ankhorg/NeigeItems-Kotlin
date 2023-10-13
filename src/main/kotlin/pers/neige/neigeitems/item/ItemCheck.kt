@@ -70,11 +70,11 @@ object ItemCheck {
                     }
                     // 进行待重构节点覆盖
                     rebuild.forEach { (key, value) ->
-                        data?.set(key, value)
+                        data.set(key, value)
                     }
                     // 进行待刷新节点移除
                     refresh.forEach { key ->
-                        data?.remove(key)
+                        data.remove(key)
                     }
                     // 触发预生成事件
                     val preGenerateEvent = ItemUpdateEvent.PreGenerate(player, itemStack, data, item)
