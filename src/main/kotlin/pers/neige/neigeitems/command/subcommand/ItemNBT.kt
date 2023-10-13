@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.HookerManager.append
 import pers.neige.neigeitems.manager.HookerManager.hoverText
 import pers.neige.neigeitems.manager.HookerManager.runCommand
+import pers.neige.neigeitems.manager.HookerManager.suggestCommand
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.PlayerUtils.sendMessage
 import taboolib.common.platform.command.subCommand
@@ -62,7 +63,7 @@ object ItemNBT {
                 result.append(
                     ComponentBuilder("§6$key${value.asPostfix()}§e: §f")
                         .hoverText(key)
-                        .runCommand(key)
+                        .suggestCommand(key)
                 )
                 if (value is NbtCompound) {
                     result.append("\n").append(INDENT)
@@ -97,7 +98,7 @@ object ItemNBT {
     fun String.toBuilder(): ComponentBuilder {
         return ComponentBuilder(if (length > 20) "${substring(0, 19)}..." else this)
             .hoverText(this)
-            .runCommand(this)
+            .suggestCommand(this)
     }
 
     @JvmStatic
@@ -121,7 +122,7 @@ object ItemNBT {
                                     repeat (level-1) { append(INDENT) }
                                     append("$LIST_INDENT§f$byte")
                                     hoverText(byte)
-                                    runCommand(byte)
+                                    suggestCommand(byte)
                                 }
                             )
                         }
@@ -140,7 +141,7 @@ object ItemNBT {
                                     repeat (level-1) { append(INDENT) }
                                     append("$LIST_INDENT§f$int")
                                     hoverText(int)
-                                    runCommand(int)
+                                    suggestCommand(int)
                                 }
                             )
                         }
@@ -159,7 +160,7 @@ object ItemNBT {
                                     repeat (level-1) { append(INDENT) }
                                     append("$LIST_INDENT§f$long")
                                     hoverText(long)
-                                    runCommand(long)
+                                    suggestCommand(long)
                                 }
                             )
                         }
@@ -200,7 +201,7 @@ object ItemNBT {
                                 }
                                 append("§6$key${value.asPostfix()}§e: §f")
                                 hoverText(key)
-                                runCommand(key)
+                                suggestCommand(key)
                             }
                         )
                         if (value is NbtCompound) {
