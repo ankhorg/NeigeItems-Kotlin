@@ -7,6 +7,7 @@ import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotations.Awake
 import pers.neige.neigeitems.annotations.Listener
+import pers.neige.neigeitems.annotations.Schedule
 import pers.neige.neigeitems.utils.ListenerUtils
 import taboolib.common.platform.Plugin
 import taboolib.platform.BukkitPlugin
@@ -42,6 +43,11 @@ object NeigeItems : Plugin() {
      * DISABLE 加载方法
      */
     private val disableMethods = mutableListOf<Method>()
+
+    /**
+     * 周期触发方法
+     */
+    private val scheduleMethods = mutableListOf<Method>()
 
     override fun onEnable() {
         try {
@@ -111,7 +117,7 @@ object NeigeItems : Plugin() {
                         listenerMethods.add(method)
                     }
                 }
-                // 周期触发方法
+                // 生命周期方法
                 if (method.isAnnotationPresent(Awake::class.java)) {
                     if (method.parameterCount == 0) {
                         if (!method.isAccessible) {
@@ -124,6 +130,15 @@ object NeigeItems : Plugin() {
                             Awake.LifeCycle.DISABLE -> disableMethods.add(method)
                             else -> {}
                         }
+                    }
+                }
+                // 周期触发方法
+                if (method.isAnnotationPresent(Schedule::class.java)) {
+                    if (method.parameterCount == 0) {
+                        if (!method.isAccessible) {
+                            method.isAccessible = true
+                        }
+                        scheduleMethods.add(method)
                     }
                 }
             }
@@ -152,6 +167,19 @@ object NeigeItems : Plugin() {
                 method.invoke(null)
             }
         })
+
+        scheduleMethods.forEach { method ->
+            val annotation = method.getAnnotation(Schedule::class.java)
+            if (annotation.async) {
+                Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, Runnable {
+                    method.invoke(null)
+                }, 0, annotation.period)
+            } else {
+                Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
+                    method.invoke(null)
+                }, 0, annotation.period)
+            }
+        }
     }
 
     override fun onDisable() {
