@@ -191,8 +191,7 @@ object NeigeItems : Plugin() {
         }
         return if (!Modifier.isStatic(modifiers)) {
             try {
-                declaringClass.getDeclaredField("INSTANCE").get(null)
-                true
+                declaringClass.getDeclaredField("INSTANCE").type == declaringClass
             } catch (error: Throwable) {
                 plugin.logger.warning(msg)
                 error.printStackTrace()

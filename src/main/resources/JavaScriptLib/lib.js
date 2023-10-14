@@ -23,6 +23,7 @@ const EnchantmentUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nb
 const EntityItemUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityItemUtils
 const EntityPlayerUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils
 const WorldUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
+const MaterialUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.MaterialUtils
 const SchedulerUtils = Packages.pers.neige.neigeitems.utils.SchedulerUtils
 
 const EnumHand = Packages.pers.neige.neigeitems.EnumHand

@@ -1,7 +1,7 @@
 package bot.inker.bukkit.nbt.neigeitems.utils;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.ref.RefCraftServer;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefCraftServer;
 import org.bukkit.Bukkit;
 
 public class ServerUtils {
