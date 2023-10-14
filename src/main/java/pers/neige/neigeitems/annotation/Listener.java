@@ -1,4 +1,4 @@
-package pers.neige.neigeitems.annotations;
+package pers.neige.neigeitems.annotation;
 
 import org.bukkit.event.EventPriority;
 

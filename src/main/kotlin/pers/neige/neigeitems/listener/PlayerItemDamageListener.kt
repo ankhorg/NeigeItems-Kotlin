@@ -3,7 +3,7 @@ package pers.neige.neigeitems.listener
 import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerItemDamageEvent
-import pers.neige.neigeitems.annotations.Listener
+import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 

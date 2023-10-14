@@ -5,7 +5,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import pers.neige.neigeitems.NeigeItems.plugin
-import pers.neige.neigeitems.annotations.Awake
+import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
 import pers.neige.neigeitems.utils.ConfigUtils.saveResourceNotWarn
 import taboolib.common.platform.Platform

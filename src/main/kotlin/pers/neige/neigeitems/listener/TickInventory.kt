@@ -2,7 +2,7 @@ package pers.neige.neigeitems.listener
 
 import org.bukkit.Bukkit
 import org.bukkit.Material
-import pers.neige.neigeitems.annotations.Schedule
+import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.item.ItemCheck
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem

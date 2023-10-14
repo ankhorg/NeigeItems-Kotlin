@@ -3,7 +3,7 @@ package pers.neige.neigeitems.listener
 import org.bukkit.Material
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerDropItemEvent
-import pers.neige.neigeitems.annotations.Listener
+import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.item.ItemCheck
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem

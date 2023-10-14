@@ -7,7 +7,7 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.annotations.Awake
+import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.easyitem.EasyItemHooker
 import pers.neige.neigeitems.hook.easyitem.impl.EasyItemHookerImpl
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker

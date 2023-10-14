@@ -1,8 +1,8 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.Bukkit
-import pers.neige.neigeitems.annotations.Awake
-import pers.neige.neigeitems.annotations.Listener
+import pers.neige.neigeitems.annotation.Awake
+import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.event.PluginReloadEvent
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.script.ScriptExpansion

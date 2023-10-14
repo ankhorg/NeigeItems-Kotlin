@@ -4,7 +4,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityPickupItemEvent
-import pers.neige.neigeitems.annotations.Listener
+import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.item.ItemOwner
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem

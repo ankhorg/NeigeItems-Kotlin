@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.annotations.Awake
+import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.section.impl.*
 import pers.neige.neigeitems.utils.ConfigUtils.getAllFiles

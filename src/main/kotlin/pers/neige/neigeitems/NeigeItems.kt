@@ -5,9 +5,9 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.annotations.Awake
-import pers.neige.neigeitems.annotations.Listener
-import pers.neige.neigeitems.annotations.Schedule
+import pers.neige.neigeitems.annotation.Awake
+import pers.neige.neigeitems.annotation.Listener
+import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.utils.ListenerUtils
 import taboolib.common.platform.Plugin
 import taboolib.platform.BukkitPlugin

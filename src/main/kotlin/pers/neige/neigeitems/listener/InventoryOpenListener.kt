@@ -3,7 +3,7 @@ package pers.neige.neigeitems.listener
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.inventory.InventoryOpenEvent
-import pers.neige.neigeitems.annotations.Listener
+import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.item.ItemCheck
 import pers.neige.neigeitems.item.ItemCheck.couldCheckInventory
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
