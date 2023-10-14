@@ -11,6 +11,7 @@ $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Type///PointingToD
 $dokka.location:pers.neige.neigeitems.item.color/ItemColor.Companion///PointingToDeclaration/pers/neige/neigeitems/item/color/ItemColor.Companion.html
 $dokka.location:pers.neige.neigeitems.item/ItemDurability.DamageResult///PointingToDeclaration/pers/neige/neigeitems/item/ItemDurability.DamageResult.html
 $dokka.location:pers.neige.neigeitems.item/ItemPack.ItemInfo///PointingToDeclaration/pers/neige/neigeitems/item/ItemPack.ItemInfo.html
+$dokka.location:pers.neige.neigeitems.lang/LocaleI18n.TranslationProvider///PointingToDeclaration/pers/neige/neigeitems/lang/LocaleI18n.TranslationProvider.html
 bot.inker.bukkit.nbt.neigeitems.enchantment
 bot.inker.bukkit.nbt.neigeitems.utils
 pers.neige.neigeitems
@@ -32,6 +33,7 @@ pers.neige.neigeitems.item
 pers.neige.neigeitems.item.action
 pers.neige.neigeitems.item.color
 pers.neige.neigeitems.item.color.impl
+pers.neige.neigeitems.lang
 pers.neige.neigeitems.libs.asahi.util.calculate
 pers.neige.neigeitems.listener
 pers.neige.neigeitems.manager
