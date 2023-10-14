@@ -1,6 +1,6 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
-$dokka.location:pers.neige.neigeitems.annotations/Awake.LifeCycle///PointingToDeclaration/pers/neige/neigeitems/annotations/Awake.LifeCycle.html
+$dokka.location:pers.neige.neigeitems.annotation/Awake.LifeCycle///PointingToDeclaration/pers/neige/neigeitems/annotation/Awake.LifeCycle.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PostGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PostGenerate.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PreGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PreGenerate.html
 $dokka.location:pers.neige.neigeitems.event/MythicDropEvent.ConfigLoaded///PointingToDeclaration/pers/neige/neigeitems/event/MythicDropEvent.ConfigLoaded.html
@@ -14,7 +14,7 @@ $dokka.location:pers.neige.neigeitems.item/ItemPack.ItemInfo///PointingToDeclara
 bot.inker.bukkit.nbt.neigeitems.enchantment
 bot.inker.bukkit.nbt.neigeitems.utils
 pers.neige.neigeitems
-pers.neige.neigeitems.annotations
+pers.neige.neigeitems.annotation
 pers.neige.neigeitems.command
 pers.neige.neigeitems.command.subcommand
 pers.neige.neigeitems.event
