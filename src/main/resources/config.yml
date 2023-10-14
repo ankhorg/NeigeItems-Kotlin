@@ -1,3 +1,4 @@
+Language: zh_cn
 Main:
   MMItemsPath: MMItems.yml
   Debug: false

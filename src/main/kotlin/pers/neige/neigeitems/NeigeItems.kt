@@ -8,6 +8,8 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.annotation.Schedule
+import pers.neige.neigeitems.lang.LocaleI18n
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.utils.ListenerUtils
 import taboolib.common.platform.Plugin
 import taboolib.platform.BukkitPlugin
@@ -66,6 +68,10 @@ object NeigeItems : Plugin() {
             }
             return
         }
+
+        ConfigManager.saveResource()
+
+        LocaleI18n.init()
 
         // 扫描加载所有插件类
         val pluginClassLoaderClass = Class.forName("org.bukkit.plugin.java.PluginClassLoader")

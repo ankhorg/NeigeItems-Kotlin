@@ -1,8 +1,11 @@
 package pers.neige.neigeitems.manager
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion
+import bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
+import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
@@ -26,7 +29,9 @@ import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.item.color.impl.ItemColorProtocol
 import pers.neige.neigeitems.item.color.impl.ItemColorVanilla
 import pers.neige.neigeitems.manager.ConfigManager.config
-import taboolib.module.nms.getName
+import pers.neige.neigeitems.manager.HookerManager.getParsedComponent
+import pers.neige.neigeitems.manager.HookerManager.getParsedName
+import pers.neige.neigeitems.utils.ItemUtils.getName
 import java.util.*
 import java.util.function.BiFunction
 
@@ -45,9 +50,9 @@ object HookerManager {
 
     val nashornHooker: NashornHooker =
         when {
-            // jdk自带nashorn
-            check("jdk.nashorn.api.scripting.NashornScriptEngineFactory") -> LegacyNashornHookerImpl()
-            // 主动下载nashorn
+            // jdk11 以下使用 jdk 自带 nashorn
+            check("jdk.nashorn.api.scripting.NashornScriptEngineFactory") && ((System.getProperty("java.class.version").toDoubleOrNull() ?: 0.0) < 55.0) -> LegacyNashornHookerImpl()
+            // jdk11 以上使用 openjdk nashorn
             else -> NashornHookerImpl()
         }
 
@@ -304,10 +309,35 @@ object HookerManager {
      */
     @JvmStatic
     fun ItemStack.getParsedName(): String {
-        return when (itemPlaceholder) {
-            null -> getName()
-            else -> itemPlaceholder.parse(this, getName())
+        if (hasItemMeta()) {
+            val itemMeta = itemMeta
+            if (itemMeta != null && itemMeta.hasDisplayName()) {
+                return when (itemPlaceholder) {
+                    null -> itemMeta.displayName
+                    else -> itemPlaceholder.parse(this, itemMeta.displayName)
+                }
+            }
         }
+        return TranslationUtils.getTranslationName(this)
+    }
+
+    /**
+     * 获取已解析物品变量的物品名
+     *
+     * @return 解析后文本
+     */
+    @JvmStatic
+    fun ItemStack.getParsedComponent(): BaseComponent {
+        if (hasItemMeta()) {
+            val itemMeta = itemMeta
+            if (itemMeta != null && itemMeta.hasDisplayName()) {
+                return when (itemPlaceholder) {
+                    null -> TextComponent(itemMeta.displayName)
+                    else -> TextComponent(itemPlaceholder.parse(this, itemMeta.displayName))
+                }
+            }
+        }
+        return TranslationUtils.getTranslatableComponent(this)
     }
 
     /**

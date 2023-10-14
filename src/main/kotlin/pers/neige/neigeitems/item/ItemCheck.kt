@@ -6,12 +6,12 @@ import pers.neige.neigeitems.event.ItemExpirationEvent
 import pers.neige.neigeitems.event.ItemUpdateEvent
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import taboolib.module.nms.getName
 
 /**
  * 物品检测器, 用于回收过期物品并更新旧版物品

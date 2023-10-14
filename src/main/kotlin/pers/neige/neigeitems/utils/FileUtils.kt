@@ -4,6 +4,7 @@ import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.Reader
+import java.security.MessageDigest
 
 
 /**
@@ -98,5 +99,42 @@ object FileUtils {
     @JvmStatic
     fun writeText(file: File, text: String) {
         file.writeText(text)
+    }
+
+    /**
+     * 获取文件sha1码
+     *
+     * @return sha1码
+     */
+    @JvmStatic
+    fun File.sha1(): String {
+        FileInputStream(this).use { fis ->
+            val digest = MessageDigest.getInstance("SHA1")
+            val buffer = ByteArray(8192)
+            var len: Int
+            while (fis.read(buffer).also { len = it } != -1) {
+                digest.update(buffer, 0, len)
+            }
+            return digest.digest().joinToString("") { "%02x".format(it) }
+        }
+    }
+
+    @JvmStatic
+    fun File.createFile(): File {
+        if (!parentFile.exists()) {
+            parentFile.mkdirs()
+        }
+        if (!exists()) {
+            createNewFile()
+        }
+        return this
+    }
+
+    @JvmStatic
+    fun File.createDirectory(): File {
+        if (!exists()) {
+            mkdirs()
+        }
+        return this
     }
 }

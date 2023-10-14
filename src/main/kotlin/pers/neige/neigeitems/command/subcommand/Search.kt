@@ -8,15 +8,16 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.append
+import pers.neige.neigeitems.manager.HookerManager.getParsedComponent
 import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.manager.HookerManager.hoverItem
 import pers.neige.neigeitems.manager.HookerManager.hoverText
 import pers.neige.neigeitems.manager.HookerManager.runCommand
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.PlayerUtils.sendMessage
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 import taboolib.common.platform.command.subCommand
-import taboolib.module.nms.getName
 import java.util.*
 import kotlin.math.ceil
 
@@ -96,21 +97,12 @@ object Search {
                                 .hoverText(ConfigManager.config.getString("Messages.clickGiveMessage")?:"")
                         )
                         if (i+1 != listItemMessageList.size) {
-                            // 在1.12.2版本, hoverItem难以应对诸如BRICK(砖块)这种物品, 不得已捕获一下报错
-                            kotlin.runCatching {
-                                // 解析物品变量
-                                HookerManager.parseItemPlaceholders(itemStack)
-                                ComponentBuilder(itemStack.getParsedName())
+                            HookerManager.parseItemPlaceholders(itemStack)
+                            listItemRaw.append(
+                                ComponentBuilder(itemStack.getParsedComponent())
                                     .hoverItem(itemStack)
                                     .runCommand("/ni get $id")
-                            }.getOrNull()?.let {
-                                listItemRaw.append(it)
-                            } ?: let {
-                                listItemRaw.append(
-                                    ComponentBuilder(itemStack.getParsedName())
-                                        .runCommand("/ni get $id")
-                                )
-                            }
+                            )
                         }
                     }
                     sender.sendMessage(listItemRaw)

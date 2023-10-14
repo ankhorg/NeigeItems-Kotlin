@@ -4,6 +4,7 @@ import bot.inker.bukkit.nbt.*
 import bot.inker.bukkit.nbt.api.NbtComponentLike
 import bot.inker.bukkit.nbt.api.NbtLike
 import bot.inker.bukkit.nbt.api.NbtListLike
+import bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.Location
@@ -23,7 +24,6 @@ import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SchedulerUtils.syncAndGet
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
-import taboolib.module.nms.getName
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.cos
 import kotlin.math.sin
@@ -35,6 +35,19 @@ import kotlin.math.sqrt
  */
 object ItemUtils {
     val invalidNBT by lazy { arrayListOf("display", "Enchantments","VARIABLES_DATA","ench","Damage","HideFlags","Unbreakable", "CustomModelData") }
+
+    /**
+     * 获取物品的名称（若存在 displayName 则返回 displayName，反之获取译名）
+     */
+    fun ItemStack.getName(): String {
+        if (hasItemMeta()) {
+            val itemMeta = itemMeta
+            if (itemMeta != null && itemMeta.hasDisplayName()) {
+                return itemMeta.displayName
+            }
+        }
+        return TranslationUtils.getTranslationName(this)
+    }
 
     /**
      * HashMap 转 NbtCompound

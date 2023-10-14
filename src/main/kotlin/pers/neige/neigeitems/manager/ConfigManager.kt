@@ -5,7 +5,6 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import pers.neige.neigeitems.NeigeItems.plugin
-import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
 import pers.neige.neigeitems.utils.ConfigUtils.saveResourceNotWarn
 import taboolib.common.platform.Platform
@@ -38,12 +37,12 @@ object ConfigManager {
     var comboInterval = config.getLong("ItemAction.comboInterval", 500)
     var removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
     var updateInterval = config.getLong("ItemUpdate.interval", -1)
+    var language = config.getString("Language", "zh_cn")!!
 
     /**
      * 加载默认配置文件
      */
-    @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
-    private fun saveResource() {
+    fun saveResource() {
         if (getFileOrNull("Expansions") == null) {
             plugin.saveResourceNotWarn("Expansions${File.separator}CustomAction.js")
             plugin.saveResourceNotWarn("Expansions${File.separator}CustomItemEditor.js")
@@ -95,6 +94,11 @@ object ConfigManager {
             }
         }
         plugin.saveConfig()
+        debug = config.getBoolean("Main.Debug", false)
+        comboInterval = config.getLong("ItemAction.comboInterval", 500)
+        removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
+        updateInterval = config.getLong("ItemUpdate.interval", -1)
+        language = config.getString("Language", "zh_cn")!!
     }
 
     /**
@@ -103,10 +107,6 @@ object ConfigManager {
     fun reload() {
         plugin.reloadConfig()
         loadConfig()
-        debug = config.getBoolean("Main.Debug", false)
-        comboInterval = config.getLong("ItemAction.comboInterval", 500)
-        removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
-        updateInterval = config.getLong("ItemUpdate.interval", -1)
     }
 
     fun debug(text: String) {

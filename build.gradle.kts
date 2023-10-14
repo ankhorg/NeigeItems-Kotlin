@@ -41,11 +41,6 @@ subprojects {
         compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
 
         compileOnly("io.izzel.taboolib:common:$taboolib_version")
-        compileOnly("io.izzel.taboolib:common-5:$taboolib_version")
-        compileOnly("io.izzel.taboolib:module-chat:$taboolib_version")
-        compileOnly("io.izzel.taboolib:module-configuration:$taboolib_version")
-        compileOnly("io.izzel.taboolib:module-nms:$taboolib_version")
-        compileOnly("io.izzel.taboolib:module-nms-util:$taboolib_version")
         compileOnly("io.izzel.taboolib:module-metrics:$taboolib_version")
         compileOnly("io.izzel.taboolib:platform-bukkit:$taboolib_version")
     }
@@ -97,8 +92,6 @@ dependencies {
     implementation("io.izzel.taboolib:common-5:$taboolib_version")
     implementation("io.izzel.taboolib:module-chat:$taboolib_version")
     implementation("io.izzel.taboolib:module-configuration:$taboolib_version")
-    implementation("io.izzel.taboolib:module-nms:$taboolib_version")
-    implementation("io.izzel.taboolib:module-nms-util:$taboolib_version")
     implementation("io.izzel.taboolib:module-metrics:$taboolib_version")
     implementation("io.izzel.taboolib:platform-bukkit:$taboolib_version")
 
