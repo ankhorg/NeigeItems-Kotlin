@@ -1,8 +1,12 @@
 package bot.inker.bukkit.nbt.neigeitems.utils;
 
 import bot.inker.bukkit.nbt.NbtType;
+import bot.inker.bukkit.nbt.NbtUtils;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.*;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefChatFormatting;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefChatSerializer;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefCraftChatMessage;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntityTypes;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.item.*;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.item.potion.RefPotionUtil;
@@ -13,15 +17,83 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.lang.LocaleI18n;
 
 public class TranslationUtils {
     /**
+     * 根据物品获取显示名, 无显示名则返回翻译名.
+     *
+     * @param itemStack 待获取物品.
+     * @return 显示名或翻译名.
+     */
+    @NotNull
+    public static String getDisplayOrTranslationName(
+            @NotNull ItemStack itemStack
+    ) {
+        String displayName = getDisplayName(itemStack);
+        return displayName == null ? TranslationUtils.getTranslationName(itemStack) : displayName;
+    }
+
+    /**
+     * 根据物品获取显示名, 无显示名则返回翻译键.
+     *
+     * @param itemStack 待获取物品.
+     * @return 显示名或翻译键.
+     */
+    @NotNull
+    public static BaseComponent getDisplayOrTranslationComponent(
+            @NotNull ItemStack itemStack
+    ) {
+        String displayName = getDisplayName(itemStack);
+        return displayName == null ? TranslationUtils.getTranslationComponent(itemStack) : new TextComponent(displayName);
+    }
+
+    /**
+     * 根据物品获取显示名, 无显示名则返回 null.
+     *
+     * @param itemStack 待获取物品.
+     * @return 显示名.
+     */
+    @Nullable
+    public static String getDisplayName(
+            @NotNull ItemStack itemStack
+    ) {
+        if ((Object) itemStack instanceof RefCraftItemStack) {
+            if (itemStack.getType() != Material.AIR) {
+                RefNbtTagCompound tag = ((RefCraftItemStack) (Object) itemStack).handle.getTag();
+                if (tag != null) {
+                    RefNbtBase display = tag.get("display");
+                    if (display instanceof RefNbtTagCompound) {
+                        RefNbtBase tagName = ((RefNbtTagCompound) display).get("Name");
+                        if (tagName instanceof RefNbtTagString) {
+                            String rawName = tagName.asString();
+                            if (CbVersion.current() == CbVersion.v1_12_R1) {
+                                return rawName;
+                            } else if (CbVersion.v1_15_R1.isSupport()) {
+                                return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName));
+                            } else {
+                                return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName), RefChatFormatting.WHITE);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            ItemMeta itemMeta = NbtUtils.getItemMeta(itemStack);
+            if (itemMeta != null && itemMeta.hasDisplayName()) {
+                return itemMeta.getDisplayName();
+            }
+        }
+        return null;
+    }
+
+    /**
      * 根据物品获取翻译名.
      *
-     * @param itemStack 待检测物品.
+     * @param itemStack 待获取物品.
      * @return 翻译名.
      */
     @NotNull
@@ -133,13 +205,13 @@ public class TranslationUtils {
     }
 
     /**
-     * 根据物品获取 TranslatableComponen.
+     * 根据物品获取包含翻译键的 BaseComponent.
      *
-     * @param itemStack 待检测物品.
-     * @return TranslatableComponen.
+     * @param itemStack 待获取物品.
+     * @return 包含翻译键的 BaseComponent.
      */
     @NotNull
-    public static BaseComponent getTranslatableComponent(
+    public static BaseComponent getTranslationComponent(
             @NotNull ItemStack itemStack
     ) {
         RefNmsItemStack nmsItemStack;
@@ -248,8 +320,7 @@ public class TranslationUtils {
 
     /**
      * 根据材质获取对应的 DescriptionId.
-     * 在 1.12.2 版本, DescriptionId 与 "翻译键" 有很大的差别.
-     * 而在 1.13+ 版本, 除头颅和成书外, DescriptionId 等同于翻译键.
+     * DescriptionId 与 "翻译键" 有很大的差别, 二者概念不可随意混淆.
      *
      * @param material 待检测材质.
      * @return DescriptionId.

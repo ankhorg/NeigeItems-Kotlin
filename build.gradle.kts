@@ -95,6 +95,8 @@ dependencies {
     implementation("io.izzel.taboolib:module-metrics:$taboolib_version")
     implementation("io.izzel.taboolib:platform-bukkit:$taboolib_version")
 
+    // bstats
+    implementation("org.bstats:bstats-bukkit:3.0.2")
     // kotlin
     implementation(kotlin("stdlib"))
     // javassist
@@ -124,6 +126,8 @@ tasks {
         }
         // taboolib
         relocate("taboolib", "pers.neige.neigeitems.taboolib")
+        // bstats
+        relocate("org.bstats", "pers.neige.neigeitems.libs.bstats")
         // stringsearcher
         relocate("org.neosearch.stringsearcher","pers.neige.neigeitems.libs.stringsearcher")
         // javassist

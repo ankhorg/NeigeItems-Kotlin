@@ -29,9 +29,6 @@ import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.item.color.impl.ItemColorProtocol
 import pers.neige.neigeitems.item.color.impl.ItemColorVanilla
 import pers.neige.neigeitems.manager.ConfigManager.config
-import pers.neige.neigeitems.manager.HookerManager.getParsedComponent
-import pers.neige.neigeitems.manager.HookerManager.getParsedName
-import pers.neige.neigeitems.utils.ItemUtils.getName
 import java.util.*
 import java.util.function.BiFunction
 
@@ -309,13 +306,10 @@ object HookerManager {
      */
     @JvmStatic
     fun ItemStack.getParsedName(): String {
-        if (hasItemMeta()) {
-            val itemMeta = itemMeta
-            if (itemMeta != null && itemMeta.hasDisplayName()) {
-                return when (itemPlaceholder) {
-                    null -> itemMeta.displayName
-                    else -> itemPlaceholder.parse(this, itemMeta.displayName)
-                }
+        TranslationUtils.getDisplayName(this)?.let { displayName ->
+            return when (itemPlaceholder) {
+                null -> displayName
+                else -> itemPlaceholder.parse(this, displayName)
             }
         }
         return TranslationUtils.getTranslationName(this)
@@ -328,16 +322,13 @@ object HookerManager {
      */
     @JvmStatic
     fun ItemStack.getParsedComponent(): BaseComponent {
-        if (hasItemMeta()) {
-            val itemMeta = itemMeta
-            if (itemMeta != null && itemMeta.hasDisplayName()) {
-                return when (itemPlaceholder) {
-                    null -> TextComponent(itemMeta.displayName)
-                    else -> TextComponent(itemPlaceholder.parse(this, itemMeta.displayName))
-                }
+        TranslationUtils.getDisplayName(this)?.let { displayName ->
+            return when (itemPlaceholder) {
+                null -> TextComponent(displayName)
+                else -> TextComponent(itemPlaceholder.parse(this, displayName))
             }
         }
-        return TranslationUtils.getTranslatableComponent(this)
+        return TranslationUtils.getTranslationComponent(this)
     }
 
     /**

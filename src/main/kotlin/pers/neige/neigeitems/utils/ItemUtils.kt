@@ -37,16 +37,13 @@ object ItemUtils {
     val invalidNBT by lazy { arrayListOf("display", "Enchantments","VARIABLES_DATA","ench","Damage","HideFlags","Unbreakable", "CustomModelData") }
 
     /**
-     * 获取物品的名称（若存在 displayName 则返回 displayName，反之获取译名）
+     * 根据物品获取显示名, 无显示名则返回翻译名.
+     *
+     * @return 显示名或翻译名.
      */
+    @JvmStatic
     fun ItemStack.getName(): String {
-        if (hasItemMeta()) {
-            val itemMeta = itemMeta
-            if (itemMeta != null && itemMeta.hasDisplayName()) {
-                return itemMeta.displayName
-            }
-        }
-        return TranslationUtils.getTranslationName(this)
+        return TranslationUtils.getDisplayOrTranslationName(this)
     }
 
     /**
