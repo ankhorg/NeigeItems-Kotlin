@@ -437,7 +437,7 @@ object ItemManager : ItemConfigManager() {
         } else {
             // 修改耐久值
             neigeItems.putInt("durability", newDurability)
-            this.durability = (this.durability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
+            this.durability = (type.maxDurability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
         }
     }
 
@@ -472,7 +472,7 @@ object ItemManager : ItemConfigManager() {
         } else {
             // 修改耐久值
             neigeItems.putInt("durability", newDurability)
-            this.durability = (this.durability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
+            this.durability = (type.maxDurability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
         }
     }
 
@@ -500,7 +500,7 @@ object ItemManager : ItemConfigManager() {
         neigeItems.putInt("durability", durability)
         // 修改最大耐久值
         neigeItems.putInt("maxDurability", realAmount)
-        this.durability = (this.durability * (1 - (durability.toDouble()/realAmount))).toInt().toShort()
+        this.durability = (type.maxDurability * (1 - (durability.toDouble()/realAmount))).toInt().toShort()
     }
 
     /**
@@ -527,7 +527,7 @@ object ItemManager : ItemConfigManager() {
         neigeItems.putInt("durability", durability)
         // 修改最大耐久值
         neigeItems.putInt("maxDurability", maxDurability)
-        this.durability = (this.durability * (1 - (durability.toDouble()/maxDurability))).toInt().toShort()
+        this.durability = (type.maxDurability * (1 - (durability.toDouble()/maxDurability))).toInt().toShort()
     }
 
     /**
