@@ -15,9 +15,9 @@ import java.util.function.Function;
 
 public class CommandDispatcher {
     @Nullable
-    private Consumer<@NotNull CommandContext> executor;
+    private Consumer<CommandContext> executor;
     @Nullable
-    private Function<@NotNull CommandContext, @Nullable List<String>> suggester;
+    private Function<CommandContext, List<String>> suggester;
     private int index = -1;
     @Nullable
     private CommandDispatcher pre = null;

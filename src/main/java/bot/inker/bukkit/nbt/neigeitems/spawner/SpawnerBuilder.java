@@ -1,35 +1,21 @@
 package bot.inker.bukkit.nbt.neigeitems.spawner;
 
-import bot.inker.bukkit.nbt.NbtCompound;
-import bot.inker.bukkit.nbt.NeigeItemsUtils;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockPos;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefCraftBlockEntityState;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.spawner.RefBaseSpawner;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.spawner.RefCraftCreatureSpawner;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.spawner.RefSpawnData;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.spawner.RefSpawnerBlockEntity;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.util.*;
-import bot.inker.bukkit.nbt.neigeitems.utils.EntityUtils;
-import com.google.common.collect.ImmutableList;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.jetbrains.annotations.NotNull;
-import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.utils.ItemUtils;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class SpawnerBuilder {
     /**

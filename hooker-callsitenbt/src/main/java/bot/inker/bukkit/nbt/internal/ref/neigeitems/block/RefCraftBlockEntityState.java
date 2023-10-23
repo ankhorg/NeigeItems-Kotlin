@@ -2,10 +2,6 @@ package bot.inker.bukkit.nbt.internal.ref.neigeitems.block;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.EntityType;
-import org.jetbrains.annotations.NotNull;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/block/CraftBlockEntityState")
 public abstract class RefCraftBlockEntityState<T extends RefBlockEntity> {

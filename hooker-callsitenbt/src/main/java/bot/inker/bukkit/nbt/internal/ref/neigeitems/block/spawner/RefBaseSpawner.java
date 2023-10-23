@@ -2,11 +2,8 @@ package bot.inker.bukkit.nbt.internal.ref.neigeitems.block.spawner;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.util.RefSimpleWeightedRandomList;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.util.RefWeightedRandomList;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.util.RefWrapper;
-import com.google.common.collect.Lists;
-import net.minecraft.server.v1_12_R1.MobSpawnerData;
 
 import javax.annotation.Nullable;
 import java.util.List;

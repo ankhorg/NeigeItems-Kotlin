@@ -5,7 +5,6 @@ import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockEntity;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockPos;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockState;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.spawner.RefBaseSpawner;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/TileEntityMobSpawner")
 @HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/level/block/entity/SpawnerBlockEntity")

@@ -6,7 +6,6 @@ import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.ScriptUtils.toRoundingMode
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.text.DecimalFormat
-import java.util.concurrent.ThreadLocalRandom
 
 /**
  * Format 节点解析器

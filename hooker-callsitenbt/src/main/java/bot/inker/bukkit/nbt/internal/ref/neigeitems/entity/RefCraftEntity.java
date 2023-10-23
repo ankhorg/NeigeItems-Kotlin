@@ -2,8 +2,6 @@ package bot.inker.bukkit.nbt.internal.ref.neigeitems.entity;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorld;
-import org.bukkit.entity.Entity;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_20_R1/entity/CraftEntity")
 public abstract class RefCraftEntity {

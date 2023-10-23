@@ -2,7 +2,6 @@ package bot.inker.bukkit.nbt.internal.ref.neigeitems.util;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 

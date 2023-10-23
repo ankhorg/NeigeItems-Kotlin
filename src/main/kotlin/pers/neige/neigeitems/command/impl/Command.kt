@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.command.impl
 
-import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.command.CommandDispatcher
 import pers.neige.neigeitems.command.impl.sub.Give
 import pers.neige.neigeitems.command.subcommand.Help
