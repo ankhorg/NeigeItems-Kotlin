@@ -13,4 +13,8 @@ public abstract class RefEntityHuman extends RefEntityLiving {
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityHuman;setAbsorptionHearts(F)V")
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/player/Player;setAbsorptionAmount(F)V")
     public native void setAbsorptionAmount(float amount);
+
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityHuman;attack(Lnet/minecraft/server/v1_12_R1/Entity;)V")
+    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/player/Player;attack(Lnet/minecraft/world/entity/Entity;)V")
+    public native void attack(RefEntity target);
 }

@@ -7,6 +7,14 @@ import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
 @HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/EntityLiving")
 @HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/entity/LivingEntity")
 public abstract class RefEntityLiving extends RefEntity {
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aE:I", accessor = true)
+    @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aH:I", accessor = true)
+    @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aD:I", accessor = true)
+    @HandleBy(version = CbVersion.v1_15_R1, reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aB:I", accessor = true)
+    @HandleBy(version = CbVersion.v1_16_R1, reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;at:I", accessor = true)
+    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;attackStrengthTicker:I", accessor = true)
+    public int attackStrengthTicker;
+
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;b(Lnet/minecraft/server/v1_12_R1/EnumHand;)Lnet/minecraft/server/v1_12_R1/ItemStack;")
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;")
     public native RefNmsItemStack getItemInHand(RefEnumHand hand);

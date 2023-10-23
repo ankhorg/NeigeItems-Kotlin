@@ -2,11 +2,15 @@ package bot.inker.bukkit.nbt.neigeitems.utils;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefCraftPlayer;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntityPlayer;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEnumHand;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.*;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.RefPacketPlayOutAnimation;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorld;
+import net.minecraft.server.v1_16_R3.MathHelper;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.EnumHand;
@@ -26,6 +30,103 @@ public class EntityPlayerUtils {
      * 总觉得有一种小脑发育不完全的美, 所以本工具类的 getAbsorptionAmount 干脆全盘使用 NMS 操作, 不在 1.16.2+ 版本调用 BukkitAPI 了.
      */
     private static final boolean ABSORPTION_SUPPORT = CbVersion.v1_16_R2.isSupport();
+
+    /**
+     * 1.15.2+ 版本起, HumanEntity 接口下添加 getAttackCooldown 方法, 用于获取玩家当前攻击冷却.
+     * 但是 1.15 - 1.15.2 版本的 CraftBukkit 版本均为 v1_15_R1.
+     * 为防止出现问题, 直接看作 v1_16_R1 起步.
+     */
+    private static final boolean ATTACK_COOLDOWN_SUPPORT = CbVersion.v1_16_R1.isSupport();
+
+    /**
+     * 让指定玩家攻击指定实体.
+     *
+     * @param player 攻击者.
+     * @param entity 防御者.
+     */
+    public static void attack(
+            @NotNull Player player,
+            @NotNull Entity entity
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            RefEntityPlayer attacker = ((RefCraftPlayer) (Object) player).getHandle();
+            if (entity instanceof RefCraftEntity) {
+                RefEntity defender = ((RefCraftEntity) entity).getHandle();
+                attacker.attack(defender);
+            }
+        }
+    }
+
+    /**
+     * 获取指定实体的攻击冷却.
+     *
+     * @param entity 待获取实体.
+     */
+    public static float getAttackCooldown(
+            @NotNull HumanEntity entity
+    ) {
+        if (ATTACK_COOLDOWN_SUPPORT) {
+            return entity.getAttackCooldown();
+        } else {
+            return getAttackCooldown((LivingEntity) entity);
+        }
+    }
+
+    /**
+     * 获取指定实体的攻击冷却.
+     *
+     * @param entity 待获取实体.
+     */
+    public static float getAttackCooldown(
+            @NotNull LivingEntity entity
+    ) {
+        if (entity instanceof RefCraftLivingEntity) {
+            RefEntityLiving livingEntity = ((RefCraftLivingEntity) entity).getHandle();
+            int attackStrengthTicker = livingEntity.attackStrengthTicker;
+            AttributeInstance attackSpeedAttribute = entity.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
+            double attackSpeed;
+            if (attackSpeedAttribute != null) {
+                attackSpeed = attackSpeedAttribute.getValue();
+            } else {
+                attackSpeed = 4;
+            }
+            float value = (float) ((attackStrengthTicker + 0.5) / (1.0 / attackSpeed * 20.0));
+            return value < 0 ? 0 : Math.min(value, 1);
+        }
+        return 0;
+    }
+
+    /**
+     * 获取指定实体距上次攻击行为有多久(tick).
+     *
+     * @param entity 待获取实体.
+     */
+    public static int getAttackStrengthTicker(
+            @NotNull LivingEntity entity
+    ) {
+        if (entity instanceof RefCraftLivingEntity) {
+            RefEntityLiving livingEntity = ((RefCraftLivingEntity) entity).getHandle();
+            return livingEntity.attackStrengthTicker;
+        }
+        return 0;
+    }
+
+    /**
+     * 设置指定实体距上次攻击行为有多久(tick).
+     *
+     * @param entity 待获取实体.
+     * @param attackStrengthTicker 实体距上次攻击行为的时间(tick).
+     */
+    public static void setAttackStrengthTicker(
+            @NotNull LivingEntity entity,
+            int attackStrengthTicker
+    ) {
+        if (entity instanceof RefCraftLivingEntity) {
+            RefEntityLiving livingEntity = ((RefCraftLivingEntity) entity).getHandle();
+            livingEntity.attackStrengthTicker = attackStrengthTicker;
+        }
+    }
+
 
     /**
      * 让指定玩家使用对应手持物品.
