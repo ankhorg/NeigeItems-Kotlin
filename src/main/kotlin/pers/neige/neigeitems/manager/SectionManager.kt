@@ -134,6 +134,7 @@ object SectionManager {
         ChanceParser.register()
         CheckParser.register()
         FastCalcParser.register()
+        FormatParser.register()
         GaussianParser.register()
         GradientParser.register()
         InheritParser.register()

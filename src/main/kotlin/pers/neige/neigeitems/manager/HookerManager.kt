@@ -56,32 +56,28 @@ object HookerManager {
     // 某些情况下 MythicMobs 的 ItemManager 加载顺序很奇怪，因此写成 by lazy, 然后在 active 阶段主动调用
     // 没事儿改包名很爽吗, 写MM的, 你妈死了
     val mythicMobsHooker: MythicMobsHooker? by lazy {
-        try {
-            try {
-                // 5.0.3+
-                Class.forName("io.lumine.mythic.bukkit.utils.config.file.YamlConfiguration")
-                Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510").newInstance() as MythicMobsHooker
-            } catch (error: Throwable) {
-                try {
-                    // 5.0.3-
-                    Class.forName("io.lumine.mythic.utils.config.file.YamlConfiguration")
-                    Class.forName("io.lumine.mythic.bukkit.MythicBukkit")
-                    Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl502").newInstance() as MythicMobsHooker
-                } catch (error: Throwable) {
-                    try {
-                        // 5.0.0-
-                        Class.forName("io.lumine.xikage.mythicmobs.utils.config.file.YamlConfiguration")
-                        Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl490").newInstance() as MythicMobsHooker
-                    } catch (error: Throwable) {
-                        // 4.7.2-
-                        Class.forName("io.lumine.utils.config.file.YamlConfiguration")
-                        Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl459").newInstance() as MythicMobsHooker
-                    }
-                }
-            }
-        } catch (error: Throwable) {
+        kotlin.runCatching {
+            // 5.0.3+
+            Class.forName("io.lumine.mythic.bukkit.utils.config.file.YamlConfiguration")
+            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510").newInstance() as MythicMobsHooker
+        }.getOrNull() ?: kotlin.runCatching {
+            // 5.0.3-
+            Class.forName("io.lumine.mythic.utils.config.file.YamlConfiguration")
+            Class.forName("io.lumine.mythic.bukkit.MythicBukkit")
+            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl502").newInstance() as MythicMobsHooker
+        }.getOrNull() ?: kotlin.runCatching {
+            // 5.0.0-
+            Class.forName("io.lumine.xikage.mythicmobs.utils.config.file.YamlConfiguration")
+            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl490").newInstance() as MythicMobsHooker
+        }.getOrNull() ?: kotlin.runCatching {
+            // 4.7.2-
+            Class.forName("io.lumine.utils.config.file.YamlConfiguration")
+            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl459").newInstance() as MythicMobsHooker
+        }.getOrNull() ?: kotlin.runCatching {
+            // 4.5.0-
+            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl440").newInstance() as MythicMobsHooker
+        }.getOrNull()?.also {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
-            null
         }
     }
 

@@ -2,6 +2,7 @@ rootProject.name="NeigeItems"
 
 include("hooker")
 
+include("hooker-mythicmobs-v440")
 include("hooker-mythicmobs-v459")
 include("hooker-mythicmobs-v490")
 include("hooker-mythicmobs-v502")

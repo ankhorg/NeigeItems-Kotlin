@@ -15,4 +15,11 @@ public class ServerUtils {
             ((RefCraftServer) (Object) Bukkit.getServer()).syncCommands();
         }
     }
+
+    /**
+     * 获取服务器 TPS.
+     */
+    public static double[] getTps() {
+        return ((RefCraftServer) (Object) Bukkit.getServer()).getServer().recentTps;
+    }
 }

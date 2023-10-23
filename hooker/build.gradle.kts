@@ -7,6 +7,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":hooker-mythicmobs-v440"))
     implementation(project(":hooker-mythicmobs-v459"))
     implementation(project(":hooker-mythicmobs-v490"))
     implementation(project(":hooker-mythicmobs-v502"))
