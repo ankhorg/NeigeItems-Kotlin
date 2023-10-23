@@ -237,10 +237,12 @@ abstract class MythicMobsHooker {
                         (ItemManager.getItemStack(args[0], null, data)
                             ?: HookerManager.easyItemHooker?.getItemStack(args[0])
                             ?: getItemStackSync(args[0]))?.let { itemStack ->
-                            dropChance[slot]?.let { chance ->
-                                val itemTag = itemStack.getNbt()
-                                itemTag.putDeepDouble("NeigeItems.dropChance", chance)
-                                itemTag.saveToSafe(itemStack)
+                            if (itemStack.type != Material.AIR) {
+                                dropChance[slot]?.let { chance ->
+                                    val itemTag = itemStack.getNbt()
+                                    itemTag.putDeepDouble("NeigeItems.dropChance", chance)
+                                    itemTag.saveToSafe(itemStack)
+                                }
                             }
                             val event = MythicEquipEvent(entity, internalName, slot, itemStack)
 

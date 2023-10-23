@@ -389,6 +389,13 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 // 预处理中已将ItemStack转为CraftItemStack, 可提升NBT操作效率
                 val itemStack = staticItemStack
                 material?.let { itemStack.type = material }
+                // 空物品检测
+                if (itemStack.type == Material.AIR) {
+                    // 触发一下物品生成事件
+                    val event = ItemGenerateEvent(id, player, itemStack, cache, configSection, sections)
+                    event.call()
+                    return event.itemStack
+                }
                 // 设置子ID/损伤值
                 if (configSection.contains("damage")) {
                     itemStack.durability = configSection.getInt("damage").toShort()
