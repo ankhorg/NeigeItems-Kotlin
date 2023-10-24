@@ -17,4 +17,10 @@ public abstract class RefEntityHuman extends RefEntityLiving {
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityHuman;attack(Lnet/minecraft/server/v1_12_R1/Entity;)V")
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/player/Player;attack(Lnet/minecraft/world/entity/Entity;)V")
     public native void attack(RefEntity target);
+
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityHuman;cu()V")
+    @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/EntityHuman;cH()V")
+    @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_14_R1/EntityHuman;jump()V")
+    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/player/Player;jumpFromGround()V")
+    public native void jumpFromGround();
 }
