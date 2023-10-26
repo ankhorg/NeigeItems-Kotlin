@@ -323,103 +323,103 @@ public class EntityPlayerUtils {
         }
     }
 
-    public static void receiveMovePacket(
-            Player player,
-            float yaw,
-            float pitch,
-            boolean onGround
-    ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
-            entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(yaw, pitch, onGround));
-        }
-    }
-
-    public static void receiveMovePacket(
-            Player player,
-            double x,
-            double y,
-            double z,
-            boolean onGround
-    ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
-            entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(x, y, z, onGround));
-        }
-    }
-
-    public static void receiveMovePacket(
-            Player player,
-            double x,
-            double y,
-            double z,
-            float yaw,
-            float pitch,
-            boolean onGround
-    ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
-            entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(x, y, z, yaw, pitch, onGround));
-        }
-    }
-
-    private static RefPacketPlayInFlying newPlayerMovePacket(
-            float yaw,
-            float pitch,
-            boolean onGround
-    ) {
-        if (NEW_MOVE_PACKET_CONSTRUCTOR) {
-            return new RefPacketPlayInFlying.Rot(yaw, pitch, onGround);
-        } else {
-            RefPacketPlayInFlying packet = new RefPacketPlayInFlying.Rot();
-            packet.yaw = yaw;
-            packet.pitch = pitch;
-            packet.onGround = onGround;
-            packet.changePosition = false;
-            return packet;
-        }
-    }
-
-    private static RefPacketPlayInFlying newPlayerMovePacket(
-            double x,
-            double y,
-            double z,
-            boolean onGround
-    ) {
-        if (NEW_MOVE_PACKET_CONSTRUCTOR) {
-            return new RefPacketPlayInFlying.Pos(x, y, z, onGround);
-        } else {
-            RefPacketPlayInFlying packet = new RefPacketPlayInFlying.Pos();
-            packet.x = x;
-            packet.y = y;
-            packet.z = z;
-            packet.onGround = onGround;
-            packet.changeLook = false;
-            return packet;
-        }
-    }
-
-    private static RefPacketPlayInFlying newPlayerMovePacket(
-            double x,
-            double y,
-            double z,
-            float yaw,
-            float pitch,
-            boolean onGround
-    ) {
-        if (NEW_MOVE_PACKET_CONSTRUCTOR) {
-            return new RefPacketPlayInFlying.PosRot(x, y, z, yaw, pitch, onGround);
-        } else {
-            RefPacketPlayInFlying packet = new RefPacketPlayInFlying.PosRot();
-            packet.x = x;
-            packet.y = y;
-            packet.z = z;
-            packet.yaw = yaw;
-            packet.pitch = pitch;
-            packet.onGround = onGround;
-            return packet;
-        }
-    }
+//    public static void receiveMovePacket(
+//            Player player,
+//            float yaw,
+//            float pitch,
+//            boolean onGround
+//    ) {
+//        if ((Object) player instanceof RefCraftPlayer) {
+//            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+//            entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(yaw, pitch, onGround));
+//        }
+//    }
+//
+//    public static void receiveMovePacket(
+//            Player player,
+//            double x,
+//            double y,
+//            double z,
+//            boolean onGround
+//    ) {
+//        if ((Object) player instanceof RefCraftPlayer) {
+//            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+//            entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(x, y, z, onGround));
+//        }
+//    }
+//
+//    public static void receiveMovePacket(
+//            Player player,
+//            double x,
+//            double y,
+//            double z,
+//            float yaw,
+//            float pitch,
+//            boolean onGround
+//    ) {
+//        if ((Object) player instanceof RefCraftPlayer) {
+//            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+//            entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(x, y, z, yaw, pitch, onGround));
+//        }
+//    }
+//
+//    private static RefPacketPlayInFlying newPlayerMovePacket(
+//            float yaw,
+//            float pitch,
+//            boolean onGround
+//    ) {
+//        if (NEW_MOVE_PACKET_CONSTRUCTOR) {
+//            return new RefPacketPlayInFlying.Rot(yaw, pitch, onGround);
+//        } else {
+//            RefPacketPlayInFlying packet = new RefPacketPlayInFlying.Rot();
+//            packet.yaw = yaw;
+//            packet.pitch = pitch;
+//            packet.onGround = onGround;
+//            packet.changePosition = false;
+//            return packet;
+//        }
+//    }
+//
+//    private static RefPacketPlayInFlying newPlayerMovePacket(
+//            double x,
+//            double y,
+//            double z,
+//            boolean onGround
+//    ) {
+//        if (NEW_MOVE_PACKET_CONSTRUCTOR) {
+//            return new RefPacketPlayInFlying.Pos(x, y, z, onGround);
+//        } else {
+//            RefPacketPlayInFlying packet = new RefPacketPlayInFlying.Pos();
+//            packet.x = x;
+//            packet.y = y;
+//            packet.z = z;
+//            packet.onGround = onGround;
+//            packet.changeLook = false;
+//            return packet;
+//        }
+//    }
+//
+//    private static RefPacketPlayInFlying newPlayerMovePacket(
+//            double x,
+//            double y,
+//            double z,
+//            float yaw,
+//            float pitch,
+//            boolean onGround
+//    ) {
+//        if (NEW_MOVE_PACKET_CONSTRUCTOR) {
+//            return new RefPacketPlayInFlying.PosRot(x, y, z, yaw, pitch, onGround);
+//        } else {
+//            RefPacketPlayInFlying packet = new RefPacketPlayInFlying.PosRot();
+//            packet.x = x;
+//            packet.y = y;
+//            packet.z = z;
+//            packet.yaw = yaw;
+//            packet.pitch = pitch;
+//            packet.onGround = onGround;
+//            return packet;
+//        }
+//    }
 
     private static void lookAtByNms(
             @NotNull Player player,
