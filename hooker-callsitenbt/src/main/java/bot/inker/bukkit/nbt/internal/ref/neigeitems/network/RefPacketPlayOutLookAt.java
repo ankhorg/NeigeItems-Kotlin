@@ -3,7 +3,6 @@ package bot.inker.bukkit.nbt.internal.ref.neigeitems.network;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntity;
 
 @HandleBy(version = CbVersion.v1_13_R1, reference = "net/minecraft/server/v1_13_R1/PacketPlayOutLookAt")
 @HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/protocol/game/ClientboundPlayerLookAtPacket")

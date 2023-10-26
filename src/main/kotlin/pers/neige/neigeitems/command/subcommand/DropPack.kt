@@ -100,6 +100,93 @@ object DropPack {
             }
         }
     }
+
+    val dropPackSilent = subCommand {
+        // ni dropPack [物品包ID]
+        dynamic {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                ItemPackManager.itemPackIds
+            }
+            execute<CommandSender> { sender, _, _ ->
+                async {
+                    help(sender)
+                }
+            }
+            // ni dropPack [物品包ID] [数量]
+            dynamic {
+                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                    arrayListOf("amount")
+                }
+                execute<CommandSender> { sender, _, _ ->
+                    async {
+                        help(sender)
+                    }
+                }
+                // ni dropPack [物品包ID] [数量] [世界名]
+                dynamic {
+                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                        Bukkit.getWorlds().map { it.name }
+                    }
+                    execute<CommandSender> { sender, _, _ ->
+                        async {
+                            help(sender)
+                        }
+                    }
+                    // ni dropPack [物品包ID] [数量] [世界名] [X坐标]
+                    dynamic {
+                        suggestion<CommandSender>(uncheck = true) { _, _ ->
+                            arrayListOf("x")
+                        }
+                        execute<CommandSender> { sender, _, _ ->
+                            async {
+                                help(sender)
+                            }
+                        }
+                        // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标]
+                        dynamic {
+                            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                                arrayListOf("y")
+                            }
+                            execute<CommandSender> { sender, _, _ ->
+                                async {
+                                    help(sender)
+                                }
+                            }
+                            // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标]
+                            dynamic {
+                                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                                    arrayListOf("z")
+                                }
+                                execute<CommandSender> { sender, _, _ ->
+                                    async {
+                                        help(sender)
+                                    }
+                                }
+                                // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象]
+                                dynamic {
+                                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                                        Bukkit.getOnlinePlayers().map { it.name }
+                                    }
+                                    execute<CommandSender> { sender, context, argument ->
+                                        dropPackCommandAsync(sender, context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                                    }
+                                    // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象] (指向数据)
+                                    dynamic {
+                                        suggestion<CommandSender>(uncheck = true) { _, _ ->
+                                            arrayListOf("data")
+                                        }
+                                        execute<CommandSender> { sender, context, argument ->
+                                            dropPackCommandAsync(sender, context.argument(-7), context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     private fun dropPackCommandAsync(
         sender: CommandSender,
@@ -110,10 +197,11 @@ object DropPack {
         yString: String,
         zString: String,
         parser: String,
-        data: String? = null
+        data: String? = null,
+        tip: Boolean = true
     ) {
         async {
-            dropPackCommand(sender, id, repeat, worldName, xString, yString, zString, parser, data)
+            dropPackCommand(sender, id, repeat, worldName, xString, yString, zString, parser, data, tip)
         }
     }
 
@@ -135,14 +223,16 @@ object DropPack {
         // 物品解析对象, 用于生成物品
         parser: String,
         // 指向数据
-        data: String? = null
+        data: String? = null,
+        // 是否进行消息提示
+        tip: Boolean
     ) {
         Bukkit.getWorld(worldName)?.let { world ->
             val x = xString.toDoubleOrNull()
             val y = yString.toDoubleOrNull()
             val z = zString.toDoubleOrNull()
             if (x != null && y != null && z != null) {
-                dropPackCommand(sender, id, repeat?.toIntOrNull(), Location(world, x, y, z), Bukkit.getPlayerExact(parser), data)
+                dropPackCommand(sender, id, repeat?.toIntOrNull(), Location(world, x, y, z), Bukkit.getPlayerExact(parser), data, tip)
             } else {
                 sender.sendLang("Messages.invalidLocation")
             }
@@ -157,7 +247,8 @@ object DropPack {
         repeat: Int?,
         location: Location,
         parser: Player?,
-        data: String? = null
+        data: String? = null,
+        tip: Boolean
     ) {
         parser?.let {
             ItemPackManager.getItemPack(id)?.let { itemPack ->
@@ -188,15 +279,17 @@ object DropPack {
                         packInfo[event.location] = (packInfo[event.location] ?: 0) + 1
                     }
                 }
-                for ((loc, amount) in packInfo) {
-                    sender.sendLang("Messages.dropPackSuccessInfo", mapOf(
-                        Pair("{world}", loc.world?.name ?: ""),
-                        Pair("{x}", loc.x.toString()),
-                        Pair("{y}", loc.y.toString()),
-                        Pair("{z}", loc.z.toString()),
-                        Pair("{amount}", amount.toString()),
-                        Pair("{name}", id)
-                    ))
+                if (tip) {
+                    for ((loc, amount) in packInfo) {
+                        sender.sendLang("Messages.dropPackSuccessInfo", mapOf(
+                            Pair("{world}", loc.world?.name ?: ""),
+                            Pair("{x}", loc.x.toString()),
+                            Pair("{y}", loc.y.toString()),
+                            Pair("{z}", loc.z.toString()),
+                            Pair("{amount}", amount.toString()),
+                            Pair("{name}", id)
+                        ))
+                    }
                 }
                 // 未知物品包
             } ?: let {

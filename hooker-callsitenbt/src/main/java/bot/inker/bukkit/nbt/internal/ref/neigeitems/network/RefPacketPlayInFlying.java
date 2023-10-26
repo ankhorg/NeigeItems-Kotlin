@@ -2,7 +2,6 @@ package bot.inker.bukkit.nbt.internal.ref.neigeitems.network;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/PacketPlayInFlying")
 @HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/protocol/game/ServerboundMovePlayerPacket")
@@ -42,6 +41,7 @@ public class RefPacketPlayInFlying implements RefPacket<RefPacketListenerPlayIn>
     @HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/protocol/game/ServerboundMovePlayerPacket$Rot")
     public static class Rot extends RefPacketPlayInFlying {
         @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PacketPlayInFlying$PacketPlayInLook;<init>()V")
+        @HandleBy(version = CbVersion.v1_17_R1, reference = "")
         public Rot() {
             throw new UnsupportedOperationException();
         }
@@ -56,6 +56,7 @@ public class RefPacketPlayInFlying implements RefPacket<RefPacketListenerPlayIn>
     @HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/protocol/game/ServerboundMovePlayerPacket$Pos")
     public static class Pos extends RefPacketPlayInFlying {
         @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PacketPlayInFlying$PacketPlayInPosition;<init>()V")
+        @HandleBy(version = CbVersion.v1_17_R1, reference = "")
         public Pos() {
             throw new UnsupportedOperationException();
         }
@@ -70,6 +71,7 @@ public class RefPacketPlayInFlying implements RefPacket<RefPacketListenerPlayIn>
     @HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/protocol/game/ServerboundMovePlayerPacket$PosRot")
     public static class PosRot extends RefPacketPlayInFlying {
         @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PacketPlayInFlying$PacketPlayInPositionLook;<init>()V")
+        @HandleBy(version = CbVersion.v1_17_R1, reference = "")
         public PosRot() {
             throw new UnsupportedOperationException();
         }

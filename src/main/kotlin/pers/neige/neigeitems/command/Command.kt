@@ -78,24 +78,48 @@ object Command {
     val get = Give.get
 
     @CommandBody
+    // ni getSilent
+    val getSilent = Give.getSilent
+
+    @CommandBody
     // ni give [玩家ID] [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予NI物品
     val give = Give.give
+
+    @CommandBody
+    // ni giveSilent
+    val giveSilent = Give.giveSilent
 
     @CommandBody
     // ni giveAll [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予所有人NI物品
     val giveAll = Give.giveAll
 
     @CommandBody
+    // ni giveAllSilent
+    val giveAllSilent = Give.giveAllSilent
+
+    @CommandBody
     // ni givePack [玩家ID] [物品包ID] (数量) > 根据ID给予NI物品包
     val givePack = GivePack.givePack
+
+    @CommandBody
+    // ni givePackSilent
+    val givePackSilent = GivePack.givePackSilent
 
     @CommandBody
     // ni drop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机] [物品解析对象] (指向数据) > 于指定位置掉落NI物品
     val drop = Drop.drop
 
     @CommandBody
+    // ni dropSilent
+    val dropSilent = Drop.dropSilent
+
+    @CommandBody
     // ni dropPack [物品包ID] (数量) [世界名] [X坐标] [Y坐标] [Z坐标] (物品解析对象) > 于指定位置掉落NI物品包
     val dropPack = DropPack.dropPack
+
+    @CommandBody
+    // ni dropPackSilent
+    val dropPackSilent = DropPack.dropPackSilent
 
     @CommandBody
     // ni save [物品ID] (保存路径) > 将手中物品以对应ID保存至对应路径

@@ -29,7 +29,7 @@ object Give {
             suggestion<Player>(uncheck = true) { _, _ ->
                 ItemManager.items.keys.toList()
             }
-            execute<Player> { sender, _, argument ->
+            execute<Player> { sender, context, argument ->
                 giveCommandAsync(sender, sender, argument, "1")
             }
             // ni get [物品ID] (数量)
@@ -55,6 +55,51 @@ object Give {
                         }
                         execute<Player> { sender, context, argument ->
                             giveCommandAsync(sender, sender, context.argument(-3), context.argument(-2), context.argument(-1), argument)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // ni get [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID获取NI物品
+    val getSilent = subCommand {
+        execute<Player> { sender, _, _ ->
+            async {
+                help(sender)
+            }
+        }
+        // ni get [物品ID]
+        dynamic {
+            suggestion<Player>(uncheck = true) { _, _ ->
+                ItemManager.items.keys.toList()
+            }
+            execute<Player> { sender, context, argument ->
+                giveCommandAsync(sender, sender, argument, "1", tip = false)
+            }
+            // ni get [物品ID] (数量)
+            dynamic(optional = true) {
+                suggestion<Player>(uncheck = true) { _, _ ->
+                    arrayListOf("amount")
+                }
+                execute<Player> { sender, context, argument ->
+                    giveCommandAsync(sender, sender, context.argument(-1), argument, tip = false)
+                }
+                // ni get [物品ID] (数量) (是否反复随机)
+                dynamic(optional = true) {
+                    suggestion<Player>(uncheck = true) { _, _ ->
+                        arrayListOf("true", "false")
+                    }
+                    execute<Player> { sender, context, argument ->
+                        giveCommandAsync(sender, sender, context.argument(-2), context.argument(-1), argument, tip = false)
+                    }
+                    // ni get [物品ID] (数量) (是否反复随机) (指向数据)
+                    dynamic(optional = true) {
+                        suggestion<Player>(uncheck = true) { _, _ ->
+                            arrayListOf("data")
+                        }
+                        execute<Player> { sender, context, argument ->
+                            giveCommandAsync(sender, sender, context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
                         }
                     }
                 }
@@ -117,6 +162,61 @@ object Give {
         }
     }
 
+    // ni give [玩家ID] [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予NI物品
+    val giveSilent = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            async {
+                help(sender)
+            }
+        }
+        dynamic {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                Bukkit.getOnlinePlayers().map { it.name }
+            }
+            execute<CommandSender> { sender, _, _ ->
+                async {
+                    help(sender)
+                }
+            }
+            // ni give [玩家ID] [物品ID]
+            dynamic {
+                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                    ItemManager.items.keys.toList()
+                }
+                execute<CommandSender> { sender, context, argument ->
+                    giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-1)), argument, "1", tip = false)
+                }
+                // ni give [玩家ID] [物品ID] (数量)
+                dynamic(optional = true) {
+                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                        arrayListOf("amount")
+                    }
+                    execute<CommandSender> { sender, context, argument ->
+                        giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-2)), context.argument(-1), argument, tip = false)
+                    }
+                    // ni give [玩家ID] [物品ID] (数量) (是否反复随机)
+                    dynamic(optional = true) {
+                        suggestion<CommandSender>(uncheck = true) { _, _ ->
+                            arrayListOf("true", "false")
+                        }
+                        execute<CommandSender> { sender, context, argument ->
+                            giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-3)), context.argument(-2), context.argument(-1), argument, tip = false)
+                        }
+                        // ni give [玩家ID] [物品ID] (数量) (是否反复随机) (指向数据)
+                        dynamic(optional = true) {
+                            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                                arrayListOf("data")
+                            }
+                            execute<CommandSender> { sender, context, argument ->
+                                giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-4)), context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // ni giveAll [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予所有人NI物品
     val giveAll = subCommand {
         execute<CommandSender> { sender, _, _ ->
@@ -129,7 +229,7 @@ object Give {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
                 ItemManager.items.keys.toList()
             }
-            execute<CommandSender> { sender, _, argument ->
+            execute<CommandSender> { sender, context, argument ->
                 giveAllCommandAsync(sender, argument, "1")
             }
             // ni giveAll [物品ID] (数量)
@@ -162,6 +262,51 @@ object Give {
         }
     }
 
+    // ni giveAll [物品ID] (数量) (是否反复随机) (指向数据) > 根据ID给予所有人NI物品
+    val giveAllSilent = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            async {
+                help(sender)
+            }
+        }
+        // ni giveAll [物品ID]
+        dynamic {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                ItemManager.items.keys.toList()
+            }
+            execute<CommandSender> { sender, context, argument ->
+                giveAllCommandAsync(sender, argument, "1", tip = false)
+            }
+            // ni giveAll [物品ID] (数量)
+            dynamic(optional = true) {
+                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                    arrayListOf("amount")
+                }
+                execute<CommandSender> { sender, context, argument ->
+                    giveAllCommandAsync(sender, context.argument(-1), argument, tip = false)
+                }
+                // ni giveAll [物品ID] (数量) (是否反复随机)
+                dynamic(optional = true) {
+                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                        arrayListOf("true", "false")
+                    }
+                    execute<CommandSender> { sender, context, argument ->
+                        giveAllCommandAsync(sender, context.argument(-2), context.argument(-1), argument, tip = false)
+                    }
+                    // ni giveAll [物品ID] (数量) (是否反复随机) (指向数据)
+                    dynamic(optional = true) {
+                        suggestion<CommandSender>(uncheck = true) { _, _ ->
+                            arrayListOf("data")
+                        }
+                        execute<CommandSender> { sender, context, argument ->
+                            giveAllCommandAsync(sender, context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun giveCommand(
         // 行为发起人, 用于接收反馈信息
         sender: CommandSender,
@@ -174,9 +319,11 @@ object Give {
         // 是否反复随机
         random: String?,
         // 指向数据
-        data: String?
+        data: String?,
+        // 是否进行消息提示
+        tip: Boolean
     ) {
-        giveCommand(sender, player, id, amount?.toIntOrNull(), random, data)
+        giveCommand(sender, player, id, amount?.toIntOrNull(), random, data, tip)
     }
 
     private fun giveCommandAsync(
@@ -185,10 +332,11 @@ object Give {
         id: String,
         amount: String? = null,
         random: String? = null,
-        data: String? = null
+        data: String? = null,
+        tip: Boolean = true
     ) {
         async {
-            giveCommand(sender, player, id, amount, random, data)
+            giveCommand(sender, player, id, amount, random, data, tip)
         }
     }
 
@@ -197,11 +345,12 @@ object Give {
         id: String,
         amount: String? = null,
         random: String? = null,
-        data: String? = null
+        data: String? = null,
+        tip: Boolean = true
     ) {
         async {
             Bukkit.getOnlinePlayers().forEach { player ->
-                giveCommand(sender, player, id, amount, random, data)
+                giveCommand(sender, player, id, amount, random, data, tip)
             }
         }
     }
@@ -212,7 +361,8 @@ object Give {
         id: String,
         amount: Int?,
         random: String?,
-        data: String?
+        data: String?,
+        tip: Boolean
     ) {
         player?.let {
             when (random) {
@@ -236,15 +386,17 @@ object Give {
                             sync {
                                 player.giveItems(event.itemStack, event.amount)
                             }
-                            sender.sendLang("Messages.successInfo", mapOf(
-                                Pair("{player}", player.name),
-                                Pair("{amount}", amount.toString()),
-                                Pair("{name}", itemStack.getParsedName())
-                            ))
-                            player.sendLang("Messages.givenInfo", mapOf(
-                                Pair("{amount}", amount.toString()),
-                                Pair("{name}", itemStack.getParsedName())
-                            ))
+                            if (tip) {
+                                sender.sendLang("Messages.successInfo", mapOf(
+                                    Pair("{player}", player.name),
+                                    Pair("{amount}", amount.toString()),
+                                    Pair("{name}", itemStack.getParsedName())
+                                ))
+                                player.sendLang("Messages.givenInfo", mapOf(
+                                    Pair("{amount}", amount.toString()),
+                                    Pair("{name}", itemStack.getParsedName())
+                                ))
+                            }
                             // 未知物品ID
                         } ?: let {
                             sender.sendLang("Messages.unknownItem", mapOf(
@@ -288,16 +440,18 @@ object Give {
                                 Pair("{itemID}", id)
                             ))
                         }
-                        for ((name, amt) in dropData) {
-                            sender.sendLang("Messages.successInfo", mapOf(
-                                Pair("{player}", player.name),
-                                Pair("{amount}", amt.toString()),
-                                Pair("{name}", name)
-                            ))
-                            player.sendLang("Messages.givenInfo", mapOf(
-                                Pair("{amount}", amt.toString()),
-                                Pair("{name}", name)
-                            ))
+                        if (tip) {
+                            for ((name, amt) in dropData) {
+                                sender.sendLang("Messages.successInfo", mapOf(
+                                    Pair("{player}", player.name),
+                                    Pair("{amount}", amt.toString()),
+                                    Pair("{name}", name)
+                                ))
+                                player.sendLang("Messages.givenInfo", mapOf(
+                                    Pair("{amount}", amt.toString()),
+                                    Pair("{name}", name)
+                                ))
+                            }
                         }
                         // 无效数字
                     } ?: let {

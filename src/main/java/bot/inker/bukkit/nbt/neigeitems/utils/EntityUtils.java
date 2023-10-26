@@ -1,9 +1,8 @@
 package bot.inker.bukkit.nbt.neigeitems.utils;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.NbtCompound;
 import bot.inker.bukkit.nbt.NeigeItemsUtils;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagCompound;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.*;
@@ -11,9 +10,7 @@ import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefVec3;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.util.NumberConversions;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -62,15 +62,62 @@ object GivePack {
         }
     }
 
+    // ni givePack [玩家ID] [物品包ID] (数量) (指向数据) > 根据ID给予NI物品包
+    val givePackSilent = subCommand {
+        execute<CommandSender> { sender, _, _ ->
+            async {
+                help(sender)
+            }
+        }
+        dynamic {
+            suggestion<CommandSender>(uncheck = true) { _, _ ->
+                Bukkit.getOnlinePlayers().map { it.name }
+            }
+            execute<CommandSender> { sender, _, _ ->
+                async {
+                    help(sender)
+                }
+            }
+            // ni givePack [玩家ID] [物品包ID]
+            dynamic {
+                suggestion<CommandSender>(uncheck = true) { _, _ ->
+                    ItemPackManager.itemPackIds
+                }
+                execute<CommandSender> { sender, context, argument ->
+                    givePackCommandAsync(sender, context.argument(-1), argument, "1", tip = false)
+                }
+                // ni givePack [玩家ID] [物品包ID] (数量)
+                dynamic(optional = true) {
+                    suggestion<CommandSender>(uncheck = true) { _, _ ->
+                        arrayListOf("amount")
+                    }
+                    execute<CommandSender> { sender, context, argument ->
+                        givePackCommandAsync(sender, context.argument(-2), context.argument(-1), argument, tip = false)
+                    }
+                    // ni givePack [玩家ID] [物品包ID] (数量) (指向数据)
+                    dynamic(optional = true) {
+                        suggestion<CommandSender>(uncheck = true) { _, _ ->
+                            arrayListOf("data")
+                        }
+                        execute<CommandSender> { sender, context, argument ->
+                            givePackCommandAsync(sender, context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun givePackCommandAsync(
         sender: CommandSender,
         player: String,
         id: String,
         repeat: String?,
-        data: String? = null
+        data: String? = null,
+        tip: Boolean = true
     ) {
         async {
-            givePackCommand(sender, player, id, repeat, data)
+            givePackCommand(sender, player, id, repeat, data, tip)
         }
     }
 
@@ -84,9 +131,11 @@ object GivePack {
         // 重复次数
         repeat: String?,
         // 指向数据
-        data: String? = null
+        data: String? = null,
+        // 是否进行消息提示
+        tip: Boolean
     ) {
-        givePackCommand(sender, Bukkit.getPlayerExact(player), id, repeat?.toIntOrNull(), data)
+        givePackCommand(sender, Bukkit.getPlayerExact(player), id, repeat?.toIntOrNull(), data, tip)
     }
 
     private fun givePackCommand(
@@ -94,7 +143,8 @@ object GivePack {
         player: Player?,
         id: String,
         repeat: Int?,
-        data: String? = null
+        data: String? = null,
+        tip: Boolean
     ) {
         player?.let {
             ItemPackManager.getItemPack(id)?.let { itemPack ->
@@ -123,28 +173,30 @@ object GivePack {
                     }
                 }
                 // 信息提示
-                dropData?.let {
-                    for ((name, amt) in dropData) {
-                        sender.sendLang("Messages.successInfo", mapOf(
+                if (tip) {
+                    dropData?.let {
+                        for ((name, amt) in dropData) {
+                            sender.sendLang("Messages.successInfo", mapOf(
+                                Pair("{player}", player.name),
+                                Pair("{amount}", amt.toString()),
+                                Pair("{name}", name)
+                            ))
+                            player.sendLang("Messages.givenInfo", mapOf(
+                                Pair("{amount}", amt.toString()),
+                                Pair("{name}", name)
+                            ))
+                        }
+                    } ?: let {
+                        sender.sendLang("Messages.successPackInfo", mapOf(
                             Pair("{player}", player.name),
-                            Pair("{amount}", amt.toString()),
-                            Pair("{name}", name)
+                            Pair("{amount}", repeat.toString()),
+                            Pair("{name}", id)
                         ))
-                        player.sendLang("Messages.givenInfo", mapOf(
-                            Pair("{amount}", amt.toString()),
-                            Pair("{name}", name)
+                        player.sendLang("Messages.givenPackInfo", mapOf(
+                            Pair("{amount}", repeat.toString()),
+                            Pair("{name}", id)
                         ))
                     }
-                } ?: let {
-                    sender.sendLang("Messages.successPackInfo", mapOf(
-                        Pair("{player}", player.name),
-                        Pair("{amount}", repeat.toString()),
-                        Pair("{name}", id)
-                    ))
-                    player.sendLang("Messages.givenPackInfo", mapOf(
-                        Pair("{amount}", repeat.toString()),
-                        Pair("{name}", id)
-                    ))
                 }
                 // 未知物品包
             } ?: let {
