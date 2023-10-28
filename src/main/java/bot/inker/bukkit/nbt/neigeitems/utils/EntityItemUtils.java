@@ -2,6 +2,7 @@ package bot.inker.bukkit.nbt.neigeitems.utils;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefCraftItem;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntityItem;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Item;
@@ -25,6 +26,21 @@ public class EntityItemUtils {
      * 1.16.2 和 1.16.3 都是 v1_16_R2, 所以按 v1_16_R3 起算.
      */
     private static final boolean GET_AND_SET_SUPPORT = CbVersion.v1_16_R3.isSupport();
+    /**
+     * 1.20.2+ 版本起, CraftItem 类移除私有字段 item.
+     * 改为通过 getHandle 方法获取对应的 ItemEntity.
+     */
+    private static final boolean REMOVE_CRAFTITEM_ITEM = CbVersion.v1_20_R2.isSupport();
+
+    private static RefEntityItem getHandle(
+            RefCraftItem item
+    ) {
+        if (REMOVE_CRAFTITEM_ITEM) {
+            return item.getHandle();
+        } else {
+            return item.item;
+        }
+    }
 
     /**
      * 获取掉落物实体的已存活时长(tick).
@@ -38,7 +54,7 @@ public class EntityItemUtils {
             @NotNull Item item
     ) {
         if ((Object) item instanceof RefCraftItem) {
-            return ((RefCraftItem) (Object) item).item.age;
+            return getHandle((RefCraftItem) (Object) item).age;
         }
         return null;
     }
@@ -54,7 +70,7 @@ public class EntityItemUtils {
             int age
     ) {
         if ((Object) item instanceof RefCraftItem) {
-            ((RefCraftItem) (Object) item).item.age = age;
+            getHandle((RefCraftItem) (Object) item).age = age;
         }
     }
 
@@ -68,7 +84,7 @@ public class EntityItemUtils {
             @NotNull Item item
     ) {
         if (HAS_DESPAWN_RATE && ((Object) item instanceof RefCraftItem)) {
-            return ((RefCraftItem) (Object) item).item.despawnRate;
+            return getHandle((RefCraftItem) (Object) item).despawnRate;
         } else {
             return WorldUtils.getDespawnRate(item.getWorld());
         }
@@ -92,11 +108,11 @@ public class EntityItemUtils {
         } else {
             if ((Object) item instanceof RefCraftItem) {
                 if (UUID_SUPPORT) {
-                    UUID ownerUUID = ((RefCraftItem) (Object) item).item.ownerUUID;
+                    UUID ownerUUID = getHandle((RefCraftItem) (Object) item).ownerUUID;
                     if (ownerUUID == null) return null;
                     return Bukkit.getOfflinePlayer(ownerUUID);
                 } else {
-                    String ownerName = ((RefCraftItem) (Object) item).item.ownerName;
+                    String ownerName = getHandle((RefCraftItem) (Object) item).ownerName;
                     if (ownerName == null) return null;
                     return Bukkit.getOfflinePlayer(ownerName);
                 }
@@ -117,7 +133,7 @@ public class EntityItemUtils {
             @NotNull Item item
     ) {
         if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
-            return ((RefCraftItem) (Object) item).item.ownerName;
+            return getHandle((RefCraftItem) (Object) item).ownerName;
         }
         return null;
     }
@@ -137,7 +153,7 @@ public class EntityItemUtils {
             return item.getOwner();
         } else {
             if ((Object) item instanceof RefCraftItem && UUID_SUPPORT) {
-                return ((RefCraftItem) (Object) item).item.ownerUUID;
+                return getHandle((RefCraftItem) (Object) item).ownerUUID;
             }
         }
         return null;
@@ -159,9 +175,9 @@ public class EntityItemUtils {
         } else {
             if ((Object) item instanceof RefCraftItem) {
                 if (UUID_SUPPORT) {
-                    ((RefCraftItem) (Object) item).item.ownerUUID = player.getUniqueId();
+                    getHandle((RefCraftItem) (Object) item).ownerUUID = player.getUniqueId();
                 } else {
-                    ((RefCraftItem) (Object) item).item.ownerName = player.getName();
+                    getHandle((RefCraftItem) (Object) item).ownerName = player.getName();
                 }
             }
         }
@@ -179,7 +195,7 @@ public class EntityItemUtils {
             @NotNull String name
     ) {
         if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
-            ((RefCraftItem) (Object) item).item.ownerName = name;
+            getHandle((RefCraftItem) (Object) item).ownerName = name;
         }
     }
 
@@ -198,7 +214,7 @@ public class EntityItemUtils {
             item.setOwner(uuid);
         } else {
             if ((Object) item instanceof RefCraftItem && UUID_SUPPORT) {
-                ((RefCraftItem) (Object) item).item.ownerUUID = uuid;
+                getHandle((RefCraftItem) (Object) item).ownerUUID = uuid;
             }
         }
     }
@@ -221,11 +237,11 @@ public class EntityItemUtils {
         } else {
             if ((Object) item instanceof RefCraftItem) {
                 if (UUID_SUPPORT) {
-                    UUID throwerUUID = ((RefCraftItem) (Object) item).item.throwerUUID;
+                    UUID throwerUUID = getHandle((RefCraftItem) (Object) item).throwerUUID;
                     if (throwerUUID == null) return null;
                     return Bukkit.getOfflinePlayer(throwerUUID);
                 } else {
-                    String throwerName = ((RefCraftItem) (Object) item).item.throwerName;
+                    String throwerName = getHandle((RefCraftItem) (Object) item).throwerName;
                     if (throwerName == null) return null;
                     return Bukkit.getOfflinePlayer(throwerName);
                 }
@@ -246,7 +262,7 @@ public class EntityItemUtils {
             @NotNull Item item
     ) {
         if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
-            return ((RefCraftItem) (Object) item).item.throwerName;
+            return getHandle((RefCraftItem) (Object) item).throwerName;
         }
         return null;
     }
@@ -266,7 +282,7 @@ public class EntityItemUtils {
             return item.getThrower();
         } else {
             if ((Object) item instanceof RefCraftItem && UUID_SUPPORT) {
-                return ((RefCraftItem) (Object) item).item.throwerUUID;
+                return getHandle((RefCraftItem) (Object) item).throwerUUID;
             }
         }
         return null;
@@ -288,9 +304,9 @@ public class EntityItemUtils {
         } else {
             if ((Object) item instanceof RefCraftItem) {
                 if (UUID_SUPPORT) {
-                    ((RefCraftItem) (Object) item).item.throwerUUID = player.getUniqueId();
+                    getHandle((RefCraftItem) (Object) item).throwerUUID = player.getUniqueId();
                 } else {
-                    ((RefCraftItem) (Object) item).item.throwerName = player.getName();
+                    getHandle((RefCraftItem) (Object) item).throwerName = player.getName();
                 }
             }
         }
@@ -308,7 +324,7 @@ public class EntityItemUtils {
             @NotNull String name
     ) {
         if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
-            ((RefCraftItem) (Object) item).item.throwerName = name;
+            getHandle((RefCraftItem) (Object) item).throwerName = name;
         }
     }
 
@@ -327,7 +343,7 @@ public class EntityItemUtils {
             item.setThrower(uuid);
         } else {
             if ((Object) item instanceof RefCraftItem && UUID_SUPPORT) {
-                ((RefCraftItem) (Object) item).item.throwerUUID = uuid;
+                getHandle((RefCraftItem) (Object) item).throwerUUID = uuid;
             }
         }
     }
