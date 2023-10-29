@@ -5,8 +5,12 @@ import bot.inker.bukkit.nbt.NeigeItemsUtils;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagCompound;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefChatSerializer;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefComponent;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.*;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefVec3;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -35,6 +39,10 @@ public class EntityUtils {
      * 1.17+ 版本起, Entity 内部的添加 lookAt 方法, 用于使实体看向指定位置.
      */
     private static final boolean LOOK_AT_SUPPORT = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.13+ 版本起, Entity 类 setCustomName 方法由接收 String 改为接收 IChatBaseComponent.
+     */
+    private static final boolean COMPONENT_NAME_SUPPORT = CbVersion.v1_13_R1.isSupport();
 
     /**
      * 将实体信息保存至 NBT.
@@ -287,6 +295,25 @@ public class EntityUtils {
                 lookAtByNms(entity, x, y, z);
             }
         }
+    }
+
+    /**
+     * 为实体设置自定义名称.
+     *
+     * @param entity 待操作实体.
+     * @param name 自定义名称.
+     */
+    public static void setCustomName(
+            @NotNull Entity entity,
+            @NotNull BaseComponent name
+    ) {
+        if (COMPONENT_NAME_SUPPORT && entity instanceof RefCraftEntity) {
+            ((RefCraftEntity) entity).getHandle().setCustomName(toNms(name));
+        }
+    }
+
+    private static RefComponent toNms(BaseComponent component) {
+        return RefChatSerializer.fromJson(ComponentSerializer.toString(component));
     }
 
     protected static void lookAtByNms(

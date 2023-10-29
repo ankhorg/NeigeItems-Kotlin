@@ -91,6 +91,33 @@ public class TranslationUtils {
     }
 
     /**
+     * 检测物品是否包含自定义显示名.
+     *
+     * @param itemStack 待检测物品.
+     * @return 是否包含自定义显示名.
+     */
+    public static boolean hasDisplayName(
+            @NotNull ItemStack itemStack
+    ) {
+        if ((Object) itemStack instanceof RefCraftItemStack) {
+            if (itemStack.getType() != Material.AIR) {
+                RefNbtTagCompound tag = ((RefCraftItemStack) (Object) itemStack).handle.getTag();
+                if (tag != null) {
+                    RefNbtBase display = tag.get("display");
+                    if (display instanceof RefNbtTagCompound) {
+                        RefNbtBase tagName = ((RefNbtTagCompound) display).get("Name");
+                        return tagName instanceof RefNbtTagString;
+                    }
+                }
+            }
+        } else {
+            ItemMeta itemMeta = NbtUtils.getItemMeta(itemStack);
+            return itemMeta != null && itemMeta.hasDisplayName();
+        }
+        return false;
+    }
+
+    /**
      * 根据物品获取翻译名.
      *
      * @param itemStack 待获取物品.
