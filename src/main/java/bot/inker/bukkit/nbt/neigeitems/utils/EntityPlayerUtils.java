@@ -9,6 +9,7 @@ import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.RefPacketPlayOutAnim
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.RefPacketPlayOutLookAt;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefVec3;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorld;
+import io.netty.channel.Channel;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -18,6 +19,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.EnumHand;
 
 public class EntityPlayerUtils {
@@ -319,6 +321,22 @@ public class EntityPlayerUtils {
                 lookAtByNms(player, x, y, z);
             }
         }
+    }
+
+    /**
+     * 获取玩家对应的 Channel.
+     *
+     * @param player 待操作玩家.
+     * @return 玩家对应的 Channel.
+     */
+    @Nullable
+    public static Channel getChannel(
+            @NotNull Player player
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            return ((RefCraftPlayer) (Object) player).getHandle().playerConnection.networkManager.channel;
+        }
+        return null;
     }
 
     public static void receiveMovePacket(

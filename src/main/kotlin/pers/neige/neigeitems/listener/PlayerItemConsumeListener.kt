@@ -37,18 +37,20 @@ object PlayerItemConsumeListener {
             if (event.isCancelled) return
             // 执行物品动作
             ActionManager.eatListener(player, itemStack, itemInfo, event)
+            if (event.isCancelled) {
+                // 他妈的。。。。。
+                itemTag.saveToSafe(itemStack)
+
+                // 设置物品
+                if (hand == EquipmentSlot.HAND) {
+                    player.inventory.setItemInMainHand(itemStack)
+                } else {
+                    player.inventory.setItemInOffHand(itemStack)
+                }
+                return
+            }
         } catch (error: Throwable) {
             error.printStackTrace()
-        }
-
-        // 他妈的。。。。。
-        itemTag.saveToSafe(itemStack)
-
-        // 设置物品
-        if (hand == EquipmentSlot.HAND) {
-            player.inventory.setItemInMainHand(itemStack)
-        } else {
-            player.inventory.setItemInOffHand(itemStack)
         }
     }
 }
