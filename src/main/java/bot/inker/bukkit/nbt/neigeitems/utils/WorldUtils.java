@@ -34,10 +34,10 @@ public class WorldUtils {
     /**
      * 在指定世界的指定坐标生成一个掉落物, 生成实体前对实体进行一些操作.
      *
-     * @param world 待掉落世界.
-     * @param location 待掉落坐标.
+     * @param world     待掉落世界.
+     * @param location  待掉落坐标.
      * @param itemStack 待掉落物品.
-     * @param function 掉落前对物品执行的操作.
+     * @param function  掉落前对物品执行的操作.
      * @return 生成的掉落物.
      */
     @NotNull
@@ -69,10 +69,10 @@ public class WorldUtils {
     /**
      * 在指定世界的指定坐标生成一个掉落物, 生成实体前对实体添加一个向量.
      *
-     * @param world 待掉落世界.
-     * @param location 待掉落坐标.
+     * @param world     待掉落世界.
+     * @param location  待掉落坐标.
      * @param itemStack 待掉落物品.
-     * @param velocity 待添加向量.
+     * @param velocity  待添加向量.
      * @return 生成的掉落物.
      */
     @NotNull

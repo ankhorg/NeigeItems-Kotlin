@@ -63,7 +63,7 @@ public class EntityItemUtils {
      * 设置掉落物实体的已存活时长(tick).
      *
      * @param item 待检测物品.
-     * @param age 掉落物实体的已存活时长(tick).
+     * @param age  掉落物实体的已存活时长(tick).
      */
     public static void setAge(
             @NotNull Item item,
@@ -163,7 +163,7 @@ public class EntityItemUtils {
      * 设置掉落物实体的拥有者.
      * 1.12.2 的 owner 是 String, 1.13+ 的 owner 是 UUID, 所以需要 OfflinePlayer.
      *
-     * @param item 待设置物品.
+     * @param item   待设置物品.
      * @param player 物品拥有者.
      */
     public static void setOwner(
@@ -292,7 +292,7 @@ public class EntityItemUtils {
      * 设置掉落物实体的丢出者.
      * 1.12.2 的 thrower 是 String, 1.13+ 的 thrower 是 UUID, 所以需要 OfflinePlayer.
      *
-     * @param item 待设置物品.
+     * @param item   待设置物品.
      * @param player 物品丢出者.
      */
     public static void setThrower(

@@ -3,6 +3,7 @@ package bot.inker.bukkit.nbt.internal.ref.neigeitems.entity;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.sign.RefSignBlockEntity;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.RefPlayerConnection;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefVec3;
 
@@ -19,4 +20,12 @@ public final class RefEntityPlayer extends RefEntityHuman {
 
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/server/level/ServerPlayer;lookAt(Lnet/minecraft/commands/arguments/EntityAnchorArgument$Anchor;Lnet/minecraft/world/phys/Vec3;)V")
     public native void lookAt(RefAnchor anchorPoint, RefVec3 target);
+
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityPlayer;openSign(Lnet/minecraft/server/v1_12_R1/TileEntitySign;)V")
+    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/server/level/ServerPlayer;openTextEdit(Lnet/minecraft/world/level/block/entity/SignBlockEntity;)V")
+    @HandleBy(version = CbVersion.v1_20_R1, reference = "")
+    public native void openSign(RefSignBlockEntity sign);
+
+    @HandleBy(version = CbVersion.v1_20_R1, reference = "Lnet/minecraft/server/level/ServerPlayer;openTextEdit(Lnet/minecraft/world/level/block/entity/SignBlockEntity;Z)V")
+    public native void openSign(RefSignBlockEntity sign, boolean front);
 }

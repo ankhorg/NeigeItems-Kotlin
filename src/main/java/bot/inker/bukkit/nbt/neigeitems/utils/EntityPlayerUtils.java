@@ -3,6 +3,8 @@ package bot.inker.bukkit.nbt.neigeitems.utils;
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockPos;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.sign.RefSignBlockEntity;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.*;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.RefPacketPlayInFlying;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.RefPacketPlayOutAnimation;
@@ -64,6 +66,16 @@ public class EntityPlayerUtils {
      * 1.17+ 版本起, PacketPlayInFlying 的构造器发生变化, 同时内部变量全部添加 final 修饰符.
      */
     private static final boolean NEW_MOVE_PACKET_CONSTRUCTOR = CbVersion.v1_17_R1.isSupport();
+
+    /**
+     * 1.17+ 版本起, SignBlockEntity 构造函数发生变化.
+     */
+    private static final boolean NEW_SIGN_ENTITY_CONSTRUCTOR = CbVersion.v1_17_R1.isSupport();
+
+    /**
+     * 1.20+ 版本起, 告示牌开始出现正反面区别.
+     */
+    private static final boolean SIGN_SIDE_SUPPORT = CbVersion.v1_20_R1.isSupport();
 
     /**
      * 让指定玩家攻击指定实体.
@@ -141,7 +153,7 @@ public class EntityPlayerUtils {
     /**
      * 设置指定实体距上次攻击行为有多久(tick).
      *
-     * @param entity 待获取实体.
+     * @param entity               待获取实体.
      * @param attackStrengthTicker 实体距上次攻击行为的时间(tick).
      */
     public static void setAttackStrengthTicker(
@@ -158,7 +170,7 @@ public class EntityPlayerUtils {
      * 让指定玩家使用对应手持物品.
      *
      * @param player 待操作玩家.
-     * @param hand 待使用物品槽位.
+     * @param hand   待使用物品槽位.
      */
     public static void useItem(
             @NotNull Player player,
@@ -177,7 +189,7 @@ public class EntityPlayerUtils {
      * 摆动指定玩家的指定手臂.
      *
      * @param player 待操作玩家.
-     * @param hand 待摆动手臂.
+     * @param hand   待摆动手臂.
      */
     public static void swing(
             @NotNull Player player,
@@ -189,8 +201,8 @@ public class EntityPlayerUtils {
     /**
      * 摆动指定玩家的指定手臂.
      *
-     * @param player 待操作玩家.
-     * @param hand 待摆动手臂.
+     * @param player           待操作玩家.
+     * @param hand             待摆动手臂.
      * @param fromServerPlayer 本人是否可见摆动动作.
      */
     public static void swing(
@@ -264,8 +276,8 @@ public class EntityPlayerUtils {
      * 设置玩家朝向(仅适用于1.13+).
      *
      * @param player 待设置玩家.
-     * @param yaw 实体偏航角.
-     * @param pitch 实体俯仰角.
+     * @param yaw    实体偏航角.
+     * @param pitch  实体俯仰角.
      */
     public static void setRotation(
             @NotNull Player player,
@@ -304,9 +316,9 @@ public class EntityPlayerUtils {
      * 令玩家看向指定坐标(仅适用于1.13+).
      *
      * @param player 待操作玩家.
-     * @param x 目标 x 坐标.
-     * @param y 目标 y 坐标.
-     * @param z 目标 z 坐标.
+     * @param x      目标 x 坐标.
+     * @param y      目标 y 坐标.
+     * @param z      目标 z 坐标.
      */
     public static void lookAt(
             @NotNull Player player,
@@ -337,6 +349,31 @@ public class EntityPlayerUtils {
             return ((RefCraftPlayer) (Object) player).getHandle().playerConnection.networkManager.channel;
         }
         return null;
+    }
+
+    /**
+     * 为玩家打开一个虚拟告示牌.
+     *
+     * @param player 待操作玩家.
+     */
+    public static void openSign(
+            @NotNull Player player
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefSignBlockEntity sign;
+            if (NEW_SIGN_ENTITY_CONSTRUCTOR) {
+                Location location = player.getLocation();
+                sign = new RefSignBlockEntity(new RefBlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()), null);
+            } else {
+                sign = new RefSignBlockEntity();
+            }
+            if (SIGN_SIDE_SUPPORT) {
+                nmsPlayer.openSign(sign, true);
+            } else {
+                nmsPlayer.openSign(sign);
+            }
+        }
     }
 
     public static void receiveMovePacket(

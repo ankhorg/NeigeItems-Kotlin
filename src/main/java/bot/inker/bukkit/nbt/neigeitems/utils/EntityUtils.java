@@ -66,7 +66,7 @@ public class EntityUtils {
      * 令实体加载 NBT 信息.
      *
      * @param entity 待操作实体.
-     * @param nbt 待加载 NBT.
+     * @param nbt    待加载 NBT.
      */
     public static void load(
             @NotNull Entity entity,
@@ -81,9 +81,9 @@ public class EntityUtils {
      * 强制实体移动.
      *
      * @param entity 待操作实体.
-     * @param x 移动方向 x 轴分量.
-     * @param y 移动方向 y 轴分量.
-     * @param z 移动方向 z 轴分量.
+     * @param x      移动方向 x 轴分量.
+     * @param y      移动方向 y 轴分量.
+     * @param z      移动方向 z 轴分量.
      */
     public static void move(
             @NotNull Entity entity,
@@ -134,8 +134,8 @@ public class EntityUtils {
      * 设置非玩家实体朝向.
      *
      * @param entity 待设置实体.
-     * @param yaw 实体偏航角.
-     * @param pitch 实体俯仰角.
+     * @param yaw    实体偏航角.
+     * @param pitch  实体俯仰角.
      */
     public static void setRotation(
             @NotNull Entity entity,
@@ -223,9 +223,9 @@ public class EntityUtils {
      * 令实体看向指定坐标.
      *
      * @param entity 待操作实体.
-     * @param x 目标 x 坐标.
-     * @param y 目标 y 坐标.
-     * @param z 目标 z 坐标.
+     * @param x      目标 x 坐标.
+     * @param y      目标 y 坐标.
+     * @param z      目标 z 坐标.
      */
     public static void lookAt(
             @NotNull Entity entity,
@@ -254,8 +254,8 @@ public class EntityUtils {
         double d1 = y - location.getY() + nmsEntity.getEyeHeight();
         double d2 = z - location.getZ();
         double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-        nmsEntity.pitch = wrapDegrees((float)(-(Math.atan2(d1, d3) * 57.2957763671875D)));
-        nmsEntity.yaw = wrapDegrees((float)(Math.atan2(d2, d0) * 57.2957763671875D) - 90.0F);
+        nmsEntity.pitch = wrapDegrees((float) (-(Math.atan2(d1, d3) * 57.2957763671875D)));
+        nmsEntity.yaw = wrapDegrees((float) (Math.atan2(d2, d0) * 57.2957763671875D) - 90.0F);
         nmsEntity.setHeadRotation(nmsEntity.yaw);
         nmsEntity.lastPitch = nmsEntity.pitch;
         nmsEntity.lastYaw = nmsEntity.yaw;
@@ -278,9 +278,9 @@ public class EntityUtils {
      * 令实体看向指定坐标.
      *
      * @param entity 待操作实体.
-     * @param x 目标 x 坐标.
-     * @param y 目标 y 坐标.
-     * @param z 目标 z 坐标.
+     * @param x      目标 x 坐标.
+     * @param y      目标 y 坐标.
+     * @param z      目标 z 坐标.
      */
     public static void lookAt(
             @NotNull LivingEntity entity,
@@ -301,7 +301,7 @@ public class EntityUtils {
      * 为实体设置自定义名称.
      *
      * @param entity 待操作实体.
-     * @param name 自定义名称.
+     * @param name   自定义名称.
      */
     public static void setCustomName(
             @NotNull Entity entity,
