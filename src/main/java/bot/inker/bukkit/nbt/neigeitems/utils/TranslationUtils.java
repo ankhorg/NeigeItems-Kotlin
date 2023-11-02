@@ -128,7 +128,7 @@ public class TranslationUtils {
             @NotNull ItemStack itemStack
     ) {
         RefNmsItemStack nmsItemStack;
-        if ((Object) itemStack instanceof RefCraftItemStack) {
+        if ((Object) itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
             nmsItemStack = ((RefCraftItemStack) (Object) itemStack).handle;
         } else {
             nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
@@ -242,7 +242,7 @@ public class TranslationUtils {
             @NotNull ItemStack itemStack
     ) {
         RefNmsItemStack nmsItemStack;
-        if ((Object) itemStack instanceof RefCraftItemStack) {
+        if ((Object) itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
             nmsItemStack = ((RefCraftItemStack) (Object) itemStack).handle;
         } else {
             nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);

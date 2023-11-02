@@ -1105,7 +1105,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: PlayerItemConsumeEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "eat", cancell = true, cancellIfCooldown = false, giveLater = true)
+        basicHandler(player, itemStack, itemInfo, event, "eat", cancel = true, cancelIfCooldown = false, giveLater = true)
     }
 
     // 丢弃物品
@@ -1115,7 +1115,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: PlayerDropItemEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "drop", cancell = false, cancellIfCooldown = true)
+        basicHandler(player, itemStack, itemInfo, event, "drop", cancel = false, cancelIfCooldown = true)
     }
 
     // 拾取物品
@@ -1125,7 +1125,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityPickupItemEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "pick", cancell = false, cancellIfCooldown = true, consumeItem = false)
+        basicHandler(player, itemStack, itemInfo, event, "pick", cancel = false, cancelIfCooldown = true, consumeItem = false)
     }
 
     // 点击物品
@@ -1155,7 +1155,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityShootBowEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "shoot_bow", cancell = false, cancellIfCooldown = true, consumeItem = false)
+        basicHandler(player, itemStack, itemInfo, event, "shoot_bow", cancel = false, cancelIfCooldown = true, consumeItem = false)
     }
 
     // 射箭时由箭触发
@@ -1165,7 +1165,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityShootBowEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "shoot_arrow", cancell = false, cancellIfCooldown = true, consumeItem = false)
+        basicHandler(player, itemStack, itemInfo, event, "shoot_arrow", cancel = false, cancelIfCooldown = true, consumeItem = false)
     }
 
     // 格挡时由盾触发
@@ -1175,7 +1175,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityDamageByEntityEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "blocking", cancell = false, cancellIfCooldown = true)
+        basicHandler(player, itemStack, itemInfo, event, "blocking", cancel = false, cancelIfCooldown = true)
     }
 
     // 攻击实体时由主手物品触发
@@ -1185,7 +1185,18 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityDamageByEntityEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "damage", cancell = false, cancellIfCooldown = true)
+        basicHandler(player, itemStack, itemInfo, event, "damage", cancel = false, cancelIfCooldown = true)
+    }
+
+    // 击杀实体时触发
+    fun killListener(
+        player: Player,
+        itemStack: ItemStack,
+        itemInfo: ItemInfo,
+        event: EntityDamageByEntityEvent,
+        key: String
+    ) {
+        basicHandler(player, itemStack, itemInfo, event, key, cancel = false, consumeItem = false)
     }
 
     // 挖掘方块时由主手物品触发
@@ -1195,7 +1206,7 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: BlockBreakEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "break_block", cancell = false, cancellIfCooldown = true)
+        basicHandler(player, itemStack, itemInfo, event, "break_block", cancel = false, cancelIfCooldown = true)
     }
 
     // 适用于基础情况
@@ -1205,8 +1216,8 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: Event,
         key: String,
-        cancell: Boolean = true,
-        cancellIfCooldown: Boolean = false,
+        cancel: Boolean = true,
+        cancelIfCooldown: Boolean = false,
         giveLater: Boolean = false,
         consumeItem: Boolean = true
     ) {
@@ -1223,12 +1234,12 @@ object ActionManager {
         val data = itemInfo.data
 
         // 取消事件
-        if (event is Cancellable && cancell) {
+        if (event is Cancellable && cancel) {
             event.isCancelled = true
         }
         // 检测冷却
         if (trigger.isCoolDown(player, itemStack, itemTag, data)) {
-            if ((cancell || cancellIfCooldown) && event is Cancellable) {
+            if ((cancel || cancelIfCooldown) && event is Cancellable) {
                 event.isCancelled = true
             }
             return
