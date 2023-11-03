@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.SectionManager
+import pers.neige.neigeitems.utils.FileUtils.createFile
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -81,13 +82,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrCreate(file: String): File {
-        return File(plugin.dataFolder, File.separator + file).also {
-            if (!it.exists()) {
-                val parent = it.parentFile
-                if (!parent.exists()) parent.mkdirs()
-                it.createNewFile()
-            }
-        }
+        return File(plugin.dataFolder, File.separator + file).createFile()
     }
 
     /**
@@ -150,13 +145,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrCreate(plugin: String, file: String): File {
-        return File(File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin), File.separator + file).also {
-            if (!it.exists()) {
-                val parent = it.parentFile
-                if (!parent.exists()) parent.mkdirs()
-                it.createNewFile()
-            }
-        }
+        return File(File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin), File.separator + file).createFile()
     }
 
     /**

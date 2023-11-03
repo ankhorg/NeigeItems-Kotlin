@@ -136,6 +136,29 @@ public class EntityPlayerUtils {
     }
 
     /**
+     * 设置指定实体的攻击冷却.
+     *
+     * @param entity         待获取实体.
+     * @param attackCooldown 攻击冷却.
+     */
+    public static void setAttackCooldown(
+            @NotNull LivingEntity entity,
+            float attackCooldown
+    ) {
+        if (entity instanceof RefCraftLivingEntity) {
+            RefEntityLiving livingEntity = ((RefCraftLivingEntity) entity).getHandle();
+            AttributeInstance attackSpeedAttribute = entity.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
+            double attackSpeed;
+            if (attackSpeedAttribute != null) {
+                attackSpeed = attackSpeedAttribute.getValue();
+            } else {
+                attackSpeed = 4;
+            }
+            livingEntity.attackStrengthTicker = Math.max(0, (int) (attackCooldown * (1.0 / attackSpeed * 20.0) - 0.5));
+        }
+    }
+
+    /**
      * 获取指定实体距上次攻击行为有多久(tick).
      *
      * @param entity 待获取实体.

@@ -121,10 +121,10 @@ object FileUtils {
 
     @JvmStatic
     fun File.createFile(): File {
-        if (!parentFile.exists()) {
-            parentFile.mkdirs()
-        }
         if (!exists()) {
+            if (!parentFile.exists()) {
+                parentFile.mkdirs()
+            }
             createNewFile()
         }
         return this
