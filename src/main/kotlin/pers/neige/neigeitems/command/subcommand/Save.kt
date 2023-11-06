@@ -27,17 +27,21 @@ object Save {
                     when (ItemManager.saveItem(sender.inventory.itemInMainHand, argument, "$argument.yml", false)) {
                         // 保存成功
                         1 -> {
-                            sender.sendLang("Messages.successSaveInfo", mapOf(
-                                Pair("{name}", sender.inventory.itemInMainHand.getName()),
-                                Pair("{itemID}", argument),
-                                Pair("{path}", "$argument.yml")
-                            ))
+                            sender.sendLang(
+                                "Messages.successSaveInfo", mapOf(
+                                    Pair("{name}", sender.inventory.itemInMainHand.getName()),
+                                    Pair("{itemID}", argument),
+                                    Pair("{path}", "$argument.yml")
+                                )
+                            )
                         }
                         // 已存在对应ID物品
                         0 -> {
-                            sender.sendLang("Messages.existedKey", mapOf(
-                                Pair("{itemID}", argument)
-                            ))
+                            sender.sendLang(
+                                "Messages.existedKey", mapOf(
+                                    Pair("{itemID}", argument)
+                                )
+                            )
                         }
                         // 你保存了个空气
                         else -> sender.sendLang("Messages.airItem")
@@ -47,23 +51,38 @@ object Save {
             // ni save [物品ID] (保存路径)
             dynamic {
                 suggestion<Player>(uncheck = true) { _, _ ->
-                    ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
+                    ItemManager.files.map {
+                        it.path.replace(
+                            "plugins${File.separator}NeigeItems${File.separator}Items${File.separator}",
+                            ""
+                        )
+                    }
                 }
                 execute<Player> { sender, context, argument ->
                     async {
-                        when (ItemManager.saveItem(sender.inventory.itemInMainHand, context.argument(-1), argument, false)) {
+                        when (ItemManager.saveItem(
+                            sender.inventory.itemInMainHand,
+                            context.argument(-1),
+                            argument,
+                            false
+                        )) {
                             // 保存成功
                             1 -> {
-                                sender.sendLang("Messages.successSaveInfo", mapOf(
-                                    Pair("{name}", sender.inventory.itemInMainHand.getName()),
-                                    Pair("{itemID}", context.argument(-1)),
-                                    Pair("{path}", argument)
-                                ))
+                                sender.sendLang(
+                                    "Messages.successSaveInfo", mapOf(
+                                        Pair("{name}", sender.inventory.itemInMainHand.getName()),
+                                        Pair("{itemID}", context.argument(-1)),
+                                        Pair("{path}", argument)
+                                    )
+                                )
                             }
                             // 已存在对应ID物品
-                            0 -> {sender.sendLang("Messages.existedKey", mapOf(
-                                Pair("{itemID}", context.argument(-1))
-                            ))
+                            0 -> {
+                                sender.sendLang(
+                                    "Messages.existedKey", mapOf(
+                                        Pair("{itemID}", context.argument(-1))
+                                    )
+                                )
                             }
                             // 你保存了个空气
                             else -> sender.sendLang("Messages.airItem")
@@ -93,11 +112,13 @@ object Save {
                         2 -> sender.sendLang("Messages.airItem")
                         // 保存成功
                         else -> {
-                            sender.sendLang("Messages.successSaveInfo", mapOf(
-                                Pair("{name}", sender.inventory.itemInMainHand.getName()),
-                                Pair("{itemID}", argument),
-                                Pair("{path}", "$argument.yml")
-                            ))
+                            sender.sendLang(
+                                "Messages.successSaveInfo", mapOf(
+                                    Pair("{name}", sender.inventory.itemInMainHand.getName()),
+                                    Pair("{itemID}", argument),
+                                    Pair("{path}", "$argument.yml")
+                                )
+                            )
                         }
                     }
                 }
@@ -105,20 +126,32 @@ object Save {
             // ni cover [物品ID] (保存路径)
             dynamic {
                 suggestion<Player>(uncheck = true) { _, _ ->
-                    ItemManager.files.map { it.path.replace("plugins${File.separator}NeigeItems${File.separator}Items${File.separator}", "") }
+                    ItemManager.files.map {
+                        it.path.replace(
+                            "plugins${File.separator}NeigeItems${File.separator}Items${File.separator}",
+                            ""
+                        )
+                    }
                 }
                 execute<Player> { sender, context, argument ->
                     async {
-                        when (ItemManager.saveItem(sender.inventory.itemInMainHand, context.argument(-1), argument, true)) {
+                        when (ItemManager.saveItem(
+                            sender.inventory.itemInMainHand,
+                            context.argument(-1),
+                            argument,
+                            true
+                        )) {
                             // 你保存了个空气
                             2 -> sender.sendLang("Messages.airItem")
                             // 保存成功
                             else -> {
-                                sender.sendLang("Messages.successSaveInfo", mapOf(
-                                    Pair("{name}", sender.inventory.itemInMainHand.getName()),
-                                    Pair("{itemID}", context.argument(-1)),
-                                    Pair("{path}", argument)
-                                ))
+                                sender.sendLang(
+                                    "Messages.successSaveInfo", mapOf(
+                                        Pair("{name}", sender.inventory.itemInMainHand.getName()),
+                                        Pair("{itemID}", context.argument(-1)),
+                                        Pair("{path}", argument)
+                                    )
+                                )
                             }
                         }
                     }

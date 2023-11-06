@@ -9,6 +9,11 @@ public class CancellableEvent extends BasicEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
 
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     @Override
     public boolean call() {
         Bukkit.getPluginManager().callEvent(this);
@@ -28,11 +33,6 @@ public class CancellableEvent extends BasicEvent implements Cancellable {
     @Override
     @NotNull
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @NotNull
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

@@ -18,7 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class NMSHooker{
+public class NMSHooker {
+    protected Map<Material, NamespacedKey> materialNamespacedKeys;
+
+    public NMSHooker() {
+        materialNamespacedKeys = loadNamespacedKeys();
+    }
+
     protected Map<Material, NamespacedKey> loadNamespacedKeys() {
         Map<Material, NamespacedKey> result = new HashMap<>();
         for (Material material : Material.values()) {
@@ -26,12 +32,6 @@ public class NMSHooker{
             result.put(material, new NamespacedKey(bukkitNamespacedKey.getNamespace(), bukkitNamespacedKey.getKey()));
         }
         return result;
-    }
-
-    protected Map<Material, NamespacedKey> materialNamespacedKeys;
-
-    public NMSHooker() {
-        materialNamespacedKeys = loadNamespacedKeys();
     }
 
     /**
@@ -86,10 +86,10 @@ public class NMSHooker{
     /**
      * 在指定世界的指定坐标生成一个掉落物, 生成实体前对实体进行一些操作.
      *
-     * @param world 待掉落世界.
-     * @param location 待掉落坐标.
+     * @param world     待掉落世界.
+     * @param location  待掉落坐标.
      * @param itemStack 待掉落物品.
-     * @param function 掉落前对物品执行的操作.
+     * @param function  掉落前对物品执行的操作.
      * @return 生成的掉落物.
      */
     @Deprecated
@@ -138,10 +138,10 @@ public class NMSHooker{
         return new HoverEvent(
                 HoverEvent.Action.SHOW_ITEM,
                 new net.md_5.bungee.api.chat.hover.content.Item(
-                         getNamespacedKey(itemStack.getType()).getKey(),
-                         itemStack.getAmount(),
-                         ItemTag.ofNbt(nbtString)
-                 )
+                        getNamespacedKey(itemStack.getType()).getKey(),
+                        itemStack.getAmount(),
+                        ItemTag.ofNbt(nbtString)
+                )
         );
     }
 }

@@ -27,10 +27,10 @@ public final class ItemInfo {
      * 用于在判断NI物品后返回NI物品信息, 详见ItemUtils#isNiItem
      *
      * @param nbtItemStack NbtItemStack
-     * @param itemTag 物品NBT
-     * @param neigeItems NI物品特殊NBT
-     * @param id 物品ID
-     * @param data 指向数据
+     * @param itemTag      物品NBT
+     * @param neigeItems   NI物品特殊NBT
+     * @param id           物品ID
+     * @param data         指向数据
      */
     public ItemInfo(
             @NotNull NbtItemStack nbtItemStack,

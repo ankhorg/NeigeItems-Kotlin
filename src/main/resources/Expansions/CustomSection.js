@@ -18,7 +18,7 @@ function enable() {
              * @param sections ConfigurationSection? 节点池
              * @return 解析值
              */
-            function(data, cache, player, sections) {
+            function (data, cache, player, sections) {
                 if (data.contains("values")) {
                     // SectionUtils.parseSection("待解析字符串", cache, player, sections)用于解析节点内容
                     return SectionUtils.parseSection("<number::0_1_2>", cache, player, sections)
@@ -33,7 +33,7 @@ function enable() {
              * @param sections ConfigurationSection? 节点池
              * @return 解析值
              */
-            function(args, cache, player, sections) {
+            function (args, cache, player, sections) {
                 return SectionUtils.parseSection("<number::0_1_2>", cache, player, sections)
             }
         )

@@ -11,5 +11,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Listener {
     EventPriority eventPriority() default EventPriority.NORMAL;
+
     boolean ignoreCancelled() default true;
 }

@@ -81,7 +81,7 @@ object WeightDeclareParser : SectionParser() {
                 // 有权重, 根据权重大小进行记录
                 else -> {
                     val weight = value.substring(0, index).toDoubleOrNull() ?: 1.0
-                    val string = value.substring(index+2, value.length)
+                    val string = value.substring(index + 2, value.length)
                     info[string]?.let {
                         info[string] = it + weight
                     } ?: let { info[string] = weight }
@@ -139,7 +139,7 @@ object WeightDeclareParser : SectionParser() {
                 if (cache.contains("$key.$index")) {
                     // 延长循环
                     length++
-                // 对应位置没有节点
+                    // 对应位置没有节点
                 } else {
                     cache["$key.$index"] = realList[realIndex]
                     realIndex++

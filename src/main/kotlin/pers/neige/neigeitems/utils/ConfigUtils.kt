@@ -106,7 +106,12 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getAllFiles(plugin: String, dir: String): ArrayList<File> {
-        return getAllFiles(File(File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin), File.separator + dir))
+        return getAllFiles(
+            File(
+                File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin),
+                File.separator + dir
+            )
+        )
     }
 
     /**
@@ -145,7 +150,10 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrCreate(plugin: String, file: String): File {
-        return File(File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin), File.separator + file).createFile()
+        return File(
+            File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin),
+            File.separator + file
+        ).createFile()
     }
 
     /**
@@ -277,21 +285,21 @@ object ConfigUtils {
             is ConfigurationSection -> {
                 val map = HashMap<String, Any>()
                 data.getKeys(false).forEach { key ->
-                    toMap(data.get(key))?.let { value -> map[key] = value}
+                    toMap(data.get(key))?.let { value -> map[key] = value }
                 }
                 return map
             }
             is Map<*, *> -> {
                 val map = HashMap<String, Any>()
                 for ((key, value) in data) {
-                    toMap(value)?.let { map[key as String] = it}
+                    toMap(value)?.let { map[key as String] = it }
                 }
                 return map
             }
             is List<*> -> {
                 val list = ArrayList<Any>()
                 for (value in data) {
-                    toMap(value)?.let { list.add(it)}
+                    toMap(value)?.let { list.add(it) }
                 }
                 return list
             }
@@ -309,7 +317,7 @@ object ConfigUtils {
     fun ConfigurationSection.toMap(): HashMap<String, Any> {
         val map = HashMap<String, Any>()
         this.getKeys(false).forEach { key ->
-            toMap(this.get(key))?.let { value -> map[key] = value}
+            toMap(this.get(key))?.let { value -> map[key] = value }
         }
         return map
     }
@@ -365,7 +373,8 @@ object ConfigUtils {
             if (value != null) {
                 // 如果二者均为ConfigurationSection
                 if (value is ConfigurationSection
-                    && coverValue is ConfigurationSection) {
+                    && coverValue is ConfigurationSection
+                ) {
                     // 合并
                     this.set(key, value.coverWith(coverValue))
                 } else {
@@ -437,7 +446,8 @@ object ConfigUtils {
                     }
                     fileOutputStream.close()
                     inputStream.close()
-                } catch (ex: IOException) {}
+                } catch (ex: IOException) {
+                }
             }
         }
     }

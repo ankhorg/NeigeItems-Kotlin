@@ -12,7 +12,7 @@ import java.util.*
  * @constructor 启用低版本PlaceholderAPI挂钩
  */
 class LegacyPapiHookerImpl : PapiHooker() {
-    private val placeholders get() =  PlaceholderAPI.getPlaceholders()
+    private val placeholders get() = PlaceholderAPI.getPlaceholders()
 
     init {
         placeholders
@@ -204,6 +204,7 @@ class LegacyPapiHookerImpl : PapiHooker() {
 
         return builder.toString()
     }
+
     override fun hasPapi(text: String): Boolean {
         val chars = text.toCharArray()
 

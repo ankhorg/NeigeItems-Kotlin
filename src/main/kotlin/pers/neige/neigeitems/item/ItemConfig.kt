@@ -12,7 +12,11 @@ import java.io.File
  * @param config 文件转换来的YamlConfiguration
  * @constructor 根据ID及文件获取物品配置节点
  */
-class ItemConfig(val id: String, val file: File, config: ConfigurationSection = YamlConfiguration.loadConfiguration(file)) {
+class ItemConfig(
+    val id: String,
+    val file: File,
+    config: ConfigurationSection = YamlConfiguration.loadConfiguration(file)
+) {
     /**
      * 获取物品原始配置
      */

@@ -12,6 +12,11 @@ public class BasicEvent extends Event {
         super(!Bukkit.isPrimaryThread());
     }
 
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
     public boolean call() {
         Bukkit.getPluginManager().callEvent(this);
         return true;
@@ -20,11 +25,6 @@ public class BasicEvent extends Event {
     @Override
     @NotNull
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @NotNull
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

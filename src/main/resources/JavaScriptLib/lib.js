@@ -50,7 +50,7 @@ const plugin = pluginManager.getPlugin("NeigeItems")
  * @param perm String 权限节点
  * @return Boolean 玩家是否拥有该权限
  */
-const perm = function(perm) {
+const perm = function (perm) {
     return player.hasPermission(perm)
 }
 
@@ -60,7 +60,7 @@ const perm = function(perm) {
  * @param text String 待替换文本
  * @return String 替换后文本
  */
-const color = function(text) {
+const color = function (text) {
     return ChatColor.translateAlternateColorCodes('&', text)
 }
 
@@ -69,7 +69,7 @@ const color = function(text) {
  *
  * @param text String 待发送消息
  */
-const tell = function(text) {
+const tell = function (text) {
     player.sendMessage(text)
 }
 
@@ -78,7 +78,7 @@ const tell = function(text) {
  *
  * @param cmd String 待执行指令
  */
-const command = function(cmd) {
+const command = function (cmd) {
     bukkitServer.dispatchCommand(player, cmd)
 }
 
@@ -87,7 +87,7 @@ const command = function(cmd) {
  *
  * @param cmd String 待执行指令
  */
-const console = function(cmd) {
+const console = function (cmd) {
     bukkitServer.dispatchCommand(consoleSender, cmd)
 }
 
@@ -97,7 +97,7 @@ const console = function(cmd) {
  * @param text String 待解析文本
  * @return String 解析后文本
  */
-const papi = function(text) {
+const papi = function (text) {
     return HookerManager.papi(player, text)
 }
 
@@ -107,7 +107,7 @@ const papi = function(text) {
  * @param text String 待解析文本
  * @return String 解析后文本
  */
-const parse = function(text) {
+const parse = function (text) {
     if (typeof cache == "undefined" && typeof sections == "undefined") {
         return SectionUtils.parseSection(text, player)
     } else {
@@ -121,7 +121,7 @@ const parse = function(text) {
  * @param text String 待解析文本
  * @return String 解析后文本
  */
-const parseItem = function(text) {
+const parseItem = function (text) {
     if (typeof itemTag != "undefined") {
         return SectionUtils.parseItemSection(text, itemStack, itemTag, data, player)
     } else {
@@ -135,7 +135,7 @@ const parseItem = function(text) {
  * @param key String NBT键
  * @return String NBT值转文本
  */
-const getNBT = function(key) {
+const getNBT = function (key) {
     const result = itemTag.getDeep(key)
     if (result != null) {
         return ItemUtils.toValue(result).toString()
@@ -149,7 +149,7 @@ const getNBT = function(key) {
  * @param key String NBT键
  * @return ItemTag NBT值
  */
-const getNBTTag = function(key) {
+const getNBTTag = function (key) {
     return itemTag.getDeep(key)
 }
 
@@ -160,7 +160,7 @@ const getNBTTag = function(key) {
  * @param max Double 随机数最大值
  * @return Double 随机数
  */
-const random = function(min, max) {
+const random = function (min, max) {
     return ThreadLocalRandom.current().nextDouble(min || 0, max || 1)
 }
 
@@ -174,7 +174,7 @@ const random = function(min, max) {
  * @param limit Double 概率上限
  * @return Boolean 随机数
  */
-const chance = function(value, limit) {
+const chance = function (value, limit) {
     return value > ThreadLocalRandom.current().nextDouble(0, limit || 1)
 }
 
@@ -185,8 +185,8 @@ const chance = function(value, limit) {
  * @param types [] 连击类型
  * @return Boolean 是否达成连击
  */
-const combo = function(group, types) {
-    if(!player.hasMetadata("NI-Combo-" + group)) {
+const combo = function (group, types) {
+    if (!player.hasMetadata("NI-Combo-" + group)) {
         PlayerUtils.setMetadataEZ(player, "NI-Combo-" + group, new java.util.ArrayList())
     }
     const comboInfos = player.getMetadata("NI-Combo-" + group)[0].value()
@@ -207,8 +207,8 @@ const combo = function(group, types) {
  * @param group String 连击组
  * @return Boolean 是否达成连击
  */
-const comboSize = function(group) {
-    if(!player.hasMetadata("NI-Combo-" + group)) {
+const comboSize = function (group) {
+    if (!player.hasMetadata("NI-Combo-" + group)) {
         PlayerUtils.setMetadataEZ(player, "NI-Combo-" + group, new java.util.ArrayList())
     }
     const comboInfos = player.getMetadata("NI-Combo-" + group)[0].value()
@@ -221,7 +221,7 @@ const comboSize = function(group) {
  *
  * @return Boolean 点击事件是否由主手触发
  */
-const isMainHand = function() {
+const isMainHand = function () {
     return event.hand === EquipmentSlot.HAND
 }
 
@@ -230,7 +230,7 @@ const isMainHand = function() {
  *
  * @return Boolean 点击事件是否由副手触发
  */
-const isOffHand = function() {
+const isOffHand = function () {
     return event.hand === EquipmentSlot.OFF_HAND
 }
 
@@ -239,7 +239,7 @@ const isOffHand = function() {
  *
  * @return Boolean 点击事件是否由副手触发
  */
-const hand = function() {
+const hand = function () {
     return event.hand.toString()
 }
 
@@ -248,7 +248,7 @@ const hand = function() {
  *
  * @param action String 物品动作
  */
-const runAction = function(action) {
+const runAction = function (action) {
     ActionManager.runAction(player, action)
 }
 
@@ -271,7 +271,7 @@ const async = SchedulerUtils.async
  *
  * @return String 玩家IP地址
  */
-const address = function() {
+const address = function () {
     return player.getAddress().getHostString()
 }
 
@@ -281,7 +281,7 @@ const address = function() {
  * @param flight Boolean 是否允许飞行
  * @return Boolean 玩家是否允许飞行
  */
-const allowFlight = function(flight) {
+const allowFlight = function (flight) {
     if (flight == null) {
         return player.getAllowFlight()
     } else {
@@ -295,7 +295,7 @@ const allowFlight = function(flight) {
  *
  * @return float 当前攻击冷却
  */
-const attackCooldown = function() {
+const attackCooldown = function () {
     return player.getAttackCooldown()
 }
 
@@ -304,7 +304,7 @@ const attackCooldown = function() {
  *
  * @return Location 玩家重生点
  */
-const bedSpawn = function() {
+const bedSpawn = function () {
     return player.getBedSpawnLocation()
 }
 
@@ -313,7 +313,7 @@ const bedSpawn = function() {
  *
  * @return double 玩家重生点X轴坐标
  */
-const bedSpawnX = function() {
+const bedSpawnX = function () {
     return player.getBedSpawnLocation().getX()
 }
 
@@ -322,7 +322,7 @@ const bedSpawnX = function() {
  *
  * @return double 玩家重生点Y轴坐标
  */
-const bedSpawnY = function() {
+const bedSpawnY = function () {
     return player.getBedSpawnLocation().getY()
 }
 
@@ -331,7 +331,7 @@ const bedSpawnY = function() {
  *
  * @return double 玩家重生点Z轴坐标
  */
-const bedSpawnZ = function() {
+const bedSpawnZ = function () {
     return player.getBedSpawnLocation().getZ()
 }
 
@@ -340,7 +340,7 @@ const bedSpawnZ = function() {
  *
  * @return Boolean 玩家是否正在格挡
  */
-const blocking = function() {
+const blocking = function () {
     return player.isBlocking()
 }
 
@@ -350,7 +350,7 @@ const blocking = function() {
  * @param loc Location 指南针目标
  * @return Location 指南针目标
  */
-const compassTarget = function(loc) {
+const compassTarget = function (loc) {
     if (loc == null) {
         return player.getCompassTarget()
     } else {
@@ -364,7 +364,7 @@ const compassTarget = function(loc) {
  *
  * @return double 玩家指南针目标X轴坐标
  */
-const compassTargetX = function() {
+const compassTargetX = function () {
     return player.getCompassTarget().getX()
 }
 
@@ -373,7 +373,7 @@ const compassTargetX = function() {
  *
  * @return double 玩家指南针目标Y轴坐标
  */
-const compassTargetY = function() {
+const compassTargetY = function () {
     return player.getCompassTarget().getY()
 }
 
@@ -382,7 +382,7 @@ const compassTargetY = function() {
  *
  * @return double 玩家指南针目标Z轴坐标
  */
-const compassTargetZ = function() {
+const compassTargetZ = function () {
     return player.getCompassTarget().getZ()
 }
 
@@ -391,7 +391,7 @@ const compassTargetZ = function() {
  *
  * @return int 日期
  */
-const day = function() {
+const day = function () {
     return Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 }
 
@@ -400,7 +400,7 @@ const day = function() {
  *
  * @return int 日期
  */
-const dayOfMonth = function() {
+const dayOfMonth = function () {
     return Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 }
 
@@ -409,7 +409,7 @@ const dayOfMonth = function() {
  *
  * @return int 星期几
  */
-const dayOfWeek = function() {
+const dayOfWeek = function () {
     return (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1) || 7
 }
 
@@ -418,7 +418,7 @@ const dayOfWeek = function() {
  *
  * @return int 天数
  */
-const dayOfYear = function() {
+const dayOfYear = function () {
     return Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
 }
 
@@ -427,7 +427,7 @@ const dayOfYear = function() {
  *
  * @return int 月份
  */
-const month = function() {
+const month = function () {
     return Calendar.getInstance().get(Calendar.MONTH) + 1
 }
 
@@ -436,7 +436,7 @@ const month = function() {
  *
  * @return int 年份
  */
-const year = function() {
+const year = function () {
     return Calendar.getInstance().get(Calendar.YEAR)
 }
 
@@ -445,7 +445,7 @@ const year = function() {
  *
  * @return int 小时
  */
-const hour = function() {
+const hour = function () {
     return Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
 }
 
@@ -454,7 +454,7 @@ const hour = function() {
  *
  * @return int 分钟
  */
-const minute = function() {
+const minute = function () {
     return Calendar.getInstance().get(Calendar.MINUTE)
 }
 
@@ -463,7 +463,7 @@ const minute = function() {
  *
  * @return int 秒钟
  */
-const second = function() {
+const second = function () {
     return Calendar.getInstance().get(Calendar.SECOND)
 }
 
@@ -472,7 +472,7 @@ const second = function() {
  *
  * @return int 周数
  */
-const weekOfMonth = function() {
+const weekOfMonth = function () {
     return Calendar.getInstance().get(Calendar.WEEK_OF_MONTH)
 }
 
@@ -481,7 +481,7 @@ const weekOfMonth = function() {
  *
  * @return int 周数
  */
-const weekOfYear = function() {
+const weekOfYear = function () {
     return Calendar.getInstance().get(Calendar.WEEK_OF_YEAR)
 }
 
@@ -490,7 +490,7 @@ const weekOfYear = function() {
  *
  * @return int 上午/下午
  */
-const amOrPm = function() {
+const amOrPm = function () {
     return Calendar.getInstance().get(Calendar.AM_PM)
 }
 
@@ -499,7 +499,7 @@ const amOrPm = function() {
  *
  * @return int 时间戳
  */
-const time = function() {
+const time = function () {
     return new Date().getTime()
 }
 
@@ -508,7 +508,7 @@ const time = function() {
  *
  * @return Boolean 玩家当前是否死亡
  */
-const dead = function() {
+const dead = function () {
     return player.isDead()
 }
 
@@ -518,7 +518,7 @@ const dead = function() {
  * @param value float 玩家疲劳度
  * @return float 玩家疲劳度
  */
-const exhaustion = function(value) {
+const exhaustion = function (value) {
     if (value == null) {
         return player.getExhaustion()
     } else {
@@ -533,7 +533,7 @@ const exhaustion = function(value) {
  * @param value int 经验值
  * @return int 经验值
  */
-const exp = function(value) {
+const exp = function (value) {
     if (value == null) {
         return player.getTotalExperience()
     } else {
@@ -547,7 +547,7 @@ const exp = function(value) {
  *
  * @param value int 经验值
  */
-const addExp = function(value) {
+const addExp = function (value) {
     player.giveExp(value)
 }
 
@@ -556,7 +556,7 @@ const addExp = function(value) {
  *
  * @param value int 经验值
  */
-const takeExp = function(value) {
+const takeExp = function (value) {
     player.giveExp(-value)
 }
 
@@ -566,7 +566,7 @@ const takeExp = function(value) {
  * @param value int 等级
  * @return int 等级
  */
-const level = function(value) {
+const level = function (value) {
     if (value == null) {
         return player.getLevel()
     } else {
@@ -580,7 +580,7 @@ const level = function(value) {
  *
  * @param value int 等级
  */
-const addLevel = function(value) {
+const addLevel = function (value) {
     player.giveExpLevels(value)
 }
 
@@ -589,7 +589,7 @@ const addLevel = function(value) {
  *
  * @param value int 等级
  */
-const takeLevel = function(value) {
+const takeLevel = function (value) {
     player.giveExpLevels(-value)
 }
 
@@ -598,7 +598,7 @@ const takeLevel = function(value) {
  *
  * @return Boolean 是否首次登录
  */
-const firstPlay = function() {
+const firstPlay = function () {
     return !player.hasPlayedBefore()
 }
 
@@ -608,7 +608,7 @@ const firstPlay = function() {
  * @param value Boolean 玩家飞行状态
  * @return Boolean 玩家飞行状态
  */
-const fly = function(value) {
+const fly = function (value) {
     if (value == null) {
         return player.isFlying()
     } else {
@@ -623,7 +623,7 @@ const fly = function(value) {
  * @param value float 玩家飞行速度
  * @return float 玩家飞行速度
  */
-const flySpeed = function(value) {
+const flySpeed = function (value) {
     if (value == null) {
         return player.getFlySpeed()
     } else {
@@ -638,7 +638,7 @@ const flySpeed = function(value) {
  * @param value float 玩家行走速度
  * @return float 玩家行走速度
  */
-const walkSpeed = function(value) {
+const walkSpeed = function (value) {
     if (value == null) {
         return player.getWalkSpeed()
     } else {
@@ -653,7 +653,7 @@ const walkSpeed = function(value) {
  * @param value int 饥饿度
  * @return int 饥饿度
  */
-const food = function(value) {
+const food = function (value) {
     if (value == null) {
         return player.getFoodLevel()
     } else {
@@ -667,7 +667,7 @@ const food = function(value) {
  *
  * @param value int 饥饿度
  */
-const addFood = function(value) {
+const addFood = function (value) {
     player.setFoodLevel(Math.min(Math.max(player.getFoodLevel() + value, 0), 20))
 }
 
@@ -676,7 +676,7 @@ const addFood = function(value) {
  *
  * @param value int 饥饿度
  */
-const takeFood = function(value) {
+const takeFood = function (value) {
     player.setFoodLevel(Math.min(Math.max(player.getFoodLevel() - value, 0), 20))
 }
 
@@ -686,7 +686,7 @@ const takeFood = function(value) {
  * @param value String 游戏模式
  * @return String 游戏模式
  */
-const gamemode = function(value) {
+const gamemode = function (value) {
     if (value == null) {
         return player.getGameMode().toString()
     } else {
@@ -701,7 +701,7 @@ const gamemode = function(value) {
  * @param value Boolean 滑翔状态
  * @return Boolean 滑翔状态
  */
-const guilding = function(value) {
+const guilding = function (value) {
     if (value == null) {
         return player.isGliding()
     } else {
@@ -716,7 +716,7 @@ const guilding = function(value) {
  * @param value Boolean 发光状态
  * @return Boolean 发光状态
  */
-const glowing = function(value) {
+const glowing = function (value) {
     if (value == null) {
         return player.isGlowing()
     } else {
@@ -731,7 +731,7 @@ const glowing = function(value) {
  * @param value Boolean 重力状态
  * @return Boolean 重力状态
  */
-const gravity = function(value) {
+const gravity = function (value) {
     if (value == null) {
         return player.hasGravity()
     } else {
@@ -745,7 +745,7 @@ const gravity = function(value) {
  *
  * @return double 玩家生命
  */
-const health = function() {
+const health = function () {
     return player.getHealth()
 }
 
@@ -754,7 +754,7 @@ const health = function() {
  *
  * @return double 玩家生命
  */
-const maxHealth = function() {
+const maxHealth = function () {
     return player.getMaxHealth()
 }
 
@@ -763,7 +763,7 @@ const maxHealth = function() {
  *
  * @return String 玩家名称
  */
-const name = function() {
+const name = function () {
     return player.getName()
 }
 
@@ -773,7 +773,7 @@ const name = function() {
  * @param value int 剩余氧气
  * @return int 剩余氧气
  */
-const remainingAir = function(value) {
+const remainingAir = function (value) {
     if (value == null) {
         return player.getRemainingAir()
     } else {
@@ -787,7 +787,7 @@ const remainingAir = function(value) {
  *
  * @return Boolean 睡觉状态
  */
-const sleeping = function() {
+const sleeping = function () {
     return player.isSleeping()
 }
 
@@ -796,7 +796,7 @@ const sleeping = function() {
  *
  * @return Boolean 潜行状态
  */
-const sneaking = function(value) {
+const sneaking = function (value) {
     if (value == null) {
         return player.isSneaking()
     } else {
@@ -810,7 +810,7 @@ const sneaking = function(value) {
  *
  * @return Boolean 疾跑状态
  */
-const sprinting = function(value) {
+const sprinting = function (value) {
     if (value == null) {
         return player.isSprinting()
     } else {
@@ -824,7 +824,7 @@ const sprinting = function(value) {
  *
  * @return Boolean 游泳状态
  */
-const swimming = function(value) {
+const swimming = function (value) {
     if (value == null) {
         return player.isSwimming()
     } else {
@@ -838,6 +838,6 @@ const swimming = function(value) {
  *
  * @return String 世界名称
  */
-const world = function() {
+const world = function () {
     return player.getWorld().getName()
 }

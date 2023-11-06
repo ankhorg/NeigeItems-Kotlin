@@ -312,7 +312,7 @@ public class EntityUtils {
         }
     }
 
-    private static RefComponent toNms(BaseComponent component) {
+    protected static RefComponent toNms(BaseComponent component) {
         return RefChatSerializer.fromJson(ComponentSerializer.toString(component));
     }
 

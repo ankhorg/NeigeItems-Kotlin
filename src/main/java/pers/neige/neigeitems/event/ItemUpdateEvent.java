@@ -33,10 +33,10 @@ public final class ItemUpdateEvent {
         private final ItemGenerator item;
 
         /**
-         * @param player 持有物品的玩家
+         * @param player  持有物品的玩家
          * @param oldItem 待更新物品
-         * @param data 旧物品内部的指向数据
-         * @param item 根据旧物品的物品ID获得的NI物品生成器
+         * @param data    旧物品内部的指向数据
+         * @param item    根据旧物品的物品ID获得的NI物品生成器
          */
         public PreGenerate(
                 @Nullable OfflinePlayer player,
@@ -48,6 +48,11 @@ public final class ItemUpdateEvent {
             this.oldItem = oldItem;
             this.data = data;
             this.item = item;
+        }
+
+        @NotNull
+        public static HandlerList getHandlerList() {
+            return handlers;
         }
 
         /**
@@ -87,11 +92,6 @@ public final class ItemUpdateEvent {
         public HandlerList getHandlers() {
             return handlers;
         }
-
-        @NotNull
-        public static HandlerList getHandlerList() {
-            return handlers;
-        }
     }
 
     /**
@@ -111,7 +111,7 @@ public final class ItemUpdateEvent {
         private final ItemStack newItem;
 
         /**
-         * @param player 持有物品的玩家
+         * @param player  持有物品的玩家
          * @param oldItem 待更新物品
          * @param newItem 待覆盖物品
          */
@@ -123,6 +123,11 @@ public final class ItemUpdateEvent {
             this.player = player;
             this.oldItem = oldItem;
             this.newItem = newItem;
+        }
+
+        @NotNull
+        public static HandlerList getHandlerList() {
+            return handlers;
         }
 
         /**
@@ -152,11 +157,6 @@ public final class ItemUpdateEvent {
         @Override
         @NotNull
         public HandlerList getHandlers() {
-            return handlers;
-        }
-
-        @NotNull
-        public static HandlerList getHandlerList() {
             return handlers;
         }
     }

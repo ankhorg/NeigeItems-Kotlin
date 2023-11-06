@@ -81,7 +81,7 @@ class ItemPlaceholder {
                     // 值为1或不存在(这种情况itemBreak是true)代表损坏
                     if (itemBreak) {
                         info?.getOrNull(1)
-                    // 值为0代表不损坏
+                        // 值为0代表不损坏
                     } else {
                         info?.getOrNull(0)
                     }
@@ -107,7 +107,8 @@ class ItemPlaceholder {
                     plugin,
                     ListenerPriority.LOWEST,
                     PacketType.Play.Server.WINDOW_ITEMS,
-                    PacketType.Play.Server.SET_SLOT) {
+                    PacketType.Play.Server.SET_SLOT
+                ) {
                 override fun onPacketSending(event: PacketEvent) {
                     val gameMode = event.player.gameMode
                     if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
@@ -124,6 +125,7 @@ class ItemPlaceholder {
                         }
                     }
                 }
+
                 override fun onPacketReceiving(event: PacketEvent) {}
             }
             )
@@ -141,13 +143,13 @@ class ItemPlaceholder {
 
     private fun NbtComponentLike.getDeepStringOrNull(key: String): String? {
         return when (val value: Nbt<*>? = getDeepWithEscape(key, separator = '`')) {
-            is NbtString ->  value.asString
+            is NbtString -> value.asString
             is NbtByte -> value.asByte.toString()
-            is NbtShort ->  value.asShort.toString()
-            is NbtInt ->  value.asInt.toString()
-            is NbtLong ->  value.asLong.toString()
-            is NbtFloat ->  value.asFloat.toString()
-            is NbtDouble ->  value.asDouble.toString()
+            is NbtShort -> value.asShort.toString()
+            is NbtInt -> value.asInt.toString()
+            is NbtLong -> value.asLong.toString()
+            is NbtFloat -> value.asFloat.toString()
+            is NbtDouble -> value.asDouble.toString()
             else -> value?.asString
         }
     }

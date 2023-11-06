@@ -163,7 +163,7 @@ object ActionManager {
         player: Player,
         action: Any?,
         itemStack: ItemStack? = null,
-        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
+        itemTag: NbtCompound? = itemStack?.let { itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?> = HashMap<String, Any?>(),
@@ -172,7 +172,16 @@ object ActionManager {
         when (action) {
             is String -> return runAction(player, action, itemStack, itemTag, data, event, global, map)
             is List<*> -> return runAction(player, action, itemStack, itemTag, data, event, global, 0, action.size, map)
-            is Map<*, *> -> return runAction(player, action as Map<String, *>, itemStack, itemTag, data, event, global, map)
+            is Map<*, *> -> return runAction(
+                player,
+                action as Map<String, *>,
+                itemStack,
+                itemTag,
+                data,
+                event,
+                global,
+                map
+            )
             is ConfigurationSection -> return runAction(player, action, itemStack, itemTag, data, event, global, map)
         }
         return true
@@ -197,7 +206,7 @@ object ActionManager {
         actionType: String,
         actionContent: String,
         itemStack: ItemStack? = null,
-        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
+        itemTag: NbtCompound? = itemStack?.let { itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?>,
@@ -227,7 +236,7 @@ object ActionManager {
                 event?.let { bindings["event"] = it }
                 bindings["global"] = global
                 bindings["glo"] = global
-                val result =  try {
+                val result = try {
                     actionScripts.computeIfAbsent(actionContent) {
                         nashornHooker.compile(engine, actionContent)
                     }.eval(bindings) ?: true
@@ -273,7 +282,7 @@ object ActionManager {
         player: Player,
         action: List<*>,
         itemStack: ItemStack? = null,
-        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
+        itemTag: NbtCompound? = itemStack?.let { itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?>,
@@ -331,7 +340,18 @@ object ActionManager {
                     actionType == "delay" -> delay += actionContent.toLongOrNull() ?: 0
                     // 正常执行
                     else -> {
-                        if (!runAction(player, actionType, actionContent, itemStack, itemTag, data, event, global, map)) return false
+                        if (!runAction(
+                                player,
+                                actionType,
+                                actionContent,
+                                itemStack,
+                                itemTag,
+                                data,
+                                event,
+                                global,
+                                map
+                            )
+                        ) return false
                     }
                 }
                 // 如果属于其他类型
@@ -360,7 +380,7 @@ object ActionManager {
         player: Player,
         action: String,
         itemStack: ItemStack? = null,
-        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
+        itemTag: NbtCompound? = itemStack?.let { itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?>,
@@ -407,7 +427,7 @@ object ActionManager {
         player: Player,
         action: ConfigurationSection,
         itemStack: ItemStack? = null,
-        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
+        itemTag: NbtCompound? = itemStack?.let { itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?>,
@@ -451,7 +471,7 @@ object ActionManager {
                 runAction(player, finally, itemStack, itemTag, data, event, global, map)
                 return true
             }
-            else ->  {
+            else -> {
                 return runAction(player, actions, itemStack, itemTag, data, event, global, map)
             }
         }
@@ -474,7 +494,7 @@ object ActionManager {
         player: Player,
         action: Map<String, *>,
         itemStack: ItemStack? = null,
-        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
+        itemTag: NbtCompound? = itemStack?.let { itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?>,
@@ -518,7 +538,7 @@ object ActionManager {
                 runAction(player, finally, itemStack, itemTag, data, event, global, map)
                 return true
             }
-            else ->  {
+            else -> {
                 return runAction(player, actions, itemStack, itemTag, data, event, global, map)
             }
         }
@@ -566,7 +586,7 @@ object ActionManager {
         condition: String?,
         player: Player?,
         itemStack: ItemStack? = null,
-        itemTag: NbtCompound? = itemStack?.let{ itemStack.getNbt() },
+        itemTag: NbtCompound? = itemStack?.let { itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
         global: MutableMap<String, Any?> = HashMap<String, Any?>(),
@@ -674,7 +694,8 @@ object ActionManager {
                 // 当前配置有消耗动作
                 if (consume?.getBoolean(id) == true
                     // all类型的特殊判断
-                    || (id == "all" && consume?.getBoolean("left") == true || consume?.getBoolean("right") == true )) {
+                    || (id == "all" && consume?.getBoolean("left") == true || consume?.getBoolean("right") == true)
+                ) {
                     // 转换消耗数量
                     config.set("consume.amount", consume.get("amount"))
                     // 转换冷却时间
@@ -714,7 +735,8 @@ object ActionManager {
             try {
                 val script = pers.neige.neigeitems.script.CompiledScript(file)
                 script.invoke("main", null)
-            } catch (_: Throwable) {}
+            } catch (_: Throwable) {
+            }
         }
     }
 
@@ -873,14 +895,16 @@ object ActionManager {
         // 给予玩家饱食度
         addAction("giveFood") { player, string ->
             sync {
-                player.foodLevel = (player.foodLevel + (papi(player, string).toIntOrNull() ?: 0)).coerceAtLeast(0).coerceAtMost(20)
+                player.foodLevel =
+                    (player.foodLevel + (papi(player, string).toIntOrNull() ?: 0)).coerceAtLeast(0).coerceAtMost(20)
             }
             true
         }
         // 扣除玩家饱食度
         addAction("takeFood") { player, string ->
             sync {
-                player.foodLevel = (player.foodLevel - (papi(player, string).toIntOrNull() ?: 0)).coerceAtLeast(0).coerceAtMost(20)
+                player.foodLevel =
+                    (player.foodLevel - (papi(player, string).toIntOrNull() ?: 0)).coerceAtLeast(0).coerceAtMost(20)
             }
             true
         }
@@ -894,42 +918,50 @@ object ActionManager {
         // 给予玩家饱和度
         addAction("giveSaturation") { player, string ->
             sync {
-                player.saturation = (player.saturation + (papi(player, string).toFloatOrNull() ?: 0F)).coerceAtLeast(0F).coerceAtMost(player.foodLevel.toFloat())
+                player.saturation = (player.saturation + (papi(player, string).toFloatOrNull() ?: 0F)).coerceAtLeast(0F)
+                    .coerceAtMost(player.foodLevel.toFloat())
             }
             true
         }
         // 扣除玩家饱和度
         addAction("takeSaturation") { player, string ->
             sync {
-                player.saturation = (player.saturation - (papi(player, string).toFloatOrNull() ?: 0F)).coerceAtLeast(0F).coerceAtMost(player.foodLevel.toFloat())
+                player.saturation = (player.saturation - (papi(player, string).toFloatOrNull() ?: 0F)).coerceAtLeast(0F)
+                    .coerceAtMost(player.foodLevel.toFloat())
             }
             true
         }
         // 设置玩家饱和度
         addAction("setSaturation") { player, string ->
             sync {
-                player.saturation = (papi(player, string).toFloatOrNull() ?: 0F).coerceAtLeast(0F).coerceAtMost(player.foodLevel.toFloat())
+                player.saturation = (papi(player, string).toFloatOrNull() ?: 0F).coerceAtLeast(0F)
+                    .coerceAtMost(player.foodLevel.toFloat())
             }
             true
         }
         // 给予玩家生命
         addAction("giveHealth") { player, string ->
             sync {
-                player.health = (player.health + (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtMost(player.maxHealth)
+                player.health = (player.health + (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtMost(
+                    player.maxHealth
+                )
             }
             true
         }
         // 扣除玩家生命
         addAction("takeHealth") { player, string ->
             sync {
-                player.health = (player.health - (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtLeast(0.toDouble())
+                player.health = (player.health - (papi(player, string).toDoubleOrNull() ?: 0.toDouble())).coerceAtLeast(
+                    0.toDouble()
+                )
             }
             true
         }
         // 设置玩家生命
         addAction("setHealth") { player, string ->
             sync {
-                player.health = (papi(player, string).toDoubleOrNull() ?: 0.toDouble()).coerceAtLeast(0.toDouble()).coerceAtMost(player.maxHealth)
+                player.health = (papi(player, string).toDoubleOrNull() ?: 0.toDouble()).coerceAtLeast(0.toDouble())
+                    .coerceAtMost(player.maxHealth)
             }
             true
         }
@@ -945,7 +977,7 @@ object ActionManager {
             val comboGroup = info[0]
             // 连击类型
             val comboType = info.getOrNull(1) ?: ""
-            if(!player.hasMetadata("NI-Combo-$comboGroup")) {
+            if (!player.hasMetadata("NI-Combo-$comboGroup")) {
                 player.setMetadataEZ("NI-Combo-$comboGroup", ArrayList<ComboInfo>())
             }
             // 当前时间
@@ -1084,7 +1116,9 @@ object ActionManager {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
+            val amount: Int = consume.getString("amount")
+                ?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)
+                ?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -1105,7 +1139,16 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: PlayerItemConsumeEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "eat", cancel = true, cancelIfCooldown = false, giveLater = true)
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            "eat",
+            cancel = true,
+            cancelIfCooldown = false,
+            giveLater = true
+        )
     }
 
     // 丢弃物品
@@ -1125,7 +1168,16 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityPickupItemEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "pick", cancel = false, cancelIfCooldown = true, consumeItem = false)
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            "pick",
+            cancel = false,
+            cancelIfCooldown = true,
+            consumeItem = false
+        )
     }
 
     // 点击物品
@@ -1155,7 +1207,16 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityShootBowEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "shoot_bow", cancel = false, cancelIfCooldown = true, consumeItem = false)
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            "shoot_bow",
+            cancel = false,
+            cancelIfCooldown = true,
+            consumeItem = false
+        )
     }
 
     // 射箭时由箭触发
@@ -1165,7 +1226,16 @@ object ActionManager {
         itemInfo: ItemInfo,
         event: EntityShootBowEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "shoot_arrow", cancel = false, cancelIfCooldown = true, consumeItem = false)
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            "shoot_arrow",
+            cancel = false,
+            cancelIfCooldown = true,
+            consumeItem = false
+        )
     }
 
     // 格挡时由盾触发
@@ -1248,7 +1318,7 @@ object ActionManager {
         val global = HashMap<String, Any?>()
         if (consumeItem) {
             // 获取物品消耗信息
-            val consume =  trigger.consume
+            val consume = trigger.consume
             // 如果该物品需要被消耗
             if (consume != null) {
                 // 预执行动作
@@ -1264,7 +1334,9 @@ object ActionManager {
                     }
                 }
                 // 获取待消耗数量
-                val amount: Int = consume.getString("amount")?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)?.toIntOrNull() ?: 1
+                val amount: Int = consume.getString("amount")
+                    ?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)
+                    ?.toIntOrNull() ?: 1
                 // 消耗物品
                 if (!itemStack.consume(player, amount, itemTag, neigeItems, giveLater)) {
                     // 跑一下deny动作

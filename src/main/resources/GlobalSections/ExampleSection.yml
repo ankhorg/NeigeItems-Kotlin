@@ -2,8 +2,8 @@ global-strings-1:
   # 随机字符节点
   type: strings
   values:
-  - test1
-  - test2
+    - test1
+    - test2
 global-number-1:
   # 随机数节点
   type: number
@@ -28,9 +28,9 @@ global-weight-1:
   # 权重字符串节点
   type: weight
   values:
-  # 权重::字符串内容
-  - 5::第一行
-  - 1::第二行
+    # 权重::字符串内容
+    - 5::第一行
+    - 1::第二行
 global-js-1:
   # JavaScript节点
   type: js

@@ -22,6 +22,7 @@ import java.util.jar.JarFile
  */
 object NeigeItems : Plugin() {
     val plugin by lazy { BukkitPlugin.getInstance() }
+
     /**
      * 所有插件类
      */

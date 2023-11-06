@@ -19,5 +19,6 @@ public class NMSHookerCustomModelData extends NMSHookerHoverEvent {
     }
 
     @Override
-    public void setCustomModelData(@Nullable ItemMeta itemMeta, int data) {}
+    public void setCustomModelData(@Nullable ItemMeta itemMeta, int data) {
+    }
 }

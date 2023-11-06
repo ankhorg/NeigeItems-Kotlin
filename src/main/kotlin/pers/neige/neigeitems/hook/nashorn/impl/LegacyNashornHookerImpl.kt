@@ -16,8 +16,14 @@ class LegacyNashornHookerImpl : NashornHooker() {
         return NashornScriptEngineFactory().getScriptEngine(args, classLoader)
     }
 
-    override fun invoke(compiledScript: pers.neige.neigeitems.script.CompiledScript, function: String, map: Map<String, Any>?, vararg args: Any): Any? {
-        val newObject: ScriptObjectMirror = (compiledScript.scriptEngine as Invocable).invokeFunction("newObject") as ScriptObjectMirror
+    override fun invoke(
+        compiledScript: pers.neige.neigeitems.script.CompiledScript,
+        function: String,
+        map: Map<String, Any>?,
+        vararg args: Any
+    ): Any? {
+        val newObject: ScriptObjectMirror =
+            (compiledScript.scriptEngine as Invocable).invokeFunction("newObject") as ScriptObjectMirror
         map?.forEach { (key, value) -> newObject[key] = value }
         return newObject.callMember(function, *args)
     }

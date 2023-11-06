@@ -34,7 +34,18 @@ import kotlin.math.sqrt
  * 物品相关工具类
  */
 object ItemUtils {
-    val invalidNBT by lazy { arrayListOf("display", "Enchantments","VARIABLES_DATA","ench","Damage","HideFlags","Unbreakable", "CustomModelData") }
+    val invalidNBT by lazy {
+        arrayListOf(
+            "display",
+            "Enchantments",
+            "VARIABLES_DATA",
+            "ench",
+            "Damage",
+            "HideFlags",
+            "Unbreakable",
+            "CustomModelData"
+        )
+    }
 
     /**
      * 根据物品获取显示名, 无显示名则返回翻译名.
@@ -94,8 +105,8 @@ object ItemUtils {
             this.startsWith("[") && this.endsWith("]") -> {
                 val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
                 when {
-                    list.all { it is Byte } -> ByteArray(list.size){ list[it] as Byte }
-                    list.all { it is Int } -> IntArray(list.size){ list[it] as Int }
+                    list.all { it is Byte } -> ByteArray(list.size) { list[it] as Byte }
+                    list.all { it is Int } -> IntArray(list.size) { list[it] as Int }
                     else -> this
                 }
             }
@@ -142,14 +153,15 @@ object ItemUtils {
                 this.substring(8, this.length).toFloatOrNull()?.let { NbtFloat.valueOf(it) } ?: NbtString.valueOf(this)
             }
             this.startsWith("(Double) ") -> {
-                this.substring(9, this.length).toDoubleOrNull()?.let { NbtDouble.valueOf(it) } ?: NbtString.valueOf(this)
+                this.substring(9, this.length).toDoubleOrNull()?.let { NbtDouble.valueOf(it) }
+                    ?: NbtString.valueOf(this)
             }
             this.startsWith("[") && this.endsWith("]") -> {
                 val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
                 when {
-                    list.all { it is Byte } -> NbtByteArray(ByteArray(list.size){ list[it] as Byte })
-                    list.all { it is Int } -> NbtIntArray(IntArray(list.size){ list[it] as Int })
-                    list.all { it is Long } -> NbtLongArray(LongArray(list.size){ list[it] as Long })
+                    list.all { it is Byte } -> NbtByteArray(ByteArray(list.size) { list[it] as Byte })
+                    list.all { it is Int } -> NbtIntArray(IntArray(list.size) { list[it] as Int })
+                    list.all { it is Long } -> NbtLongArray(LongArray(list.size) { list[it] as Long })
                     else -> NbtString.valueOf(this)
                 }
             }
@@ -179,8 +191,8 @@ object ItemUtils {
             is List<*> -> {
                 val list = this.map { it?.cast() ?: it }
                 when {
-                    list.all { it is Byte } -> NbtByteArray(ByteArray(list.size){ list[it] as Byte })
-                    list.all { it is Int } -> NbtIntArray(IntArray(list.size){ list[it] as Int })
+                    list.all { it is Byte } -> NbtByteArray(ByteArray(list.size) { list[it] as Byte })
+                    list.all { it is Int } -> NbtIntArray(IntArray(list.size) { list[it] as Int })
                     else -> {
                         val nbtList = NbtList()
                         for (obj in list) {
@@ -236,12 +248,12 @@ object ItemUtils {
     fun Nbt<*>.toStringValue(): Any {
         return when (this) {
             is NbtByte -> "(Byte) ${this.asByte}"
-            is NbtShort ->  "(Short) ${this.asShort}"
-            is NbtInt ->  "(Int) ${this.asInt}"
-            is NbtLong ->  "(Long) ${this.asLong}"
-            is NbtFloat ->  "(Float) ${this.asFloat}"
-            is NbtDouble ->  "(Double) ${this.asDouble}"
-            is NbtString ->  this.asString
+            is NbtShort -> "(Short) ${this.asShort}"
+            is NbtInt -> "(Int) ${this.asInt}"
+            is NbtLong -> "(Long) ${this.asLong}"
+            is NbtFloat -> "(Float) ${this.asFloat}"
+            is NbtDouble -> "(Double) ${this.asDouble}"
+            is NbtString -> this.asString
             is NbtByteArray -> {
                 arrayListOf<String>().also { list ->
                     this.asByteArray.forEach { list.add("(Byte) $it") }
@@ -303,12 +315,12 @@ object ItemUtils {
     fun Nbt<*>.toValue(): Any {
         return when (this) {
             is NbtByte -> this.asByte
-            is NbtShort ->  this.asShort
-            is NbtInt ->  this.asInt
-            is NbtLong ->  this.asLong
-            is NbtFloat ->  this.asFloat
-            is NbtDouble ->  this.asDouble
-            is NbtString ->  this.asString
+            is NbtShort -> this.asShort
+            is NbtInt -> this.asInt
+            is NbtLong -> this.asLong
+            is NbtFloat -> this.asFloat
+            is NbtDouble -> this.asDouble
+            is NbtString -> this.asString
             is NbtByteArray -> this.asByteArray.toList()
             is NbtIntArray -> this.asIntArray.toList()
             is NbtLongArray -> this.asLongArray.toList()
@@ -704,7 +716,8 @@ object ItemUtils {
         // 如果NI和MM都不存在对应物品就跳过去
         if (!ItemManager.hasItem(args[0])
             && mythicMobsHooker?.getItemStackSync(args[0]) == null
-            && easyItemHooker?.hasItem(args[0]) != true) return
+            && easyItemHooker?.hasItem(args[0]) != true
+        ) return
 
         // 获取掉落数量
         var amount = 1
@@ -712,9 +725,9 @@ object ItemUtils {
             if (args[1].contains("-")) {
                 val index = args[1].indexOf("-")
                 val min = args[1].substring(0, index).toIntOrNull()
-                val max = args[1].substring(index+1, args[1].length).toIntOrNull()
+                val max = args[1].substring(index + 1, args[1].length).toIntOrNull()
                 if (min != null && max != null) {
-                    amount = ThreadLocalRandom.current().nextInt(min, max+1)
+                    amount = ThreadLocalRandom.current().nextInt(min, max + 1)
                 }
             } else {
                 args[1].toIntOrNull()?.let {
@@ -788,7 +801,7 @@ object ItemUtils {
             val offsetX: Double = if (offsetXString.contains("-")) {
                 val index = offsetXString.indexOf("-")
                 val min = offsetXString.substring(0, index).toDoubleOrNull()
-                val max = offsetXString.substring(index+1).toDoubleOrNull()
+                val max = offsetXString.substring(index + 1).toDoubleOrNull()
                 when {
                     min != null && max != null -> ThreadLocalRandom.current().nextDouble(min, max)
                     else -> 0.1
@@ -800,7 +813,7 @@ object ItemUtils {
             val offsetY: Double = if (offsetYString.contains("-")) {
                 val index = offsetYString.indexOf("-")
                 val min = offsetYString.substring(0, index).toDoubleOrNull()
-                val max = offsetYString.substring(index+1).toDoubleOrNull()
+                val max = offsetYString.substring(index + 1).toDoubleOrNull()
                 when {
                     min != null && max != null -> ThreadLocalRandom.current().nextDouble(min, max)
                     else -> 0.1
@@ -819,8 +832,8 @@ object ItemUtils {
                         val z = -angleSin * vector.x + angleCos * vector.z
                         vector.setX(x).z = z
                     } else if (angleType == "round") {
-                        val angleCos = cos(Math.PI * 2 * index/dropItems.size)
-                        val angleSin = sin(Math.PI * 2 * index/dropItems.size)
+                        val angleCos = cos(Math.PI * 2 * index / dropItems.size)
+                        val angleSin = sin(Math.PI * 2 * index / dropItems.size)
                         val x = angleCos * vector.x + angleSin * vector.z
                         val z = -angleSin * vector.x + angleCos * vector.z
                         vector.setX(x).z = z
@@ -915,13 +928,13 @@ object ItemUtils {
     @JvmStatic
     fun NbtComponentLike.getStringOrNull(key: String): String? {
         return when (val value: Nbt<*>? = get(key)) {
-            is NbtString ->  value.asString
+            is NbtString -> value.asString
             is NbtByte -> value.asByte.toString()
-            is NbtShort ->  value.asShort.toString()
-            is NbtInt ->  value.asInt.toString()
-            is NbtLong ->  value.asLong.toString()
-            is NbtFloat ->  value.asFloat.toString()
-            is NbtDouble ->  value.asDouble.toString()
+            is NbtShort -> value.asShort.toString()
+            is NbtInt -> value.asInt.toString()
+            is NbtLong -> value.asLong.toString()
+            is NbtFloat -> value.asFloat.toString()
+            is NbtDouble -> value.asDouble.toString()
             else -> value?.asString
         }
     }
@@ -999,13 +1012,13 @@ object ItemUtils {
     @JvmStatic
     fun NbtComponentLike.getDeepStringOrNull(key: String): String? {
         return when (val value: Nbt<*>? = getDeepWithEscape(key)) {
-            is NbtString ->  value.asString
+            is NbtString -> value.asString
             is NbtByte -> value.asByte.toString()
-            is NbtShort ->  value.asShort.toString()
-            is NbtInt ->  value.asInt.toString()
-            is NbtLong ->  value.asLong.toString()
-            is NbtFloat ->  value.asFloat.toString()
-            is NbtDouble ->  value.asDouble.toString()
+            is NbtShort -> value.asShort.toString()
+            is NbtInt -> value.asInt.toString()
+            is NbtLong -> value.asLong.toString()
+            is NbtFloat -> value.asFloat.toString()
+            is NbtDouble -> value.asDouble.toString()
             else -> value?.asString
         }
     }
@@ -1242,7 +1255,7 @@ object ItemUtils {
                         // 刚好大一个
                     } else if (nodeIndex == byteArray.size) {
                         // 复制扩容
-                        val newArray = byteArray.copyOf(byteArray.size+1)
+                        val newArray = byteArray.copyOf(byteArray.size + 1)
                         newArray[nodeIndex] = value.asByte
                         // 覆盖上一层
                         when (father) {
@@ -1259,7 +1272,7 @@ object ItemUtils {
                         boom = true
                         return@let
                     }
-                // IntArray插入
+                    // IntArray插入
                 } else if (temp is NbtIntArray && value is NbtInt) {
                     val intArray = (temp as NbtIntArray).asIntArray
                     // 检测是否越界
@@ -1268,7 +1281,7 @@ object ItemUtils {
                         // 刚好大一个
                     } else if (nodeIndex == intArray.size) {
                         // 复制扩容
-                        val newArray = intArray.copyOf(intArray.size+1)
+                        val newArray = intArray.copyOf(intArray.size + 1)
                         newArray[nodeIndex] = value.asInt
                         // 覆盖上一层
                         when (father) {
@@ -1280,12 +1293,12 @@ object ItemUtils {
                             }
                         }
                         // 越界了, 爬
-                    }  else {
+                    } else {
                         // 你给我爬(变成NbtCompound)
                         boom = true
                         return@let
                     }
-                // LongArray插入
+                    // LongArray插入
                 } else if (temp is NbtLongArray && value is NbtLong) {
                     val longArray = (temp as NbtLongArray).asLongArray
                     // 检测是否越界
@@ -1294,7 +1307,7 @@ object ItemUtils {
                         // 刚好大一个
                     } else if (nodeIndex == longArray.size) {
                         // 复制扩容
-                        val newArray = longArray.copyOf(longArray.size+1)
+                        val newArray = longArray.copyOf(longArray.size + 1)
                         newArray[nodeIndex] = value.asLong
                         // 覆盖上一层
                         when (father) {
@@ -1306,12 +1319,12 @@ object ItemUtils {
                             }
                         }
                         // 越界了, 爬
-                    }  else {
+                    } else {
                         // 你给我爬(变成NbtCompound)
                         boom = true
                         return@let
                     }
-                // List插入
+                    // List插入
                 } else if (temp is NbtList) {
                     val list = temp as NbtList
                     // 检测是否越界

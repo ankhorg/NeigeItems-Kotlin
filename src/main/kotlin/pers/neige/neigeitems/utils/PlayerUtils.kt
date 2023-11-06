@@ -81,7 +81,7 @@ object PlayerUtils {
      */
     @JvmStatic
     fun Metadatable.getMetadataEZ(key: String, type: String, def: Any): Any? {
-        if(!this.hasMetadata(key)) {
+        if (!this.hasMetadata(key)) {
             this.setMetadataEZ(key, def)
             return def
         }

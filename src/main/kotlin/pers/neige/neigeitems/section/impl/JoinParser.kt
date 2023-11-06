@@ -87,10 +87,12 @@ object JoinParser : SectionParser() {
             // 获取操作函数
             val transform = rawTransform?.let {
                 compiledScripts.computeIfAbsent(it) {
-                    CompiledScript("""
+                    CompiledScript(
+                        """
                         function main() {
                             $it
-                        }""".trimIndent())
+                        }""".trimIndent()
+                    )
                 }
             }
 
@@ -120,7 +122,13 @@ object JoinParser : SectionParser() {
                 // 待操作列表
                 map["list"] = realList
                 // 节点解析函数
-                map["vars"] = java.util.function.Function<String, String> { string -> string.parseSection(cache, player, sections) }
+                map["vars"] = java.util.function.Function<String, String> { string ->
+                    string.parseSection(
+                        cache,
+                        player,
+                        sections
+                    )
+                }
             }
 
             // 遍历列表

@@ -156,7 +156,8 @@ object SectionUtils {
                                     .coerceAtMost(0xFFFFFF)
                                 val color = Color(hex)
                                 return ChatColor.of(color).toString()
-                            } catch (_: NumberFormatException) {}
+                            } catch (_: NumberFormatException) {
+                            }
                         } catch (error: NoSuchMethodError) {
                             Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
                         }
@@ -169,7 +170,7 @@ object SectionUtils {
                 // 获取节点类型
                 val type = this.substring(0, index)
                 // 所有参数
-                val args = this.substring(index+2).split('_', '\\')
+                val args = this.substring(index + 2).split('_', '\\')
                 return SectionManager.sectionParsers[type]?.onRequest(args, cache, player, sections) ?: "<$this>"
             }
         }
@@ -268,7 +269,8 @@ object SectionUtils {
                                     .coerceAtMost(0xFFFFFF)
                                 val color = Color(hex)
                                 return ChatColor.of(color).toString()
-                            } catch (_: NumberFormatException) {}
+                            } catch (_: NumberFormatException) {
+                            }
                         } catch (error: NoSuchMethodError) {
                             Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
                         }
@@ -279,13 +281,14 @@ object SectionUtils {
             else -> {
                 // 获取节点类型
                 val name = this.substring(0, index)
-                val param = this.substring(index+2)
+                val param = this.substring(index + 2)
                 return when (name.lowercase(Locale.getDefault())) {
                     "nbt" -> {
                         itemTag.getDeepStringOrNull(param) ?: "<$this>"
                     }
                     "data" -> {
-                        (data ?: itemTag.getExactStringOrNull("NeigeItems.data")?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
+                        (data ?: itemTag.getExactStringOrNull("NeigeItems.data")
+                            ?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
                     }
                     "amount" -> {
                         itemStack.amount.toString()
@@ -297,7 +300,8 @@ object SectionUtils {
                         itemStack.durability.toString()
                     }
                     else -> {
-                        SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player) ?: "<$this>"
+                        SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player)
+                            ?: "<$this>"
                     }
                 }
             }

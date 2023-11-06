@@ -78,10 +78,12 @@ object WeightJoinParser : SectionParser() {
             // 获取操作函数
             val transform = rawTransform?.let {
                 compiledScripts.computeIfAbsent(it) {
-                    CompiledScript("""
+                    CompiledScript(
+                        """
                         function main() {
                             $it
-                        }""".trimIndent())
+                        }""".trimIndent()
+                    )
                 }
             }
             // 获取是否乱序
@@ -118,7 +120,7 @@ object WeightJoinParser : SectionParser() {
                     // 有权重, 根据权重大小进行记录
                     else -> {
                         val weight = value.substring(0, index).toDoubleOrNull() ?: 1.0
-                        val string = value.substring(index+2, value.length)
+                        val string = value.substring(index + 2, value.length)
                         info[string]?.let {
                             info[string] = it + weight
                         } ?: let { info[string] = weight }
@@ -155,7 +157,13 @@ object WeightJoinParser : SectionParser() {
                 // 待操作列表
                 map["list"] = realList
                 // 节点解析函数
-                map["vars"] = java.util.function.Function<String, String> { string -> string.parseSection(cache, player, sections) }
+                map["vars"] = java.util.function.Function<String, String> { string ->
+                    string.parseSection(
+                        cache,
+                        player,
+                        sections
+                    )
+                }
             }
 
             // 遍历列表

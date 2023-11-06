@@ -10,11 +10,10 @@ import java.util.List;
 public class CommandContext {
     @NotNull
     private final CommandSender sender;
-
-    @NotNull
-    private String[] args;
     @NotNull
     private final List<String> keys;
+    @NotNull
+    private String[] args;
     private int index;
     @Nullable
     private String arg;

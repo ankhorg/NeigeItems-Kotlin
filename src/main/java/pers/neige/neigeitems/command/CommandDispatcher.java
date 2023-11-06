@@ -14,6 +14,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class CommandDispatcher {
+    @NotNull
+    private final Map<String, CommandDispatcher> post = new HashMap<>();
+    @NotNull
+    private final String key;
     @Nullable
     private Consumer<CommandContext> executor;
     @Nullable
@@ -21,12 +25,8 @@ public class CommandDispatcher {
     private int index = -1;
     @Nullable
     private CommandDispatcher pre = null;
-    @NotNull
-    private final Map<String, CommandDispatcher> post = new HashMap<>();
     @Nullable
     private CommandDispatcher onlyPost = null;
-    @NotNull
-    private final String key;
     private PluginCommand command;
     private boolean only = false;
 
@@ -102,7 +102,7 @@ public class CommandDispatcher {
                 return postDispatcher.suggest(context.push(key));
             } else if (onlyPost != null && !Objects.equals(arg, "")) {
                 return onlyPost.suggest(context.push(key));
-            // 参数合并
+                // 参数合并
             } else {
                 merge(context, args);
                 if (suggester != null) {

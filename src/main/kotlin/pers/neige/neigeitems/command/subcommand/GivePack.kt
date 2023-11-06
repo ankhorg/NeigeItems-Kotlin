@@ -54,7 +54,13 @@ object GivePack {
                             arrayListOf("data")
                         }
                         execute<CommandSender> { sender, context, argument ->
-                            givePackCommandAsync(sender, context.argument(-3), context.argument(-2), context.argument(-1), argument)
+                            givePackCommandAsync(
+                                sender,
+                                context.argument(-3),
+                                context.argument(-2),
+                                context.argument(-1),
+                                argument
+                            )
                         }
                     }
                 }
@@ -100,7 +106,14 @@ object GivePack {
                             arrayListOf("data")
                         }
                         execute<CommandSender> { sender, context, argument ->
-                            givePackCommandAsync(sender, context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                            givePackCommandAsync(
+                                sender,
+                                context.argument(-3),
+                                context.argument(-2),
+                                context.argument(-1),
+                                argument,
+                                tip = false
+                            )
                         }
                     }
                 }
@@ -167,7 +180,9 @@ object GivePack {
                                 player.giveItem(itemStack)
                             }
                             dropData?.let {
-                                dropData[itemStack.getParsedName()] = dropData[itemStack.getParsedName()]?.let { it + itemStack.amount } ?: itemStack.amount
+                                dropData[itemStack.getParsedName()] =
+                                    dropData[itemStack.getParsedName()]?.let { it + itemStack.amount }
+                                        ?: itemStack.amount
                             }
                         }
                     }
@@ -176,33 +191,43 @@ object GivePack {
                 if (tip) {
                     dropData?.let {
                         for ((name, amt) in dropData) {
-                            sender.sendLang("Messages.successInfo", mapOf(
-                                Pair("{player}", player.name),
-                                Pair("{amount}", amt.toString()),
-                                Pair("{name}", name)
-                            ))
-                            player.sendLang("Messages.givenInfo", mapOf(
-                                Pair("{amount}", amt.toString()),
-                                Pair("{name}", name)
-                            ))
+                            sender.sendLang(
+                                "Messages.successInfo", mapOf(
+                                    Pair("{player}", player.name),
+                                    Pair("{amount}", amt.toString()),
+                                    Pair("{name}", name)
+                                )
+                            )
+                            player.sendLang(
+                                "Messages.givenInfo", mapOf(
+                                    Pair("{amount}", amt.toString()),
+                                    Pair("{name}", name)
+                                )
+                            )
                         }
                     } ?: let {
-                        sender.sendLang("Messages.successPackInfo", mapOf(
-                            Pair("{player}", player.name),
-                            Pair("{amount}", repeat.toString()),
-                            Pair("{name}", id)
-                        ))
-                        player.sendLang("Messages.givenPackInfo", mapOf(
-                            Pair("{amount}", repeat.toString()),
-                            Pair("{name}", id)
-                        ))
+                        sender.sendLang(
+                            "Messages.successPackInfo", mapOf(
+                                Pair("{player}", player.name),
+                                Pair("{amount}", repeat.toString()),
+                                Pair("{name}", id)
+                            )
+                        )
+                        player.sendLang(
+                            "Messages.givenPackInfo", mapOf(
+                                Pair("{amount}", repeat.toString()),
+                                Pair("{name}", id)
+                            )
+                        )
                     }
                 }
                 // 未知物品包
             } ?: let {
-                sender.sendLang("Messages.unknownItemPack", mapOf(
-                    Pair("{packID}", id)
-                ))
+                sender.sendLang(
+                    "Messages.unknownItemPack", mapOf(
+                        Pair("{packID}", id)
+                    )
+                )
             }
             // 未知解析对象
         } ?: let {

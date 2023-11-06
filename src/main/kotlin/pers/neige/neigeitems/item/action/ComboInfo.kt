@@ -6,7 +6,7 @@ package pers.neige.neigeitems.item.action
  * @property type 连击类型
  * @property time 触发时间
  */
-class ComboInfo (
+class ComboInfo(
     val type: String,
     val time: Long,
 )

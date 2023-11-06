@@ -115,7 +115,10 @@ object SectionManager {
                     file.writeText(HookerManager.papiHooker.toSection(text))
                 }
             }
-            val fileName = file.path.replace("plugins${File.separator}NeigeItems${File.separator}GlobalSections${File.separator}", "")
+            val fileName = file.path.replace(
+                "plugins${File.separator}NeigeItems${File.separator}GlobalSections${File.separator}",
+                ""
+            )
             val config = file.loadConfiguration()
             globalSectionMap[fileName] = config
             for (key in config.getKeys(false)) {
@@ -158,7 +161,8 @@ object SectionManager {
             // 防止某个脚本出错导致加载中断
             try {
                 pers.neige.neigeitems.script.CompiledScript(file).invoke("main", null)
-            } catch (_: Throwable) {}
+            } catch (_: Throwable) {
+            }
         }
     }
 }

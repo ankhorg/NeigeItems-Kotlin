@@ -86,7 +86,7 @@ object StringUtils {
             -1 -> arrayOf(this)
             else -> {
                 val pre = this.substring(0, index)
-                val post = this.substring(index+separator.length)
+                val post = this.substring(index + separator.length)
                 arrayOf(pre, post)
             }
         }

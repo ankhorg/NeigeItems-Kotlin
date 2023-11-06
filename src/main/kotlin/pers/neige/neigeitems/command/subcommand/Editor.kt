@@ -47,7 +47,12 @@ object Editor {
                             player = sender
                         }
                         player?.let { player ->
-                            ItemEditorManager.runEditor(context.argument(-1), argument, player.inventory.itemInMainHand, player)
+                            ItemEditorManager.runEditor(
+                                context.argument(-1),
+                                argument,
+                                player.inventory.itemInMainHand,
+                                player
+                            )
                         }
                     }
                 }
@@ -93,7 +98,12 @@ object Editor {
                             player = sender
                         }
                         player?.let {
-                            ItemEditorManager.runEditor(context.argument(-1), argument, player.inventory.itemInOffHand, player)
+                            ItemEditorManager.runEditor(
+                                context.argument(-1),
+                                argument,
+                                player.inventory.itemInOffHand,
+                                player
+                            )
                         }
                     }
                 }

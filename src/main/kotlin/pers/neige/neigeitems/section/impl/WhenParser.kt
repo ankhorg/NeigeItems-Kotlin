@@ -55,13 +55,17 @@ object WhenParser : SectionParser() {
                         // 确认类型正确
                         if (condition is String?) {
                             // 如果符合条件
-                            if (parseCondition(condition, player?.player, map = mapOf(
-                                    Pair("value", value),
-                                    Pair("cache", cache),
-                                    Pair("sections", sections)
-                                ))) {
+                            if (parseCondition(
+                                    condition, player?.player, map = mapOf(
+                                        Pair("value", value),
+                                        Pair("cache", cache),
+                                        Pair("sections", sections)
+                                    )
+                                )
+                            ) {
                                 // 返回
-                                return result.toString().parseSection(cache, player, sections).also { cache?.remove("value") }
+                                return result.toString().parseSection(cache, player, sections)
+                                    .also { cache?.remove("value") }
                             }
                         }
                     }

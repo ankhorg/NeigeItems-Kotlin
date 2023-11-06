@@ -7,6 +7,17 @@ import org.jetbrains.annotations.NotNull;
  * 插件重载事件, /ni reload指令触发
  */
 public final class PluginReloadEvent {
+    public enum Type {
+        ALL,
+        CONFIG,
+        ITEM,
+        SCRIPT,
+        PACK,
+        ACTION,
+        EDITOR,
+        EXPANSION,
+    }
+
     /**
      * 插件重载前触发
      *
@@ -31,6 +42,11 @@ public final class PluginReloadEvent {
             this.type = type;
         }
 
+        @NotNull
+        public static HandlerList getHandlerList() {
+            return handlers;
+        }
+
         /**
          * 获取重载类型
          */
@@ -42,11 +58,6 @@ public final class PluginReloadEvent {
         @Override
         @NotNull
         public HandlerList getHandlers() {
-            return handlers;
-        }
-
-        @NotNull
-        public static HandlerList getHandlerList() {
             return handlers;
         }
     }
@@ -73,6 +84,11 @@ public final class PluginReloadEvent {
             this.type = type;
         }
 
+        @NotNull
+        public static HandlerList getHandlerList() {
+            return handlers;
+        }
+
         /**
          * 获取重载类型
          */
@@ -86,21 +102,5 @@ public final class PluginReloadEvent {
         public HandlerList getHandlers() {
             return handlers;
         }
-
-        @NotNull
-        public static HandlerList getHandlerList() {
-            return handlers;
-        }
-    }
-
-    public enum Type {
-        ALL,
-        CONFIG,
-        ITEM,
-        SCRIPT,
-        PACK,
-        ACTION,
-        EDITOR,
-        EXPANSION,
     }
 }

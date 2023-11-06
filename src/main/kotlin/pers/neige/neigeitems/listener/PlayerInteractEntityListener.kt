@@ -13,7 +13,7 @@ object PlayerInteractEntityListener {
     fun listener(event: PlayerInteractEntityEvent) {
         val player = event.player
         // 对于已损坏物品取消事件
-        val itemStack = when(event.hand) {
+        val itemStack = when (event.hand) {
             EquipmentSlot.HAND -> player.inventory.itemInMainHand
             else -> player.inventory.itemInOffHand
         }

@@ -24,9 +24,9 @@ public final class ItemExpirationEvent extends CancellableEvent {
     private final ItemInfo itemInfo;
 
     /**
-     * @param player 持有物品的玩家
+     * @param player    持有物品的玩家
      * @param itemStack 到期的物品
-     * @param itemInfo 物品信息
+     * @param itemInfo  物品信息
      */
     public ItemExpirationEvent(
             @Nullable OfflinePlayer player,
@@ -36,6 +36,11 @@ public final class ItemExpirationEvent extends CancellableEvent {
         this.player = player;
         this.itemStack = itemStack;
         this.itemInfo = itemInfo;
+    }
+
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -65,11 +70,6 @@ public final class ItemExpirationEvent extends CancellableEvent {
     @Override
     @NotNull
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @NotNull
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

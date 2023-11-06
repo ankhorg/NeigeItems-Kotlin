@@ -1,4 +1,4 @@
-rootProject.name="NeigeItems"
+rootProject.name = "NeigeItems"
 
 include("hooker")
 

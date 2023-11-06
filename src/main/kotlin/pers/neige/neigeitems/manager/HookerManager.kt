@@ -48,7 +48,8 @@ object HookerManager {
     val nashornHooker: NashornHooker =
         when {
             // jdk11 以下使用 jdk 自带 nashorn
-            check("jdk.nashorn.api.scripting.NashornScriptEngineFactory") && ((System.getProperty("java.class.version").toDoubleOrNull() ?: 0.0) < 55.0) -> LegacyNashornHookerImpl()
+            check("jdk.nashorn.api.scripting.NashornScriptEngineFactory") && ((System.getProperty("java.class.version")
+                .toDoubleOrNull() ?: 0.0) < 55.0) -> LegacyNashornHookerImpl()
             // jdk11 以上使用 openjdk nashorn
             else -> NashornHookerImpl()
         }
@@ -59,23 +60,28 @@ object HookerManager {
         kotlin.runCatching {
             // 5.0.3+
             Class.forName("io.lumine.mythic.bukkit.utils.config.file.YamlConfiguration")
-            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510").newInstance() as MythicMobsHooker
+            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510")
+                .newInstance() as MythicMobsHooker
         }.getOrNull() ?: kotlin.runCatching {
             // 5.0.3-
             Class.forName("io.lumine.mythic.utils.config.file.YamlConfiguration")
             Class.forName("io.lumine.mythic.bukkit.MythicBukkit")
-            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl502").newInstance() as MythicMobsHooker
+            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl502")
+                .newInstance() as MythicMobsHooker
         }.getOrNull() ?: kotlin.runCatching {
             // 5.0.0-
             Class.forName("io.lumine.xikage.mythicmobs.utils.config.file.YamlConfiguration")
-            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl490").newInstance() as MythicMobsHooker
+            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl490")
+                .newInstance() as MythicMobsHooker
         }.getOrNull() ?: kotlin.runCatching {
             // 4.7.2-
             Class.forName("io.lumine.utils.config.file.YamlConfiguration")
-            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl459").newInstance() as MythicMobsHooker
+            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl459")
+                .newInstance() as MythicMobsHooker
         }.getOrNull() ?: kotlin.runCatching {
             // 4.5.0-
-            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl440").newInstance() as MythicMobsHooker
+            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl440")
+                .newInstance() as MythicMobsHooker
         }.getOrNull()?.also {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
         }
@@ -84,9 +90,12 @@ object HookerManager {
     val nmsHooker: NMSHooker =
         try {
             when {
-                CbVersion.current() == CbVersion.v1_12_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerNamespacedKey").newInstance() as NMSHooker
-                CbVersion.current().ordinal < CbVersion.v1_14_R1.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerCustomModelData").newInstance() as NMSHooker
-                CbVersion.current().ordinal < CbVersion.v1_16_R2.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerHoverEvent").newInstance() as NMSHooker
+                CbVersion.current() == CbVersion.v1_12_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerNamespacedKey")
+                    .newInstance() as NMSHooker
+                CbVersion.current().ordinal < CbVersion.v1_14_R1.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerCustomModelData")
+                    .newInstance() as NMSHooker
+                CbVersion.current().ordinal < CbVersion.v1_16_R2.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerHoverEvent")
+                    .newInstance() as NMSHooker
                 else -> NMSHooker()
             }
         } catch (error: Throwable) {
@@ -112,7 +121,8 @@ object HookerManager {
                 if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
                     error.printStackTrace()
                 } else {
-                    Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "PlaceholderAPI"))
+                    Bukkit.getLogger()
+                        .info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "PlaceholderAPI"))
                 }
                 null
             }
@@ -130,7 +140,7 @@ object HookerManager {
             null
         }
 
-    val easyItemHooker: EasyItemHooker?  by lazy {
+    val easyItemHooker: EasyItemHooker? by lazy {
         if (Bukkit.getPluginManager().isPluginEnabled("EasyItem")) {
             try {
                 EasyItemHookerImpl()

@@ -116,6 +116,7 @@ class PapiHookerImpl : PapiHooker() {
 
         return builder.toString()
     }
+
     override fun toSection(text: String): String {
         val chars = text.toCharArray()
         val builder = StringBuilder(text.length)
@@ -203,6 +204,7 @@ class PapiHookerImpl : PapiHooker() {
 
         return builder.toString()
     }
+
     override fun hasPapi(text: String): Boolean {
         val chars = text.toCharArray()
 

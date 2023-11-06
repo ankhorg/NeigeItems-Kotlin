@@ -24,7 +24,8 @@ public class NMSHookerNamespacedKey extends NMSHookerCustomModelData {
                     MinecraftKey minecraftKey = REGISTRY.b(item);
                     result.put(material, new NamespacedKey(minecraftKey.b(), minecraftKey.getKey()));
                 }
-            } catch(Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
         }
         return result;
     }

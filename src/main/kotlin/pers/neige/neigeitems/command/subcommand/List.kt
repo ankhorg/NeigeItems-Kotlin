@@ -23,43 +23,45 @@ import kotlin.math.ceil
 
 object List {
     val list = subCommand {
-        execute<CommandSender> { sender, _, _, ->
+        execute<CommandSender> { sender, _, _ ->
             listCommandAsync(sender, 1)
         }
         dynamic {
             suggestion<CommandSender>(uncheck = true) { _, _ ->
-                (1..ceil(ItemManager.itemAmount.toDouble()/ ConfigManager.config.getDouble("ItemList.ItemAmount")).toInt()).toList().map { it.toString() }
+                (1..ceil(ItemManager.itemAmount.toDouble() / ConfigManager.config.getDouble("ItemList.ItemAmount")).toInt()).toList()
+                    .map { it.toString() }
             }
             execute<CommandSender> { sender, _, argument ->
-                listCommandAsync(sender, argument.toIntOrNull()?:1)
+                listCommandAsync(sender, argument.toIntOrNull() ?: 1)
             }
         }
     }
 
-    private fun listCommandAsync (sender: CommandSender, page: Int) {
+    private fun listCommandAsync(sender: CommandSender, page: Int) {
         async {
             listCommand(sender, page)
         }
     }
 
-    private fun listCommand (
+    private fun listCommand(
         // 行为发起人, 用于接收反馈信息
         sender: CommandSender,
         // 页码
         page: Int
     ) {
-        val pageAmount = ceil(ItemManager.itemAmount.toDouble()/ ConfigManager.config.getDouble("ItemList.ItemAmount")).toInt()
+        val pageAmount =
+            ceil(ItemManager.itemAmount.toDouble() / ConfigManager.config.getDouble("ItemList.ItemAmount")).toInt()
         val realPage = page.coerceAtMost(pageAmount).coerceAtLeast(1)
         // 发送前缀
         ConfigManager.config.getString("ItemList.Prefix")?.let { sender.sendMessage(it) }
         // 预构建待发送信息
         val listMessage = ComponentBuilder("")
         // 获取当前序号
-        val prevItemAmount = ((realPage-1)* ConfigManager.config.getInt("ItemList.ItemAmount"))+1
+        val prevItemAmount = ((realPage - 1) * ConfigManager.config.getInt("ItemList.ItemAmount")) + 1
         // 逐个获取物品
         for (index in (prevItemAmount until prevItemAmount + ConfigManager.config.getInt("ItemList.ItemAmount"))) {
             if (index == ItemManager.itemIds.size + 1) break
-            val id = ItemManager.itemIds[index-1]
+            val id = ItemManager.itemIds[index - 1]
             // 替换信息内变量
             var listItemMessage = (ConfigManager.config.getString("ItemList.ItemFormat") ?: "")
                 .replace("{index}", index.toString())
@@ -73,9 +75,9 @@ object List {
                         listItemRaw.append(
                             ComponentBuilder(it)
                                 .runCommand("/ni get $id")
-                                .hoverText(ConfigManager.config.getString("Messages.clickGiveMessage")?:"")
+                                .hoverText(ConfigManager.config.getString("Messages.clickGiveMessage") ?: "")
                         )
-                        if (i+1 != listItemMessageList.size) {
+                        if (i + 1 != listItemMessageList.size) {
                             HookerManager.parseItemPlaceholders(itemStack)
                             listItemRaw.append(
                                 ComponentBuilder(itemStack.getParsedComponent())
@@ -95,7 +97,9 @@ object List {
                     val itemKeySection = ItemManager.getOriginConfig(id)
                     val itemName = when {
                         itemKeySection?.contains("name") == true -> itemKeySection.getString("name")
-                        else -> Material.matchMaterial((itemKeySection?.getString("material")?:"").uppercase(Locale.getDefault()))
+                        else -> Material.matchMaterial(
+                            (itemKeySection?.getString("material") ?: "").uppercase(Locale.getDefault())
+                        )
                             ?.let { ItemStack(it).getName() }
                     }
                     listItemMessage = itemName?.let { listItemMessage.replace("{name}", it) }.toString()
@@ -103,18 +107,18 @@ object List {
                 }
             }
         }
-        val prevRaw = ComponentBuilder(ConfigManager.config.getString("ItemList.Prev")?:"")
+        val prevRaw = ComponentBuilder(ConfigManager.config.getString("ItemList.Prev") ?: "")
         if (realPage != 1) {
             prevRaw
-                .hoverText((ConfigManager.config.getString("ItemList.Prev")?:"") + ": " + (realPage-1).toString())
-                .runCommand("/ni list ${realPage-1}")
+                .hoverText((ConfigManager.config.getString("ItemList.Prev") ?: "") + ": " + (realPage - 1).toString())
+                .runCommand("/ni list ${realPage - 1}")
         }
-        val nextRaw = ComponentBuilder(ConfigManager.config.getString("ItemList.Next")?:"")
+        val nextRaw = ComponentBuilder(ConfigManager.config.getString("ItemList.Next") ?: "")
         if (realPage != pageAmount) {
-            nextRaw.hoverText((ConfigManager.config.getString("ItemList.Next")?:"") + ": " + (realPage+1))
-            nextRaw.runCommand("/ni list ${realPage+1}")
+            nextRaw.hoverText((ConfigManager.config.getString("ItemList.Next") ?: "") + ": " + (realPage + 1))
+            nextRaw.runCommand("/ni list ${realPage + 1}")
         }
-        var listSuffixMessage = (ConfigManager.config.getString("ItemList.Suffix")?:"")
+        var listSuffixMessage = (ConfigManager.config.getString("ItemList.Suffix") ?: "")
             .replace("{current}", realPage.toString())
             .replace("{total}", pageAmount.toString())
         if (sender is Player) {
@@ -132,9 +136,11 @@ object List {
             // 向玩家发送信息
             sender.sendMessage(listMessage)
         } else {
-            sender.sendMessage(listSuffixMessage
-                .replace("{prev}", ConfigManager.config.getString("ItemList.Prev")?:"")
-                .replace("{next}", ConfigManager.config.getString("ItemList.Next")?:""))
+            sender.sendMessage(
+                listSuffixMessage
+                    .replace("{prev}", ConfigManager.config.getString("ItemList.Prev") ?: "")
+                    .replace("{next}", ConfigManager.config.getString("ItemList.Next") ?: "")
+            )
         }
     }
 }

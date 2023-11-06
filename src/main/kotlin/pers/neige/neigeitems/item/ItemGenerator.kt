@@ -35,7 +35,7 @@ import java.util.*
  * @property itemConfig 物品基础配置
  * @constructor 根据物品基础配置构建物品生成器
  */
-class ItemGenerator (val itemConfig: ItemConfig) {
+class ItemGenerator(val itemConfig: ItemConfig) {
     /**
      * 获取物品ID
      */
@@ -64,7 +64,10 @@ class ItemGenerator (val itemConfig: ItemConfig) {
     /**
      * 获取物品是否需要更新
      */
-    val update = configSection.getBoolean("options.update.enable", configSection.getBoolean("static.options.update.enable", false))
+    val update = configSection.getBoolean(
+        "options.update.enable",
+        configSection.getBoolean("static.options.update.enable", false)
+    )
 
     /**
      * 获取更新时保护的NBT
@@ -143,7 +146,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
     /**
      * 获取是否存在静态材质
      */
-    val hasStaticMaterial = static?.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) } != null
+    val hasStaticMaterial =
+        static?.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) } != null
 
     /**
      * 获取原始静态物品
@@ -204,7 +208,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 try {
                     val itemFlag = ItemFlag.valueOf(value)
                     itemMeta?.addItemFlags(itemFlag)
-                } catch (_: IllegalArgumentException) {}
+                } catch (_: IllegalArgumentException) {
+                }
             }
         }
         // 设置物品颜色
@@ -274,7 +279,10 @@ class ItemGenerator (val itemConfig: ItemConfig) {
             }
             // 设置物品时限
             if (static.contains("options.itemtime")) {
-                neigeItems.putLong("itemTime", System.currentTimeMillis() + (static.getLong("options.itemtime", 0) * 1000))
+                neigeItems.putLong(
+                    "itemTime",
+                    System.currentTimeMillis() + (static.getLong("options.itemtime", 0) * 1000)
+                )
             }
         }
         // 设置物品NBT
@@ -282,7 +290,7 @@ class ItemGenerator (val itemConfig: ItemConfig) {
             // 获取配置NBT
             val itemNBT = static.getConfigurationSection("nbt")?.toNbtCompound()
             // NBT覆盖
-            itemNBT?.let {itemTag.coverWith(it)}
+            itemNBT?.let { itemTag.coverWith(it) }
         }
         itemStack
     } ?: let {
@@ -295,7 +303,10 @@ class ItemGenerator (val itemConfig: ItemConfig) {
      */
     val staticItemStack get() = originStaticItemStack.copy()
 
-    private fun inherit(configSection: ConfigurationSection, originConfigSection: ConfigurationSection): ConfigurationSection {
+    private fun inherit(
+        configSection: ConfigurationSection,
+        originConfigSection: ConfigurationSection
+    ): ConfigurationSection {
         // 检测是否需要进行继承
         if (originConfigSection.contains("inherit") == true) {
             // 检测进行全局继承/部分继承
@@ -315,7 +326,12 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                             val currentSection = ItemManager.getOriginConfig(id)
                             // 如果存在对应模板且模板存在对应键, 进行继承
                             if (currentSection != null) {
-                                val realConfig = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), currentSection), false)
+                                val realConfig = loadGlobalSections(
+                                    inherit(
+                                        (YamlConfiguration() as ConfigurationSection),
+                                        currentSection
+                                    ), false
+                                )
                                 if (realConfig.contains(key)) {
                                     configSection.set(key, realConfig.get(key))
                                 }
@@ -326,7 +342,12 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                 is String -> {
                     // 仅指定单个模板ID，进行全局继承
                     ItemManager.getOriginConfig(inheritInfo)?.let { inheritConfigSection ->
-                        val realConfig = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), inheritConfigSection), false)
+                        val realConfig = loadGlobalSections(
+                            inherit(
+                                (YamlConfiguration() as ConfigurationSection),
+                                inheritConfigSection
+                            ), false
+                        )
                         configSection.coverWith(realConfig)
                     }
                 }
@@ -335,7 +356,12 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                     for (templateId in inheritInfo) {
                         // 逐个获取模板
                         ItemManager.getOriginConfig(templateId as String)?.let { currentSection ->
-                            val realConfig = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), currentSection), false)
+                            val realConfig = loadGlobalSections(
+                                inherit(
+                                    (YamlConfiguration() as ConfigurationSection),
+                                    currentSection
+                                ), false
+                            )
                             // 进行模板覆盖
                             configSection.coverWith(realConfig)
                         }
@@ -356,10 +382,12 @@ class ItemGenerator (val itemConfig: ItemConfig) {
      * @return 生成的物品, 生成失败则返回null
      */
     fun getItemStack(player: OfflinePlayer?, data: String?): ItemStack? {
-        return getItemStack(player, when (data) {
-            null -> HashMap<String, String>()
-            else -> data.parseObject<HashMap<String, String>>()
-        })
+        return getItemStack(
+            player, when (data) {
+                null -> HashMap<String, String>()
+                else -> data.parseObject<HashMap<String, String>>()
+            }
+        )
     }
 
     /**
@@ -384,7 +412,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
         // 构建物品
         if (configSection.contains("material") || hasStaticMaterial) {
             // 获取材质
-            val material = configSection.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) }
+            val material =
+                configSection.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) }
             if (material != null || hasStaticMaterial) {
                 // 预处理中已将ItemStack转为CraftItemStack, 可提升NBT操作效率
                 val itemStack = staticItemStack
@@ -447,7 +476,8 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                         try {
                             val itemFlag = ItemFlag.valueOf(value)
                             itemMeta?.addItemFlags(itemFlag)
-                        } catch (_: IllegalArgumentException) {}
+                        } catch (_: IllegalArgumentException) {
+                        }
                     }
                 }
                 // 设置物品颜色
@@ -520,7 +550,10 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                     }
                     // 设置物品时限
                     if (configSection.contains("options.itemtime")) {
-                        neigeItems.putLong("itemTime", System.currentTimeMillis() + (configSection.getLong("options.itemtime", 0) * 1000))
+                        neigeItems.putLong(
+                            "itemTime",
+                            System.currentTimeMillis() + (configSection.getLong("options.itemtime", 0) * 1000)
+                        )
                     }
                 }
                 // 设置物品NBT
@@ -528,17 +561,19 @@ class ItemGenerator (val itemConfig: ItemConfig) {
                     // 获取配置NBT
                     val itemNBT = configSection.getConfigurationSection("nbt")?.toNbtCompound()
                     // NBT覆盖
-                    itemNBT?.let {itemTag.coverWith(it)}
+                    itemNBT?.let { itemTag.coverWith(it) }
                 }
                 // 触发一下物品生成事件
                 val event = ItemGenerateEvent(id, player, itemStack, cache, configSection, sections)
                 event.call()
                 return event.itemStack
             } else {
-                Bukkit.getConsoleSender().sendLang("Messages.invalidMaterial", mapOf(
-                    Pair("{itemID}", id),
-                    Pair("{material}", configSection.getString("material") ?: "")
-                ))
+                Bukkit.getConsoleSender().sendLang(
+                    "Messages.invalidMaterial", mapOf(
+                        Pair("{itemID}", id),
+                        Pair("{material}", configSection.getString("material") ?: "")
+                    )
+                )
             }
         }
         return null

@@ -98,7 +98,12 @@ abstract class NashornHooker {
      * @param args 传入函数的参数
      * @return 返回值
      */
-    abstract fun invoke(compiledScript: pers.neige.neigeitems.script.CompiledScript, function: String, map: Map<String, Any>?, vararg args: Any): Any?
+    abstract fun invoke(
+        compiledScript: pers.neige.neigeitems.script.CompiledScript,
+        function: String,
+        map: Map<String, Any>?,
+        vararg args: Any
+    ): Any?
 
     /**
      * 检测引擎中是否包含对应函数

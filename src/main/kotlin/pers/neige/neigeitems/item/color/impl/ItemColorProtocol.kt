@@ -83,59 +83,63 @@ class ItemColorProtocol : ItemColor() {
             PacketAdapter(
                 plugin,
                 ListenerPriority.NORMAL,
-                PacketType.Play.Server.ENTITY_METADATA) {
-                override fun onPacketSending(event: PacketEvent) {
-                    // 数据包接收者
-                    val receiver = event.player
-                    // 相关实体
-                    val id = event.packet.integers.read(0)
-                    if (id >= 0) {
-                        // 虽然但是, 有的时候会找不到相关实体
-                        val entity = try {
-                            protocolManager.getEntityFromID(receiver.world, id)
-                        } catch (error: FieldAccessException) {
-                            null
-                        }
-                        if (entity is Item) {
-                            val itemStack = entity.itemStack
-                            val itemInfo = itemStack.isNiItem() ?: return
-                            val colorString = itemInfo.neigeItems.getString("color") ?: return
-                            val color = colors[colorString] ?: return
+                PacketType.Play.Server.ENTITY_METADATA
+            ) {
+            override fun onPacketSending(event: PacketEvent) {
+                // 数据包接收者
+                val receiver = event.player
+                // 相关实体
+                val id = event.packet.integers.read(0)
+                if (id >= 0) {
+                    // 虽然但是, 有的时候会找不到相关实体
+                    val entity = try {
+                        protocolManager.getEntityFromID(receiver.world, id)
+                    } catch (error: FieldAccessException) {
+                        null
+                    }
+                    if (entity is Item) {
+                        val itemStack = entity.itemStack
+                        val itemInfo = itemStack.isNiItem() ?: return
+                        val colorString = itemInfo.neigeItems.getString("color") ?: return
+                        val color = colors[colorString] ?: return
 
-                            // 设置发光
-                            // 使用发包让实体发光只会带来无穷的麻烦
-                            // 直接通过BukkitAPI设置发光效果才会让我们走向美好的未来
-                            entity.isGlowing = true
-                            initTeam(event.player)
-                            // 创建Team数据包
-                            val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
-                            // 设置数据包类型为"向Team添加实体"
-                            when (version) {
-                                12 -> {
-                                    packet.integers.write(1, 3)
-                                }
-                                13 -> {
-                                    packet.integers.write(0, 3)
-                                }
-                                else -> {
-                                    packet.integers.write(0, 3)
-                                    // 设置队伍颜色
-                                    val internalStructure = packet.optionalStructures.read(0).get()
-                                    internalStructure.getEnumModifier(ChatColor::class.java, enumChatFormatClass).write(0, color)
-                                    packet.optionalStructures.write(0, Optional.of(internalStructure))
-                                }
+                        // 设置发光
+                        // 使用发包让实体发光只会带来无穷的麻烦
+                        // 直接通过BukkitAPI设置发光效果才会让我们走向美好的未来
+                        entity.isGlowing = true
+                        initTeam(event.player)
+                        // 创建Team数据包
+                        val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
+                        // 设置数据包类型为"向Team添加实体"
+                        when (version) {
+                            12 -> {
+                                packet.integers.write(1, 3)
                             }
-                            // 设置队伍ID
-                            packet.strings.write(0, "NIProtocol-$color")
-                            // 添加实体
-                            (packet.getSpecificModifier(Collection::class.java).read(0) as ArrayList<String>).add(entity.uniqueId.toString())
-                            // 发送数据包
-                            protocolManager.sendServerPacket(receiver, packet)
+                            13 -> {
+                                packet.integers.write(0, 3)
+                            }
+                            else -> {
+                                packet.integers.write(0, 3)
+                                // 设置队伍颜色
+                                val internalStructure = packet.optionalStructures.read(0).get()
+                                internalStructure.getEnumModifier(ChatColor::class.java, enumChatFormatClass)
+                                    .write(0, color)
+                                packet.optionalStructures.write(0, Optional.of(internalStructure))
+                            }
                         }
+                        // 设置队伍ID
+                        packet.strings.write(0, "NIProtocol-$color")
+                        // 添加实体
+                        (packet.getSpecificModifier(Collection::class.java)
+                            .read(0) as ArrayList<String>).add(entity.uniqueId.toString())
+                        // 发送数据包
+                        protocolManager.sendServerPacket(receiver, packet)
                     }
                 }
-                override fun onPacketReceiving(event: PacketEvent) {}
             }
+
+            override fun onPacketReceiving(event: PacketEvent) {}
+        }
         )
     }
 }

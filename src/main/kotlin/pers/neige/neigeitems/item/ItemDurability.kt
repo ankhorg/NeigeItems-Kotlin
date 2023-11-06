@@ -69,7 +69,7 @@ object ItemDurability {
         val block = event.clickedBlock
         // 火焰弹点燃
         if (
-            // 非创造模式玩家
+        // 非创造模式玩家
             event.player.gameMode != GameMode.CREATIVE
             // 使用火焰弹
             && itemStack.type == FIRE_CHARGE
@@ -94,7 +94,7 @@ object ItemDurability {
                 getLang("Messages.brokenItem")?.let {
                     if (it != "") player.sendActionBar(it)
                 }
-            // 对于存在自定义耐久值的物品
+                // 对于存在自定义耐久值的物品
             } else if (result != DamageResult.VANILLA && result != DamageResult.BREAK) {
                 // 物品数量+1, 让交互TNT事件消耗
                 itemStack.amount += 1
@@ -266,11 +266,11 @@ object ItemDurability {
                 }
                 // 返回物品破坏结果
                 DamageResult.BREAK
-            // 如果不破坏物品
+                // 如果不破坏物品
             } else {
                 // 修改耐久值
                 neigeItems.putInt("durability", 0)
-                damageEvent?.let {damageEvent.damage = itemStack.type.maxDurability - itemStack.durability - 1}
+                damageEvent?.let { damageEvent.damage = itemStack.type.maxDurability - itemStack.durability - 1 }
                 // 保存NBT
                 itemTag.saveToSafe(itemStack)
                 // 播放物品破碎声
@@ -282,13 +282,14 @@ object ItemDurability {
                 // 返回耐久消耗成功结果
                 DamageResult.SUCCESS
             }
-        // 如果伤害值小于耐久值
+            // 如果伤害值小于耐久值
         } else {
             // 修改耐久值
-            neigeItems.putInt("durability", durability-realDamage)
+            neigeItems.putInt("durability", durability - realDamage)
             if (damageEvent != null) {
                 val maxDurability = neigeItems.getInt("maxDurability")
-                damageEvent.damage = ((realDamage.toDouble() / maxDurability.toDouble()) * itemStack.type.maxDurability).toInt()
+                damageEvent.damage =
+                    ((realDamage.toDouble() / maxDurability.toDouble()) * itemStack.type.maxDurability).toInt()
             }
             // 保存NBT
             itemTag.saveToSafe(itemStack)
@@ -302,22 +303,27 @@ object ItemDurability {
          * 原版物品, 无自定义耐久
          */
         VANILLA,
+
         /**
          * 耐久耗尽, 物品破碎
          */
         BREAK,
+
         /**
          * 已损坏物品, 应取消本次事件
          */
         BROKEN_ITEM,
+
         /**
          * 不损失物品耐久
          */
         ZERO_DAMAGE,
+
         /**
          * 耐久正常消耗
          */
         SUCCESS,
+
         /**
          * 耐久消耗值小于0, 非法
          */

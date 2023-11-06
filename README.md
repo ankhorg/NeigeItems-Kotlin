@@ -1,6 +1,6 @@
 # NeigeItems
 
-A bukkit item manage plugin.  
+A bukkit item manage plugin.
 
 Chinese Wiki: https://neige7.github.io/NeigeItems-Wiki-Docusaurus/intro/
 

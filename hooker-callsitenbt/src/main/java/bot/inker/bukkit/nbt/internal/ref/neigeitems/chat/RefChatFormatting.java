@@ -95,5 +95,5 @@ public final class RefChatFormatting {
     public static final RefChatFormatting RESET = null;
 
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/ChatFormatting;getByHexValue(I)Lnet/minecraft/ChatFormatting;")
-    public static native RefChatFormatting getByHexValue(int i) ;
+    public static native RefChatFormatting getByHexValue(int i);
 }

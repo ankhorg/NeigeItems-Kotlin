@@ -18,7 +18,7 @@ object Command {
             .then(Give.get)
     }
 
-//    @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
+    //    @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
     fun register() {
         dispatcher.register(arrayListOf("nitest"))
     }

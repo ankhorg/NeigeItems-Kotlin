@@ -72,12 +72,16 @@ object GradientParser : SectionParser() {
         rawText: String?
     ): String? {
         if (colorStartString != null && colorEndString != null && rawText != null) {
-            val colorStart = Color((colorStartString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
-                .coerceAtLeast(0)
-                .coerceAtMost(0xFFFFFF))
-            val colorEnd = Color((colorEndString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
-                .coerceAtLeast(0)
-                .coerceAtMost(0xFFFFFF))
+            val colorStart = Color(
+                (colorStartString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
+                    .coerceAtLeast(0)
+                    .coerceAtMost(0xFFFFFF)
+            )
+            val colorEnd = Color(
+                (colorEndString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
+                    .coerceAtLeast(0)
+                    .coerceAtMost(0xFFFFFF)
+            )
 
             val step = (stepString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 1)
                 .coerceAtLeast(1)

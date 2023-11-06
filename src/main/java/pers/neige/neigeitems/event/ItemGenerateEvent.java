@@ -26,21 +26,21 @@ public final class ItemGenerateEvent extends BasicEvent {
     @Nullable
     private final OfflinePlayer player;
     @NotNull
-    private ItemStack itemStack;
-    @NotNull
     private final Map<String, String> cache;
     @NotNull
     private final ConfigurationSection configSection;
     @Nullable
     private final ConfigurationSection sections;
+    @NotNull
+    private ItemStack itemStack;
 
     /**
-     * @param id 物品ID
-     * @param player 用于解析物品的玩家
-     * @param itemStack 生成的物品
-     * @param cache 节点缓存
+     * @param id            物品ID
+     * @param player        用于解析物品的玩家
+     * @param itemStack     生成的物品
+     * @param cache         节点缓存
      * @param configSection 物品配置(经过了节点解析, 不包含节点配置)
-     * @param sections 节点配置
+     * @param sections      节点配置
      */
     public ItemGenerateEvent(
             @NotNull String id,
@@ -56,6 +56,11 @@ public final class ItemGenerateEvent extends BasicEvent {
         this.cache = cache;
         this.configSection = configSection;
         this.sections = sections;
+    }
+
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -120,11 +125,6 @@ public final class ItemGenerateEvent extends BasicEvent {
     @Override
     @NotNull
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @NotNull
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

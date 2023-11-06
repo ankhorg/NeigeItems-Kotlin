@@ -46,7 +46,7 @@ object LocaleI18n {
     fun init() {
         // 检测是否需要下载语言文件
         if (
-            // 语言文件不存在
+        // 语言文件不存在
             !file.exists()
             // sha1校验文件不存在
             || !sha1File.exists()
@@ -78,7 +78,16 @@ object LocaleI18n {
                                 // 写入sha1
                                 sha1File.createFile().writeText(hash)
                                 // 写入文件
-                                file.createFile().writeText(URL("https://resources.download.minecraft.net/${hash.substring(0, 2)}/$hash").readText())
+                                file.createFile().writeText(
+                                    URL(
+                                        "https://resources.download.minecraft.net/${
+                                            hash.substring(
+                                                0,
+                                                2
+                                            )
+                                        }/$hash"
+                                    ).readText()
+                                )
                                 // sha1校验
                                 if (file.sha1() != hash) {
                                     sha1File.delete()
@@ -116,7 +125,8 @@ object LocaleI18n {
     }
 
     private class JsonProvider(resourceFile: File) : TranslationProvider {
-        private val translations: MutableMap<String, String> = resourceFile.readText().parseObject<HashMap<String, String>>()
+        private val translations: MutableMap<String, String> =
+            resourceFile.readText().parseObject<HashMap<String, String>>()
 
         override fun translate(key: String): String? {
             return translations[key]

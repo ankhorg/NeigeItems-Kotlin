@@ -5,13 +5,13 @@ import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockPos;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.sign.RefSignBlockEntity;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefEnumTitleAction;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.*;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.RefPacketPlayInFlying;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.RefPacketPlayOutAnimation;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.RefPacketPlayOutLookAt;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.*;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefVec3;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorld;
 import io.netty.channel.Channel;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -76,6 +76,11 @@ public class EntityPlayerUtils {
      * 1.20+ 版本起, 告示牌开始出现正反面区别.
      */
     private static final boolean SIGN_SIDE_SUPPORT = CbVersion.v1_20_R1.isSupport();
+
+    /**
+     * 1.17+ 版本起, Title 相关数据包发生变化.
+     */
+    private static final boolean TITLE_PACKET_CHANGED = CbVersion.v1_17_R1.isSupport();
 
     /**
      * 让指定玩家攻击指定实体.
@@ -395,6 +400,66 @@ public class EntityPlayerUtils {
                 nmsPlayer.openSign(sign, true);
             } else {
                 nmsPlayer.openSign(sign);
+            }
+        }
+    }
+
+    /**
+     * 向玩家发送 BaseComponent 形式的 Title.
+     *
+     * @param player   待接收玩家.
+     * @param title    Title.
+     * @param subtitle Subtitle.
+     */
+    public static void sendTitle(
+            @NotNull Player player,
+            @Nullable BaseComponent title,
+            @Nullable BaseComponent subtitle
+    ) {
+        sendTitle(player, title, subtitle, 10, 70, 20);
+    }
+
+    /**
+     * 向玩家发送 BaseComponent 形式的 Title.
+     *
+     * @param player   待接收玩家.
+     * @param title    Title.
+     * @param subtitle Subtitle.
+     * @param fadeIn   渐入时间(tick).
+     * @param stay     停留时间(tick).
+     * @param fadeOut  渐出时间(tick).
+     */
+    public static void sendTitle(
+            @NotNull Player player,
+            @Nullable BaseComponent title,
+            @Nullable BaseComponent subtitle,
+            int fadeIn,
+            int stay,
+            int fadeOut
+    ) {
+        RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (TITLE_PACKET_CHANGED) {
+            RefClientboundSetTitlesAnimationPacket times = new RefClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
+            nmsPlayer.playerConnection.sendPacket(times);
+            if (title != null) {
+                RefClientboundSetTitleTextPacket packetTitle = new RefClientboundSetTitleTextPacket(EntityUtils.toNms(title));
+                nmsPlayer.playerConnection.sendPacket(packetTitle);
+            }
+            if (subtitle != null) {
+                RefClientboundSetSubtitleTextPacket packetSubtitle = new RefClientboundSetSubtitleTextPacket(EntityUtils.toNms(subtitle));
+                nmsPlayer.playerConnection.sendPacket(packetSubtitle);
+            }
+        } else {
+            RefPacketPlayOutTitle times = new RefPacketPlayOutTitle(fadeIn, stay, fadeOut);
+            nmsPlayer.playerConnection.sendPacket(times);
+            RefPacketPlayOutTitle packetSubtitle;
+            if (title != null) {
+                packetSubtitle = new RefPacketPlayOutTitle(RefEnumTitleAction.TITLE, EntityUtils.toNms(title));
+                nmsPlayer.playerConnection.sendPacket(packetSubtitle);
+            }
+            if (subtitle != null) {
+                packetSubtitle = new RefPacketPlayOutTitle(RefEnumTitleAction.SUBTITLE, EntityUtils.toNms(subtitle));
+                nmsPlayer.playerConnection.sendPacket(packetSubtitle);
             }
         }
     }

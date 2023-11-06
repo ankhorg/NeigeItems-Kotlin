@@ -16,7 +16,7 @@ plugins {
 
 val realVersion = version
 
-if(!System.getenv("CI").toBoolean()){
+if (!System.getenv("CI").toBoolean()) {
     version = "dev"
 }
 
@@ -54,7 +54,7 @@ subprojects {
             freeCompilerArgs = listOf("-Xjvm-default=all", "-Xextended-compiler-checks")
         }
     }
-    java{
+    java {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -129,16 +129,16 @@ tasks {
         // bstats
         relocate("org.bstats", "pers.neige.neigeitems.libs.bstats")
         // stringsearcher
-        relocate("org.neosearch.stringsearcher","pers.neige.neigeitems.libs.stringsearcher")
+        relocate("org.neosearch.stringsearcher", "pers.neige.neigeitems.libs.stringsearcher")
         // javassist
-        relocate("javassist","pers.neige.neigeitems.libs.javassist")
+        relocate("javassist", "pers.neige.neigeitems.libs.javassist")
         // callsitenbt
-        relocate("bot.inker.bukkit.nbt","pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
+        relocate("bot.inker.bukkit.nbt", "pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
         // maven-model
-        relocate("org.codehaus.plexus.util","pers.neige.neigeitems.libs.plexus.util")
-        relocate("org.apache.maven.model","pers.neige.neigeitems.libs.maven.model")
+        relocate("org.codehaus.plexus.util", "pers.neige.neigeitems.libs.plexus.util")
+        relocate("org.apache.maven.model", "pers.neige.neigeitems.libs.maven.model")
         // fastjson2
-        relocate("com.alibaba.fastjson2","pers.neige.neigeitems.libs.fastjson2")
+        relocate("com.alibaba.fastjson2", "pers.neige.neigeitems.libs.fastjson2")
     }
     kotlinSourcesJar {
         // include subprojects
@@ -149,7 +149,7 @@ tasks {
     }
 }
 
-java{
+java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
@@ -165,7 +165,7 @@ tasks.compileKotlin {
     }
 }
 
-tasks.create("apiJar", Jar::class){
+tasks.create("apiJar", Jar::class) {
     dependsOn(tasks.compileJava, tasks.compileKotlin)
     from(tasks.compileJava, tasks.compileKotlin)
 
@@ -176,16 +176,16 @@ tasks.create("apiJar", Jar::class){
     archiveClassifier.set("api")
 }
 
-tasks.assemble{
+tasks.assemble {
     dependsOn(tasks["apiJar"])
 }
 
 publishing {
     repositories {
-        if(!System.getenv("CI").toBoolean()){
+        if (!System.getenv("CI").toBoolean()) {
             maven(buildDir.resolve("repo"))
-        }else if(!version.toString().endsWith("-SNAPSHOT")){
-            maven("https://s0.blobs.inksnow.org/maven/"){
+        } else if (!version.toString().endsWith("-SNAPSHOT")) {
+            maven("https://s0.blobs.inksnow.org/maven/") {
                 credentials {
                     username = System.getenv("IREPO_USERNAME")
                     password = System.getenv("IREPO_PASSWORD")
@@ -195,7 +195,7 @@ publishing {
     }
     publications {
         create<MavenPublication>("library") {
-            artifact(tasks["apiJar"]){
+            artifact(tasks["apiJar"]) {
                 classifier = null
             }
         }
@@ -221,34 +221,37 @@ fun final(name: String) {
                     val targetClassBytes = jarFile.getInputStream(entry).readBytes()
 
                     val classReader = org.objectweb.asm.ClassReader(targetClassBytes)
-                    val classWriter = org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
-                    val classVisitor = object : org.objectweb.asm.ClassVisitor(org.objectweb.asm.Opcodes.ASM9, classWriter) {
-                        override fun visitMethod(
-                            access: Int,
-                            name: String?,
-                            descriptor: String?,
-                            signature: String?,
-                            exceptions: Array<out String>?
-                        ): org.objectweb.asm.MethodVisitor? {
-                            val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
-                            if (name == "<clinit>") {
-                                return object : org.objectweb.asm.MethodVisitor(org.objectweb.asm.Opcodes.ASM9, methodVisitor) {
-                                    override fun visitCode() {
-                                        visitLdcInsn(org.objectweb.asm.Type.getType("Lpers/neige/neigeitems/taboolib/platform/BukkitPlugin;"))
-                                        visitMethodInsn(
-                                            org.objectweb.asm.Opcodes.INVOKESTATIC,
-                                            "pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/loader/CallSiteNbt",
-                                            "install",
-                                            "(Ljava/lang/Class;)V",
-                                            false
-                                        )
-                                        super.visitCode()
+                    val classWriter =
+                        org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
+                    val classVisitor =
+                        object : org.objectweb.asm.ClassVisitor(org.objectweb.asm.Opcodes.ASM9, classWriter) {
+                            override fun visitMethod(
+                                access: Int,
+                                name: String?,
+                                descriptor: String?,
+                                signature: String?,
+                                exceptions: Array<out String>?
+                            ): org.objectweb.asm.MethodVisitor? {
+                                val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
+                                if (name == "<clinit>") {
+                                    return object :
+                                        org.objectweb.asm.MethodVisitor(org.objectweb.asm.Opcodes.ASM9, methodVisitor) {
+                                        override fun visitCode() {
+                                            visitLdcInsn(org.objectweb.asm.Type.getType("Lpers/neige/neigeitems/taboolib/platform/BukkitPlugin;"))
+                                            visitMethodInsn(
+                                                org.objectweb.asm.Opcodes.INVOKESTATIC,
+                                                "pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/loader/CallSiteNbt",
+                                                "install",
+                                                "(Ljava/lang/Class;)V",
+                                                false
+                                            )
+                                            super.visitCode()
+                                        }
                                     }
                                 }
+                                return methodVisitor
                             }
-                            return methodVisitor
                         }
-                    }
                     classReader.accept(classVisitor, org.objectweb.asm.ClassReader.EXPAND_FRAMES)
 
                     jarOutputStream.putNextEntry(JarEntry(entryName))
@@ -256,7 +259,7 @@ fun final(name: String) {
                     jarOutputStream.closeEntry()
                 } else {
                     if (!(entryName.startsWith("org/intellij/lang/annotations")
-                        || entryName.startsWith("org/jetbrains/annotations"))
+                                || entryName.startsWith("org/jetbrains/annotations"))
                     ) {
                         jarOutputStream.putNextEntry(entry)
                         jarFile.getInputStream(entry).copyTo(jarOutputStream)

@@ -55,7 +55,14 @@ object Give {
                             arrayListOf("data")
                         }
                         .execute {
-                            giveCommandAsync(it.sender, it.sender, it.get("物品ID")!!, it.get("数量")!!, it.get("是否反复随机")!!, it.arg)
+                            giveCommandAsync(
+                                it.sender,
+                                it.sender,
+                                it.get("物品ID")!!,
+                                it.get("数量")!!,
+                                it.get("是否反复随机")!!,
+                                it.arg
+                            )
                         }
                     )
                 )

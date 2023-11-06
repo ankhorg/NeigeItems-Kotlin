@@ -54,7 +54,14 @@ object Give {
                             arrayListOf("data")
                         }
                         execute<Player> { sender, context, argument ->
-                            giveCommandAsync(sender, sender, context.argument(-3), context.argument(-2), context.argument(-1), argument)
+                            giveCommandAsync(
+                                sender,
+                                sender,
+                                context.argument(-3),
+                                context.argument(-2),
+                                context.argument(-1),
+                                argument
+                            )
                         }
                     }
                 }
@@ -91,7 +98,14 @@ object Give {
                         arrayListOf("true", "false")
                     }
                     execute<Player> { sender, context, argument ->
-                        giveCommandAsync(sender, sender, context.argument(-2), context.argument(-1), argument, tip = false)
+                        giveCommandAsync(
+                            sender,
+                            sender,
+                            context.argument(-2),
+                            context.argument(-1),
+                            argument,
+                            tip = false
+                        )
                     }
                     // ni get [物品ID] (数量) (是否反复随机) (指向数据)
                     dynamic(optional = true) {
@@ -99,7 +113,15 @@ object Give {
                             arrayListOf("data")
                         }
                         execute<Player> { sender, context, argument ->
-                            giveCommandAsync(sender, sender, context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                            giveCommandAsync(
+                                sender,
+                                sender,
+                                context.argument(-3),
+                                context.argument(-2),
+                                context.argument(-1),
+                                argument,
+                                tip = false
+                            )
                         }
                     }
                 }
@@ -137,7 +159,12 @@ object Give {
                         arrayListOf("amount")
                     }
                     execute<CommandSender> { sender, context, argument ->
-                        giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-2)), context.argument(-1), argument)
+                        giveCommandAsync(
+                            sender,
+                            Bukkit.getPlayerExact(context.argument(-2)),
+                            context.argument(-1),
+                            argument
+                        )
                     }
                     // ni give [玩家ID] [物品ID] (数量) (是否反复随机)
                     dynamic(optional = true) {
@@ -145,7 +172,13 @@ object Give {
                             arrayListOf("true", "false")
                         }
                         execute<CommandSender> { sender, context, argument ->
-                            giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-3)), context.argument(-2), context.argument(-1), argument)
+                            giveCommandAsync(
+                                sender,
+                                Bukkit.getPlayerExact(context.argument(-3)),
+                                context.argument(-2),
+                                context.argument(-1),
+                                argument
+                            )
                         }
                         // ni give [玩家ID] [物品ID] (数量) (是否反复随机) (指向数据)
                         dynamic(optional = true) {
@@ -153,7 +186,14 @@ object Give {
                                 arrayListOf("data")
                             }
                             execute<CommandSender> { sender, context, argument ->
-                                giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-4)), context.argument(-3), context.argument(-2), context.argument(-1), argument)
+                                giveCommandAsync(
+                                    sender,
+                                    Bukkit.getPlayerExact(context.argument(-4)),
+                                    context.argument(-3),
+                                    context.argument(-2),
+                                    context.argument(-1),
+                                    argument
+                                )
                             }
                         }
                     }
@@ -192,7 +232,13 @@ object Give {
                         arrayListOf("amount")
                     }
                     execute<CommandSender> { sender, context, argument ->
-                        giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-2)), context.argument(-1), argument, tip = false)
+                        giveCommandAsync(
+                            sender,
+                            Bukkit.getPlayerExact(context.argument(-2)),
+                            context.argument(-1),
+                            argument,
+                            tip = false
+                        )
                     }
                     // ni give [玩家ID] [物品ID] (数量) (是否反复随机)
                     dynamic(optional = true) {
@@ -200,7 +246,14 @@ object Give {
                             arrayListOf("true", "false")
                         }
                         execute<CommandSender> { sender, context, argument ->
-                            giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-3)), context.argument(-2), context.argument(-1), argument, tip = false)
+                            giveCommandAsync(
+                                sender,
+                                Bukkit.getPlayerExact(context.argument(-3)),
+                                context.argument(-2),
+                                context.argument(-1),
+                                argument,
+                                tip = false
+                            )
                         }
                         // ni give [玩家ID] [物品ID] (数量) (是否反复随机) (指向数据)
                         dynamic(optional = true) {
@@ -208,7 +261,15 @@ object Give {
                                 arrayListOf("data")
                             }
                             execute<CommandSender> { sender, context, argument ->
-                                giveCommandAsync(sender, Bukkit.getPlayerExact(context.argument(-4)), context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                                giveCommandAsync(
+                                    sender,
+                                    Bukkit.getPlayerExact(context.argument(-4)),
+                                    context.argument(-3),
+                                    context.argument(-2),
+                                    context.argument(-1),
+                                    argument,
+                                    tip = false
+                                )
                             }
                         }
                     }
@@ -254,7 +315,13 @@ object Give {
                             arrayListOf("data")
                         }
                         execute<CommandSender> { sender, context, argument ->
-                            giveAllCommandAsync(sender, context.argument(-3), context.argument(-2), context.argument(-1), argument)
+                            giveAllCommandAsync(
+                                sender,
+                                context.argument(-3),
+                                context.argument(-2),
+                                context.argument(-1),
+                                argument
+                            )
                         }
                     }
                 }
@@ -299,7 +366,14 @@ object Give {
                             arrayListOf("data")
                         }
                         execute<CommandSender> { sender, context, argument ->
-                            giveAllCommandAsync(sender, context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                            giveAllCommandAsync(
+                                sender,
+                                context.argument(-3),
+                                context.argument(-2),
+                                context.argument(-1),
+                                argument,
+                                tip = false
+                            )
                         }
                     }
                 }
@@ -387,21 +461,27 @@ object Give {
                                 player.giveItems(event.itemStack, event.amount)
                             }
                             if (tip) {
-                                sender.sendLang("Messages.successInfo", mapOf(
-                                    Pair("{player}", player.name),
-                                    Pair("{amount}", amount.toString()),
-                                    Pair("{name}", itemStack.getParsedName())
-                                ))
-                                player.sendLang("Messages.givenInfo", mapOf(
-                                    Pair("{amount}", amount.toString()),
-                                    Pair("{name}", itemStack.getParsedName())
-                                ))
+                                sender.sendLang(
+                                    "Messages.successInfo", mapOf(
+                                        Pair("{player}", player.name),
+                                        Pair("{amount}", amount.toString()),
+                                        Pair("{name}", itemStack.getParsedName())
+                                    )
+                                )
+                                player.sendLang(
+                                    "Messages.givenInfo", mapOf(
+                                        Pair("{amount}", amount.toString()),
+                                        Pair("{name}", itemStack.getParsedName())
+                                    )
+                                )
                             }
                             // 未知物品ID
                         } ?: let {
-                            sender.sendLang("Messages.unknownItem", mapOf(
-                                Pair("{itemID}", id)
-                            ))
+                            sender.sendLang(
+                                "Messages.unknownItem", mapOf(
+                                    Pair("{itemID}", id)
+                                )
+                            )
                         }
                         // 无效数字
                     } ?: let {
@@ -415,7 +495,7 @@ object Give {
                         // 给物品
                         if (ItemManager.hasItem(id)) {
                             repeat(amount.coerceAtLeast(1)) {
-                                ItemManager.getItemStack(id, player, data)?.let letItem@ { itemStack ->
+                                ItemManager.getItemStack(id, player, data)?.let letItem@{ itemStack ->
                                     // 移除一下物品拥有者信息
                                     if (ConfigManager.removeNBTWhenGive) {
                                         val nbt = itemStack.getNbtOrNull()
@@ -431,26 +511,34 @@ object Give {
                                     sync {
                                         player.giveItems(event.itemStack, event.amount)
                                     }
-                                    dropData[event.itemStack.getParsedName()] = dropData[event.itemStack.getParsedName()]?.let { it + event.amount } ?: event.amount
+                                    dropData[event.itemStack.getParsedName()] =
+                                        dropData[event.itemStack.getParsedName()]?.let { it + event.amount }
+                                            ?: event.amount
                                     // 未知物品ID
                                 }
                             }
                         } else {
-                            sender.sendLang("Messages.unknownItem", mapOf(
-                                Pair("{itemID}", id)
-                            ))
+                            sender.sendLang(
+                                "Messages.unknownItem", mapOf(
+                                    Pair("{itemID}", id)
+                                )
+                            )
                         }
                         if (tip) {
                             for ((name, amt) in dropData) {
-                                sender.sendLang("Messages.successInfo", mapOf(
-                                    Pair("{player}", player.name),
-                                    Pair("{amount}", amt.toString()),
-                                    Pair("{name}", name)
-                                ))
-                                player.sendLang("Messages.givenInfo", mapOf(
-                                    Pair("{amount}", amt.toString()),
-                                    Pair("{name}", name)
-                                ))
+                                sender.sendLang(
+                                    "Messages.successInfo", mapOf(
+                                        Pair("{player}", player.name),
+                                        Pair("{amount}", amt.toString()),
+                                        Pair("{name}", name)
+                                    )
+                                )
+                                player.sendLang(
+                                    "Messages.givenInfo", mapOf(
+                                        Pair("{amount}", amt.toString()),
+                                        Pair("{name}", name)
+                                    )
+                                )
                             }
                         }
                         // 无效数字

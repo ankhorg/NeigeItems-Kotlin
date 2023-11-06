@@ -66,7 +66,7 @@ function commandExample() {
          * @return Boolean 指令是否执行成功
          */
         .setExecutor(
-            function(sender, command, label, args) {
+            function (sender, command, label, args) {
                 sender.sendMessage("测试指令")
                 return true
             }
@@ -81,16 +81,16 @@ function commandExample() {
          * @return List<String> 补全内容
          */
         .setTabCompleter(
-            function(sender, command, label, args) {
+            function (sender, command, label, args) {
                 return ["测试补全"]
             }
         )
-        /**
-         * 注册指令
-         * 为了防止默认配置给你带来困扰, 我默认不进行注册
-         * 你想实验的话删掉前面的"// "就好, 那是注释符号
-         */
-        // .register()
+    /**
+     * 注册指令
+     * 为了防止默认配置给你带来困扰, 我默认不进行注册
+     * 你想实验的话删掉前面的"// "就好, 那是注释符号
+     */
+    // .register()
 }
 
 /**
@@ -124,18 +124,18 @@ function listenerExample() {
          * @param event 你监听的事件
          */
         .setExecutor(
-            function(event) {
+            function (event) {
                 event.player.sendMessage(
                     '你是不是打算说: " ' + event.message + ' " ?'
                 )
             }
         )
-        /**
-         * 注册监听器
-         * 为了防止默认配置给你带来困扰, 我默认不进行注册
-         * 你想实验的话删掉前面的"// "就好, 那是注释符号
-         */
-        // .register()
+    /**
+     * 注册监听器
+     * 为了防止默认配置给你带来困扰, 我默认不进行注册
+     * 你想实验的话删掉前面的"// "就好, 那是注释符号
+     */
+    // .register()
 }
 
 /**
@@ -163,17 +163,17 @@ function placeholderExample() {
          * @return String 变量返回值
          */
         .setExecutor(
-            function(player, params) {
+            function (player, params) {
                 // %test% 返回玩家名
                 return player.name
             }
         )
-        /**
-         * 注册PAPI变量
-         * 为了防止默认配置给你带来困扰, 我默认不进行注册
-         * 你想实验的话删掉前面的"// "就好, 那是注释符号
-         */
-        // .register()
+    /**
+     * 注册PAPI变量
+     * 为了防止默认配置给你带来困扰, 我默认不进行注册
+     * 你想实验的话删掉前面的"// "就好, 那是注释符号
+     */
+    // .register()
 }
 
 /**
@@ -190,7 +190,7 @@ function taskExample() {
     new Task()
         // 设置任务中你要执行的代码
         .setTask(
-            function() {
+            function () {
                 print(Bukkit.isPrimaryThread())
             }
         )
@@ -200,10 +200,10 @@ function taskExample() {
         .setDelay(10)
         // 设置任务是否异步执行(不设置的话任务将同步进行)
         .setAsync(true)
-        /**
-         * 注册Bukkit任务
-         * 为了防止默认配置给你带来困扰, 我默认不进行注册
-         * 你想实验的话删掉前面的"// "就好, 那是注释符号
-         */
-        // .register()
+    /**
+     * 注册Bukkit任务
+     * 为了防止默认配置给你带来困扰, 我默认不进行注册
+     * 你想实验的话删掉前面的"// "就好, 那是注释符号
+     */
+    // .register()
 }

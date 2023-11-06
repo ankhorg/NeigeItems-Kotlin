@@ -20,32 +20,34 @@ class ItemHider {
             PacketAdapter(
                 NeigeItems.plugin,
                 ListenerPriority.LOWEST,
-                PacketType.Play.Server.ENTITY_METADATA) {
+                PacketType.Play.Server.ENTITY_METADATA
+            ) {
             override fun onPacketSending(event: PacketEvent) {
-                 val receiver = event.player
-                 val id = event.packet.integers.read(0)
-                 if (id >= 0) {
-                     val entity = try {
-                         protocolManager.getEntityFromID(receiver.world, id)
-                     } catch (error: FieldAccessException) {
-                         null
-                     }
-                     if (entity is Item) {
-                         if (entity.hasMetadata("NI-Owner")) {
-                             // 获取归属者
-                             val owner = entity.getMetadataEZ("NI-Owner", "String", "") as String
-                             // 是否隐藏掉落物
-                             val hide = entity.getMetadataEZ("NI-Hide", "Byte", 0.toByte()) as Byte
+                val receiver = event.player
+                val id = event.packet.integers.read(0)
+                if (id >= 0) {
+                    val entity = try {
+                        protocolManager.getEntityFromID(receiver.world, id)
+                    } catch (error: FieldAccessException) {
+                        null
+                    }
+                    if (entity is Item) {
+                        if (entity.hasMetadata("NI-Owner")) {
+                            // 获取归属者
+                            val owner = entity.getMetadataEZ("NI-Owner", "String", "") as String
+                            // 是否隐藏掉落物
+                            val hide = entity.getMetadataEZ("NI-Hide", "Byte", 0.toByte()) as Byte
 
-                             // 检测拾取者是否是拥有者以及是否隐藏掉落物
-                             if (receiver.name != owner && hide == 1.toByte()) {
-                                 // 隐藏掉落物
-                                 event.isCancelled = true
-                             }
-                         }
-                     }
-                 }
+                            // 检测拾取者是否是拥有者以及是否隐藏掉落物
+                            if (receiver.name != owner && hide == 1.toByte()) {
+                                // 隐藏掉落物
+                                event.isCancelled = true
+                            }
+                        }
+                    }
+                }
             }
+
             override fun onPacketReceiving(event: PacketEvent) {}
         }
         )

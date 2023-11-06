@@ -34,7 +34,8 @@ class CustomSection(
         data: ConfigurationSection,
         cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
-        sections: ConfigurationSection?): String? {
+        sections: ConfigurationSection?
+    ): String? {
         return func1(data, cache, player, sections)
     }
 
@@ -42,7 +43,8 @@ class CustomSection(
         args: List<String>,
         cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
-        sections: ConfigurationSection?): String {
+        sections: ConfigurationSection?
+    ): String {
         return func2(args, cache, player, sections) ?: "<$id::${args.joinToString("_")}>"
     }
 }

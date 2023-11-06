@@ -88,10 +88,12 @@ open class CompiledScript {
      */
     private fun magicFunction() {
         compiledScript.eval()
-        scriptEngine.eval("""
+        scriptEngine.eval(
+            """
             function NeigeItemsNumberOne() {}
             NeigeItemsNumberOne.prototype = this
             function newObject() { return new NeigeItemsNumberOne() }
-        """)
+        """
+        )
     }
 }

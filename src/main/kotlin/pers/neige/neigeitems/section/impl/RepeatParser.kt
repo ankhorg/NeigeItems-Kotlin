@@ -65,10 +65,12 @@ object RepeatParser : SectionParser() {
         // 获取操作函数
         val transform = transformString?.let {
             compiledScripts.computeIfAbsent(it) {
-                CompiledScript("""
+                CompiledScript(
+                    """
                     function main() {
                         $it
-                    }""".trimIndent())
+                    }""".trimIndent()
+                )
             }
         }
 
@@ -90,7 +92,8 @@ object RepeatParser : SectionParser() {
             // 待操作元素
             map["it"] = content
             // 节点解析函数
-            map["vars"] = java.util.function.Function<String, String> { string -> string.parseSection(cache, player, sections) }
+            map["vars"] =
+                java.util.function.Function<String, String> { string -> string.parseSection(cache, player, sections) }
         }
 
         for (index in 0 until length) {

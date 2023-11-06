@@ -211,7 +211,7 @@ abstract class MythicMobsHooker {
                 if (string.contains(" ")) {
                     val index = string.indexOf(" ")
                     id = string.substring(0, index).lowercase(Locale.getDefault())
-                    chance = string.substring(index+1).toDoubleOrNull() ?: 1.toDouble()
+                    chance = string.substring(index + 1).toDoubleOrNull() ?: 1.toDouble()
                 }
                 dropChance[id] = chance
             }
@@ -222,7 +222,7 @@ abstract class MythicMobsHooker {
                 if (string.contains(": ")) {
                     val index = string.indexOf(": ")
                     val slot = string.substring(0, index).lowercase(Locale.getDefault())
-                    val info = string.substring(index+2)
+                    val info = string.substring(index + 2)
                     // [物品ID] (生成概率) (指向数据)
                     val args = info.split(" ", limit = 3)
 
@@ -294,9 +294,11 @@ abstract class MythicMobsHooker {
                         }
                     } catch (error: Throwable) {
                         ConfigManager.config.getString("Messages.equipFailed")?.let { message ->
-                            NeigeItems.plugin.logger.info(message
-                                .replace("{mobID}", internalName)
-                                .replace("{itemID}", args[0]))
+                            NeigeItems.plugin.logger.info(
+                                message
+                                    .replace("{mobID}", internalName)
+                                    .replace("{itemID}", args[0])
+                            )
                         }
                         error.printStackTrace()
                     }
@@ -323,7 +325,17 @@ abstract class MythicMobsHooker {
                 var angleType = configSection.getString("NeigeItems.FancyDrop.angle.type")
 
                 // 东西都加载好了, 触发一下事件
-                val configLoadedEvent = MythicDropEvent.ConfigLoaded(internalName, entity, killer, drops, fishDrops, dropPackRawIds, offsetXString, offsetYString, angleType)
+                val configLoadedEvent = MythicDropEvent.ConfigLoaded(
+                    internalName,
+                    entity,
+                    killer,
+                    drops,
+                    fishDrops,
+                    dropPackRawIds,
+                    offsetXString,
+                    offsetYString,
+                    angleType
+                )
                 configLoadedEvent.call()
                 if (configLoadedEvent.isCancelled) return
 
@@ -368,9 +380,9 @@ abstract class MythicMobsHooker {
                             it.contains("-") -> {
                                 val index = it.indexOf("-")
                                 val min = it.substring(0, index).toIntOrNull()
-                                val max = it.substring(index+1, it.length).toIntOrNull()
+                                val max = it.substring(index + 1, it.length).toIntOrNull()
                                 if (min != null && max != null) {
-                                    ThreadLocalRandom.current().nextInt(min, max+1)
+                                    ThreadLocalRandom.current().nextInt(min, max + 1)
                                 } else {
                                     null
                                 }
@@ -413,16 +425,43 @@ abstract class MythicMobsHooker {
                     // 存在击杀者, 载入fishDropItems
                     if (killer != null) {
                         ArrayList<ItemStack>().also {
-                            configLoadedEvent.fishDrops?.let { fishDrops -> loadItems(it, fishDrops, player as? OfflinePlayer, params, null, true) }
+                            configLoadedEvent.fishDrops?.let { fishDrops ->
+                                loadItems(
+                                    it,
+                                    fishDrops,
+                                    player as? OfflinePlayer,
+                                    params,
+                                    null,
+                                    true
+                                )
+                            }
                         }
-                    // 不存在击杀者, 载入dropItems
+                        // 不存在击杀者, 载入dropItems
                     } else {
-                        configLoadedEvent.fishDrops?.let { loadItems(dropItems, it, player as? OfflinePlayer, params, null, true) }
+                        configLoadedEvent.fishDrops?.let {
+                            loadItems(
+                                dropItems,
+                                it,
+                                player as? OfflinePlayer,
+                                params,
+                                null,
+                                true
+                            )
+                        }
                         null
                     }
 
                 // 物品都加载好了, 触发一下事件
-                val dropEvent = MythicDropEvent.Drop(internalName, entity, player, dropItems, fishDropItems, offsetXString, offsetYString, angleType)
+                val dropEvent = MythicDropEvent.Drop(
+                    internalName,
+                    entity,
+                    player,
+                    dropItems,
+                    fishDropItems,
+                    offsetXString,
+                    offsetYString,
+                    angleType
+                )
                 dropEvent.call()
                 if (dropEvent.isCancelled) return
 

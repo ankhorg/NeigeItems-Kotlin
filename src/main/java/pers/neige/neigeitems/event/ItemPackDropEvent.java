@@ -21,18 +21,18 @@ public final class ItemPackDropEvent extends CancellableEvent {
     private static final HandlerList handlers = new HandlerList();
     @NotNull
     private final String id;
+    @Nullable
+    private final OfflinePlayer parser;
     @NotNull
     private List<ItemStack> itemStacks;
     @NotNull
     private Location location;
-    @Nullable
-    private final OfflinePlayer parser;
 
     /**
-     * @param id 物品ID
+     * @param id         物品ID
      * @param itemStacks 待掉落物品
-     * @param location 掉落位置
-     * @param parser 物品解析对象
+     * @param location   掉落位置
+     * @param parser     物品解析对象
      */
     public ItemPackDropEvent(
             @NotNull String id,
@@ -44,6 +44,11 @@ public final class ItemPackDropEvent extends CancellableEvent {
         this.itemStacks = itemStacks;
         this.location = location;
         this.parser = parser;
+    }
+
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -103,11 +108,6 @@ public final class ItemPackDropEvent extends CancellableEvent {
     @Override
     @NotNull
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @NotNull
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

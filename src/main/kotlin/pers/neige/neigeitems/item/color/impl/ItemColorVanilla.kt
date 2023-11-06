@@ -31,7 +31,7 @@ class ItemColorVanilla : ItemColor() {
             // 1.12-需要给prefix设置颜色才能改变发光颜色
             team?.prefix = color.toString()
             // 存入缓存
-            team?.let {teams[color.toString()] = it}
+            team?.let { teams[color.toString()] = it }
         }
     }
 

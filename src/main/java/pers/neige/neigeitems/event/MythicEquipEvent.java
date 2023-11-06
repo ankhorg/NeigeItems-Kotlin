@@ -25,10 +25,10 @@ public final class MythicEquipEvent extends CancellableEvent {
     private ItemStack itemStack;
 
     /**
-     * @param entity 怪物实体
+     * @param entity       怪物实体
      * @param internalName 怪物ID
-     * @param slot 槽位(helmet/chestplate/leggings/boots/mainhand/offhand)
-     * @param itemStack 待掉落物品
+     * @param slot         槽位(helmet/chestplate/leggings/boots/mainhand/offhand)
+     * @param itemStack    待掉落物品
      */
     public MythicEquipEvent(
             @NotNull LivingEntity entity,
@@ -40,6 +40,11 @@ public final class MythicEquipEvent extends CancellableEvent {
         this.internalName = internalName;
         this.slot = slot;
         this.itemStack = itemStack;
+    }
+
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -88,11 +93,6 @@ public final class MythicEquipEvent extends CancellableEvent {
     @Override
     @NotNull
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @NotNull
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

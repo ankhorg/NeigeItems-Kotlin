@@ -51,11 +51,15 @@ object ExpansionBuild {
             execute<CommandSender> { sender, _, argument ->
                 async {
                     ExpansionManager.expansions[argument]?.also { script ->
-                        val pluginName = script.scriptEngine.get("name") as? String ?: argument.split(File.separator).last().split(".").first()
-                        val authors = script.scriptEngine.get("authors") as? ArrayList<String> ?: ArrayList<String>().also { it.add("unnamed") }
+                        val pluginName =
+                            script.scriptEngine.get("name") as? String ?: argument.split(File.separator).last()
+                                .split(".").first()
+                        val authors = script.scriptEngine.get("authors") as? ArrayList<String>
+                            ?: ArrayList<String>().also { it.add("unnamed") }
                         val version = script.scriptEngine.get("version") as? String ?: "1.0.0"
                         val apiVersion = script.scriptEngine.get("apiVersion") as? String ?: "1.13"
-                        val depend = (script.scriptEngine.get("depend") as? ArrayList<String> ?: ArrayList()).also { it.add("NeigeItems") }
+                        val depend = (script.scriptEngine.get("depend") as? ArrayList<String>
+                            ?: ArrayList()).also { it.add("NeigeItems") }
                         val softdepend = script.scriptEngine.get("softdepend") as? ArrayList<String> ?: ArrayList()
 
                         val pool = ClassPool.getDefault()
@@ -141,10 +145,12 @@ object ExpansionBuild {
                             }
                             outputStream.closeEntry()
 
-                            sender.sendLang("Messages.buildExpansionMessage", mapOf(
-                                Pair("{expansion}", argument),
-                                Pair("{file}", "$pluginName-$version.jar")
-                            ))
+                            sender.sendLang(
+                                "Messages.buildExpansionMessage", mapOf(
+                                    Pair("{expansion}", argument),
+                                    Pair("{file}", "$pluginName-$version.jar")
+                                )
+                            )
                         }
                     }
                 }

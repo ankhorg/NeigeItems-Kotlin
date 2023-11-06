@@ -81,7 +81,16 @@ object DropPack {
                                         Bukkit.getOnlinePlayers().map { it.name }
                                     }
                                     execute<CommandSender> { sender, context, argument ->
-                                        dropPackCommandAsync(sender, context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument)
+                                        dropPackCommandAsync(
+                                            sender,
+                                            context.argument(-6),
+                                            context.argument(-5),
+                                            context.argument(-4),
+                                            context.argument(-3),
+                                            context.argument(-2),
+                                            context.argument(-1),
+                                            argument
+                                        )
                                     }
                                     // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象] (指向数据)
                                     dynamic {
@@ -89,7 +98,17 @@ object DropPack {
                                             arrayListOf("data")
                                         }
                                         execute<CommandSender> { sender, context, argument ->
-                                            dropPackCommandAsync(sender, context.argument(-7), context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument)
+                                            dropPackCommandAsync(
+                                                sender,
+                                                context.argument(-7),
+                                                context.argument(-6),
+                                                context.argument(-5),
+                                                context.argument(-4),
+                                                context.argument(-3),
+                                                context.argument(-2),
+                                                context.argument(-1),
+                                                argument
+                                            )
                                         }
                                     }
                                 }
@@ -168,7 +187,17 @@ object DropPack {
                                         Bukkit.getOnlinePlayers().map { it.name }
                                     }
                                     execute<CommandSender> { sender, context, argument ->
-                                        dropPackCommandAsync(sender, context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                                        dropPackCommandAsync(
+                                            sender,
+                                            context.argument(-6),
+                                            context.argument(-5),
+                                            context.argument(-4),
+                                            context.argument(-3),
+                                            context.argument(-2),
+                                            context.argument(-1),
+                                            argument,
+                                            tip = false
+                                        )
                                     }
                                     // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象] (指向数据)
                                     dynamic {
@@ -176,7 +205,18 @@ object DropPack {
                                             arrayListOf("data")
                                         }
                                         execute<CommandSender> { sender, context, argument ->
-                                            dropPackCommandAsync(sender, context.argument(-7), context.argument(-6), context.argument(-5), context.argument(-4), context.argument(-3), context.argument(-2), context.argument(-1), argument, tip = false)
+                                            dropPackCommandAsync(
+                                                sender,
+                                                context.argument(-7),
+                                                context.argument(-6),
+                                                context.argument(-5),
+                                                context.argument(-4),
+                                                context.argument(-3),
+                                                context.argument(-2),
+                                                context.argument(-1),
+                                                argument,
+                                                tip = false
+                                            )
                                         }
                                     }
                                 }
@@ -187,7 +227,7 @@ object DropPack {
             }
         }
     }
-    
+
     private fun dropPackCommandAsync(
         sender: CommandSender,
         id: String,
@@ -232,7 +272,15 @@ object DropPack {
             val y = yString.toDoubleOrNull()
             val z = zString.toDoubleOrNull()
             if (x != null && y != null && z != null) {
-                dropPackCommand(sender, id, repeat?.toIntOrNull(), Location(world, x, y, z), Bukkit.getPlayerExact(parser), data, tip)
+                dropPackCommand(
+                    sender,
+                    id,
+                    repeat?.toIntOrNull(),
+                    Location(world, x, y, z),
+                    Bukkit.getPlayerExact(parser),
+                    data,
+                    tip
+                )
             } else {
                 sender.sendLang("Messages.invalidLocation")
             }
@@ -281,21 +329,25 @@ object DropPack {
                 }
                 if (tip) {
                     for ((loc, amount) in packInfo) {
-                        sender.sendLang("Messages.dropPackSuccessInfo", mapOf(
-                            Pair("{world}", loc.world?.name ?: ""),
-                            Pair("{x}", loc.x.toString()),
-                            Pair("{y}", loc.y.toString()),
-                            Pair("{z}", loc.z.toString()),
-                            Pair("{amount}", amount.toString()),
-                            Pair("{name}", id)
-                        ))
+                        sender.sendLang(
+                            "Messages.dropPackSuccessInfo", mapOf(
+                                Pair("{world}", loc.world?.name ?: ""),
+                                Pair("{x}", loc.x.toString()),
+                                Pair("{y}", loc.y.toString()),
+                                Pair("{z}", loc.z.toString()),
+                                Pair("{amount}", amount.toString()),
+                                Pair("{name}", id)
+                            )
+                        )
                     }
                 }
                 // 未知物品包
             } ?: let {
-                sender.sendLang("Messages.unknownItemPack", mapOf(
-                    Pair("{packID}", id)
-                ))
+                sender.sendLang(
+                    "Messages.unknownItemPack", mapOf(
+                        Pair("{packID}", id)
+                    )
+                )
             }
             // 未知解析对象
         } ?: let {

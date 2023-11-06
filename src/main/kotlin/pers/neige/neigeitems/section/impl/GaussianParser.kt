@@ -98,12 +98,12 @@ object GaussianParser : SectionParser() {
         // 获取随机数
         if (base != null && spread != null && maxSpread != null) {
             // 根据正态分布进行范围随机
-            val random = (ThreadLocalRandom.current().nextGaussian()*spread)
+            val random = (ThreadLocalRandom.current().nextGaussian() * spread)
                 // 限制随机范围下限
                 .coerceAtLeast(-maxSpread)
                 // 限制随机范围上限
                 .coerceAtMost(maxSpread)
-            var result = base*(1 + random)
+            var result = base * (1 + random)
             // 限制结果下限
             min?.let { result = result.coerceAtLeast(it) }
             // 限制结果上限

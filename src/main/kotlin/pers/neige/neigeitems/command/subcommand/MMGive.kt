@@ -191,20 +191,26 @@ object MMGive {
                     sync {
                         player.giveItems(itemStack, amount.coerceAtLeast(1))
                     }
-                    sender.sendLang("Messages.successInfo", mapOf(
-                        Pair("{player}", player.name),
-                        Pair("{amount}", amount.toString()),
-                        Pair("{name}", itemStack.getName())
-                    ))
-                    player.sendLang("Messages.givenInfo", mapOf(
-                        Pair("{amount}", amount.toString()),
-                        Pair("{name}", itemStack.getName())
-                    ))
+                    sender.sendLang(
+                        "Messages.successInfo", mapOf(
+                            Pair("{player}", player.name),
+                            Pair("{amount}", amount.toString()),
+                            Pair("{name}", itemStack.getName())
+                        )
+                    )
+                    player.sendLang(
+                        "Messages.givenInfo", mapOf(
+                            Pair("{amount}", amount.toString()),
+                            Pair("{name}", itemStack.getName())
+                        )
+                    )
                     // 未知物品ID
                 } ?: let {
-                    sender.sendLang("Messages.unknownItem", mapOf(
-                        Pair("{itemID}", id)
-                    ))
+                    sender.sendLang(
+                        "Messages.unknownItem", mapOf(
+                            Pair("{itemID}", id)
+                        )
+                    )
                 }
                 // 无效数字
             } ?: let {

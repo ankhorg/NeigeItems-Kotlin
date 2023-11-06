@@ -78,7 +78,8 @@ class ScriptPlaceholder(private val identifier: String) {
             // papiHooker为null说明没安装PlaceholderAPI
         } ?: let {
             // 后台进行提示
-            Bukkit.getLogger().info(ConfigManager.config.getString("Messages.invalidPlugin")?.replace("{plugin}", "PlaceholderAPI"))
+            Bukkit.getLogger()
+                .info(ConfigManager.config.getString("Messages.invalidPlugin")?.replace("{plugin}", "PlaceholderAPI"))
         }
         return this
     }

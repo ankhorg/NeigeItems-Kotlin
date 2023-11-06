@@ -17,7 +17,7 @@ function enable() {
          * @param itemStack ItemStack 待编辑物品
          * @param content String 传入的文本
          */
-        function(player, itemStack, content) {
+        function (player, itemStack, content) {
             // 判断是不是空气
             if (itemStack.type != Material.AIR) {
                 // 获取itemMeta

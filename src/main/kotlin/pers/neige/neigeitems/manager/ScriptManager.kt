@@ -35,11 +35,13 @@ object ScriptManager {
      */
     private fun loadScripts() {
         for (file in getAllFiles("Scripts")) {
-            val fileName = file.path.replace("plugins${File.separator}NeigeItems${File.separator}Scripts${File.separator}", "")
+            val fileName =
+                file.path.replace("plugins${File.separator}NeigeItems${File.separator}Scripts${File.separator}", "")
             try {
                 compiledScripts[fileName] = CompiledScript(file)
             } catch (error: Throwable) {
-                Bukkit.getLogger().info(ConfigManager.config.getString("Messages.invalidScript")?.replace("{script}", fileName))
+                Bukkit.getLogger()
+                    .info(ConfigManager.config.getString("Messages.invalidScript")?.replace("{script}", fileName))
                 error.printStackTrace()
             }
         }

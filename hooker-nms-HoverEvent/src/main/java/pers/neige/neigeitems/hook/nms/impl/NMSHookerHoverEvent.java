@@ -20,7 +20,7 @@ public class NMSHookerHoverEvent extends NMSHooker {
     ) {
         return new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
-                new TextComponent[] {new TextComponent(text)}
+                new TextComponent[]{new TextComponent(text)}
         );
     }
 

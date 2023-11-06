@@ -6,7 +6,7 @@ function enable() {
         // 动作名称
         "test",
         // 动作内容(一般是异步调用的, 所以需要同步执行的内容需要自行同步)
-        function(player, string) {
+        function (player, string) {
             // 调用动作
             ActionManager.runAction(player, "tell: 123")
             ActionManager.runAction(player, "tell: 456")

@@ -103,10 +103,12 @@ class ItemPack(
      * @return 解析后物品包配置
      */
     fun getSection(player: OfflinePlayer?, data: String?): ConfigurationSection? {
-        return getSection(player, when (data) {
-            null -> HashMap<String, String>()
-            else -> data.parseObject<HashMap<String, String>>()
-        })
+        return getSection(
+            player, when (data) {
+                null -> HashMap<String, String>()
+                else -> data.parseObject<HashMap<String, String>>()
+            }
+        )
     }
 
     /**
@@ -156,10 +158,12 @@ class ItemPack(
      * @return 物品
      */
     fun getItemStacks(player: OfflinePlayer?, data: String?): List<ItemStack> {
-        return getItemStacks(player, when (data) {
-            null -> HashMap<String, String>()
-            else -> data.parseObject<HashMap<String, String>>()
-        })
+        return getItemStacks(
+            player, when (data) {
+                null -> HashMap<String, String>()
+                else -> data.parseObject<HashMap<String, String>>()
+            }
+        )
     }
 
     /**
@@ -211,7 +215,7 @@ class ItemPack(
                                 // 怼进去
                                 itemStacks.addAll(currentItems)
                                 // 记录数量
-                                amount ++
+                                amount++
                                 // 数量超了, 停止操作
                             } else {
                                 break@all
@@ -268,7 +272,7 @@ class ItemPack(
                             // 怼进去
                             itemStacks.addAll(currentItems)
                             // 记录数量
-                            amount ++
+                            amount++
                             // 数量超了, 停止操作
                         } else {
                             return@forEach
@@ -304,9 +308,9 @@ class ItemPack(
                 it.contains("-") -> {
                     val index = args[1].indexOf("-")
                     val min = args[1].substring(0, index).toIntOrNull()
-                    val max = args[1].substring(index+1, args[1].length).toIntOrNull()
+                    val max = args[1].substring(index + 1, args[1].length).toIntOrNull()
                     if (min != null && max != null) {
-                        ThreadLocalRandom.current().nextInt(min, max+1)
+                        ThreadLocalRandom.current().nextInt(min, max + 1)
                     } else {
                         null
                     }
@@ -363,11 +367,13 @@ class ItemPack(
                             }
                         }
                         HookerManager.easyItemHooker?.hasItem(id) == true -> {
-                            HookerManager.easyItemHooker?.getItemStack(id)?.getItems(amount)?.forEach { itemStacks.add(it) }
+                            HookerManager.easyItemHooker?.getItemStack(id)?.getItems(amount)
+                                ?.forEach { itemStacks.add(it) }
                         }
                         // 对于MM物品, 这个配置项不代表是否随机生成, 代表物品是否合并
                         else -> {
-                            HookerManager.mythicMobsHooker?.getItemStackSync(id)?.getItems(amount)?.forEach { itemStacks.add(it) }
+                            HookerManager.mythicMobsHooker?.getItemStackSync(id)?.getItems(amount)
+                                ?.forEach { itemStacks.add(it) }
                         }
                     }
                 } else {

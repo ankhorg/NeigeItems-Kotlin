@@ -19,7 +19,7 @@ public class ListenerUtils {
      * plugin 取默认值 NeigeItems.INSTANCE.getPlugin().
      * ignoreCancelled 取默认值 true.
      *
-     * @param eventClass 事件类.
+     * @param eventClass    事件类.
      * @param eventExecutor 事件处理器.
      * @return 对应的 Listener 对象.
      */
@@ -36,9 +36,9 @@ public class ListenerUtils {
      * eventPriority 取默认值 EventPriority.NORMAL.
      * ignoreCancelled 取默认值 true.
      *
-     * @param eventClass 事件类.
+     * @param eventClass    事件类.
      * @param eventExecutor 事件处理器.
-     * @param plugin 注册监听器的插件.
+     * @param plugin        注册监听器的插件.
      * @return 对应的 Listener 对象.
      */
     @NotNull
@@ -55,7 +55,7 @@ public class ListenerUtils {
      * plugin 取默认值 NeigeItems.INSTANCE.getPlugin().
      * ignoreCancelled 取默认值 true.
      *
-     * @param eventClass 事件类.
+     * @param eventClass    事件类.
      * @param eventPriority 监听优先级.
      * @param eventExecutor 事件处理器.
      * @return 对应的 Listener 对象.
@@ -73,10 +73,10 @@ public class ListenerUtils {
      * 注册一个事件监听器.
      * ignoreCancelled 取默认值 true.
      *
-     * @param eventClass 事件类.
+     * @param eventClass    事件类.
      * @param eventPriority 监听优先级.
      * @param eventExecutor 事件处理器.
-     * @param plugin 注册监听器的插件.
+     * @param plugin        注册监听器的插件.
      * @return 对应的 Listener 对象.
      */
     @NotNull
@@ -93,9 +93,9 @@ public class ListenerUtils {
      * 注册一个事件监听器.
      * plugin 取默认值 NeigeItems.INSTANCE.getPlugin().
      *
-     * @param eventClass 事件类.
-     * @param eventPriority 监听优先级.
-     * @param eventExecutor 事件处理器.
+     * @param eventClass      事件类.
+     * @param eventPriority   监听优先级.
+     * @param eventExecutor   事件处理器.
      * @param ignoreCancelled 是否忽略已取消事件.
      * @return 对应的 Listener 对象.
      */
@@ -112,10 +112,10 @@ public class ListenerUtils {
     /**
      * 注册一个事件监听器.
      *
-     * @param eventClass 事件类.
-     * @param eventPriority 监听优先级.
-     * @param eventExecutor 事件处理器.
-     * @param plugin 注册监听器的插件.
+     * @param eventClass      事件类.
+     * @param eventPriority   监听优先级.
+     * @param eventExecutor   事件处理器.
+     * @param plugin          注册监听器的插件.
      * @param ignoreCancelled 是否忽略已取消事件.
      * @return 对应的 Listener 对象.
      */
@@ -127,7 +127,8 @@ public class ListenerUtils {
             boolean ignoreCancelled,
             @NotNull Consumer<T> eventExecutor
     ) {
-        Listener listener = new Listener(){};
+        Listener listener = new Listener() {
+        };
         Bukkit.getPluginManager().registerEvent(
                 eventClass,
                 listener,

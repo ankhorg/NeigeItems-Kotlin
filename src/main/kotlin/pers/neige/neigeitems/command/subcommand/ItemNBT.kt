@@ -15,18 +15,18 @@ import taboolib.common.platform.command.subCommand
 
 object ItemNBT {
     val itemNBT = subCommand {
-        execute<Player> { sender, _, _, ->
+        execute<Player> { sender, _, _ ->
             itemnbtCommandAsync(sender.inventory.itemInMainHand, sender)
         }
     }
 
-    private fun itemnbtCommandAsync (itemStack: ItemStack, sender: Player) {
+    private fun itemnbtCommandAsync(itemStack: ItemStack, sender: Player) {
         async {
             itemnbtCommand(itemStack, sender)
         }
     }
 
-    private fun itemnbtCommand (itemStack: ItemStack, sender: Player) {
+    private fun itemnbtCommand(itemStack: ItemStack, sender: Player) {
         if (itemStack.type != Material.AIR) {
             val components = itemStack.getNbt().format().create()
             var temp = TextComponent()
@@ -81,12 +81,12 @@ object ItemNBT {
     fun Nbt<*>.asPostfix(): String {
         return when (this) {
             is NbtByte -> " §6(§eByte§6)"
-            is NbtShort ->  " §6(§eShort§6)"
-            is NbtInt ->  " §6(§eInt§6)"
-            is NbtLong ->  " §6(§eLong§6)"
-            is NbtFloat ->  " §6(§eFloat§6)"
-            is NbtDouble ->  " §6(§eDouble§6)"
-            is NbtString ->  " §6(§eString§6)"
+            is NbtShort -> " §6(§eShort§6)"
+            is NbtInt -> " §6(§eInt§6)"
+            is NbtLong -> " §6(§eLong§6)"
+            is NbtFloat -> " §6(§eFloat§6)"
+            is NbtDouble -> " §6(§eDouble§6)"
+            is NbtString -> " §6(§eString§6)"
             is NbtByteArray -> " §6(§eByteArray§6)"
             is NbtIntArray -> " §6(§eIntArray§6)"
             is NbtLongArray -> " §6(§eLongArray§6)"
@@ -121,7 +121,7 @@ object ItemNBT {
                         iterator.next().toString().let { byte ->
                             result.append(
                                 with(ComponentBuilder("")) {
-                                    repeat (level-1) { append(INDENT) }
+                                    repeat(level - 1) { append(INDENT) }
                                     append("$LIST_INDENT§f$byte")
                                     hoverText(byte)
                                     suggestCommand(byte)
@@ -140,7 +140,7 @@ object ItemNBT {
                         iterator.next().toString().let { int ->
                             result.append(
                                 with(ComponentBuilder("")) {
-                                    repeat (level-1) { append(INDENT) }
+                                    repeat(level - 1) { append(INDENT) }
                                     append("$LIST_INDENT§f$int")
                                     hoverText(int)
                                     suggestCommand(int)
@@ -159,7 +159,7 @@ object ItemNBT {
                         iterator.next().toString().let { long ->
                             result.append(
                                 with(ComponentBuilder("")) {
-                                    repeat (level-1) { append(INDENT) }
+                                    repeat(level - 1) { append(INDENT) }
                                     append("$LIST_INDENT§f$long")
                                     hoverText(long)
                                     suggestCommand(long)
@@ -178,7 +178,7 @@ object ItemNBT {
                         iterator.next().asValueString(level).let {
                             result.append(
                                 ComponentBuilder("").also { json ->
-                                    repeat (level-1) { json.append(INDENT) }
+                                    repeat(level - 1) { json.append(INDENT) }
                                     json.append(LIST_INDENT)
                                     json.append(it)
                                     if (iterator.hasNext()) json.append("\n")
@@ -199,7 +199,7 @@ object ItemNBT {
                                 if (first) {
                                     first = false
                                 } else {
-                                    repeat (level) { append(INDENT) }
+                                    repeat(level) { append(INDENT) }
                                 }
                                 append("§6$key${value.asPostfix()}§e: §f")
                                 hoverText(key)
@@ -208,9 +208,9 @@ object ItemNBT {
                         )
                         if (value is NbtCompound) {
                             result.append("\n")
-                            repeat (level+1) { result.append(INDENT) }
+                            repeat(level + 1) { result.append(INDENT) }
                         }
-                        result.append(value.asValueString(level+1))
+                        result.append(value.asValueString(level + 1))
                         if (iterator.hasNext()) result.append("\n")
                     }
                 }

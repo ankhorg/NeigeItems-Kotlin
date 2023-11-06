@@ -49,15 +49,15 @@ public final class MythicDropEvent {
         private String angleType;
 
         /**
-         * @param internalName 怪物ID
-         * @param entity 怪物实体(你可能需要通过编辑它身上的装备来改变掉落装备)
-         * @param killer 怪物击杀者
-         * @param drops NeigeItems.Drop
-         * @param fishDrops NeigeItems.FishDrop
-         * @param dropPacks NeigeItems.DropPacks
+         * @param internalName  怪物ID
+         * @param entity        怪物实体(你可能需要通过编辑它身上的装备来改变掉落装备)
+         * @param killer        怪物击杀者
+         * @param drops         NeigeItems.Drop
+         * @param fishDrops     NeigeItems.FishDrop
+         * @param dropPacks     NeigeItems.DropPacks
          * @param offsetXString NeigeItems.FancyDrop.offset.x(可能在后续被物品包配置覆盖)
          * @param offsetYString NeigeItems.FancyDrop.offset.y(可能在后续被物品包配置覆盖)
-         * @param angleType NeigeItems.FancyDrop.offset.angle.type(可能在后续被物品包配置覆盖)
+         * @param angleType     NeigeItems.FancyDrop.offset.angle.type(可能在后续被物品包配置覆盖)
          */
         public ConfigLoaded(
                 @NotNull String internalName,
@@ -79,6 +79,11 @@ public final class MythicDropEvent {
             this.offsetXString = offsetXString;
             this.offsetYString = offsetYString;
             this.angleType = angleType;
+        }
+
+        @NotNull
+        public static HandlerList getHandlerList() {
+            return handlers;
         }
 
         /**
@@ -224,11 +229,6 @@ public final class MythicDropEvent {
         public HandlerList getHandlers() {
             return handlers;
         }
-
-        @NotNull
-        public static HandlerList getHandlerList() {
-            return handlers;
-        }
     }
 
     /**
@@ -264,14 +264,14 @@ public final class MythicDropEvent {
         private String angleType;
 
         /**
-         * @param internalName 怪物ID
-         * @param entity 怪物实体
-         * @param player 怪物击杀者
-         * @param dropItems 待掉落物品
+         * @param internalName  怪物ID
+         * @param entity        怪物实体
+         * @param player        怪物击杀者
+         * @param dropItems     待掉落物品
          * @param fishDropItems 拟渔获掉落物品(不存在击杀者时并入dropItems)
          * @param offsetXString 多彩掉落横向偏移
          * @param offsetYString 多彩掉落纵向偏移
-         * @param angleType 多彩掉落喷射模式
+         * @param angleType     多彩掉落喷射模式
          */
         public Drop(
                 @NotNull String internalName,
@@ -291,6 +291,11 @@ public final class MythicDropEvent {
             this.offsetXString = offsetXString;
             this.offsetYString = offsetYString;
             this.angleType = angleType;
+        }
+
+        @NotNull
+        public static HandlerList getHandlerList() {
+            return handlers;
         }
 
         /**
@@ -415,11 +420,6 @@ public final class MythicDropEvent {
         @Override
         @NotNull
         public HandlerList getHandlers() {
-            return handlers;
-        }
-
-        @NotNull
-        public static HandlerList getHandlerList() {
             return handlers;
         }
     }

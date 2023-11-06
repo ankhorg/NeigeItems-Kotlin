@@ -44,13 +44,15 @@ object ItemEditorManager {
     /**
      * 获取所有物品编辑函数
      */
-    val itemEditors: HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>> = HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>>()
+    val itemEditors: HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>> =
+        HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>>()
 
     /**
      * 基础物品编辑函数
      */
-    private val basicItemEditors: HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>> = HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>>()
-    
+    private val basicItemEditors: HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>> =
+        HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>>()
+
     /**
      * 获取所有物品编辑函数名
      */
@@ -108,7 +110,7 @@ object ItemEditorManager {
         editorNames.add(id)
         itemEditors[id.lowercase(Locale.getDefault())] = function
     }
-    
+
     private fun addBasicItemEditor(id: String, function: TriFunction<Player, ItemStack, String, Boolean?>) {
         basicItemEditors[id] = function
     }
@@ -121,7 +123,8 @@ object ItemEditorManager {
             // 防止某个脚本出错导致加载中断
             try {
                 pers.neige.neigeitems.script.CompiledScript(file).invoke("main", null)
-            } catch (error: Throwable) {}
+            } catch (error: Throwable) {
+            }
         }
     }
 
@@ -160,7 +163,8 @@ object ItemEditorManager {
             if (itemStack.type != Material.AIR) {
                 // 获取对应数量
                 content.toIntOrNull()?.let { amount ->
-                    itemStack.amount = (itemStack.amount + amount).coerceAtLeast(0).coerceAtMost(itemStack.type.maxStackSize)
+                    itemStack.amount =
+                        (itemStack.amount + amount).coerceAtLeast(0).coerceAtMost(itemStack.type.maxStackSize)
                     return@addBasicItemEditor true
                 }
             }
@@ -172,7 +176,8 @@ object ItemEditorManager {
             if (itemStack.type != Material.AIR) {
                 // 获取对应数量
                 content.toIntOrNull()?.let { amount ->
-                    itemStack.amount = (itemStack.amount - amount).coerceAtLeast(0).coerceAtMost(itemStack.type.maxStackSize)
+                    itemStack.amount =
+                        (itemStack.amount - amount).coerceAtLeast(0).coerceAtMost(itemStack.type.maxStackSize)
                     return@addBasicItemEditor true
                 }
             }
@@ -235,7 +240,8 @@ object ItemEditorManager {
                     val originName = itemMeta.displayName
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -298,7 +304,8 @@ object ItemEditorManager {
                     val originName = itemMeta.displayName
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -356,7 +363,8 @@ object ItemEditorManager {
                     var name = itemMeta.displayName
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -400,7 +408,8 @@ object ItemEditorManager {
                     var name = itemMeta.displayName
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -444,7 +453,8 @@ object ItemEditorManager {
                     var name = itemMeta.displayName
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -488,7 +498,8 @@ object ItemEditorManager {
                     var name = itemMeta.displayName
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -525,7 +536,8 @@ object ItemEditorManager {
                     var name = itemMeta.displayName
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -562,7 +574,8 @@ object ItemEditorManager {
                     var name = itemMeta.displayName
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -632,7 +645,8 @@ object ItemEditorManager {
                     val originLore = itemMeta.lore
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -691,7 +705,7 @@ object ItemEditorManager {
                                 }
                                 // 挪出去
                                 info.remove(now)
-                            // 如果这段文本不是待替换文本
+                                // 如果这段文本不是待替换文本
                             } else {
                                 // 怼回去
                                 text.append(now)
@@ -723,7 +737,8 @@ object ItemEditorManager {
                     val originLore = itemMeta.lore
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -809,7 +824,8 @@ object ItemEditorManager {
                     val originLore = itemMeta.lore
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -887,7 +903,8 @@ object ItemEditorManager {
                     val originLore = itemMeta.lore
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -965,7 +982,8 @@ object ItemEditorManager {
                     val originLore = itemMeta.lore
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -1043,7 +1061,8 @@ object ItemEditorManager {
                     val originLore = itemMeta.lore
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -1103,7 +1122,8 @@ object ItemEditorManager {
                     val originLore = itemMeta.lore
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -1163,7 +1183,8 @@ object ItemEditorManager {
                     val originLore = itemMeta.lore
 
                     // 获取 待替换文本: 替换文本
-                    val info = ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
+                    val info =
+                        ChatColor.translateAlternateColorCodes('&', content).parseObject<HashMap<String, String>>()
                     // 啥也没写还替换个头
                     if (info.isEmpty()) return@addBasicItemEditor true
 
@@ -1229,7 +1250,7 @@ object ItemEditorManager {
                             // 设置物品材质子ID/损伤值
                             itemStack.durability = damage.coerceAtLeast(0)
                         }
-                    // 如果物品属于无耐久物品
+                        // 如果物品属于无耐久物品
                     } else {
                         // 设置物品材质子ID/损伤值
                         itemStack.durability = damage
@@ -1440,7 +1461,7 @@ object ItemEditorManager {
                         if (level > 0) {
                             // 设置附魔
                             itemStack.addUnsafeEnchantment(enchantment, level)
-                        // 如果目标等级小于零
+                            // 如果目标等级小于零
                         } else {
                             // 移除附魔
                             itemStack.removeEnchantment(enchantment)
@@ -1499,7 +1520,8 @@ object ItemEditorManager {
                         try {
                             val itemFlag = ItemFlag.valueOf(itemFlagString)
                             itemMeta.addItemFlags(itemFlag)
-                        } catch (_: IllegalArgumentException) {}
+                        } catch (_: IllegalArgumentException) {
+                        }
                     }
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
@@ -1521,7 +1543,8 @@ object ItemEditorManager {
                         try {
                             val itemFlag = ItemFlag.valueOf(itemFlagString)
                             itemMeta.addItemFlags(itemFlag)
-                        } catch (_: IllegalArgumentException) {}
+                        } catch (_: IllegalArgumentException) {
+                        }
                     }
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
@@ -1543,7 +1566,8 @@ object ItemEditorManager {
                         try {
                             val itemFlag = ItemFlag.valueOf(itemFlagString)
                             itemMeta.removeItemFlags(itemFlag)
-                        } catch (_: IllegalArgumentException) {}
+                        } catch (_: IllegalArgumentException) {
+                        }
                     }
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
@@ -1843,7 +1867,7 @@ object ItemEditorManager {
             }
             return@addBasicItemEditor false
         }
-        basicItemEditors.forEach{ (id, function) ->
+        basicItemEditors.forEach { (id, function) ->
             addItemEditor(id) { player, itemStack, content ->
                 return@addItemEditor function.apply(player, itemStack, content)
             }
@@ -1869,7 +1893,11 @@ object ItemEditorManager {
                 }
                 // (解析其中的即时声明节点)
                 addItemEditor("${id}Section") { player, itemStack, content ->
-                    return@addItemEditor function.apply(player, itemStack, content.parseItemSection(itemStack, itemStack.getNbt(), null, player))
+                    return@addItemEditor function.apply(
+                        player,
+                        itemStack,
+                        content.parseItemSection(itemStack, itemStack.getNbt(), null, player)
+                    )
                 }
             }
         }

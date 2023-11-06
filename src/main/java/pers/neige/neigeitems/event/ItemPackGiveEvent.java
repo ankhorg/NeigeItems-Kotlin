@@ -24,8 +24,8 @@ public final class ItemPackGiveEvent extends CancellableEvent {
     private List<ItemStack> itemStacks;
 
     /**
-     * @param id 物品包ID
-     * @param player 物品接收者
+     * @param id         物品包ID
+     * @param player     物品接收者
      * @param itemStacks 待给予物品
      */
     public ItemPackGiveEvent(
@@ -36,6 +36,11 @@ public final class ItemPackGiveEvent extends CancellableEvent {
         this.id = id;
         this.player = player;
         this.itemStacks = itemStacks;
+    }
+
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -76,11 +81,6 @@ public final class ItemPackGiveEvent extends CancellableEvent {
     @Override
     @NotNull
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    @NotNull
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

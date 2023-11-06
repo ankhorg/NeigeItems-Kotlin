@@ -9,34 +9,34 @@ ExampleItem:
   name: §6一件皮革甲
   # 物品Lore
   lore:
-  - 'PAPI变量测试: <papi::player_level>'
-  - '16进制颜色测试: <#ABCDEF>好耶'
-  - '私有简单节点测试: <simple-1>'
-  - '私有字符串节点测试: <strings-1>'
-  - '私有随机数节点测试: <number-1>'
-  - '私有公式节点测试: <calculation-1>'
-  - '私有权重节点测试: <weight-1>'
-  - '私有JavaScript节点测试: <js-1>'
-  - '即时声明字符串节点测试: <strings::number-1_weight-1>'
-  - '即时声明随机数节点测试: <number::0_10_0>'
-  - '即时声明公式节点测试: <calculation::1+1+3+<number-1>_2>'
-  - '即时声明权重节点测试: <weight::5::权重文本1_1::权重文本2>'
-  - '即时声明papi节点测试: <papi::<papiString-1><papiString-2>>'
-  - '即时声明JavaScript节点测试: <js::ExampleScript.js::main>'
-  - '全局节点调用测试: <global-strings-1>'
-  - '嵌套识别测试: <<strings-1>>'
-  - '文本中小于号请添加反斜杠, 防止错误识别'
-  - '形如: \<\<\<\>\>\>'
-  - '请尽量避免使用即时声明节点'
-  - "换行符测试\n换行符测试"
+    - 'PAPI变量测试: <papi::player_level>'
+    - '16进制颜色测试: <#ABCDEF>好耶'
+    - '私有简单节点测试: <simple-1>'
+    - '私有字符串节点测试: <strings-1>'
+    - '私有随机数节点测试: <number-1>'
+    - '私有公式节点测试: <calculation-1>'
+    - '私有权重节点测试: <weight-1>'
+    - '私有JavaScript节点测试: <js-1>'
+    - '即时声明字符串节点测试: <strings::number-1_weight-1>'
+    - '即时声明随机数节点测试: <number::0_10_0>'
+    - '即时声明公式节点测试: <calculation::1+1+3+<number-1>_2>'
+    - '即时声明权重节点测试: <weight::5::权重文本1_1::权重文本2>'
+    - '即时声明papi节点测试: <papi::<papiString-1><papiString-2>>'
+    - '即时声明JavaScript节点测试: <js::ExampleScript.js::main>'
+    - '全局节点调用测试: <global-strings-1>'
+    - '嵌套识别测试: <<strings-1>>'
+    - '文本中小于号请添加反斜杠, 防止错误识别'
+    - '形如: \<\<\<\>\>\>'
+    - '请尽量避免使用即时声明节点'
+    - "换行符测试\n换行符测试"
   # 物品附魔
   enchantments:
     ARROW_DAMAGE: 1
     ARROW_KNOCKBACK: 1
   # 物品隐藏标识
   hideflags:
-  - HIDE_ATTRIBUTES
-  - HIDE_DESTROYS
+    - HIDE_ATTRIBUTES
+    - HIDE_DESTROYS
   # 物品颜色(适用于药水/皮革装备)
   color: 65535
   # 额外选项
@@ -49,29 +49,29 @@ ExampleItem:
     <strings::文本1_文本2_文本3_文本4>: 114514
     # 可以在NBT中编辑物品的原版属性
     AttributeModifiers:
-    - Amount: 10
-      AttributeName: minecraft:generic.max_health
-      Operation: 0
-      UUID:
-      - 0
-      - 31453
-      - 0
-      - 59664
-      Name: generic.maxHealth
+      - Amount: 10
+        AttributeName: minecraft:generic.max_health
+        Operation: 0
+        UUID:
+          - 0
+          - 31453
+          - 0
+          - 59664
+        Name: generic.maxHealth
   # 引用的全局节点
   globalsections:
-  # 这种直接填写文件名的方式可以直接调用文件内的全部全局节点
-  # - ExampleSection.yml
-  - global-strings-1
-  - global-number-1
+    # 这种直接填写文件名的方式可以直接调用文件内的全部全局节点
+    # - ExampleSection.yml
+    - global-strings-1
+    - global-number-1
   # 物品私有节点
   sections:
     simple-1: <strings::text1_text2_text3>
     strings-1:
       type: strings
       values:
-      - 测试文本1
-      - 测试文本2
+        - 测试文本1
+        - 测试文本2
     number-1:
       type: number
       min: 1
@@ -86,19 +86,19 @@ ExampleItem:
     weight-1:
       type: weight
       values:
-      - 5::第一行
-      - 1::第二行
+        - 5::第一行
+        - 1::第二行
     js-1:
       type: js
       path: ExampleScript.js::main
     papiString-1:
       type: strings
       values:
-      - "player_"
+        - "player_"
     papiString-2:
       type: strings
       values:
-      - "name"
+        - "name"
 ExampleItem2:
   material: STONE
 ExampleItem3:
@@ -107,7 +107,7 @@ ExampleItem4:
   material: STONE
   name: "&f%neigeitems_nbt_NeigeItems`id%"
   lore:
-  - '&f物品使用次数: %neigeitems_charge%/%neigeitems_maxCharge%'
+    - '&f物品使用次数: %neigeitems_charge%/%neigeitems_maxCharge%'
   options:
     charge: 10
 
@@ -175,7 +175,7 @@ ComboTest:
 template1:
   material: IRON_SWORD
   lore:
-  - "&e攻击伤害: &f<damage>"
+    - "&e攻击伤害: &f<damage>"
   nbt:
     MMOITEMS_ATTACK_DAMAGE: (Double) <damage>
 # 一个测试模板
@@ -190,7 +190,7 @@ TemplateItem1:
     damage: 100
 # 一个部分继承测试, 它继承了"template1"的lore, 以及"template2"的material
 TemplateItem2:
-  inherit: 
+  inherit:
     lore: template1
     material: template2
   name: §f物品继承测试
@@ -199,8 +199,8 @@ TemplateItem2:
 # 一个顺序继承测试, 它将按顺序进行节点继承. 先继承"template1"的所有内容，再继承"template2"的所有内容
 TemplateItem3:
   inherit:
-  - template1
-  - template2
+    - template1
+    - template2
   name: §f物品继承测试
   sections:
     damage: 100
@@ -209,9 +209,9 @@ TemplateItem3:
 InheritSectionTest:
   material: STONE
   lore:
-  - <templateTest>
-  - <inheritTest>
-  - <inherit::templateTest>
+    - <templateTest>
+    - <inheritTest>
+    - <inherit::templateTest>
   sections:
     templateTest: <strings::text1_text2_text3>
     inheritTest:
@@ -238,11 +238,11 @@ ActionTest:
   name: <test>
   nbt:
     test1: "666"
-    test2: 
+    test2:
       test3: "777"
     test4:
-    - "888"
-    - "999"
+      - "888"
+      - "999"
   sections:
     test: "yeah"
 

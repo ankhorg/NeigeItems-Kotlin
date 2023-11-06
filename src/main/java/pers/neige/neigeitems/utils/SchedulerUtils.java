@@ -25,7 +25,7 @@ public class SchedulerUtils {
      * 在主线程执行一段代码, 如果当前正处于主线程则直接执行, 如果不处在主线程则调用 runTask.
      *
      * @param plugin 注册任务的插件.
-     * @param task 执行的代码.
+     * @param task   执行的代码.
      */
     public static void sync(
             @NotNull Plugin plugin,
@@ -42,7 +42,7 @@ public class SchedulerUtils {
      * 在主线程延迟执行一段代码.
      *
      * @param delay 延迟时间(tick).
-     * @param task 执行的代码.
+     * @param task  执行的代码.
      */
     public static void syncLater(
             long delay,
@@ -55,8 +55,8 @@ public class SchedulerUtils {
      * 在主线程延迟执行一段代码.
      *
      * @param plugin 注册任务的插件.
-     * @param delay 延迟时间(tick).
-     * @param task 执行的代码.
+     * @param delay  延迟时间(tick).
+     * @param task   执行的代码.
      */
     public static void syncLater(
             @NotNull Plugin plugin,
@@ -82,7 +82,7 @@ public class SchedulerUtils {
      * 在主线程执行一段代码, 返回这段代码的返回值, 如果当前正处于主线程则直接执行, 如果不处在主线程则调用 callSyncMethod.
      *
      * @param plugin 注册任务的插件.
-     * @param task 执行的代码.
+     * @param task   执行的代码.
      */
     @Nullable
     public static <T> T syncAndGet(
@@ -120,7 +120,7 @@ public class SchedulerUtils {
      * 异步执行一段代码.
      *
      * @param plugin 注册任务的插件.
-     * @param task 执行的代码.
+     * @param task   执行的代码.
      */
     public static void async(
             @NotNull Plugin plugin,
@@ -133,7 +133,7 @@ public class SchedulerUtils {
      * 异步延迟执行一段代码.
      *
      * @param delay 延迟时间(tick).
-     * @param task 执行的代码.
+     * @param task  执行的代码.
      */
     public static void asyncLater(
             long delay,
@@ -146,8 +146,8 @@ public class SchedulerUtils {
      * 异步延迟执行一段代码.
      *
      * @param plugin 注册任务的插件.
-     * @param delay 延迟时间(tick).
-     * @param task 执行的代码.
+     * @param delay  延迟时间(tick).
+     * @param task   执行的代码.
      */
     public static void asyncLater(
             @NotNull Plugin plugin,
@@ -161,7 +161,7 @@ public class SchedulerUtils {
      * 在当前线程延迟执行一段代码.
      *
      * @param delay 延迟时间(tick).
-     * @param task 执行的代码.
+     * @param task  执行的代码.
      */
     public static void runLater(
             long delay,
@@ -174,8 +174,8 @@ public class SchedulerUtils {
      * 在当前线程延迟执行一段代码.
      *
      * @param plugin 注册任务的插件.
-     * @param delay 延迟时间(tick).
-     * @param task 执行的代码.
+     * @param delay  延迟时间(tick).
+     * @param task   执行的代码.
      */
     public static void runLater(
             @NotNull Plugin plugin,

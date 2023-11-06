@@ -66,7 +66,7 @@ public class CommandUtils {
     /**
      * 新建一个 PluginCommand 对象.
      *
-     * @param name 指令名.
+     * @param name  指令名.
      * @param owner 创建指令的插件.
      * @return 对应的 PluginCommand 对象.
      */

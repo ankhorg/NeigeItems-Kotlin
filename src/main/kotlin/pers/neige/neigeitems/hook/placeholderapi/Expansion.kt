@@ -64,13 +64,14 @@ object Expansion : PlaceholderExpansion {
                                     "get" -> return data[content] ?: ""
                                     "has" -> return data.containsKey(content).toString()
                                     "check" -> {
-                                        content.parseObject<java.util.HashMap<String, String?>>().forEach { (key, value) ->
-                                            if (value == null) {
-                                                if (data.containsKey(key)) return "false"
-                                            } else {
-                                                if (data[key] != value) return "false"
+                                        content.parseObject<java.util.HashMap<String, String?>>()
+                                            .forEach { (key, value) ->
+                                                if (value == null) {
+                                                    if (data.containsKey(key)) return "false"
+                                                } else {
+                                                    if (data[key] != value) return "false"
+                                                }
                                             }
-                                        }
                                         return "true"
                                     }
                                     "eval" -> {
@@ -91,13 +92,14 @@ object Expansion : PlaceholderExpansion {
                                     "get" -> return itemTag.getDeepStringOrNull(content) ?: ""
                                     "has" -> return (itemTag.getDeep(content) != null).toString()
                                     "check" -> {
-                                        content.parseObject<java.util.HashMap<String, String?>>().forEach { (key, value) ->
-                                            if (value == null) {
-                                                if (itemTag.getDeep(key) == null) return "false"
-                                            } else {
-                                                if (itemTag.getDeepStringOrNull(key) != value) return "false"
+                                        content.parseObject<java.util.HashMap<String, String?>>()
+                                            .forEach { (key, value) ->
+                                                if (value == null) {
+                                                    if (itemTag.getDeep(key) == null) return "false"
+                                                } else {
+                                                    if (itemTag.getDeepStringOrNull(key) != value) return "false"
+                                                }
                                             }
-                                        }
                                         return "true"
                                     }
                                     "eval" -> {

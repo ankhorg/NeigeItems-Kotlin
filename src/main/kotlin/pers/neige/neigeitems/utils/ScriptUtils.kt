@@ -37,9 +37,11 @@ object ScriptUtils {
                 else -> runCatching { evalResult.toString().toDoubleOrNull() }.getOrNull()
             }
         if (result == null) {
-            Bukkit.getConsoleSender().sendLang("Messages.invalidFormula", mapOf(
-                Pair("{formula}", this)
-            ))
+            Bukkit.getConsoleSender().sendLang(
+                "Messages.invalidFormula", mapOf(
+                    Pair("{formula}", this)
+                )
+            )
         }
         return result ?: 0.0
     }
@@ -56,9 +58,11 @@ object ScriptUtils {
             "HALF_DOWN" -> RoundingMode.HALF_DOWN
             "HALF_EVEN" -> RoundingMode.HALF_EVEN
             else -> {
-                Bukkit.getConsoleSender().sendLang("Messages.invalidRoundingMode", mapOf(
-                    Pair("{mode}", this.uppercase(Locale.getDefault()))
-                ))
+                Bukkit.getConsoleSender().sendLang(
+                    "Messages.invalidRoundingMode", mapOf(
+                        Pair("{mode}", this.uppercase(Locale.getDefault()))
+                    )
+                )
                 RoundingMode.HALF_UP
             }
         }

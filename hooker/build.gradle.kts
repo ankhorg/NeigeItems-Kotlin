@@ -31,16 +31,16 @@ tasks {
         // taboolib
         relocate("taboolib", "pers.neige.neigeitems.taboolib")
         // stringsearcher
-        relocate("org.neosearch.stringsearcher","pers.neige.neigeitems.libs.stringsearcher")
+        relocate("org.neosearch.stringsearcher", "pers.neige.neigeitems.libs.stringsearcher")
         // javassist
-        relocate("javassist","pers.neige.neigeitems.libs.javassist")
+        relocate("javassist", "pers.neige.neigeitems.libs.javassist")
         // callsitenbt
-        relocate("bot.inker.bukkit.nbt","pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
+        relocate("bot.inker.bukkit.nbt", "pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
         // maven-model
-        relocate("org.codehaus.plexus.util","pers.neige.neigeitems.libs.plexus.util")
-        relocate("org.apache.maven.model","pers.neige.neigeitems.libs.maven.model")
+        relocate("org.codehaus.plexus.util", "pers.neige.neigeitems.libs.plexus.util")
+        relocate("org.apache.maven.model", "pers.neige.neigeitems.libs.maven.model")
         // fastjson2
-        relocate("com.alibaba.fastjson2","pers.neige.neigeitems.libs.fastjson2")
+        relocate("com.alibaba.fastjson2", "pers.neige.neigeitems.libs.fastjson2")
     }
     kotlinSourcesJar {
         // include subprojects
@@ -53,7 +53,8 @@ tasks {
 
 fun final() {
     val mainFile = File("${rootProject.buildDir}/libs/${rootProject.name}-${rootProject.property("version")}.jar")
-    val newMainFile = File("${rootProject.buildDir}/libs/Modified${rootProject.name}-${rootProject.property("version")}.jar")
+    val newMainFile =
+        File("${rootProject.buildDir}/libs/Modified${rootProject.name}-${rootProject.property("version")}.jar")
     val currentFile = File("${project.buildDir}/libs/${project.name}-${project.property("version")}.jar")
 
     if (!mainFile.exists()) return

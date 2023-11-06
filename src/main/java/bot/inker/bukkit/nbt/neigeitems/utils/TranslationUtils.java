@@ -139,10 +139,10 @@ public class TranslationUtils {
         // 玩家头颅
         if (item instanceof RefItemSkull) {
             if (
-                    // 1.13+ 肯定是玩家头颅, 1.12.2 需要检测损伤值
+                // 1.13+ 肯定是玩家头颅, 1.12.2 需要检测损伤值
                     (CbVersion.v1_13_R1.isSupport() || itemStack.getDurability() == 3)
-                    // NBT 检测
-                    && nmsItemStack.hasTag()
+                            // NBT 检测
+                            && nmsItemStack.hasTag()
             ) {
                 RefNbtTagCompound tag = nmsItemStack.getTag();
                 RefNbtBase skullOwnerTag = tag.get("SkullOwner");
@@ -160,14 +160,14 @@ public class TranslationUtils {
                     // 1.13+ 具名玩家头颅的翻译键
                     if (CbVersion.v1_13_R1.isSupport()) {
                         temp = LocaleI18n.translate(item.getDescriptionId() + ".named");
-                    // 1.12.2 具名玩家头颅的翻译键
+                        // 1.12.2 具名玩家头颅的翻译键
                     } else {
                         temp = LocaleI18n.translate("item.skull.player.name");
                     }
                     result = temp.replaceFirst("%s", ownerName);
                 }
             }
-        // 成书
+            // 成书
         } else if (item instanceof RefItemWrittenBook) {
             RefNbtTagCompound tag = nmsItemStack.getTag();
             if (tag != null) {
@@ -182,30 +182,30 @@ public class TranslationUtils {
                 String translationKey = item.getDescriptionId(nmsItemStack);
                 result = LocaleI18n.translate(translationKey);
             }
-        // 1.12.2 获取翻译键需要经历更多的痛苦折磨
+            // 1.12.2 获取翻译键需要经历更多的痛苦折磨
         } else {
             // 旗帜
             if (item instanceof RefItemBanner) {
                 RefEnumColor color = RefItemBanner.getColor(nmsItemStack);
                 String translationKey = "item.banner." + color.getTranslationKey() + ".name";
                 result = LocaleI18n.translate(translationKey);
-            // 喷溅药水
+                // 喷溅药水
             } else if (item instanceof RefItemSplashPotion) {
                 String translationKey = RefPotionUtil.getPotionRegistry(nmsItemStack).getTranslationKey("splash_potion.effect.");
                 result = LocaleI18n.translate(translationKey);
-            // 滞留药水
+                // 滞留药水
             } else if (item instanceof RefItemLingeringPotion) {
                 String translationKey = RefPotionUtil.getPotionRegistry(nmsItemStack).getTranslationKey("lingering_potion.effect.");
                 result = LocaleI18n.translate(translationKey);
-            // 普通药水
+                // 普通药水
             } else if (item instanceof RefItemPotion) {
                 String translationKey = RefPotionUtil.getPotionRegistry(nmsItemStack).getTranslationKey("potion.effect.");
                 result = LocaleI18n.translate(translationKey);
-            // 药水箭
+                // 药水箭
             } else if (item instanceof RefItemTippedArrow) {
                 String translationKey = RefPotionUtil.getPotionRegistry(nmsItemStack).getTranslationKey("tipped_arrow.effect.");
                 result = LocaleI18n.translate(translationKey);
-            // 刷怪蛋
+                // 刷怪蛋
             } else if (item instanceof RefItemMonsterEgg) {
                 String basicName = LocaleI18n.translate(item.getDescriptionId(nmsItemStack) + ".name");
                 String entityTranslationKey = RefEntityTypes.getTranslationKey(RefItemMonsterEgg.getEntityType(nmsItemStack));
@@ -213,7 +213,7 @@ public class TranslationUtils {
                     entityTranslationKey = "generic";
                 }
                 result = basicName + " " + LocaleI18n.translate("entity." + entityTranslationKey + ".name");
-            // 盾牌
+                // 盾牌
             } else if (item instanceof RefItemShield) {
                 RefNbtTagCompound tag = nmsItemStack.getTag();
                 if (tag != null && tag.hasKeyOfType("BlockEntityTag", NbtType.TAG_COMPOUND)) {

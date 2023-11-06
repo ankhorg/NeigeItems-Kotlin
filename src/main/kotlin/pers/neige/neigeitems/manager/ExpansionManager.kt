@@ -110,7 +110,8 @@ object ExpansionManager {
         // 加载文件中的扩展
         for (file in ConfigUtils.getAllFiles("Expansions")) {
             // 这个不是真的文件名, 而是Expansions文件夹下的相对路径
-            val fileName = file.path.replace("plugins${File.separator}NeigeItems${File.separator}Expansions${File.separator}", "")
+            val fileName =
+                file.path.replace("plugins${File.separator}NeigeItems${File.separator}Expansions${File.separator}", "")
             // 仅加载.js文件
             if (!fileName.endsWith(".js")) continue
             // 防止某个脚本出错导致加载中断
@@ -120,7 +121,8 @@ object ExpansionManager {
                 expansions[fileName] = script
             } catch (error: Throwable) {
                 // 出错了就提示一下
-                Bukkit.getLogger().info(ConfigManager.config.getString("Messages.invalidScript")?.replace("{script}", fileName))
+                Bukkit.getLogger()
+                    .info(ConfigManager.config.getString("Messages.invalidScript")?.replace("{script}", fileName))
                 error.printStackTrace()
             } finally {
                 // 开启了debug就发一下加载耗时
@@ -136,7 +138,7 @@ object ExpansionManager {
      */
     @Listener
     private fun enable(event: PluginReloadEvent.Post) {
-        if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION ) {
+        if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION) {
             return
         }
         permanentExpansion.forEach { (scriptName, scriptExpansion) ->
@@ -171,7 +173,7 @@ object ExpansionManager {
      */
     @Listener
     private fun disable(event: PluginReloadEvent.Pre) {
-        if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION ) {
+        if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION) {
             return
         }
         permanentExpansion.forEach { (scriptName, scriptExpansion) ->

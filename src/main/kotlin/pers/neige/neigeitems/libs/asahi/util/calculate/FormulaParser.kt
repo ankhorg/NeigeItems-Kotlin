@@ -111,9 +111,11 @@ object FormulaParser {
         return runCatching {
             toCalcInfix().toCalcSuffix().calc()
         }.getOrElse {
-            Bukkit.getConsoleSender().sendLang("Messages.invalidFormula", mapOf(
-                Pair("{formula}", this)
-            ))
+            Bukkit.getConsoleSender().sendLang(
+                "Messages.invalidFormula", mapOf(
+                    Pair("{formula}", this)
+                )
+            )
             0.0
         }
     }

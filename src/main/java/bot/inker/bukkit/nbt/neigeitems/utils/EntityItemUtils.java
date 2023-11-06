@@ -43,6 +43,18 @@ public class EntityItemUtils {
     }
 
     /**
+     * 判断给定的 Item 实体是否属于 CraftItem.
+     *
+     * @param item 待检测物品.
+     * @return 是否属于 CraftItem.
+     */
+    public static boolean isCraftItem(
+            Item item
+    ) {
+        return (Object) item instanceof RefCraftItem;
+    }
+
+    /**
      * 获取掉落物实体的已存活时长(tick).
      * 若该物品不属于 CraftItem 则返回 null.
      *

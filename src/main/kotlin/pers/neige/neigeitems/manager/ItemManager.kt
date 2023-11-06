@@ -239,7 +239,7 @@ object ItemManager : ItemConfigManager() {
                         }
                     }
                     // 设置ItemFlags
-                    itemMeta?.itemFlags?.let{
+                    itemMeta?.itemFlags?.let {
                         if (it.isNotEmpty()) {
                             configSection.set("hideflags", it.map { flag -> flag.name })
                         }
@@ -277,7 +277,9 @@ object ItemManager : ItemConfigManager() {
      */
     fun saveItem(itemStack: ItemStack, id: String, path: String = "$id.yml", cover: Boolean): Int {
         val file = File(plugin.dataFolder, "${File.separator}Items${File.separator}$path")
-        if(!file.exists()) { file.createNewFile() }
+        if (!file.exists()) {
+            file.createNewFile()
+        }
         val config = YamlConfiguration.loadConfiguration(file)
         return saveItem(itemStack, id, file, config, cover)
     }
@@ -351,7 +353,7 @@ object ItemManager : ItemConfigManager() {
         if (newCharge == 0) {
             // 扬了
             this.amount = 0
-        // 不为0
+            // 不为0
         } else {
             // 修改使用次数
             neigeItems.putInt("charge", newCharge)
@@ -437,7 +439,7 @@ object ItemManager : ItemConfigManager() {
         } else {
             // 修改耐久值
             neigeItems.putInt("durability", newDurability)
-            this.durability = (type.maxDurability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
+            this.durability = (type.maxDurability * (1 - (newDurability.toDouble() / maxDurability))).toInt().toShort()
         }
     }
 
@@ -468,11 +470,11 @@ object ItemManager : ItemConfigManager() {
         // 破坏
         if (newDurability == 0 && itemBreak) {
             this.amount = 0
-        // 不破坏
+            // 不破坏
         } else {
             // 修改耐久值
             neigeItems.putInt("durability", newDurability)
-            this.durability = (type.maxDurability * (1 - (newDurability.toDouble()/maxDurability))).toInt().toShort()
+            this.durability = (type.maxDurability * (1 - (newDurability.toDouble() / maxDurability))).toInt().toShort()
         }
     }
 
@@ -500,7 +502,7 @@ object ItemManager : ItemConfigManager() {
         neigeItems.putInt("durability", durability)
         // 修改最大耐久值
         neigeItems.putInt("maxDurability", realAmount)
-        this.durability = (type.maxDurability * (1 - (durability.toDouble()/realAmount))).toInt().toShort()
+        this.durability = (type.maxDurability * (1 - (durability.toDouble() / realAmount))).toInt().toShort()
     }
 
     /**
@@ -527,7 +529,7 @@ object ItemManager : ItemConfigManager() {
         neigeItems.putInt("durability", durability)
         // 修改最大耐久值
         neigeItems.putInt("maxDurability", maxDurability)
-        this.durability = (type.maxDurability * (1 - (durability.toDouble()/maxDurability))).toInt().toShort()
+        this.durability = (type.maxDurability * (1 - (durability.toDouble() / maxDurability))).toInt().toShort()
     }
 
     /**
@@ -550,7 +552,11 @@ object ItemManager : ItemConfigManager() {
      * @return 物品是空气时返回false, 其余情况返回true
      */
     @JvmStatic
-    fun ItemStack.rebuild(player: OfflinePlayer, sections: MutableMap<String, String?>, protectNBT: List<String>?): Boolean {
+    fun ItemStack.rebuild(
+        player: OfflinePlayer,
+        sections: MutableMap<String, String?>,
+        protectNBT: List<String>?
+    ): Boolean {
         // 判断是不是空气
         if (type != Material.AIR) {
             // 获取NI物品信息
