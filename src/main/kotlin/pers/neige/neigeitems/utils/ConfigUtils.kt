@@ -7,10 +7,10 @@ import org.bukkit.plugin.java.JavaPlugin
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.SectionManager
+import pers.neige.neigeitems.utils.FileUtils.createDirectory
 import pers.neige.neigeitems.utils.FileUtils.createFile
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.io.OutputStream
 
 
@@ -426,27 +426,31 @@ object ConfigUtils {
 
     /**
      * 保存默认文件(不进行替换)
+     *
+     * @param resourcePath 文件路径
      */
     @JvmStatic
     fun JavaPlugin.saveResourceNotWarn(resourcePath: String) {
-        this.getResource(resourcePath.replace('\\', '/'))?.let { inputStream ->
-            val outFile = File(this.dataFolder, resourcePath)
-            val lastIndex: Int = resourcePath.lastIndexOf(File.separator)
-            val outDir = File(this.dataFolder, resourcePath.substring(0, if (lastIndex >= 0) lastIndex else 0))
-            if (!outDir.exists()) {
-                outDir.mkdirs()
-            }
+        this.saveResourceNotWarn(resourcePath, File(this.dataFolder, resourcePath))
+    }
+
+    /**
+     * 保存默认文件(不进行替换)
+     *
+     * @param resourcePath 文件路径
+     * @param outFile 输出路径
+     */
+    @JvmStatic
+    fun JavaPlugin.saveResourceNotWarn(resourcePath: String, outFile: File) {
+        this.getResource(resourcePath.replace('\\', '/'))?.use { inputStream ->
+            outFile.parentFile.createDirectory()
             if (!outFile.exists()) {
-                try {
+                FileOutputStream(outFile).use { fileOutputStream ->
                     var len: Int
-                    val fileOutputStream = FileOutputStream(outFile)
                     val buf = ByteArray(1024)
                     while (inputStream.read(buf).also { len = it } > 0) {
                         (fileOutputStream as OutputStream).write(buf, 0, len)
                     }
-                    fileOutputStream.close()
-                    inputStream.close()
-                } catch (ex: IOException) {
                 }
             }
         }

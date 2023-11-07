@@ -5,8 +5,10 @@ import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagCompound;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefComponent;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefAABB;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefVec3;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorld;
+import net.minecraft.server.v1_12_R1.AxisAlignedBB;
 import org.bukkit.entity.Entity;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/Entity")
@@ -132,4 +134,8 @@ public abstract class RefEntity {
     @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/Entity;hasCustomName()Z")
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/Entity;hasCustomName()Z")
     public native boolean hasCustomName();
+
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/Entity;getBoundingBox()Lnet/minecraft/server/v1_12_R1/AxisAlignedBB;")
+    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/Entity;getBoundingBox()Lnet/minecraft/world/phys/AABB;")
+    public native RefAABB getBoundingBox();
 }

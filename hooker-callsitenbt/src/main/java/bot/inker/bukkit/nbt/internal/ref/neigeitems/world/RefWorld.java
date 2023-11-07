@@ -23,4 +23,8 @@ public abstract class RefWorld {
     @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/World;getEntities(Lnet/minecraft/server/v1_13_R1/Entity;Lnet/minecraft/server/v1_13_R1/AxisAlignedBB;Ljava/util/function/Predicate;)Ljava/util/List;")
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/level/Level;getEntities(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;Ljava/util/function/Predicate;)Ljava/util/List;")
     public native List<RefEntity> getEntities(@Nullable RefEntity except, RefAABB aabb, @Nullable Predicate<? super RefEntity> filter);
+
+    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/World;getChunkIfLoaded(II)Lnet/minecraft/server/v1_12_R1/Chunk;")
+    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/level/Level;getChunkIfLoaded(II)Lnet/minecraft/world/level/chunk/LevelChunk;")
+    public native RefChunk getChunkIfLoaded(int x, int z);
 }

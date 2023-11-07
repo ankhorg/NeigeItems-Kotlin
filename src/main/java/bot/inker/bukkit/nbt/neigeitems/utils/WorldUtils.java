@@ -5,9 +5,7 @@ import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefCraftEntity;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntity;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntityItem;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefAABB;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefCraftWorld;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorldServer;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.*;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -32,6 +30,10 @@ public class WorldUtils {
      * 1.13+ 版本起, CraftWorld#getNearbyEntities 方法中的 Predicate 参数由 Guava 实现变更为 Java 实现.
      */
     private static final boolean JAVA_PREDICATE_SUPPORT = CbVersion.v1_13_R1.isSupport();
+    /**
+     * 1.19.4+ 版本起, Chunk 类移除 bukkitChunk 字段, 需要自行构建 CraftChunk 实例.
+     */
+    private static final boolean REMOVE_BUKKIT_CHUNK_FIELD = CbVersion.v1_19_R3.isSupport();
 
     /**
      * 获取世界中掉落物实体的最大存活时长(tick).
