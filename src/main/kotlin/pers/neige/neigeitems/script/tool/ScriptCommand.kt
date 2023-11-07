@@ -16,7 +16,9 @@ import pers.neige.neigeitems.utils.SchedulerUtils.sync
  * @property name 指令名
  * @constructor Bukkit 指令
  */
-class ScriptCommand(private val name: String) {
+class ScriptCommand(rawName: String) {
+    private val name = rawName.lowercase()
+
     /**
      * Bukkit PluginCommand 对象
      */

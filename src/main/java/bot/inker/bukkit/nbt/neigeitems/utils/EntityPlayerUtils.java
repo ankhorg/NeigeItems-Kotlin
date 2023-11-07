@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.EnumHand;
 
+import java.util.Collections;
+
 public class EntityPlayerUtils {
     /**
      * 1.15+ 版本起, EntityLiving 内部 swing 方法可以传入一个布尔量.
@@ -464,7 +466,7 @@ public class EntityPlayerUtils {
         }
     }
 
-    public static void receiveMovePacket(
+    public static void moveTo(
             Player player,
             float yaw,
             float pitch,
@@ -472,11 +474,13 @@ public class EntityPlayerUtils {
     ) {
         if ((Object) player instanceof RefCraftPlayer) {
             RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            Location location = player.getLocation();
             entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(yaw, pitch, onGround));
+            entityPlayer.playerConnection.internalTeleport(location.getX(), location.getY(), location.getZ(), yaw, pitch, Collections.emptySet());
         }
     }
 
-    public static void receiveMovePacket(
+    public static void moveTo(
             Player player,
             double x,
             double y,
@@ -485,11 +489,13 @@ public class EntityPlayerUtils {
     ) {
         if ((Object) player instanceof RefCraftPlayer) {
             RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            Location location = player.getLocation();
             entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(x, y, z, onGround));
+            entityPlayer.playerConnection.internalTeleport(x, y, z, location.getYaw(), location.getPitch(), Collections.emptySet());
         }
     }
 
-    public static void receiveMovePacket(
+    public static void moveTo(
             Player player,
             double x,
             double y,
@@ -501,6 +507,39 @@ public class EntityPlayerUtils {
         if ((Object) player instanceof RefCraftPlayer) {
             RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
             entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(x, y, z, yaw, pitch, onGround));
+            entityPlayer.playerConnection.internalTeleport(x, y, z, yaw, pitch, Collections.emptySet());
+        }
+    }
+
+    public static void move(
+            Player player,
+            double x,
+            double y,
+            double z,
+            boolean onGround
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            Location location = player.getLocation();
+            entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(location.getX() + x, location.getY() + y, location.getZ() + z, onGround));
+            entityPlayer.playerConnection.internalTeleport(location.getX() + x, location.getY() + y, location.getZ() + z, location.getYaw(), location.getPitch(), Collections.emptySet());
+        }
+    }
+
+    public static void move(
+            Player player,
+            double x,
+            double y,
+            double z,
+            float yaw,
+            float pitch,
+            boolean onGround
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            Location location = player.getLocation();
+            entityPlayer.playerConnection.handleMovePlayer(newPlayerMovePacket(location.getX() + x, location.getY() + y, location.getZ() + z, yaw, pitch, onGround));
+            entityPlayer.playerConnection.internalTeleport(location.getX() + x, location.getY() + y, location.getZ() + z, yaw, pitch, Collections.emptySet());
         }
     }
 

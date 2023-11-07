@@ -121,17 +121,14 @@ public abstract class RefEntity {
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/Entity;getEyeHeight()F")
     public native final float getEyeHeight();
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "")
     @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/Entity;getCustomName()Lnet/minecraft/server/v1_13_R1/IChatBaseComponent;")
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/Entity;getCustomName()Lnet/minecraft/network/chat/Component;")
     public native RefComponent getCustomName();
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "")
     @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/Entity;setCustomName(Lnet/minecraft/server/v1_13_R1/IChatBaseComponent;)V")
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/Entity;setCustomName(Lnet/minecraft/network/chat/Component;)V")
     public native void setCustomName(RefComponent name);
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "")
     @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/Entity;hasCustomName()Z")
     @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/Entity;hasCustomName()Z")
     public native boolean hasCustomName();

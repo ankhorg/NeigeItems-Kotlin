@@ -63,6 +63,7 @@ public final class JvmHacker {
         Field implLookupField = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
         return (MethodHandles.Lookup) unsafe().getObject(unsafe().staticFieldBase(implLookupField), unsafe().staticFieldOffset(implLookupField));
     });
+
     private JvmHacker() {
         throw new UnsupportedOperationException();
     }

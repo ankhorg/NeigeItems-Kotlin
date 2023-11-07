@@ -11,6 +11,6 @@ import org.jetbrains.annotations.Nullable;
 public final class RefCraftMagicNumbers {
     @Nullable
     @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/util/CraftMagicNumbers;getItem(Lorg/bukkit/Material;)Lnet/minecraft/server/v1_12_R1/Item;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lorg/bukkit/craftbukkit/v1_20_R1/util/CraftMagicNumbers;getItem(Lorg/bukkit/Material;)Lnet/minecraft/world/item/Item;")
+    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lorg/bukkit/craftbukkit/v1_17_R1/util/CraftMagicNumbers;getItem(Lorg/bukkit/Material;)Lnet/minecraft/world/item/Item;")
     public static native RefItem getItem(@NotNull Material material);
 }
