@@ -24,8 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.EnumHand;
 
-import java.util.Collections;
-
 public class EntityPlayerUtils {
     /**
      * 1.15+ 版本起, EntityLiving 内部 swing 方法可以传入一个布尔量.

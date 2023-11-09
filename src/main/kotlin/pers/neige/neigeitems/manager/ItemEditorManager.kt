@@ -190,7 +190,7 @@ object ItemEditorManager {
                 // 获取itemMeta
                 itemStack.itemMeta?.let { itemMeta ->
                     // 获取并设置显示名
-                    itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', content))
+                    itemMeta.displayName = ChatColor.translateAlternateColorCodes('&', content)
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -205,7 +205,7 @@ object ItemEditorManager {
                 // 获取itemMeta
                 itemStack.itemMeta?.let { itemMeta ->
                     // 获取并设置显示名
-                    itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', content) + itemMeta.displayName)
+                    itemMeta.displayName = ChatColor.translateAlternateColorCodes('&', content) + itemMeta.displayName
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -220,7 +220,7 @@ object ItemEditorManager {
                 // 获取itemMeta
                 itemStack.itemMeta?.let { itemMeta ->
                     // 获取并设置显示名
-                    itemMeta.setDisplayName(itemMeta.displayName + ChatColor.translateAlternateColorCodes('&', content))
+                    itemMeta.displayName = itemMeta.displayName + ChatColor.translateAlternateColorCodes('&', content)
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -284,7 +284,7 @@ object ItemEditorManager {
                     }
 
                     // 设置Name
-                    itemMeta.setDisplayName(name.toString())
+                    itemMeta.displayName = name.toString()
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -343,7 +343,7 @@ object ItemEditorManager {
                     }
 
                     // 设置Name
-                    itemMeta.setDisplayName(name.toString())
+                    itemMeta.displayName = name.toString()
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -388,7 +388,7 @@ object ItemEditorManager {
                     }
 
                     // 设置Name
-                    itemMeta.setDisplayName(name)
+                    itemMeta.displayName = name
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -433,7 +433,7 @@ object ItemEditorManager {
                     }
 
                     // 设置Name
-                    itemMeta.setDisplayName(name)
+                    itemMeta.displayName = name
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -478,7 +478,7 @@ object ItemEditorManager {
                     }
 
                     // 设置Name
-                    itemMeta.setDisplayName(name)
+                    itemMeta.displayName = name
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -516,7 +516,7 @@ object ItemEditorManager {
                     }
 
                     // 设置Name
-                    itemMeta.setDisplayName(name)
+                    itemMeta.displayName = name
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -554,7 +554,7 @@ object ItemEditorManager {
                     }
 
                     // 设置Name
-                    itemMeta.setDisplayName(name)
+                    itemMeta.displayName = name
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -592,7 +592,7 @@ object ItemEditorManager {
                     }
 
                     // 设置Name
-                    itemMeta.setDisplayName(name)
+                    itemMeta.displayName = name
                     // 将改动完成的itemMeta设置回去
                     itemStack.itemMeta = itemMeta
                     return@addBasicItemEditor true
@@ -1628,7 +1628,7 @@ object ItemEditorManager {
                         nbtItemStack = itemInfo.nbtItemStack
                         neigeItems = itemInfo.neigeItems
                         id = itemInfo.id
-                        data = itemInfo.data ?: HashMap<String, String>()
+                        data = itemInfo.data
                     }
                 }
                 sections.forEach { data.remove(it) }
@@ -1691,7 +1691,7 @@ object ItemEditorManager {
                         nbtItemStack = itemInfo.nbtItemStack
                         neigeItems = itemInfo.neigeItems
                         id = itemInfo.id
-                        data = itemInfo.data ?: HashMap<String, String>()
+                        data = itemInfo.data
                     }
                 }
                 sections.forEach { data.remove(it) }
@@ -1750,7 +1750,7 @@ object ItemEditorManager {
                         nbtItemStack = itemInfo.nbtItemStack
                         neigeItems = itemInfo.neigeItems
                         id = itemInfo.id
-                        data = itemInfo.data ?: HashMap<String, String>()
+                        data = itemInfo.data
                     }
                 }
                 sections.forEach { (key, value) ->

@@ -48,7 +48,7 @@ public class SchedulerUtils {
             long delay,
             @NotNull Runnable task
     ) {
-        Bukkit.getScheduler().runTaskLater(NeigeItems.INSTANCE.getPlugin(), task, delay);
+        syncLater(NeigeItems.INSTANCE.getPlugin(), delay, task);
     }
 
     /**
@@ -64,6 +64,36 @@ public class SchedulerUtils {
             @NotNull Runnable task
     ) {
         Bukkit.getScheduler().runTaskLater(plugin, task, delay);
+    }
+
+    /**
+     * 在主线程重复执行一段代码.
+     *
+     * @param delay 延迟时间(tick).
+     * @param task  执行的代码.
+     */
+    public static void syncTimer(
+            long delay,
+            long period,
+            @NotNull Runnable task
+    ) {
+        syncTimer(NeigeItems.INSTANCE.getPlugin(), delay, period, task);
+    }
+
+    /**
+     * 在主线程重复执行一段代码.
+     *
+     * @param plugin 注册任务的插件.
+     * @param delay  延迟时间(tick).
+     * @param task   执行的代码.
+     */
+    public static void syncTimer(
+            @NotNull Plugin plugin,
+            long delay,
+            long period,
+            @NotNull Runnable task
+    ) {
+        Bukkit.getScheduler().runTaskTimer(plugin, task, delay, period);
     }
 
     /**
@@ -139,7 +169,7 @@ public class SchedulerUtils {
             long delay,
             @NotNull Runnable task
     ) {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(NeigeItems.INSTANCE.getPlugin(), task, delay);
+        asyncLater(NeigeItems.INSTANCE.getPlugin(), delay, task);
     }
 
     /**
@@ -155,6 +185,36 @@ public class SchedulerUtils {
             @NotNull Runnable task
     ) {
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, task, delay);
+    }
+
+    /**
+     * 异步重复执行一段代码.
+     *
+     * @param delay 延迟时间(tick).
+     * @param task  执行的代码.
+     */
+    public static void asyncTimer(
+            long delay,
+            long period,
+            @NotNull Runnable task
+    ) {
+        asyncTimer(NeigeItems.INSTANCE.getPlugin(), delay, period, task);
+    }
+
+    /**
+     * 异步重复执行一段代码.
+     *
+     * @param plugin 注册任务的插件.
+     * @param delay  延迟时间(tick).
+     * @param task   执行的代码.
+     */
+    public static void asyncTimer(
+            @NotNull Plugin plugin,
+            long delay,
+            long period,
+            @NotNull Runnable task
+    ) {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, task, delay, period);
     }
 
     /**

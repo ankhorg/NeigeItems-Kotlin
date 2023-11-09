@@ -8,7 +8,6 @@ import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefComponent;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefAABB;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefVec3;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorld;
-import net.minecraft.server.v1_12_R1.AxisAlignedBB;
 import org.bukkit.entity.Entity;
 
 @HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/Entity")

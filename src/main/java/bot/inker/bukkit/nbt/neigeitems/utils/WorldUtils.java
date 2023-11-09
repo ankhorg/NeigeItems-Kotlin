@@ -5,7 +5,9 @@ import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefCraftEntity;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntity;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntityItem;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.*;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefAABB;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefCraftWorld;
+import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorldServer;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -382,7 +384,7 @@ public class WorldUtils {
                 return false;
             });
         } else {
-            worldServer.getEntities(realExcept, aabb, (com.google.common.base.Predicate<RefEntity>) refEntity -> {
+            worldServer.getEntities(realExcept, aabb, refEntity -> {
                 if (entities.size() < limit) {
                     Entity entity = refEntity.getBukkitEntity();
                     if (filter == null || filter.test(entity)) {

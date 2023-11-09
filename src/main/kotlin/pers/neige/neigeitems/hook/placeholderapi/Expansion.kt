@@ -59,7 +59,7 @@ object Expansion : PlaceholderExpansion {
                             if (itemStack.type == Material.AIR) return ""
                             if (key == "data") {
                                 val itemInfo = itemStack.isNiItem(true) ?: return ""
-                                val data: HashMap<String, String> = itemInfo.data!!
+                                val data: HashMap<String, String> = itemInfo.data
                                 when (type) {
                                     "get" -> return data[content] ?: ""
                                     "has" -> return data.containsKey(content).toString()

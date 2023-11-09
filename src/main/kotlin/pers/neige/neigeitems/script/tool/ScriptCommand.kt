@@ -55,7 +55,7 @@ class ScriptCommand(rawName: String) {
      * @return ScriptCommand 本身
      */
     fun setExecutor(executor: CommandExecutor): ScriptCommand {
-        command.setExecutor(executor)
+        command.executor = executor
         return this
     }
 

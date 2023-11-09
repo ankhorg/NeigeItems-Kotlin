@@ -564,8 +564,8 @@ object ItemManager : ItemConfigManager() {
             // 填入重构节点
             sections.forEach { (key, value) ->
                 when (value) {
-                    null -> itemInfo.data!!.remove(key)
-                    else -> itemInfo.data!![key] = value
+                    null -> itemInfo.data.remove(key)
+                    else -> itemInfo.data[key] = value
                 }
             }
             // 生成新物品

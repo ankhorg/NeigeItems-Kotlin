@@ -221,7 +221,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
             }
             color = color.coerceAtLeast(0).coerceAtMost(0xFFFFFF)
             when (itemMeta) {
-                is LeatherArmorMeta -> itemMeta.setColor(Color.fromRGB(color))
+                is LeatherArmorMeta -> itemMeta.color = Color.fromRGB(color)
                 is MapMeta -> itemMeta.color = Color.fromRGB(color)
                 is PotionMeta -> itemMeta.color = Color.fromRGB(color)
             }
@@ -452,8 +452,8 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                 }
                 // 设置物品名
                 if (configSection.contains("name")) {
-                    itemMeta?.setDisplayName(configSection.getString("name")
-                        ?.let { ChatColor.translateAlternateColorCodes('&', it) })
+                    itemMeta?.displayName = configSection.getString("name")
+                        ?.let { ChatColor.translateAlternateColorCodes('&', it) }
                 }
                 // 设置Lore
                 if (configSection.contains("lore")) {
@@ -489,7 +489,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                     }
                     color = color.coerceAtLeast(0).coerceAtMost(0xFFFFFF)
                     when (itemMeta) {
-                        is LeatherArmorMeta -> itemMeta.setColor(Color.fromRGB(color))
+                        is LeatherArmorMeta -> itemMeta.color = Color.fromRGB(color)
                         is MapMeta -> itemMeta.color = Color.fromRGB(color)
                         is PotionMeta -> itemMeta.color = Color.fromRGB(color)
                     }
