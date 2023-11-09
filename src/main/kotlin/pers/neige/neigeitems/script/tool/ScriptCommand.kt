@@ -55,7 +55,7 @@ class ScriptCommand(rawName: String) {
      * @return ScriptCommand 本身
      */
     fun setExecutor(executor: CommandExecutor): ScriptCommand {
-        command.executor = executor
+        command.setExecutor(executor)
         return this
     }
 
@@ -66,7 +66,7 @@ class ScriptCommand(rawName: String) {
      * @return ScriptCommand 本身
      */
     fun setTabCompleter(tabCompleter: TabCompleter): ScriptCommand {
-        command.tabCompleter = tabCompleter
+        command.setTabCompleter(tabCompleter)
         return this
     }
 

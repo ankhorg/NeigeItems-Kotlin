@@ -43,9 +43,9 @@ object PlayerItemConsumeListener {
 
                 // 设置物品
                 if (hand == EquipmentSlot.HAND) {
-                    player.inventory.itemInMainHand = itemStack
+                    player.inventory.setItemInMainHand(itemStack)
                 } else {
-                    player.inventory.itemInOffHand = itemStack
+                    player.inventory.setItemInMainHand(itemStack)
                 }
                 return
             }
