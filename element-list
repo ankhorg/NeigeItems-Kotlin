@@ -42,6 +42,7 @@ pers.neige.neigeitems.libs.asahi.util.calculate
 pers.neige.neigeitems.listener
 pers.neige.neigeitems.manager
 pers.neige.neigeitems.maven
+pers.neige.neigeitems.scanner
 pers.neige.neigeitems.script
 pers.neige.neigeitems.script.tool
 pers.neige.neigeitems.section

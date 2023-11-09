@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>LifeCycle 1.15.94 API </title>
+    <title>ClassScanner 1.15.94 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -40,7 +40,7 @@ var pathtoroot = "../../../../";
     
     <li><a href="package-summary.html">Package</a></li>
     
-    <li>Class</li>
+    <li class="navBarCell1Rev">Class</li>
     
     <li><a href="package-tree.html">Tree</a></li>
     
@@ -89,7 +89,7 @@ var pathtoroot = "../../../../";
 <main role="main">
     <div class="header">
         <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html"></a></div>
-        <h2 title="Enum Awake.LifeCycle" class="title">Enum Awake.LifeCycle</h2>
+        <h2 title="Class ClassScanner" class="title">Class ClassScanner</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -114,7 +114,7 @@ var pathtoroot = "../../../../";
                     <hr>
                     <pre class="wrap-overflow">
 
-public enum <span class="typeNameLabel"><a href=Awake.LifeCycle.html>Awake.LifeCycle</a></span>
+public final class <span class="typeNameLabel"><a href=ClassScanner.html>ClassScanner</a></span>
 
                     </pre>
                     <div class="block"></div>
@@ -164,6 +164,12 @@ public enum <span class="typeNameLabel"><a href=Awake.LifeCycle.html>Awake.LifeC
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
                                         
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt;&gt;</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=ClassScanner.html#classes>classes</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
                                     </table>
                                 </div>
                             </li>
@@ -188,6 +194,12 @@ public enum <span class="typeNameLabel"><a href=Awake.LifeCycle.html>Awake.LifeC
                                         </tr>
 
                                         
+                                            <tr class="altColor">
+                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
+                                                        href="#ClassScanner(Plugin,String,Set)">ClassScanner</a></span>(Plugin plugin, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> packageName, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; except)</code></th>
+                                                <td class="colLast"></td>
+                                            </tr>
+                                        
 
                                         </tbody>
                                     </table>
@@ -209,24 +221,6 @@ public enum <span class="typeNameLabel"><a href=Awake.LifeCycle.html>Awake.LifeC
                                     <tr>
                                         <th class="colFirst" scope="col">Enum Constant</th>
                                         <th class="colLast" scope="col">Description</th>
-                                    </tr>
-                                    
-                                    <tr class="altColor">
-                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
-                                                href="TODO"><a href=Awake.LifeCycle.html#ENABLE>ENABLE</a></a></span></code></th>
-                                        <td class="colLast"></td>
-                                    </tr>
-                                    
-                                    <tr class="rowColor">
-                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
-                                                href="TODO"><a href=Awake.LifeCycle.html#ACTIVE>ACTIVE</a></a></span></code></th>
-                                        <td class="colLast"></td>
-                                    </tr>
-                                    
-                                    <tr class="altColor">
-                                        <th class="colFirst" scope="row"><code><span class="memberNameLink"><a
-                                                href="TODO"><a href=Awake.LifeCycle.html#DISABLE>DISABLE</a></a></span></code></th>
-                                        <td class="colLast"></td>
                                     </tr>
                                     
                                 </table>
@@ -256,19 +250,27 @@ public enum <span class="typeNameLabel"><a href=Awake.LifeCycle.html>Awake.LifeC
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code>static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=Awake.LifeCycle.html>Awake.LifeCycle</a>&gt;</code>
+                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt;&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=Awake.LifeCycle.html#values()>values</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=ClassScanner.html#getClasses()>getClasses</a>() </code>
                                             </th>
-                                            <td class="colLast">Returns an array containing the constants of this enum type, in the order they're declared.</td>
+                                            <td class="colLast">所有插件类</td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>static <a href=Awake.LifeCycle.html>Awake.LifeCycle</a></code>
+                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=Awake.LifeCycle.html#valueOf(String)>valueOf</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ClassScanner.html#onEnable()>onEnable</a>() </code>
                                             </th>
-                                            <td class="colLast">Returns the enum constant of this type with the specified name.</td>
+                                            <td class="colLast">enable阶段调用</td>
+                                        </tr>
+                                        
+                                        <tr id="i2" class="altColor">
+                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=ClassScanner.html#onDisable()>onDisable</a>() </code>
+                                            </th>
+                                            <td class="colLast">disable阶段调用</td>
                                         </tr>
                                         
                                         </tbody>
@@ -302,6 +304,16 @@ public enum <span class="typeNameLabel"><a href=Awake.LifeCycle.html>Awake.LifeC
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
+                                <a name="ClassScanner(Plugin,String,Set)"></a>
+                                <ul class="blockList">
+                                    <li class="blockList">
+                                        <h4>ClassScanner</h4>
+                                        <pre>ClassScanner(Plugin plugin, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> packageName, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; except)</pre>
+                                        <div class="block"></div>
+                                        
+                                    </li>
+                                </ul>
+                                
                             </li>
                         </ul>
                     </section>
@@ -315,31 +327,46 @@ public enum <span class="typeNameLabel"><a href=Awake.LifeCycle.html>Awake.LifeC
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="values()">
+                                <a id="getClasses()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>values</h4>
-                                        <pre class="methodSignature"> static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=Awake.LifeCycle.html>Awake.LifeCycle</a>&gt; <a href=Awake.LifeCycle.html#values()>values</a>()</pre>
-                                        <div class="block"><p>Returns an array containing the constants of this enum type, in the order they're declared. This method may be used to iterate over the constants.</p></div>
+                                        <h4>getClasses</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt;&gt; <a href=ClassScanner.html#getClasses()>getClasses</a>()</pre>
+                                        <div class="block"><p>所有插件类</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="valueOf(String)">
+                                <a id="onEnable()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>onEnable</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ClassScanner.html#onEnable()>onEnable</a>()</pre>
+                                        <div class="block"><p>enable阶段调用</p></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="onDisable()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>valueOf</h4>
-                                        <pre class="methodSignature"> static <a href=Awake.LifeCycle.html>Awake.LifeCycle</a> <a href=Awake.LifeCycle.html#valueOf(String)>valueOf</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name)</pre>
-                                        <div class="block"><p>Returns the enum constant of this type with the specified name. The string must match exactly an identifier used to declare an enum constant in this type. (Extraneous whitespace characters are not permitted.)</p></div>
+                                        <h4>onDisable</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=ClassScanner.html#onDisable()>onDisable</a>()</pre>
+                                        <div class="block"><p>disable阶段调用</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
@@ -370,7 +397,7 @@ public enum <span class="typeNameLabel"><a href=Awake.LifeCycle.html>Awake.LifeC
     
     <li><a href="package-summary.html">Package</a></li>
     
-    <li>Class</li>
+    <li class="navBarCell1Rev">Class</li>
     
     <li><a href="package-tree.html">Tree</a></li>
     
