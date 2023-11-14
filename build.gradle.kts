@@ -121,9 +121,7 @@ tasks {
         exclude("META-INF/tf/**")
         exclude("module-info.java")
         // kotlin
-        relocate("kotlin.", "pers.neige.neigeitems.libs.kotlin.") {
-            exclude("kotlin.Metadata")
-        }
+        relocate("kotlin.", "pers.neige.neigeitems.libs.kotlin.")
         // taboolib
         relocate("taboolib", "pers.neige.neigeitems.taboolib")
         // bstats
