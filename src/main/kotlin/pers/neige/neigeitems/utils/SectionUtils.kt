@@ -130,9 +130,9 @@ object SectionUtils {
             // 私有节点调用
             -1 -> {
                 // 尝试读取缓存
-                if (cache?.get(this) != null) {
+                if (cache?.containsKey(this) ?: false) {
                     // 直接返回对应节点值
-                    return cache[this].toString()
+                    return (cache as Map<*, *>)[this].toString()
                     // 读取失败, 尝试主动解析
                 } else {
                     // 尝试解析并返回对应节点值
@@ -211,7 +211,7 @@ object SectionUtils {
         itemStack: ItemStack,
         itemTag: NbtCompound,
         data: MutableMap<String, String>?,
-        player: OfflinePlayer,
+        player: OfflinePlayer?,
         cache: MutableMap<String, String>?,
         sections: ConfigurationSection?
     ): String {
@@ -236,16 +236,16 @@ object SectionUtils {
         itemStack: ItemStack,
         itemTag: NbtCompound,
         data: MutableMap<String, String>?,
-        player: OfflinePlayer,
+        player: OfflinePlayer?,
         cache: MutableMap<String, String>? = null,
         sections: ConfigurationSection? = null
     ): String {
         when (val index = this.indexOf("::")) {
             -1 -> {
                 // 尝试读取缓存
-                if (cache?.get(this) != null) {
+                if (cache?.containsKey(this) ?: false) {
                     // 直接返回对应节点值
-                    return cache[this].toString()
+                    return (cache as Map<*, *>)[this].toString()
                     // 读取失败, 尝试主动解析
                 } else {
                     // 尝试解析并返回对应节点值

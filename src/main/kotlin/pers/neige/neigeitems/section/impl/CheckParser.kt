@@ -2,6 +2,7 @@ package pers.neige.neigeitems.section.impl
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SchedulerUtils.async
@@ -51,10 +52,12 @@ object CheckParser : SectionParser() {
                     Pair("sections", sections)
                 ).let { params ->
                     ActionManager.runAction(
-                        it,
                         actions,
-                        params,
-                        params
+                        ActionContext(
+                            it,
+                            params,
+                            params
+                        )
                     )
                 }
             }

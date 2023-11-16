@@ -3,6 +3,7 @@ package pers.neige.neigeitems.command.subcommand
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.SchedulerUtils.async
@@ -39,8 +40,10 @@ object Action {
                         if (player == null && sender is Player && context.argument(-1) == "me") {
                             player = sender
                         }
-                        player?.let {
-                            ActionManager.runAction(player, argument.parseSection(player))
+                        if (player != null) {
+                            ActionManager.runAction(argument.parseSection(player), ActionContext(player))
+                        } else {
+                            ActionManager.runAction(argument.parseSection())
                         }
                     }
                 }

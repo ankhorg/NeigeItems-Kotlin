@@ -2,6 +2,7 @@ package pers.neige.neigeitems.item;
 
 import bot.inker.bukkit.nbt.NbtCompound;
 import bot.inker.bukkit.nbt.NbtItemStack;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.JsonUtils;
@@ -12,6 +13,8 @@ import java.util.HashMap;
  * 用于在判断NI物品后返回NI物品信息, 详见ItemUtils#isNiItem
  */
 public final class ItemInfo {
+    @NotNull
+    private final ItemStack itemStack;
     @NotNull
     private final NbtItemStack nbtItemStack;
     @NotNull
@@ -26,6 +29,7 @@ public final class ItemInfo {
     /**
      * 用于在判断NI物品后返回NI物品信息, 详见ItemUtils#isNiItem
      *
+     * @param itemStack 物品本身
      * @param nbtItemStack NbtItemStack
      * @param itemTag      物品NBT
      * @param neigeItems   NI物品特殊NBT
@@ -33,17 +37,24 @@ public final class ItemInfo {
      * @param data         指向数据
      */
     public ItemInfo(
+            @NotNull ItemStack itemStack,
             @NotNull NbtItemStack nbtItemStack,
             @NotNull NbtCompound itemTag,
             @NotNull NbtCompound neigeItems,
             @NotNull String id,
             @Nullable HashMap<String, String> data
     ) {
+        this.itemStack = itemStack;
         this.nbtItemStack = nbtItemStack;
         this.itemTag = itemTag;
         this.neigeItems = neigeItems;
         this.id = id;
         this.data = data;
+    }
+
+    @NotNull
+    public ItemStack getItemStack() {
+        return this.itemStack;
     }
 
     @NotNull

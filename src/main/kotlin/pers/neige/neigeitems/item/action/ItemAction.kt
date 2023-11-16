@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import java.util.*
 
@@ -65,12 +66,39 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
     /**
      * 运行某个动作
      *
+     * @param trigger 触发器
+     * @param context 动作上下文
+     */
+    fun run(
+        trigger: ActionTrigger?,
+        context: ActionContext
+    ) {
+        trigger?.run(context)
+    }
+
+    /**
+     * 运行某个动作
+     *
+     * @param trigger 触发器
+     * @param context 动作上下文
+     */
+    fun run(
+        trigger: String?,
+        context: ActionContext
+    ) {
+        triggers[trigger]?.run(context)
+    }
+
+    /**
+     * 运行某个动作
+     *
      * @param player 待操作玩家
      * @param trigger 触发器
      * @param itemStack 触发物品
      * @param itemTag 物品NBT
      * @param event 触发事件
      */
+    @Deprecated("使用run(trigger: ActionTrigger?, context: ActionContext)代替")
     fun run(
         player: Player,
         trigger: ActionTrigger?,
@@ -99,6 +127,7 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
      * @param itemTag 物品NBT
      * @param event 触发事件
      */
+    @Deprecated("使用run(trigger: String?, context: ActionContext)代替")
     fun run(
         player: Player,
         trigger: String?,

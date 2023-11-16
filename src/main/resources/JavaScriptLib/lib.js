@@ -30,6 +30,10 @@ const SchedulerUtils = Packages.pers.neige.neigeitems.utils.SchedulerUtils
 
 const EnumHand = Packages.pers.neige.neigeitems.EnumHand
 const SpawnerBuilder = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner.SpawnerBuilder
+const SuccessResult = Packages.pers.neige.neigeitems.action.result.SuccessResult
+const StopResult = Packages.pers.neige.neigeitems.action.result.StopResult
+const DelayResult = Packages.pers.neige.neigeitems.action.result.DelayResult
+const Results = Packages.pers.neige.neigeitems.action.result.Results
 
 const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
 const ConfigManager = Packages.pers.neige.neigeitems.manager.ConfigManager.INSTANCE

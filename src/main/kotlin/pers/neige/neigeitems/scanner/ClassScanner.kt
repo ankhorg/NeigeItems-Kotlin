@@ -69,12 +69,20 @@ class ClassScanner(
         }
 
         enableMethods.forEach { method ->
-            method.invokeSafe()
+            kotlin.runCatching {
+                method.invokeSafe()
+            }.getOrElse {
+                it.printStackTrace()
+            }
         }
 
         sync(plugin) {
             activeMethods.forEach { method ->
-                method.invokeSafe()
+                kotlin.runCatching {
+                    method.invokeSafe()
+                }.getOrElse {
+                    it.printStackTrace()
+                }
             }
         }
 
@@ -97,7 +105,11 @@ class ClassScanner(
      */
     fun onDisable() {
         disableMethods.forEach { method ->
-            method.invokeSafe()
+            kotlin.runCatching {
+                method.invokeSafe()
+            }.getOrElse {
+                it.printStackTrace()
+            }
         }
     }
 

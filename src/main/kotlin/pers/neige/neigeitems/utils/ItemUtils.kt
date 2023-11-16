@@ -511,7 +511,7 @@ object ItemUtils {
                 parseData -> neigeItems.getString("data")?.parseObject<java.util.HashMap<String, String>>()
                 else -> null
             }
-            return ItemInfo(nbtItemStack, itemTag, neigeItems, id, data)
+            return ItemInfo(this, nbtItemStack, itemTag, neigeItems, id, data)
         }
         return null
     }

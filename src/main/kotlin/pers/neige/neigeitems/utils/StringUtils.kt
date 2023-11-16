@@ -92,6 +92,11 @@ object StringUtils {
         }
     }
 
+    @JvmStatic
+    fun String.splitKt(separator: String, limit: Int): List<String> {
+        return this.split(separator, limit = limit)
+    }
+
     /**
      * 转Int
      *
