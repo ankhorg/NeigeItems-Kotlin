@@ -17,6 +17,9 @@ bot.inker.bukkit.nbt.neigeitems.enchantment
 bot.inker.bukkit.nbt.neigeitems.spawner
 bot.inker.bukkit.nbt.neigeitems.utils
 pers.neige.neigeitems
+pers.neige.neigeitems.action
+pers.neige.neigeitems.action.impl
+pers.neige.neigeitems.action.result
 pers.neige.neigeitems.annotation
 pers.neige.neigeitems.command
 pers.neige.neigeitems.command.impl
