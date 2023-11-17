@@ -144,7 +144,7 @@ public abstract class BaseActionManager {
      */
     @NotNull
     public ActionResult runAction(
-            @Nullable Object action
+            @NotNull Action action
     ) {
         return runAction(action, ActionContext.empty());
     }
@@ -156,20 +156,7 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    public ActionResult runAction(
-            @Nullable Object action,
-            @NotNull ActionContext context
-    ) {
-        return compile(action).eval(this, context);
-    }
-
-    /**
-     * 执行物品动作
-     *
-     * @param action  动作内容
-     * @param context 动作上下文
-     * @return 执行结果
-     */
+    @NotNull
     public ActionResult runAction(
             @NotNull Action action,
             @NotNull ActionContext context
@@ -184,6 +171,7 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
+    @NotNull
     public ActionResult runAction(
             @NotNull StringAction action,
             @NotNull ActionContext context
@@ -203,6 +191,7 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
+    @NotNull
     public ActionResult runAction(
             @NotNull ListAction action,
             @NotNull ActionContext context
@@ -233,6 +222,7 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
+    @NotNull
     public ActionResult runAction(
             @NotNull ConditionAction action,
             @NotNull ActionContext context
@@ -256,6 +246,7 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
+    @NotNull
     public ActionResult runAction(
             @NotNull WhileAction action,
             @NotNull ActionContext context
@@ -283,6 +274,7 @@ public abstract class BaseActionManager {
      * @param context   动作上下文
      * @return 执行结果
      */
+    @NotNull
     public ActionResult parseCondition(
             @Nullable String condition,
             @NotNull ActionContext context

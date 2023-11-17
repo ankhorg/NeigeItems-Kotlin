@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.manager
 
 import bot.inker.bukkit.nbt.NbtCompound
+import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -21,6 +22,7 @@ import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.action.ActionResult
 import pers.neige.neigeitems.action.ResultType
 import pers.neige.neigeitems.action.impl.StringAction
+import pers.neige.neigeitems.action.result.DelayResult
 import pers.neige.neigeitems.action.result.Results
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.item.action.ItemAction
@@ -31,13 +33,13 @@ import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
+import pers.neige.neigeitems.utils.SchedulerUtils.*
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
-import kotlin.collections.HashMap
 
 /**
  * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
@@ -68,6 +70,260 @@ object ActionManager : BaseActionManager(plugin) {
     /**
      * 执行物品动作
      *
+     * @param action 动作内容
+     * @return 执行结果
+     */
+    @Deprecated("使用BaseActionManager中的方法代替")
+    fun runAction(
+        action: Any?
+    ): ActionResult {
+        return runAction(action, ActionContext.empty())
+    }
+
+    /**
+     * 执行物品动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @Deprecated("使用BaseActionManager中的方法代替")
+    fun runAction(
+        action: Any?,
+        context: ActionContext
+    ): ActionResult {
+        when (action) {
+            is String -> return runAction(action, context)
+            is List<*> -> return runAction(action, context)
+            is Map<*, *> -> return runAction(action as Map<String, *>, context)
+            is ConfigurationSection -> return runAction(action, context)
+        }
+        return Results.SUCCESS
+    }
+
+    /**
+     * 执行物品动作
+     *
+     * @param action 动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @Deprecated("使用BaseActionManager中的方法代替")
+    private fun runAction(
+        action: List<*>,
+        context: ActionContext
+    ): ActionResult {
+        action.forEachIndexed { index, value ->
+            val result = runAction(value, context)
+            when (result.type) {
+                ResultType.DELAY -> {
+                    runLater((result as DelayResult).delay.toLong()) {
+                        runAction(action.subList(index + 1, action.lastIndex), context)
+                    }
+                    return Results.SUCCESS
+                }
+                ResultType.STOP -> return result
+                else -> {}
+            }
+        }
+        return Results.SUCCESS
+    }
+
+    /**
+     * 执行物品动作
+     *
+     * @param action 动作文本
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @Deprecated("使用BaseActionManager中的方法代替")
+    private fun runAction(
+        action: String,
+        context: ActionContext
+    ): ActionResult {
+        // 解析物品变量
+        val itemStack = context.itemStack
+        val nbt = context.nbt
+        val cache = (context.params?.get("cache") ?: context.global) as? MutableMap<String, String>
+        val sections = context.params?.get("sections") as? ConfigurationSection
+        val actionString = if (itemStack != null && nbt != null) {
+            action.parseItemSection(
+                itemStack,
+                nbt,
+                context.data,
+                context.player,
+                cache,
+                sections
+            )
+        } else {
+            action.parseSection(
+                cache,
+                context.player,
+                sections
+            )
+        }
+        // 解析动作类型及动作内容
+        val info = actionString.split(": ", limit = 2)
+        val type = info[0]
+        val content = info.getOrNull(1) ?: ""
+        // 尝试加载物品动作, 返回执行结果
+        actions[type.lowercase(Locale.getDefault())]?.apply(context, content)?.also { return it }
+        // 尝试加载物品编辑函数, 返回执行结果
+        val player = context.player
+        if (itemStack != null && player != null) {
+            return Results.fromBoolean(
+                ItemEditorManager.runEditorWithResult(type, content, itemStack, player) ?: return Results.SUCCESS
+            )
+        }
+        return Results.SUCCESS
+    }
+
+    /**
+     * 执行物品动作
+     *
+     * @param action 动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @Deprecated("使用BaseActionManager中的方法代替")
+    private fun runAction(
+        action: ConfigurationSection,
+        context: ActionContext
+    ): ActionResult {
+        // 动作执行条件
+        val condition: String? = action.getString("condition")
+        // 循环执行条件
+        val whileCondition: String? = action.getString("while")
+        // 动作内容
+        val actions = action.get("actions")
+        // 强制异步动作内容
+        val async = action.get("async")
+        // 强制同步动作内容
+        val sync = action.get("sync")
+        // 结束动作内容
+        val finally = action.get("finally")
+        // 不满足条件时执行的内容
+        val deny = action.get("deny")
+        // 模式检测
+        when {
+            // condition模式
+            condition != null -> {
+                // 如果条件通过
+                if (parseCondition(condition, context).type == ResultType.SUCCESS) {
+                    // 执行动作
+                    runAction(sync, async, context)
+                    return runAction(actions, context)
+                    // 条件未通过
+                } else {
+                    // 执行deny动作
+                    return runAction(deny, context)
+                }
+            }
+            // while模式
+            whileCondition != null -> {
+                while (parseCondition(whileCondition, context).type == ResultType.SUCCESS) {
+                    // 执行动作
+                    runAction(sync, async, context)
+                    val result = runAction(actions, context)
+                    if (result.type == ResultType.STOP) {
+                        runAction(finally, context)
+                        return Results.STOP
+                    }
+                }
+                runAction(finally, context)
+                return Results.SUCCESS
+            }
+            else -> {
+                runAction(sync, async, context)
+                return runAction(actions, context)
+            }
+        }
+    }
+
+    /**
+     * 执行物品动作
+     *
+     * @param action 动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @Deprecated("使用BaseActionManager中的方法代替")
+    private fun runAction(
+        action: Map<String, *>,
+        context: ActionContext
+    ): ActionResult {
+        // 动作执行条件
+        val condition: String? = action["condition"] as String?
+        // 循环执行条件
+        val whileCondition: String? = action["while"] as String?
+        // 动作内容
+        val actions = action["actions"]
+        // 强制异步动作内容
+        val async = action["async"]
+        // 强制同步动作内容
+        val sync = action["sync"]
+        // 结束动作内容
+        val finally = action["finally"]
+        // 不满足条件时执行的内容
+        val deny = action["deny"]
+        // 模式检测
+        when {
+            // condition模式
+            condition != null -> {
+                // 如果条件通过
+                if (parseCondition(condition, context).type == ResultType.SUCCESS) {
+                    // 执行动作
+                    runAction(sync, async, context)
+                    return runAction(actions, context)
+                    // 条件未通过
+                } else {
+                    // 执行deny动作
+                    return runAction(deny, context)
+                }
+            }
+            // while模式
+            whileCondition != null -> {
+                while (parseCondition(whileCondition, context).type == ResultType.SUCCESS) {
+                    // 执行动作
+                    runAction(sync, async, context)
+                    val result = runAction(actions, context)
+                    if (result.type == ResultType.STOP) {
+                        runAction(finally, context)
+                        return Results.STOP
+                    }
+                }
+                runAction(finally, context)
+                return Results.SUCCESS
+            }
+            else -> {
+                runAction(sync, async, context)
+                return runAction(actions, context)
+            }
+        }
+    }
+
+    @Deprecated("使用BaseActionManager中的方法代替")
+    private fun runAction(
+        sync: Any?,
+        async: Any?,
+        context: ActionContext
+    ) {
+        if (Bukkit.isPrimaryThread()) {
+            runAction(sync, context)
+            async(plugin) {
+                runAction(async, context)
+            }
+        } else {
+            sync(plugin) {
+                runAction(sync, context)
+            }
+            runAction(async, context)
+        }
+    }
+
+    /**
+     * 执行物品动作
+     *
      * @param player 执行玩家
      * @param action 动作文本
      * @return 是否继续执行(执行List<String>中的物品动作时, 某个动作返回false则终止动作执行)
@@ -77,7 +333,7 @@ object ActionManager : BaseActionManager(plugin) {
         player: Player,
         action: String
     ): Boolean {
-        val result = runAction(action, ActionContext(player))
+        val result = runAction(StringAction(action), ActionContext(player))
         return when (result.type) {
             ResultType.STOP -> false
             else -> true
@@ -97,7 +353,7 @@ object ActionManager : BaseActionManager(plugin) {
     fun runAction(
         player: Player,
         action: Any?,
-        global: MutableMap<String, Any?> = HashMap<String, Any?>(),
+        global: MutableMap<String, Any?> = HashMap(),
         map: Map<String, Any?>? = null
     ): Boolean {
         val result = runAction(action, ActionContext(player, global, map))
@@ -128,7 +384,7 @@ object ActionManager : BaseActionManager(plugin) {
         itemTag: NbtCompound? = itemStack?.let { itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
-        global: MutableMap<String, Any?> = HashMap<String, Any?>(),
+        global: MutableMap<String, Any?> = HashMap(),
         map: Map<String, Any?>? = null
     ): Boolean {
         val result = runAction(action, ActionContext(player, global, map, itemStack, itemTag, data, event))
@@ -151,7 +407,7 @@ object ActionManager : BaseActionManager(plugin) {
     fun parseCondition(
         condition: String?,
         player: Player?,
-        global: MutableMap<String, Any?> = HashMap<String, Any?>(),
+        global: MutableMap<String, Any?> = HashMap(),
         map: Map<String, Any?>? = null
     ): Boolean {
         return parseCondition(
@@ -184,7 +440,7 @@ object ActionManager : BaseActionManager(plugin) {
         itemTag: NbtCompound? = itemStack?.let { itemStack.getNbt() },
         data: MutableMap<String, String>? = null,
         event: Event? = null,
-        global: MutableMap<String, Any?> = HashMap<String, Any?>(),
+        global: MutableMap<String, Any?> = HashMap(),
         map: Map<String, Any?>? = null
     ): Boolean {
         val result = parseCondition(condition, ActionContext(player, global, map, itemStack, itemTag, data, event))
@@ -244,46 +500,9 @@ object ActionManager : BaseActionManager(plugin) {
         // 尝试加载物品编辑函数, 返回执行结果
         val player = context.player
         if (itemStack != null && player != null) {
-            return Results.fromBoolean(ItemEditorManager.runEditorWithResult(type, content, itemStack, player) ?: return Results.SUCCESS)
-        }
-        return Results.SUCCESS
-    }
-
-    fun runAction(
-        action: String,
-        context: ActionContext
-    ): ActionResult {
-        // 解析物品变量
-        val itemStack = context.itemStack
-        val nbt = context.nbt
-        val cache = (context.params?.get("cache") ?: context.global) as? MutableMap<String, String>
-        val sections = context.params?.get("sections") as? ConfigurationSection
-        val actionString = if (itemStack != null && nbt != null) {
-            action.parseItemSection(
-                itemStack,
-                nbt,
-                context.data,
-                context.player,
-                cache,
-                sections
+            return Results.fromBoolean(
+                ItemEditorManager.runEditorWithResult(type, content, itemStack, player) ?: return Results.SUCCESS
             )
-        } else {
-            action.parseSection(
-                cache,
-                context.player,
-                sections
-            )
-        }
-        // 解析动作类型及动作内容
-        val info = actionString.split(": ", limit = 2)
-        val type = info[0]
-        val content = info.getOrNull(1) ?: ""
-        // 尝试加载物品动作, 返回执行结果
-        actions[type.lowercase(Locale.getDefault())]?.apply(context, content)?.also { return it }
-        // 尝试加载物品编辑函数, 返回执行结果
-        val player = context.player
-        if (itemStack != null && player != null) {
-            return Results.fromBoolean(ItemEditorManager.runEditorWithResult(type, content, itemStack, player) ?: return Results.SUCCESS)
         }
         return Results.SUCCESS
     }

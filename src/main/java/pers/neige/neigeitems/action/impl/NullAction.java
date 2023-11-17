@@ -19,6 +19,9 @@ public class NullAction extends Action {
         return ActionType.NULL;
     }
 
+    /**
+     * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
+     */
     @Override
     @NotNull
     public ActionResult eval(
