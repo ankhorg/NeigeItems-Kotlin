@@ -37,6 +37,8 @@ import pers.neige.neigeitems.utils.SchedulerUtils.*
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.io.File
+import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
@@ -51,6 +53,14 @@ object ActionManager : BaseActionManager(plugin) {
     val itemActions: ConcurrentHashMap<String, ItemAction> = ConcurrentHashMap<String, ItemAction>()
 
     init {
+        try {
+            plugin.getResource("JavaScriptLib/lib.js")?.use { input ->
+                InputStreamReader(input, StandardCharsets.UTF_8)
+                    .use { reader -> engine.eval(reader) }
+            }
+        } catch (error: Throwable) {
+            error.printStackTrace()
+        }
         // 加载所有拥有动作的物品及相关动作
         loadItemActions()
         // 加载自定义动作

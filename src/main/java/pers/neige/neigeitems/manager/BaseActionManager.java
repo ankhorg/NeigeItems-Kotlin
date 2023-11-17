@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -43,17 +44,6 @@ public abstract class BaseActionManager {
             @NotNull Plugin plugin
     ) {
         this.plugin = plugin;
-        try (InputStream input = plugin.getResource("JavaScriptLib/lib.js")) {
-            if (input != null) {
-                try (InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8)) {
-                    engine.eval(reader);
-                } catch (Throwable error) {
-                    error.printStackTrace();
-                }
-            }
-        } catch (Throwable error) {
-            error.printStackTrace();
-        }
         // 加载基础物品动作
         loadBasicActions();
     }
