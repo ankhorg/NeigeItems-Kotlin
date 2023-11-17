@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>Post 1.15.98 API </title>
+    <title>ListUtils 1.15.98 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -89,7 +89,7 @@ var pathtoroot = "../../../../";
 <main role="main">
     <div class="header">
         <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html"></a></div>
-        <h2 title="Class PluginReloadEvent.Post" class="title">Class PluginReloadEvent.Post</h2>
+        <h2 title="Class ListUtils" class="title">Class ListUtils</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -114,10 +114,10 @@ var pathtoroot = "../../../../";
                     <hr>
                     <pre class="wrap-overflow">
 
-public class <span class="typeNameLabel"><a href=PluginReloadEvent.Post.html>PluginReloadEvent.Post</a></span>
-extends <a href=BasicEvent.html>BasicEvent</a>
+public class <span class="typeNameLabel"><a href=ListUtils.html>ListUtils</a></span>
+
                     </pre>
-                    <div class="block"><p>插件重载后触发, 不可取消</p></div>
+                    <div class="block"></div>
                 </li>
             </ul>
         </div>
@@ -164,24 +164,6 @@ extends <a href=BasicEvent.html>BasicEvent</a>
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
                                         
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>public final static HandlerList</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=PluginReloadEvent.Post.html#handlers>handlers</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="rowColor">
-                                            <td class="colFirst"><code>public final <a href=PluginReloadEvent.Type.html>PluginReloadEvent.Type</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=PluginReloadEvent.Post.html#type>type</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>public final static HandlerList</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemGenerateEvent.html#handlers>handlers</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
                                     </table>
                                 </div>
                             </li>
@@ -205,18 +187,6 @@ extends <a href=BasicEvent.html>BasicEvent</a>
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
 
-                                        
-                                            <tr class="altColor">
-                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#PluginReloadEvent.Post()">PluginReloadEvent.Post</a></span>()</code></th>
-                                                <td class="colLast">type 取默认值 Type.ALL.</td>
-                                            </tr>
-                                        
-                                            <tr class="rowColor">
-                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#PluginReloadEvent.Post(PluginReloadEvent.Type)">PluginReloadEvent.Post</a></span>(<a href=PluginReloadEvent.Type.html>PluginReloadEvent.Type</a> type)</code></th>
-                                                <td class="colLast"></td>
-                                            </tr>
                                         
 
                                         </tbody>
@@ -268,25 +238,49 @@ extends <a href=BasicEvent.html>BasicEvent</a>
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code>HandlerList</code>
+                                            <td class="colFirst"><code>static &lt;T&gt; <a href=ListUtils.html#getOrNull(List,int)>T</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PluginReloadEvent.Post.html#getHandlers()>getHandlers</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=ListUtils.html#getOrNull(List,int)>getOrNull</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=ListUtils.html#getOrNull(List,int)>T</a>&gt; list, int index) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code><a href=PluginReloadEvent.Type.html>PluginReloadEvent.Type</a></code>
+                                            <td class="colFirst"><code>static &lt;T&gt; <a href=ListUtils.html#getOrDefault(List,int,T)>T</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PluginReloadEvent.Post.html#getType()>getType</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=ListUtils.html#getOrDefault(List,int,T)>getOrDefault</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=ListUtils.html#getOrDefault(List,int,T)>T</a>&gt; list, int index, @NotNull() <a href=ListUtils.html#getOrDefault(List,int,T)>T</a> def) </code>
                                             </th>
-                                            <td class="colLast">获取重载类型</td>
+                                            <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code>static HandlerList</code>
+                                            <td class="colFirst"><code>static &lt;T, V&gt; <a href=ListUtils.html#getAndApply(List,int,V,Function)>V</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PluginReloadEvent.Post.html#getHandlerList()>getHandlerList</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=ListUtils.html#getAndApply(List,int,V,Function)>getAndApply</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=ListUtils.html#getAndApply(List,int,V,Function)>T</a>&gt; list, int index, @NotNull() <a href=ListUtils.html#getAndApply(List,int,V,Function)>V</a> def, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html>Function</a>&lt;<a href=ListUtils.html#getAndApply(List,int,V,Function)>T</a>, <a href=ListUtils.html#getAndApply(List,int,V,Function)>V</a>&gt; handler) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i3" class="rowColor">
+                                            <td class="colFirst"><code>static &lt;T&gt; <a href=ListUtils.html#getOrNull(Array,int)>T</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=ListUtils.html#getOrNull(Array,int)>getOrNull</a>(@NotNull() <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=ListUtils.html#getOrNull(Array,int)>T</a>&gt; list, int index) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i4" class="altColor">
+                                            <td class="colFirst"><code>static &lt;T&gt; <a href=ListUtils.html#getOrDefault(Array,int,T)>T</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=ListUtils.html#getOrDefault(Array,int,T)>getOrDefault</a>(@NotNull() <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=ListUtils.html#getOrDefault(Array,int,T)>T</a>&gt; list, int index, @NotNull() <a href=ListUtils.html#getOrDefault(Array,int,T)>T</a> def) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i5" class="rowColor">
+                                            <td class="colFirst"><code>static &lt;T, V&gt; <a href=ListUtils.html#getAndApply(Array,int,V,Function)>V</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=ListUtils.html#getAndApply(Array,int,V,Function)>getAndApply</a>(@NotNull() <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=ListUtils.html#getAndApply(Array,int,V,Function)>T</a>&gt; list, int index, @NotNull() <a href=ListUtils.html#getAndApply(Array,int,V,Function)>V</a> def, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html>Function</a>&lt;<a href=ListUtils.html#getAndApply(Array,int,V,Function)>T</a>, <a href=ListUtils.html#getAndApply(Array,int,V,Function)>V</a>&gt; handler) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -296,18 +290,6 @@ extends <a href=BasicEvent.html>BasicEvent</a>
                                 </div>
                                 <ul class="blockList">
                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.org.bukkit.event.Event">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;org.bukkit.event.Event</h3>
-                                            <code>getEventName, getHandlers, isAsynchronous</code></li>
-                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.pers.neige.neigeitems.event.BasicEvent">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;pers.neige.neigeitems.event.BasicEvent</h3>
-                                            <code>call</code></li>
-                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
                                     </a>
@@ -334,35 +316,6 @@ extends <a href=BasicEvent.html>BasicEvent</a>
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="PluginReloadEvent.Post()"></a>
-                                <ul class="blockList">
-                                    <li class="blockList">
-                                        <h4>PluginReloadEvent.Post</h4>
-                                        <pre>PluginReloadEvent.Post()</pre>
-                                        <div class="block">type 取默认值 Type.ALL.</div>
-                                        
-                                    </li>
-                                </ul>
-                                
-                                <a name="PluginReloadEvent.Post(PluginReloadEvent.Type)"></a>
-                                <ul class="blockList">
-                                    <li class="blockList">
-                                        <h4>PluginReloadEvent.Post</h4>
-                                        <pre>PluginReloadEvent.Post(<a href=PluginReloadEvent.Type.html>PluginReloadEvent.Type</a> type)</pre>
-                                        <div class="block"></div>
-                                        
-                                        <dl>
-                                            <dt><span class="paramLabel">Parameters:</span></dt>
-                                            
-                                            
-                                            <dd><code>type</code> - 重载类型</dd>
-                                            
-                                            
-                                        </dl>
-                                        
-                                    </li>
-                                </ul>
-                                
                             </li>
                         </ul>
                     </section>
@@ -376,45 +329,90 @@ extends <a href=BasicEvent.html>BasicEvent</a>
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="getHandlers()">
+                                <a id="getOrNull(List,int)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getHandlers</h4>
-                                        <pre class="methodSignature">@NotNull() HandlerList <a href=PluginReloadEvent.Post.html#getHandlers()>getHandlers</a>()</pre>
+                                        <h4>getOrNull</h4>
+                                        <pre class="methodSignature">@Nullable() static &lt;T&gt; <a href=ListUtils.html#getOrNull(List,int)>T</a> <a href=ListUtils.html#getOrNull(List,int)>getOrNull</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=ListUtils.html#getOrNull(List,int)>T</a>&gt; list, int index)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="getType()">
+                                <a id="getOrDefault(List,int,T)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getType</h4>
-                                        <pre class="methodSignature">@NotNull() <a href=PluginReloadEvent.Type.html>PluginReloadEvent.Type</a> <a href=PluginReloadEvent.Post.html#getType()>getType</a>()</pre>
-                                        <div class="block"><p>获取重载类型</p></div>
+                                        <h4>getOrDefault</h4>
+                                        <pre class="methodSignature">@NotNull() static &lt;T&gt; <a href=ListUtils.html#getOrDefault(List,int,T)>T</a> <a href=ListUtils.html#getOrDefault(List,int,T)>getOrDefault</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=ListUtils.html#getOrDefault(List,int,T)>T</a>&gt; list, int index, @NotNull() <a href=ListUtils.html#getOrDefault(List,int,T)>T</a> def)</pre>
+                                        <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>
                                 </ul>
                                 
-                                <a id="getHandlerList()">
+                                <a id="getAndApply(List,int,V,Function)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getAndApply</h4>
+                                        <pre class="methodSignature">@NotNull() static &lt;T, V&gt; <a href=ListUtils.html#getAndApply(List,int,V,Function)>V</a> <a href=ListUtils.html#getAndApply(List,int,V,Function)>getAndApply</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=ListUtils.html#getAndApply(List,int,V,Function)>T</a>&gt; list, int index, @NotNull() <a href=ListUtils.html#getAndApply(List,int,V,Function)>V</a> def, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html>Function</a>&lt;<a href=ListUtils.html#getAndApply(List,int,V,Function)>T</a>, <a href=ListUtils.html#getAndApply(List,int,V,Function)>V</a>&gt; handler)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getOrNull(Array,int)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getOrNull</h4>
+                                        <pre class="methodSignature">@Nullable() static &lt;T&gt; <a href=ListUtils.html#getOrNull(Array,int)>T</a> <a href=ListUtils.html#getOrNull(Array,int)>getOrNull</a>(@NotNull() <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=ListUtils.html#getOrNull(Array,int)>T</a>&gt; list, int index)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getOrDefault(Array,int,T)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getOrDefault</h4>
+                                        <pre class="methodSignature">@NotNull() static &lt;T&gt; <a href=ListUtils.html#getOrDefault(Array,int,T)>T</a> <a href=ListUtils.html#getOrDefault(Array,int,T)>getOrDefault</a>(@NotNull() <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=ListUtils.html#getOrDefault(Array,int,T)>T</a>&gt; list, int index, @NotNull() <a href=ListUtils.html#getOrDefault(Array,int,T)>T</a> def)</pre>
+                                        <div class="block"></div>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="getAndApply(Array,int,V,Function)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>getHandlerList</h4>
-                                        <pre class="methodSignature">@NotNull() static HandlerList <a href=PluginReloadEvent.Post.html#getHandlerList()>getHandlerList</a>()</pre>
+                                        <h4>getAndApply</h4>
+                                        <pre class="methodSignature">@NotNull() static &lt;T, V&gt; <a href=ListUtils.html#getAndApply(Array,int,V,Function)>V</a> <a href=ListUtils.html#getAndApply(Array,int,V,Function)>getAndApply</a>(@NotNull() <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;<a href=ListUtils.html#getAndApply(Array,int,V,Function)>T</a>&gt; list, int index, @NotNull() <a href=ListUtils.html#getAndApply(Array,int,V,Function)>V</a> def, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Function.html>Function</a>&lt;<a href=ListUtils.html#getAndApply(Array,int,V,Function)>T</a>, <a href=ListUtils.html#getAndApply(Array,int,V,Function)>V</a>&gt; handler)</pre>
                                         <div class="block"></div>
                                         
                                         <!-- TODO missing return annotation -->
