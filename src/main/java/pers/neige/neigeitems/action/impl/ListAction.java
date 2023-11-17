@@ -12,12 +12,17 @@ import java.util.List;
 
 public class ListAction extends Action {
     @NotNull
-    private final List<Action> actions = new ArrayList<>();
+    private final List<Action> actions;
 
-    public ListAction(List<?> action) {
+    public ListAction(BaseActionManager manager, List<?> action) {
+        actions = new ArrayList<>();
         for (Object it : action) {
-            actions.add(parse(it));
+            actions.add(manager.compile(it));
         }
+    }
+
+    private ListAction(ListAction action, int fromIndex, int toIndex) {
+        actions = action.actions.subList(fromIndex, toIndex);
     }
 
     @Override
@@ -27,7 +32,7 @@ public class ListAction extends Action {
 
     @Override
     @NotNull
-    public ActionResult run(
+    public ActionResult eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {
@@ -37,5 +42,10 @@ public class ListAction extends Action {
     @NotNull
     public List<Action> getActions() {
         return actions;
+    }
+
+    @NotNull
+    public ListAction subList(int fromIndex, int toIndex) {
+        return new ListAction(this, fromIndex, toIndex);
     }
 }

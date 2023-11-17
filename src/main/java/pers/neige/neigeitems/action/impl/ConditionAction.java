@@ -23,19 +23,19 @@ public class ConditionAction extends Action {
     @NotNull
     private final Action deny;
 
-    public ConditionAction(ConfigurationSection action) {
+    public ConditionAction(BaseActionManager manager, ConfigurationSection action) {
         if (action.contains("condition")) {
             condition = action.getString("condition");
         } else {
             condition = null;
         }
-        actions = parse(action.get("actions"));
-        async = parse(action.get("async"));
-        sync = parse(action.get("sync"));
-        deny = parse(action.get("deny"));
+        actions = manager.compile(action.get("actions"));
+        async = manager.compile(action.get("async"));
+        sync = manager.compile(action.get("sync"));
+        deny = manager.compile(action.get("deny"));
     }
 
-    public ConditionAction(Map<?, ?> action) {
+    public ConditionAction(BaseActionManager manager, Map<?, ?> action) {
         if (action.containsKey("condition")) {
             Object value = action.get("condition");
             if (value instanceof String) {
@@ -46,10 +46,10 @@ public class ConditionAction extends Action {
         } else {
             condition = null;
         }
-        actions = parse(action.get("actions"));
-        async = parse(action.get("async"));
-        sync = parse(action.get("sync"));
-        deny = parse(action.get("deny"));
+        actions = manager.compile(action.get("actions"));
+        async = manager.compile(action.get("async"));
+        sync = manager.compile(action.get("sync"));
+        deny = manager.compile(action.get("deny"));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ConditionAction extends Action {
 
     @Override
     @NotNull
-    public ActionResult run(
+    public ActionResult eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {

@@ -23,19 +23,19 @@ public class WhileAction extends Action {
     @NotNull
     private final Action _finally;
 
-    public WhileAction(ConfigurationSection action) {
+    public WhileAction(BaseActionManager manager, ConfigurationSection action) {
         if (action.contains("while")) {
             condition = action.getString("while");
         } else {
             condition = null;
         }
-        actions = parse(action.get("actions"));
-        async = parse(action.get("async"));
-        sync = parse(action.get("sync"));
-        _finally = parse(action.get("finally"));
+        actions = manager.compile(action.get("actions"));
+        async = manager.compile(action.get("async"));
+        sync = manager.compile(action.get("sync"));
+        _finally = manager.compile(action.get("finally"));
     }
 
-    public WhileAction(Map<?, ?> action) {
+    public WhileAction(BaseActionManager manager, Map<?, ?> action) {
         if (action.containsKey("while")) {
             Object value = action.get("while");
             if (value instanceof String) {
@@ -46,10 +46,10 @@ public class WhileAction extends Action {
         } else {
             condition = null;
         }
-        actions = parse(action.get("actions"));
-        async = parse(action.get("async"));
-        sync = parse(action.get("sync"));
-        _finally = parse(action.get("finally"));
+        actions = manager.compile(action.get("actions"));
+        async = manager.compile(action.get("async"));
+        sync = manager.compile(action.get("sync"));
+        _finally = manager.compile(action.get("finally"));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class WhileAction extends Action {
 
     @Override
     @NotNull
-    public ActionResult run(
+    public ActionResult eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {

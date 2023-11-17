@@ -249,7 +249,7 @@ object ActionManager : BaseActionManager(plugin) {
         return Results.SUCCESS
     }
 
-    override fun runAction(
+    fun runAction(
         action: String,
         context: ActionContext
     ): ActionResult {
@@ -460,25 +460,25 @@ object ActionManager : BaseActionManager(plugin) {
         // 如果物品需要消耗
         if (consume != null) {
             // 预执行动作
-            runAction(consume.get("pre"), context)
+            runAction(consume.pre, context)
             // 检测条件
-            consume.getString("condition")?.let {
+            consume.condition?.let {
                 // 不满足条件就爬
-                if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
+                if (parseCondition(it, context).type == ResultType.STOP) {
                     // 跑一下deny动作
-                    runAction(consume.get("deny"), context)
+                    runAction(consume.deny, context)
                     // 爬
                     return
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.getString("amount")
+            val amount: Int = consume.amount
                 ?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)
                 ?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
-                runAction(consume.get("deny"), context)
+                runAction(consume.deny, context)
                 // 数量不足
                 return
             }
@@ -680,25 +680,25 @@ object ActionManager : BaseActionManager(plugin) {
             // 如果该物品需要被消耗
             if (consume != null) {
                 // 预执行动作
-                runAction(consume.get("pre"), context)
+                runAction(consume.pre, context)
                 // 检测条件
-                consume.getString("condition")?.let {
+                consume.condition?.let {
                     // 不满足条件就爬
-                    if (!parseCondition(it, player, itemStack, itemTag, data, event, global)) {
+                    if (parseCondition(it, context).type == ResultType.STOP) {
                         // 跑一下deny动作
-                        runAction(consume.get("deny"), context)
+                        runAction(consume.deny, context)
                         // 爬
                         return
                     }
                 }
                 // 获取待消耗数量
-                val amount: Int = consume.getString("amount")
+                val amount: Int = consume.amount
                     ?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)
                     ?.toIntOrNull() ?: 1
                 // 消耗物品
                 if (!itemStack.consume(player, amount, itemTag, neigeItems, giveLater)) {
                     // 跑一下deny动作
-                    runAction(consume.get("deny"), context)
+                    runAction(consume.deny, context)
                     // 数量不足
                     return
                 }

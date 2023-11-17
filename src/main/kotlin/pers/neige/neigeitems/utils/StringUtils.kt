@@ -92,11 +92,6 @@ object StringUtils {
         }
     }
 
-    @JvmStatic
-    fun String.splitKt(separator: String, limit: Int): List<String> {
-        return this.split(separator, limit = limit)
-    }
-
     /**
      * 转Int
      *
@@ -126,6 +121,17 @@ object StringUtils {
      * @return Double?
      */
     @JvmStatic
+    fun toFloatOrNull(string: String): Float? {
+        return string.toFloatOrNull()
+    }
+
+    /**
+     * 转Double
+     *
+     * @param string 分隔符
+     * @return Double?
+     */
+    @JvmStatic
     fun toDoubleOrNull(string: String): Double? {
         return string.toDoubleOrNull()
     }
@@ -139,5 +145,60 @@ object StringUtils {
     @JvmStatic
     fun toBigDecimalOrNull(string: String): BigDecimal? {
         return string.toBigDecimalOrNull()
+    }
+
+    /**
+     * 转Int
+     *
+     * @param string 分隔符
+     * @return Int?
+     */
+    @JvmStatic
+    fun toInt(string: String, default: Int): Int {
+        return string.toIntOrNull() ?: default
+    }
+
+    /**
+     * 转Byte
+     *
+     * @param string 分隔符
+     * @return Byte?
+     */
+    @JvmStatic
+    fun toByte(string: String, default: Byte): Byte {
+        return string.toByteOrNull() ?: default
+    }
+
+    /**
+     * 转Double
+     *
+     * @param string 分隔符
+     * @return Double?
+     */
+    @JvmStatic
+    fun toFloat(string: String, default: Float): Float {
+        return string.toFloatOrNull() ?: default
+    }
+
+    /**
+     * 转Double
+     *
+     * @param string 分隔符
+     * @return Double?
+     */
+    @JvmStatic
+    fun toDouble(string: String, default: Double): Double {
+        return string.toDoubleOrNull() ?: default
+    }
+
+    /**
+     * 转BigDecimal
+     *
+     * @param string 分隔符
+     * @return BigDecimal?
+     */
+    @JvmStatic
+    fun toBigDecimal(string: String, default: BigDecimal): BigDecimal {
+        return string.toBigDecimalOrNull() ?: default
     }
 }

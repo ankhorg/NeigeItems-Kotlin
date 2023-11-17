@@ -23,9 +23,9 @@ public class StringAction extends Action {
             @NotNull String action
     ) {
         this.action = action;
-        List<String> info = StringUtils.splitKt(action, ": ", 2);
-        key = info.get(0).toLowerCase(Locale.ROOT);
-        content = info.size() > 1 ? info.get(1) : "";
+        String[] info = action.split(": ", 2);
+        key = info[0].toLowerCase(Locale.ROOT);
+        content = info.length > 1 ? info[1] : "";
     }
 
     @Override
@@ -35,7 +35,7 @@ public class StringAction extends Action {
 
     @Override
     @NotNull
-    public ActionResult run(
+    public ActionResult eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {

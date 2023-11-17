@@ -30,22 +30,22 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
     /**
      * 获取物品消耗信息
      */
-    val consume = config.getConfigurationSection("consume")
+    val consume: ConsumeInfo? = config.getConfigurationSection("consume")?.let { ConsumeInfo(it) }
 
     /**
      * 获取异步动作信息
      */
-    val actions: Action = Action.parse(config.get("actions"))
+    val actions: Action = ActionManager.compile(config.get("actions"))
 
     /**
      * 获取异步动作信息
      */
-    val async: Action = Action.parse(config.get("async"))
+    val async: Action = ActionManager.compile(config.get("async"))
 
     /**
      * 获取同步动作信息
      */
-    val sync: Action = Action.parse(config.get("sync"))
+    val sync: Action = ActionManager.compile(config.get("sync"))
 
     /**
      * 运行异步物品动作
@@ -68,8 +68,8 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         context: ActionContext
     ) {
         SchedulerUtils.async {
-            actions.run(ActionManager, context)
-            async.run(ActionManager, context)
+            actions.eval(ActionManager, context)
+            async.eval(ActionManager, context)
         }
     }
 
@@ -82,7 +82,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         context: ActionContext
     ) {
         SchedulerUtils.sync {
-            sync.run(ActionManager, context)
+            sync.eval(ActionManager, context)
         }
     }
 

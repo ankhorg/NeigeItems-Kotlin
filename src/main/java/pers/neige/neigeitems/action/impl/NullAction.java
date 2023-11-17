@@ -11,13 +11,17 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 public class NullAction extends Action {
     public static Action INSTANCE = new NullAction();
 
+    private NullAction() {
+    }
+
     @Override
     public @NotNull ActionType getType() {
         return ActionType.NULL;
     }
+
     @Override
     @NotNull
-    public ActionResult run(
+    public ActionResult eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {
