@@ -129,6 +129,7 @@ public class ActionContext {
         }
         bindings.put("global", global);
         bindings.put("glo", global);
+        bindings.put("context", this);
         return bindings;
     }
 
