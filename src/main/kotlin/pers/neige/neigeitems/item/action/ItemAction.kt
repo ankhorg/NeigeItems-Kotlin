@@ -86,7 +86,7 @@ class ItemAction(val id: String, val config: ConfigurationSection) {
         trigger: String?,
         context: ActionContext
     ) {
-        triggers[trigger]?.run(context)
+        triggers[trigger?.lowercase()]?.run(context)
     }
 
     /**

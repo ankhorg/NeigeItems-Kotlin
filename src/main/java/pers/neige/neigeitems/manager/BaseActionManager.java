@@ -193,7 +193,7 @@ public abstract class BaseActionManager {
             switch (result.getType()) {
                 case DELAY: {
                     int fromIndex = index + 1;
-                    int toIndex = actions.size() - 1;
+                    int toIndex = actions.size();
                     SchedulerUtils.runLater(plugin, ((DelayResult) result).getDelay(), () -> runAction(action.subList(fromIndex, toIndex), context));
                     return Results.SUCCESS;
                 }
