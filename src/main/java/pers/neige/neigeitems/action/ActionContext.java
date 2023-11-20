@@ -11,11 +11,12 @@ import javax.script.Bindings;
 import javax.script.SimpleBindings;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ActionContext {
     private static final ActionContext EMPTY = new ActionContext();
     @NotNull
-    private final Bindings basicBindings;
+    private Bindings basicBindings;
     @Nullable
     private final Player player;
     @NotNull
@@ -30,6 +31,8 @@ public class ActionContext {
     private final Map<String, String> data;
     @Nullable
     private final Event event;
+    @Nullable
+    private Set<String> oldKeySet;
 
     public ActionContext() {
         this(null);
@@ -43,34 +46,34 @@ public class ActionContext {
 
     public ActionContext(
             @Nullable Player player,
-            @Nullable Map<String, Object> param
+            @Nullable Map<String, Object> params
     ) {
-        this(player, null, param);
+        this(player, null, params);
     }
 
     public ActionContext(
             @Nullable Player player,
             @Nullable Map<String, Object> global,
-            @Nullable Map<String, Object> param
+            @Nullable Map<String, Object> params
     ) {
-        this(player, global, param, null, null, null, null);
+        this(player, global, params, null, null, null, null);
     }
 
     public ActionContext(
             @Nullable Player player,
             @Nullable Map<String, Object> global,
-            @Nullable Map<String, Object> param,
+            @Nullable Map<String, Object> params,
             @Nullable ItemStack itemStack,
             @Nullable NbtCompound nbt,
             @Nullable Map<String, String> data
     ) {
-        this(player, global, param, itemStack, nbt, data, null);
+        this(player, global, params, itemStack, nbt, data, null);
     }
 
     public ActionContext(
             @Nullable Player player,
             @Nullable Map<String, Object> global,
-            @Nullable Map<String, Object> param,
+            @Nullable Map<String, Object> params,
             @Nullable ItemStack itemStack,
             @Nullable NbtCompound nbt,
             @Nullable Map<String, String> data,
@@ -82,7 +85,12 @@ public class ActionContext {
         } else {
             this.global = global;
         }
-        this.params = param;
+        this.params = params;
+        if (params != null) {
+            this.oldKeySet = params.keySet();
+        } else {
+            this.oldKeySet = null;
+        }
         this.itemStack = itemStack;
         this.nbt = nbt;
         this.data = data;
@@ -142,7 +150,11 @@ public class ActionContext {
         Map<String, Object> vars = new HashMap<>();
         bindings.put("variables", vars);
         bindings.put("vars", vars);
-        bindings.putAll(this.basicBindings);
+        if (params != null && params.keySet() != oldKeySet) {
+            oldKeySet = params.keySet();
+            basicBindings = toBindings();
+        }
+        bindings.putAll(basicBindings);
         return bindings;
     }
 
