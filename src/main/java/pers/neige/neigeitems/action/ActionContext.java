@@ -16,7 +16,7 @@ import java.util.Set;
 public class ActionContext {
     private static final ActionContext EMPTY = new ActionContext();
     @NotNull
-    private Bindings basicBindings;
+    private final Bindings basicBindings;
     @Nullable
     private final Player player;
     @NotNull
@@ -31,8 +31,6 @@ public class ActionContext {
     private final Map<String, String> data;
     @Nullable
     private final Event event;
-    @Nullable
-    private Set<String> oldKeySet;
 
     public ActionContext() {
         this(null);
@@ -86,11 +84,6 @@ public class ActionContext {
             this.global = global;
         }
         this.params = params;
-        if (params != null) {
-            this.oldKeySet = params.keySet();
-        } else {
-            this.oldKeySet = null;
-        }
         this.itemStack = itemStack;
         this.nbt = nbt;
         this.data = data;
@@ -142,6 +135,19 @@ public class ActionContext {
     }
 
     /**
+     * 修改 params 后请调用该方法刷新 Bindings.
+     */
+    public void refreshParams() {
+        if (params != null) {
+            params.forEach((key, value) -> {
+                if (value != null) {
+                    basicBindings.put(key, value);
+                }
+            });
+        }
+    }
+
+    /**
      * 获取用于传入 js 的 Bindings.
      */
     @NotNull
@@ -150,10 +156,6 @@ public class ActionContext {
         Map<String, Object> vars = new HashMap<>();
         bindings.put("variables", vars);
         bindings.put("vars", vars);
-        if (params != null && params.keySet() != oldKeySet) {
-            oldKeySet = params.keySet();
-            basicBindings = toBindings();
-        }
         bindings.putAll(basicBindings);
         return bindings;
     }
