@@ -259,9 +259,9 @@ class ItemGenerator(val itemConfig: ItemConfig) {
             // 设置物品最大使用次数
             if (config.contains("options.maxcharge")) {
                 if (!neigeItems.contains("charge")) {
-                    neigeItems.putInt("charge", config.getInt("options.maxCharge"))
+                    neigeItems.putInt("charge", config.getInt("options.maxcharge"))
                 }
-                neigeItems.putInt("maxCharge", config.getInt("options.maxCharge"))
+                neigeItems.putInt("maxCharge", config.getInt("options.maxcharge"))
             }
             // 设置物品自定义耐久
             if (config.contains("options.durability")) {
@@ -273,7 +273,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                 if (!neigeItems.contains("durability")) {
                     neigeItems.putInt("durability", config.getInt("options.maxdurability"))
                 }
-                neigeItems.putInt("maxDurability", config.getInt("options.maxDurability"))
+                neigeItems.putInt("maxDurability", config.getInt("options.maxdurability"))
             }
             // 设置物品自定义耐久为0时是否破坏
             if (config.contains("options.itembreak")) {
