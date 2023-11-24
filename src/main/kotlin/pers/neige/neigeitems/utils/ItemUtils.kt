@@ -391,6 +391,17 @@ object ItemUtils {
     }
 
     /**
+     * 检测ItemStack是否属于CraftItemStack
+     *
+     * @return ItemStack是否属于CraftItemStack
+     */
+    @JvmStatic
+    fun ItemStack?.isCraftItem(): Boolean {
+        if (this == null) return false
+        return NbtUtils.isCraftItemStack(this)
+    }
+
+    /**
      * 获取物品显示名, 这个方法的意义在于, 方便让js脚本调用
      *
      * @param itemStack 待操作物品
