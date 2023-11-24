@@ -285,11 +285,12 @@ object ItemDurability {
             // 如果伤害值小于耐久值
         } else {
             // 修改耐久值
-            neigeItems.putInt("durability", durability - realDamage)
+            val finalDurability = durability - realDamage
+            neigeItems.putInt("durability", finalDurability)
             if (damageEvent != null) {
                 val maxDurability = neigeItems.getInt("maxDurability")
                 damageEvent.damage =
-                    ((realDamage.toDouble() / maxDurability.toDouble()) * itemStack.type.maxDurability).toInt()
+                    (itemStack.type.maxDurability * (1 - (finalDurability.toDouble() / maxDurability))).toInt()-itemStack.durability
             }
             // 保存NBT
             itemTag.saveToSafe(itemStack)
