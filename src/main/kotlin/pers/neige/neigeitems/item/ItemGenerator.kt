@@ -250,6 +250,9 @@ class ItemGenerator(val itemConfig: ItemConfig) {
             }
             // 设置物品最大自定义耐久
             if (static.contains("options.maxdurability")) {
+                if (!neigeItems.contains("durability")) {
+                    neigeItems.putInt("durability", static.getInt("options.maxdurability"))
+                }
                 neigeItems.putInt("maxDurability", static.getInt("options.maxDurability"))
             }
             // 设置物品自定义耐久为0时是否破坏
@@ -522,6 +525,9 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                     }
                     // 设置物品最大自定义耐久
                     if (configSection.contains("options.maxdurability")) {
+                        if (!neigeItems.contains("durability")) {
+                            neigeItems.putInt("durability", configSection.getInt("options.maxdurability"))
+                        }
                         neigeItems.putInt("maxDurability", configSection.getInt("options.maxdurability"))
                     }
                     // 设置物品自定义耐久为0时是否破坏
