@@ -110,7 +110,7 @@ public class EntityUtils {
             @NotNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
-            return getPitch(((RefCraftEntity) entity).getHandle());
+            return getPitchByNms(((RefCraftEntity) entity).getHandle());
         }
         return 0;
     }
@@ -125,7 +125,7 @@ public class EntityUtils {
             @NotNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
-            return getYaw(((RefCraftEntity) entity).getHandle());
+            return getYawByNms(((RefCraftEntity) entity).getHandle());
         }
         return 0;
     }
@@ -149,8 +149,8 @@ public class EntityUtils {
                 RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
                 NumberConversions.checkFinite(yaw, "yaw not finite");
                 NumberConversions.checkFinite(pitch, "pitch not finite");
-                yaw = normalizeYaw(yaw);
-                pitch = normalizePitch(pitch);
+                yaw = normalizeYawByNms(yaw);
+                pitch = normalizePitchByNms(pitch);
                 nmsEntity.yaw = yaw;
                 nmsEntity.pitch = pitch;
                 nmsEntity.lastYaw = yaw;
@@ -342,7 +342,7 @@ public class EntityUtils {
         return f;
     }
 
-    private static float normalizeYaw(float yaw) {
+    private static float normalizeYawByNms(float yaw) {
         yaw %= 360.0F;
         if (yaw >= 180.0F) {
             yaw -= 360.0F;
@@ -353,7 +353,7 @@ public class EntityUtils {
         return yaw;
     }
 
-    private static float normalizePitch(float pitch) {
+    private static float normalizePitchByNms(float pitch) {
         if (pitch > 90.0F) {
             pitch = 90.0F;
         } else if (pitch < -90.0F) {
@@ -363,7 +363,7 @@ public class EntityUtils {
         return pitch;
     }
 
-    private static float getPitch(
+    private static float getPitchByNms(
             @NotNull RefEntity entity
     ) {
         if (GET_YAW_SUPPORT) {
@@ -373,7 +373,7 @@ public class EntityUtils {
         }
     }
 
-    private static float getYaw(
+    private static float getYawByNms(
             @NotNull RefEntity entity
     ) {
         if (GET_YAW_SUPPORT) {

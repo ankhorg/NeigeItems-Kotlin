@@ -236,7 +236,7 @@ public class EntityPlayerUtils {
         if ((Object) player instanceof RefCraftPlayer) {
             RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
             RefEnumHand enumHand = toRefEnumHand(hand);
-            swing(entityPlayer, enumHand, fromServerPlayer);
+            swingByNms(entityPlayer, enumHand, fromServerPlayer);
         }
     }
 
@@ -474,14 +474,14 @@ public class EntityPlayerUtils {
         }
     }
 
-    private static void swing(
+    private static void swingByNms(
             @NotNull RefEntityPlayer player,
             @NotNull RefEnumHand hand
     ) {
-        swing(player, hand, true);
+        swingByNms(player, hand, true);
     }
 
-    private static void swing(
+    private static void swingByNms(
             @NotNull RefEntityPlayer player,
             @NotNull RefEnumHand hand,
             boolean fromServerPlayer
