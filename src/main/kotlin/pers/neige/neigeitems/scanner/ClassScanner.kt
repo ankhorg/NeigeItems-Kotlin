@@ -184,6 +184,7 @@ class ClassScanner(
             try {
                 classes.add(Class.forName(entryName))
             } catch (error: Throwable) {
+                plugin.logger.warning("error occurred while get Class $entryName")
                 error.printStackTrace()
             }
         }
