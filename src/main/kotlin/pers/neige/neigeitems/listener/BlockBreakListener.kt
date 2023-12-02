@@ -11,8 +11,8 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object BlockBreakListener {
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun blocking(event: BlockBreakEvent) {
-        // 获取受击者
+    fun breakBlock(event: BlockBreakEvent) {
+        // 获取挖掘者
         val player = event.player
         // 获取主手物品
         val itemStack = player.inventory.itemInMainHand

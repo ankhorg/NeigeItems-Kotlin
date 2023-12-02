@@ -10,11 +10,13 @@ import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.*;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.*;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefVec3;
 import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorld;
+import com.google.common.base.Preconditions;
 import io.netty.channel.Channel;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
@@ -238,6 +240,44 @@ public class EntityPlayerUtils {
             RefEnumHand enumHand = toRefEnumHand(hand);
             swingByNms(entityPlayer, enumHand, fromServerPlayer);
         }
+    }
+
+    /**
+     * 让指定玩家破坏对应位置的方块.
+     *
+     * @param player 待操作玩家.
+     * @param block  待破坏方块.
+     * @return 是否破坏成功
+     */
+    public static boolean breakBlock(
+            @NotNull Player player,
+            Block block
+    ) {
+        Preconditions.checkArgument(block != null, "Block cannot be null");
+        Preconditions.checkArgument(block.getWorld().equals(player.getWorld()), "Cannot break blocks across worlds");
+        return breakBlock(player, block.getX(), block.getY(), block.getZ());
+    }
+
+    /**
+     * 让指定玩家破坏对应位置的方块.
+     *
+     * @param player 待操作玩家.
+     * @param x      目标方块 x 坐标.
+     * @param y      目标方块 y 坐标.
+     * @param z      目标方块 z 坐标.
+     * @return 是否破坏成功
+     */
+    public static boolean breakBlock(
+            @NotNull Player player,
+            int x,
+            int y,
+            int z
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            return entityPlayer.playerInteractManager.breakBlock(new RefBlockPos(x, y, z));
+        }
+        return false;
     }
 
     /**
