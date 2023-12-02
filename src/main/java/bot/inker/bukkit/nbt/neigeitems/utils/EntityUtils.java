@@ -78,6 +78,54 @@ public class EntityUtils {
     }
 
     /**
+     * 让实体尝试寻路并移动到对应位置.
+     *
+     * @param entity 待操作实体.
+     * @param x      目标点 x 轴坐标.
+     * @param y      目标点 y 轴坐标.
+     * @param z      目标点 z 轴坐标.
+     * @param speed  移动速度.
+     * @return 寻路是否成功.
+     */
+    public static boolean tryToMoveTo(
+            @NotNull LivingEntity entity,
+            double x,
+            double y,
+            double z,
+            double speed
+    ) {
+        if (entity instanceof RefCraftLivingEntity) {
+            RefEntityLiving living = ((RefCraftLivingEntity) entity).getHandle();
+            if (living instanceof RefMob) {
+                return ((RefMob) living).getNavigation().moveTo(x, y, z, speed);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 让实体尝试寻路并移动到对应实体位置.
+     *
+     * @param entity 待操作实体.
+     * @param target 目标实体.
+     * @param speed  移动速度.
+     * @return 寻路是否成功.
+     */
+    public static boolean tryToMoveTo(
+            @NotNull LivingEntity entity,
+            Entity target,
+            double speed
+    ) {
+        if (entity instanceof RefCraftLivingEntity && target instanceof RefCraftEntity) {
+            RefEntityLiving living = ((RefCraftLivingEntity) entity).getHandle();
+            if (living instanceof RefMob) {
+                return ((RefMob) living).getNavigation().moveTo(((RefCraftEntity) target).getHandle(), speed);
+            }
+        }
+        return false;
+    }
+
+    /**
      * 强制实体移动.
      *
      * @param entity 待操作实体.

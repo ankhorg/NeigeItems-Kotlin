@@ -1,5 +1,14 @@
 rootProject.name = "NeigeItems"
 
+//pluginManagement {
+//    repositories {
+//        gradlePluginPortal()
+//        maven("https://r.irepo.space/maven/") {
+//            content { includeGroupByRegex("^org\\.inksnow(\\..+|)\$") }
+//        }
+//    }
+//}
+
 include("hooker")
 
 include("hooker-mythicmobs-v440")

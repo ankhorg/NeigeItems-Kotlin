@@ -69,19 +69,19 @@ class ClassScanner(
         }
 
         enableMethods.forEach { method ->
-            kotlin.runCatching {
+            try {
                 method.invokeSafe()
-            }.getOrElse {
-                it.printStackTrace()
+            } catch (error: Throwable) {
+                error.printStackTrace()
             }
         }
 
         sync(plugin) {
             activeMethods.forEach { method ->
-                kotlin.runCatching {
+                try {
                     method.invokeSafe()
-                }.getOrElse {
-                    it.printStackTrace()
+                } catch (error: Throwable) {
+                    error.printStackTrace()
                 }
             }
         }
@@ -105,10 +105,10 @@ class ClassScanner(
      */
     fun onDisable() {
         disableMethods.forEach { method ->
-            kotlin.runCatching {
+            try {
                 method.invokeSafe()
-            }.getOrElse {
-                it.printStackTrace()
+            } catch (error: Throwable) {
+                error.printStackTrace()
             }
         }
     }
@@ -211,7 +211,16 @@ class ClassScanner(
         if (Modifier.isStatic(modifiers)) {
             invoke(null, *args)
         } else {
-            invoke(declaringClass.getDeclaredField("INSTANCE").get(null), *args)
+            val instance = try {
+                declaringClass.getDeclaredField("INSTANCE").get(null)
+            } catch (error: Throwable) {
+                plugin.logger.warning("$declaringClass 不是kotlin单例, 无法执行非静态方法 $name")
+                error.printStackTrace()
+                null
+            }
+            if (instance != null) {
+                invoke(instance, *args)
+            }
         }
     }
 }

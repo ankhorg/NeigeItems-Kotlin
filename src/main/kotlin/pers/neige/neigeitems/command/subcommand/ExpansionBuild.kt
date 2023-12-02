@@ -69,6 +69,10 @@ object ExpansionBuild {
                         pool.insertClassPath(ClassClassPath(Objects::class.java))
                         pool.insertClassPath(ClassClassPath(UUID::class.java))
                         pool.insertClassPath(ClassClassPath(Reader::class.java))
+                        runCatching {
+                            val clazz = pool.get("pers.neige.${pluginName.lowercase(Locale.getDefault())}.Main")
+                            if (clazz.isFrozen) clazz.defrost()
+                        }
                         val ctClass = pool.makeClass("pers.neige.${pluginName.lowercase(Locale.getDefault())}.Main")
                         ctClass.superclass = pool.get("org.bukkit.plugin.java.JavaPlugin")
                         val methodCode = """

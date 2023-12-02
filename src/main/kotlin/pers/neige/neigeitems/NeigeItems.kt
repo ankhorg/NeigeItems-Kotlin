@@ -46,6 +46,7 @@ object NeigeItems : Plugin() {
             )
         )
         scanner!!.onEnable()
+//        ExampleMain.onEnable()
     }
 
     override fun onDisable() {
