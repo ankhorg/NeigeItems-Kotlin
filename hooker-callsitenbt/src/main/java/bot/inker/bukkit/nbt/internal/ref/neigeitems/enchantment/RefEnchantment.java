@@ -1,75 +1,74 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.enchantment;
+package pers.neige.neigeitems.internal.ref.enchantment;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefComponent;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntity;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntityLiving;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEquipmentSlot;
+import pers.neige.neigeitems.internal.ref.chat.RefComponent;
+import pers.neige.neigeitems.internal.ref.entity.RefEntity;
+import pers.neige.neigeitems.internal.ref.entity.RefEntityLiving;
+import pers.neige.neigeitems.internal.ref.entity.RefEquipmentSlot;
 
 import java.util.Map;
 
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/item/enchantment/Enchantment")
+@HandleBy(reference = "net/minecraft/world/item/enchantment/Enchantment", predicates = "craftbukkit_version:[v1_17_R1,)")
 public abstract class RefEnchantment {
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;slots:[Lnet/minecraft/world/entity/EquipmentSlot;")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;slots:[Lnet/minecraft/world/entity/EquipmentSlot;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public final RefEquipmentSlot slots = null;
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;category:Lnet/minecraft/world/item/enchantment/EnchantmentCategory;")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;category:Lnet/minecraft/world/item/enchantment/EnchantmentCategory;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public final RefEnchantmentCategory category = null;
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;<init>(Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;Lnet/minecraft/world/item/enchantment/EnchantmentCategory;[Lnet/minecraft/world/entity/EquipmentSlot;)V")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;<init>(Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;Lnet/minecraft/world/item/enchantment/EnchantmentCategory;[Lnet/minecraft/world/entity/EquipmentSlot;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     protected RefEnchantment(RefRarity weight, RefEnchantmentCategory target, RefEquipmentSlot[] slotTypes) {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getSlotItems(Lnet/minecraft/world/entity/LivingEntity;)Ljava/util/Map;")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getSlotItems(Lnet/minecraft/world/entity/LivingEntity;)Ljava/util/Map;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native Map<RefEquipmentSlot, RefNmsItemStack> getSlotItems(RefEntityLiving entity);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getRarity()Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getRarity()Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native RefRarity getRarity();
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getMinLevel()I")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getMinLevel()I", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native int getMinLevel();
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getMaxLevel()I")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getMaxLevel()I", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native int getMaxLevel();
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getMinCost(I)I")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getMinCost(I)I", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native int getMinCost(int level);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getMaxCost(I)I")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getMaxCost(I)I", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native int getMaxCost(int level);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isCompatibleWith(Lnet/minecraft/world/item/enchantment/Enchantment;)Z")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isCompatibleWith(Lnet/minecraft/world/item/enchantment/Enchantment;)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native boolean isCompatibleWith(RefEnchantment other);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;checkCompatibility(Lnet/minecraft/world/item/enchantment/Enchantment;)Z")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;checkCompatibility(Lnet/minecraft/world/item/enchantment/Enchantment;)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
     protected native boolean checkCompatibility(RefEnchantment other);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getDescriptionId()Ljava/lang/String;")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getDescriptionId()Ljava/lang/String;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native String getDescriptionId();
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getFullname(I)Lnet/minecraft/network/chat/Component;")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getFullname(I)Lnet/minecraft/network/chat/Component;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native RefComponent getFullname(int level);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;canEnchant(Lnet/minecraft/world/item/ItemStack;)Z")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;canEnchant(Lnet/minecraft/world/item/ItemStack;)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native boolean canEnchant(RefNmsItemStack stack);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;doPostAttack(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/Entity;I)V")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;doPostAttack(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/Entity;I)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native void doPostAttack(RefEntityLiving user, RefEntity target, int level);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;doPostHurt(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/Entity;I)V")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;doPostHurt(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/Entity;I)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native void doPostHurt(RefEntityLiving user, RefEntity target, int level);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isTreasureOnly()Z")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isTreasureOnly()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native boolean isTreasureOnly();
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isCurse()Z")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isCurse()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native boolean isCurse();
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isTradeable()Z")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isTradeable()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native boolean isTradeable();
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isDiscoverable()Z")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isDiscoverable()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native boolean isDiscoverable();
 }

@@ -1,13 +1,13 @@
 rootProject.name = "NeigeItems"
 
-//pluginManagement {
-//    repositories {
-//        gradlePluginPortal()
-//        maven("https://r.irepo.space/maven/") {
-//            content { includeGroupByRegex("^org\\.inksnow(\\..+|)\$") }
-//        }
-//    }
-//}
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven("https://r.irepo.space/maven/") {
+            content { includeGroupByRegex("^org\\.inksnow(\\..+|)\$") }
+        }
+    }
+}
 
 include("hooker")
 
@@ -21,5 +21,4 @@ include("hooker-nms-NamespacedKey")
 include("hooker-nms-CustomModelData")
 include("hooker-nms-HoverEvent")
 
-include("hooker-callsitenbt")
-
+//include("hooker-callsitenbt")

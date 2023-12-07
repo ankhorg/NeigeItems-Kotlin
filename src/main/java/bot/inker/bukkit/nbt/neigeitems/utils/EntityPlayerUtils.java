@@ -1,15 +1,15 @@
 package bot.inker.bukkit.nbt.neigeitems.utils;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockPos;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.sign.RefSignBlockEntity;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefEnumTitleAction;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.*;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.*;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefVec3;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorld;
+import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
+import pers.neige.neigeitems.ref.argument.RefAnchor;
+import pers.neige.neigeitems.ref.block.RefBlockPos;
+import pers.neige.neigeitems.ref.block.sign.RefSignBlockEntity;
+import pers.neige.neigeitems.ref.chat.RefEnumTitleAction;
+import pers.neige.neigeitems.ref.entity.*;
+import pers.neige.neigeitems.ref.network.*;
+import pers.neige.neigeitems.ref.world.RefVec3;
+import pers.neige.neigeitems.ref.world.RefWorld;
 import com.google.common.base.Preconditions;
 import io.netty.channel.Channel;
 import net.md_5.bungee.api.chat.BaseComponent;

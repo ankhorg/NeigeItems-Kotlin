@@ -1,16 +1,15 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.util;
+package pers.neige.neigeitems.internal.ref.util;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.RefItem;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/util/CraftMagicNumbers")
+@HandleBy(reference = "org/bukkit/craftbukkit/v1_12_R1/util/CraftMagicNumbers", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefCraftMagicNumbers {
     @Nullable
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/util/CraftMagicNumbers;getItem(Lorg/bukkit/Material;)Lnet/minecraft/server/v1_12_R1/Item;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lorg/bukkit/craftbukkit/v1_17_R1/util/CraftMagicNumbers;getItem(Lorg/bukkit/Material;)Lnet/minecraft/world/item/Item;")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/util/CraftMagicNumbers;getItem(Lorg/bukkit/Material;)Lnet/minecraft/world/item/Item;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/util/CraftMagicNumbers;getItem(Lorg/bukkit/Material;)Lnet/minecraft/server/v1_12_R1/Item;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public static native RefItem getItem(@NotNull Material material);
 }

@@ -1,14 +1,11 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.item.shield;
+package pers.neige.neigeitems.internal.ref.item.shield;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.item.RefEnumColor;
+import pers.neige.neigeitems.internal.ref.item.RefEnumColor;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/TileEntityBanner")
-@HandleBy(version = CbVersion.v1_13_R1, reference = "")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/TileEntityBanner", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
 public final class RefTileEntityBanner {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/TileEntityBanner;d(Lnet/minecraft/server/v1_12_R1/ItemStack;)Lnet/minecraft/server/v1_12_R1/EnumColor;")
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/TileEntityBanner;d(Lnet/minecraft/server/v1_12_R1/ItemStack;)Lnet/minecraft/server/v1_12_R1/EnumColor;", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public static native RefEnumColor getColor(RefNmsItemStack itemStack);
 }

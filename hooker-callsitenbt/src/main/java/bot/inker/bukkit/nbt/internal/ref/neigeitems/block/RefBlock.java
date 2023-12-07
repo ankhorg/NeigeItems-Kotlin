@@ -1,10 +1,9 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.block;
+package pers.neige.neigeitems.internal.ref.block;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/Block")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/level/block/Block")
+@HandleBy(reference = "net/minecraft/world/level/block/Block", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/Block", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefBlock {
 
 }

@@ -1,13 +1,12 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.util;
+package pers.neige.neigeitems.internal.ref.util;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/util/random/Weight")
+@HandleBy(reference = "net/minecraft/util/random/Weight", predicates = "craftbukkit_version:[v1_17_R1,)")
 public class RefWeight {
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/util/random/Weight;of(I)Lnet/minecraft/util/random/Weight;")
+    @HandleBy(reference = "Lnet/minecraft/util/random/Weight;of(I)Lnet/minecraft/util/random/Weight;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public static native RefWeight of(int weight);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/util/random/Weight;asInt()I")
+    @HandleBy(reference = "Lnet/minecraft/util/random/Weight;asInt()I", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native int asInt();
 }

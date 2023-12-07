@@ -1,13 +1,10 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.item.potion;
+package pers.neige.neigeitems.internal.ref.item.potion;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/PotionUtil")
-@HandleBy(version = CbVersion.v1_13_R1, reference = "")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/PotionUtil", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
 public final class RefPotionUtil {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PotionUtil;d(Lnet/minecraft/server/v1_12_R1/ItemStack;)Lnet/minecraft/server/v1_12_R1/PotionRegistry;")
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/PotionUtil;d(Lnet/minecraft/server/v1_12_R1/ItemStack;)Lnet/minecraft/server/v1_12_R1/PotionRegistry;", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public static native RefPotionRegistry getPotionRegistry(RefNmsItemStack itemStack);
 }

@@ -1,14 +1,13 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.network;
+package pers.neige.neigeitems.internal.ref.network;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntity;
+import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.internal.ref.entity.RefEntity;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/PacketPlayOutAnimation")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/protocol/game/ClientboundAnimatePacket")
+@HandleBy(reference = "net/minecraft/network/protocol/game/ClientboundAnimatePacket", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/PacketPlayOutAnimation", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefPacketPlayOutAnimation implements RefPacket<RefPacketListenerPlayOut> {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PacketPlayOutAnimation;<init>(Lnet/minecraft/server/v1_12_R1/Entity;I)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/network/protocol/game/ClientboundAnimatePacket;<init>(Lnet/minecraft/world/entity/Entity;I)V")
+    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundAnimatePacket;<init>(Lnet/minecraft/world/entity/Entity;I)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/PacketPlayOutAnimation;<init>(Lnet/minecraft/server/v1_12_R1/Entity;I)V", predicates = "craftbukkit_version:[v1_12_R1,)")
     public RefPacketPlayOutAnimation(RefEntity entity, int animationId) {
         throw new UnsupportedOperationException();
     }

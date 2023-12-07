@@ -1,6 +1,6 @@
 package bot.inker.bukkit.nbt;
 
-import bot.inker.bukkit.nbt.internal.ref.RefNbtTagCompound;
+import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
 import org.jetbrains.annotations.NotNull;
 
 public class NeigeItemsUtils {

@@ -1,13 +1,13 @@
 package bot.inker.bukkit.nbt.neigeitems.utils;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.ref.RefCraftItemStack;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefCraftEntity;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntity;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntityItem;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefAABB;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefCraftWorld;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorldServer;
+import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
+import pers.neige.neigeitems.ref.entity.RefCraftEntity;
+import pers.neige.neigeitems.ref.entity.RefEntity;
+import pers.neige.neigeitems.ref.entity.RefEntityItem;
+import pers.neige.neigeitems.ref.world.RefAABB;
+import pers.neige.neigeitems.ref.world.RefCraftWorld;
+import pers.neige.neigeitems.ref.world.RefWorldServer;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;

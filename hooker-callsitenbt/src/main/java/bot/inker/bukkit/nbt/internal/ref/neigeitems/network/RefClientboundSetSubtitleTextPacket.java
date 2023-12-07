@@ -1,12 +1,11 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.network;
+package pers.neige.neigeitems.internal.ref.network;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefComponent;
+import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.internal.ref.chat.RefComponent;
 
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/protocol/game/ClientboundSetSubtitleTextPacket")
+@HandleBy(reference = "net/minecraft/network/protocol/game/ClientboundSetSubtitleTextPacket", predicates = "craftbukkit_version:[v1_17_R1,)")
 public final class RefClientboundSetSubtitleTextPacket implements RefPacket<RefPacketListenerPlayOut> {
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/network/protocol/game/ClientboundSetSubtitleTextPacket;<init>(Lnet/minecraft/network/chat/Component;)V")
+    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundSetSubtitleTextPacket;<init>(Lnet/minecraft/network/chat/Component;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     public RefClientboundSetSubtitleTextPacket(RefComponent title) {
         throw new UnsupportedOperationException();
     }

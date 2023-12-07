@@ -1,12 +1,9 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.item.potion;
+package pers.neige.neigeitems.internal.ref.item.potion;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/PotionUtil")
-@HandleBy(version = CbVersion.v1_13_R1, reference = "")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/PotionUtil", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
 public final class RefPotionRegistry {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PotionRegistry;b(Ljava/lang/String;)Ljava/lang/String;")
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/PotionRegistry;b(Ljava/lang/String;)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public native String getTranslationKey(String prefix);
 }

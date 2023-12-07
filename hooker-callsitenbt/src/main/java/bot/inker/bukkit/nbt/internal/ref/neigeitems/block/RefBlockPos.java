@@ -1,17 +1,16 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.block;
+package pers.neige.neigeitems.internal.ref.block;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/BlockPosition")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/core/BlockPos")
+@HandleBy(reference = "net/minecraft/core/BlockPos", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/BlockPosition", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefBlockPos {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/BlockPosition;ZERO:Lnet/minecraft/server/v1_12_R1/BlockPosition;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/core/BlockPos;ZERO:Lnet/minecraft/core/BlockPos;")
+    @HandleBy(reference = "Lnet/minecraft/core/BlockPos;ZERO:Lnet/minecraft/core/BlockPos;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/BlockPosition;ZERO:Lnet/minecraft/server/v1_12_R1/BlockPosition;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public static final RefBlockPos ZERO = null;
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/BlockPosition;<init>(III)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/core/BlockPos;<init>(III)V")
+    @HandleBy(reference = "Lnet/minecraft/core/BlockPos;<init>(III)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/BlockPosition;<init>(III)V", predicates = "craftbukkit_version:[v1_12_R1,)")
     public RefBlockPos(int x, int y, int z) {
         throw new UnsupportedOperationException();
     }

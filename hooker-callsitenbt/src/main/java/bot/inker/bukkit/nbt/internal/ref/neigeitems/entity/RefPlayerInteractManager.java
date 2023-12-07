@@ -1,20 +1,19 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.entity;
+package pers.neige.neigeitems.internal.ref.entity;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockPos;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefWorld;
+import pers.neige.neigeitems.internal.ref.block.RefBlockPos;
+import pers.neige.neigeitems.internal.ref.world.RefWorld;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/PlayerInteractManager")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/server/level/ServerPlayerGameMode")
+@HandleBy(reference = "net/minecraft/server/level/ServerPlayerGameMode", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/PlayerInteractManager", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefPlayerInteractManager {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PlayerInteractManager;a(Lnet/minecraft/server/v1_12_R1/EntityHuman;Lnet/minecraft/server/v1_12_R1/World;Lnet/minecraft/server/v1_12_R1/ItemStack;Lnet/minecraft/server/v1_12_R1/EnumHand;)Lnet/minecraft/server/v1_12_R1/EnumInteractionResult;")
-    @HandleBy(version = CbVersion.v1_16_R1, reference = "Lnet/minecraft/server/v1_16_R1/PlayerInteractManager;a(Lnet/minecraft/server/v1_16_R1/EntityPlayer;Lnet/minecraft/server/v1_16_R1/World;Lnet/minecraft/server/v1_16_R1/ItemStack;Lnet/minecraft/server/v1_16_R1/EnumHand;)Lnet/minecraft/server/v1_16_R1/EnumInteractionResult;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/server/level/ServerPlayerGameMode;useItem(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;")
+    @HandleBy(reference = "Lnet/minecraft/server/level/ServerPlayerGameMode;useItem(Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/PlayerInteractManager;a(Lnet/minecraft/server/v1_16_R1/EntityPlayer;Lnet/minecraft/server/v1_16_R1/World;Lnet/minecraft/server/v1_16_R1/ItemStack;Lnet/minecraft/server/v1_16_R1/EnumHand;)Lnet/minecraft/server/v1_16_R1/EnumInteractionResult;", predicates = "craftbukkit_version:[v1_16_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/PlayerInteractManager;a(Lnet/minecraft/server/v1_12_R1/EntityHuman;Lnet/minecraft/server/v1_12_R1/World;Lnet/minecraft/server/v1_12_R1/ItemStack;Lnet/minecraft/server/v1_12_R1/EnumHand;)Lnet/minecraft/server/v1_12_R1/EnumInteractionResult;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native RefEnumInteractionResult useItem(RefEntityHuman entityHuman, RefWorld world, RefNmsItemStack itemStack, RefEnumHand hand);
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PlayerInteractManager;breakBlock(Lnet/minecraft/server/v1_12_R1/BlockPosition;)Z")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/server/level/ServerPlayerGameMode;destroyBlock(Lnet/minecraft/core/BlockPos;)Z")
+    @HandleBy(reference = "Lnet/minecraft/server/level/ServerPlayerGameMode;destroyBlock(Lnet/minecraft/core/BlockPos;)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/PlayerInteractManager;breakBlock(Lnet/minecraft/server/v1_12_R1/BlockPosition;)Z", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native boolean breakBlock(RefBlockPos pos);
 }

@@ -1,11 +1,10 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.entity;
+package pers.neige.neigeitems.internal.ref.entity;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/entity/CraftPlayer")
+@HandleBy(reference = "org/bukkit/craftbukkit/v1_12_R1/entity/CraftPlayer", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefCraftPlayer extends RefCraftHumanEntity {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftPlayer;getHandle()Lnet/minecraft/server/v1_12_R1/EntityPlayer;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lorg/bukkit/craftbukkit/v1_17_R1/entity/CraftPlayer;getHandle()Lnet/minecraft/server/level/ServerPlayer;")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/entity/CraftPlayer;getHandle()Lnet/minecraft/server/level/ServerPlayer;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftPlayer;getHandle()Lnet/minecraft/server/v1_12_R1/EntityPlayer;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native RefEntityPlayer getHandle();
 }

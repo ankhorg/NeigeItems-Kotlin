@@ -1,21 +1,17 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.network;
+package pers.neige.neigeitems.internal.ref.network;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefComponent;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.chat.RefEnumTitleAction;
+import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.internal.ref.chat.RefComponent;
+import pers.neige.neigeitems.internal.ref.chat.RefEnumTitleAction;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/PacketPlayOutTitle")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/PacketPlayOutTitle", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public final class RefPacketPlayOutTitle implements RefPacket<RefPacketListenerPlayOut> {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PacketPlayOutTitle;<init>(III)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/PacketPlayOutTitle;<init>(III)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefPacketPlayOutTitle(int fadeIn, int stay, int fadeOut) {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PacketPlayOutTitle;<init>(Lnet/minecraft/server/v1_12_R1/PacketPlayOutTitle$EnumTitleAction;Lnet/minecraft/server/v1_12_R1/IChatBaseComponent;)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/PacketPlayOutTitle;<init>(Lnet/minecraft/server/v1_12_R1/PacketPlayOutTitle$EnumTitleAction;Lnet/minecraft/server/v1_12_R1/IChatBaseComponent;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefPacketPlayOutTitle(RefEnumTitleAction action, RefComponent title) {
         throw new UnsupportedOperationException();
     }

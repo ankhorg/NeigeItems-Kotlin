@@ -1,18 +1,17 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.world;
+package pers.neige.neigeitems.internal.ref.world;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.network.RefServerConnection;
+import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.internal.ref.network.RefServerConnection;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/MinecraftServer")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/server/MinecraftServer")
+@HandleBy(reference = "net/minecraft/server/MinecraftServer", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/MinecraftServer", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefMinecraftServer {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/MinecraftServer;recentTps:[D")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/server/MinecraftServer;recentTps:[D")
+    @HandleBy(reference = "Lnet/minecraft/server/MinecraftServer;recentTps:[D", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/MinecraftServer;recentTps:[D", predicates = "craftbukkit_version:[v1_12_R1,)")
     public final double[] recentTps = null;
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/MinecraftServer;p:Lnet/minecraft/server/v1_12_R1/ServerConnection;", accessor = true)
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/MinecraftServer;serverConnection:Lnet/minecraft/server/v1_13_R1/ServerConnection;", accessor = true)
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/server/MinecraftServer;connection:Lnet/minecraft/server/network/ServerConnectionListener;", accessor = true)
+    @HandleBy(reference = "Lnet/minecraft/server/MinecraftServer;connection:Lnet/minecraft/server/network/ServerConnectionListener;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/MinecraftServer;serverConnection:Lnet/minecraft/server/v1_13_R1/ServerConnection;", useAccessor = true, predicates = "craftbukkit_version:[v1_13_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/MinecraftServer;p:Lnet/minecraft/server/v1_12_R1/ServerConnection;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,)")
     public RefServerConnection connection;
 }

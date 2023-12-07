@@ -1,13 +1,12 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.server.players;
+package pers.neige.neigeitems.internal.ref.server.players;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import com.mojang.authlib.GameProfile;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/PlayerList")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/server/players/PlayerList")
+@HandleBy(reference = "net/minecraft/server/players/PlayerList", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/PlayerList", predicates = "craftbukkit_version:[v1_12_R1,)")
 public abstract class RefPlayerList {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/PlayerList;isOp(Lcom/mojang/authlib/GameProfile;)Z")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/server/players/PlayerList;isOp(Lcom/mojang/authlib/GameProfile;)Z")
+    @HandleBy(reference = "Lnet/minecraft/server/players/PlayerList;isOp(Lcom/mojang/authlib/GameProfile;)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/PlayerList;isOp(Lcom/mojang/authlib/GameProfile;)Z", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native boolean isOp(GameProfile gameprofile);
 }

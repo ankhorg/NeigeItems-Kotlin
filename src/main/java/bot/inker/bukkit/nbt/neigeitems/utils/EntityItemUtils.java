@@ -1,8 +1,8 @@
 package bot.inker.bukkit.nbt.neigeitems.utils;
 
 import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefCraftItem;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.entity.RefEntityItem;
+import pers.neige.neigeitems.ref.entity.RefCraftItem;
+import pers.neige.neigeitems.ref.entity.RefEntityItem;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Item;

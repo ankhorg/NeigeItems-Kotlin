@@ -4,11 +4,15 @@ import bot.inker.bukkit.nbt.NbtItemStack
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
+import org.bukkit.plugin.java.JavaPlugin
+import org.inksnow.ankhinvoke.bukkit.AnkhInvokeBukkit
+import org.inksnow.ankhinvoke.example.ExampleMain
 import pers.neige.neigeitems.lang.LocaleI18n
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.scanner.ClassScanner
 import taboolib.common.platform.Plugin
 import taboolib.platform.BukkitPlugin
+import java.net.URLClassLoader
 
 /**
  * 插件主类
@@ -51,5 +55,24 @@ object NeigeItems : Plugin() {
 
     override fun onDisable() {
         scanner!!.onDisable()
+    }
+
+    @JvmStatic
+    fun init() {
+        try {
+            AnkhInvokeBukkit.forBukkit((Class.forName("pers.neige.neigeitems.taboolib.platform.BukkitPlugin") as Class<out JavaPlugin?>))
+                .reference() /**/
+                .appendPackage("pers.neige.neigeitems.ref") /**/
+                .build()
+                .inject() /**/
+                .urlInjector((Class.forName("pers.neige.neigeitems.taboolib.platform.BukkitPlugin").classLoader as URLClassLoader)) /**/
+                .build()
+                .referenceRemap() /**/
+                .setApplyMapRegistry("neigeitems") /**/
+                .build()
+                .build()
+        } catch (e: ClassNotFoundException) {
+            e.printStackTrace()
+        }
     }
 }

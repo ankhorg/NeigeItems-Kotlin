@@ -1,19 +1,18 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.enchantment;
+package pers.neige.neigeitems.internal.ref.enchantment;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/item/enchantment/Enchantment$Rarity")
+@HandleBy(reference = "net/minecraft/world/item/enchantment/Enchantment$Rarity", predicates = "craftbukkit_version:[v1_17_R1,)")
 public final class RefRarity {
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;COMMON:Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;COMMON:Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public static final RefRarity COMMON = null;
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;UNCOMMON:Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;UNCOMMON:Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public static final RefRarity UNCOMMON = null;
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;RARE:Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;RARE:Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public static final RefRarity RARE = null;
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;VERY_RARE:Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;")
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;VERY_RARE:Lnet/minecraft/world/item/enchantment/Enchantment$Rarity;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public static final RefRarity VERY_RARE = null;
 }
