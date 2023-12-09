@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.command;
 
-import bot.inker.bukkit.nbt.neigeitems.utils.ServerUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ServerUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;

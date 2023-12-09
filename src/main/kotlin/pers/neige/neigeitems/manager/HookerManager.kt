@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.manager
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion
-import bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder

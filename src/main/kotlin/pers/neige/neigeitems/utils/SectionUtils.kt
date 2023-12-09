@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.utils
 
-import bot.inker.bukkit.nbt.NbtCompound
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import com.alibaba.fastjson2.parseObject
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit

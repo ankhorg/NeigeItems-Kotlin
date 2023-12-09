@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.manager
 
-import bot.inker.bukkit.nbt.NbtCompound
-import bot.inker.bukkit.nbt.NbtItemStack
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.ChatColor
 import org.bukkit.Material

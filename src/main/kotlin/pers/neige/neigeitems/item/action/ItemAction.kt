@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.item.action
 
-import bot.inker.bukkit.nbt.NbtCompound
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.entity.Player
 import org.bukkit.event.Event

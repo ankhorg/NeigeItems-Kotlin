@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.listener
 
-import bot.inker.bukkit.nbt.NbtCompound
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerItemDamageEvent
 import pers.neige.neigeitems.annotation.Listener

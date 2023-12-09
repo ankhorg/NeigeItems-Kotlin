@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.hook.nms;
 
-import bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.ItemTag;
 import net.md_5.bungee.api.chat.hover.content.Text;

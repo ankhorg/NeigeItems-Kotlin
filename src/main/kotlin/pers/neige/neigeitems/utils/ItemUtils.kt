@@ -1,11 +1,11 @@
 package pers.neige.neigeitems.utils
 
 import bot.inker.bukkit.nbt.*
-import bot.inker.bukkit.nbt.api.NbtComponentLike
-import bot.inker.bukkit.nbt.api.NbtLike
-import bot.inker.bukkit.nbt.api.NbtListLike
-import bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
-import bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtListLike
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.Location
 import org.bukkit.Material
@@ -17,6 +17,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import pers.neige.neigeitems.item.ItemInfo
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
@@ -159,9 +160,12 @@ object ItemUtils {
             this.startsWith("[") && this.endsWith("]") -> {
                 val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
                 when {
-                    list.all { it is Byte } -> NbtByteArray(ByteArray(list.size) { list[it] as Byte })
-                    list.all { it is Int } -> NbtIntArray(IntArray(list.size) { list[it] as Int })
-                    list.all { it is Long } -> NbtLongArray(LongArray(list.size) { list[it] as Long })
+                    list.all { it is Byte } -> NbtByteArray(
+                        ByteArray(list.size) { list[it] as Byte })
+                    list.all { it is Int } -> NbtIntArray(
+                        IntArray(list.size) { list[it] as Int })
+                    list.all { it is Long } -> NbtLongArray(
+                        LongArray(list.size) { list[it] as Long })
                     else -> NbtString.valueOf(this)
                 }
             }
@@ -191,8 +195,10 @@ object ItemUtils {
             is List<*> -> {
                 val list = this.map { it?.cast() ?: it }
                 when {
-                    list.all { it is Byte } -> NbtByteArray(ByteArray(list.size) { list[it] as Byte })
-                    list.all { it is Int } -> NbtIntArray(IntArray(list.size) { list[it] as Int })
+                    list.all { it is Byte } -> NbtByteArray(
+                        ByteArray(list.size) { list[it] as Byte })
+                    list.all { it is Int } -> NbtIntArray(
+                        IntArray(list.size) { list[it] as Int })
                     else -> {
                         val nbtList = NbtList()
                         for (obj in list) {
@@ -1171,7 +1177,8 @@ object ItemUtils {
                                 // 如果刚好是比list的大小多一个
                                 if (nodeIndex == (temp as NbtList).size) {
                                     // 创建一个新的NbtCompound
-                                    val newItemTag = NbtCompound()
+                                    val newItemTag =
+                                        NbtCompound()
                                     // 丢进去
                                     (temp as NbtList).add(newItemTag)
                                     // 记录一下
@@ -1192,11 +1199,13 @@ object ItemUtils {
                             // 其他情况说明需要重新创建一个NbtList, 所以nodeIndex必须为0
                             if (nodeIndex == 0) {
                                 // 新建一个NbtCompound
-                                val fatherItemTagList = NbtList()
+                                val fatherItemTagList =
+                                    NbtList()
                                 // 覆盖上一层
                                 (father as NbtCompound)[tempId] = fatherItemTagList
                                 // 新建当前Nbt
-                                val tempItemTag = NbtCompound()
+                                val tempItemTag =
+                                    NbtCompound()
                                 // 建立下一级Nbt
                                 fatherItemTagList.add(tempItemTag)
                                 // 记录父级NbtCompound
@@ -1232,11 +1241,13 @@ object ItemUtils {
                     // 其他情况
                     else -> {
                         // 新建一个NbtCompound
-                        val fatherItemTag = NbtCompound()
+                        val fatherItemTag =
+                            NbtCompound()
                         // 覆盖上一层
                         (father as NbtCompound)[tempId] = fatherItemTag
                         // 新建当前Nbt
-                        val tempItemTag = NbtCompound()
+                        val tempItemTag =
+                            NbtCompound()
                         // 建立下一级Nbt
                         fatherItemTag[node] = tempItemTag
                         // 记录父级NbtCompound
@@ -1271,10 +1282,16 @@ object ItemUtils {
                         // 覆盖上一层
                         when (father) {
                             is NbtList -> {
-                                (father as NbtList)[tempId.toInt()] = NbtByteArray(newArray)
+                                (father as NbtList)[tempId.toInt()] =
+                                    NbtByteArray(
+                                        newArray
+                                    )
                             }
                             else -> {
-                                (father as NbtCompound)[tempId] = NbtByteArray(newArray)
+                                (father as NbtCompound)[tempId] =
+                                    NbtByteArray(
+                                        newArray
+                                    )
                             }
                         }
                         // 越界了, 爬
@@ -1297,10 +1314,16 @@ object ItemUtils {
                         // 覆盖上一层
                         when (father) {
                             is NbtList -> {
-                                (father as NbtList)[tempId.toInt()] = NbtIntArray(newArray)
+                                (father as NbtList)[tempId.toInt()] =
+                                    NbtIntArray(
+                                        newArray
+                                    )
                             }
                             else -> {
-                                (father as NbtCompound)[tempId] = NbtIntArray(newArray)
+                                (father as NbtCompound)[tempId] =
+                                    NbtIntArray(
+                                        newArray
+                                    )
                             }
                         }
                         // 越界了, 爬
@@ -1323,10 +1346,16 @@ object ItemUtils {
                         // 覆盖上一层
                         when (father) {
                             is NbtList -> {
-                                (father as NbtList)[tempId.toInt()] = NbtLongArray(newArray)
+                                (father as NbtList)[tempId.toInt()] =
+                                    NbtLongArray(
+                                        newArray
+                                    )
                             }
                             else -> {
-                                (father as NbtCompound)[tempId] = NbtLongArray(newArray)
+                                (father as NbtCompound)[tempId] =
+                                    NbtLongArray(
+                                        newArray
+                                    )
                             }
                         }
                         // 越界了, 爬

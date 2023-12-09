@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.listener
 
-import bot.inker.bukkit.nbt.NbtCompound
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityShootBowEvent

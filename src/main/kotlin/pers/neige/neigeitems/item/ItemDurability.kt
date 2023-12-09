@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.item
 
-import bot.inker.bukkit.nbt.NbtCompound
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound

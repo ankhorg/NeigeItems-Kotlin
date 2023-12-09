@@ -1,6 +1,6 @@
 package org.inksnow.ankhinvoke.example;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

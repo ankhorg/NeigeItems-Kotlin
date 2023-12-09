@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.item
 
-import bot.inker.bukkit.nbt.NbtItemStack
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import com.alibaba.fastjson2.parseObject
 import com.alibaba.fastjson2.toJSONString
 import org.bukkit.*

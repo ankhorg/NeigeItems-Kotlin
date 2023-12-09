@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.manager
 
-import bot.inker.bukkit.nbt.NbtItemStack
-import bot.inker.bukkit.nbt.NbtNumeric
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtNumeric
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection

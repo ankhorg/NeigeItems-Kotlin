@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.item
 
 import bot.inker.bukkit.nbt.*
-import bot.inker.bukkit.nbt.api.NbtComponentLike
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.events.ListenerPriority
@@ -11,6 +11,7 @@ import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.ItemUtils.getDeepIntOrNull
 import pers.neige.neigeitems.utils.ItemUtils.getDeepWithEscape
