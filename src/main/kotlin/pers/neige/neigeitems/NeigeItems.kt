@@ -6,7 +6,6 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import org.inksnow.ankhinvoke.bukkit.AnkhInvokeBukkit
-import org.inksnow.ankhinvoke.example.ExampleMain
 import pers.neige.neigeitems.lang.LocaleI18n
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.scanner.ClassScanner
@@ -51,7 +50,6 @@ object NeigeItems : Plugin() {
             )
         )
         scanner!!.onEnable()
-//        ExampleMain.onEnable()
     }
 
     override fun onDisable() {

@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.utils
 
-import bot.inker.bukkit.nbt.*
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtListLike

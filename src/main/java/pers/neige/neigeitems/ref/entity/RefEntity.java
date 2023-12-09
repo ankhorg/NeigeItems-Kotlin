@@ -132,4 +132,8 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getBoundingBox()Lnet/minecraft/world/phys/AABB;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;getBoundingBox()Lnet/minecraft/server/v1_12_R1/AxisAlignedBB;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native RefAABB getBoundingBox();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;setPos(DDD)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;setPosition(DDD)V", predicates = "craftbukkit_version:[v1_12_R1,)")
+    public native void setPosition(double x, double y, double z);
 }

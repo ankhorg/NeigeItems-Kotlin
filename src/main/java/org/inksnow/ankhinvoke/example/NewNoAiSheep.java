@@ -1,8 +1,8 @@
 package org.inksnow.ankhinvoke.example;
 
-import org.inksnow.ankhinvoke.example.ref.nms.RefEntitySheep;
-import org.inksnow.ankhinvoke.example.ref.nms.RefNewEntityTypes;
-import org.inksnow.ankhinvoke.example.ref.nms.RefWorld;
+import pers.neige.neigeitems.ref.entity.animal.RefEntitySheep;
+import pers.neige.neigeitems.ref.entity.RefNewEntityTypes;
+import pers.neige.neigeitems.ref.world.RefWorld;
 
 public class NewNoAiSheep extends RefEntitySheep {
   public NewNoAiSheep(RefNewEntityTypes<? extends RefEntitySheep> type, RefWorld world) {

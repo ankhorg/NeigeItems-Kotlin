@@ -113,13 +113,10 @@ dependencies {
     implementation(kotlin("stdlib"))
     // javassist
     implementation("org.javassist:javassist:3.20.0-GA")
-    // callsite-nbt
-//    implementation(fileTree("libs/callsite-nbt-1.0-dev-SNAPSHOT-fat.jar"))
-//    implementation(project(":hooker-callsitenbt"))
     // openjdk-nashorn
     implementation(fileTree("libs/relocated-nashorn-15.4.jar"))
     // fastjson2
-    implementation("com.alibaba.fastjson2:fastjson2-kotlin:2.0.25")
+    implementation("com.alibaba.fastjson2:fastjson2-kotlin:2.0.43")
     // multiple-string-searcher
     implementation("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
     // maven-model
@@ -134,6 +131,8 @@ tasks {
         exclude("module-info.java")
         // kotlin
         relocate("kotlin.", "pers.neige.neigeitems.libs.kotlin.")
+        // ankh-invoke
+        relocate("org.inksnow.ankhinvoke", "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke")
         // taboolib
         relocate("taboolib", "pers.neige.neigeitems.taboolib")
         // bstats

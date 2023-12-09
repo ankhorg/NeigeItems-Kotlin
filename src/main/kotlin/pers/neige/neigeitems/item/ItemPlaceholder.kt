@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.item
 
-import bot.inker.bukkit.nbt.*
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
 import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.ProtocolLibrary

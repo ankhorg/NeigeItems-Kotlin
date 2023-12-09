@@ -1,7 +1,7 @@
-package org.inksnow.ankhinvoke.example.ref.nms;
+package pers.neige.neigeitems.ref.entity;
 
-import com.google.common.collect.ImmutableSet;
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.ref.world.RefWorld;
 
 @HandleBy(reference = "net/minecraft/world/entity/EntityType$EntityFactory", predicates = "craftbukkit_version:[v1_17_R1,)", isInterface = true)
 public interface RefEntityTypesFactory<T extends RefEntity> {

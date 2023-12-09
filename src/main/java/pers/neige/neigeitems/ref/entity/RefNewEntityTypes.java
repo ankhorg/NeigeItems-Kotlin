@@ -1,6 +1,7 @@
-package org.inksnow.ankhinvoke.example.ref.nms;
+package pers.neige.neigeitems.ref.entity;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.ref.entity.animal.RefEntitySheep;
 
 @HandleBy(reference = "net/minecraft/world/entity/EntityType", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_13_R1/EntityTypes", predicates = "craftbukkit_version:[v1_13_R1,)")

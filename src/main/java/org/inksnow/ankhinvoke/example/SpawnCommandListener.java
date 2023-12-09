@@ -9,8 +9,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.inksnow.ankhinvoke.example.ref.craftbukkit.RefCraftWorld;
-import org.inksnow.ankhinvoke.example.ref.nms.*;
+import pers.neige.neigeitems.ref.entity.RefNewEntityTypes;
+import pers.neige.neigeitems.ref.world.RefCraftWorld;
+import pers.neige.neigeitems.ref.world.RefWorldServer;
 
 public class SpawnCommandListener implements Listener {
   private static final boolean TEST1 = CbVersion.v1_14_R1.isSupport();
@@ -38,7 +39,7 @@ public class SpawnCommandListener implements Listener {
       Bukkit.getScheduler().runTask(plugin, () -> {
 
         World bukkitWorld = event.getPlayer().getWorld();
-        RefWorldServer serverWorld = ((RefCraftWorld) bukkitWorld).getHandle();
+        RefWorldServer serverWorld = ((RefCraftWorld) (Object) bukkitWorld).getHandle();
 
         Location bukkitLocation = event.getPlayer().getLocation();
         if (TEST1) {
