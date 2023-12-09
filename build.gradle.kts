@@ -14,7 +14,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.7.20"
     id("org.jetbrains.dokka") version "1.7.20"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.2-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.3-SNAPSHOT"
 }
 
 val realVersion = version
@@ -97,7 +97,7 @@ dependencies {
 //    compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
 
     // ankh-invoke
-    implementation("org.inksnow:ankh-invoke-bukkit:1.0.2-SNAPSHOT")
+    implementation("org.inksnow:ankh-invoke-bukkit:1.0.3-SNAPSHOT")
 
     // taboolib
     implementation("io.izzel.taboolib:common:$taboolib_version")
@@ -143,7 +143,7 @@ tasks {
         // javassist
         relocate("javassist", "pers.neige.neigeitems.libs.javassist")
         // callsitenbt
-        relocate("bot.inker.bukkit.nbt", "pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
+        // relocate("bot.inker.bukkit.nbt", "pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
         // maven-model
         relocate("org.codehaus.plexus.util", "pers.neige.neigeitems.libs.plexus.util")
         relocate("org.apache.maven.model", "pers.neige.neigeitems.libs.maven.model")
