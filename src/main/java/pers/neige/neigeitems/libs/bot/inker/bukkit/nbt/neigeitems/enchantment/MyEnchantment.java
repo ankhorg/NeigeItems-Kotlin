@@ -1,4 +1,12 @@
-package pers.neige.neigeitems.internal.ref.enchantment;
+package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.enchantment;
+
+import pers.neige.neigeitems.ref.chat.RefChatFormatting;
+import pers.neige.neigeitems.ref.chat.RefComponent;
+import pers.neige.neigeitems.ref.chat.RefMutableComponent;
+import pers.neige.neigeitems.ref.enchantment.RefEnchantment;
+import pers.neige.neigeitems.ref.enchantment.RefEnchantmentCategory;
+import pers.neige.neigeitems.ref.enchantment.RefRarity;
+import pers.neige.neigeitems.ref.entity.RefEquipmentSlot;
 
 /**
  * 仅作测试, 存在问题, 尚未实装

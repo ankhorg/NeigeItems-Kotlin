@@ -1,4 +1,4 @@
-package pers.neige.neigeitems.internal.ref.server.players;
+package pers.neige.neigeitems.ref.server.players;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
 import com.mojang.authlib.GameProfile;

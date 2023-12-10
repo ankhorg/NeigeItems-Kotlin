@@ -41,5 +41,5 @@ public class RefEntityTypesBuilder<T extends RefEntity> {
     public native RefEntityTypesBuilder<T> requiredFeatures(RefFeatureFlag... features);
 
     @HandleBy(reference = "Lnet/minecraft/world/entity/EntityType$Builder;build(Ljava/lang/String;)Lnet/minecraft/world/entity/EntityType;", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native RefNewEntityTypes<T> build(String id);
+    public native RefEntityType<T> build(String id);
 }

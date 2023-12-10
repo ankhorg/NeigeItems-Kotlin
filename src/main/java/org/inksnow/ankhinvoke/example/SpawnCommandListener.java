@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import pers.neige.neigeitems.ref.entity.RefNewEntityTypes;
+import pers.neige.neigeitems.ref.entity.RefEntityType;
 import pers.neige.neigeitems.ref.world.RefCraftWorld;
 import pers.neige.neigeitems.ref.world.RefWorldServer;
 
@@ -43,7 +43,7 @@ public class SpawnCommandListener implements Listener {
 
         Location bukkitLocation = event.getPlayer().getLocation();
         if (TEST1) {
-          NewNoAiSheep sheep = new NewNoAiSheep(RefNewEntityTypes.SHEEP, serverWorld);
+          NewNoAiSheep sheep = new NewNoAiSheep(RefEntityType.SHEEP, serverWorld);
           sheep.setPosition(bukkitLocation.getX(), bukkitLocation.getY(), bukkitLocation.getZ());
           serverWorld.addEntity(sheep, CreatureSpawnEvent.SpawnReason.CUSTOM);
         } else {

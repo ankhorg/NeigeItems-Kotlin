@@ -1,10 +1,5 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.spawner;
+package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import pers.neige.neigeitems.internal.ref.block.RefBlockPos;
-import pers.neige.neigeitems.internal.ref.block.RefCraftBlockEntityState;
-import pers.neige.neigeitems.internal.ref.block.spawner.RefCraftCreatureSpawner;
-import pers.neige.neigeitems.internal.ref.block.spawner.RefSpawnerBlockEntity;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.CreatureSpawner;
@@ -12,6 +7,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.jetbrains.annotations.NotNull;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.ref.block.RefBlockPos;
+import pers.neige.neigeitems.ref.block.RefCraftBlockEntityState;
+import pers.neige.neigeitems.ref.block.spawner.RefCraftCreatureSpawner;
+import pers.neige.neigeitems.ref.block.spawner.RefSpawnerBlockEntity;
 import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.lang.reflect.Field;
@@ -29,7 +29,7 @@ public class SpawnerBuilder {
      */
     @NotNull
     private static final Material MATERIAL_SPAWNER;
-    private static Field snapshot = null;
+//    private static Field snapshot = null;
 
     static {
         // 确定刷怪笼对应的 Material
@@ -38,14 +38,14 @@ public class SpawnerBuilder {
         } else {
             MATERIAL_SPAWNER = Material.valueOf("MOB_SPAWNER");
         }
-        if (NEW_CONSTRUCTOR) {
-            try {
-                snapshot = RefCraftBlockEntityState.class.getDeclaredField("snapshot");
-                snapshot.setAccessible(true);
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (NEW_CONSTRUCTOR) {
+//            try {
+//                snapshot = RefCraftBlockEntityState.class.getDeclaredField("snapshot");
+//                snapshot.setAccessible(true);
+//            } catch (NoSuchFieldException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     /**
