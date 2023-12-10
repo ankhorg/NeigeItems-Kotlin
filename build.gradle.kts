@@ -132,7 +132,7 @@ tasks {
         // kotlin
         relocate("kotlin.", "pers.neige.neigeitems.libs.kotlin.")
         // ankh-invoke
-        relocate("org.inksnow.ankhinvoke", "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke")
+//        relocate("org.inksnow.ankhinvoke", "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke")
         // taboolib
         relocate("taboolib", "pers.neige.neigeitems.taboolib")
         // bstats
