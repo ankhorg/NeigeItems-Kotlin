@@ -11,8 +11,8 @@ val taboolib_version: String by project
 plugins {
     `java-library`
     `maven-publish`
-    id("org.jetbrains.kotlin.jvm") version "1.7.20"
-    id("org.jetbrains.dokka") version "1.7.20"
+    id("org.jetbrains.kotlin.jvm") version "1.9.10"
+    id("org.jetbrains.dokka") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.4-SNAPSHOT"
 }
@@ -85,7 +85,7 @@ repositories {
 }
 
 dependencies {
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.10")
     compileOnly(fileTree("libs"))
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
     compileOnly("org.spigotmc:spigot:1.16.5-R0.1-SNAPSHOT")
@@ -236,50 +236,35 @@ fun final(name: String) {
 
                     val classReader = org.objectweb.asm.ClassReader(targetClassBytes)
                     val classWriter =
-                        org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
+                            org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
                     val classVisitor =
-                        object : org.objectweb.asm.ClassVisitor(org.objectweb.asm.Opcodes.ASM9, classWriter) {
-                            override fun visitMethod(
-                                access: Int,
-                                name: String?,
-                                descriptor: String?,
-                                signature: String?,
-                                exceptions: Array<out String>?
-                            ): org.objectweb.asm.MethodVisitor? {
-                                val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
-                                if (name == "<clinit>") {
-                                    return object :
-                                        org.objectweb.asm.MethodVisitor(org.objectweb.asm.Opcodes.ASM9, methodVisitor) {
-                                        override fun visitCode() {
-//                                            visitLdcInsn(org.objectweb.asm.Type.getType("Lpers/neige/neigeitems/taboolib/platform/BukkitPlugin;"))
-//                                            visitMethodInsn(
-//                                                org.objectweb.asm.Opcodes.INVOKESTATIC,
-//                                                "pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/loader/CallSiteNbt",
-//                                                "install",
-//                                                "(Ljava/lang/Class;)V",
-//                                                false
-//                                            )
-//                                            visitMethodInsn(
-//                                                org.objectweb.asm.Opcodes.INVOKESTATIC,
-//                                                "org/inksnow/ankhinvoke/example/ExampleMain",
-//                                                "init",
-//                                                "()V",
-//                                                false
-//                                            )
-                                            visitMethodInsn(
-                                                org.objectweb.asm.Opcodes.INVOKESTATIC,
-                                                "pers/neige/neigeitems/NeigeItems",
-                                                "init",
-                                                "()V",
-                                                false
-                                            )
-                                            super.visitCode()
+                            object : org.objectweb.asm.ClassVisitor(org.objectweb.asm.Opcodes.ASM9, classWriter) {
+                                override fun visitMethod(
+                                        access: Int,
+                                        name: String?,
+                                        descriptor: String?,
+                                        signature: String?,
+                                        exceptions: Array<out String>?
+                                ): org.objectweb.asm.MethodVisitor? {
+                                    val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
+                                    if (name == "<clinit>") {
+                                        return object :
+                                                org.objectweb.asm.MethodVisitor(org.objectweb.asm.Opcodes.ASM9, methodVisitor) {
+                                            override fun visitCode() {
+                                                visitMethodInsn(
+                                                        org.objectweb.asm.Opcodes.INVOKESTATIC,
+                                                        "pers/neige/neigeitems/NeigeItems",
+                                                        "init",
+                                                        "()V",
+                                                        false
+                                                )
+                                                super.visitCode()
+                                            }
                                         }
                                     }
+                                    return methodVisitor
                                 }
-                                return methodVisitor
                             }
-                        }
                     classReader.accept(classVisitor, org.objectweb.asm.ClassReader.EXPAND_FRAMES)
 
                     jarOutputStream.putNextEntry(JarEntry(entryName))
@@ -287,7 +272,7 @@ fun final(name: String) {
                     jarOutputStream.closeEntry()
                 } else {
                     if (!(entryName.startsWith("org/intellij/lang/annotations")
-                                || entryName.startsWith("org/jetbrains/annotations"))
+                                    || entryName.startsWith("org/jetbrains/annotations"))
                     ) {
                         jarOutputStream.putNextEntry(entry)
                         jarFile.getInputStream(entry).copyTo(jarOutputStream)
@@ -334,19 +319,19 @@ tasks.create<BuildMappingsTask>("build-mappings") {
     registryName = "neigeitems"
     outputDirectory = buildDir.resolve("cache/build-mappings")
 
-    mapping("nms", "1.20.2"){
+    mapping("nms", "1.20.2") {
         predicates = arrayOf("craftbukkit_version:{v1_20_R2}")
     }
-    mapping("nms", "1.20.1"){
+    mapping("nms", "1.20.1") {
         predicates = arrayOf("craftbukkit_version:{v1_20_R1}")
     }
-    mapping("nms", "1.19.4"){
+    mapping("nms", "1.19.4") {
         predicates = arrayOf("craftbukkit_version:{v1_19_R3}")
     }
-    mapping("nms", "1.18.2"){
+    mapping("nms", "1.18.2") {
         predicates = arrayOf("craftbukkit_version:{v1_18_R2}")
     }
-    mapping("nms", "1.17.1"){
+    mapping("nms", "1.17.1") {
         predicates = arrayOf("craftbukkit_version:{v1_17_R1}")
     }
 }
