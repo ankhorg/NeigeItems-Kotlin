@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation.AnimationType;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
 import pers.neige.neigeitems.ref.argument.RefAnchor;
 import pers.neige.neigeitems.ref.block.RefBlockPos;
@@ -239,6 +240,22 @@ public class EntityPlayerUtils {
             RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
             RefEnumHand enumHand = toRefEnumHand(hand);
             swingByNms(entityPlayer, enumHand, fromServerPlayer);
+        }
+    }
+
+    /**
+     * 给玩家播放指定动画(仅玩家本人可见).
+     *
+     * @param player 待操作玩家.
+     * @param type   动画类型.
+     */
+    public static void sendAnimationPacket(
+            @NotNull Player player,
+            @NotNull AnimationType type
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            entityPlayer.playerConnection.sendPacket(new RefPacketPlayOutAnimation(entityPlayer, type.getValue()));
         }
     }
 

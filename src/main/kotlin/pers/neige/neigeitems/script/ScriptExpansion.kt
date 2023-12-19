@@ -64,6 +64,7 @@ class ScriptExpansion : CompiledScript {
                 const WorldUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
                 const SchedulerUtils = Packages.pers.neige.neigeitems.utils.SchedulerUtils
                 
+                const AnimationType = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation.AnimationType
                 const EnumHand = Packages.pers.neige.neigeitems.EnumHand
                 const SpawnerBuilder = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner.SpawnerBuilder
                 

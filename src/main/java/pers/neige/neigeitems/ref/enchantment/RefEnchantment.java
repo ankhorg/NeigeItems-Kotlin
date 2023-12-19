@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.ref.enchantment;
 
+import pers.neige.neigeitems.ref.damagesource.RefDamageSource;
+import pers.neige.neigeitems.ref.entity.RefMobType;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
 import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.entity.RefEntity;
@@ -38,6 +40,12 @@ public abstract class RefEnchantment {
 
     @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getMaxCost(I)I", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native int getMaxCost(int level);
+
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getDamageProtection(ILnet/minecraft/world/damagesource/DamageSource;)I", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native int getDamageProtection(int level, RefDamageSource source);
+
+    @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;getDamageBonus(ILnet/minecraft/world/entity/MobType;)F", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native float getDamageBonus(int level, RefMobType group);
 
     @HandleBy(reference = "Lnet/minecraft/world/item/enchantment/Enchantment;isCompatibleWith(Lnet/minecraft/world/item/enchantment/Enchantment;)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native boolean isCompatibleWith(RefEnchantment other);

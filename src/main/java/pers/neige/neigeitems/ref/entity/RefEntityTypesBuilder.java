@@ -4,9 +4,8 @@ import org.inksnow.ankhinvoke.comments.HandleBy;
 import pers.neige.neigeitems.ref.block.RefBlock;
 
 @HandleBy(reference = "net/minecraft/world/entity/EntityType$Builder", predicates = "craftbukkit_version:[v1_17_R1,)")
-@HandleBy(reference = "net/minecraft/server/v1_13_R1/EntityTypes$a", predicates = "craftbukkit_version:[v1_13_R1,)")
-public class RefEntityTypesBuilder<T extends RefEntity> {
-//    @HandleBy(reference = "Lnet/minecraft/world/entity/EntityTypes$Builder;a(Lnet/minecraft/world/entity/EntityTypes$b;Lnet/minecraft/world/entity/EnumCreatureType;)Lnet/minecraft/world/entity/EntityTypes$Builder;", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_13_R1/EntityTypes$a", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
+public class RefEntityTypesBuilder<T extends RefEntity> { //    @HandleBy(reference = "Lnet/minecraft/world/entity/EntityTypes$Builder;a(Lnet/minecraft/world/entity/EntityTypes$b;Lnet/minecraft/world/entity/EnumCreatureType;)Lnet/minecraft/world/entity/EntityTypes$Builder;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/world/entity/EntityType$Builder;of(Lnet/minecraft/world/entity/EntityType$EntityFactory;Lnet/minecraft/world/entity/MobCategory;)Lnet/minecraft/world/entity/EntityType$Builder;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native static <T extends RefEntity> RefEntityTypesBuilder<T> of(RefEntityTypesFactory<T> factory, RefMobCategory spawnGroup);
 

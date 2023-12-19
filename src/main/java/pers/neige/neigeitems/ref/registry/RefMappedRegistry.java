@@ -10,4 +10,10 @@ public class RefMappedRegistry<T> implements RefWritableRegistry<T> {
     public final Map<T, RefReference<T>> byValue = null;
     @HandleBy(reference = "Lnet/minecraft/core/MappedRegistry;frozen:Z", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     public boolean frozen;
+
+    @HandleBy(reference = "Lnet/minecraft/core/MappedRegistry;unregisteredIntrusiveHolders:Ljava/util/Map;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    public Map<T, RefReference<T>> unregisteredIntrusiveHolders;
+
+    @HandleBy(reference = "Lnet/minecraft/core/MappedRegistry;asLookup()Lnet/minecraft/core/HolderLookup$RegistryLookup;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native RefRegistryLookup<T> asLookup();
 }
