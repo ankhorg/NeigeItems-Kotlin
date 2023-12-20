@@ -55,6 +55,7 @@ class ScriptExpansion : CompiledScript {
                 const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
                 const StringUtils = Packages.pers.neige.neigeitems.utils.StringUtils
                 
+                const DamageEventUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.DamageEventUtils
                 const EnchantmentUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EnchantmentUtils
                 const EntityUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityUtils
                 const EntityItemUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityItemUtils

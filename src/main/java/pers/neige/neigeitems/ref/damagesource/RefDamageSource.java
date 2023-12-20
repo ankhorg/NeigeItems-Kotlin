@@ -94,12 +94,13 @@ public class RefDamageSource {
     @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;typeHolder()Lnet/minecraft/core/Holder;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native RefHolder<RefDamageType> typeHolder();
 
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;isCritical()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native boolean isCritical();
-
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;critical()Lnet/minecraft/world/damagesource/DamageSource;", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native RefDamageSource critical();
-
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;critical(Z)Lnet/minecraft/world/damagesource/DamageSource;", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native RefDamageSource critical(boolean critical);
+    // critical相关判断为paper独有
+//    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;isCritical()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+//    public native boolean isCritical();
+//
+//    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;critical()Lnet/minecraft/world/damagesource/DamageSource;", predicates = "craftbukkit_version:[v1_17_R1,)")
+//    public native RefDamageSource critical();
+//
+//    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;critical(Z)Lnet/minecraft/world/damagesource/DamageSource;", predicates = "craftbukkit_version:[v1_17_R1,)")
+//    public native RefDamageSource critical(boolean critical);
 }

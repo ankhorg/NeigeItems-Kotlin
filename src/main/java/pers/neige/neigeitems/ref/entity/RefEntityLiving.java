@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.ref.entity;
 
+import pers.neige.neigeitems.ref.damagesource.RefDamageSource;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
 import pers.neige.neigeitems.ref.argument.RefAnchor;
 import pers.neige.neigeitems.ref.world.RefVec3;
@@ -45,6 +46,9 @@ public abstract class RefEntityLiving extends RefEntity {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aE:I", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public int attackStrengthTicker;
 
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;lastDamageSource:Lnet/minecraft/world/damagesource/DamageSource;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    public RefDamageSource lastDamageSource;
+
     @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;b(Lnet/minecraft/server/v1_12_R1/EnumHand;)Lnet/minecraft/server/v1_12_R1/ItemStack;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native RefNmsItemStack getItemInHand(RefEnumHand hand);
@@ -79,4 +83,10 @@ public abstract class RefEntityLiving extends RefEntity {
 
     @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;lookAt(Lnet/minecraft/commands/arguments/EntityAnchorArgument$Anchor;Lnet/minecraft/world/phys/Vec3;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native void lookAt(RefAnchor anchorPoint, RefVec3 target);
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;onClimbable()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;isClimbing()Z", predicates = "craftbukkit_version:[v1_14_R1,v1_17_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;z_()Z", predicates = "craftbukkit_version:[v1_13_R1,v1_14_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;m_()Z", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public native boolean onClimbable();
 }
