@@ -11,7 +11,7 @@ public final class RefNmsItemStack {
   }
 
   @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/world/level/ItemLike;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
-  @HandleBy(reference = "Lnet/minecraft/server/v1_13_R2/ItemStack;<init>(Lnet/minecraft/server/v1_13_R2/IMaterial;)V", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
+  @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/ItemStack;<init>(Lnet/minecraft/server/v1_13_R1/IMaterial;)V", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
   public RefNmsItemStack(RefIMaterial imaterial) {
     throw new UnsupportedOperationException();
   }
