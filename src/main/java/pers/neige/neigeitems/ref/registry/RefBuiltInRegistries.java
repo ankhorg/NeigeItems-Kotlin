@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.ref.registry;
 
-import pers.neige.neigeitems.ref.enchantment.RefEnchantment;
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.ref.enchantment.RefEnchantment;
 import pers.neige.neigeitems.ref.entity.RefEntityType;
 
 @HandleBy(reference = "net/minecraft/core/registries/BuiltInRegistries", predicates = "craftbukkit_version:[v1_17_R1,)")

@@ -1,7 +1,5 @@
 package pers.neige.neigeitems.manager
 
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -28,6 +26,8 @@ import pers.neige.neigeitems.item.ItemPlaceholder
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.item.color.impl.ItemColorProtocol
 import pers.neige.neigeitems.item.color.impl.ItemColorVanilla
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.manager.ConfigManager.config
 import java.util.*
 import java.util.function.BiFunction

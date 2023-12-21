@@ -1,8 +1,8 @@
 package pers.neige.neigeitems.ref.util;
 
-import pers.neige.neigeitems.ref.nbt.RefItem;
 import org.bukkit.Material;
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.ref.nbt.RefItem;
 
 @HandleBy(reference = "org/bukkit/craftbukkit/v1_12_R1/util/CraftMagicNumbers", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefCraftMagicNumbers {

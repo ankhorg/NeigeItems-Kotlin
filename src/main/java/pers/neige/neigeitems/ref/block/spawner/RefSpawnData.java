@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.ref.block.spawner;
 
-import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
 
 import java.util.Optional;
 

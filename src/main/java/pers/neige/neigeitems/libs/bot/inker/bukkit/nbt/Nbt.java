@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike;
 import pers.neige.neigeitems.ref.nbt.*;
 
 public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike {

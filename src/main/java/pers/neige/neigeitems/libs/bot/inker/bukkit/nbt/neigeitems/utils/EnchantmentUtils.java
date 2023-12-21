@@ -5,10 +5,8 @@ import pers.neige.neigeitems.ref.enchantment.RefEnchantment;
 import pers.neige.neigeitems.ref.enchantment.RefEnchantments;
 import pers.neige.neigeitems.ref.registry.RefBuiltInRegistries;
 import pers.neige.neigeitems.ref.registry.RefMappedRegistry;
-import pers.neige.neigeitems.ref.registry.RefReference;
 
 import java.util.IdentityHashMap;
-import java.util.Map;
 
 public class EnchantmentUtils {
 //    public static void registerEnchantment(String name, RefEnchantment enchantment) {

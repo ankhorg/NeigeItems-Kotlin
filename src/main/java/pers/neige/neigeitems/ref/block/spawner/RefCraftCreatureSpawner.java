@@ -1,10 +1,10 @@
 package pers.neige.neigeitems.ref.block.spawner;
 
-import pers.neige.neigeitems.ref.block.RefCraftBlockEntityState;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.ref.block.RefCraftBlockEntityState;
 
 @HandleBy(reference = "org/bukkit/craftbukkit/v1_12_R1/block/CraftCreatureSpawner", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefCraftCreatureSpawner extends RefCraftBlockEntityState<RefSpawnerBlockEntity> {

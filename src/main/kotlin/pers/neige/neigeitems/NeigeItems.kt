@@ -1,12 +1,12 @@
 package pers.neige.neigeitems
 
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import org.inksnow.ankhinvoke.bukkit.AnkhInvokeBukkit
 import pers.neige.neigeitems.lang.LocaleI18n
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.scanner.ClassScanner
 import taboolib.common.platform.Plugin

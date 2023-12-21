@@ -1,8 +1,8 @@
 package pers.neige.neigeitems.ref.network;
 
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.chat.RefEnumTitleAction;
-import org.inksnow.ankhinvoke.comments.HandleBy;
 
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/PacketPlayOutTitle", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public final class RefPacketPlayOutTitle implements RefPacket<RefPacketListenerPlayOut> {

@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.ref.nbt;
 
-import org.inksnow.ankhinvoke.comments.HandleBy;
 import org.bukkit.inventory.ItemStack;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
 @HandleBy(reference = "org/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefCraftItemStack {

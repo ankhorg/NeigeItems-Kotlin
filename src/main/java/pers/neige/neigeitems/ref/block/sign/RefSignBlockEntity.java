@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.ref.block.sign;
 
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import pers.neige.neigeitems.ref.block.RefBlockEntity;
 import pers.neige.neigeitems.ref.block.RefBlockPos;
 import pers.neige.neigeitems.ref.block.RefBlockState;
-import org.inksnow.ankhinvoke.comments.HandleBy;
 
 @HandleBy(reference = "net/minecraft/world/level/block/entity/SignBlockEntity", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/TileEntitySign", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")

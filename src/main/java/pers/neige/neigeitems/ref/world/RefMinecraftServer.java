@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.ref.world;
 
-import pers.neige.neigeitems.ref.network.RefServerConnection;
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.ref.network.RefServerConnection;
 
 @HandleBy(reference = "net/minecraft/server/MinecraftServer", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/MinecraftServer", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")

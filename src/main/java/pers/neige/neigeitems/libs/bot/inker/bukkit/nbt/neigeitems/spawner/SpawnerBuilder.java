@@ -9,12 +9,10 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.block.RefBlockPos;
-import pers.neige.neigeitems.ref.block.RefCraftBlockEntityState;
 import pers.neige.neigeitems.ref.block.spawner.RefCraftCreatureSpawner;
 import pers.neige.neigeitems.ref.block.spawner.RefSpawnerBlockEntity;
 import pers.neige.neigeitems.utils.ItemUtils;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 public class SpawnerBuilder {
