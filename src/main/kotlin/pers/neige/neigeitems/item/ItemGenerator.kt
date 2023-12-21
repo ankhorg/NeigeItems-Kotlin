@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.item
 
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import com.alibaba.fastjson2.parseObject
 import com.alibaba.fastjson2.toJSONString
 import org.bukkit.*
@@ -15,6 +14,7 @@ import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
 import pers.neige.neigeitems.event.ItemGenerateEvent
 import pers.neige.neigeitems.item.color.ItemColor
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.ItemManager

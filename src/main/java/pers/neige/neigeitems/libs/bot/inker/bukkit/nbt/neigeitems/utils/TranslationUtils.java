@@ -1,28 +1,36 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.TranslatableComponent;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.lang.LocaleI18n;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtType;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.chat.RefChatFormatting;
 import pers.neige.neigeitems.ref.chat.RefChatSerializer;
 import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
+import pers.neige.neigeitems.ref.entity.RefCraftEntity;
+import pers.neige.neigeitems.ref.entity.RefEntity;
 import pers.neige.neigeitems.ref.entity.RefEntityTypes;
 import pers.neige.neigeitems.ref.item.*;
 import pers.neige.neigeitems.ref.item.potion.RefPotionUtil;
 import pers.neige.neigeitems.ref.item.shield.RefTileEntityBanner;
 import pers.neige.neigeitems.ref.nbt.*;
 import pers.neige.neigeitems.ref.util.RefCraftMagicNumbers;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.TranslatableComponent;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.lang.LocaleI18n;
 
 public class TranslationUtils {
+    /**
+     * 1.13+ 版本起, EntityTypes 类发生了一些巨大的变化.
+     */
+    private static final boolean NEW_ENTITY_TYPE_SUPPORT = CbVersion.v1_13_R1.isSupport();
+
     /**
      * 根据物品获取显示名, 无显示名则返回翻译名.
      *
@@ -343,6 +351,97 @@ public class TranslationUtils {
             }
         }
         return result;
+    }
+
+    /**
+     * 根据实体获取显示名, 无显示名则返回翻译名.
+     *
+     * @param entity 待获取实体.
+     * @return 显示名或翻译名.
+     */
+    @NotNull
+    public static String getDisplayOrTranslationName(
+            @NotNull Entity entity
+    ) {
+        String name = entity.getCustomName();
+        if (name != null) {
+            return name;
+        }
+        return getTranslationName(entity);
+    }
+
+    /**
+     * 根据实体获取显示名, 无显示名则返回翻译键.
+     *
+     * @param entity 待获取实体.
+     * @return 显示名或翻译键.
+     */
+    @NotNull
+    public static BaseComponent getDisplayOrTranslationComponent(
+            @NotNull Entity entity
+    ) {
+        String name = entity.getCustomName();
+        if (name != null) {
+            return new TextComponent(name);
+        }
+        return getTranslationComponent(entity);
+    }
+
+    /**
+     * 根据实体获取翻译名.
+     *
+     * @param entity 待获取实体.
+     * @return 翻译名.
+     */
+    @NotNull
+    public static String getTranslationName(
+            @NotNull Entity entity
+    ) {
+        String descriptionId = getDescriptionId(entity);
+        if (descriptionId != null) {
+            return LocaleI18n.translate(descriptionId);
+        } else {
+            return entity.getName();
+        }
+    }
+
+    /**
+     * 根据实体获取翻译键.
+     *
+     * @param entity 待获取实体.
+     * @return 翻译键.
+     */
+    @NotNull
+    public static BaseComponent getTranslationComponent(
+            @NotNull Entity entity
+    ) {
+        String descriptionId = getDescriptionId(entity);
+        if (descriptionId != null) {
+            return new TranslatableComponent(descriptionId);
+        } else {
+            return new TextComponent(entity.getName());
+        }
+    }
+
+    /**
+     * 根据实体获取对应的 DescriptionId.
+     *
+     * @param entity 待检测实体.
+     * @return DescriptionId.
+     */
+    @Nullable
+    public static String getDescriptionId(
+            @NotNull Entity entity
+    ) {
+        if (entity instanceof RefCraftEntity) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            if (NEW_ENTITY_TYPE_SUPPORT) {
+                return nmsEntity.getType().getDescriptionId();
+            } else {
+                return RefEntityTypes.getTranslationKey(RefEntityTypes.getMinecraftKey(nmsEntity));
+            }
+        }
+        return null;
     }
 
     /**

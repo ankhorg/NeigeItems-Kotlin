@@ -1,10 +1,10 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.inksnow.ankhinvoke.gradle.ApplyReferenceTask
+import org.inksnow.ankhinvoke.gradle.BuildMappingsTask
 import java.io.FileOutputStream
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
-import org.inksnow.ankhinvoke.gradle.ApplyReferenceTask
-import org.inksnow.ankhinvoke.gradle.BuildMappingsTask
 
 val taboolib_version: String by project
 

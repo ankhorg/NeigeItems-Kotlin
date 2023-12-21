@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.ref.entity;
 
-import pers.neige.neigeitems.ref.entity.ai.navigation.RefPathNavigation;
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.ref.entity.ai.navigation.RefPathNavigation;
 
 @HandleBy(reference = "net/minecraft/world/entity/Mob", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/EntityInsentient", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")

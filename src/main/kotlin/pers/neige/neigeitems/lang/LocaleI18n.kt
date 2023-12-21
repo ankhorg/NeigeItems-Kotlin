@@ -1,11 +1,11 @@
 package pers.neige.neigeitems.lang
 
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import com.alibaba.fastjson2.JSONObject
 import com.alibaba.fastjson2.parseObject
 import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.Bukkit
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.manager.ConfigManager.language
 import pers.neige.neigeitems.utils.FileUtils.createFile
 import pers.neige.neigeitems.utils.FileUtils.sha1

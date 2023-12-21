@@ -1,21 +1,5 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NeigeItemsUtils;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import pers.neige.neigeitems.ref.enchantment.RefBukkitEnchantment;
-import pers.neige.neigeitems.ref.enchantment.RefEnchantment;
-import pers.neige.neigeitems.ref.enchantment.RefEnchantments;
-import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
-import pers.neige.neigeitems.ref.argument.RefAnchor;
-import pers.neige.neigeitems.ref.chat.RefChatSerializer;
-import pers.neige.neigeitems.ref.chat.RefComponent;
-import pers.neige.neigeitems.ref.entity.*;
-import pers.neige.neigeitems.ref.registry.RefBuiltInRegistries;
-import pers.neige.neigeitems.ref.registry.RefDefaultedMappedRegistry;
-import pers.neige.neigeitems.ref.registry.RefMappedRegistry;
-import pers.neige.neigeitems.ref.registry.RefReference;
-import pers.neige.neigeitems.ref.world.RefVec3;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Location;
@@ -24,6 +8,15 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.NumberConversions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NeigeItemsUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.ref.argument.RefAnchor;
+import pers.neige.neigeitems.ref.chat.RefChatSerializer;
+import pers.neige.neigeitems.ref.chat.RefComponent;
+import pers.neige.neigeitems.ref.entity.*;
+import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
+import pers.neige.neigeitems.ref.world.RefVec3;
 
 public class EntityUtils {
     /**

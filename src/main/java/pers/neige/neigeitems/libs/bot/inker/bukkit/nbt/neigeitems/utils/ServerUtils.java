@@ -1,8 +1,8 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import org.bukkit.Bukkit;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.world.RefCraftServer;
-import org.bukkit.Bukkit;
 
 public class ServerUtils {
     private static final boolean SYNC_COMMANDS_SUPPORT = CbVersion.v1_13_R1.isSupport();

@@ -1,13 +1,13 @@
 package pers.neige.neigeitems.ref.entity;
 
-import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
+import org.bukkit.entity.Entity;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import pers.neige.neigeitems.ref.argument.RefAnchor;
 import pers.neige.neigeitems.ref.chat.RefComponent;
+import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
 import pers.neige.neigeitems.ref.world.RefAABB;
 import pers.neige.neigeitems.ref.world.RefVec3;
 import pers.neige.neigeitems.ref.world.RefWorld;
-import org.bukkit.entity.Entity;
-import org.inksnow.ankhinvoke.comments.HandleBy;
 
 @HandleBy(reference = "net/minecraft/world/entity/Entity", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/Entity", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
@@ -144,4 +144,9 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;isPassenger()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;isPassenger()Z", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native boolean isPassenger();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getType()Lnet/minecraft/world/entity/EntityType;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/Entity;getEntityType()Lnet/minecraft/server/v1_14_R1/EntityTypes;", predicates = "craftbukkit_version:[v1_14_R1,v1_17_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/Entity;P()Lnet/minecraft/server/v1_13_R1/EntityTypes;", predicates = "craftbukkit_version:[v1_13_R1,v1_14_R1)")
+    public native RefEntityType<?> getType();
 }
