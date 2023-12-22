@@ -1,17 +1,16 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.chat;
+package pers.neige.neigeitems.internal.ref.chat;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/IChatBaseComponent")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/chat/Component")
+@HandleBy(reference = "net/minecraft/network/chat/Component", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/IChatBaseComponent", predicates = "craftbukkit_version:[v1_12_R1,)")
 public interface RefComponent {
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;")
+    @HandleBy(reference = "Lnet/minecraft/network/chat/Component;literal(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;", predicates = "craftbukkit_version:[v1_17_R1,)")
     static RefMutableComponent literal(String key) {
         return null;
     }
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;")
+    @HandleBy(reference = "Lnet/minecraft/network/chat/Component;translatable(Ljava/lang/String;)Lnet/minecraft/network/chat/MutableComponent;", predicates = "craftbukkit_version:[v1_17_R1,)")
     static RefMutableComponent translatable(String key) {
         return null;
     }

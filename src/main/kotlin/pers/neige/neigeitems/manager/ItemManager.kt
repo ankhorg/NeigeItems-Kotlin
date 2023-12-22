@@ -1,7 +1,5 @@
 package pers.neige.neigeitems.manager
 
-import bot.inker.bukkit.nbt.NbtItemStack
-import bot.inker.bukkit.nbt.NbtNumeric
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
@@ -11,6 +9,8 @@ import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtNumeric
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.utils.ConfigUtils.clone
@@ -37,6 +37,8 @@ object ItemManager : ItemConfigManager() {
      * 获取物品总数
      */
     val itemAmount get() = itemIds.size
+
+    private val nullHashMap: HashMap<String, String>? = null
 
     init {
         // 初始化所有物品生成器
@@ -115,7 +117,7 @@ object ItemManager : ItemConfigManager() {
      * @return 物品
      */
     fun getItemStack(id: String): ItemStack? {
-        return getItemStack(id, null, null as? HashMap<String, String>)
+        return getItemStack(id, null, nullHashMap)
     }
 
     /**
@@ -126,7 +128,7 @@ object ItemManager : ItemConfigManager() {
      * @return 物品
      */
     fun getItemStack(id: String, player: OfflinePlayer?): ItemStack? {
-        return getItemStack(id, player, null as? HashMap<String, String>)
+        return getItemStack(id, player, nullHashMap)
     }
 
     /**

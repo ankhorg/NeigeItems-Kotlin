@@ -1,11 +1,10 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.entity;
+package pers.neige.neigeitems.internal.ref.entity;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "org/bukkit/craftbukkit/v1_12_R1/entity/CraftHumanEntity")
+@HandleBy(reference = "org/bukkit/craftbukkit/v1_12_R1/entity/CraftHumanEntity", predicates = "craftbukkit_version:[v1_12_R1,)")
 public class RefCraftHumanEntity extends RefCraftLivingEntity {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftHumanEntity;getHandle()Lnet/minecraft/server/v1_12_R1/EntityHuman;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lorg/bukkit/craftbukkit/v1_17_R1/entity/CraftHumanEntity;getHandle()Lnet/minecraft/world/entity/player/Player;")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/entity/CraftHumanEntity;getHandle()Lnet/minecraft/world/entity/player/Player;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftHumanEntity;getHandle()Lnet/minecraft/server/v1_12_R1/EntityHuman;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native RefEntityHuman getHandle();
 }

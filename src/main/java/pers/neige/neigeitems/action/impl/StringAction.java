@@ -6,9 +6,7 @@ import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.manager.BaseActionManager;
-import pers.neige.neigeitems.utils.StringUtils;
 
-import java.util.List;
 import java.util.Locale;
 
 public class StringAction extends Action {

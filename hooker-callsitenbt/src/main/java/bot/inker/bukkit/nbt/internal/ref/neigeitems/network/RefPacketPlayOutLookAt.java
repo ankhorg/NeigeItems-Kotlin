@@ -1,14 +1,13 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.network;
+package pers.neige.neigeitems.internal.ref.network;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
+import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.internal.ref.argument.RefAnchor;
 
-@HandleBy(version = CbVersion.v1_13_R1, reference = "net/minecraft/server/v1_13_R1/PacketPlayOutLookAt")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/protocol/game/ClientboundPlayerLookAtPacket")
+@HandleBy(reference = "net/minecraft/network/protocol/game/ClientboundPlayerLookAtPacket", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_13_R1/PacketPlayOutLookAt", predicates = "craftbukkit_version:[v1_13_R1,)")
 public final class RefPacketPlayOutLookAt implements RefPacket<RefPacketListenerPlayOut> {
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/PacketPlayOutLookAt;<init>(Lnet/minecraft/server/v1_13_R1/ArgumentAnchor$Anchor;DDD)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/network/protocol/game/ClientboundPlayerLookAtPacket;<init>(Lnet/minecraft/commands/arguments/EntityAnchorArgument$Anchor;DDD)V")
+    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundPlayerLookAtPacket;<init>(Lnet/minecraft/commands/arguments/EntityAnchorArgument$Anchor;DDD)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/PacketPlayOutLookAt;<init>(Lnet/minecraft/server/v1_13_R1/ArgumentAnchor$Anchor;DDD)V", predicates = "craftbukkit_version:[v1_13_R1,)")
     public RefPacketPlayOutLookAt(RefAnchor selfAnchor, double targetX, double targetY, double targetZ) {
         throw new UnsupportedOperationException();
     }

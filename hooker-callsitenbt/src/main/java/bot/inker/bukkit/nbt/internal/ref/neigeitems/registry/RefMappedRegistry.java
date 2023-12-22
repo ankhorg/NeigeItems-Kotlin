@@ -1,14 +1,13 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.registry;
+package pers.neige.neigeitems.internal.ref.registry;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
 import java.util.Map;
 
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/core/MappedRegistry")
+@HandleBy(reference = "net/minecraft/core/MappedRegistry", predicates = "craftbukkit_version:[v1_17_R1,)")
 public final class RefMappedRegistry<T> implements RefWritableRegistry<T> {
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/core/MappedRegistry;byValue:Ljava/util/Map;", accessor = true)
+    @HandleBy(reference = "Lnet/minecraft/core/MappedRegistry;byValue:Ljava/util/Map;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     public final Map<T, RefReference<T>> byValue = null;
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/core/MappedRegistry;frozen:Z", accessor = true)
+    @HandleBy(reference = "Lnet/minecraft/core/MappedRegistry;frozen:Z", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     public boolean frozen;
 }

@@ -1,16 +1,15 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.entity;
+package pers.neige.neigeitems.internal.ref.entity;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/EnumHand")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/InteractionHand")
+@HandleBy(reference = "net/minecraft/world/InteractionHand", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/EnumHand", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefEnumHand {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EnumHand;MAIN_HAND:Lnet/minecraft/server/v1_12_R1/EnumHand;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/InteractionHand;MAIN_HAND:Lnet/minecraft/world/InteractionHand;")
+    @HandleBy(reference = "Lnet/minecraft/world/InteractionHand;MAIN_HAND:Lnet/minecraft/world/InteractionHand;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EnumHand;MAIN_HAND:Lnet/minecraft/server/v1_12_R1/EnumHand;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public static final RefEnumHand MAIN_HAND = null;
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EnumHand;OFF_HAND:Lnet/minecraft/server/v1_12_R1/EnumHand;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/InteractionHand;OFF_HAND:Lnet/minecraft/world/InteractionHand;")
+    @HandleBy(reference = "Lnet/minecraft/world/InteractionHand;OFF_HAND:Lnet/minecraft/world/InteractionHand;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EnumHand;OFF_HAND:Lnet/minecraft/server/v1_12_R1/EnumHand;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public static final RefEnumHand OFF_HAND = null;
 }

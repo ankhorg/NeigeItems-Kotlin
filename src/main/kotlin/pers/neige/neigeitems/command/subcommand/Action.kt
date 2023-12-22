@@ -35,16 +35,14 @@ object Action {
                     ActionManager.actions.keys.toList().sorted()
                 }
                 execute<CommandSender> { sender, context, argument ->
-                    async {
-                        var player = Bukkit.getPlayerExact(context.argument(-1))
-                        if (player == null && sender is Player && context.argument(-1) == "me") {
-                            player = sender
-                        }
-                        if (player != null) {
-                            ActionManager.runAction(argument.parseSection(player), ActionContext(player))
-                        } else {
-                            ActionManager.runAction(argument.parseSection())
-                        }
+                    var player = Bukkit.getPlayerExact(context.argument(-1))
+                    if (player == null && sender is Player && context.argument(-1) == "me") {
+                        player = sender
+                    }
+                    if (player != null) {
+                        ActionManager.runAction(argument.parseSection(player), ActionContext(player))
+                    } else {
+                        ActionManager.runAction(argument.parseSection())
                     }
                 }
             }

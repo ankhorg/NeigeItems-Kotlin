@@ -1,8 +1,7 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.util;
+package pers.neige.neigeitems.internal.ref.util;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/util/random/WeightedEntry")
+@HandleBy(reference = "net/minecraft/util/random/WeightedEntry", predicates = "craftbukkit_version:[v1_17_R1,)")
 public interface RefWeightedEntry {
 }

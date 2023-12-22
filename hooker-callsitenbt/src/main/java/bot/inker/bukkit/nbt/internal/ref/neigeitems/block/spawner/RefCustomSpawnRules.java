@@ -1,8 +1,7 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.block.spawner;
+package pers.neige.neigeitems.internal.ref.block.spawner;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/level/SpawnData$CustomSpawnRules")
+@HandleBy(reference = "net/minecraft/world/level/SpawnData$CustomSpawnRules", predicates = "craftbukkit_version:[v1_17_R1,)")
 public class RefCustomSpawnRules {
 }

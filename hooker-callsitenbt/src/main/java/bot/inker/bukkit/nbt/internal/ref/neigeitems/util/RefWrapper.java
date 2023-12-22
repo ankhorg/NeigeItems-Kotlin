@@ -1,16 +1,15 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.util;
+package pers.neige.neigeitems.internal.ref.util;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/util/random/WeightedEntry$Wrapper")
+@HandleBy(reference = "net/minecraft/util/random/WeightedEntry$Wrapper", predicates = "craftbukkit_version:[v1_17_R1,)")
 public class RefWrapper<T> implements RefWeightedEntry {
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/util/random/WeightedEntry$Wrapper;<init>(Ljava/lang/Object;Lnet/minecraft/util/random/Weight;)V", accessor = true)
+    @HandleBy(reference = "Lnet/minecraft/util/random/WeightedEntry$Wrapper;<init>(Ljava/lang/Object;Lnet/minecraft/util/random/Weight;)V", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     public static native <T> RefWrapper<T> newInstance(T data, RefWeight weight);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/util/random/WeightedEntry$Wrapper;getData()Ljava/lang/Object;")
+    @HandleBy(reference = "Lnet/minecraft/util/random/WeightedEntry$Wrapper;getData()Ljava/lang/Object;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native T getData();
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/util/random/WeightedEntry$Wrapper;getWeight()Lnet/minecraft/util/random/Weight;")
+    @HandleBy(reference = "Lnet/minecraft/util/random/WeightedEntry$Wrapper;getWeight()Lnet/minecraft/util/random/Weight;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native RefWeight getWeight();
 }

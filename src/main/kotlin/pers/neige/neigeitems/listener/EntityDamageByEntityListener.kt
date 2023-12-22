@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.listener
 
-import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.Material
 import org.bukkit.entity.Damageable
 import org.bukkit.entity.Player
@@ -10,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.item.ItemDurability
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 

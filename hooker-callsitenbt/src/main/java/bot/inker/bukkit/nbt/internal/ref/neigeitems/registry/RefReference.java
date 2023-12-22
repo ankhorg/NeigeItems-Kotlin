@@ -1,10 +1,9 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.registry;
+package pers.neige.neigeitems.internal.ref.registry;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/core/Holder$Reference")
+@HandleBy(reference = "net/minecraft/core/Holder$Reference", predicates = "craftbukkit_version:[v1_17_R1,)")
 public final class RefReference<T> {
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/core/Holder$Reference;bindValue(Ljava/lang/Object;)V", accessor = true)
+    @HandleBy(reference = "Lnet/minecraft/core/Holder$Reference;bindValue(Ljava/lang/Object;)V", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     public native void bindValue(T value);
 }

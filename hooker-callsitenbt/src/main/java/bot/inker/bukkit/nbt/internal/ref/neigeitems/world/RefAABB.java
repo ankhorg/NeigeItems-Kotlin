@@ -1,22 +1,21 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.world;
+package pers.neige.neigeitems.internal.ref.world;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/AxisAlignedBB")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/phys/AABB")
+@HandleBy(reference = "net/minecraft/world/phys/AABB", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/AxisAlignedBB", predicates = "craftbukkit_version:[v1_12_R1,)")
 public class RefAABB {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/AxisAlignedBB;<init>(DDDDDD)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/phys/AABB;<init>(DDDDDD)V")
+    @HandleBy(reference = "Lnet/minecraft/world/phys/AABB;<init>(DDDDDD)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/AxisAlignedBB;<init>(DDDDDD)V", predicates = "craftbukkit_version:[v1_12_R1,)")
     public RefAABB(double x1, double y1, double z1, double x2, double y2, double z2) {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/AxisAlignedBB;c(Lnet/minecraft/server/v1_12_R1/AxisAlignedBB;)Z")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/phys/AABB;intersects(Lnet/minecraft/world/phys/AABB;)Z")
+    @HandleBy(reference = "Lnet/minecraft/world/phys/AABB;intersects(Lnet/minecraft/world/phys/AABB;)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/AxisAlignedBB;c(Lnet/minecraft/server/v1_12_R1/AxisAlignedBB;)Z", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native boolean intersects(RefAABB box);
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/AxisAlignedBB;a(DDDDDD)Z")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/phys/AABB;intersects(DDDDDD)Z")
+    @HandleBy(reference = "Lnet/minecraft/world/phys/AABB;intersects(DDDDDD)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/AxisAlignedBB;a(DDDDDD)Z", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native boolean intersects(double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
 }

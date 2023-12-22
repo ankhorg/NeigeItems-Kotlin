@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.item
 
-import bot.inker.bukkit.nbt.NbtItemStack
 import com.alibaba.fastjson2.parseObject
 import com.alibaba.fastjson2.toJSONString
 import org.bukkit.*
@@ -15,6 +14,7 @@ import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
 import pers.neige.neigeitems.event.ItemGenerateEvent
 import pers.neige.neigeitems.item.color.ItemColor
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.ItemManager
@@ -168,7 +168,9 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         val itemStack = if (base.isCraftItem()) base!! else base?.asCraftCopy() ?: ItemStack(
             material ?: Material.STONE
         ).asCraftCopy()
-        itemStack.type = material ?: Material.STONE
+        if (material != null) {
+            itemStack.type = material
+        }
         // 设置子ID/损伤值
         if (config.contains("damage")) {
             itemStack.durability = config.getInt("damage").toShort()

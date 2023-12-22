@@ -1,10 +1,10 @@
 package pers.neige.neigeitems.item;
 
-import bot.inker.bukkit.nbt.NbtCompound;
-import bot.inker.bukkit.nbt.NbtItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
 import pers.neige.neigeitems.utils.JsonUtils;
 
 import java.util.HashMap;

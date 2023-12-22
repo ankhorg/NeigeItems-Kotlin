@@ -1,16 +1,15 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.block;
+package pers.neige.neigeitems.internal.ref.block;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/Blocks")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/level/block/Blocks")
+@HandleBy(reference = "net/minecraft/world/level/block/Blocks", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/Blocks", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefBlocks {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/Blocks;ANVIL:Lnet/minecraft/server/v1_12_R1/Block;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/level/block/Blocks;ANVIL:Lnet/minecraft/world/level/block/Block;")
+    @HandleBy(reference = "Lnet/minecraft/world/level/block/Blocks;ANVIL:Lnet/minecraft/world/level/block/Block;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Blocks;ANVIL:Lnet/minecraft/server/v1_12_R1/Block;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public static final RefBlock ANVIL = null;
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/Blocks;ENCHANTING_TABLE:Lnet/minecraft/server/v1_12_R1/Block;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/level/block/Blocks;ENCHANTING_TABLE:Lnet/minecraft/world/level/block/Block;")
+    @HandleBy(reference = "Lnet/minecraft/world/level/block/Blocks;ENCHANTING_TABLE:Lnet/minecraft/world/level/block/Block;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Blocks;ENCHANTING_TABLE:Lnet/minecraft/server/v1_12_R1/Block;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public static final RefBlock ENCHANTING_TABLE = null;
 }

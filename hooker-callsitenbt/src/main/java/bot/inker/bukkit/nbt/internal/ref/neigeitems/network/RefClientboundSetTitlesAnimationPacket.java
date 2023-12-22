@@ -1,11 +1,10 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.network;
+package pers.neige.neigeitems.internal.ref.network;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/protocol/game/ClientboundSetTitlesAnimationPacket")
+@HandleBy(reference = "net/minecraft/network/protocol/game/ClientboundSetTitlesAnimationPacket", predicates = "craftbukkit_version:[v1_17_R1,)")
 public final class RefClientboundSetTitlesAnimationPacket implements RefPacket<RefPacketListenerPlayOut> {
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/network/protocol/game/ClientboundSetTitlesAnimationPacket;<init>(III)V")
+    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundSetTitlesAnimationPacket;<init>(III)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     public RefClientboundSetTitlesAnimationPacket(int fadeIn, int stay, int fadeOut) {
         throw new UnsupportedOperationException();
     }

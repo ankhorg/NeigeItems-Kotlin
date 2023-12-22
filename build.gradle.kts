@@ -1,20 +1,20 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.inksnow.ankhinvoke.gradle.ApplyReferenceTask
+import org.inksnow.ankhinvoke.gradle.BuildMappingsTask
 import java.io.FileOutputStream
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
-//import org.inksnow.ankhinvoke.gradle.ApplyReferenceTask
-//import org.inksnow.ankhinvoke.gradle.BuildMappingsTask
 
 val taboolib_version: String by project
 
 plugins {
     `java-library`
     `maven-publish`
-    id("org.jetbrains.kotlin.jvm") version "1.7.20"
-    id("org.jetbrains.dokka") version "1.7.20"
+    id("org.jetbrains.kotlin.jvm") version "1.9.10"
+    id("org.jetbrains.dokka") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-//    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.4-SNAPSHOT"
 }
 
 val realVersion = version
@@ -67,8 +67,8 @@ repositories {
     mavenLocal()
     maven("https://maven.aliyun.com/nexus/content/groups/public/")
     mavenCentral()
-//    maven("https://r.irepo.space/maven/")
-//    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://r.irepo.space/maven/")
+    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/public")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://repo.dmulloy2.net/repository/public/")
@@ -85,7 +85,7 @@ repositories {
 }
 
 dependencies {
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.7.20")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.10")
     compileOnly(fileTree("libs"))
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
     compileOnly("org.spigotmc:spigot:1.16.5-R0.1-SNAPSHOT")
@@ -96,8 +96,8 @@ dependencies {
 //    compileOnly("net.Indyuce:MMOItems-API:6.9.5-SNAPSHOT")
 //    compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
 
-//    // ankh-invoke
-//    implementation("org.inksnow:ankh-invoke-bukkit:1.0-SNAPSHOT")
+    // ankh-invoke
+    implementation("org.inksnow:ankh-invoke-bukkit:1.0.4-SNAPSHOT")
 
     // taboolib
     implementation("io.izzel.taboolib:common:$taboolib_version")
@@ -113,13 +113,10 @@ dependencies {
     implementation(kotlin("stdlib"))
     // javassist
     implementation("org.javassist:javassist:3.20.0-GA")
-    // callsite-nbt
-    implementation(fileTree("libs/callsite-nbt-1.0-dev-SNAPSHOT-fat.jar"))
-    implementation(project(":hooker-callsitenbt"))
     // openjdk-nashorn
     implementation(fileTree("libs/relocated-nashorn-15.4.jar"))
     // fastjson2
-    implementation("com.alibaba.fastjson2:fastjson2-kotlin:2.0.25")
+    implementation("com.alibaba.fastjson2:fastjson2-kotlin:2.0.43")
     // multiple-string-searcher
     implementation("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
     // maven-model
@@ -134,6 +131,8 @@ tasks {
         exclude("module-info.java")
         // kotlin
         relocate("kotlin.", "pers.neige.neigeitems.libs.kotlin.")
+        // ankh-invoke
+//        relocate("org.inksnow.ankhinvoke", "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke")
         // taboolib
         relocate("taboolib", "pers.neige.neigeitems.taboolib")
         // bstats
@@ -142,17 +141,15 @@ tasks {
         relocate("org.neosearch.stringsearcher", "pers.neige.neigeitems.libs.stringsearcher")
         // javassist
         relocate("javassist", "pers.neige.neigeitems.libs.javassist")
-        // callsitenbt
-        relocate("bot.inker.bukkit.nbt", "pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
         // maven-model
         relocate("org.codehaus.plexus.util", "pers.neige.neigeitems.libs.plexus.util")
         relocate("org.apache.maven.model", "pers.neige.neigeitems.libs.maven.model")
         // fastjson2
         relocate("com.alibaba.fastjson2", "pers.neige.neigeitems.libs.fastjson2")
-//        // asm
-//        relocate("org.objectweb.asm", "pers.neige.neigeitems.libs.asm9")
-//        // JvmHacker
-//        relocate("bot.inker.acj", "pers.neige.neigeitems.libs.acj")
+        // asm
+        relocate("org.objectweb.asm", "pers.neige.neigeitems.libs.asm9")
+        // JvmHacker
+        relocate("bot.inker.acj", "pers.neige.neigeitems.libs.acj")
     }
     kotlinSourcesJar {
         // include subprojects
@@ -219,11 +216,11 @@ publishing {
 // 向BukkitPlugin的<clinit>块开头插入CallSiteNbt.install(this.getClass())
 // 删除被fastjson2连带打包的annotations类
 fun final(name: String) {
-    val oldFile = File("$buildDir/libs/$name")
-    val newFile = File("$buildDir/libs/Modified$name")
-//    File("$buildDir/libs/$name.jar").delete()
-//    val oldFile = File("$buildDir/libs/$name-shaded.jar")
-//    val newFile = File("$buildDir/libs/Modified$name.jar")
+//    val oldFile = File("$buildDir/libs/$name")
+//    val newFile = File("$buildDir/libs/Modified$name")
+    File("$buildDir/libs/$name.jar").delete()
+    val oldFile = File("$buildDir/libs/$name-shaded.jar")
+    val newFile = File("$buildDir/libs/Modified$name.jar")
 
     if (!oldFile.exists()) return
 
@@ -239,43 +236,35 @@ fun final(name: String) {
 
                     val classReader = org.objectweb.asm.ClassReader(targetClassBytes)
                     val classWriter =
-                        org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
+                            org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
                     val classVisitor =
-                        object : org.objectweb.asm.ClassVisitor(org.objectweb.asm.Opcodes.ASM9, classWriter) {
-                            override fun visitMethod(
-                                access: Int,
-                                name: String?,
-                                descriptor: String?,
-                                signature: String?,
-                                exceptions: Array<out String>?
-                            ): org.objectweb.asm.MethodVisitor? {
-                                val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
-                                if (name == "<clinit>") {
-                                    return object :
-                                        org.objectweb.asm.MethodVisitor(org.objectweb.asm.Opcodes.ASM9, methodVisitor) {
-                                        override fun visitCode() {
-                                            visitLdcInsn(org.objectweb.asm.Type.getType("Lpers/neige/neigeitems/taboolib/platform/BukkitPlugin;"))
-                                            visitMethodInsn(
-                                                org.objectweb.asm.Opcodes.INVOKESTATIC,
-                                                "pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/loader/CallSiteNbt",
-                                                "install",
-                                                "(Ljava/lang/Class;)V",
-                                                false
-                                            )
-//                                            visitMethodInsn(
-//                                                org.objectweb.asm.Opcodes.INVOKESTATIC,
-//                                                "org/inksnow/ankhinvoke/example/ExampleMain",
-//                                                "init",
-//                                                "()V",
-//                                                false
-//                                            )
-                                            super.visitCode()
+                            object : org.objectweb.asm.ClassVisitor(org.objectweb.asm.Opcodes.ASM9, classWriter) {
+                                override fun visitMethod(
+                                        access: Int,
+                                        name: String?,
+                                        descriptor: String?,
+                                        signature: String?,
+                                        exceptions: Array<out String>?
+                                ): org.objectweb.asm.MethodVisitor? {
+                                    val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
+                                    if (name == "<clinit>") {
+                                        return object :
+                                                org.objectweb.asm.MethodVisitor(org.objectweb.asm.Opcodes.ASM9, methodVisitor) {
+                                            override fun visitCode() {
+                                                visitMethodInsn(
+                                                        org.objectweb.asm.Opcodes.INVOKESTATIC,
+                                                        "pers/neige/neigeitems/NeigeItems",
+                                                        "init",
+                                                        "()V",
+                                                        false
+                                                )
+                                                super.visitCode()
+                                            }
                                         }
                                     }
+                                    return methodVisitor
                                 }
-                                return methodVisitor
                             }
-                        }
                     classReader.accept(classVisitor, org.objectweb.asm.ClassReader.EXPAND_FRAMES)
 
                     jarOutputStream.putNextEntry(JarEntry(entryName))
@@ -283,7 +272,7 @@ fun final(name: String) {
                     jarOutputStream.closeEntry()
                 } else {
                     if (!(entryName.startsWith("org/intellij/lang/annotations")
-                                || entryName.startsWith("org/jetbrains/annotations"))
+                                    || entryName.startsWith("org/jetbrains/annotations"))
                     ) {
                         jarOutputStream.putNextEntry(entry)
                         jarFile.getInputStream(entry).copyTo(jarOutputStream)
@@ -294,14 +283,14 @@ fun final(name: String) {
         }
     }
     oldFile.delete()
-    newFile.renameTo(oldFile)
-//    newFile.renameTo(File("$buildDir/libs/$name.jar"))
+//    newFile.renameTo(oldFile)
+    newFile.renameTo(File("$buildDir/libs/$name.jar"))
 }
 
 val finalTask = tasks.register("finalTask") {
     doLast {
-        final("${rootProject.name}-${project.property("version")}.jar")
-//        final("${rootProject.name}-${project.property("version")}")
+//        final("${rootProject.name}-${project.property("version")}.jar")
+        final("${rootProject.name}-${project.property("version")}")
     }
 }
 
@@ -325,40 +314,40 @@ tasks.register("replaceVersionInPluginYml") {
 tasks.named("assemble") {
     dependsOn("replaceVersionInPluginYml")
 }
-//
-//tasks.create<BuildMappingsTask>("build-mappings") {
-//    registryName = "example"
-//    outputDirectory = buildDir.resolve("cache/build-mappings")
-//
-//    mapping("nms", "1.20.2"){
-//        predicates = arrayOf("craftbukkit_version:{v1_20_R2}")
-//    }
-//    mapping("nms", "1.20.1"){
-//        predicates = arrayOf("craftbukkit_version:{v1_20_R1}")
-//    }
-//    mapping("nms", "1.19.4"){
-//        predicates = arrayOf("craftbukkit_version:{v1_19_R3}")
-//    }
-//    mapping("nms", "1.18.2"){
-//        predicates = arrayOf("craftbukkit_version:{v1_18_R2}")
-//    }
-//    mapping("nms", "1.17.1"){
-//        predicates = arrayOf("craftbukkit_version:{v1_17_R1}")
-//    }
-//}
-//
-//tasks.processResources {
-//    from(tasks.getByName("build-mappings").outputs)
-//}
-//
-//tasks.create<ApplyReferenceTask>("apply-reference") {
-//    dependsOn(tasks.getByName("shadowJar"))
-//
-//    appendReferencePackage("org.inksnow.ankhinvoke.example.ref")
-//    inputJars = tasks.getByName("shadowJar").outputs.files
-//    outputJar = buildDir.resolve("libs/NeigeItems-$version-shaded.jar")
-//}
-//
-//tasks.assemble {
-//    dependsOn(tasks.getByName("apply-reference"))
-//}
+
+tasks.create<BuildMappingsTask>("build-mappings") {
+    registryName = "neigeitems"
+    outputDirectory = buildDir.resolve("cache/build-mappings")
+
+    mapping("nms", "1.20.2") {
+        predicates = arrayOf("craftbukkit_version:{v1_20_R2}")
+    }
+    mapping("nms", "1.20.1") {
+        predicates = arrayOf("craftbukkit_version:{v1_20_R1}")
+    }
+    mapping("nms", "1.19.4") {
+        predicates = arrayOf("craftbukkit_version:{v1_19_R3}")
+    }
+    mapping("nms", "1.18.2") {
+        predicates = arrayOf("craftbukkit_version:{v1_18_R2}")
+    }
+    mapping("nms", "1.17.1") {
+        predicates = arrayOf("craftbukkit_version:{v1_17_R1}")
+    }
+}
+
+tasks.processResources {
+    from(tasks.getByName("build-mappings").outputs)
+}
+
+tasks.create<ApplyReferenceTask>("apply-reference") {
+    dependsOn(tasks.getByName("shadowJar"))
+
+    appendReferencePackage("pers.neige.neigeitems.ref")
+    inputJars = tasks.getByName("shadowJar").outputs.files
+    outputJar = buildDir.resolve("libs/NeigeItems-$version-shaded.jar")
+}
+
+tasks.assemble {
+    dependsOn(tasks.getByName("apply-reference"))
+}

@@ -1,21 +1,19 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.block.sign;
+package pers.neige.neigeitems.internal.ref.block.sign;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockEntity;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockPos;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.block.RefBlockState;
+import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.internal.ref.block.RefBlockEntity;
+import pers.neige.neigeitems.internal.ref.block.RefBlockPos;
+import pers.neige.neigeitems.internal.ref.block.RefBlockState;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/TileEntitySign")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/level/block/entity/SignBlockEntity")
+@HandleBy(reference = "net/minecraft/world/level/block/entity/SignBlockEntity", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/TileEntitySign", predicates = "craftbukkit_version:[v1_12_R1,)")
 public final class RefSignBlockEntity extends RefBlockEntity {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/TileEntitySign;<init>()V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/TileEntitySign;<init>()V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefSignBlockEntity() {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/level/block/entity/SignBlockEntity;<init>(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V")
+    @HandleBy(reference = "Lnet/minecraft/world/level/block/entity/SignBlockEntity;<init>(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     public RefSignBlockEntity(RefBlockPos pos, RefBlockState state) {
         throw new UnsupportedOperationException();
     }

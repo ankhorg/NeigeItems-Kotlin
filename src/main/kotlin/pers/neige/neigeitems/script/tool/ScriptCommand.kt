@@ -1,11 +1,11 @@
 package pers.neige.neigeitems.script.tool
 
-import bot.inker.bukkit.nbt.neigeitems.utils.ServerUtils
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.PluginCommand
 import org.bukkit.command.TabCompleter
 import org.bukkit.plugin.Plugin
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ServerUtils
 import pers.neige.neigeitems.manager.ExpansionManager
 import pers.neige.neigeitems.utils.CommandUtils
 import pers.neige.neigeitems.utils.SchedulerUtils.sync

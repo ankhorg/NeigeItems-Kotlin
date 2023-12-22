@@ -1,33 +1,30 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.block.spawner;
+package pers.neige.neigeitems.internal.ref.block.spawner;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.RefNbtTagCompound;
 
 import java.util.Optional;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/MobSpawnerData")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/level/SpawnData")
+@HandleBy(reference = "net/minecraft/world/level/SpawnData", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/MobSpawnerData", predicates = "craftbukkit_version:[v1_12_R1,)")
 public class RefSpawnData {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/MobSpawnerData;<init>()V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/level/SpawnData;<init>()V")
+    @HandleBy(reference = "Lnet/minecraft/world/level/SpawnData;<init>()V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/MobSpawnerData;<init>()V", predicates = "craftbukkit_version:[v1_12_R1,)")
     public RefSpawnData() {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/MobSpawnerData;<init>(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/MobSpawnerData;<init>(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefSpawnData(RefNbtTagCompound entityToSpawn) {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/MobSpawnerData;<init>(ILnet/minecraft/server/v1_12_R1/NBTTagCompound;)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/MobSpawnerData;<init>(ILnet/minecraft/server/v1_12_R1/NBTTagCompound;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefSpawnData(int weight, RefNbtTagCompound entityToSpawn) {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/level/SpawnData;<init>(Lnet/minecraft/nbt/CompoundTag;Ljava/util/Optional;)V")
+    @HandleBy(reference = "Lnet/minecraft/world/level/SpawnData;<init>(Lnet/minecraft/nbt/CompoundTag;Ljava/util/Optional;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     public RefSpawnData(RefNbtTagCompound entityToSpawn, Optional<RefCustomSpawnRules> customSpawnRules) {
         throw new UnsupportedOperationException();
     }

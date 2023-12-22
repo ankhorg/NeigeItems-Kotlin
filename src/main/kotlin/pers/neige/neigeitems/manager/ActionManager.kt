@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.manager
 
-import bot.inker.bukkit.nbt.NbtCompound
 import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
@@ -26,6 +25,7 @@ import pers.neige.neigeitems.action.result.DelayResult
 import pers.neige.neigeitems.action.result.Results
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.item.action.ItemAction
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.ActionUtils.consume
 import pers.neige.neigeitems.utils.ActionUtils.isCoolDown

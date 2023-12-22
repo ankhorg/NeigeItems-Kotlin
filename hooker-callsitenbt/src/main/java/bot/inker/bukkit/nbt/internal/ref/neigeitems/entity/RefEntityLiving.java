@@ -1,83 +1,82 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.entity;
+package pers.neige.neigeitems.internal.ref.entity;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import bot.inker.bukkit.nbt.internal.ref.RefNmsItemStack;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.argument.RefAnchor;
-import bot.inker.bukkit.nbt.internal.ref.neigeitems.world.RefVec3;
+import pers.neige.neigeitems.internal.ref.argument.RefAnchor;
+import pers.neige.neigeitems.internal.ref.world.RefVec3;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/EntityLiving")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/world/entity/LivingEntity")
+@HandleBy(reference = "net/minecraft/world/entity/LivingEntity", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/EntityLiving", predicates = "craftbukkit_version:[v1_12_R1,)")
 public abstract class RefEntityLiving extends RefEntity {
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aN:F")
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aQ:F")
-    @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aK:F")
-    @HandleBy(version = CbVersion.v1_15_R1, reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aI:F")
-    @HandleBy(version = CbVersion.v1_16_R1, reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;aH:F")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;yBodyRot:F")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;yBodyRot:F", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;aH:F", predicates = "craftbukkit_version:[v1_16_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aI:F", predicates = "craftbukkit_version:[v1_15_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aK:F", predicates = "craftbukkit_version:[v1_14_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aQ:F", predicates = "craftbukkit_version:[v1_13_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aN:F", predicates = "craftbukkit_version:[v1_12_R1,)")
     public float yBodyRot;
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aO:F")
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aR:F")
-    @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aL:F")
-    @HandleBy(version = CbVersion.v1_15_R1, reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aJ:F")
-    @HandleBy(version = CbVersion.v1_16_R1, reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;aI:F")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;yBodyRotO:F")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;yBodyRotO:F", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;aI:F", predicates = "craftbukkit_version:[v1_16_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aJ:F", predicates = "craftbukkit_version:[v1_15_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aL:F", predicates = "craftbukkit_version:[v1_14_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aR:F", predicates = "craftbukkit_version:[v1_13_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aO:F", predicates = "craftbukkit_version:[v1_12_R1,)")
     public float yBodyRotO;
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aP:F")
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aS:F")
-    @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aM:F")
-    @HandleBy(version = CbVersion.v1_15_R1, reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aK:F")
-    @HandleBy(version = CbVersion.v1_16_R1, reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;aJ:F")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;yHeadRot:F")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;yHeadRot:F", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;aJ:F", predicates = "craftbukkit_version:[v1_16_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aK:F", predicates = "craftbukkit_version:[v1_15_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aM:F", predicates = "craftbukkit_version:[v1_14_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aS:F", predicates = "craftbukkit_version:[v1_13_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aP:F", predicates = "craftbukkit_version:[v1_12_R1,)")
     public float yHeadRot;
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aQ:F")
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aT:F")
-    @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aN:F")
-    @HandleBy(version = CbVersion.v1_15_R1, reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aL:F")
-    @HandleBy(version = CbVersion.v1_16_R1, reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;aK:F")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;yHeadRotO:F")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;yHeadRotO:F", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;aK:F", predicates = "craftbukkit_version:[v1_16_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aL:F", predicates = "craftbukkit_version:[v1_15_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aN:F", predicates = "craftbukkit_version:[v1_14_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aT:F", predicates = "craftbukkit_version:[v1_13_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aQ:F", predicates = "craftbukkit_version:[v1_12_R1,)")
     public float yHeadRotO;
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aE:I", accessor = true)
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aH:I", accessor = true)
-    @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aD:I", accessor = true)
-    @HandleBy(version = CbVersion.v1_15_R1, reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aB:I", accessor = true)
-    @HandleBy(version = CbVersion.v1_16_R1, reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;at:I", accessor = true)
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;attackStrengthTicker:I", accessor = true)
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;attackStrengthTicker:I", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;at:I", useAccessor = true, predicates = "craftbukkit_version:[v1_16_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;aB:I", useAccessor = true, predicates = "craftbukkit_version:[v1_15_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;aD:I", useAccessor = true, predicates = "craftbukkit_version:[v1_14_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;aH:I", useAccessor = true, predicates = "craftbukkit_version:[v1_13_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aE:I", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,)")
     public int attackStrengthTicker;
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;b(Lnet/minecraft/server/v1_12_R1/EnumHand;)Lnet/minecraft/server/v1_12_R1/ItemStack;")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;b(Lnet/minecraft/server/v1_12_R1/EnumHand;)Lnet/minecraft/server/v1_12_R1/ItemStack;", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native RefNmsItemStack getItemInHand(RefEnumHand hand);
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;a(Lnet/minecraft/server/v1_12_R1/EnumHand;Lnet/minecraft/server/v1_12_R1/ItemStack;)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;setItemInHand(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;setItemInHand(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;a(Lnet/minecraft/server/v1_12_R1/EnumHand;Lnet/minecraft/server/v1_12_R1/ItemStack;)V", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native void setItemInHand(RefEnumHand hand, RefNmsItemStack itemStack);
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;a(Lnet/minecraft/server/v1_12_R1/EnumHand;)V")
-    @HandleBy(version = CbVersion.v1_16_R1, reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;swingHand(Lnet/minecraft/server/v1_16_R1/EnumHand;)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;swing(Lnet/minecraft/world/InteractionHand;)V")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;swing(Lnet/minecraft/world/InteractionHand;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;swingHand(Lnet/minecraft/server/v1_16_R1/EnumHand;)V", predicates = "craftbukkit_version:[v1_16_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;a(Lnet/minecraft/server/v1_12_R1/EnumHand;)V", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native void swing(RefEnumHand hand);
 
-    @HandleBy(version = CbVersion.v1_15_R1, reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;a(Lnet/minecraft/server/v1_15_R1/EnumHand;Z)V")
-    @HandleBy(version = CbVersion.v1_16_R1, reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;swingHand(Lnet/minecraft/server/v1_16_R1/EnumHand;Z)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;swing(Lnet/minecraft/world/InteractionHand;Z)V")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;swing(Lnet/minecraft/world/InteractionHand;Z)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/EntityLiving;swingHand(Lnet/minecraft/server/v1_16_R1/EnumHand;Z)V", predicates = "craftbukkit_version:[v1_16_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/EntityLiving;a(Lnet/minecraft/server/v1_15_R1/EnumHand;Z)V", predicates = "craftbukkit_version:[v1_15_R1,)")
     public native void swing(RefEnumHand hand, boolean fromServerPlayer);
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;cu()V", accessor = true)
-    @HandleBy(version = CbVersion.v1_13_R1, reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;cH()V", accessor = true)
-    @HandleBy(version = CbVersion.v1_14_R1, reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;jump()V", accessor = true)
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;jumpFromGround()V", accessor = true)
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;jumpFromGround()V", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/EntityLiving;jump()V", useAccessor = true, predicates = "craftbukkit_version:[v1_14_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;cH()V", useAccessor = true, predicates = "craftbukkit_version:[v1_13_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;cu()V", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,)")
     public native void jumpFromGround();
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;getHeadRotation()F")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;getYHeadRot()F")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;getYHeadRot()F", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;getHeadRotation()F", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native float getHeadRotation();
 
-    @HandleBy(version = CbVersion.v1_12_R1, reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;setHeadRotation(F)V")
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;setYHeadRot(F)V")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;setYHeadRot(F)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;setHeadRotation(F)V", predicates = "craftbukkit_version:[v1_12_R1,)")
     public native void setHeadRotation(float headRotation);
 
-    @HandleBy(version = CbVersion.v1_17_R1, reference = "Lnet/minecraft/world/entity/LivingEntity;lookAt(Lnet/minecraft/commands/arguments/EntityAnchorArgument$Anchor;Lnet/minecraft/world/phys/Vec3;)V")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;lookAt(Lnet/minecraft/commands/arguments/EntityAnchorArgument$Anchor;Lnet/minecraft/world/phys/Vec3;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native void lookAt(RefAnchor anchorPoint, RefVec3 target);
 }

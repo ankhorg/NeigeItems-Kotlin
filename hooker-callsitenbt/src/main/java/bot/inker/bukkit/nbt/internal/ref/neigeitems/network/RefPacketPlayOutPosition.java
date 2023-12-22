@@ -1,9 +1,8 @@
-package bot.inker.bukkit.nbt.internal.ref.neigeitems.network;
+package pers.neige.neigeitems.internal.ref.network;
 
-import bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import bot.inker.bukkit.nbt.internal.annotation.HandleBy;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 
-@HandleBy(version = CbVersion.v1_12_R1, reference = "net/minecraft/server/v1_12_R1/PacketPlayOutPosition")
-@HandleBy(version = CbVersion.v1_17_R1, reference = "net/minecraft/network/protocol/game/ClientboundPlayerPositionPacket")
+@HandleBy(reference = "net/minecraft/network/protocol/game/ClientboundPlayerPositionPacket", predicates = "craftbukkit_version:[v1_17_R1,)")
+@HandleBy(reference = "net/minecraft/server/v1_12_R1/PacketPlayOutPosition", predicates = "craftbukkit_version:[v1_12_R1,)")
 public class RefPacketPlayOutPosition implements RefPacket<RefPacketListenerPlayOut> {
 }

@@ -105,8 +105,8 @@ object WeightJoinParser : SectionParser() {
             // 加权随机取值
             val info = HashMap<String, Double>()
             // 加载所有参数并遍历
-            list.forEachIndexed { i, it ->
-                val value = it.parseSection(cache, player, sections)
+            list.forEachIndexed { i, raw ->
+                val value = raw.parseSection(cache, player, sections)
                 // 检测权重
                 when (val index = value.indexOf("::")) {
                     // 无权重, 直接记录
