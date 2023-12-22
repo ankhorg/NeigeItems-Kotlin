@@ -168,7 +168,9 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         val itemStack = if (base.isCraftItem()) base!! else base?.asCraftCopy() ?: ItemStack(
             material ?: Material.STONE
         ).asCraftCopy()
-        itemStack.type = material ?: Material.STONE
+        if (material != null) {
+            itemStack.type = material
+        }
         // 设置子ID/损伤值
         if (config.contains("damage")) {
             itemStack.durability = config.getInt("damage").toShort()
