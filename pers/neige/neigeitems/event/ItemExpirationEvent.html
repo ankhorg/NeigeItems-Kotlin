@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>ItemExpirationEvent 1.15.113 API </title>
+    <title>ItemExpirationEvent 1.16.0 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -88,7 +88,7 @@ var pathtoroot = "../../../../";
 
 <main role="main">
     <div class="header">
-        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html"></a></div>
+        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems.event</a></div>
         <h2 title="Class ItemExpirationEvent" class="title">Class ItemExpirationEvent</h2>
     </div>
     <div class="contentContainer">
@@ -121,6 +121,14 @@ public final class <span class="typeNameLabel"><a href=ItemExpirationEvent.html>
 extends <a href=CancellableEvent.html>CancellableEvent</a>
                     </pre>
                     <div class="block"><p>物品到期事件.</p></div>
+
+                    <dl>
+
+                    
+
+                    
+
+                    </dl>
                 </li>
             </ul>
         </div>
@@ -193,13 +201,13 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         
                                         <tr class="altColor">
                                             <td class="colFirst"><code>public final static HandlerList</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemUpdateEvent.PostGenerate.html#handlers>handlers</a></code></th>
+                                            <th class="colSecond" scope="row"><code><a href=MythicEquipEvent.html#handlers>handlers</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr class="rowColor">
                                             <td class="colFirst"><code>private  boolean</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemUpdateEvent.PostGenerate.html#cancelled>cancelled</a></code></th>
+                                            <th class="colSecond" scope="row"><code><a href=MythicEquipEvent.html#cancelled>cancelled</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -229,7 +237,7 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         
                                             <tr class="altColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#ItemExpirationEvent(OfflinePlayer,ItemStack,ItemInfo)">ItemExpirationEvent</a></span>(OfflinePlayer player, ItemStack itemStack, <a href=../item/ItemInfo.html>ItemInfo</a> itemInfo)</code></th>
+                                                        href="#ItemExpirationEvent(org.bukkit.OfflinePlayer,org.bukkit.inventory.ItemStack,pers.neige.neigeitems.item.ItemInfo)">ItemExpirationEvent</a></span>(OfflinePlayer player, ItemStack itemStack, <a href=../item/ItemInfo.html>ItemInfo</a> itemInfo)</code></th>
                                                 <td class="colLast"></td>
                                             </tr>
                                         
@@ -371,7 +379,7 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="ItemExpirationEvent(OfflinePlayer,ItemStack,ItemInfo)"></a>
+                                <a name="ItemExpirationEvent(org.bukkit.OfflinePlayer,org.bukkit.inventory.ItemStack,pers.neige.neigeitems.item.ItemInfo)"></a>
                                 <ul class="blockList">
                                     <li class="blockList">
                                         <h4>ItemExpirationEvent</h4>
@@ -421,8 +429,16 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getHandlers</h4>
                                         <pre class="methodSignature">@NotNull() HandlerList <a href=ItemExpirationEvent.html#getHandlers()>getHandlers</a>()</pre>
                                         <div class="block"></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -436,8 +452,16 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getPlayer</h4>
                                         <pre class="methodSignature">@Nullable() OfflinePlayer <a href=ItemExpirationEvent.html#getPlayer()>getPlayer</a>()</pre>
                                         <div class="block"><p>获取持有物品的玩家</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -451,8 +475,16 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getItemStack</h4>
                                         <pre class="methodSignature">@NotNull() ItemStack <a href=ItemExpirationEvent.html#getItemStack()>getItemStack</a>()</pre>
                                         <div class="block"><p>获取到期的物品</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -466,8 +498,16 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getItemInfo</h4>
                                         <pre class="methodSignature">@NotNull() <a href=../item/ItemInfo.html>ItemInfo</a> <a href=ItemExpirationEvent.html#getItemInfo()>getItemInfo</a>()</pre>
                                         <div class="block"><p>获取物品信息</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -481,8 +521,16 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getHandlerList</h4>
                                         <pre class="methodSignature">@NotNull() static HandlerList <a href=ItemExpirationEvent.html#getHandlerList()>getHandlerList</a>()</pre>
                                         <div class="block"></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 

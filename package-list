@@ -12,10 +12,10 @@ $dokka.location:pers.neige.neigeitems.item.color/ItemColor.Companion///PointingT
 $dokka.location:pers.neige.neigeitems.item/ItemDurability.DamageResult///PointingToDeclaration/pers/neige/neigeitems/item/ItemDurability.DamageResult.html
 $dokka.location:pers.neige.neigeitems.item/ItemPack.ItemInfo///PointingToDeclaration/pers/neige/neigeitems/item/ItemPack.ItemInfo.html
 $dokka.location:pers.neige.neigeitems.lang/LocaleI18n.TranslationProvider///PointingToDeclaration/pers/neige/neigeitems/lang/LocaleI18n.TranslationProvider.html
-bot.inker.bukkit.nbt
-bot.inker.bukkit.nbt.neigeitems.enchantment
-bot.inker.bukkit.nbt.neigeitems.spawner
-bot.inker.bukkit.nbt.neigeitems.utils
+$dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.Pos///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.Pos.html
+$dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.PosRot///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.PosRot.html
+$dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.Rot///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.Rot.html
+org.inksnow.ankhinvoke.example
 pers.neige.neigeitems
 pers.neige.neigeitems.action
 pers.neige.neigeitems.action.impl
@@ -42,9 +42,39 @@ pers.neige.neigeitems.item.color
 pers.neige.neigeitems.item.color.impl
 pers.neige.neigeitems.lang
 pers.neige.neigeitems.libs.asahi.util.calculate
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.enchantment
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils
 pers.neige.neigeitems.listener
 pers.neige.neigeitems.manager
 pers.neige.neigeitems.maven
+pers.neige.neigeitems.ref
+pers.neige.neigeitems.ref.argument
+pers.neige.neigeitems.ref.block
+pers.neige.neigeitems.ref.block.sign
+pers.neige.neigeitems.ref.block.spawner
+pers.neige.neigeitems.ref.chat
+pers.neige.neigeitems.ref.damagesource
+pers.neige.neigeitems.ref.enchantment
+pers.neige.neigeitems.ref.entity
+pers.neige.neigeitems.ref.entity.ai.navigation
+pers.neige.neigeitems.ref.entity.animal
+pers.neige.neigeitems.ref.item
+pers.neige.neigeitems.ref.item.potion
+pers.neige.neigeitems.ref.item.shield
+pers.neige.neigeitems.ref.nbt
+pers.neige.neigeitems.ref.network
+pers.neige.neigeitems.ref.registry
+pers.neige.neigeitems.ref.server.players
+pers.neige.neigeitems.ref.sounds
+pers.neige.neigeitems.ref.tags
+pers.neige.neigeitems.ref.util
+pers.neige.neigeitems.ref.world
 pers.neige.neigeitems.scanner
 pers.neige.neigeitems.script
 pers.neige.neigeitems.script.tool

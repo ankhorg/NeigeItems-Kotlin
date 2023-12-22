@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>ItemGiveEvent 1.15.113 API </title>
+    <title>ItemGiveEvent 1.16.0 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -88,7 +88,7 @@ var pathtoroot = "../../../../";
 
 <main role="main">
     <div class="header">
-        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html"></a></div>
+        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems.event</a></div>
         <h2 title="Class ItemGiveEvent" class="title">Class ItemGiveEvent</h2>
     </div>
     <div class="contentContainer">
@@ -121,6 +121,14 @@ public final class <span class="typeNameLabel"><a href=ItemGiveEvent.html>ItemGi
 extends <a href=CancellableEvent.html>CancellableEvent</a>
                     </pre>
                     <div class="block"><p>物品给予事件, /ni give指令触发.</p></div>
+
+                    <dl>
+
+                    
+
+                    
+
+                    </dl>
                 </li>
             </ul>
         </div>
@@ -199,13 +207,13 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         
                                         <tr class="rowColor">
                                             <td class="colFirst"><code>public final static HandlerList</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemUpdateEvent.PostGenerate.html#handlers>handlers</a></code></th>
+                                            <th class="colSecond" scope="row"><code><a href=MythicEquipEvent.html#handlers>handlers</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr class="altColor">
                                             <td class="colFirst"><code>private  boolean</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemUpdateEvent.PostGenerate.html#cancelled>cancelled</a></code></th>
+                                            <th class="colSecond" scope="row"><code><a href=MythicEquipEvent.html#cancelled>cancelled</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -235,13 +243,13 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         
                                             <tr class="altColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#ItemGiveEvent(String,Player,ItemStack)">ItemGiveEvent</a></span>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, Player player, ItemStack itemStack)</code></th>
+                                                        href="#ItemGiveEvent(java.lang.String,org.bukkit.entity.Player,org.bukkit.inventory.ItemStack)">ItemGiveEvent</a></span>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, Player player, ItemStack itemStack)</code></th>
                                                 <td class="colLast"></td>
                                             </tr>
                                         
                                             <tr class="rowColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#ItemGiveEvent(String,Player,ItemStack,int)">ItemGiveEvent</a></span>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, Player player, ItemStack itemStack, int amount)</code></th>
+                                                        href="#ItemGiveEvent(java.lang.String,org.bukkit.entity.Player,org.bukkit.inventory.ItemStack,int)">ItemGiveEvent</a></span>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, Player player, ItemStack itemStack, int amount)</code></th>
                                                 <td class="colLast"></td>
                                             </tr>
                                         
@@ -329,7 +337,7 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <tr id="i4" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemGiveEvent.html#setItemStack(ItemStack)>setItemStack</a>(@NotNull() ItemStack itemStack) </code>
+                                            <th class="colSecond" scope="row"><code><a href=ItemGiveEvent.html#setItemStack(org.bukkit.inventory.ItemStack)>setItemStack</a>(@NotNull() ItemStack itemStack) </code>
                                             </th>
                                             <td class="colLast">设置待给予物品</td>
                                         </tr>
@@ -407,7 +415,7 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="ItemGiveEvent(String,Player,ItemStack)"></a>
+                                <a name="ItemGiveEvent(java.lang.String,org.bukkit.entity.Player,org.bukkit.inventory.ItemStack)"></a>
                                 <ul class="blockList">
                                     <li class="blockList">
                                         <h4>ItemGiveEvent</h4>
@@ -434,7 +442,7 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                     </li>
                                 </ul>
                                 
-                                <a name="ItemGiveEvent(String,Player,ItemStack,int)"></a>
+                                <a name="ItemGiveEvent(java.lang.String,org.bukkit.entity.Player,org.bukkit.inventory.ItemStack,int)"></a>
                                 <ul class="blockList">
                                     <li class="blockList">
                                         <h4>ItemGiveEvent</h4>
@@ -488,8 +496,16 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getHandlers</h4>
                                         <pre class="methodSignature">@NotNull() HandlerList <a href=ItemGiveEvent.html#getHandlers()>getHandlers</a>()</pre>
                                         <div class="block"></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -503,8 +519,16 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getId</h4>
                                         <pre class="methodSignature">@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=ItemGiveEvent.html#getId()>getId</a>()</pre>
                                         <div class="block"><p>获取物品ID</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -518,8 +542,16 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getPlayer</h4>
                                         <pre class="methodSignature">@NotNull() Player <a href=ItemGiveEvent.html#getPlayer()>getPlayer</a>()</pre>
                                         <div class="block"><p>获取物品接收者</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -533,12 +565,20 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getItemStack</h4>
                                         <pre class="methodSignature">@NotNull() ItemStack <a href=ItemGiveEvent.html#getItemStack()>getItemStack</a>()</pre>
                                         <div class="block"><p>获取待给予物品</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
-                                <a id="setItemStack(ItemStack)">
+                                <a id="setItemStack(org.bukkit.inventory.ItemStack)">
                                     <!--   -->
                                 </a>
                                 <ul class=
@@ -546,19 +586,25 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                           >
                                     <li class="blockList">
                                         <h4>setItemStack</h4>
-                                        <pre class="methodSignature"> void <a href=ItemGiveEvent.html#setItemStack(ItemStack)>setItemStack</a>(@NotNull() ItemStack itemStack)</pre>
+                                        <pre class="methodSignature"> void <a href=ItemGiveEvent.html#setItemStack(org.bukkit.inventory.ItemStack)>setItemStack</a>(@NotNull() ItemStack itemStack)</pre>
                                         <div class="block"><p>设置待给予物品</p></div>
-                                        
+
                                         <dl>
+
+                                        
                                             <dt><span class="paramLabel">Parameters:</span></dt>
                                             
                                             
                                             <dd><code>itemStack</code> - 待给予物品</dd>
                                             
                                             
-                                        </dl>
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -572,8 +618,16 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getAmount</h4>
                                         <pre class="methodSignature"> int <a href=ItemGiveEvent.html#getAmount()>getAmount</a>()</pre>
                                         <div class="block"><p>获取给予数量</p></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -587,17 +641,23 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>setAmount</h4>
                                         <pre class="methodSignature"> void <a href=ItemGiveEvent.html#setAmount(int)>setAmount</a>(int amount)</pre>
                                         <div class="block"><p>设置给予数量</p></div>
-                                        
+
                                         <dl>
+
+                                        
                                             <dt><span class="paramLabel">Parameters:</span></dt>
                                             
                                             
                                             <dd><code>amount</code> - 给予数量</dd>
                                             
                                             
-                                        </dl>
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
@@ -611,8 +671,16 @@ extends <a href=CancellableEvent.html>CancellableEvent</a>
                                         <h4>getHandlerList</h4>
                                         <pre class="methodSignature">@NotNull() static HandlerList <a href=ItemGiveEvent.html#getHandlerList()>getHandlerList</a>()</pre>
                                         <div class="block"></div>
+
+                                        <dl>
+
                                         
-                                        <!-- TODO missing return annotation -->
+
+                                        
+
+                                        
+
+                                        </dl>
                                     </li>
                                 </ul>
                                 
