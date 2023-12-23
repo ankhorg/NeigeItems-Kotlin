@@ -14,7 +14,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.10"
     id("org.jetbrains.dokka") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.4-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.5-SNAPSHOT"
 }
 
 val realVersion = version
@@ -97,7 +97,7 @@ dependencies {
 //    compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
 
     // ankh-invoke
-    implementation("org.inksnow:ankh-invoke-bukkit:1.0.4-SNAPSHOT")
+    implementation("org.inksnow:ankh-invoke-bukkit:1.0.5-SNAPSHOT")
 
     // taboolib
     implementation("io.izzel.taboolib:common:$taboolib_version")
@@ -319,6 +319,9 @@ tasks.create<BuildMappingsTask>("build-mappings") {
     registryName = "neigeitems"
     outputDirectory = buildDir.resolve("cache/build-mappings")
 
+    mapping("nms", "1.20.4") {
+        predicates = arrayOf("craftbukkit_version:{v1_20_R3}")
+    }
     mapping("nms", "1.20.2") {
         predicates = arrayOf("craftbukkit_version:{v1_20_R2}")
     }
