@@ -121,6 +121,8 @@ dependencies {
     implementation("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
     // maven-model
     implementation("org.apache.maven:maven-model:3.9.1")
+    // slf4j-api
+    implementation("org.slf4j:slf4j-api:1.7.36")
 }
 
 tasks {
@@ -150,6 +152,8 @@ tasks {
         relocate("org.objectweb.asm", "pers.neige.neigeitems.libs.asm9")
         // JvmHacker
         relocate("bot.inker.acj", "pers.neige.neigeitems.libs.acj")
+        // slf4j-api
+        relocate("org.slf4j", "pers.neige.neigeitems.libs.slf4j")
     }
     kotlinSourcesJar {
         // include subprojects
