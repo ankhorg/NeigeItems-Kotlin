@@ -123,7 +123,10 @@ dependencies {
     implementation("org.apache.maven:maven-model:3.9.1")
     // slf4j
     implementation("org.slf4j:slf4j-api:1.7.36")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.22.0")
+    implementation("org.apache.logging.log4j:log4j-slf4j-impl:2.22.0") {
+        exclude(group = "org.apache.logging.log4j", module = "log4j-api")
+        exclude(group = "org.apache.logging.log4j", module = "log4j-core")
+    }
 }
 
 tasks {
@@ -156,7 +159,6 @@ tasks {
         // slf4j
         relocate("org.slf4j", "pers.neige.neigeitems.libs.slf4j")
         relocate("org.apache.logging.slf4j", "pers.neige.neigeitems.libs.logging.slf4j")
-        relocate("org.apache.logging.log4j", "pers.neige.neigeitems.libs.logging.log4j")
     }
     kotlinSourcesJar {
         // include subprojects
