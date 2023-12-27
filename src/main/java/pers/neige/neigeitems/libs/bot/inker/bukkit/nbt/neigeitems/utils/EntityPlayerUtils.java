@@ -3,14 +3,13 @@ package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 import com.google.common.base.Preconditions;
 import io.netty.channel.Channel;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,8 +23,17 @@ import pers.neige.neigeitems.ref.chat.RefEnumTitleAction;
 import pers.neige.neigeitems.ref.entity.*;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
 import pers.neige.neigeitems.ref.network.*;
+import pers.neige.neigeitems.ref.network.syncher.RefEntityDataAccessor;
+import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData;
+import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataValue;
+import pers.neige.neigeitems.ref.server.level.RefServerEntity;
+import pers.neige.neigeitems.ref.world.RefCraftWorld;
 import pers.neige.neigeitems.ref.world.RefVec3;
 import pers.neige.neigeitems.ref.world.RefWorld;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class EntityPlayerUtils {
     /**
@@ -79,6 +87,26 @@ public class EntityPlayerUtils {
      * 1.17+ 版本起, Title 相关数据包发生变化.
      */
     private static final boolean TITLE_PACKET_CHANGED = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.14+ 版本起, Entity 类添加 addEntityPacket 方法, 返回对应的添加实体数据包.
+     */
+    private static final boolean ADD_ENTITY_PACKET_SUPPORT = CbVersion.v1_14_R1.isSupport();
+    /**
+     * 1.17+ 版本起, spawnEntity 方法添加 boolean 类型 randomizeData 参数, 用于随机生成实体数据.
+     */
+    private static final boolean RANDOMIZE_DATA_SUPPORT = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.19.4+ 版本起, spawnEntity 方法添加 boolean 类型 randomizeData 参数, 用于随机生成实体数据.
+     */
+    private static final boolean METADATA_NEED_VALUE_LIST = CbVersion.v1_19_R3.isSupport();
+    /**
+     * 1.13+ 版本起, Entity 类 setCustomName 方法由接收 String 改为接收 IChatBaseComponent.
+     */
+    private static final boolean COMPONENT_NAME_SUPPORT = CbVersion.v1_13_R1.isSupport();
+    /**
+     * 1.19.4+ 版本起, SynchedEntityData 下 set 方法添加 boolean 类型 force 参数, 用于强制设置.
+     */
+    private static final boolean FORCE_DATA_SET = CbVersion.v1_19_R3.isSupport();
 
     /**
      * 让指定玩家攻击指定实体.
@@ -513,6 +541,239 @@ public class EntityPlayerUtils {
                 packetSubtitle = new RefPacketPlayOutTitle(RefEnumTitleAction.SUBTITLE, EntityUtils.toNms(subtitle));
                 nmsPlayer.playerConnection.sendPacket(packetSubtitle);
             }
+        }
+    }
+
+    /**
+     * 向玩家发送一个虚拟的实体数据包.
+     *
+     * @param location 待生成坐标.
+     * @param type     实体类型.
+     * @param player   待接收玩家.
+     */
+    public static void sendFakeEntity(
+            @NotNull Location location,
+            @NotNull EntityType type,
+            @NotNull Player player
+    ) {
+        sendFakeEntity(location, type, true, null, player);
+    }
+
+    /**
+     * 向玩家发送一个虚拟的实体数据包.
+     *
+     * @param location      待生成坐标.
+     * @param type          实体类型.
+     * @param randomizeData 是否随机实体数据(仅在1.17+版本生效).
+     * @param player        待接收玩家.
+     */
+    public static void sendFakeEntity(
+            @NotNull Location location,
+            @NotNull EntityType type,
+            boolean randomizeData,
+            @NotNull Player player
+    ) {
+        sendFakeEntity(location, type, randomizeData, null, player);
+    }
+
+    /**
+     * 向玩家发送一个虚拟的实体数据包.
+     *
+     * @param location      待生成坐标.
+     * @param type          实体类型.
+     * @param randomizeData 是否随机实体数据(仅在1.17+版本生效).
+     * @param function      对实体执行的操作.
+     * @param player        待接收玩家.
+     * @return 生成的实体.
+     */
+    @Nullable
+    public static Entity sendFakeEntity(
+            @NotNull Location location,
+            @NotNull EntityType type,
+            boolean randomizeData,
+            @Nullable Consumer<Entity> function,
+            @NotNull Player player
+    ) {
+        World world = location.getWorld();
+        if (world == null) return null;
+        RefCraftWorld craftWorld = (RefCraftWorld) (Object) world;
+
+        RefEntity entity;
+        if (RANDOMIZE_DATA_SUPPORT) {
+            entity = craftWorld.createEntity(location, type.getEntityClass(), randomizeData);
+        } else {
+            entity = craftWorld.createEntity(location, type.getEntityClass());
+        }
+        Entity bukkitEntity = entity.getBukkitEntity();
+
+        if ((Object) player instanceof RefCraftPlayer) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            if (ADD_ENTITY_PACKET_SUPPORT) {
+                nmsPlayer.playerConnection.sendPacket(entity.getAddEntityPacket());
+            } else {
+                RefServerEntity serverEntity = new RefServerEntity(entity, 0, 0, 0, false);
+                nmsPlayer.playerConnection.sendPacket(serverEntity.createPacket());
+            }
+            if (function != null) {
+                function.accept(bukkitEntity);
+                refreshFakeEntity(bukkitEntity, player);
+            }
+        }
+        return bukkitEntity;
+    }
+
+    /**
+     * 刷新虚拟实体数据.
+     *
+     * @param entity 待刷新实体.
+     * @param player 待接收玩家.
+     */
+    public static void refreshFakeEntity(
+            @NotNull Entity entity,
+            @NotNull Player player
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntityMetadata packet;
+            if (METADATA_NEED_VALUE_LIST) {
+                RefSynchedEntityData entityData = nmsEntity.getEntityData();
+                List<RefSynchedEntityData$DataValue> dataList = entityData.packDirty();
+                if (dataList == null) {
+                    dataList = entityData.getNonDefaultValues();
+                }
+                packet = new RefPacketPlayOutEntityMetadata(nmsEntity.getId(), dataList);
+            } else {
+                packet = new RefPacketPlayOutEntityMetadata(nmsEntity.getId(), nmsEntity.getEntityData(), true);
+            }
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    /**
+     * 移除实体虚拟显示名.
+     *
+     * @param entity 待设置实体.
+     * @param player 待接收玩家.
+     */
+    public static void removeFakeCustomName(
+            @NotNull Entity entity,
+            @NotNull Player player
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntityMetadata packet;
+            RefSynchedEntityData entityData = new RefSynchedEntityData(nmsEntity);
+            defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_VISIBLE, entity.isCustomNameVisible());
+            if (COMPONENT_NAME_SUPPORT) {
+                defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_COMPONENT, Optional.of(nmsEntity.getCustomName()));
+            } else {
+                defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_STRING, entity.getCustomName());
+            }
+            if (METADATA_NEED_VALUE_LIST) {
+                List<RefSynchedEntityData$DataValue> dataList = entityData.packDirty();
+                if (dataList == null) {
+                    dataList = entityData.getNonDefaultValues();
+                }
+                packet = new RefPacketPlayOutEntityMetadata(nmsEntity.getId(), dataList);
+            } else {
+                packet = new RefPacketPlayOutEntityMetadata(nmsEntity.getId(), entityData, true);
+            }
+
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    /**
+     * 为实体设置虚拟显示名.
+     *
+     * @param entity 待设置实体.
+     * @param player 待接收玩家.
+     * @param name   显示名.
+     */
+    public static void setFakeCustomName(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            @NotNull String name
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntityMetadata packet;
+            RefSynchedEntityData entityData = new RefSynchedEntityData(nmsEntity);
+            defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_VISIBLE, true);
+            if (COMPONENT_NAME_SUPPORT) {
+                defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_COMPONENT, Optional.of(EntityUtils.toNms(new TextComponent(name))));
+            } else {
+                defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_STRING, name);
+            }
+            if (METADATA_NEED_VALUE_LIST) {
+                List<RefSynchedEntityData$DataValue> dataList = entityData.packDirty();
+                if (dataList == null) {
+                    dataList = entityData.getNonDefaultValues();
+                }
+                packet = new RefPacketPlayOutEntityMetadata(nmsEntity.getId(), dataList);
+            } else {
+                packet = new RefPacketPlayOutEntityMetadata(nmsEntity.getId(), entityData, true);
+            }
+
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    /**
+     * 为实体设置虚拟显示名.
+     *
+     * @param entity 待设置实体.
+     * @param player 待接收玩家.
+     * @param name   显示名.
+     */
+    public static void setFakeCustomName(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            @NotNull BaseComponent name
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntityMetadata packet;
+            RefSynchedEntityData entityData = new RefSynchedEntityData(nmsEntity);
+            defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_VISIBLE, true);
+            if (COMPONENT_NAME_SUPPORT) {
+                defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_COMPONENT, Optional.of(EntityUtils.toNms(name)));
+            } else {
+                defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_STRING, name.toLegacyText());
+            }
+            if (METADATA_NEED_VALUE_LIST) {
+                List<RefSynchedEntityData$DataValue> dataList = entityData.packDirty();
+                if (dataList == null) {
+                    dataList = entityData.getNonDefaultValues();
+                }
+                packet = new RefPacketPlayOutEntityMetadata(nmsEntity.getId(), dataList);
+            } else {
+                packet = new RefPacketPlayOutEntityMetadata(nmsEntity.getId(), entityData, true);
+            }
+
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    private static <T> void defineAndForceSet(
+            @NotNull RefSynchedEntityData entityData,
+            @NotNull RefEntityDataAccessor<T> key,
+            @NotNull T value
+    ) {
+        entityData.define(key, value);
+        if (FORCE_DATA_SET) {
+            entityData.set(key, value, true);
+        } else {
+            entityData.set(key, value);
         }
     }
 

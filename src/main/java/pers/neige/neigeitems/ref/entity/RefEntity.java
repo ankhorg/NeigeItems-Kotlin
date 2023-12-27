@@ -5,9 +5,14 @@ import org.inksnow.ankhinvoke.comments.HandleBy;
 import pers.neige.neigeitems.ref.argument.RefAnchor;
 import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
+import pers.neige.neigeitems.ref.network.RefPacket;
+import pers.neige.neigeitems.ref.network.syncher.RefEntityDataAccessor;
+import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData;
 import pers.neige.neigeitems.ref.world.RefAABB;
 import pers.neige.neigeitems.ref.world.RefVec3;
 import pers.neige.neigeitems.ref.world.RefWorld;
+
+import java.util.Optional;
 
 @HandleBy(reference = "net/minecraft/world/entity/Entity", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/Entity", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
@@ -33,6 +38,23 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;level:Lnet/minecraft/world/level/Level;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;world:Lnet/minecraft/server/v1_12_R1/World;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefWorld world;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;aB:Lnet/minecraft/server/v1_12_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public static final RefEntityDataAccessor<String> DATA_CUSTOM_NAME_STRING = null;
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;DATA_CUSTOM_NAME:Lnet/minecraft/network/syncher/EntityDataAccessor;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R2/Entity;aq:Lnet/minecraft/server/v1_16_R2/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_16_R2,v1_17_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/Entity;ax:Lnet/minecraft/server/v1_16_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_16_R1,v1_16_R2)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/Entity;az:Lnet/minecraft/server/v1_14_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_14_R1,v1_16_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/Entity;aE:Lnet/minecraft/server/v1_13_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_13_R1,v1_14_R1)")
+    public static final RefEntityDataAccessor<Optional<RefComponent>> DATA_CUSTOM_NAME_COMPONENT = null;
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;DATA_CUSTOM_NAME_VISIBLE:Lnet/minecraft/network/syncher/EntityDataAccessor;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R2/Entity;ar:Lnet/minecraft/server/v1_16_R2/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_16_R2,v1_17_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/Entity;ay:Lnet/minecraft/server/v1_16_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_16_R1,v1_16_R2)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/Entity;aA:Lnet/minecraft/server/v1_14_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_14_R1,v1_16_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/Entity;aF:Lnet/minecraft/server/v1_13_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_13_R1,v1_14_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;aC:Lnet/minecraft/server/v1_12_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public static final RefEntityDataAccessor<Boolean> DATA_CUSTOM_NAME_VISIBLE = null;
 
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getBukkitEntity()Lorg/bukkit/craftbukkit/v1_17_R1/entity/CraftEntity;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;getBukkitEntity()Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftEntity;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
@@ -149,4 +171,18 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/Entity;getEntityType()Lnet/minecraft/server/v1_14_R1/EntityTypes;", predicates = "craftbukkit_version:[v1_14_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/Entity;P()Lnet/minecraft/server/v1_13_R1/EntityTypes;", predicates = "craftbukkit_version:[v1_13_R1,v1_14_R1)")
     public native RefEntityType<?> getType();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getEntityData()Lnet/minecraft/network/syncher/SynchedEntityData;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;getDataWatcher()Lnet/minecraft/server/v1_12_R1/DataWatcher;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
+    public native RefSynchedEntityData getEntityData();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getAddEntityPacket()Lnet/minecraft/network/protocol/Packet;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/Entity;P()Lnet/minecraft/server/v1_15_R1/Packet;", predicates = "craftbukkit_version:[v1_16_R1,v1_17_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/Entity;L()Lnet/minecraft/server/v1_15_R1/Packet;", predicates = "craftbukkit_version:[v1_15_R1,v1_16_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/Entity;N()Lnet/minecraft/server/v1_14_R1/Packet;", predicates = "craftbukkit_version:[v1_14_R1,v1_15_R1)")
+    public native RefPacket<?> getAddEntityPacket();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getId()I", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;getId()I", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
+    public native int getId();
 }

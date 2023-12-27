@@ -3,6 +3,7 @@ package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -14,9 +15,9 @@ import pers.neige.neigeitems.ref.entity.RefCraftEntity;
 import pers.neige.neigeitems.ref.entity.RefEntity;
 import pers.neige.neigeitems.ref.entity.RefEntityItem;
 import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
+import pers.neige.neigeitems.ref.server.level.RefWorldServer;
 import pers.neige.neigeitems.ref.world.RefAABB;
 import pers.neige.neigeitems.ref.world.RefCraftWorld;
-import pers.neige.neigeitems.ref.world.RefWorldServer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,14 @@ public class WorldUtils {
      * 1.19.4+ 版本起, Chunk 类移除 bukkitChunk 字段, 需要自行构建 CraftChunk 实例.
      */
     private static final boolean REMOVE_BUKKIT_CHUNK_FIELD = CbVersion.v1_19_R3.isSupport();
+    /**
+     * 1.17+ 版本起, spawnEntity 方法添加 boolean 类型 randomizeData 参数, 用于随机生成实体数据.
+     */
+    private static final boolean RANDOMIZE_DATA_SUPPORT = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.20.2+ 版本起, addEntity 方法的 function 参数由 org.bukkit.util.Consumer 变更为 java.util.function.Consumer.
+     */
+    private static final boolean JAVA_CONSUMER_SUPPORT = CbVersion.v1_20_R2.isSupport();
 
     /**
      * 获取世界中掉落物实体的最大存活时长(tick).
@@ -396,5 +405,91 @@ public class WorldUtils {
             });
         }
         return entities;
+    }
+
+    /**
+     * 在指定世界的指定坐标生成一个实体, 生成实体前对实体进行一些操作.
+     *
+     * @param location 待生成坐标.
+     * @param type     实体类型.
+     * @param function 生成前对实体执行的操作.
+     * @return 生成的实体.
+     */
+    @Nullable
+    public static Entity spawnEntity(
+            @NotNull Location location,
+            @NotNull EntityType type,
+            @Nullable Consumer<Entity> function
+    ) {
+        return spawnEntity(location, type, true, function, CreatureSpawnEvent.SpawnReason.CUSTOM);
+    }
+
+    /**
+     * 在指定世界的指定坐标生成一个实体, 生成实体前对实体进行一些操作.
+     *
+     * @param location      待生成坐标.
+     * @param type          实体类型.
+     * @param randomizeData 是否随机实体数据(仅在1.17+版本生效).
+     * @param function      生成前对实体执行的操作.
+     * @return 生成的实体.
+     */
+    @Nullable
+    public static Entity spawnEntity(
+            @NotNull Location location,
+            @NotNull EntityType type,
+            boolean randomizeData,
+            @Nullable Consumer<Entity> function
+    ) {
+        return spawnEntity(location, type, randomizeData, function, CreatureSpawnEvent.SpawnReason.CUSTOM);
+    }
+
+    /**
+     * 在指定世界的指定坐标生成一个实体, 生成实体前对实体进行一些操作.
+     *
+     * @param location      待生成坐标.
+     * @param type          实体类型.
+     * @param randomizeData 是否随机实体数据(仅在1.17+版本生效).
+     * @param function      生成前对实体执行的操作.
+     * @param spawnReason   生成原因.
+     * @return 生成的实体.
+     */
+    @Nullable
+    public static Entity spawnEntity(
+            @NotNull Location location,
+            @NotNull EntityType type,
+            boolean randomizeData,
+            @Nullable Consumer<Entity> function,
+            @Nullable CreatureSpawnEvent.SpawnReason spawnReason
+    ) {
+        World world = location.getWorld();
+        if (world == null) return null;
+        RefCraftWorld craftWorld = (RefCraftWorld) (Object) world;
+
+        RefEntity entity;
+        if (RANDOMIZE_DATA_SUPPORT) {
+            entity = craftWorld.createEntity(location, type.getEntityClass(), randomizeData);
+        } else {
+            entity = craftWorld.createEntity(location, type.getEntityClass());
+        }
+        Entity bukkitEntity = entity.getBukkitEntity();
+
+        if (RANDOMIZE_DATA_SUPPORT) {
+            if (JAVA_CONSUMER_SUPPORT) {
+                craftWorld.addEntity(entity, spawnReason, function, randomizeData);
+            } else {
+                if (function != null) {
+                    craftWorld.addEntity(entity, spawnReason, (org.bukkit.util.Consumer<Entity>) function::accept, randomizeData);
+                } else {
+                    craftWorld.addEntity(entity, spawnReason, (org.bukkit.util.Consumer<Entity>) null, randomizeData);
+                }
+            }
+        } else {
+            if (function != null) {
+                craftWorld.addEntity(entity, spawnReason, function::accept);
+            } else {
+                craftWorld.addEntity(entity, spawnReason, null);
+            }
+        }
+        return bukkitEntity;
     }
 }
