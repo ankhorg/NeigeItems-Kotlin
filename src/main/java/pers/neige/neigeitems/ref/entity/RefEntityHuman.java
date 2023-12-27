@@ -9,7 +9,8 @@ public abstract class RefEntityHuman extends RefEntityLiving {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityHuman;getAbsorptionHearts()F", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native float getAbsorptionAmount();
 
-    @HandleBy(reference = "Lnet/minecraft/world/entity/player/Player;setAbsorptionAmount(F)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/player/Player;internalSetAbsorptionAmount(F)V", useAccessor = true, predicates = "craftbukkit_version:[v1_20_R2,)")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/player/Player;setAbsorptionAmount(F)V", predicates = "craftbukkit_version:[v1_17_R1,v1_20_R2)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityHuman;setAbsorptionHearts(F)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native void setAbsorptionAmount(float amount);
 
