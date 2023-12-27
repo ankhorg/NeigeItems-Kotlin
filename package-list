@@ -15,7 +15,6 @@ $dokka.location:pers.neige.neigeitems.lang/LocaleI18n.TranslationProvider///Poin
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.Pos///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.Pos.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.PosRot///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.PosRot.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.Rot///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.Rot.html
-org.inksnow.ankhinvoke.example
 pers.neige.neigeitems
 pers.neige.neigeitems.action
 pers.neige.neigeitems.action.impl
