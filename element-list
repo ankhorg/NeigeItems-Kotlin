@@ -69,7 +69,9 @@ pers.neige.neigeitems.ref.item.potion
 pers.neige.neigeitems.ref.item.shield
 pers.neige.neigeitems.ref.nbt
 pers.neige.neigeitems.ref.network
+pers.neige.neigeitems.ref.network.syncher
 pers.neige.neigeitems.ref.registry
+pers.neige.neigeitems.ref.server.level
 pers.neige.neigeitems.ref.server.players
 pers.neige.neigeitems.ref.sounds
 pers.neige.neigeitems.ref.tags
