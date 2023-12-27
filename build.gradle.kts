@@ -132,13 +132,15 @@ dependencies {
 tasks {
     withType<ShadowJar> {
         archiveClassifier.set("")
+
+        mergeServiceFiles()
         exclude("META-INF/maven/**")
         exclude("META-INF/tf/**")
         exclude("module-info.java")
         // kotlin
         relocate("kotlin.", "pers.neige.neigeitems.libs.kotlin.")
         // ankh-invoke
-//        relocate("org.inksnow.ankhinvoke", "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke")
+        relocate("org.inksnow.ankhinvoke", "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke")
         // taboolib
         relocate("taboolib", "pers.neige.neigeitems.taboolib")
         // bstats
@@ -327,6 +329,7 @@ tasks.named("assemble") {
 tasks.create<BuildMappingsTask>("build-mappings") {
     registryName = "neigeitems"
     outputDirectory = buildDir.resolve("cache/build-mappings")
+    ankhInvokePackage = "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke"
 
     mapping("nms", "1.20.4") {
         predicates = arrayOf("craftbukkit_version:{v1_20_R3}")
@@ -355,6 +358,7 @@ tasks.processResources {
 tasks.create<ApplyReferenceTask>("apply-reference") {
     dependsOn(tasks.getByName("shadowJar"))
 
+    ankhInvokePackage = "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke"
     appendReferencePackage("pers.neige.neigeitems.ref")
     inputJars = tasks.getByName("shadowJar").outputs.files
     outputJar = buildDir.resolve("libs/NeigeItems-$version-shaded.jar")
