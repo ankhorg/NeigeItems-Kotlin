@@ -360,6 +360,21 @@ public class EntityUtils {
         }
     }
 
+    /**
+     * 获取实体ID.
+     *
+     * @param entity 待获取实体.
+     * @return 实体ID.
+     */
+    public static int getId(
+            @NotNull Entity entity
+    ) {
+        if (entity instanceof RefCraftEntity) {
+            return ((RefCraftEntity) entity).getHandle().getId();
+        }
+        return 0;
+    }
+
     protected static RefComponent toNms(BaseComponent component) {
         return RefChatSerializer.fromJson(ComponentSerializer.toString(component));
     }

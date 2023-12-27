@@ -7,6 +7,10 @@ import pers.neige.neigeitems.ref.network.RefPacket;
 @HandleBy(reference = "net/minecraft/server/level/ServerEntity", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/EntityTrackerEntry", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public class RefServerEntity {
+    @HandleBy(reference = "Lnet/minecraft/server/level/ServerEntity;entity:Lnet/minecraft/world/entity/Entity;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityTrackerEntry;tracker:Lnet/minecraft/server/v1_12_R1/Entity;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
+    public final RefEntity entity;
+
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityTrackerEntry;<init>(Lnet/minecraft/server/v1_12_R1/Entity;IIIZ)V", predicates = "craftbukkit_version:[v1_12_R1,v1_14_R1)")
     public RefServerEntity(RefEntity entity, int i, int j, int k, boolean flag) {
         throw new UnsupportedOperationException();

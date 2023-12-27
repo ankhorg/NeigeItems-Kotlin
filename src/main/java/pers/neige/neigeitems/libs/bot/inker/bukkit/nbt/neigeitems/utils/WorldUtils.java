@@ -15,7 +15,10 @@ import pers.neige.neigeitems.ref.entity.RefCraftEntity;
 import pers.neige.neigeitems.ref.entity.RefEntity;
 import pers.neige.neigeitems.ref.entity.RefEntityItem;
 import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
+import pers.neige.neigeitems.ref.server.level.RefServerEntity;
+import pers.neige.neigeitems.ref.server.level.RefTrackedEntity;
 import pers.neige.neigeitems.ref.server.level.RefWorldServer;
+import pers.neige.neigeitems.ref.util.RefInt2ObjectMap;
 import pers.neige.neigeitems.ref.world.RefAABB;
 import pers.neige.neigeitems.ref.world.RefCraftWorld;
 
@@ -45,6 +48,10 @@ public class WorldUtils {
      * 1.20.2+ 版本起, addEntity 方法的 function 参数由 org.bukkit.util.Consumer 变更为 java.util.function.Consumer.
      */
     private static final boolean JAVA_CONSUMER_SUPPORT = CbVersion.v1_20_R2.isSupport();
+    /**
+     * 1.14+ 版本起, WorldServer 类移除 tracker 字段.
+     */
+    private static final boolean REMOVED_TRACKER = CbVersion.v1_14_R1.isSupport();
 
     /**
      * 获取世界中掉落物实体的最大存活时长(tick).
@@ -491,5 +498,46 @@ public class WorldUtils {
             }
         }
         return bukkitEntity;
+    }
+
+    /**
+     * 通过实体ID获取对应的实体.
+     *
+     * @param world 实体所在世界.
+     * @param id    实体ID.
+     * @return 对应的实体.
+     */
+    @Nullable
+    public static Entity getEntityFromID(
+            @NotNull World world,
+            int id
+    ) {
+        if ((Object) world instanceof RefCraftWorld) {
+            RefEntity entity = getEntityFromIDByNms(((RefCraftWorld) (Object) world).getHandle(), id);
+            if (entity != null) {
+                return entity.getBukkitEntity();
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    protected static RefEntity getEntityFromIDByNms(
+            @NotNull RefWorldServer world,
+            int id
+    ) {
+        RefServerEntity serverEntity = null;
+        if (REMOVED_TRACKER) {
+            RefTrackedEntity trackedEntity = ((RefInt2ObjectMap<RefTrackedEntity>) world.getChunkSource().chunkMap.entityMap).get(id);
+            if (trackedEntity != null) {
+                serverEntity = trackedEntity.serverEntity;
+            }
+        } else {
+            serverEntity = world.tracker.trackedEntities.get(id);
+        }
+        if (serverEntity != null) {
+            return serverEntity.entity;
+        }
+        return null;
     }
 }

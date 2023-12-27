@@ -25,14 +25,17 @@ import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
 import pers.neige.neigeitems.ref.network.*;
 import pers.neige.neigeitems.ref.network.syncher.RefEntityDataAccessor;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData;
+import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataItem;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataValue;
 import pers.neige.neigeitems.ref.server.level.RefServerEntity;
+import pers.neige.neigeitems.ref.server.level.RefWorldServer;
 import pers.neige.neigeitems.ref.world.RefCraftWorld;
 import pers.neige.neigeitems.ref.world.RefVec3;
 import pers.neige.neigeitems.ref.world.RefWorld;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 public class EntityPlayerUtils {
@@ -107,6 +110,10 @@ public class EntityPlayerUtils {
      * 1.19.4+ 版本起, SynchedEntityData 下 set 方法添加 boolean 类型 force 参数, 用于强制设置.
      */
     private static final boolean FORCE_DATA_SET = CbVersion.v1_19_R3.isSupport();
+    /**
+     * 1.14+ 版本起, WorldServer 类移除 tracker 字段.
+     */
+    private static final boolean REMOVED_TRACKER = CbVersion.v1_14_R1.isSupport();
 
     /**
      * 让指定玩家攻击指定实体.
@@ -761,6 +768,80 @@ public class EntityPlayerUtils {
             }
 
             nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    public static void setFakeCustomName(
+            @NotNull World world,
+            @NotNull Object packetObject,
+            @NotNull BaseComponent name
+    ) {
+        if (packetObject instanceof RefPacketPlayOutEntityMetadata) {
+            RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
+
+            RefWorldServer worldServer = ((RefCraftWorld) (Object) world).getHandle();
+            int entityId = packet.id;
+            RefEntity entity = WorldUtils.getEntityFromIDByNms(worldServer, entityId);
+
+            RefSynchedEntityData entityData = new RefSynchedEntityData(entity);
+            if (COMPONENT_NAME_SUPPORT) {
+                defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_COMPONENT, Optional.of(EntityUtils.toNms(name)));
+            } else {
+                defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_STRING, name.toLegacyText());
+            }
+            if (METADATA_NEED_VALUE_LIST) {
+                boolean setCustomVisible = true;
+                List<RefSynchedEntityData$DataValue> result = new CopyOnWriteArrayList<>();
+                for (RefSynchedEntityData$DataValue next : packet.packedItems1) {
+                    if (next.id() == RefEntity.DATA_CUSTOM_NAME_VISIBLE.getId()) {
+                        setCustomVisible = false;
+                        result.add(next);
+                    } else {
+                        if (COMPONENT_NAME_SUPPORT) {
+                            if (next.id() != RefEntity.DATA_CUSTOM_NAME_COMPONENT.getId()) {
+                                result.add(next);
+                            }
+                        } else {
+                            if (next.id() != RefEntity.DATA_CUSTOM_NAME_STRING.getId()) {
+                                result.add(next);
+                            }
+                        }
+                    }
+                }
+                if (setCustomVisible) {
+                    defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_VISIBLE, true);
+                }
+                List<RefSynchedEntityData$DataValue> dataList = entityData.packDirty();
+                if (dataList == null) {
+                    dataList = entityData.getNonDefaultValues();
+                }
+                result.addAll(new RefPacketPlayOutEntityMetadata(entityId, dataList).packedItems1);
+                packet.packedItems1 = result;
+            } else {
+                boolean setCustomVisible = true;
+                List<RefSynchedEntityData$DataItem> result = new CopyOnWriteArrayList<>();
+                for (RefSynchedEntityData$DataItem next : packet.packedItems0) {
+                    if (next.getAccessor() == RefEntity.DATA_CUSTOM_NAME_VISIBLE) {
+                        setCustomVisible = false;
+                        result.add(next);
+                    } else {
+                        if (COMPONENT_NAME_SUPPORT) {
+                            if (next.getAccessor() != RefEntity.DATA_CUSTOM_NAME_COMPONENT) {
+                                result.add(next);
+                            }
+                        } else {
+                            if (next.getAccessor() != RefEntity.DATA_CUSTOM_NAME_STRING) {
+                                result.add(next);
+                            }
+                        }
+                    }
+                }
+                if (setCustomVisible) {
+                    defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_VISIBLE, true);
+                }
+                result.addAll(new RefPacketPlayOutEntityMetadata(entityId, entityData, true).packedItems0);
+                packet.packedItems0 = result;
+            }
         }
     }
 
