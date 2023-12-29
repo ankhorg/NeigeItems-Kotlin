@@ -1,5 +1,6 @@
 package pers.neige.neigeitems
 
+import net.bytebuddy.implementation.bytecode.Throw
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -40,6 +41,25 @@ object NeigeItems : Plugin() {
             return
         }
 
+        var safe = true
+
+        if (!checkMagicUtils("DamageEventUtils")) safe = false
+        if (!checkMagicUtils("EnchantmentUtils")) safe = false
+        if (!checkMagicUtils("EntityItemUtils")) safe = false
+        if (!checkMagicUtils("EntityPlayerUtils")) safe = false
+        if (!checkMagicUtils("EntityUtils")) safe = false
+        if (!checkMagicUtils("ServerUtils")) safe = false
+        if (!checkMagicUtils("TranslationUtils")) safe = false
+        if (!checkMagicUtils("WorldUtils")) safe = false
+
+        if (!safe) {
+            val pluginManager = Bukkit.getPluginManager()
+            pluginManager.getPlugin("NeigeItems")?.let {
+                pluginManager.disablePlugin(it)
+            }
+            return
+        }
+
         ConfigManager.saveResource()
         LocaleI18n.init()
         scanner = ClassScanner(
@@ -51,6 +71,18 @@ object NeigeItems : Plugin() {
             )
         )
         scanner!!.onEnable()
+    }
+
+    private fun checkMagicUtils(className: String): Boolean {
+        try {
+            Class.forName("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.$className")
+            return true
+        } catch (error: Throwable) {
+            plugin.logger.warning("$className 类未正常加载, 这可能造成不可预知的错误, 请联系作者修复")
+            plugin.logger.warning("class $className did not load properly, which may cause unpredictable errors. Please contact the author for repair.")
+            error.printStackTrace()
+            return false
+        }
     }
 
     override fun onDisable() {

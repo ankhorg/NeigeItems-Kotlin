@@ -19,13 +19,17 @@ const ScriptUtils = Packages.pers.neige.neigeitems.utils.ScriptUtils
 const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
 const StringUtils = Packages.pers.neige.neigeitems.utils.StringUtils
 
+const DamageEventUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.DamageEventUtils
 const EnchantmentUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EnchantmentUtils
 const EntityUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityUtils
 const EntityItemUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityItemUtils
 const EntityPlayerUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils
 const ServerUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ServerUtils
-const WorldUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 const TranslationUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
+const WorldUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
+const CommandUtils = Packages.pers.neige.neigeitems.utils.CommandUtils
+const ListenerUtils = Packages.pers.neige.neigeitems.utils.ListenerUtils
+const ListUtils = Packages.pers.neige.neigeitems.utils.ListUtils
 const SchedulerUtils = Packages.pers.neige.neigeitems.utils.SchedulerUtils
 
 const EnumHand = Packages.pers.neige.neigeitems.EnumHand
