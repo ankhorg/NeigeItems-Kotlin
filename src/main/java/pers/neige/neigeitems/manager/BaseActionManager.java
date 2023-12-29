@@ -356,7 +356,6 @@ public abstract class BaseActionManager {
         addConsumer("commandNoColor", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(player, HookerManager.papiColor(player, content)));
             SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(player, HookerManager.papi(player, content)));
         });
         // 后台执行指令
