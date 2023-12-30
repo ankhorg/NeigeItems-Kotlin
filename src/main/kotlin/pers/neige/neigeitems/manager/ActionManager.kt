@@ -128,7 +128,7 @@ object ActionManager : BaseActionManager(plugin) {
             when (result.type) {
                 ResultType.DELAY -> {
                     runLater((result as DelayResult).delay.toLong()) {
-                        runAction(action.subList(index + 1, action.lastIndex), context)
+                        runAction(action.subList(index + 1, action.size), context)
                     }
                     return Results.SUCCESS
                 }
