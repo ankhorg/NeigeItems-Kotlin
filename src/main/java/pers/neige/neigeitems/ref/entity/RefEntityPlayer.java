@@ -15,7 +15,7 @@ public final class RefEntityPlayer extends RefEntityHuman {
 
     @HandleBy(reference = "Lnet/minecraft/server/level/ServerPlayer;connection:Lnet/minecraft/server/network/ServerGamePacketListenerImpl;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityPlayer;playerConnection:Lnet/minecraft/server/v1_12_R1/PlayerConnection;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
-    public final RefPlayerConnection playerConnection = null;
+    public RefPlayerConnection playerConnection = null;
 
     @HandleBy(reference = "Lnet/minecraft/server/level/ServerPlayer;lookAt(Lnet/minecraft/commands/arguments/EntityAnchorArgument$Anchor;Lnet/minecraft/world/phys/Vec3;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native void lookAt(RefAnchor anchorPoint, RefVec3 target);

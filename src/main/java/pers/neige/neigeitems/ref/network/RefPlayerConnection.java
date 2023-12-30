@@ -8,7 +8,8 @@ import java.util.Set;
 @HandleBy(reference = "net/minecraft/server/network/ServerGamePacketListenerImpl", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/PlayerConnection", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public final class RefPlayerConnection {
-    @HandleBy(reference = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;connection:Lnet/minecraft/network/Connection;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/network/ServerCommonPacketListenerImpl;connection:Lnet/minecraft/network/Connection;", predicates = "craftbukkit_version:[v1_20_R2,)")
+    @HandleBy(reference = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;connection:Lnet/minecraft/network/Connection;", predicates = "craftbukkit_version:[v1_17_R1,v1_20_R2)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/PlayerConnection;networkManager:Lnet/minecraft/server/v1_12_R1/NetworkManager;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public final RefNetworkManager networkManager = null;
     @HandleBy(reference = "Lnet/minecraft/server/network/ServerGamePacketListenerImpl;awaitingTeleport:I", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
