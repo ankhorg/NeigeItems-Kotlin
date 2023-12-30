@@ -163,50 +163,56 @@ object LocaleI18n {
             || file.sha1() != sha1File.readText()
         ) {
             plugin.logger.info("Try to find $simpleFileName")
-            // 所有版本信息
-            "https://launchermeta.mojang.com/mc/game/version_manifest.json".connectAndParseObject()
-                .getJSONArray("versions")
-                // 获取当前版本信息
-                .first {
-                    (it as JSONObject).getString("id") == minecraftVersion
-                }?.let { ver ->
-                    val hash = (ver as JSONObject)
-                        .getString("url")
-                        .connectAndParseObject()
-                        // 资源索引
-                        .getJSONObject("assetIndex")
-                        .getString("url")
-                        .connectAndParseObject()
-                        .getJSONObject("objects")
-                        // 对应语言文件
-                        .getJSONObject(fileName)
-                        .getString("hash")
-                    try {
-                        plugin.logger.info("Downloading $simpleFileName")
-                        // 写入sha1
-                        sha1File.createFile().writeText(hash)
-                        // 写入文件
-                        file.createFile().writeText(
-                            URL(
-                                "https://resources.download.minecraft.net/${
-                                    hash.substring(
-                                        0,
-                                        2
-                                    )
-                                }/$hash"
-                            ).readText()
-                        )
-                        // sha1校验
-                        if (file.sha1() != hash) {
-                            sha1File.delete()
-                            file.delete()
-                            throw IllegalStateException("file " + file.name + " sha1 not match.")
+            try {
+                // 所有版本信息
+                "https://launchermeta.mojang.com/mc/game/version_manifest.json".connectAndParseObject()
+                    .getJSONArray("versions")
+                    // 获取当前版本信息
+                    .first {
+                        (it as JSONObject).getString("id") == minecraftVersion
+                    }?.let { ver ->
+                        val hash = (ver as JSONObject)
+                            .getString("url")
+                            .connectAndParseObject()
+                            // 资源索引
+                            .getJSONObject("assetIndex")
+                            .getString("url")
+                            .connectAndParseObject()
+                            .getJSONObject("objects")
+                            // 对应语言文件
+                            .getJSONObject(fileName)
+                            .getString("hash")
+                        try {
+                            plugin.logger.info("Downloading $simpleFileName")
+                            // 写入sha1
+                            sha1File.createFile().writeText(hash)
+                            // 写入文件
+                            file.createFile().writeText(
+                                URL(
+                                    "https://resources.download.minecraft.net/${
+                                        hash.substring(
+                                            0,
+                                            2
+                                        )
+                                    }/$hash"
+                                ).readText()
+                            )
+                            // sha1校验
+                            if (file.sha1() != hash) {
+                                sha1File.delete()
+                                file.delete()
+                                throw IllegalStateException("file " + file.name + " sha1 not match.")
+                            }
+                            plugin.logger.info("Successfully downloaded $simpleFileName")
+                        } catch (e: IOException) {
+                            plugin.logger.info("Failed to download $simpleFileName")
                         }
-                        plugin.logger.info("Successfully downloaded $simpleFileName")
-                    } catch (e: IOException) {
-                        plugin.logger.info("Failed to download $simpleFileName")
                     }
-                }
+            } catch(error: Throwable) {
+                plugin.logger.warning("Error occurred while downloading $simpleFileName")
+                error.printStackTrace()
+                return
+            }
         }
         provider = file.let { if (CbVersion.v1_13_R1.isSupport) JsonProvider(it) else PropertiesProvider(it) }
     }
