@@ -6,6 +6,7 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import org.inksnow.ankhinvoke.bukkit.AnkhInvokeBukkit
+import org.inksnow.ankhinvoke.bukkit.injector.JarTransformInjector
 import pers.neige.neigeitems.lang.LocaleI18n
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import pers.neige.neigeitems.manager.ConfigManager
@@ -93,15 +94,22 @@ object NeigeItems : Plugin() {
     fun init() {
         try {
             println("[NeigeItems] loading ankh-invoke")
-            AnkhInvokeBukkit.forBukkit((Class.forName("pers.neige.neigeitems.taboolib.platform.BukkitPlugin") as Class<out JavaPlugin?>))
-                .reference() /**/
-                .appendPackage("pers.neige.neigeitems.ref") /**/
+            val bukkitPluginClass = Class.forName("pers.neige.neigeitems.taboolib.platform.BukkitPlugin")
+                .asSubclass(JavaPlugin::class.java)
+            AnkhInvokeBukkit.forBukkit(bukkitPluginClass)
+                .reference()
+                .appendPackage("pers.neige.neigeitems.ref")
                 .build()
-                .inject() /**/
-                .urlInjector((Class.forName("pers.neige.neigeitems.taboolib.platform.BukkitPlugin").classLoader as URLClassLoader)) /**/
+                .inject()
+                .injector(
+                    JarTransformInjector.Builder()
+                        .classLoader(bukkitPluginClass.classLoader)
+                        .transformPackage("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.")
+                        .build()
+                )
                 .build()
-                .referenceRemap() /**/
-                .setApplyMapRegistry("neigeitems") /**/
+                .referenceRemap()
+                .setApplyMapRegistry("neigeitems")
                 .build()
                 .build()
             println("[NeigeItems] ankh-invoke loaded")

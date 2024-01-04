@@ -14,7 +14,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.10"
     id("org.jetbrains.dokka") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.8-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.10-SNAPSHOT"
 }
 
 val realVersion = version
@@ -98,7 +98,7 @@ dependencies {
 //    compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
 
     // ankh-invoke
-    implementation("org.inksnow:ankh-invoke-bukkit:1.0.8-SNAPSHOT")
+    implementation("org.inksnow:ankh-invoke-bukkit:1.0.10-SNAPSHOT")
 
     // taboolib
     implementation("io.izzel.taboolib:common:$taboolib_version")
