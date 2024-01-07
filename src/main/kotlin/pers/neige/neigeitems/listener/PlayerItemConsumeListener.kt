@@ -45,7 +45,7 @@ object PlayerItemConsumeListener {
                 if (hand == EquipmentSlot.HAND) {
                     player.inventory.setItemInMainHand(itemStack)
                 } else {
-                    player.inventory.setItemInMainHand(itemStack)
+                    player.inventory.setItemInOffHand(itemStack)
                 }
                 return
             }
