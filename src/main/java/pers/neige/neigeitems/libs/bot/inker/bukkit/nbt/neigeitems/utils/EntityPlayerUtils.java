@@ -240,7 +240,7 @@ public class EntityPlayerUtils {
         if ((Object) player instanceof RefCraftPlayer) {
             RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
             RefEnumHand enumHand = toRefEnumHand(hand);
-            RefWorld world = entityPlayer.world;
+            RefWorldServer world = ((RefCraftWorld) (Object) player.getWorld()).getHandle();
             RefNmsItemStack itemStack = entityPlayer.getItemInHand(enumHand);
             entityPlayer.playerInteractManager.useItem(entityPlayer, world, itemStack, enumHand);
         }
