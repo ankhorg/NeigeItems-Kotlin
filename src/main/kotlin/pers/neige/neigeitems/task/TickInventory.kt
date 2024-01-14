@@ -1,4 +1,4 @@
-package pers.neige.neigeitems.listener
+package pers.neige.neigeitems.task
 
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -8,6 +8,7 @@ import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object TickInventory {
+    @JvmStatic
     @Schedule(period = 1, async = true)
     fun schedule() {
         Bukkit.getOnlinePlayers().forEach { player ->

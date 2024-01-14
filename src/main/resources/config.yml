@@ -2,6 +2,7 @@ Language: zh_cn
 Main:
   MMItemsPath: MMItems.yml
   Debug: false
+  UpdateCheck: true
 Messages:
   type:
     # Pack/Items
@@ -44,6 +45,8 @@ Messages:
   invalidMMItem: §bNeige§3Items §7> §7生成MM物品 §f{itemID} §7时出现错误
   invalidRoundingMode: §bNeige§3Items §7> §7未知的取整模式 §f{mode}
   invalidFormula: §bNeige§3Items §7> §7无法执行的计算公式 §f{formula}
+  findNewVersion: '§bNeige§3Items §7> §f发现新版本: {version}'
+  updateLink: '§bNeige§3Items §7> §f链接: {link}'
 Help:
   prefix: |-
     §6====================§eNeigeItems§6====================

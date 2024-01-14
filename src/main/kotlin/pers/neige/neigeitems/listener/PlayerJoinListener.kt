@@ -1,6 +1,27 @@
 package pers.neige.neigeitems.listener
 
+import org.bukkit.event.player.PlayerJoinEvent
+import pers.neige.neigeitems.annotation.Listener
+import pers.neige.neigeitems.task.Updater
+import pers.neige.neigeitems.utils.LangUtils.sendLang
+
 object PlayerJoinListener {
+    @Listener
+    fun listener(event: PlayerJoinEvent) {
+        if (!event.player.isOp) return
+        if (Updater.latestVersion == null || Updater.latestVersion == Updater.currentVersion) return
+        event.player.sendLang(
+            "Messages.findNewVersion", mapOf(
+                Pair("{version}", Updater.latestVersion!!)
+            )
+        )
+        event.player.sendLang(
+            "Messages.updateLink", mapOf(
+                Pair("{link}", "https://github.com/ankhorg/NeigeItems-Kotlin/releases/latest")
+            )
+        )
+    }
+
 //    @Listener
 //    fun listener(event: PlayerJoinEvent) {
 //        EntityPlayerUtils.getChannel(event.player)?.pipeline()
