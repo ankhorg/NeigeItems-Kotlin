@@ -65,15 +65,19 @@ class ItemPlaceholder {
                 "charge" -> {
                     itemTag.getDeepIntOrNull("NeigeItems.charge")?.toString()
                 }
+
                 "maxcharge" -> {
                     itemTag.getDeepIntOrNull("NeigeItems.maxCharge")?.toString()
                 }
+
                 "durability" -> {
                     itemTag.getDeepIntOrNull("NeigeItems.durability")?.toString()
                 }
+
                 "maxdurability" -> {
                     itemTag.getDeepIntOrNull("NeigeItems.maxDurability")?.toString()
                 }
+
                 "itembreak" -> {
                     val info = args.getOrNull(1)?.split("_", limit = 2)
                     val itemBreak = itemTag.getDeepBoolean("NeigeItems.itemBreak", true)
@@ -85,15 +89,18 @@ class ItemPlaceholder {
                         info?.getOrNull(0)
                     }
                 }
+
                 "nbt" -> {
                     itemTag.getDeepStringOrNull(args.getOrNull(1) ?: "")
                 }
+
                 "nbtnumber" -> {
                     val info = args.getOrNull(1)?.split("_", limit = 2)
                     val value = itemTag.getDeepDoubleOrNull(info?.getOrNull(1) ?: "") ?: return@addExpansion null
                     "%.${info?.getOrNull(0)}f".format(value)
 
                 }
+
                 else -> null
             }
         }

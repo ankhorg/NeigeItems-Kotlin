@@ -73,6 +73,7 @@ object Expansion : PlaceholderExpansion {
                                             }
                                         return "true"
                                     }
+
                                     "eval" -> {
                                         val bindings = SimpleBindings()
                                         bindings["player"] = player
@@ -101,6 +102,7 @@ object Expansion : PlaceholderExpansion {
                                             }
                                         return "true"
                                     }
+
                                     "eval" -> {
                                         val bindings = SimpleBindings()
                                         bindings["player"] = player
@@ -117,6 +119,7 @@ object Expansion : PlaceholderExpansion {
                 }
                 return ""
             }
+
             else -> return ""
         }
     }

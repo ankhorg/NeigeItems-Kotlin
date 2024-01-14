@@ -208,7 +208,7 @@ object LocaleI18n {
                             plugin.logger.info("Failed to download $simpleFileName")
                         }
                     }
-            } catch(error: Throwable) {
+            } catch (error: Throwable) {
                 plugin.logger.warning("Error occurred while downloading $simpleFileName")
                 error.printStackTrace()
                 return

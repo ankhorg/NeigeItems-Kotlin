@@ -82,6 +82,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                 configSection.getStringList("static.options.update.protect")
             }
         }
+
         else -> listOf()
     }
 
@@ -96,6 +97,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                 configSection.getStringList("static.options.update.refresh")
             }
         }
+
         else -> listOf()
     }
 
@@ -110,6 +112,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                 configSection.getConfigurationSection("static.options.update.rebuild")?.toMap()
             }
         }
+
         else -> null
     }
 
@@ -361,6 +364,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                         }
                     }
                 }
+
                 is String -> {
                     // 仅指定单个模板ID，进行全局继承
                     ItemManager.getOriginConfig(inheritInfo)?.let { inheritConfigSection ->
@@ -373,6 +377,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                         configSection.coverWith(realConfig)
                     }
                 }
+
                 is List<*> -> {
                     // 顺序继承, 按顺序进行覆盖式继承
                     for (templateId in inheritInfo) {

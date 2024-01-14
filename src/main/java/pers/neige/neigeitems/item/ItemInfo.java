@@ -29,7 +29,7 @@ public final class ItemInfo {
     /**
      * 用于在判断NI物品后返回NI物品信息, 详见ItemUtils#isNiItem
      *
-     * @param itemStack 物品本身
+     * @param itemStack    物品本身
      * @param nbtItemStack NbtItemStack
      * @param itemTag      物品NBT
      * @param neigeItems   NI物品特殊NBT

@@ -315,6 +315,7 @@ class ItemPack(
                         null
                     }
                 }
+
                 else -> {
                     it.toIntOrNull()
                 }
@@ -366,6 +367,7 @@ class ItemPack(
                                 }
                             }
                         }
+
                         HookerManager.easyItemHooker?.hasItem(id) == true -> {
                             HookerManager.easyItemHooker?.getItemStack(id)?.getItems(amount)
                                 ?.forEach { itemStacks.add(it) }
@@ -382,6 +384,7 @@ class ItemPack(
                         ItemManager.hasItem(id) -> {
                             ItemManager.getItemStack(id, player, data)?.getItems(amount)?.forEach { itemStacks.add(it) }
                         }
+
                         HookerManager.easyItemHooker?.hasItem(id) == true -> {
                             HookerManager.easyItemHooker?.getItemStack(id)?.let { itemStack ->
                                 repeat(amount) {
@@ -389,6 +392,7 @@ class ItemPack(
                                 }
                             }
                         }
+
                         else -> {
                             HookerManager.mythicMobsHooker?.getItemStackSync(id)?.let { itemStack ->
                                 repeat(amount) {

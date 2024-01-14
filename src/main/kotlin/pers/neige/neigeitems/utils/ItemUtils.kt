@@ -110,6 +110,7 @@ object ItemUtils {
                     else -> this
                 }
             }
+
             else -> this
         }
     }
@@ -140,34 +141,44 @@ object ItemUtils {
             this.startsWith("(Byte) ") -> {
                 this.substring(7, this.length).toByteOrNull()?.let { NbtByte.valueOf(it) } ?: NbtString.valueOf(this)
             }
+
             this.startsWith("(Short) ") -> {
                 this.substring(8, this.length).toShortOrNull()?.let { NbtShort.valueOf(it) } ?: NbtString.valueOf(this)
             }
+
             this.startsWith("(Int) ") -> {
                 this.substring(6, this.length).toIntOrNull()?.let { NbtInt.valueOf(it) } ?: NbtString.valueOf(this)
             }
+
             this.startsWith("(Long) ") -> {
                 this.substring(7, this.length).toLongOrNull()?.let { NbtLong.valueOf(it) } ?: NbtString.valueOf(this)
             }
+
             this.startsWith("(Float) ") -> {
                 this.substring(8, this.length).toFloatOrNull()?.let { NbtFloat.valueOf(it) } ?: NbtString.valueOf(this)
             }
+
             this.startsWith("(Double) ") -> {
                 this.substring(9, this.length).toDoubleOrNull()?.let { NbtDouble.valueOf(it) }
                     ?: NbtString.valueOf(this)
             }
+
             this.startsWith("[") && this.endsWith("]") -> {
                 val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
                 when {
                     list.all { it is Byte } -> NbtByteArray(
                         ByteArray(list.size) { list[it] as Byte })
+
                     list.all { it is Int } -> NbtIntArray(
                         IntArray(list.size) { list[it] as Int })
+
                     list.all { it is Long } -> NbtLongArray(
                         LongArray(list.size) { list[it] as Long })
+
                     else -> NbtString.valueOf(this)
                 }
             }
+
             else -> NbtString.valueOf(this)
         }
     }
@@ -196,8 +207,10 @@ object ItemUtils {
                 when {
                     list.all { it is Byte } -> NbtByteArray(
                         ByteArray(list.size) { list[it] as Byte })
+
                     list.all { it is Int } -> NbtIntArray(
                         IntArray(list.size) { list[it] as Int })
+
                     else -> {
                         val nbtList = NbtList()
                         for (obj in list) {
@@ -207,6 +220,7 @@ object ItemUtils {
                     }
                 }
             }
+
             is HashMap<*, *> -> this.toNbtCompound()
             is ConfigurationSection -> this.toNbtCompound()
             else -> NbtString.valueOf("nm的你塞了个什么东西进来，我给你一拖鞋")
@@ -264,16 +278,19 @@ object ItemUtils {
                     this.asByteArray.forEach { list.add("(Byte) $it") }
                 }
             }
+
             is NbtIntArray -> {
                 arrayListOf<String>().also { list ->
                     this.asIntArray.forEach { list.add("(Int) $it") }
                 }
             }
+
             is NbtLongArray -> {
                 arrayListOf<String>().also { list ->
                     this.asLongArray.forEach { list.add("(Long) $it") }
                 }
             }
+
             is NbtCompound -> this.toStringMap()
             is NbtList -> this.map { it.toStringValue() }
             else -> this.asString
@@ -758,6 +775,7 @@ object ItemUtils {
                 ItemManager.hasItem(args[0]) -> {
                     ItemManager.getItemStack(args[0], player, data)?.getItems(amount)?.forEach { items.add(it) }
                 }
+
                 easyItemHooker?.hasItem(args[0]) == true -> {
                     easyItemHooker?.getItemStack(args[0])?.let { itemStack ->
                         repeat(amount) {
@@ -765,6 +783,7 @@ object ItemUtils {
                         }
                     }
                 }
+
                 else -> {
                     mythicMobsHooker?.getItemStackSync(args[0])?.let { itemStack ->
                         repeat(amount) {
@@ -783,6 +802,7 @@ object ItemUtils {
                         }
                     }
                 }
+
                 easyItemHooker?.hasItem(args[0]) == true -> {
                     easyItemHooker?.getItemStack(args[0])?.getItems(amount)?.forEach { items.add(it) }
                 }
@@ -1302,6 +1322,7 @@ object ItemUtils {
                                         newArray
                                     )
                             }
+
                             else -> {
                                 (father as NbtCompound)[tempId] =
                                     NbtByteArray(
@@ -1334,6 +1355,7 @@ object ItemUtils {
                                         newArray
                                     )
                             }
+
                             else -> {
                                 (father as NbtCompound)[tempId] =
                                     NbtIntArray(
@@ -1366,6 +1388,7 @@ object ItemUtils {
                                         newArray
                                     )
                             }
+
                             else -> {
                                 (father as NbtCompound)[tempId] =
                                     NbtLongArray(

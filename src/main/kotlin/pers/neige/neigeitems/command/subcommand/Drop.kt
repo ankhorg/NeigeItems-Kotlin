@@ -366,6 +366,7 @@ object Drop {
                         sender.sendLang("Messages.invalidAmount")
                     }
                 }
+
                 else -> {
                     // 获取数量
                     amount?.let {

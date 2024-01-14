@@ -132,6 +132,7 @@ object ItemNBT {
                     }
                 }
             }
+
             is NbtIntArray -> {
                 ComponentBuilder("").also { result ->
                     result.append("\n")
@@ -151,6 +152,7 @@ object ItemNBT {
                     }
                 }
             }
+
             is NbtLongArray -> {
                 ComponentBuilder("").also { result ->
                     result.append("\n")
@@ -170,6 +172,7 @@ object ItemNBT {
                     }
                 }
             }
+
             is NbtList -> {
                 ComponentBuilder("").also { result ->
                     result.append("\n")
@@ -188,6 +191,7 @@ object ItemNBT {
                     }
                 }
             }
+
             is NbtCompound -> {
                 val result = ComponentBuilder("")
                 val iterator = this.iterator()
@@ -216,6 +220,7 @@ object ItemNBT {
                 }
                 result
             }
+
             else -> ComponentBuilder("妖魔鬼怪")
         }
     }

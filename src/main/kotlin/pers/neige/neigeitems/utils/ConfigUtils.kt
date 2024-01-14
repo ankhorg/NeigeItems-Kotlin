@@ -289,6 +289,7 @@ object ConfigUtils {
                 }
                 return map
             }
+
             is Map<*, *> -> {
                 val map = HashMap<String, Any>()
                 for ((key, value) in data) {
@@ -296,6 +297,7 @@ object ConfigUtils {
                 }
                 return map
             }
+
             is List<*> -> {
                 val list = ArrayList<Any>()
                 for (value in data) {
@@ -303,6 +305,7 @@ object ConfigUtils {
                 }
                 return list
             }
+
             else -> {
                 return data
             }

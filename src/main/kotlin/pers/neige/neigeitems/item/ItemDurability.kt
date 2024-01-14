@@ -289,7 +289,7 @@ object ItemDurability {
             if (damageEvent != null) {
                 val maxDurability = neigeItems.getInt("maxDurability")
                 damageEvent.damage =
-                    (itemStack.type.maxDurability * (1 - (finalDurability.toDouble() / maxDurability))).toInt()-itemStack.durability
+                    (itemStack.type.maxDurability * (1 - (finalDurability.toDouble() / maxDurability))).toInt() - itemStack.durability
             }
             // 保存NBT
             itemTag.saveToSafe(itemStack)

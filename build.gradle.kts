@@ -244,35 +244,35 @@ fun final(name: String) {
 
                     val classReader = org.objectweb.asm.ClassReader(targetClassBytes)
                     val classWriter =
-                            org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
+                        org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
                     val classVisitor =
-                            object : org.objectweb.asm.ClassVisitor(org.objectweb.asm.Opcodes.ASM9, classWriter) {
-                                override fun visitMethod(
-                                        access: Int,
-                                        name: String?,
-                                        descriptor: String?,
-                                        signature: String?,
-                                        exceptions: Array<out String>?
-                                ): org.objectweb.asm.MethodVisitor? {
-                                    val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
-                                    if (name == "<clinit>") {
-                                        return object :
-                                                org.objectweb.asm.MethodVisitor(org.objectweb.asm.Opcodes.ASM9, methodVisitor) {
-                                            override fun visitCode() {
-                                                visitMethodInsn(
-                                                        org.objectweb.asm.Opcodes.INVOKESTATIC,
-                                                        "pers/neige/neigeitems/NeigeItems",
-                                                        "init",
-                                                        "()V",
-                                                        false
-                                                )
-                                                super.visitCode()
-                                            }
+                        object : org.objectweb.asm.ClassVisitor(org.objectweb.asm.Opcodes.ASM9, classWriter) {
+                            override fun visitMethod(
+                                access: Int,
+                                name: String?,
+                                descriptor: String?,
+                                signature: String?,
+                                exceptions: Array<out String>?
+                            ): org.objectweb.asm.MethodVisitor? {
+                                val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
+                                if (name == "<clinit>") {
+                                    return object :
+                                        org.objectweb.asm.MethodVisitor(org.objectweb.asm.Opcodes.ASM9, methodVisitor) {
+                                        override fun visitCode() {
+                                            visitMethodInsn(
+                                                org.objectweb.asm.Opcodes.INVOKESTATIC,
+                                                "pers/neige/neigeitems/NeigeItems",
+                                                "init",
+                                                "()V",
+                                                false
+                                            )
+                                            super.visitCode()
                                         }
                                     }
-                                    return methodVisitor
                                 }
+                                return methodVisitor
                             }
+                        }
                     classReader.accept(classVisitor, org.objectweb.asm.ClassReader.EXPAND_FRAMES)
 
                     jarOutputStream.putNextEntry(JarEntry(entryName))
@@ -280,7 +280,7 @@ fun final(name: String) {
                     jarOutputStream.closeEntry()
                 } else {
                     if (!(entryName.startsWith("org/intellij/lang/annotations")
-                                    || entryName.startsWith("org/jetbrains/annotations"))
+                                || entryName.startsWith("org/jetbrains/annotations"))
                     ) {
                         jarOutputStream.putNextEntry(entry)
                         jarFile.getInputStream(entry).copyTo(jarOutputStream)

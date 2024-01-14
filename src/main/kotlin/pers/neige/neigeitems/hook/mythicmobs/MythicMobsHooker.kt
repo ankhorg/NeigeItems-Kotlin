@@ -252,6 +252,7 @@ abstract class MythicMobsHooker {
                                         else -> {}
                                     }
                                 }
+
                                 "chestplate" -> {
                                     event.call()
                                     when {
@@ -259,6 +260,7 @@ abstract class MythicMobsHooker {
                                         else -> {}
                                     }
                                 }
+
                                 "leggings" -> {
                                     event.call()
                                     when {
@@ -266,6 +268,7 @@ abstract class MythicMobsHooker {
                                         else -> {}
                                     }
                                 }
+
                                 "boots" -> {
                                     event.call()
                                     when {
@@ -273,6 +276,7 @@ abstract class MythicMobsHooker {
                                         else -> {}
                                     }
                                 }
+
                                 "mainhand" -> {
                                     event.call()
                                     when {
@@ -280,6 +284,7 @@ abstract class MythicMobsHooker {
                                         else -> {}
                                     }
                                 }
+
                                 "offhand" -> {
                                     event.call()
                                     when {
@@ -287,6 +292,7 @@ abstract class MythicMobsHooker {
                                         else -> {}
                                     }
                                 }
+
                                 else -> {}
                             }
                         }
@@ -385,6 +391,7 @@ abstract class MythicMobsHooker {
                                     null
                                 }
                             }
+
                             else -> {
                                 it.toIntOrNull()
                             }

@@ -92,10 +92,13 @@ object HookerManager {
             when {
                 CbVersion.current() == CbVersion.v1_12_R1 -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerNamespacedKey")
                     .newInstance() as NMSHooker
+
                 CbVersion.current().ordinal < CbVersion.v1_14_R1.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerCustomModelData")
                     .newInstance() as NMSHooker
+
                 CbVersion.current().ordinal < CbVersion.v1_16_R2.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerHoverEvent")
                     .newInstance() as NMSHooker
+
                 else -> NMSHooker()
             }
         } catch (error: Throwable) {

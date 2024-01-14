@@ -102,18 +102,23 @@ class ScriptTask {
                 async && period > 0 -> {
                     bukkitRunnable.runTaskTimerAsynchronously(plugin, delay.coerceAtLeast(0), period)
                 }
+
                 async && delay > 0 -> {
                     bukkitRunnable.runTaskLaterAsynchronously(plugin, delay)
                 }
+
                 async -> {
                     bukkitRunnable.runTaskAsynchronously(plugin)
                 }
+
                 period > 0 -> {
                     bukkitRunnable.runTaskTimer(plugin, delay.coerceAtLeast(0), period)
                 }
+
                 delay > 0 -> {
                     bukkitRunnable.runTaskLater(plugin, delay)
                 }
+
                 else -> {
                     bukkitRunnable.runTask(plugin)
                 }

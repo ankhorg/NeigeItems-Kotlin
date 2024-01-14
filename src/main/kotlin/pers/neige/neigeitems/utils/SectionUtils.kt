@@ -276,6 +276,7 @@ object SectionUtils {
                 }
                 return "<$this>"
             }
+
             else -> {
                 // 获取节点类型
                 val name = this.substring(0, index)
@@ -284,19 +285,24 @@ object SectionUtils {
                     "nbt" -> {
                         itemTag.getDeepStringOrNull(param) ?: "<$this>"
                     }
+
                     "data" -> {
                         (data ?: itemTag.getStringOrNull("NeigeItems.data")
                             ?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
                     }
+
                     "amount" -> {
                         itemStack.amount.toString()
                     }
+
                     "type" -> {
                         itemStack.type.toString()
                     }
+
                     "damage" -> {
                         itemStack.durability.toString()
                     }
+
                     else -> {
                         SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player)
                             ?: "<$this>"

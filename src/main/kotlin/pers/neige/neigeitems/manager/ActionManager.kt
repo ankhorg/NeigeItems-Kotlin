@@ -132,6 +132,7 @@ object ActionManager : BaseActionManager(plugin) {
                     }
                     return Results.SUCCESS
                 }
+
                 ResultType.STOP -> return result
                 else -> {}
             }
@@ -243,6 +244,7 @@ object ActionManager : BaseActionManager(plugin) {
                 runAction(finally, context)
                 return Results.SUCCESS
             }
+
             else -> {
                 runAction(sync, async, context)
                 return runAction(actions, context)
@@ -305,6 +307,7 @@ object ActionManager : BaseActionManager(plugin) {
                 runAction(finally, context)
                 return Results.SUCCESS
             }
+
             else -> {
                 runAction(sync, async, context)
                 return runAction(actions, context)
@@ -641,6 +644,7 @@ object ActionManager : BaseActionManager(plugin) {
                         if (!itemAction.hasShiftLeftAction) return
                         itemAction.triggers["shift_left"]
                     }
+
                     else -> {
                         // 如果既没有left又没有all就爬
                         if (!itemAction.hasLeftAction) return
@@ -656,6 +660,7 @@ object ActionManager : BaseActionManager(plugin) {
                         if (!itemAction.hasShiftRightAction) return
                         itemAction.triggers["shift_right"]
                     }
+
                     else -> {
                         // 如果既没有right又没有all就爬
                         if (!itemAction.hasRightAction) return

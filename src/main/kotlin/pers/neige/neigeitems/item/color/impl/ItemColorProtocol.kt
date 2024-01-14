@@ -115,9 +115,11 @@ class ItemColorProtocol : ItemColor() {
                             12 -> {
                                 packet.integers.write(1, 3)
                             }
+
                             13 -> {
                                 packet.integers.write(0, 3)
                             }
+
                             else -> {
                                 packet.integers.write(0, 3)
                                 // 设置队伍颜色
