@@ -1,6 +1,5 @@
 package pers.neige.neigeitems
 
-import net.bytebuddy.implementation.bytecode.Throw
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
@@ -13,7 +12,6 @@ import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.scanner.ClassScanner
 import taboolib.common.platform.Plugin
 import taboolib.platform.BukkitPlugin
-import java.net.URLClassLoader
 
 /**
  * 插件主类

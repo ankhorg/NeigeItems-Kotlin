@@ -41,6 +41,11 @@ public final class NbtByte extends NbtNumeric<RefNbtTagByte> implements NbtByteL
   }
 
   @Override
+  public String getAsString() {
+    return String.valueOf(getAsByte());
+  }
+
+  @Override
   public NbtByte clone() {
     return this;
   }

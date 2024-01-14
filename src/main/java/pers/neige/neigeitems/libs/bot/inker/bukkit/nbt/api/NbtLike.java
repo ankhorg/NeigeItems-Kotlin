@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api;
 
 public interface NbtLike {
-  byte getId();
+    byte getId();
 
-  String getAsString();
+    String getAsString();
 
-  NbtLike clone();
+    NbtLike clone();
 }

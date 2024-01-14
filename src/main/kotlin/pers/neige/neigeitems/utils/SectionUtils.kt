@@ -9,8 +9,6 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
-import pers.neige.neigeitems.utils.ItemUtils.getDeepStringOrNull
-import pers.neige.neigeitems.utils.ItemUtils.getExactStringOrNull
 import pers.neige.neigeitems.utils.StringUtils.split
 import java.awt.Color
 import java.util.*
@@ -287,7 +285,7 @@ object SectionUtils {
                         itemTag.getDeepStringOrNull(param) ?: "<$this>"
                     }
                     "data" -> {
-                        (data ?: itemTag.getExactStringOrNull("NeigeItems.data")
+                        (data ?: itemTag.getStringOrNull("NeigeItems.data")
                             ?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
                     }
                     "amount" -> {

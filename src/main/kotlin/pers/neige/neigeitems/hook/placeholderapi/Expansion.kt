@@ -6,7 +6,6 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.HookerManager
-import pers.neige.neigeitems.utils.ItemUtils.getDeepStringOrNull
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.SectionUtils.parseSection

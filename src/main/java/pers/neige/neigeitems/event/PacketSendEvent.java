@@ -1,12 +1,9 @@
 package pers.neige.neigeitems.event;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.item.ItemInfo;
 
 /**
  * 数据包发送事件(未实际启用, 监听无效).

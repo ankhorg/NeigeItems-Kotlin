@@ -5,44 +5,44 @@ import java.util.Map;
 import java.util.Set;
 
 public final class DelegateAbstractMap<K, V> extends AbstractMap<K, V> {
-  private final Map<K, V> delegateMap;
+    private final Map<K, V> delegateMap;
 
-  public DelegateAbstractMap(Map<K, V> delegateMap) {
-    this.delegateMap = delegateMap;
-  }
+    public DelegateAbstractMap(Map<K, V> delegateMap) {
+        this.delegateMap = delegateMap;
+    }
 
-  @Override
-  public V get(Object key) {
-    return delegateMap.get(key);
-  }
+    @Override
+    public V get(Object key) {
+        return delegateMap.get(key);
+    }
 
-  @Override
-  public boolean containsKey(Object key) {
-    return delegateMap.containsKey(key);
-  }
+    @Override
+    public boolean containsKey(Object key) {
+        return delegateMap.containsKey(key);
+    }
 
-  @Override
-  public V put(K key, V value) {
-    return delegateMap.put(key, value);
-  }
+    @Override
+    public V put(K key, V value) {
+        return delegateMap.put(key, value);
+    }
 
-  @Override
-  public V remove(Object key) {
-    return delegateMap.remove(key);
-  }
+    @Override
+    public V remove(Object key) {
+        return delegateMap.remove(key);
+    }
 
-  @Override
-  public int size() {
-    return delegateMap.size();
-  }
+    @Override
+    public int size() {
+        return delegateMap.size();
+    }
 
-  @Override
-  public Set<K> keySet() {
-    return delegateMap.keySet();
-  }
+    @Override
+    public Set<K> keySet() {
+        return delegateMap.keySet();
+    }
 
-  @Override
-  public Set<Entry<K, V>> entrySet() {
-    return delegateMap.entrySet();
-  }
+    @Override
+    public Set<Entry<K, V>> entrySet() {
+        return delegateMap.entrySet();
+    }
 }

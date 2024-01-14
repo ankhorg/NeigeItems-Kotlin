@@ -23,8 +23,6 @@ import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getCaughtVelocity
-import pers.neige.neigeitems.utils.ItemUtils.getDoubleOrNull
-import pers.neige.neigeitems.utils.ItemUtils.getExactStringOrNull
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
@@ -561,14 +559,14 @@ abstract class MythicMobsHooker {
             val neigeItems = itemTag.getCompound("NeigeItems") ?: continue
             val dropChance = neigeItems.getDoubleOrNull("dropChance") ?: continue
             if (ThreadLocalRandom.current().nextDouble() <= dropChance) {
-                val id = neigeItems.getExactStringOrNull("id")
+                val id = neigeItems.getStringOrNull("id")
                 // 处理NI物品(根据玩家信息重新生成)
                 if (id != null) {
                     val target = when (player) {
                         is OfflinePlayer -> player
                         else -> null
                     }
-                    ItemManager.getItemStack(id, target, neigeItems.getExactStringOrNull("data"))?.let {
+                    ItemManager.getItemStack(id, target, neigeItems.getStringOrNull("data"))?.let {
                         // 丢进待掉落列表里
                         dropItems.add(it)
                     }

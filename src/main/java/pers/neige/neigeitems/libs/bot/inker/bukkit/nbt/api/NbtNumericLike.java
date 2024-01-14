@@ -1,19 +1,19 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api;
 
 public interface NbtNumericLike extends NbtLike {
-  long getAsLong();
+    long getAsLong();
 
-  int getAsInt();
+    int getAsInt();
 
-  short getAsShort();
+    short getAsShort();
 
-  byte getAsByte();
+    byte getAsByte();
 
-  double getAsDouble();
+    double getAsDouble();
 
-  float getAsFloat();
+    float getAsFloat();
 
-  Number getAsNumber();
+    Number getAsNumber();
 
-  NbtNumericLike clone();
+    NbtNumericLike clone();
 }

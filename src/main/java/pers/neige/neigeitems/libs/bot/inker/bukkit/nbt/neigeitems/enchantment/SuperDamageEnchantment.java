@@ -12,8 +12,7 @@ import pers.neige.neigeitems.ref.entity.RefMobType;
 /**
  * 一级提供 100 伤害
  */
-public class SuperDamageEnchantment
-        extends RefEnchantment {
+public class SuperDamageEnchantment extends RefEnchantment {
     public SuperDamageEnchantment() {
         super(
                 RefRarity.COMMON,

@@ -31,7 +31,6 @@ import pers.neige.neigeitems.ref.server.level.RefServerEntity;
 import pers.neige.neigeitems.ref.server.level.RefWorldServer;
 import pers.neige.neigeitems.ref.world.RefCraftWorld;
 import pers.neige.neigeitems.ref.world.RefVec3;
-import pers.neige.neigeitems.ref.world.RefWorld;
 
 import java.util.List;
 import java.util.Optional;

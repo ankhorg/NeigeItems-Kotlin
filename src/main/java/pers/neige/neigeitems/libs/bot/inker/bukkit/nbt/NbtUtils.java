@@ -25,7 +25,7 @@ public class NbtUtils {
     /**
      * 使用给定的 RefNbtTagCompound 覆盖当前 RefNbtTagCompound.
      *
-     * @param baseCompound 被覆盖的基础 RefNbtTagCompound.
+     * @param baseCompound    被覆盖的基础 RefNbtTagCompound.
      * @param overlayCompound 用于提供覆盖值的 RefNbtTagCompound.
      * @return baseCompound.
      */
@@ -90,7 +90,7 @@ public class NbtUtils {
      */
     public static ItemStack bukkitCopy(@NotNull ItemStack itemStack) {
         ItemStack result = itemStack.clone();
-        RefCraftMetaItem refItemMeta = (RefCraftMetaItem) (Object) ((RefBukkitItemStack) (Object)result).meta;
+        RefCraftMetaItem refItemMeta = (RefCraftMetaItem) (Object) ((RefBukkitItemStack) (Object) result).meta;
         if (refItemMeta != null) {
             try {
                 // paper用的TreeMap, spigot用的HashMap

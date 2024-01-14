@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
 import pers.neige.neigeitems.utils.ItemUtils.copy
-import pers.neige.neigeitems.utils.ItemUtils.getIntOrNull
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.LangUtils.getLang

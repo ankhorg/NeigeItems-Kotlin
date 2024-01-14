@@ -6,7 +6,6 @@ import pers.neige.neigeitems.item.action.ActionTrigger
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.utils.ItemUtils.copy
-import pers.neige.neigeitems.utils.ItemUtils.getIntOrNull
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
