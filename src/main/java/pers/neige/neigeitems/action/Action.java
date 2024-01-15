@@ -6,17 +6,6 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SchedulerUtils;
 
 public abstract class Action {
-    @NotNull
-    public abstract ActionType getType();
-
-    @NotNull
-    public ActionResult eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
-    ) {
-        return manager.runAction(this, context);
-    }
-
     public static void eval(
             Action sync,
             Action async,
@@ -30,5 +19,16 @@ public abstract class Action {
             SchedulerUtils.sync(manager.getPlugin(), () -> sync.eval(manager, context));
             async.eval(manager, context);
         }
+    }
+
+    @NotNull
+    public abstract ActionType getType();
+
+    @NotNull
+    public ActionResult eval(
+            @NotNull BaseActionManager manager,
+            @NotNull ActionContext context
+    ) {
+        return manager.runAction(this, context);
     }
 }

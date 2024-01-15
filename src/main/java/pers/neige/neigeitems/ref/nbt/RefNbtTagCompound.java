@@ -10,15 +10,15 @@ import java.util.UUID;
 @HandleBy(reference = "net/minecraft/nbt/CompoundTag", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/NBTTagCompound", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public final class RefNbtTagCompound extends RefNbtBase {
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;tags:Ljava/util/Map;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;map:Ljava/util/Map;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
+    public Map<String, RefNbtBase> tags;
+
     @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;<init>()V", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;<init>()V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefNbtTagCompound() {
         throw new UnsupportedOperationException();
     }
-
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;tags:Ljava/util/Map;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
-    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;map:Ljava/util/Map;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
-    public Map<String, RefNbtBase> tags;
 
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;set(Ljava/lang/String;Lnet/minecraft/server/v1_12_R1/NBTBase;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_14_R1)")
     public native void set0(String key, RefNbtBase value);

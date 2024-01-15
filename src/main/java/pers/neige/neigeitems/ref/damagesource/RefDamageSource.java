@@ -12,30 +12,6 @@ import javax.annotation.Nullable;
 
 @HandleBy(reference = "net/minecraft/world/damagesource/DamageSource", predicates = "craftbukkit_version:[v1_17_R1,)")
 public class RefDamageSource {
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;isSweep()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native boolean isSweep();
-
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;sweep()Lnet/minecraft/world/damagesource/DamageSource;", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native RefDamageSource sweep();
-
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;isMelting()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native boolean isMelting();
-
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;melting()Lnet/minecraft/world/damagesource/DamageSource;", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native RefDamageSource melting();
-
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;isPoison()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native boolean isPoison();
-
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;poison()Lnet/minecraft/world/damagesource/DamageSource;", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native RefDamageSource poison();
-
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;getFoodExhaustion()F", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native float getFoodExhaustion();
-
-    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;isIndirect()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public native boolean isIndirect();
-
     @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;<init>(Lnet/minecraft/core/Holder;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;)V", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     public RefDamageSource(RefHolder<RefDamageType> type, @Nullable RefEntity source, @Nullable RefEntity attacker, @Nullable RefVec3 position) {
         throw new UnsupportedOperationException();
@@ -60,6 +36,30 @@ public class RefDamageSource {
     public RefDamageSource(RefHolder<RefDamageType> type) {
         throw new UnsupportedOperationException();
     }
+
+    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;isSweep()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native boolean isSweep();
+
+    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;sweep()Lnet/minecraft/world/damagesource/DamageSource;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native RefDamageSource sweep();
+
+    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;isMelting()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native boolean isMelting();
+
+    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;melting()Lnet/minecraft/world/damagesource/DamageSource;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native RefDamageSource melting();
+
+    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;isPoison()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native boolean isPoison();
+
+    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;poison()Lnet/minecraft/world/damagesource/DamageSource;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native RefDamageSource poison();
+
+    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;getFoodExhaustion()F", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native float getFoodExhaustion();
+
+    @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;isIndirect()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public native boolean isIndirect();
 
     @HandleBy(reference = "Lnet/minecraft/world/damagesource/DamageSource;getDirectEntity()Lnet/minecraft/world/entity/Entity;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native RefEntity getDirectEntity();

@@ -35,6 +35,26 @@ import static pers.neige.neigeitems.utils.ListUtils.*;
 public abstract class BaseActionManager {
     @NotNull
     private final Plugin plugin;
+    /**
+     * 物品动作实现函数
+     */
+    @NotNull
+    private final HashMap<String, BiFunction<ActionContext, String, ActionResult>> actions = new HashMap<>();
+    /**
+     * 用于编译condition的脚本引擎
+     */
+    @NotNull
+    private final ScriptEngine engine = HookerManager.INSTANCE.getNashornHooker().getGlobalEngine();
+    /**
+     * 缓存的已编译condition脚本
+     */
+    @NotNull
+    private final ConcurrentHashMap<String, CompiledScript> conditionScripts = new ConcurrentHashMap<>();
+    /**
+     * 缓存的已编译action脚本
+     */
+    @NotNull
+    private final ConcurrentHashMap<String, CompiledScript> actionScripts = new ConcurrentHashMap<>();
 
     public BaseActionManager(
             @NotNull Plugin plugin
@@ -48,30 +68,6 @@ public abstract class BaseActionManager {
     public Plugin getPlugin() {
         return plugin;
     }
-
-    /**
-     * 物品动作实现函数
-     */
-    @NotNull
-    private final HashMap<String, BiFunction<ActionContext, String, ActionResult>> actions = new HashMap<>();
-
-    /**
-     * 用于编译condition的脚本引擎
-     */
-    @NotNull
-    private final ScriptEngine engine = HookerManager.INSTANCE.getNashornHooker().getGlobalEngine();
-
-    /**
-     * 缓存的已编译condition脚本
-     */
-    @NotNull
-    private final ConcurrentHashMap<String, CompiledScript> conditionScripts = new ConcurrentHashMap<>();
-
-    /**
-     * 缓存的已编译action脚本
-     */
-    @NotNull
-    private final ConcurrentHashMap<String, CompiledScript> actionScripts = new ConcurrentHashMap<>();
 
     @NotNull
     public HashMap<String, BiFunction<ActionContext, String, ActionResult>> getActions() {

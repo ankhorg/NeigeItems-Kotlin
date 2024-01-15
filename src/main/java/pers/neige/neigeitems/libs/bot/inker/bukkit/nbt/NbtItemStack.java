@@ -59,6 +59,17 @@ NbtItemStack {
         }
     }
 
+    public void setTag(@NotNull NbtCompound compound) {
+        if (craftItemStack == null) {
+            bukkitItemStack.meta = null;
+            RefCraftItemStack craftItemStack = RefCraftItemStack.asCraftCopy(itemStack);
+            craftItemStack.handle.setTag(compound.delegate);
+            bukkitItemStack.meta = ((ItemStack) (Object) craftItemStack).getItemMeta();
+        } else {
+            craftItemStack.handle.setTag(compound.delegate);
+        }
+    }
+
     public @NotNull NbtCompound getOrCreateTag() {
         if (craftItemStack == null) {
             RefCraftMetaItem meta = (RefCraftMetaItem) (Object) bukkitItemStack.meta;
@@ -71,17 +82,6 @@ NbtItemStack {
             }
         } else {
             return new NbtCompound(NbtUtils.getOrCreateTag(craftItemStack.handle));
-        }
-    }
-
-    public void setTag(@NotNull NbtCompound compound) {
-        if (craftItemStack == null) {
-            bukkitItemStack.meta = null;
-            RefCraftItemStack craftItemStack = RefCraftItemStack.asCraftCopy(itemStack);
-            craftItemStack.handle.setTag(compound.delegate);
-            bukkitItemStack.meta = ((ItemStack) (Object) craftItemStack).getItemMeta();
-        } else {
-            craftItemStack.handle.setTag(compound.delegate);
         }
     }
 
