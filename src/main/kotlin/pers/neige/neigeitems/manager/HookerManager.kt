@@ -82,7 +82,7 @@ object HookerManager {
             // 4.5.0-
             Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl440")
                 .newInstance() as MythicMobsHooker
-        }.getOrNull()?.also {
+        }.getOrNull() ?: null.also {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
         }
     }
