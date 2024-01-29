@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":hooker-mythicmobs-v490"))
     implementation(project(":hooker-mythicmobs-v502"))
     implementation(project(":hooker-mythicmobs-v510"))
+    implementation(project(":hooker-mythicmobs-v560"))
 
     implementation(project(":hooker-nms-NamespacedKey"))
     implementation(project(":hooker-nms-CustomModelData"))

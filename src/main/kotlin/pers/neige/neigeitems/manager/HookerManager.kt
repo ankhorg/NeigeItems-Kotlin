@@ -7,6 +7,7 @@ import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.OfflinePlayer
+import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.easyitem.EasyItemHooker
@@ -58,6 +59,16 @@ object HookerManager {
     // 没事儿改包名很爽吗, 写MM的, 你妈死了
     val mythicMobsHooker: MythicMobsHooker? by lazy {
         kotlin.runCatching {
+            // 5.6.0+
+            if (Class.forName("io.lumine.mythic.core.config.MythicConfigImpl")
+                    .getDeclaredMethod("getFileConfiguration").returnType == FileConfiguration::class.java
+            ) {
+                Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl560")
+                    .newInstance() as MythicMobsHooker
+            } else {
+                null
+            }
+        }.getOrNull() ?: kotlin.runCatching {
             // 5.0.3+
             Class.forName("io.lumine.mythic.bukkit.utils.config.file.YamlConfiguration")
             Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510")
@@ -144,13 +155,10 @@ object HookerManager {
         }
 
     val easyItemHooker: EasyItemHooker? by lazy {
-        if (Bukkit.getPluginManager().isPluginEnabled("EasyItem")) {
-            try {
-                EasyItemHookerImpl()
-            } catch (error: Throwable) {
-                null
-            }
-        } else {
+        try {
+            Class.forName("pers.neige.easyitem.manager.ItemManager")
+            EasyItemHookerImpl()
+        } catch (error: Throwable) {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "EasyItem"))
             null
         }
