@@ -107,6 +107,7 @@ object ItemUtils {
                 when {
                     list.all { it is Byte } -> ByteArray(list.size) { list[it] as Byte }
                     list.all { it is Int } -> IntArray(list.size) { list[it] as Int }
+                    list.all { it is Long } -> LongArray(list.size) { list[it] as Long }
                     else -> this
                 }
             }
@@ -205,6 +206,8 @@ object ItemUtils {
             is List<*> -> {
                 val list = this.map { it?.cast() ?: it }
                 when {
+                    list.isEmpty() -> NbtList()
+
                     list.all { it is Byte } -> NbtByteArray(
                         ByteArray(list.size) { list[it] as Byte })
 
