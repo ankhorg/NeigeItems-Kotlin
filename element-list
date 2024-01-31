@@ -47,6 +47,7 @@ pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.enchantment
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.level
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils
 pers.neige.neigeitems.listener
@@ -76,6 +77,8 @@ pers.neige.neigeitems.ref.sounds
 pers.neige.neigeitems.ref.tags
 pers.neige.neigeitems.ref.util
 pers.neige.neigeitems.ref.world
+pers.neige.neigeitems.ref.world.level
+pers.neige.neigeitems.ref.world.level.chunk.storage
 pers.neige.neigeitems.scanner
 pers.neige.neigeitems.script
 pers.neige.neigeitems.script.tool
