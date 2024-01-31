@@ -6,8 +6,11 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.event.ItemPackGiveEvent
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.manager.ItemPackManager
+import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
+import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.LangUtils.getLang
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
@@ -176,6 +179,14 @@ object GivePack {
                     event.call()
                     if (!event.isCancelled) {
                         event.itemStacks.forEach { itemStack ->
+                            // 移除一下物品拥有者信息
+                            if (ConfigManager.removeNBTWhenGive) {
+                                val nbt = itemStack.getNbtOrNull()
+                                if (nbt != null) {
+                                    nbt.getCompound("NeigeItems")?.remove("owner")
+                                    nbt.saveToSafe(itemStack)
+                                }
+                            }
                             sync {
                                 player.giveItem(itemStack)
                             }

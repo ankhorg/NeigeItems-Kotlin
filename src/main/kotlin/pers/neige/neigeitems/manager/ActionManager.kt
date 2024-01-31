@@ -960,7 +960,7 @@ object ActionManager : BaseActionManager(plugin) {
         val data = itemInfo.data
 
         // 检测冷却
-        val tick = trigger.tick?.parseItemSection(itemStack, itemTag, data, player)?.toLongOrNull() ?: 1000
+        val tick = trigger.tick?.parseItemSection(itemStack, itemTag, data, player)?.toLongOrNull() ?: 10
         // 如果冷却存在且大于0
         if (tick > 0) {
             // 获取上次使用时间
