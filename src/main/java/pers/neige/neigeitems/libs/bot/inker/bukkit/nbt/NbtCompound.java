@@ -22,7 +22,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     private Set<String> oldKeySet;
     private Set<Entry<String, Nbt<?>>> oldEntrySet;
 
-    NbtCompound(RefNbtTagCompound delegate) {
+    public NbtCompound(RefNbtTagCompound delegate) {
         super(delegate);
         this.delegateMap = new DelegateAbstractMap<>(this);
     }

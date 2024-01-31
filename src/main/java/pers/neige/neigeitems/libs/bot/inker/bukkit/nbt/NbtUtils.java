@@ -4,11 +4,26 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.nbt.*;
 
+import java.io.*;
 import java.util.Map;
 
 public class NbtUtils {
+    /**
+     * 1.16.2+ 版本起, NbtIo#readCompressed 及 NbtIo#writeCompressed 方法支持使用 File 作为参数.
+     */
+    private static final boolean READ_COMPRESSED_FROM_FILE_SUPPORT = CbVersion.v1_16_R2.isSupport();
+    /**
+     * 1.17.1+ 版本起, NbtIo#read 及 NbtIo#write 方法支持使用 File 作为参数.
+     */
+    private static final boolean READ_FROM_FILE_SUPPORT = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.16.2+ 版本起, NbtIo#read 方法参数由 DataInputStream 改为 DataInput.
+     */
+    private static final boolean READ_FROM_DATA_INPUT_SUPPORT = CbVersion.v1_17_R1.isSupport();
+
     /**
      * 获取物品NBT, 如果物品没有NBT就创建一个空NBT, 设置并返回.
      *
@@ -147,5 +162,97 @@ public class NbtUtils {
         } else {
             return (ItemStack) (Object) RefCraftItemStack.asCraftCopy(itemStack);
         }
+    }
+
+    /**
+     * 从压缩文件中读取 NbtCompound.
+     */
+    public static NbtCompound readCompressed(File file) throws IOException {
+        if (READ_COMPRESSED_FROM_FILE_SUPPORT) {
+            return new NbtCompound(RefNbtIo.readCompressed(file));
+        } else {
+            try (FileInputStream stream = new FileInputStream(file)) {
+                return new NbtCompound(RefNbtIo.readCompressed(stream));
+            }
+        }
+    }
+
+    /**
+     * 从压缩文件中读取 NbtCompound.
+     */
+    public static NbtCompound readCompressed(InputStream stream) throws IOException {
+        return new NbtCompound(RefNbtIo.readCompressed(stream));
+    }
+
+    /**
+     * 向压缩文件写入 NbtCompound.
+     */
+    public static void writeCompressed(NbtCompound compound, File file) throws IOException {
+        if (READ_COMPRESSED_FROM_FILE_SUPPORT) {
+            RefNbtIo.writeCompressed(compound.delegate, file);
+        } else {
+            try (FileOutputStream stream = new FileOutputStream(file)) {
+                RefNbtIo.writeCompressed(compound.delegate, stream);
+            }
+        }
+    }
+
+    /**
+     * 向压缩文件写入 NbtCompound.
+     */
+    public static void writeCompressed(NbtCompound compound, OutputStream stream) throws IOException {
+        RefNbtIo.writeCompressed(compound.delegate, stream);
+    }
+
+    /**
+     * 从未压缩文件中读取 NbtCompound.
+     */
+    public static NbtCompound read(File file) throws IOException {
+        if (READ_COMPRESSED_FROM_FILE_SUPPORT) {
+            return new NbtCompound(RefNbtIo.read(file));
+        } else {
+            try (FileInputStream fileInputStream = new FileInputStream(file)) {
+                try (DataInputStream dataInputStream = new DataInputStream(fileInputStream)) {
+                    if (READ_FROM_DATA_INPUT_SUPPORT) {
+                        return new NbtCompound(RefNbtIo.read((DataInput) dataInputStream));
+                    } else {
+                        return new NbtCompound(RefNbtIo.read(dataInputStream));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 从未压缩文件中读取 NbtCompound.
+     */
+    public static NbtCompound read(DataInputStream stream) throws IOException {
+        if (READ_FROM_DATA_INPUT_SUPPORT) {
+            return new NbtCompound(RefNbtIo.read((DataInput) stream));
+        } else {
+            return new NbtCompound(RefNbtIo.read(stream));
+        }
+    }
+
+    /**
+     * 向未压缩文件写入 NbtCompound.
+     */
+    public static void write(NbtCompound compound, File file) throws IOException {
+        if (READ_FROM_FILE_SUPPORT) {
+            RefNbtIo.write(compound.delegate, file);
+        } else {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+                try (DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream)) {
+                    RefNbtIo.write(compound.delegate, dataOutputStream);
+                }
+            }
+        }
+    }
+
+    /**
+     * 向未压缩文件写入 NbtCompound.
+     */
+    public static void write(NbtCompound compound, DataOutput output) throws IOException {
+        RefNbtIo.write(compound.delegate, output);
     }
 }

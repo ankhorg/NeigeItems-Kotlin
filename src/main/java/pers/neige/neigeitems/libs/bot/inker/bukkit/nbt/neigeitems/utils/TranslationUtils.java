@@ -99,6 +99,25 @@ public class TranslationUtils {
     }
 
     /**
+     * 将高版本json文本转化为传统文本(1.12.2不进行转换).
+     *
+     * @param json 待转换json.
+     * @return 传统文本.
+     */
+    @NotNull
+    public static String toLegacyText(
+            @NotNull String json
+    ) {
+        if (CbVersion.current() == CbVersion.v1_12_R1) {
+            return json;
+        } else if (CbVersion.v1_15_R1.isSupport()) {
+            return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(json));
+        } else {
+            return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(json), RefChatFormatting.WHITE);
+        }
+    }
+
+    /**
      * 检测物品是否包含自定义显示名.
      *
      * @param itemStack 待检测物品.
