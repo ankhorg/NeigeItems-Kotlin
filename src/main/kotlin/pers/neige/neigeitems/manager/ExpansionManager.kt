@@ -136,8 +136,9 @@ object ExpansionManager {
      * 触发enable
      * PluginReloadEvent是异步触发的, 所以内部没有runTaskAsynchronously
      */
+    @JvmStatic
     @Listener
-    private fun enable(event: PluginReloadEvent.Post) {
+    fun enable(event: PluginReloadEvent.Post) {
         if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION) {
             return
         }
@@ -153,6 +154,7 @@ object ExpansionManager {
      * 触发serverEnable(同时也会触发enable)
      * 内部runTaskAsynchronously了
      */
+    @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
     private fun serverEnable() {
         async {
@@ -171,8 +173,9 @@ object ExpansionManager {
      * 触发disable
      * PluginReloadEvent是异步触发的, 所以内部没有runTaskAsynchronously
      */
+    @JvmStatic
     @Listener
-    private fun disable(event: PluginReloadEvent.Pre) {
+    fun disable(event: PluginReloadEvent.Pre) {
         if (event.type != PluginReloadEvent.Type.ALL && event.type != PluginReloadEvent.Type.EXPANSION) {
             return
         }
@@ -188,6 +191,7 @@ object ExpansionManager {
      * 触发serverDisable(同时也会触发disable)
      * 关服的时候不能开新任务，所以是在主线程触发的
      */
+    @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.DISABLE)
     private fun serverDisable() {
         permanentExpansion.forEach { (scriptName, scriptExpansion) ->

@@ -119,6 +119,7 @@ object HookerManager {
     /**
      * 加载MM挂钩功能
      */
+    @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
     private fun loadMythicMobsHooker() {
         mythicMobsHooker
@@ -167,6 +168,7 @@ object HookerManager {
     /**
      * 加载EI挂钩功能
      */
+    @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
     private fun loadEasyItemHooker() {
         easyItemHooker
@@ -223,6 +225,7 @@ object HookerManager {
     /**
      * 掉落物光效功能
      */
+    @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
     private fun loadItemColor() {
         itemColor

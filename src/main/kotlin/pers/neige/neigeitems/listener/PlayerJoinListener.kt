@@ -6,6 +6,7 @@ import pers.neige.neigeitems.task.Updater
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 
 object PlayerJoinListener {
+    @JvmStatic
     @Listener
     fun listener(event: PlayerJoinEvent) {
         if (!event.player.isOp) return
@@ -22,6 +23,7 @@ object PlayerJoinListener {
         )
     }
 
+//    @JvmStatic
 //    @Listener
 //    fun listener(event: PlayerJoinEvent) {
 //        EntityPlayerUtils.getChannel(event.player)?.pipeline()

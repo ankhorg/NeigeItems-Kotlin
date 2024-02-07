@@ -6,6 +6,7 @@ import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 
 object ItemMergeListener {
+    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: ItemMergeEvent) {
         val entity = event.entity

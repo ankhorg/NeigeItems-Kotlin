@@ -14,6 +14,7 @@ import pers.neige.neigeitems.utils.ListenerUtils
 object EntityShootBowListener {
     private val GET_CONSUMABLE_SUPPORT = CbVersion.v1_16_R3.isSupport
 
+    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun shootBow(event: EntityShootBowEvent) {
         // 获取玩家

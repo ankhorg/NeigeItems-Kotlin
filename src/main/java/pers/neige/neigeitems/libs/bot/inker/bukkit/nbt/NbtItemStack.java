@@ -8,8 +8,7 @@ import pers.neige.neigeitems.ref.nbt.*;
 
 import java.util.Map;
 
-public final class
-NbtItemStack {
+public final class NbtItemStack {
     private final ItemStack itemStack;
     private final RefBukkitItemStack bukkitItemStack;
     private final RefCraftItemStack craftItemStack;

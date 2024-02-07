@@ -10,6 +10,7 @@ import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object BlockBreakListener {
+    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun breakBlock(event: BlockBreakEvent) {
         // 获取挖掘者

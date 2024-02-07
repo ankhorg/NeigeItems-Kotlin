@@ -8,6 +8,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object PlayerItemDamageListener {
+    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: PlayerItemDamageEvent) {
         // 获取玩家

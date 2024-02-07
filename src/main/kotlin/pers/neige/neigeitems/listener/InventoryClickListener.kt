@@ -8,6 +8,7 @@ import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object InventoryClickListener {
+    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun click(event: InventoryClickEvent) {
         // 获取玩家
@@ -22,6 +23,7 @@ object InventoryClickListener {
         ActionManager.clickListener(player, itemStack, itemInfo, event)
     }
 
+    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun beClicked(event: InventoryClickEvent) {
         // 获取玩家

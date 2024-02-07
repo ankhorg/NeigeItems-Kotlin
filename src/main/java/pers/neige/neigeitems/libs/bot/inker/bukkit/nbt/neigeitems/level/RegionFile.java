@@ -2,12 +2,9 @@ package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.level;
 
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import pers.neige.neigeitems.ref.nbt.RefNbtIo;
 import pers.neige.neigeitems.ref.world.level.RefChunkPos;
 import pers.neige.neigeitems.ref.world.level.chunk.storage.RefRegionFile;
 
-import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;

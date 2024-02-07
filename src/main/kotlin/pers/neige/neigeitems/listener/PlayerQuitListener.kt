@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.listener
 
 object PlayerQuitListener {
+//    @JvmStatic
 //    @Listener
 //    fun listener(event: PlayerQuitEvent) {
 //        val playerChannel = EntityPlayerUtils.getChannel(event.player)

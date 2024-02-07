@@ -14,13 +14,13 @@ public class RefRegionFileStorage {
         throw new UnsupportedOperationException();
     }
 
+    public native static RefChunkPos getRegionFileCoordinates(Path file);
+
     @HandleBy(reference = "Lnet/minecraft/world/level/chunk/storage/RegionFileStorage;read(Lnet/minecraft/world/level/ChunkPos;)Lnet/minecraft/nbt/CompoundTag;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native RefNbtTagCompound read(RefChunkPos pos) throws IOException;
 
     @HandleBy(reference = "Lnet/minecraft/world/level/chunk/storage/RegionFileStorage;read(Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/chunk/storage/RegionFile;)Lnet/minecraft/nbt/CompoundTag;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public native RefNbtTagCompound read(RefChunkPos pos, RefRegionFile regionfile) throws IOException;
-
-    public native static RefChunkPos getRegionFileCoordinates(Path file);
 
     public native RefRegionFile getRegionFile(RefChunkPos chunkcoordintpair, boolean existingOnly) throws IOException;
 }

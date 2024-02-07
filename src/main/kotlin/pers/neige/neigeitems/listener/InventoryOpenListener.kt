@@ -9,6 +9,7 @@ import pers.neige.neigeitems.item.ItemCheck.couldCheckInventory
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object InventoryOpenListener {
+    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: InventoryOpenEvent) {
         val player = event.player as Player

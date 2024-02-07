@@ -6,6 +6,7 @@ import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.item.ItemDurability
 
 object PlayerItemMendListener {
+    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: PlayerItemMendEvent) {
         ItemDurability.itemMend(event)

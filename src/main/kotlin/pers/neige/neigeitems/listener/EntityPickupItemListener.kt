@@ -10,6 +10,7 @@ import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object EntityPickupItemListener {
+    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
     fun owner(event: EntityPickupItemEvent) {
         // 获取玩家
@@ -21,6 +22,7 @@ object EntityPickupItemListener {
         if (event.isCancelled) return
     }
 
+    @JvmStatic
     @Listener(eventPriority = EventPriority.HIGH)
     fun listener(event: EntityPickupItemEvent) {
         // 获取玩家

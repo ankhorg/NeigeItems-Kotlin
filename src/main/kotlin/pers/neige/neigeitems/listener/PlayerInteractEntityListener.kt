@@ -9,6 +9,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object PlayerInteractEntityListener {
+    @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST, ignoreCancelled = true)
     fun listener(event: PlayerInteractEntityEvent) {
         val player = event.player
