@@ -138,28 +138,6 @@ class ItemPlaceholder {
         }
     }
 
-    private fun NbtComponentLike.getDeepDoubleOrNull(key: String): Double? {
-        val value: Nbt<*>? = getDeepWithEscape(key, separator = '`')
-        return if (value is NbtNumeric<*>) {
-            value.asDouble
-        } else {
-            null
-        }
-    }
-
-    private fun NbtComponentLike.getDeepStringOrNull(key: String): String? {
-        return when (val value: Nbt<*>? = getDeepWithEscape(key, separator = '`')) {
-            is NbtString -> value.asString
-            is NbtByte -> value.asByte.toString()
-            is NbtShort -> value.asShort.toString()
-            is NbtInt -> value.asInt.toString()
-            is NbtLong -> value.asLong.toString()
-            is NbtFloat -> value.asFloat.toString()
-            is NbtDouble -> value.asDouble.toString()
-            else -> value?.asString
-        }
-    }
-
     /**
      * 根据物品解析物品变量
      *
