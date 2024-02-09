@@ -12,8 +12,8 @@ Messages:
   givenInfo: §bNeige§3Items §7> §a你得到了 §f{amount} §a个 §f{name}
   successPackInfo: §bNeige§3Items §7> §a成功给予 §f{player} {amount} §a个 §f{name} §a物品包
   givenPackInfo: §bNeige§3Items §7> §a你得到了 §f{amount} §a个 §f{name} §a物品包
-  dropSuccessInfo: §bNeige§3Items §7> §a成功在 §f{world} §a的 §f{x},{y},{z} §a掉落了 §a{amount} §a个 §f{name}
-  dropPackSuccessInfo: §bNeige§3Items §7> §a成功在 §f{world} §a的 §f{x},{y},{z} §a掉落了 §f{amount} §a组 §f{name} §a物品包
+  dropSuccessInfo: §bNeige§3Items §7> §a成功在 §f{world} §a的 §f{x},{y},{z} §a掉落了 §a{amount} §a个 §f{name}, 解析对象为 {player}
+  dropPackSuccessInfo: §bNeige§3Items §7> §a成功在 §f{world} §a的 §f{x},{y},{z} §a掉落了 §f{amount} §a组 §f{name} §a物品包, 解析对象为 {player}
   unknownItem: §bNeige§3Items §7> §7找不到ID为 §f{itemID} §7的物品
   unknownItemPack: §bNeige§3Items §7> §7找不到ID为 §f{packID} §7的物品包
   existedKey: §bNeige§3Items §7> §7已存在ID为 §f{itemID} §7的物品

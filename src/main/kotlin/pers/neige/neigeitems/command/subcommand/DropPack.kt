@@ -336,7 +336,8 @@ object DropPack {
                                 Pair("{y}", loc.y.toString()),
                                 Pair("{z}", loc.z.toString()),
                                 Pair("{amount}", amount.toString()),
-                                Pair("{name}", id)
+                                Pair("{name}", id),
+                                Pair("{player}", parser.name)
                             )
                         )
                     }

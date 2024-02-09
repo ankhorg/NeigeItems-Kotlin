@@ -349,7 +349,8 @@ object Drop {
                                         Pair("{y}", event.location.y.toString()),
                                         Pair("{z}", event.location.z.toString()),
                                         Pair("{amount}", event.amount.toString()),
-                                        Pair("{name}", event.itemStack.getParsedName())
+                                        Pair("{name}", event.itemStack.getParsedName()),
+                                        Pair("{player}", parser.name)
                                     )
                                 )
                             }
@@ -404,7 +405,8 @@ object Drop {
                                             Pair("{y}", loc.y.toString()),
                                             Pair("{z}", loc.z.toString()),
                                             Pair("{amount}", amt.toString()),
-                                            Pair("{name}", name)
+                                            Pair("{name}", name),
+                                            Pair("{player}", parser.name)
                                         )
                                     )
                                 }
