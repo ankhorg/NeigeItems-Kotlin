@@ -115,6 +115,8 @@ object ItemCheck {
                         }
                         // 还原物品类型
                         itemStack.type = newItemStack.type
+                        // 还原损伤值(1.12.2需要)
+                        itemStack.durability = newItemStack.durability
                         // 发送提示信息
                         player.sendLang("Messages.legacyItemUpdateMessage", mapOf("{name}" to oldName))
                     }

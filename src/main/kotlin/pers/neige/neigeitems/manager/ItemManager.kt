@@ -596,6 +596,8 @@ object ItemManager : ItemConfigManager() {
                 }
                 // 还原物品类型
                 type = newItemStack.type
+                // 还原损伤值(1.12.2需要)
+                durability = newItemStack.durability
             }
             return true
         }

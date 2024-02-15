@@ -1651,6 +1651,8 @@ object ItemEditorManager {
                     }
                     // 还原物品类型
                     itemStack.type = newItemStack.type
+                    // 还原损伤值(1.12.2需要)
+                    itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
             }
@@ -1714,6 +1716,8 @@ object ItemEditorManager {
                     }
                     // 还原物品类型
                     itemStack.type = newItemStack.type
+                    // 还原损伤值(1.12.2需要)
+                    itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
             }
@@ -1778,6 +1782,8 @@ object ItemEditorManager {
                     }
                     // 还原物品类型
                     itemStack.type = newItemStack.type
+                    // 还原损伤值(1.12.2需要)
+                    itemStack.durability = newItemStack.durability
                 }
                 return@addBasicItemEditor true
             }
