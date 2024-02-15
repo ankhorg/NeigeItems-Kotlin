@@ -12,7 +12,7 @@ object ItemMergeListener {
         val entity = event.entity
         val target = event.target
         if (entity.hasMetadata("NI-Owner") && target.hasMetadata("NI-Owner")) {
-            if (entity.getMetadataEZ("NI-Owner", "String", "") != target.getMetadataEZ("NI-Owner", "String", "")) {
+            if (entity.getMetadataEZ("NI-Owner", "") != target.getMetadataEZ("NI-Owner", "")) {
                 event.isCancelled = true
             }
         }

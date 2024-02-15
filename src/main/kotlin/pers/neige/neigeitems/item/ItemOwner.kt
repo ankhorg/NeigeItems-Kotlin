@@ -18,13 +18,13 @@ object ItemOwner {
     ) {
         if (item.hasMetadata("NI-Owner")) {
             // 获取归属者
-            val owner = item.getMetadataEZ("NI-Owner", "String", "") as String
+            val owner = item.getMetadataEZ("NI-Owner", "") as String
             // 检测拾取者是否是拥有者
             if (player.name != owner) {
                 // 不是拥有者, 禁止拾取
                 event.isCancelled = true
                 // 是否隐藏掉落物
-                val hide = item.getMetadataEZ("NI-Hide", "Byte", 0.toByte()) as Byte
+                val hide = item.getMetadataEZ("NI-Hide", 0.toByte()) as Byte
                 // 不隐藏的话给予提示
                 if (hide != 1.toByte()) {
                     // 通过actionbar进行对应提示

@@ -557,12 +557,12 @@ public class EntityPlayerUtils {
      * @param type     实体类型.
      * @param player   待接收玩家.
      */
-    public static void sendFakeEntity(
+    public static Entity sendFakeEntity(
             @NotNull Location location,
             @NotNull EntityType type,
             @NotNull Player player
     ) {
-        sendFakeEntity(location, type, true, null, player);
+        return sendFakeEntity(location, type, true, null, player);
     }
 
     /**
@@ -573,13 +573,13 @@ public class EntityPlayerUtils {
      * @param randomizeData 是否随机实体数据(仅在1.17+版本生效).
      * @param player        待接收玩家.
      */
-    public static void sendFakeEntity(
+    public static Entity sendFakeEntity(
             @NotNull Location location,
             @NotNull EntityType type,
             boolean randomizeData,
             @NotNull Player player
     ) {
-        sendFakeEntity(location, type, randomizeData, null, player);
+        return sendFakeEntity(location, type, randomizeData, null, player);
     }
 
     /**
@@ -770,6 +770,13 @@ public class EntityPlayerUtils {
         }
     }
 
+    /**
+     * 为实体设置虚拟显示名.
+     *
+     * @param world        所处世界.
+     * @param packetObject 待修改的数据包(nms实例).
+     * @param name         显示名.
+     */
     public static void setFakeCustomName(
             @NotNull World world,
             @NotNull Object packetObject,

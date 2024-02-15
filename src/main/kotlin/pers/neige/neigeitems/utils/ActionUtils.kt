@@ -64,7 +64,7 @@ object ActionUtils {
             // 获取当前时间
             val time = System.currentTimeMillis()
             // 获取上次使用时间
-            val lastTime = player.getMetadataEZ("NI-CD-$group", "Long", 0.toLong()) as Long
+            val lastTime = player.getMetadataEZ("NI-CD-$group", 0.toLong()) as Long
             // 如果仍处于冷却时间
             if (lastTime > time) {
                 ConfigManager.config.getString("Messages.itemCooldown")?.let {

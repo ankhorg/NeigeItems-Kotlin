@@ -26,21 +26,21 @@ public class EnchantmentUtils {
 //        RefBukkitEnchantment.acceptingNew = false;
 //    }
 
-    public static void defrost() {
+    private static void defrost() {
         RefMappedRegistry<RefEnchantment> ENCHANTMENT = (RefMappedRegistry<RefEnchantment>) RefBuiltInRegistries.ENCHANTMENT;
         ENCHANTMENT.frozen = false;
         RefBukkitEnchantment.acceptingNew = true;
         ENCHANTMENT.unregisteredIntrusiveHolders = new IdentityHashMap<>();
     }
 
-    public static void freeze() {
+    private static void freeze() {
         RefMappedRegistry<RefEnchantment> ENCHANTMENT = (RefMappedRegistry<RefEnchantment>) RefBuiltInRegistries.ENCHANTMENT;
         ENCHANTMENT.frozen = true;
         RefBukkitEnchantment.acceptingNew = false;
         ENCHANTMENT.unregisteredIntrusiveHolders = null;
     }
 
-    public static void register(String name, RefEnchantment enchantment) {
+    private static void register(String name, RefEnchantment enchantment) {
         RefMappedRegistry<RefEnchantment> ENCHANTMENT = (RefMappedRegistry<RefEnchantment>) RefBuiltInRegistries.ENCHANTMENT;
         try {
             RefEnchantments.register(name, enchantment);

@@ -964,7 +964,7 @@ object ActionManager : BaseActionManager(plugin) {
         // 如果冷却存在且大于0
         if (tick > 0) {
             // 获取上次使用时间
-            val lastTick = player.getMetadataEZ("NI-TICK-${trigger.group}", "Long", 0.toLong()) as Long
+            val lastTick = player.getMetadataEZ("NI-TICK-${trigger.group}", 0.toLong()) as Long
             // 如果仍处于冷却时间
             if (lastTick > 0) {
                 player.setMetadataEZ("NI-TICK-${trigger.group}", lastTick - 1)

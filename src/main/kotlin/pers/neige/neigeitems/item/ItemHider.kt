@@ -34,9 +34,9 @@ class ItemHider {
                     if (entity is Item) {
                         if (entity.hasMetadata("NI-Owner")) {
                             // 获取归属者
-                            val owner = entity.getMetadataEZ("NI-Owner", "String", "") as String
+                            val owner = entity.getMetadataEZ("NI-Owner", "") as String
                             // 是否隐藏掉落物
-                            val hide = entity.getMetadataEZ("NI-Hide", "Byte", 0.toByte()) as Byte
+                            val hide = entity.getMetadataEZ("NI-Hide", 0.toByte()) as Byte
 
                             // 检测拾取者是否是拥有者以及是否隐藏掉落物
                             if (receiver.name != owner && hide == 1.toByte()) {

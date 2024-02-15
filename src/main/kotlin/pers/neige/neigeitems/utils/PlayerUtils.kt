@@ -80,6 +80,7 @@ object PlayerUtils {
      * @return Metadata值
      */
     @JvmStatic
+    @Deprecated("没有意义")
     fun Metadatable.getMetadataEZ(key: String, type: String, def: Any): Any? {
         if (!this.hasMetadata(key)) {
             this.setMetadataEZ(key, def)
@@ -96,6 +97,22 @@ object PlayerUtils {
             "String" -> this.getMetadata(key)[0].asString()
             else -> this.getMetadata(key)[0].value()
         }
+    }
+
+    /**
+     * 获取Metadata, 不含对应Metadata将设置并返回默认值
+     *
+     * @param key Metadata键
+     * @param def 默认值
+     * @return Metadata值
+     */
+    @JvmStatic
+    fun Metadatable.getMetadataEZ(key: String, def: Any): Any? {
+        if (!this.hasMetadata(key)) {
+            this.setMetadataEZ(key, def)
+            return def
+        }
+        return this.getMetadata(key)[0].value()
     }
 
     /**
