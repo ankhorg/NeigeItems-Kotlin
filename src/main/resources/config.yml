@@ -1,51 +1,96 @@
 Language: zh_cn
 Main:
+  # MM物品默认保存路径
   MMItemsPath: MMItems.yml
+  # 是否开启debug模式
   Debug: false
+  # 是否开启更新检查
   UpdateCheck: true
 Messages:
+  # 一些消息的提示类型
   type:
     # Pack/Items
+    # 给予物品包是发送物品包提示还是发送所有物品提示
     givePackMessage: Pack
+  # 玩家不在线提示
   invalidPlayer: §bNeige§3Items §7> §7玩家不在线或不存在
+  # 给予成功提示
   successInfo: §bNeige§3Items §7> §a成功给予 §f{player} {amount} §a个 §f{name}
+  # 被给予成功提示
   givenInfo: §bNeige§3Items §7> §a你得到了 §f{amount} §a个 §f{name}
+  # 给予物品包成功提示
   successPackInfo: §bNeige§3Items §7> §a成功给予 §f{player} {amount} §a个 §f{name} §a物品包
+  # 被给予物品包成功提示
   givenPackInfo: §bNeige§3Items §7> §a你得到了 §f{amount} §a个 §f{name} §a物品包
+  # 掉落成功提示
   dropSuccessInfo: §bNeige§3Items §7> §a成功在 §f{world} §a的 §f{x},{y},{z} §a掉落了 §a{amount} §a个 §f{name}, 解析对象为 {player}
+  # 掉落物品包成功提示
   dropPackSuccessInfo: §bNeige§3Items §7> §a成功在 §f{world} §a的 §f{x},{y},{z} §a掉落了 §f{amount} §a组 §f{name} §a物品包, 解析对象为 {player}
+  # 未知物品提示
   unknownItem: §bNeige§3Items §7> §7找不到ID为 §f{itemID} §7的物品
+  # 未知物品包提示
   unknownItemPack: §bNeige§3Items §7> §7找不到ID为 §f{packID} §7的物品包
+  # 对应ID物品已存在提示
   existedKey: §bNeige§3Items §7> §7已存在ID为 §f{itemID} §7的物品
+  # 错误发送者提示
   onlyPlayer: §bNeige§3Items §7> §7该指令仅可玩家使用
+  # 保存成功提示
   successSaveInfo: §bNeige§3Items §7> §a成功将 §f{name} §a以ID §f{itemID} §a保存至 §f{path}
+  # MM物品转换完毕提示
   mmImportSuccessInfo: §bNeige§3Items §7> §a成功将所有MM物品保存至 §f{path}
+  # 物品到期删除提示
   itemExpirationMessage: §bNeige§3Items §7> §6你背包中的 §f{itemName} §6已到期删除
+  # 不要保存空气提示
   airItem: §bNeige§3Items §7> §7请不要试图保存空气, 谢谢合作
+  # 输入无效数字提示
   invalidAmount: §bNeige§3Items §7> §7无效数字
+  # 输入无效世界提示
   invalidWorld: §bNeige§3Items §7> §7无效世界
+  # 输入无效坐标提示
   invalidLocation: §bNeige§3Items §7> §7无效坐标
+  # 权限不足提示
   insufficientPermissions: §bNeige§3Items §7> §7权限不足
+  # 重载完毕提示
   reloadedMessage: §bNeige§3Items §7> §a重载完毕
+  # 无效NBT提示
   invalidNBT: §bNeige§3Items §7> §6NBT加载失败, 请勿在列表型NBT中混用键值对, 数字及字符串
+  # MM生物穿戴物品失败提示
   equipFailed: §bNeige§3Items §7> §6在尝试给ID为 §f{mobID}§6 的MM怪物穿戴ID为 §f{itemID}§6 的NI物品时发生了错误.
+  # 错误物品提示
   invalidItem: '§bNeige§3Items §7> §6物品加载失败, 物品可能缺损数据, 物品ID: §f{itemID}'
+  # 给予失败提示
   failureInfo: '§bNeige§3Items §7> §6物品给予失败, 可能原因: 物品未配置材质/玩家已下线'
+  # 缺少前置插件提示
   invalidPlugin: '§bNeige§3Items §7> §7未发现前置插件: {plugin}'
+  # 未知物品材质提示
   invalidMaterial: '§bNeige§3Items §7> §6物品 §f{itemID} §6使用了未知的材质 §f{material}'
+  # 未知解析对象提示
   invalidParser: §bNeige§3Items §7> §7不能针对后台解析物品, 请指定一个玩家
+  # 物品冷却提示
   itemCooldown: §e物品冷却中! 请等待{time}秒
+  # 物品列表内, 点击获取物品提示
   clickGiveMessage: §e点击获取该物品
+  # 掉落物归属提示信息
   invalidOwnerMessage: §6无法拾取该物品, 该物品的拥有者是 §f{name}
+  # 脚本出错提示信息
   invalidScript: '§bNeige§3Items §7> §6载入 §f{script} §6脚本时出现错误, 报错如下:'
+  # 执行扩展出错提示信息
   expansionError: '§bNeige§3Items §7> §6执行 §f{expansion} §6脚本的 §f{function} §6函数时出现错误, 报错如下:'
+  # 物品耐久耗尽提示信息
   brokenItem: '§e物品耐久已耗尽'
+  # 物品更新提示信息
   legacyItemUpdateMessage: '§bNeige§3Items §7> §6你所持有的旧物品 §f{name} §6已被更新'
+  # 扩展构建插件提示信息
   buildExpansionMessage: '§bNeige§3Items §7> §a已将 §f{expansion} §a打包为 §f{file}'
+  # 一键保存MM物品时, MM物品生成时出现错误的提示信息
   invalidMMItem: §bNeige§3Items §7> §7生成MM物品 §f{itemID} §7时出现错误
+  # 计算节点输入无效的取整模式时的提示信息
   invalidRoundingMode: §bNeige§3Items §7> §7未知的取整模式 §f{mode}
+  # 计算节点输入无法计算的数学公式时的提示信息
   invalidFormula: §bNeige§3Items §7> §7无法执行的计算公式 §f{formula}
+  # 检查更新发现新版本的提示
   findNewVersion: '§bNeige§3Items §7> §f发现新版本: {version}'
+  # 更新链接提示
   updateLink: '§bNeige§3Items §7> §f链接: {link}'
 Help:
   prefix: |-
@@ -129,6 +174,7 @@ Help:
     help:
       command: §e/ni §fhelp (页数)
       description: 查看帮助信息
+# 物品列表格式
 ItemList:
   Prefix: §6===========§eNeigeItems§6===========
   Suffix: §6======<< §e{prev} §f{current}§e/§f{total} §e{next} §6>>======
@@ -136,10 +182,12 @@ ItemList:
   ItemFormat: §6{index}. §a{ID} §6- §f{name}
   Prev: 上一页
   Next: 下一页
+# 物品拥有者提示信息显示方式
 ItemOwner:
   removeNBTWhenGive: false
   # actionbar / message
   messageType: actionbar
+# 掉落物颜色实现方式(protocol对应protocollib发包, vanilla为原版实现)
 ItemColor:
   # protocol / vanilla
   type: protocol
