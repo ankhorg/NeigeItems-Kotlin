@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.ArrayUtils;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.StringUtils;
+import pers.neige.neigeitems.utils.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -32,11 +32,11 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     }
 
     default Nbt<?> removeDeep(@NotNull String key) {
-        String[] keys = StringUtils.split(key, '.');
+        List<String> keys = StringUtils.split(key, '.', '\\');
 
         NbtComponentLike currentNbtCompound = this;
-        for (int i = 0; i < (keys.length - 1); i++) {
-            String k = keys[i];
+        for (int i = 0; i < (keys.size() - 1); i++) {
+            String k = keys.get(i);
             if (currentNbtCompound == null) {
                 return null;
             }
@@ -52,7 +52,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
             }
         }
         if (currentNbtCompound != null) {
-            return currentNbtCompound.remove(keys[keys.length - 1]);
+            return currentNbtCompound.remove(keys.get(keys.size() - 1));
         }
         return null;
     }
@@ -709,7 +709,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 Nbt.
      */
     default @Nullable Nbt<?> getDeep(@NotNull String key) {
-        String[] keys = StringUtils.split(key, '.');
+        List<String> keys = StringUtils.split(key, '.', '\\');
 
         NbtComponentLike currentNbtCompound = this;
         Nbt<?> value = null;
@@ -1288,14 +1288,14 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     }
 
     default void putDeep(@NotNull String key, @NotNull Nbt<?> value, boolean force) {
-        String[] keys = StringUtils.split(key, '.');
+        List<String> keys = StringUtils.split(key, '.', '\\');
 
         NbtComponentLike currentNbtCompound = this;
 
-        for (int i = 0; i < keys.length; i++) {
-            String k = keys[i];
+        for (int i = 0; i < keys.size(); i++) {
+            String k = keys.get(i);
 
-            if (i == (keys.length - 1)) {
+            if (i == (keys.size() - 1)) {
                 currentNbtCompound.set(k, value); // is last node
             } else {
                 if (currentNbtCompound.containsKey(k)) {

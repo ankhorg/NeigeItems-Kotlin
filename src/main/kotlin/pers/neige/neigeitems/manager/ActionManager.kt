@@ -154,29 +154,37 @@ object ActionManager : BaseActionManager(plugin) {
     ): ActionResult {
         // 解析物品变量
         val itemStack = context.itemStack
-        val nbt = context.nbt
-        val cache = (context.params?.get("cache") ?: context.global) as? MutableMap<String, String>
-        val sections = context.params?.get("sections") as? ConfigurationSection
-        val actionString = if (itemStack != null && nbt != null) {
-            action.parseItemSection(
-                itemStack,
-                nbt,
-                context.data,
-                context.player,
-                cache,
-                sections
-            )
+        var type = ""
+        var content = ""
+        if (action.startsWith("js")) {
+            val info = action.split(": ", limit = 2)
+            type = info[0]
+            content = info.getOrNull(1) ?: ""
         } else {
-            action.parseSection(
-                cache,
-                context.player,
-                sections
-            )
+            val nbt = context.nbt
+            val cache = (context.params?.get("cache") ?: context.global) as? MutableMap<String, String>
+            val sections = context.params?.get("sections") as? ConfigurationSection
+            val actionString = if (itemStack != null && nbt != null) {
+                action.parseItemSection(
+                    itemStack,
+                    nbt,
+                    context.data,
+                    context.player,
+                    cache,
+                    sections
+                )
+            } else {
+                action.parseSection(
+                    cache,
+                    context.player,
+                    sections
+                )
+            }
+            // 解析动作类型及动作内容
+            val info = actionString.split(": ", limit = 2)
+            type = info[0]
+            content = info.getOrNull(1) ?: ""
         }
-        // 解析动作类型及动作内容
-        val info = actionString.split(": ", limit = 2)
-        val type = info[0]
-        val content = info.getOrNull(1) ?: ""
         // 尝试加载物品动作, 返回执行结果
         actions[type.lowercase(Locale.getDefault())]?.apply(context, content)?.also { return it }
         // 尝试加载物品编辑函数, 返回执行结果
@@ -485,31 +493,32 @@ object ActionManager : BaseActionManager(plugin) {
     ): ActionResult {
         // 解析物品变量
         val itemStack = context.itemStack
-        val nbt = context.nbt
-        val cache = (context.params?.get("cache") ?: context.global) as? MutableMap<String, String>
-        val sections = context.params?.get("sections") as? ConfigurationSection
-        val actionString = if (itemStack != null && nbt != null) {
-            action.action.parseItemSection(
-                itemStack,
-                nbt,
-                context.data,
-                context.player,
-                cache,
-                sections
-            )
+        val type = action.key
+        val content = if (type == "js") {
+            action.content
         } else {
-            action.action.parseSection(
-                cache,
-                context.player,
-                sections
-            )
+            val nbt = context.nbt
+            val cache = (context.params?.get("cache") ?: context.global) as? MutableMap<String, String>
+            val sections = context.params?.get("sections") as? ConfigurationSection
+            if (itemStack != null && nbt != null) {
+                action.content.parseItemSection(
+                    itemStack,
+                    nbt,
+                    context.data,
+                    context.player,
+                    cache,
+                    sections
+                )
+            } else {
+                action.content.parseSection(
+                    cache,
+                    context.player,
+                    sections
+                )
+            }
         }
-        // 解析动作类型及动作内容
-        val info = actionString.split(": ", limit = 2)
-        val type = info[0]
-        val content = info.getOrNull(1) ?: ""
         // 尝试加载物品动作, 返回执行结果
-        actions[type.lowercase(Locale.getDefault())]?.apply(context, content)?.also { return it }
+        actions[type]?.apply(context, content)?.also { return it }
         // 尝试加载物品编辑函数, 返回执行结果
         val player = context.player
         if (itemStack != null && player != null) {

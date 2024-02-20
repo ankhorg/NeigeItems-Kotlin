@@ -7,7 +7,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.DelegateAbstractMap;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.LazyLoadEntrySet;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.StringUtils;
+import pers.neige.neigeitems.utils.StringUtils;
 import pers.neige.neigeitems.ref.nbt.*;
 
 import java.util.*;
@@ -481,7 +481,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     private @Nullable RefNbtBase getDeepRefNbt(@NotNull String key) {
-        String[] keys = StringUtils.split(key, '.');
+        List<String> keys = StringUtils.split(key, '.', '\\');
 
         RefNbtTagCompound currentNbtCompound = this.delegate;
         RefNbtBase value = null;
@@ -693,16 +693,16 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     private void putDeepRefNbt(@NotNull String key, @NotNull RefNbtBase value, boolean force) {
-        String[] keys = StringUtils.split(key, '.');
+        List<String> keys = StringUtils.split(key, '.', '\\');
 
         RefNbtTagCompound currentNbtCompound = this.delegate;
 
         // 遍历key
-        for (int i = 0; i < keys.length; i++) {
-            String k = keys[i];
+        for (int i = 0; i < keys.size(); i++) {
+            String k = keys.get(i);
 
             // 未达末级
-            if (i != (keys.length - 1)) {
+            if (i != (keys.size() - 1)) {
                 // 存在key
                 if (currentNbtCompound.hasKey(k)) {
                     RefNbtBase obj = currentNbtCompound.get(k);
