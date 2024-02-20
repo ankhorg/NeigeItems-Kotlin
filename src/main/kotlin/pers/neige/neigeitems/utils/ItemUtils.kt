@@ -63,10 +63,12 @@ object ItemUtils {
      * @return 转换结果
      */
     @JvmStatic
-    fun HashMap<*, *>.toNbtCompound(): NbtCompound {
+    fun Map<*, *>.toNbtCompound(): NbtCompound {
         val itemTag = NbtCompound()
         for ((key, value) in this) {
-            itemTag[key as String] = value.toNbt()
+            if (value != null) {
+                itemTag[key as String] = value.toNbt()
+            }
         }
         return itemTag
     }
@@ -105,11 +107,13 @@ object ItemUtils {
             this.startsWith("[") && this.endsWith("]") -> {
                 val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
                 when {
-                    list.all { it is Byte } -> ByteArray(list.size) { list[it] as Byte }
-                    list.all { it is Int } -> IntArray(list.size) { list[it] as Int }
-                    list.all { it is Long } -> LongArray(list.size) { list[it] as Long }
+                    list.isEmpty() -> NbtString.valueOf(this)
+                    list[0] is Byte -> (list as List<Byte>).toTypedArray()
+                    list[0] is Int -> (list as List<Int>).toTypedArray()
+                    list[0] is Long -> (list as List<Long>).toTypedArray()
                     else -> this
                 }
+
             }
 
             else -> this
@@ -167,15 +171,10 @@ object ItemUtils {
             this.startsWith("[") && this.endsWith("]") -> {
                 val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
                 when {
-                    list.all { it is Byte } -> NbtByteArray(
-                        ByteArray(list.size) { list[it] as Byte })
-
-                    list.all { it is Int } -> NbtIntArray(
-                        IntArray(list.size) { list[it] as Int })
-
-                    list.all { it is Long } -> NbtLongArray(
-                        LongArray(list.size) { list[it] as Long })
-
+                    list.isEmpty() -> NbtString.valueOf(this)
+                    list[0] is Byte -> NbtByteArray(list as List<Byte>)
+                    list[0] is Int -> NbtIntArray(list as List<Int>)
+                    list[0] is Long -> NbtLongArray(list as List<Long>)
                     else -> NbtString.valueOf(this)
                 }
             }
@@ -207,13 +206,9 @@ object ItemUtils {
                 val list = this.map { it?.cast() ?: it }
                 when {
                     list.isEmpty() -> NbtList()
-
-                    list.all { it is Byte } -> NbtByteArray(
-                        ByteArray(list.size) { list[it] as Byte })
-
-                    list.all { it is Int } -> NbtIntArray(
-                        IntArray(list.size) { list[it] as Int })
-
+                    list[0] is Byte -> NbtByteArray(list as List<Byte>)
+                    list[0] is Int -> NbtIntArray(list as List<Int>)
+                    list[0] is Long -> NbtLongArray(list as List<Long>)
                     else -> {
                         val nbtList = NbtList()
                         for (obj in list) {
@@ -224,7 +219,7 @@ object ItemUtils {
                 }
             }
 
-            is HashMap<*, *> -> this.toNbtCompound()
+            is Map<*, *> -> this.toNbtCompound()
             is ConfigurationSection -> this.toNbtCompound()
             else -> NbtString.valueOf("nm的你塞了个什么东西进来，我给你一拖鞋")
         }

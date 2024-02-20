@@ -11,7 +11,7 @@ val taboolib_version: String by project
 plugins {
     `java-library`
     `maven-publish`
-    id("org.jetbrains.kotlin.jvm") version "1.9.10"
+    id("org.jetbrains.kotlin.jvm") version "1.9.22"
     id("org.jetbrains.dokka") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.10-SNAPSHOT"
@@ -60,6 +60,14 @@ subprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlin {
+        sourceSets.all {
+            languageSettings {
+                languageVersion = "2.0"
+            }
+        }
     }
 }
 
@@ -171,6 +179,14 @@ tasks {
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+kotlin {
+    sourceSets.all {
+        languageSettings {
+            languageVersion = "2.0"
+        }
+    }
 }
 
 tasks.compileJava {
