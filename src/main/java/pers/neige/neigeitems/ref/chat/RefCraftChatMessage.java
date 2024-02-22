@@ -13,4 +13,10 @@ public final class RefCraftChatMessage {
 
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/util/CraftChatMessage;fromJSONComponent(Ljava/lang/String;)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public static native String fromJSONComponent(String jsonMessage);
+
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/util/CraftChatMessage;fromStringToJSON(Ljava/lang/String;)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public static native String fromStringToJSON(String message);
+
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/util/CraftChatMessage;fromStringToJSON(Ljava/lang/String;Z)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public static native String fromStringToJSON(String message, boolean keepNewlines);
 }

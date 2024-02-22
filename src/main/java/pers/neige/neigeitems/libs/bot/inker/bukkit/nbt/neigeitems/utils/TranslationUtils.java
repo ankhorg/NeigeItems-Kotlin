@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.inksnow.ankhinvoke.comments.HandleBy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.lang.LocaleI18n;
@@ -110,11 +111,57 @@ public class TranslationUtils {
     ) {
         if (CbVersion.current() == CbVersion.v1_12_R1) {
             return json;
+        } else if (CbVersion.v1_17_R1.isSupport()) {
+            return RefCraftChatMessage.fromJSONComponent(json);
         } else if (CbVersion.v1_15_R1.isSupport()) {
             return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(json));
         } else {
             return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(json), RefChatFormatting.WHITE);
         }
+    }
+
+    /**
+     * 适用于1.17+版本, 将高版本json文本转化为传统文本.
+     *
+     * @param jsonMessage 待转换json.
+     * @return 传统文本.
+     */
+    @Nullable
+    public static String fromJSONComponent(
+            @Nullable String jsonMessage
+    ) {
+        if (jsonMessage == null) return null;
+        if (CbVersion.v1_17_R1.isSupport())
+            return RefCraftChatMessage.fromJSONComponent(jsonMessage);
+        return null;
+    }
+
+    /**
+     * 适用于1.17+版本, 将传统文本转化为高版本json文本.
+     * keepNewlines 默认为 false.
+     *
+     * @param message 待转换传统文本.
+     * @return 传统文本.
+     */
+    public static String fromStringToJSON(String message) {
+        if (message == null) return null;
+        if (CbVersion.v1_17_R1.isSupport())
+            return RefCraftChatMessage.fromStringToJSON(message);
+        return null;
+    }
+
+    /**
+     * 适用于1.17+版本, 将传统文本转化为高版本json文本.
+     *
+     * @param message 待转换传统文本.
+     * @param keepNewlines 此选项为 true 时, 将把文本中的换行符转化为 \n 文本, 为 false 时, 将于换行符处直接断开停止识别.
+     * @return 传统文本.
+     */
+    public static String fromStringToJSON(String message, boolean keepNewlines) {
+        if (message == null) return null;
+        if (CbVersion.v1_17_R1.isSupport())
+            return RefCraftChatMessage.fromStringToJSON(message, keepNewlines);
+        return null;
     }
 
     /**
