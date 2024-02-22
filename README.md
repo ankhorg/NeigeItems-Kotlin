@@ -2,11 +2,9 @@
 
 A bukkit item manage plugin.
 
-Chinese Wiki: https://neige7.github.io/NeigeItems-Wiki-Docusaurus/intro/
-
 Javadoc: https://ankhorg.github.io/NeigeItems-Kotlin/
 
-English Wiki(Deprecated): https://neige.gitbook.io/neigeitems-wiki-english/
+Wiki付费, 99元永久, 如欲购买请添加作者QQ: 2468629609
 
 ## Development
 

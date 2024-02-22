@@ -366,8 +366,11 @@ object ItemUtils {
      * @return 物品NBT
      */
     @JvmStatic
-    fun ItemStack.getNbtOrNull(): NbtCompound? {
-        return NbtItemStack(this).tag
+    fun ItemStack?.getNbtOrNull(): NbtCompound? {
+        if (this != null && this.type != Material.AIR) {
+            return NbtItemStack(this).tag
+        }
+        return null
     }
 
     /**
