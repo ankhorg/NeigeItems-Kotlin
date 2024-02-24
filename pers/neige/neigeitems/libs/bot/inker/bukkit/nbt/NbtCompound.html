@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>NbtCompound 1.16.33 API </title>
+    <title>NbtCompound 1.16.34 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../../../stylesheet.css" title="Style">
@@ -753,12 +753,20 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                         <tr id="i60" class="altColor">
                                             <td class="colFirst"><code><a href=Nbt.html>Nbt</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeep(java.lang.String)>getDeep</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
+                                            <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeep(java.lang.String,char,char)>getDeep</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, char separator, char escape) </code>
                                             </th>
                                             <td class="colLast">根据 NBT键 获取对应的 Nbt, 如果没有找到对应的 Nbt 则返回 null.</td>
                                         </tr>
                                         
                                         <tr id="i61" class="rowColor">
+                                            <td class="colFirst"><code><a href=Nbt.html>Nbt</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeep(java.lang.String)>getDeep</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
+                                            </th>
+                                            <td class="colLast">根据 NBT键 获取对应的 Nbt, 如果没有找到对应的 Nbt 则返回 null.</td>
+                                        </tr>
+                                        
+                                        <tr id="i62" class="altColor">
                                             <td class="colFirst"><code>byte</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepByte(java.lang.String,byte)>getDeepByte</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, byte def) </code>
@@ -766,7 +774,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 byte, 如果没有找到对应的 byte 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i62" class="altColor">
+                                        <tr id="i63" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Byte.html>Byte</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepByteOrNull(java.lang.String)>getDeepByteOrNull</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
@@ -774,7 +782,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 byte, 如果没有找到对应的 byte 则返回 null.</td>
                                         </tr>
                                         
-                                        <tr id="i63" class="rowColor">
+                                        <tr id="i64" class="altColor">
                                             <td class="colFirst"><code>short</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepShort(java.lang.String,short)>getDeepShort</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, short def) </code>
@@ -782,7 +790,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 short, 如果没有找到对应的 short 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i64" class="altColor">
+                                        <tr id="i65" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Short.html>Short</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepShortOrNull(java.lang.String)>getDeepShortOrNull</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
@@ -790,7 +798,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 short, 如果没有找到对应的 short 则返回 null.</td>
                                         </tr>
                                         
-                                        <tr id="i65" class="rowColor">
+                                        <tr id="i66" class="altColor">
                                             <td class="colFirst"><code>int</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepInt(java.lang.String,int)>getDeepInt</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, int def) </code>
@@ -798,7 +806,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 int, 如果没有找到对应的 int 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i66" class="altColor">
+                                        <tr id="i67" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepIntOrNull(java.lang.String)>getDeepIntOrNull</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
@@ -806,7 +814,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 int, 如果没有找到对应的 int 则返回 null.</td>
                                         </tr>
                                         
-                                        <tr id="i67" class="rowColor">
+                                        <tr id="i68" class="altColor">
                                             <td class="colFirst"><code>long</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepLong(java.lang.String,long)>getDeepLong</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, long def) </code>
@@ -814,7 +822,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 long, 如果没有找到对应的 long 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i68" class="altColor">
+                                        <tr id="i69" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html>Long</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepLongOrNull(java.lang.String)>getDeepLongOrNull</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
@@ -822,7 +830,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 long, 如果没有找到对应的 long 则返回 null.</td>
                                         </tr>
                                         
-                                        <tr id="i69" class="rowColor">
+                                        <tr id="i70" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepUUID(java.lang.String,java.util.UUID)>getDeepUUID</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> def) </code>
@@ -830,7 +838,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 UUID, 如果没有找到对应的 UUID 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i70" class="altColor">
+                                        <tr id="i71" class="rowColor">
                                             <td class="colFirst"><code>float</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepFloat(java.lang.String,float)>getDeepFloat</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, float def) </code>
@@ -838,7 +846,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 float, 如果没有找到对应的 float 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i71" class="rowColor">
+                                        <tr id="i72" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Float.html>Float</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepFloatOrNull(java.lang.String)>getDeepFloatOrNull</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
@@ -846,7 +854,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 float, 如果没有找到对应的 float 则返回 null.</td>
                                         </tr>
                                         
-                                        <tr id="i72" class="altColor">
+                                        <tr id="i73" class="rowColor">
                                             <td class="colFirst"><code>double</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepDouble(java.lang.String,double)>getDeepDouble</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, double def) </code>
@@ -854,7 +862,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 double, 如果没有找到对应的 double 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i73" class="rowColor">
+                                        <tr id="i74" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepDoubleOrNull(java.lang.String)>getDeepDoubleOrNull</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
@@ -862,7 +870,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 double, 如果没有找到对应的 double 则返回 null.</td>
                                         </tr>
                                         
-                                        <tr id="i74" class="altColor">
+                                        <tr id="i75" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepString(java.lang.String,java.lang.String)>getDeepString</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> def) </code>
@@ -870,7 +878,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 String, 如果没有找到对应的 String 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i75" class="rowColor">
+                                        <tr id="i76" class="altColor">
                                             <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepByteArray(java.lang.String,kotlin.Array)>getDeepByteArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; def) </code>
@@ -878,7 +886,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 byte[], 如果没有找到对应的 byte[] 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i76" class="altColor">
+                                        <tr id="i77" class="rowColor">
                                             <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepIntArray(java.lang.String,kotlin.Array)>getDeepIntArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt; def) </code>
@@ -886,7 +894,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 int[], 如果没有找到对应的 int[] 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i77" class="rowColor">
+                                        <tr id="i78" class="altColor">
                                             <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepLongArray(java.lang.String,kotlin.Array)>getDeepLongArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt; def) </code>
@@ -894,7 +902,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 long[], 如果没有找到对应的 long[] 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i78" class="altColor">
+                                        <tr id="i79" class="rowColor">
                                             <td class="colFirst"><code><a href=NbtCompound.html>NbtCompound</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepCompound(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound)>getDeepCompound</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=NbtCompound.html>NbtCompound</a> def) </code>
@@ -902,7 +910,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 NbtCompound, 如果没有找到对应的 NbtCompound 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i79" class="rowColor">
+                                        <tr id="i80" class="altColor">
                                             <td class="colFirst"><code><a href=NbtList.html>NbtList</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepList(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList)>getDeepList</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=NbtList.html>NbtList</a> def) </code>
@@ -910,7 +918,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 NbtList, 如果没有找到对应的 NbtList 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i80" class="altColor">
+                                        <tr id="i81" class="rowColor">
                                             <td class="colFirst"><code>boolean</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepBoolean(java.lang.String,boolean)>getDeepBoolean</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, boolean def) </code>
@@ -918,7 +926,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 boolean, 如果没有找到对应的 boolean 则返回默认值.</td>
                                         </tr>
                                         
-                                        <tr id="i81" class="rowColor">
+                                        <tr id="i82" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#getDeepBooleanOrNull(java.lang.String)>getDeepBooleanOrNull</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
@@ -926,7 +934,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">根据 NBT键 获取对应的 boolean, 如果没有找到对应的 boolean 则返回 null.</td>
                                         </tr>
                                         
-                                        <tr id="i82" class="altColor">
+                                        <tr id="i83" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#putDeep(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt,boolean)>putDeep</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @NotNull() <a href=Nbt.html>Nbt</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; value, boolean force) </code>
@@ -934,7 +942,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i83" class="rowColor">
+                                        <tr id="i84" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#putDeepByteArray(java.lang.String,kotlin.Array,boolean)>putDeepByteArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; value, boolean force) </code>
@@ -942,7 +950,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">将指定的 NBT键 设置为给定值.</td>
                                         </tr>
                                         
-                                        <tr id="i84" class="altColor">
+                                        <tr id="i85" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#putDeepByteArray(java.lang.String,java.util.List,boolean)>putDeepByteArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Byte.html>Byte</a>&gt; value, boolean force) </code>
@@ -950,7 +958,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">将指定的 NBT键 设置为给定值.</td>
                                         </tr>
                                         
-                                        <tr id="i85" class="rowColor">
+                                        <tr id="i86" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#putDeepIntArray(java.lang.String,kotlin.Array,boolean)>putDeepIntArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt; value, boolean force) </code>
@@ -958,7 +966,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">将指定的 NBT键 设置为给定值.</td>
                                         </tr>
                                         
-                                        <tr id="i86" class="altColor">
+                                        <tr id="i87" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#putDeepIntArray(java.lang.String,java.util.List,boolean)>putDeepIntArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; value, boolean force) </code>
@@ -966,7 +974,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">将指定的 NBT键 设置为给定值.</td>
                                         </tr>
                                         
-                                        <tr id="i87" class="rowColor">
+                                        <tr id="i88" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#putDeepLongArray(java.lang.String,kotlin.Array,boolean)>putDeepLongArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt; value, boolean force) </code>
@@ -974,7 +982,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">将指定的 NBT键 设置为给定值.</td>
                                         </tr>
                                         
-                                        <tr id="i88" class="altColor">
+                                        <tr id="i89" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#putDeepLongArray(java.lang.String,java.util.List,boolean)>putDeepLongArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html>Long</a>&gt; value, boolean force) </code>
@@ -982,7 +990,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">将指定的 NBT键 设置为给定值.</td>
                                         </tr>
                                         
-                                        <tr id="i89" class="rowColor">
+                                        <tr id="i90" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#saveTo(org.bukkit.inventory.ItemStack)>saveTo</a>(@Nullable() ItemStack itemStack) </code>
@@ -990,7 +998,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <td class="colLast">将当前 NbtCompound 保存至对应的 ItemStack.</td>
                                         </tr>
                                         
-                                        <tr id="i90" class="altColor">
+                                        <tr id="i91" class="rowColor">
                                             <td class="colFirst"><code><a href=NbtCompound.html>NbtCompound</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NbtCraftItemComponent.html#coverWith(pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound)>coverWith</a>(@NotNull() <a href=NbtCompound.html>NbtCompound</a> overlayCompound) </code>
@@ -1013,7 +1021,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                             <!--   -->
                                         </a>
                                             <h3>Methods inherited from class&nbsp;pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike</h3>
-                                            <code>contains, contains, delete, getBoolean, getByte, getByteArray, getByteArrayOrNull, getCompound, getCompoundOrNull, getDeepBoolean, getDeepByte, getDeepByteArray, getDeepByteArrayOrNull, getDeepCompound, getDeepCompoundOrNull, getDeepDouble, getDeepFloat, getDeepInt, getDeepIntArray, getDeepIntArrayOrNull, getDeepList, getDeepListOrNull, getDeepLong, getDeepLongArray, getDeepLongArrayOrNull, getDeepShort, getDeepString, getDeepStringOrNull, getDeepUUID, getDeepUUIDOrNull, getDouble, getFloat, getInt, getIntArray, getIntArrayOrNull, getList, getListOrNull, getLong, getLongArray, getLongArrayOrNull, getShort, getString, getStringOrNull, getUUID, getUUIDOrNull, putDeep, putDeepBoolean, putDeepBoolean, putDeepByte, putDeepByte, putDeepByteArray, putDeepByteArray, putDeepDouble, putDeepDouble, putDeepFloat, putDeepFloat, putDeepInt, putDeepInt, putDeepIntArray, putDeepIntArray, putDeepLong, putDeepLong, putDeepLongArray, putDeepLongArray, putDeepShort, putDeepShort, putDeepString, putDeepString, removeDeep</code></li>
+                                            <code>contains, contains, delete, getBoolean, getByte, getByteArray, getByteArrayOrNull, getCompound, getCompoundOrNull, getDeepBoolean, getDeepByte, getDeepByteArray, getDeepByteArrayOrNull, getDeepCompound, getDeepCompoundOrNull, getDeepDouble, getDeepFloat, getDeepInt, getDeepIntArray, getDeepIntArrayOrNull, getDeepList, getDeepListOrNull, getDeepLong, getDeepLongArray, getDeepLongArrayOrNull, getDeepShort, getDeepString, getDeepStringOrNull, getDeepUUID, getDeepUUIDOrNull, getDouble, getFloat, getInt, getIntArray, getIntArrayOrNull, getList, getListOrNull, getLong, getLongArray, getLongArrayOrNull, getShort, getString, getStringOrNull, getUUID, getUUIDOrNull, putDeep, putDeep, putDeepBoolean, putDeepBoolean, putDeepByte, putDeepByte, putDeepByteArray, putDeepByteArray, putDeepDouble, putDeepDouble, putDeepFloat, putDeepFloat, putDeepInt, putDeepInt, putDeepIntArray, putDeepIntArray, putDeepLong, putDeepLong, putDeepLongArray, putDeepLongArray, putDeepShort, putDeepShort, putDeepString, putDeepString, removeDeep</code></li>
                                  
                                     <li class="blockList"><a id="methods.inherited.from.class.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike">
                                             <!--   -->
@@ -2758,6 +2766,47 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
 
                                         
 
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getDeep(java.lang.String,char,char)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getDeep</h4>
+                                        <pre class="methodSignature">@Nullable() <a href=Nbt.html>Nbt</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; <a href=NbtCraftItemComponent.html#getDeep(java.lang.String,char,char)>getDeep</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, char separator, char escape)</pre>
+                                        <div class="block"><p>根据 NBT键 获取对应的 Nbt, 如果没有找到对应的 Nbt 则返回 null. 例如 key 填写 &quot;test.test\\.test&quot;, separator 填写 '.', escape 填写 '\\'. 最后将获取键为 &quot;test&quot; 的 NbtComponentLike 下键为 &quot;test.test&quot; 的 NbtLike 的值.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>key</code> - 要获取 Nbt 的 NBT键.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>separator</code> - 多级NBT键分隔符.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>escape</code> - 分隔符转义符.</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>待查找的 Nbt.</p></dd>
                                         
 
                                         
