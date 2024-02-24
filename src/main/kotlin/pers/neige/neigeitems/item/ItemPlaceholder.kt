@@ -9,8 +9,11 @@ import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtNumeric
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtString
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import java.util.*
@@ -90,12 +93,12 @@ class ItemPlaceholder {
                 }
 
                 "nbt" -> {
-                    itemTag.getDeepStringOrNull(args.getOrNull(1) ?: "")
+                    getDeepStringOrNull(itemTag, args.getOrNull(1) ?: "")
                 }
 
                 "nbtnumber" -> {
                     val info = args.getOrNull(1)?.split("_", limit = 2)
-                    val value = itemTag.getDeepDoubleOrNull(info?.getOrNull(1) ?: "") ?: return@addExpansion null
+                    val value = getDeepDoubleOrNull(itemTag, info?.getOrNull(1) ?: "") ?: return@addExpansion null
                     "%.${info?.getOrNull(0)}f".format(value)
 
                 }
@@ -135,6 +138,20 @@ class ItemPlaceholder {
             }
             )
         }
+    }
+
+    private fun getDeepDoubleOrNull(nbt: NbtComponentLike, key: String): Double? {
+        val value: Nbt<*>? = nbt.getDeep(key, '`', '\\')
+        return if (value is NbtNumeric<*>) {
+            value.asDouble
+        } else null
+    }
+
+    private fun getDeepStringOrNull(nbt: NbtComponentLike, key: String): String? {
+        val value: Nbt<*>? = nbt.getDeep(key, '`', '\\')
+        return if ((value != null)) {
+            value.asString
+        } else null;
     }
 
     /**

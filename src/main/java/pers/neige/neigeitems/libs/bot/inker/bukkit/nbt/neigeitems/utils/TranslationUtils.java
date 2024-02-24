@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.inksnow.ankhinvoke.comments.HandleBy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.lang.LocaleI18n;
@@ -153,7 +152,7 @@ public class TranslationUtils {
     /**
      * 适用于1.17+版本, 将传统文本转化为高版本json文本.
      *
-     * @param message 待转换传统文本.
+     * @param message      待转换传统文本.
      * @param keepNewlines 此选项为 true 时, 将把文本中的换行符转化为 \n 文本, 为 false 时, 将于换行符处直接断开停止识别.
      * @return 传统文本.
      */

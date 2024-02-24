@@ -703,13 +703,16 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
 
     /**
      * 根据 NBT键 获取对应的 Nbt, 如果没有找到对应的 Nbt 则返回 null.
-     * NBT键 以 . 做分隔符.
+     * 例如 key 填写 "test.test\\.test", separator 填写 '.', escape 填写 '\\'.
+     * 最后将获取键为 "test" 的 NbtComponentLike 下键为 "test.test" 的 NbtLike 的值.
      *
-     * @param key 要获取 Nbt 的 NBT键.
+     * @param key       要获取 Nbt 的 NBT键.
+     * @param separator 多级NBT键分隔符.
+     * @param escape    分隔符转义符.
      * @return 待查找的 Nbt.
      */
-    default @Nullable Nbt<?> getDeep(@NotNull String key) {
-        List<String> keys = StringUtils.split(key, '.', '\\');
+    default @Nullable Nbt<?> getDeep(@NotNull String key, char separator, char escape) {
+        List<String> keys = StringUtils.split(key, separator, escape);
 
         NbtComponentLike currentNbtCompound = this;
         Nbt<?> value = null;
@@ -732,6 +735,17 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
         }
 
         return value;
+    }
+
+    /**
+     * 根据 NBT键 获取对应的 Nbt, 如果没有找到对应的 Nbt 则返回 null.
+     * NBT键 以 . 做分隔符.
+     *
+     * @param key 要获取 Nbt 的 NBT键.
+     * @return 待查找的 Nbt.
+     */
+    default @Nullable Nbt<?> getDeep(@NotNull String key) {
+        return getDeep(key, '.', '\\');
     }
 
     /**
@@ -1287,8 +1301,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
                 : def;
     }
 
-    default void putDeep(@NotNull String key, @NotNull Nbt<?> value, boolean force) {
-        List<String> keys = StringUtils.split(key, '.', '\\');
+    default void putDeep(@NotNull String key, @NotNull Nbt<?> value, boolean force, char separator, char escape) {
+        List<String> keys = StringUtils.split(key, separator, escape);
 
         NbtComponentLike currentNbtCompound = this;
 
@@ -1319,6 +1333,10 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
                 }
             }
         }
+    }
+
+    default void putDeep(@NotNull String key, @NotNull Nbt<?> value, boolean force) {
+        putDeep(key, value, force, '.', '\\');
     }
 
     default void putDeep(@NotNull String key, @NotNull Nbt<?> value) {

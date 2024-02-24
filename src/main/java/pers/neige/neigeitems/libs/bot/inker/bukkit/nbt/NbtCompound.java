@@ -7,8 +7,8 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.DelegateAbstractMap;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.LazyLoadEntrySet;
-import pers.neige.neigeitems.utils.StringUtils;
 import pers.neige.neigeitems.ref.nbt.*;
+import pers.neige.neigeitems.utils.StringUtils;
 
 import java.util.*;
 
@@ -480,8 +480,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
         return new NbtCompound(cloneNms());
     }
 
-    private @Nullable RefNbtBase getDeepRefNbt(@NotNull String key) {
-        List<String> keys = StringUtils.split(key, '.', '\\');
+    private @Nullable RefNbtBase getDeepRefNbt(@NotNull String key, char separator, char escape) {
+        List<String> keys = StringUtils.split(key, separator, escape);
 
         RefNbtTagCompound currentNbtCompound = this.delegate;
         RefNbtBase value = null;
@@ -506,9 +506,18 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
         return value;
     }
 
+    private @Nullable RefNbtBase getDeepRefNbt(@NotNull String key) {
+        return getDeepRefNbt(key, '.', '\\');
+    }
+
+    @Override
+    public @Nullable Nbt<?> getDeep(@NotNull String key, char separator, char escape) {
+        return fromNms(getDeepRefNbt(key, separator, escape));
+    }
+
     @Override
     public @Nullable Nbt<?> getDeep(@NotNull String key) {
-        return fromNms(getDeepRefNbt(key));
+        return getDeep(key, '.', '\\');
     }
 
     @Override
@@ -692,8 +701,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
                 : null;
     }
 
-    private void putDeepRefNbt(@NotNull String key, @NotNull RefNbtBase value, boolean force) {
-        List<String> keys = StringUtils.split(key, '.', '\\');
+    private void putDeepRefNbt(@NotNull String key, @NotNull RefNbtBase value, boolean force, char separator, char escape) {
+        List<String> keys = StringUtils.split(key, separator, escape);
 
         RefNbtTagCompound currentNbtCompound = this.delegate;
 
@@ -748,6 +757,10 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
                 return;
             }
         }
+    }
+
+    private void putDeepRefNbt(@NotNull String key, @NotNull RefNbtBase value, boolean force) {
+        putDeepRefNbt(key, value, force, '.', '\\');
     }
 
     @Override

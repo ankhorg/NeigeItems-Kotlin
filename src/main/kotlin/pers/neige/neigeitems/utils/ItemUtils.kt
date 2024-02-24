@@ -520,7 +520,7 @@ object ItemUtils {
      * @return NI物品信息, 非NI物品返回null
      */
     @JvmStatic
-    fun ItemStack.isNiItem(): ItemInfo? {
+    fun ItemStack?.isNiItem(): ItemInfo? {
         return this.isNiItem(false)
     }
 
@@ -531,8 +531,8 @@ object ItemUtils {
      * @return NI物品信息, 非NI物品返回null
      */
     @JvmStatic
-    fun ItemStack.isNiItem(parseData: Boolean): ItemInfo? {
-        if (this.type != Material.AIR) {
+    fun ItemStack?.isNiItem(parseData: Boolean): ItemInfo? {
+        if (this != null && this.type != Material.AIR) {
             // 读取物品
             val nbtItemStack = NbtItemStack(this)
             // 获取物品NBT
