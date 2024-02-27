@@ -5,6 +5,7 @@ import org.bukkit.Material
 import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.item.ItemCheck
 import pers.neige.neigeitems.manager.ActionManager
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 
 object TickInventory {
@@ -22,6 +23,17 @@ object TickInventory {
 
                     // 检测物品过期, 检测物品更新
                     ItemCheck.checkItem(player, itemStack, itemInfo)
+                    // 耐久百分比强制同步
+                    if (ConfigManager.forceSync && itemInfo.neigeItems.containsKey("durability")) {
+                        val durability = itemInfo.neigeItems.getInt("durability")
+                        val maxDurability = itemInfo.neigeItems.getInt("maxDurability")
+                        val theoreticalDamage =
+                            (itemStack.type.maxDurability * (1 - (durability.toDouble() / maxDurability))).toInt()
+                                .toShort()
+                        if (itemStack.durability != theoreticalDamage) {
+                            itemStack.durability = theoreticalDamage
+                        }
+                    }
                     if (itemStack.amount != 0 && itemStack.type != Material.AIR) {
                         // 执行物品动作
                         ActionManager.tick(player, itemStack, itemInfo, "tick_$index")

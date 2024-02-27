@@ -38,6 +38,7 @@ object ConfigManager {
     var removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
     var updateInterval = config.getLong("ItemUpdate.interval", -1)
     var language = config.getString("Language", "zh_cn")!!
+    var forceSync = config.getBoolean("ItemDurability.forceSync", false)
 
     /**
      * 加载默认配置文件
@@ -98,6 +99,7 @@ object ConfigManager {
         removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
         updateInterval = config.getLong("ItemUpdate.interval", -1)
         language = config.getString("Language", "zh_cn")!!
+        forceSync = config.getBoolean("ItemDurability.forceSync", false)
     }
 
     /**

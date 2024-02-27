@@ -199,3 +199,6 @@ ItemAction:
 ItemPlaceholder:
   # 是否开启物品变量功能(更改后需重启服务器)
   enable: true
+ItemDurability:
+  # 物品自定义耐久百分比与原版耐久百分比对不上的时候强制进行同步修正
+  forceSync: false
