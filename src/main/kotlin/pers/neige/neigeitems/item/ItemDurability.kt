@@ -206,7 +206,7 @@ object ItemDurability {
         }
 
         // 处理真实伤害值
-        val realDamage = if (damageEvent == null) {
+        val realDamage = if (damageEvent != null) {
             // 在PlayerItemDamageEvent中, damage已经过处理, 不用我继续瞎寄吧操作
             damage
         } else {
