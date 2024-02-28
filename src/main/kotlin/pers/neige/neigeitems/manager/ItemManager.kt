@@ -317,12 +317,8 @@ object ItemManager : ItemConfigManager() {
         val directTag = nbtItemStack.directTag
         // 不是NI物品还加个屁的使用次数
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
-        // 掏出最大使用次数NBT
-        val maxChargeNbt = neigeItems.get("maxCharge")
-        // 类型检测
-        if (maxChargeNbt !is NbtNumeric<*>) return
         // 获取物品最大使用次数
-        val maxCharge = maxChargeNbt.asInt
+        val maxCharge = neigeItems.getIntOrNull("maxCharge") ?: return
         // 计算新使用次数
         val newCharge = amount.coerceAtMost(maxCharge).coerceAtLeast(0)
         // 修改使用次数
@@ -341,12 +337,8 @@ object ItemManager : ItemConfigManager() {
         val directTag = nbtItemStack.directTag
         // 不是NI物品还加个屁的使用次数
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
-        // 掏出使用次数NBT
-        val chargeNbt = neigeItems.get("charge")
-        // 类型检测
-        if (chargeNbt !is NbtNumeric<*>) return
         // 获取物品使用次数
-        val charge = chargeNbt.asInt
+        val charge = neigeItems.getIntOrNull("charge") ?: return
         // 获取物品最大使用次数
         val maxCharge = neigeItems.getInt("maxCharge")
         // 计算新使用次数
@@ -374,12 +366,8 @@ object ItemManager : ItemConfigManager() {
         val directTag = nbtItemStack.directTag
         // 不是NI物品还加个屁的使用次数
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
-        // 掏出使用次数NBT
-        val chargeNbt = neigeItems.get("charge")
-        // 类型检测
-        if (chargeNbt !is NbtNumeric<*>) return
         // 计算物品使用次数
-        val charge = chargeNbt.asInt.coerceAtMost(amount.coerceAtLeast(1))
+        val charge = (neigeItems.getIntOrNull("charge") ?: return).coerceAtMost(amount.coerceAtLeast(1))
         // 修改使用次数
         neigeItems.putInt("charge", charge)
         // 修改最大使用次数
@@ -398,12 +386,8 @@ object ItemManager : ItemConfigManager() {
         val directTag = nbtItemStack.directTag
         // 不是NI物品还加个屁的使用次数
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
-        // 掏出最大使用次数NBT
-        val maxChargeNbt = neigeItems.get("maxCharge")
-        // 类型检测
-        if (maxChargeNbt !is NbtNumeric<*>) return
         // 计算物品最大使用次数
-        val maxCharge = (maxChargeNbt.asInt + amount).coerceAtLeast(1)
+        val maxCharge = ((neigeItems.getIntOrNull("maxCharge") ?: return) + amount).coerceAtLeast(1)
         // 计算物品使用次数
         val charge = neigeItems.getInt("charge").coerceAtMost(maxCharge)
         // 修改使用次数
@@ -424,12 +408,8 @@ object ItemManager : ItemConfigManager() {
         val directTag = nbtItemStack.directTag
         // 不是NI物品还加个屁的自定义耐久
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
-        // 掏出最大耐久值NBT
-        val maxDurabilityNbt = neigeItems.get("maxDurability")
-        // 类型检测
-        if (maxDurabilityNbt !is NbtNumeric<*>) return
         // 获取物品最大耐久值
-        val maxDurability = maxDurabilityNbt.asInt
+        val maxDurability = neigeItems.getIntOrNull("maxDurability") ?: return
         // 计算新耐久值
         val newDurability = amount.coerceAtMost(maxDurability).coerceAtLeast(0)
         // 获取物品是否破坏(默认破坏)
@@ -457,12 +437,8 @@ object ItemManager : ItemConfigManager() {
         val directTag = nbtItemStack.directTag
         // 不是NI物品还加个屁的自定义耐久
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
-        // 掏出耐久值NBT
-        val durabilityNbt = neigeItems.get("durability")
-        // 类型检测
-        if (durabilityNbt !is NbtNumeric<*>) return
         // 获取物品耐久值
-        val durability = durabilityNbt.asInt
+        val durability = neigeItems.getIntOrNull("durability") ?: return
         // 获取物品最大耐久值
         val maxDurability = neigeItems.getInt("maxDurability")
         // 计算新耐久值
@@ -494,12 +470,8 @@ object ItemManager : ItemConfigManager() {
         val directTag = nbtItemStack.directTag
         // 不是NI物品还加个屁的自定义耐久
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
-        // 掏出耐久值NBT
-        val durabilityNbt = neigeItems.get("durability")
-        // 类型检测
-        if (durabilityNbt !is NbtNumeric<*>) return
         // 获取物品耐久值
-        val durability = durabilityNbt.asInt.coerceAtMost(realAmount)
+        val durability = (neigeItems.getIntOrNull("durability") ?: return).coerceAtMost(realAmount)
         // 修改耐久值
         neigeItems.putInt("durability", durability)
         // 修改最大耐久值
@@ -519,12 +491,8 @@ object ItemManager : ItemConfigManager() {
         val directTag = nbtItemStack.directTag
         // 不是NI物品还加个屁的自定义耐久
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
-        // 掏出最大耐久
-        val maxDurabilityNbt = neigeItems.get("maxDurability")
-        // 类型检测
-        if (maxDurabilityNbt !is NbtNumeric<*>) return
         // 修改后的最大耐久值
-        val maxDurability = (maxDurabilityNbt.asInt + amount).coerceAtLeast(1)
+        val maxDurability = ((neigeItems.getIntOrNull("maxDurability") ?: return) + amount).coerceAtLeast(1)
         // 获取物品耐久值
         val durability = neigeItems.getInt("durability").coerceAtMost(maxDurability)
         // 修改耐久值
