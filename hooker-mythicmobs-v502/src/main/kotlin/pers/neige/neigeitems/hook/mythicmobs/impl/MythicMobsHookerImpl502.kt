@@ -2,6 +2,7 @@ package pers.neige.neigeitems.hook.mythicmobs.impl
 
 import io.lumine.mythic.api.mobs.MobManager
 import io.lumine.mythic.bukkit.MythicBukkit
+import io.lumine.mythic.bukkit.adapters.BukkitEntity
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent
 import io.lumine.mythic.bukkit.events.MythicMobSpawnEvent
 import io.lumine.mythic.bukkit.events.MythicReloadedEvent
@@ -9,6 +10,7 @@ import io.lumine.mythic.core.items.ItemExecutor
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.event.Event
+import org.bukkit.event.EventPriority
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.utils.ListenerUtils
@@ -38,7 +40,7 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
 
     override val spawnListener = ListenerUtils.registerListener(
         MythicMobSpawnEvent::class.java,
-        org.bukkit.event.EventPriority.HIGH
+        EventPriority.HIGH
     ) { event ->
         async {
             if (event.entity is LivingEntity) {
@@ -52,7 +54,8 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
     }
 
     override val deathListener = ListenerUtils.registerListener(
-        MythicMobDeathEvent::class.java
+        MythicMobDeathEvent::class.java,
+        EventPriority.HIGH
     ) { event ->
         async {
             if (event.entity is LivingEntity) {
@@ -134,5 +137,9 @@ class MythicMobsHookerImpl502 : MythicMobsHooker() {
             is MythicMobDeathEvent -> event.mobLevel
             else -> null
         }
+    }
+
+    override fun adapt(entity: Entity): Any {
+        return BukkitEntity(entity)
     }
 }

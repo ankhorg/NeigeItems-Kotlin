@@ -39,7 +39,13 @@ public class ListUtils {
         if (index >= 0 && index <= (list.size() - 1)) {
             value = list.get(index);
         }
-        return value != null ? handler.apply(value) : def;
+        if (value != null) {
+            V result = handler.apply(value);
+            if (result != null) {
+                return result;
+            }
+        }
+        return def;
     }
 
     @Nullable
@@ -74,6 +80,12 @@ public class ListUtils {
         if (index >= 0 && index <= (list.length - 1)) {
             value = list[index];
         }
-        return value != null ? handler.apply(value) : def;
+        if (value != null) {
+            V result = handler.apply(value);
+            if (result != null) {
+                return result;
+            }
+        }
+        return def;
     }
 }

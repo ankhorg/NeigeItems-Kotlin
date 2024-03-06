@@ -11,7 +11,7 @@ object PrepareAnvilListener {
     fun listener(event: PrepareAnvilEvent) {
         val origin = event.inventory.getItem(0) ?: return
         val originNbt = origin.getNbtOrNull() ?: return
-        val result = event.inventory.getItem(2) ?: return
+        val result = event.result ?: return
         val resultNbt = result.getNbtOrNull() ?: return
         if (origin.durability == result.durability) return
         val originDurability = originNbt.getDeepIntOrNull("NeigeItems.durability") ?: return

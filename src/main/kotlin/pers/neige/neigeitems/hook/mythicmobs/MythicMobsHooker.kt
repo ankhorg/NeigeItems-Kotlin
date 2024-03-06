@@ -160,6 +160,14 @@ abstract class MythicMobsHooker {
      */
     abstract fun getMobLevel(event: Event): Double?
 
+    /**
+     * 将 Bukkit 实体转换为 MythicMobs 包了一层的 BukkitEntity.
+     *
+     * @param entity 待转换实体
+     * @return BukkitEntity
+     */
+    abstract fun adapt(entity: Entity): Any
+
     private val df2 = DecimalFormat("#0.00")
 
     /**

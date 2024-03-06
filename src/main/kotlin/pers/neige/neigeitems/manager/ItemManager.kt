@@ -10,7 +10,6 @@ import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtNumeric
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.utils.ConfigUtils.clone
