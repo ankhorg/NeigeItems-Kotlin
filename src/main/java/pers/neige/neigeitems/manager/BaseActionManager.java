@@ -271,6 +271,10 @@ public abstract class BaseActionManager {
                 return Results.STOP;
             }
         } catch (Throwable error) {
+            plugin.getLogger().warning("条件解析异常, 条件内容如下:");
+            for (String conditionLine : condition.split("\n")) {
+                plugin.getLogger().warning(conditionLine);
+            }
             error.printStackTrace();
             return Results.STOP;
         }
@@ -592,6 +596,10 @@ public abstract class BaseActionManager {
                     return Results.SUCCESS;
                 }
             } catch (Throwable error) {
+                plugin.getLogger().warning("JS动作执行异常, 动作内容如下:");
+                for (String contentLine : content.split("\n")) {
+                    plugin.getLogger().warning(contentLine);
+                }
                 error.printStackTrace();
                 return Results.SUCCESS;
             }
