@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.netty.channel.Channel;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -19,6 +20,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation.Anim
 import pers.neige.neigeitems.ref.argument.RefAnchor;
 import pers.neige.neigeitems.ref.block.RefBlockPos;
 import pers.neige.neigeitems.ref.block.sign.RefSignBlockEntity;
+import pers.neige.neigeitems.ref.chat.RefChatSerializer;
 import pers.neige.neigeitems.ref.chat.RefEnumTitleAction;
 import pers.neige.neigeitems.ref.entity.*;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
@@ -523,28 +525,64 @@ public class EntityPlayerUtils {
             int stay,
             int fadeOut
     ) {
+        sendTitle(player, ComponentSerializer.toString(title), ComponentSerializer.toString(subtitle), fadeIn, stay, fadeOut);
+    }
+
+    /**
+     * 向玩家发送 BaseComponent 形式的 Title.
+     *
+     * @param player       待接收玩家.
+     * @param jsonTitle    Title.
+     * @param jsonSubtitle Subtitle.
+     */
+    public static void sendTitle(
+            @NotNull Player player,
+            @Nullable String jsonTitle,
+            @Nullable String jsonSubtitle
+    ) {
+        sendTitle(player, jsonTitle, jsonSubtitle, 10, 70, 20);
+    }
+
+    /**
+     * 向玩家发送 BaseComponent 形式的 Title.
+     *
+     * @param player       待接收玩家.
+     * @param jsonTitle    Title.
+     * @param jsonSubtitle Subtitle.
+     * @param fadeIn       渐入时间(tick).
+     * @param stay         停留时间(tick).
+     * @param fadeOut      渐出时间(tick).
+     */
+    public static void sendTitle(
+            @NotNull Player player,
+            @Nullable String jsonTitle,
+            @Nullable String jsonSubtitle,
+            int fadeIn,
+            int stay,
+            int fadeOut
+    ) {
         RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
         if (TITLE_PACKET_CHANGED) {
             RefClientboundSetTitlesAnimationPacket times = new RefClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
             nmsPlayer.playerConnection.sendPacket(times);
-            if (title != null) {
-                RefClientboundSetTitleTextPacket packetTitle = new RefClientboundSetTitleTextPacket(EntityUtils.toNms(title));
+            if (jsonTitle != null) {
+                RefClientboundSetTitleTextPacket packetTitle = new RefClientboundSetTitleTextPacket(RefChatSerializer.fromJson(jsonTitle));
                 nmsPlayer.playerConnection.sendPacket(packetTitle);
             }
-            if (subtitle != null) {
-                RefClientboundSetSubtitleTextPacket packetSubtitle = new RefClientboundSetSubtitleTextPacket(EntityUtils.toNms(subtitle));
+            if (jsonSubtitle != null) {
+                RefClientboundSetSubtitleTextPacket packetSubtitle = new RefClientboundSetSubtitleTextPacket(RefChatSerializer.fromJson(jsonSubtitle));
                 nmsPlayer.playerConnection.sendPacket(packetSubtitle);
             }
         } else {
             RefPacketPlayOutTitle times = new RefPacketPlayOutTitle(fadeIn, stay, fadeOut);
             nmsPlayer.playerConnection.sendPacket(times);
             RefPacketPlayOutTitle packetSubtitle;
-            if (title != null) {
-                packetSubtitle = new RefPacketPlayOutTitle(RefEnumTitleAction.TITLE, EntityUtils.toNms(title));
+            if (jsonTitle != null) {
+                packetSubtitle = new RefPacketPlayOutTitle(RefEnumTitleAction.TITLE, RefChatSerializer.fromJson(jsonTitle));
                 nmsPlayer.playerConnection.sendPacket(packetSubtitle);
             }
-            if (subtitle != null) {
-                packetSubtitle = new RefPacketPlayOutTitle(RefEnumTitleAction.SUBTITLE, EntityUtils.toNms(subtitle));
+            if (jsonSubtitle != null) {
+                packetSubtitle = new RefPacketPlayOutTitle(RefEnumTitleAction.SUBTITLE, RefChatSerializer.fromJson(jsonSubtitle));
                 nmsPlayer.playerConnection.sendPacket(packetSubtitle);
             }
         }
