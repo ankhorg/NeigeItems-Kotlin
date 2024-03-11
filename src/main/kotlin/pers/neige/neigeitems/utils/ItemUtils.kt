@@ -17,9 +17,13 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtListLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
+import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
+import pers.neige.neigeitems.manager.HookerManager.getHookedItem
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
+import pers.neige.neigeitems.manager.HookerManager.oraxenHooker
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.ItemUtils.getItems
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SchedulerUtils.syncAndGet
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -777,16 +781,8 @@ object ItemUtils {
                     ItemManager.getItemStack(args[0], player, data)?.getItems(amount)?.forEach { items.add(it) }
                 }
 
-                easyItemHooker?.hasItem(args[0]) == true -> {
-                    easyItemHooker?.getItemStack(args[0])?.let { itemStack ->
-                        repeat(amount) {
-                            items.add(itemStack)
-                        }
-                    }
-                }
-
                 else -> {
-                    mythicMobsHooker?.getItemStackSync(args[0])?.let { itemStack ->
+                    getHookedItem(args[0])?.let { itemStack ->
                         repeat(amount) {
                             items.add(itemStack)
                         }
@@ -804,12 +800,9 @@ object ItemUtils {
                     }
                 }
 
-                easyItemHooker?.hasItem(args[0]) == true -> {
-                    easyItemHooker?.getItemStack(args[0])?.getItems(amount)?.forEach { items.add(it) }
-                }
-                // 对于MM物品, 这个配置项不代表是否随机生成, 代表物品是否合并
+                // 对于其他物品, 这个配置项不代表是否随机生成, 代表物品是否合并
                 else -> {
-                    mythicMobsHooker?.getItemStackSync(args[0])?.getItems(amount)?.forEach { items.add(it) }
+                    getHookedItem(args[0])?.getItems(amount)?.forEach { items.add(it) }
                 }
             }
         }

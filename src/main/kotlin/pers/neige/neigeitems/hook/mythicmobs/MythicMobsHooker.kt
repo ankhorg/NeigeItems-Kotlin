@@ -81,6 +81,14 @@ abstract class MythicMobsHooker {
     abstract val reloadListener: Listener
 
     /**
+     * 获取是否存在对应ID的MM物品
+     *
+     * @param id MM物品ID
+     * @return 是否存在对应ID的MM物品
+     */
+    abstract fun hasItem(id: String): Boolean
+
+    /**
      * 获取MM物品, 不存在对应ID的MM物品则返回null
      *
      * @param id MM物品ID

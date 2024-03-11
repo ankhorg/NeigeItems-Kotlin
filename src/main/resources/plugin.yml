@@ -9,6 +9,7 @@ softdepend:
   - 'ProtocolLib'
   - 'PlaceholderAPI'
   - 'MythicMobs'
+  - 'Oraxen'
   - 'Vault'
 
 api-version: 1.13

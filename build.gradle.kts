@@ -85,6 +85,7 @@ repositories {
     maven("https://repo.codemc.io/repository/nms")
     // mmoitems
 //    maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
+    maven("https://repo.oraxen.com/releases")
     maven {
         url = uri("http://ptms.ink:8081/repository/releases/")
         isAllowInsecureProtocol = true
@@ -102,6 +103,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("org.ow2.asm:asm:9.4")
+    compileOnly("io.th0rgal:oraxen:1.170.0")
 //    compileOnly("net.Indyuce:MMOItems-API:6.9.5-SNAPSHOT")
 //    compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
 

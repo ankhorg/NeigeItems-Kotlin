@@ -7,10 +7,12 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager
+import pers.neige.neigeitems.manager.HookerManager.getHookedItem
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
+import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.ItemUtils.getItems
 import pers.neige.neigeitems.utils.SamplingUtils.aExpj
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -367,14 +369,9 @@ class ItemPack(
                                 }
                             }
                         }
-
-                        HookerManager.easyItemHooker?.hasItem(id) == true -> {
-                            HookerManager.easyItemHooker?.getItemStack(id)?.getItems(amount)
-                                ?.forEach { itemStacks.add(it) }
-                        }
-                        // 对于MM物品, 这个配置项不代表是否随机生成, 代表物品是否合并
+                        // 对于其他物品, 这个配置项不代表是否随机生成, 代表物品是否合并
                         else -> {
-                            HookerManager.mythicMobsHooker?.getItemStackSync(id)?.getItems(amount)
+                            getHookedItem(args[0])?.getItems(amount)
                                 ?.forEach { itemStacks.add(it) }
                         }
                     }
@@ -385,16 +382,8 @@ class ItemPack(
                             ItemManager.getItemStack(id, player, data)?.getItems(amount)?.forEach { itemStacks.add(it) }
                         }
 
-                        HookerManager.easyItemHooker?.hasItem(id) == true -> {
-                            HookerManager.easyItemHooker?.getItemStack(id)?.let { itemStack ->
-                                repeat(amount) {
-                                    itemStacks.add(itemStack)
-                                }
-                            }
-                        }
-
                         else -> {
-                            HookerManager.mythicMobsHooker?.getItemStackSync(id)?.let { itemStack ->
+                            getHookedItem(args[0])?.let { itemStack ->
                                 repeat(amount) {
                                     itemStacks.add(itemStack)
                                 }

@@ -6,12 +6,15 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.easyitem.EasyItemHooker
+import pers.neige.neigeitems.hook.easyitem.OraxenHooker
 import pers.neige.neigeitems.hook.easyitem.impl.EasyItemHookerImpl
+import pers.neige.neigeitems.hook.easyitem.impl.OraxenHookerImpl
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
 import pers.neige.neigeitems.hook.nashorn.impl.LegacyNashornHookerImpl
@@ -152,15 +155,16 @@ object HookerManager {
             null
         }
 
-    val easyItemHooker: EasyItemHooker? by lazy {
+    var easyItemHooker: EasyItemHooker? = null
+
+    val oraxenHooker: OraxenHooker? =
         try {
-            Class.forName("pers.neige.easyitem.manager.ItemManager")
-            EasyItemHookerImpl()
+            Class.forName("io.th0rgal.oraxen.api.OraxenItems")
+            OraxenHookerImpl()
         } catch (error: Throwable) {
-            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "EasyItem"))
+            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "Oraxen"))
             null
         }
-    }
 
     /**
      * 加载EI挂钩功能
@@ -168,7 +172,14 @@ object HookerManager {
     @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
     private fun loadEasyItemHooker() {
-        easyItemHooker
+        easyItemHooker =
+            try {
+                Class.forName("pers.neige.easyitem.manager.ItemManager")
+                EasyItemHookerImpl()
+            } catch (error: Throwable) {
+                Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "EasyItem"))
+                null
+            }
     }
 
     /**
@@ -392,5 +403,161 @@ object HookerManager {
     @JvmStatic
     fun ComponentBuilder.append(builder: ComponentBuilder): ComponentBuilder {
         return append(builder.create())
+    }
+
+    /**
+     * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
+     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     *
+     * @param id 物品ID
+     * @return 显示名或翻译名.
+     */
+    @JvmStatic
+    fun getNiOrHookedItem(
+        id: String
+    ): ItemStack? {
+        if (ItemManager.hasItem(id)) {
+            val itemStack = ItemManager.getItemStack(id, null, HashMap())
+            if (itemStack != null) return itemStack
+        }
+        return getHookedItem(id)
+    }
+
+    /**
+     * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
+     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     *
+     * @param id 物品ID
+     * @param player 用作参数的玩家
+     * @return 显示名或翻译名.
+     */
+    @JvmStatic
+    fun getNiOrHookedItem(
+        id: String,
+        player: OfflinePlayer?
+    ): ItemStack? {
+        if (ItemManager.hasItem(id)) {
+            val itemStack = ItemManager.getItemStack(id, player, HashMap())
+            if (itemStack != null) return itemStack
+        }
+        return getHookedItem(id)
+    }
+
+    /**
+     * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
+     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     *
+     * @param id 物品ID
+     * @param player 用作参数的玩家
+     * @param data 指向数据
+     * @return 显示名或翻译名.
+     */
+    @JvmStatic
+    fun getNiOrHookedItem(
+        id: String,
+        player: OfflinePlayer?,
+        data: String?
+    ): ItemStack? {
+        if (ItemManager.hasItem(id)) {
+            val itemStack = ItemManager.getItemStack(id, player, data)
+            if (itemStack != null) return itemStack
+        }
+        return getHookedItem(id)
+    }
+
+    /**
+     * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
+     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     *
+     * @param id 物品ID
+     * @param data 指向数据
+     * @return 显示名或翻译名.
+     */
+    @JvmStatic
+    fun getNiOrHookedItem(
+        id: String,
+        data: MutableMap<String, String>?
+    ): ItemStack? {
+        if (ItemManager.hasItem(id)) {
+            val itemStack = ItemManager.getItemStack(id, null, data)
+            if (itemStack != null) return itemStack
+        }
+        return getHookedItem(id)
+    }
+
+    /**
+     * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
+     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     *
+     * @param id 物品ID
+     * @param data 指向数据
+     * @return 显示名或翻译名.
+     */
+    @JvmStatic
+    fun getNiOrHookedItem(
+        id: String,
+        data: String?
+    ): ItemStack? {
+        if (ItemManager.hasItem(id)) {
+            val itemStack = ItemManager.getItemStack(id, null, data)
+            if (itemStack != null) return itemStack
+        }
+        return getHookedItem(id)
+    }
+
+    /**
+     * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
+     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     *
+     * @param id 物品ID
+     * @param player 用作参数的玩家
+     * @param data 指向数据
+     * @return 显示名或翻译名.
+     */
+    @JvmStatic
+    fun getNiOrHookedItem(
+        id: String,
+        player: OfflinePlayer?,
+        data: MutableMap<String, String>?
+    ): ItemStack? {
+        if (ItemManager.hasItem(id)) {
+            val itemStack = ItemManager.getItemStack(id, player, data)
+            if (itemStack != null) return itemStack
+        }
+        return getHookedItem(id)
+    }
+
+    /**
+     * 根据各个参数, 尝试获取挂钩的物品库中的物品.
+     * 优先级 MM > Oraxen > EI > 原版物品.
+     *
+     * @param id 物品ID
+     * @return 显示名或翻译名.
+     */
+    @JvmStatic
+    fun getHookedItem(
+        id: String
+    ): ItemStack? {
+        if (mythicMobsHooker?.hasItem(id) == true) {
+            val itemStack = mythicMobsHooker?.getItemStackSync(id)
+            if (itemStack != null) return itemStack
+        }
+
+        if (oraxenHooker?.hasItem(id) == true) {
+            val itemStack = oraxenHooker.getItemStack(id)
+            if (itemStack != null) return itemStack
+        }
+
+        if (easyItemHooker?.hasItem(id) == true) {
+            val itemStack = easyItemHooker?.getItemStack(id)
+            if (itemStack != null) return itemStack
+        }
+
+        val material = Material.matchMaterial(id)
+        if (material != null) {
+            return ItemStack(material)
+        }
+
+        return null
     }
 }
