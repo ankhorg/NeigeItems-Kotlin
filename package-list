@@ -77,6 +77,7 @@ pers.neige.neigeitems.ref.sounds
 pers.neige.neigeitems.ref.tags
 pers.neige.neigeitems.ref.util
 pers.neige.neigeitems.ref.world
+pers.neige.neigeitems.ref.world.inventory
 pers.neige.neigeitems.ref.world.level
 pers.neige.neigeitems.ref.world.level.chunk.storage
 pers.neige.neigeitems.scanner
