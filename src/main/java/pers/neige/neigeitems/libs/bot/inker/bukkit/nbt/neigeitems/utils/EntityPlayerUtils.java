@@ -21,6 +21,8 @@ import pers.neige.neigeitems.ref.argument.RefAnchor;
 import pers.neige.neigeitems.ref.block.RefBlockPos;
 import pers.neige.neigeitems.ref.block.sign.RefSignBlockEntity;
 import pers.neige.neigeitems.ref.chat.RefChatSerializer;
+import pers.neige.neigeitems.ref.chat.RefComponent;
+import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
 import pers.neige.neigeitems.ref.chat.RefEnumTitleAction;
 import pers.neige.neigeitems.ref.entity.*;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
@@ -33,6 +35,7 @@ import pers.neige.neigeitems.ref.server.level.RefServerEntity;
 import pers.neige.neigeitems.ref.server.level.RefWorldServer;
 import pers.neige.neigeitems.ref.world.RefCraftWorld;
 import pers.neige.neigeitems.ref.world.RefVec3;
+import pers.neige.neigeitems.ref.world.inventory.RefCraftContainer;
 
 import java.util.List;
 import java.util.Optional;
@@ -115,6 +118,10 @@ public class EntityPlayerUtils {
      * 1.14+ 版本起, WorldServer 类移除 tracker 字段.
      */
     private static final boolean REMOVED_TRACKER = CbVersion.v1_14_R1.isSupport();
+    /**
+     * 1.14+ 版本起, PacketPlayOutOpenWindow 数据包中的容器类型由 String 变更为 Containers(MenuType).
+     */
+    private static final boolean FUCKING_STRING_MENU_TYPE = CbVersion.v1_14_R1.isSupport();
 
     /**
      * 让指定玩家攻击指定实体.
@@ -885,6 +892,93 @@ public class EntityPlayerUtils {
                 }
                 result.addAll(new RefPacketPlayOutEntityMetadata(entityId, entityData, true).packedItems0);
                 packet.packedItems0 = result;
+            }
+        }
+    }
+
+    /**
+     * 向玩家发送 NMS 数据包.
+     *
+     * @param player       待接收玩家.
+     * @param packetObject 待发送的数据包(nms实例).
+     */
+    public static void sendPacket(
+            @NotNull Player player,
+            @NotNull Object packetObject
+    ) {
+        if ((Object) player instanceof RefCraftPlayer && packetObject instanceof RefPacket<?>) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            nmsPlayer.playerConnection.sendPacket((RefPacket<?>) packetObject);
+        }
+    }
+
+    /**
+     * 向玩家发送虚假的容器标题.
+     *
+     * @param player 待接收玩家.
+     * @param title  待发送容器标题.
+     */
+    public static void sendFakeInventoryTitle(
+            @NotNull Player player,
+            @NotNull BaseComponent title
+    ) {
+        sendFakeInventoryTitleByNms(player, EntityUtils.toNms(title));
+    }
+
+    /**
+     * 向玩家发送虚假的容器标题.
+     *
+     * @param player 待接收玩家.
+     * @param title  待发送容器标题.
+     */
+    public static void sendFakeInventoryTitle(
+            @NotNull Player player,
+            @NotNull String title
+    ) {
+        sendFakeInventoryTitleByNms(player, RefCraftChatMessage.fromString(title)[0]);
+    }
+
+    /**
+     * 向玩家发送虚假的JSON文本容器标题.
+     *
+     * @param player 待接收玩家.
+     * @param title  JSON格式的待发送容器标题.
+     */
+    public static void sendFakeInventoryJsonTitle(
+            @NotNull Player player,
+            @NotNull String title
+    ) {
+        sendFakeInventoryTitleByNms(player, RefChatSerializer.fromJson(title));
+    }
+
+    /**
+     * 向玩家发送虚假的容器标题.
+     *
+     * @param player 待接收玩家.
+     * @param title  待发送容器标题.
+     */
+    private static void sendFakeInventoryTitleByNms(
+            @NotNull Player player,
+            @NotNull RefComponent title
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityHuman nmsHuman = (RefEntityHuman) nmsPlayer;
+            if (nmsHuman.containerMenu != nmsHuman.inventoryMenu) {
+                RefPacketPlayOutOpenWindow packet;
+                if (FUCKING_STRING_MENU_TYPE) {
+                    packet = new RefPacketPlayOutOpenWindow(nmsHuman.containerMenu.containerId, nmsHuman.containerMenu.getType(), title);
+                } else {
+                    String windowType = RefCraftContainer.getNotchInventoryType0(player.getOpenInventory().getType());
+                    int size = nmsHuman.containerMenu.getBukkitView().getTopInventory().getSize();
+                    if (windowType.equals("minecraft:crafting_table") || windowType.equals("minecraft:anvil") || windowType.equals("minecraft:enchanting_table")) {
+                        size = 0;
+                    }
+                    packet = new RefPacketPlayOutOpenWindow(nmsHuman.containerMenu.containerId, windowType, title, size);
+                }
+
+                nmsPlayer.playerConnection.sendPacket(packet);
+                player.updateInventory();
             }
         }
     }

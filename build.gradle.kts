@@ -78,19 +78,20 @@ repositories {
     maven("https://r.irepo.space/maven/")
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/public")
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://repo.dmulloy2.net/repository/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://jitpack.io")
-    maven("https://repo.codemc.io/repository/nms")
+    maven("https://jitpack.io/")
+    maven("https://repo.codemc.io/repository/nms/")
     // mmoitems
 //    maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
-    maven("https://repo.oraxen.com/releases")
+    maven("https://repo.oraxen.com/releases/")
+    maven("https://repo.papermc.io/repository/maven-public/")
     maven {
         url = uri("http://ptms.ink:8081/repository/releases/")
         isAllowInsecureProtocol = true
     }
-    maven("https://repo.tabooproject.org/storages/public/releases")
+    maven("https://repo.tabooproject.org/storages/public/releases/")
 }
 
 dependencies {
@@ -106,6 +107,9 @@ dependencies {
     compileOnly("io.th0rgal:oraxen:1.170.0")
 //    compileOnly("net.Indyuce:MMOItems-API:6.9.5-SNAPSHOT")
 //    compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
+    compileOnly("net.kyori:adventure-api:4.16.0")
+    compileOnly("net.kyori:adventure-text-serializer-legacy:4.16.0")
+    compileOnly("net.kyori:adventure-text-serializer-gson:4.16.0")
 
     // ankh-invoke
     implementation("org.inksnow:ankh-invoke-bukkit:1.0.10-SNAPSHOT")

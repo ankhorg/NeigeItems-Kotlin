@@ -6,6 +6,17 @@ import pers.neige.neigeitems.ref.world.RefCraftServer;
 
 public class ServerUtils {
     private static final boolean SYNC_COMMANDS_SUPPORT = CbVersion.v1_13_R1.isSupport();
+    private static final boolean IS_PAPER = hasClass("com.destroystokyo.paper.PaperConfig") || hasClass("io.papermc.paper.configuration.Configuration");
+    private static final boolean SUPPORT_ADVENTURE = hasClass("net.kyori.adventure.text.Component");
+
+    private static boolean hasClass(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException var2) {
+            return false;
+        }
+    }
 
     /**
      * 与客户端玩家同步指令列表.
@@ -21,5 +32,19 @@ public class ServerUtils {
      */
     public static double[] getTps() {
         return ((RefCraftServer) (Object) Bukkit.getServer()).getServer().recentTps;
+    }
+
+    /**
+     * 获取当前服务器是否为 Paper.
+     */
+    public static boolean isPaper() {
+        return IS_PAPER;
+    }
+
+    /**
+     * 获取当前服务器是否存在 AdventureAPI.
+     */
+    public static boolean isSupportAdventure() {
+        return SUPPORT_ADVENTURE;
     }
 }
