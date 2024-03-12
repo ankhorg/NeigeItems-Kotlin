@@ -5,6 +5,13 @@ import org.inksnow.ankhinvoke.comments.HandleBy;
 @HandleBy(reference = "net/minecraft/world/item/ItemStack", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/ItemStack", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public final class RefNmsItemStack {
+    @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;<init>(Lnet/minecraft/nbt/CompoundTag;)V", predicates = "craftbukkit_version:[v1_17_R1,)", useAccessor = true)
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/ItemStack;<init>(Lnet/minecraft/server/v1_13_R1/NBTTagCompound;)V", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)", useAccessor = true)
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;<init>(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public RefNmsItemStack(RefNbtTagCompound nbt) {
+        throw new UnsupportedOperationException();
+    }
+
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;<init>(Lnet/minecraft/server/v1_12_R1/Item;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public RefNmsItemStack(RefItem item) {
         throw new UnsupportedOperationException();
@@ -40,4 +47,8 @@ public final class RefNmsItemStack {
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/ItemStack;load(Lnet/minecraft/server/v1_13_R1/NBTTagCompound;)V", useAccessor = true, predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;load(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public native void load(RefNbtTagCompound nbt);
+
+    @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;of(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/item/ItemStack;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/ItemStack;a(Lnet/minecraft/server/v1_13_R1/NBTTagCompound;)Lnet/minecraft/server/v1_13_R1/ItemStack;", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
+    public native static RefNmsItemStack of(RefNbtTagCompound nbt);
 }

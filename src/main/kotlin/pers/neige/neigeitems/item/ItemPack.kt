@@ -6,13 +6,11 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.manager.ConfigManager.debug
-import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.getHookedItem
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
-import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.ItemUtils.getItems
 import pers.neige.neigeitems.utils.SamplingUtils.aExpj
 import pers.neige.neigeitems.utils.SectionUtils.parseSection

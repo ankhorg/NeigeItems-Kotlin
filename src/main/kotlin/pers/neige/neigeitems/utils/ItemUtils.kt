@@ -17,13 +17,10 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtListLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
-import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
 import pers.neige.neigeitems.manager.HookerManager.getHookedItem
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
-import pers.neige.neigeitems.manager.HookerManager.oraxenHooker
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.utils.ItemUtils.getItems
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SchedulerUtils.syncAndGet
 import pers.neige.neigeitems.utils.SectionUtils.parseSection

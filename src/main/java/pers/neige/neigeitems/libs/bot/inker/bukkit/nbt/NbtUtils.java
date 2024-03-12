@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -254,5 +255,36 @@ public class NbtUtils {
      */
     public static void write(NbtCompound compound, DataOutput output) throws IOException {
         RefNbtIo.write(compound.delegate, output);
+    }
+
+    /**
+     * 把物品保存成 NbtCompound.
+     */
+    public static NbtCompound save(
+            @Nullable ItemStack itemStack
+    ) {
+        RefNbtTagCompound nmsNbt = new RefNbtTagCompound();
+        RefNmsItemStack nmsItemStack;
+        if ((Object) itemStack instanceof RefCraftItemStack) {
+            nmsItemStack = ((RefCraftItemStack) (Object) itemStack).handle;
+        } else {
+            nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
+        }
+        nmsItemStack.save(nmsNbt);
+        return new NbtCompound(nmsNbt);
+    }
+
+    /**
+     * 根据 NbtCompound 掏一个物品出来.
+     */
+    public static ItemStack of(
+            @Nullable NbtCompound nbt
+    ) {
+        if (nbt == null) return new ItemStack(Material.AIR);
+        if (CbVersion.v1_13_R1.isSupport()) {
+            return (ItemStack) (Object) RefCraftItemStack.asCraftMirror(RefNmsItemStack.of(nbt.delegate));
+        } else {
+            return (ItemStack) (Object) RefCraftItemStack.asCraftMirror(new RefNmsItemStack(nbt.delegate));
+        }
     }
 }
