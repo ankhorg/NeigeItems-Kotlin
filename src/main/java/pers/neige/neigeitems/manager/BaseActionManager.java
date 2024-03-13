@@ -410,6 +410,16 @@ public abstract class BaseActionManager {
             if (player == null) return;
             SchedulerUtils.sync(plugin, () -> PlayerUtils.sendActionBar(player, HookerManager.papi(player, content)));
         });
+        // 播放音乐
+        addConsumer("sound", (context, content) -> {
+            Player player = context.getPlayer();
+            if (player == null) return;
+            String[] args = content.split(" ", 3);
+            String sound = getOrDefault(args, 0, "");
+            float volume = getAndApply(args, 1, 1F, StringsKt::toFloatOrNull);
+            float pitch = getAndApply(args, 2, 1F, StringsKt::toFloatOrNull);
+            player.playSound(player.getLocation(), sound, volume, pitch);
+        });
         // 给予玩家金钱
         addConsumer("giveMoney", (context, content) -> {
             Player player = context.getPlayer();
