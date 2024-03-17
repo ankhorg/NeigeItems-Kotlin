@@ -2,6 +2,7 @@ package pers.neige.neigeitems.manager;
 
 import kotlin.text.StringsKt;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -361,14 +362,20 @@ public abstract class BaseActionManager {
         // 后台执行指令
         addConsumer("console", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papiColor(player, content)));
+            if (player != null) {
+                SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papiColor(player, content)));
+            } else {
+                SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', content)));
+            }
         });
         // 后台执行指令(不将&解析为颜色符号)
         addConsumer("consoleNoColor", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papi(player, content)));
+            if (player != null) {
+                SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papi(player, content)));
+            } else {
+                SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content));
+            }
         });
         // 发送Title
         addConsumer("title", (context, content) -> {

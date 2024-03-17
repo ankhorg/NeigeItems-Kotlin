@@ -327,22 +327,12 @@ val finalTask = tasks.register("finalTask") {
 tasks.getByName("build").finalizedBy(finalTask)
 
 // 将plugin.yml中的"${version}"替换为插件版本
-tasks.register("replaceVersionInPluginYml") {
-    doLast {
-        val inputFile = File("src/main/resources/plugin.yml")
-        val outputFile = File("build/resources/main/plugin.yml")
-
-        val inputText = inputFile.readText()
-
-        val projectVersion = realVersion.toString()
-        val replacedText = inputText.replace("\${version}", projectVersion)
-
-        outputFile.writeText(replacedText)
+tasks.processResources {
+    filesMatching("plugin.yml") {
+        filter {
+            it.replace("\${version}", realVersion.toString())
+        }
     }
-}
-
-tasks.named("assemble") {
-    dependsOn("replaceVersionInPluginYml")
 }
 
 tasks.create<BuildMappingsTask>("build-mappings") {

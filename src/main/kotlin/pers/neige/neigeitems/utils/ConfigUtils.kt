@@ -86,6 +86,45 @@ object ConfigUtils {
     }
 
     /**
+     * 获取文件夹内文件
+     *
+     * @param plugin 待获取文件归属插件
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getFile(plugin: Plugin, file: String): File {
+        return File(plugin.dataFolder, File.separator + file)
+    }
+
+    /**
+     * 获取文件夹内文件(不存在时返回null)
+     *
+     * @param plugin 待获取文件归属插件
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getFileOrNull(plugin: Plugin, file: String): File? {
+        return File(plugin.dataFolder, File.separator + file).let {
+            if (!it.exists()) null
+            else it
+        }
+    }
+
+    /**
+     * 获取文件夹内文件(不存在时创建文件)
+     *
+     * @param plugin 待获取文件归属插件
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getFileOrCreate(plugin: Plugin, file: String): File {
+        return File(plugin.dataFolder, File.separator + file).createFile()
+    }
+
+    /**
      * 获取文件夹内所有文件
      *
      * @param plugin 待获取文件夹归属插件
@@ -233,12 +272,41 @@ object ConfigUtils {
      * @return 文件中所有ConfigurationSection
      */
     @JvmStatic
-    fun ArrayList<File>.getConfigSections(): ArrayList<ConfigurationSection> {
+    fun List<File>.getConfigSections(): ArrayList<ConfigurationSection> {
         val list = ArrayList<ConfigurationSection>()
         for (file: File in this) {
             list.addAll(file.getConfigSections())
         }
         return list
+    }
+
+    /**
+     * 获取文件中所有ConfigurationSection
+     *
+     * @return 文件中所有ConfigurationSection
+     */
+    @JvmStatic
+    fun File.getConfigSectionMap(): MutableMap<String, ConfigurationSection> {
+        val map = HashMap<String, ConfigurationSection>()
+        val config = YamlConfiguration.loadConfiguration(this)
+        config.getKeys(false).forEach { key ->
+            config.getConfigurationSection(key)?.let { map[key] = it }
+        }
+        return map
+    }
+
+    /**
+     * 获取所有文件中所有ConfigurationSection
+     *
+     * @return 文件中所有ConfigurationSection
+     */
+    @JvmStatic
+    fun List<File>.getConfigSectionMap(): MutableMap<String, ConfigurationSection> {
+        val map = HashMap<String, ConfigurationSection>()
+        for (file: File in this) {
+            map.putAll(file.getConfigSectionMap())
+        }
+        return map
     }
 
     /**
@@ -262,12 +330,41 @@ object ConfigUtils {
      * @return 文件中所有顶级节点内容
      */
     @JvmStatic
-    fun ArrayList<File>.getContents(): ArrayList<Any> {
+    fun List<File>.getContents(): ArrayList<Any> {
         val list = ArrayList<Any>()
         for (file: File in this) {
             list.addAll(file.getContents())
         }
         return list
+    }
+
+    /**
+     * 获取文件中所有顶级节点内容
+     *
+     * @return 文件中所有顶级节点内容
+     */
+    @JvmStatic
+    fun File.getContentMap(): MutableMap<String, Any> {
+        val map = HashMap<String, Any>()
+        val config = YamlConfiguration.loadConfiguration(this)
+        config.getKeys(false).forEach { key ->
+            config.get(key)?.let { map[key] = it }
+        }
+        return map
+    }
+
+    /**
+     * 获取文件中所有顶级节点内容
+     *
+     * @return 文件中所有顶级节点内容
+     */
+    @JvmStatic
+    fun List<File>.getContentMap(): MutableMap<String, Any> {
+        val map = HashMap<String, Any>()
+        for (file: File in this) {
+            map.putAll(file.getContentMap())
+        }
+        return map
     }
 
     /**
