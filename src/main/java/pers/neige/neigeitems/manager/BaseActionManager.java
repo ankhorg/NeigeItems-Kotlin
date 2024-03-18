@@ -377,6 +377,24 @@ public abstract class BaseActionManager {
                 SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content));
             }
         });
+        // 公告
+        addConsumer("broadcast", (context, content) -> {
+            Player player = context.getPlayer();
+            if (player != null) {
+                Bukkit.broadcastMessage(HookerManager.papiColor(player, content));
+            } else {
+                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', content));
+            }
+        });
+        // 公告(不将&解析为颜色符号)
+        addConsumer("broadcastNoColor", (context, content) -> {
+            Player player = context.getPlayer();
+            if (player != null) {
+                Bukkit.broadcastMessage(HookerManager.papi(player, content));
+            } else {
+                Bukkit.broadcastMessage(content);
+            }
+        });
         // 发送Title
         addConsumer("title", (context, content) -> {
             Player player = context.getPlayer();

@@ -7,7 +7,8 @@ import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.utils.ListenerUtils
-import pers.neige.neigeitems.utils.SchedulerUtils.*
+import pers.neige.neigeitems.utils.SchedulerUtils.asyncTimer
+import pers.neige.neigeitems.utils.SchedulerUtils.syncTimer
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.util.jar.JarFile
@@ -58,44 +59,68 @@ class ClassScanner(
             val eventClass = method.parameterTypes[0]
             val eventPriority = annotation.eventPriority
             val ignoreCancelled = annotation.ignoreCancelled
+            val instance = if (Modifier.isStatic(method.modifiers)) {
+                null
+            } else {
+                method.declaringClass.getDeclaredField("INSTANCE").get(null)
+            }
             ListenerUtils.registerListener(
                 eventClass as Class<Event>,
                 eventPriority,
                 plugin,
                 ignoreCancelled
             ) {
-                method.invokeSafe(it)
+                method.invoke(instance, it)
             }
         }
 
         enableMethods.forEach { method ->
             try {
-                method.invokeSafe()
+                val instance = if (Modifier.isStatic(method.modifiers)) {
+                    null
+                } else {
+                    method.declaringClass.getDeclaredField("INSTANCE").get(null)
+                }
+                method.invoke(instance)
             } catch (error: Throwable) {
                 error.printStackTrace()
             }
         }
 
-        sync(plugin) {
+        Bukkit.getScheduler().runTask(plugin, Runnable {
             activeMethods.forEach { method ->
                 try {
-                    method.invokeSafe()
+                    val instance = if (Modifier.isStatic(method.modifiers)) {
+                        null
+                    } else {
+                        method.declaringClass.getDeclaredField("INSTANCE").get(null)
+                    }
+                    method.invoke(instance)
                 } catch (error: Throwable) {
                     error.printStackTrace()
                 }
             }
-        }
+        })
 
         scheduleMethods.forEach { method ->
-            val annotation = method.getAnnotation(Schedule::class.java)
-            if (annotation.async) {
-                asyncTimer(plugin, 0, annotation.period) {
-                    method.invokeSafe()
+            try {
+                val annotation = method.getAnnotation(Schedule::class.java)
+                val instance = if (Modifier.isStatic(method.modifiers)) {
+                    null
+                } else {
+                    method.declaringClass.getDeclaredField("INSTANCE").get(null)
                 }
-            } else {
-                syncTimer(plugin, 0, annotation.period) {
-                    method.invokeSafe()
+                if (annotation.async) {
+                    asyncTimer(plugin, 0, annotation.period) {
+                        method.invoke(instance)
+                    }
+                } else {
+                    syncTimer(plugin, 0, annotation.period) {
+                        method.invoke(instance)
+                    }
                 }
+            } catch (error: Throwable) {
+                error.printStackTrace()
             }
         }
     }
@@ -106,7 +131,12 @@ class ClassScanner(
     fun onDisable() {
         disableMethods.forEach { method ->
             try {
-                method.invokeSafe()
+                val instance = if (Modifier.isStatic(method.modifiers)) {
+                    null
+                } else {
+                    method.declaringClass.getDeclaredField("INSTANCE").get(null)
+                }
+                method.invoke(instance)
             } catch (error: Throwable) {
                 error.printStackTrace()
             }
@@ -205,23 +235,6 @@ class ClassScanner(
             }
         } else {
             true
-        }
-    }
-
-    private fun Method.invokeSafe(vararg args: Any) {
-        if (Modifier.isStatic(modifiers)) {
-            invoke(null, *args)
-        } else {
-            val instance = try {
-                declaringClass.getDeclaredField("INSTANCE").get(null)
-            } catch (error: Throwable) {
-                plugin.logger.warning("$declaringClass 不是kotlin单例, 无法执行非静态方法 $name")
-                error.printStackTrace()
-                null
-            }
-            if (instance != null) {
-                invoke(instance, *args)
-            }
         }
     }
 }
