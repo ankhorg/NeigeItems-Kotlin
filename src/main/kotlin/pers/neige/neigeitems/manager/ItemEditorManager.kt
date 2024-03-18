@@ -26,7 +26,6 @@ import pers.neige.neigeitems.utils.ItemUtils.castToNbt
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import pers.neige.neigeitems.utils.ItemUtils.putDeepWithEscape
 import pers.neige.neigeitems.utils.ItemUtils.putDeepWithList
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
@@ -1584,7 +1583,7 @@ object ItemEditorManager {
                 val itemTag = itemStack.getNbt()
                 // 获取并遍历添加NBT
                 content.parseObject<HashMap<String, String>>().forEach { (key, value) ->
-                    itemTag.putDeepWithEscape(key, value.castToNbt())
+                    itemTag.putDeep(key, value.castToNbt())
                 }
                 // 保存物品NBT
                 itemTag.saveToSafe(itemStack)

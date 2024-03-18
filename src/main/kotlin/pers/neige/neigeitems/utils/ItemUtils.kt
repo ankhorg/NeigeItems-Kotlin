@@ -987,7 +987,7 @@ object ItemUtils {
     @JvmStatic
     @Deprecated("本体已包含该方法")
     fun NbtComponentLike.getDeepByteOrNull(key: String): Byte? {
-        val value: Nbt<*>? = getDeepWithEscape(key)
+        val value: Nbt<*>? = getDeep(key)
         return if (value is NbtNumeric<*>) {
             value.asByte
         } else {
@@ -998,7 +998,7 @@ object ItemUtils {
     @JvmStatic
     @Deprecated("本体已包含该方法")
     fun NbtComponentLike.getDeepShortOrNull(key: String): Short? {
-        val value: Nbt<*>? = getDeepWithEscape(key)
+        val value: Nbt<*>? = getDeep(key)
         return if (value is NbtNumeric<*>) {
             value.asShort
         } else {
@@ -1009,7 +1009,7 @@ object ItemUtils {
     @JvmStatic
     @Deprecated("本体已包含该方法")
     fun NbtComponentLike.getDeepIntOrNull(key: String): Int? {
-        val value: Nbt<*>? = getDeepWithEscape(key)
+        val value: Nbt<*>? = getDeep(key)
         return if (value is NbtNumeric<*>) {
             value.asInt
         } else {
@@ -1020,7 +1020,7 @@ object ItemUtils {
     @JvmStatic
     @Deprecated("本体已包含该方法")
     fun NbtComponentLike.getDeepLongOrNull(key: String): Long? {
-        val value: Nbt<*>? = getDeepWithEscape(key)
+        val value: Nbt<*>? = getDeep(key)
         return if (value is NbtNumeric<*>) {
             value.asLong
         } else {
@@ -1031,7 +1031,7 @@ object ItemUtils {
     @JvmStatic
     @Deprecated("本体已包含该方法")
     fun NbtComponentLike.getDeepFloatOrNull(key: String): Float? {
-        val value: Nbt<*>? = getDeepWithEscape(key)
+        val value: Nbt<*>? = getDeep(key)
         return if (value is NbtNumeric<*>) {
             value.asFloat
         } else {
@@ -1042,7 +1042,7 @@ object ItemUtils {
     @JvmStatic
     @Deprecated("本体已包含该方法")
     fun NbtComponentLike.getDeepDoubleOrNull(key: String): Double? {
-        val value: Nbt<*>? = getDeepWithEscape(key)
+        val value: Nbt<*>? = getDeep(key)
         return if (value is NbtNumeric<*>) {
             value.asDouble
         } else {
@@ -1053,7 +1053,7 @@ object ItemUtils {
     @JvmStatic
     @Deprecated("本体已包含该方法")
     fun NbtComponentLike.getDeepStringOrNull(key: String): String? {
-        return when (val value: Nbt<*>? = getDeepWithEscape(key)) {
+        return when (val value: Nbt<*>? = getDeep(key)) {
             is NbtString -> value.asString
             is NbtByte -> value.asByte.toString()
             is NbtShort -> value.asShort.toString()
@@ -1068,7 +1068,7 @@ object ItemUtils {
     @JvmStatic
     @Deprecated("本体已包含该方法")
     fun NbtComponentLike.getDeepExactStringOrNull(key: String): String? {
-        val value: Nbt<*>? = getDeepWithEscape(key)
+        val value: Nbt<*>? = getDeep(key)
         return if (value is NbtString) {
             value.asString
         } else {
@@ -1077,6 +1077,7 @@ object ItemUtils {
     }
 
     @JvmStatic
+    @Deprecated("本体已包含该功能")
     fun NbtComponentLike.getDeepWithEscape(
         key: String,
         escape: Char = '\\',
@@ -1114,6 +1115,7 @@ object ItemUtils {
     }
 
     @JvmStatic
+    @Deprecated("本体已包含该功能")
     fun NbtComponentLike.putDeepWithEscape(
         key: String,
         value: Nbt<*>,

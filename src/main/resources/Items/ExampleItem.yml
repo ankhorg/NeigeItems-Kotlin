@@ -240,9 +240,6 @@ ActionTest:
     test1: "666"
     test2:
       test3: "777"
-    test4:
-      - "888"
-      - "999"
   sections:
     test: "yeah"
 
