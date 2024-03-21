@@ -23,8 +23,10 @@ import pers.neige.neigeitems.action.ResultType
 import pers.neige.neigeitems.action.impl.StringAction
 import pers.neige.neigeitems.action.result.DelayResult
 import pers.neige.neigeitems.action.result.Results
+import pers.neige.neigeitems.event.ItemActionEvent
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.item.action.ItemAction
+import pers.neige.neigeitems.item.action.ItemActionType
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.ActionUtils.consume
@@ -643,21 +645,21 @@ object ActionManager : BaseActionManager(plugin) {
 
         // 获取物品动作
         val itemAction = itemActions[id] ?: return
-        // 获取基础触发器
-        val basicTrigger = when (event.action) {
+        // 获取基础触发类型
+        val basicType = when (event.action) {
             // 左键类型
             Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK -> {
                 when {
                     player.isSneaking -> {
                         // 如果既没有shift_left又没有shift_all就爬
                         if (!itemAction.hasShiftLeftAction) return
-                        itemAction.triggers["shift_left"]
+                        ItemActionType.SHIFT_LEFT
                     }
 
                     else -> {
                         // 如果既没有left又没有all就爬
                         if (!itemAction.hasLeftAction) return
-                        itemAction.triggers["left"]
+                        ItemActionType.LEFT
                     }
                 }
             }
@@ -667,35 +669,51 @@ object ActionManager : BaseActionManager(plugin) {
                     player.isSneaking -> {
                         // 如果既没有shift_right又没有shift_all就爬
                         if (!itemAction.hasShiftRightAction) return
-                        itemAction.triggers["shift_right"]
+                        ItemActionType.SHIFT_RIGHT
                     }
 
                     else -> {
                         // 如果既没有right又没有all就爬
                         if (!itemAction.hasRightAction) return
-                        itemAction.triggers["right"]
+                        ItemActionType.RIGHT
                     }
                 }
             }
             // 停止操作
             else -> return
         }
+        val basicTrigger = itemAction.triggers[basicType.type]
+        var allType = ItemActionType.SHIFT_ALL
         // 获取all触发器
         val allTrigger = when {
-            player.isSneaking -> itemAction.triggers["shift_all"]
-            else -> itemAction.triggers["all"]
+            player.isSneaking -> {
+                itemAction.triggers[ItemActionType.SHIFT_ALL.type]
+            }
+
+            else -> {
+                allType = ItemActionType.ALL
+                itemAction.triggers[ItemActionType.ALL.type]
+            }
         }
 
         val itemTag = itemInfo.itemTag
         val neigeItems = itemInfo.neigeItems
         val data = itemInfo.data
 
-        // 获取消耗信息
-        val consume = basicTrigger?.consume ?: allTrigger?.consume
         // 取消交互事件
         event.isCancelled = true
         // 检测冷却
         if ((basicTrigger ?: allTrigger)!!.isCoolDown(player, itemStack, itemTag, data)) return
+        // 触发基础动作事件
+        if (basicTrigger != null && !ItemActionEvent(player, itemStack, itemInfo, basicType, basicTrigger).call()) {
+            return
+        }
+        // 触发all动作事件
+        if (allTrigger != null && !ItemActionEvent(player, itemStack, itemInfo, allType, allTrigger).call()) {
+            return
+        }
+        // 获取消耗信息
+        val consume = basicTrigger?.consume ?: allTrigger?.consume
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 动作上下文
@@ -743,7 +761,7 @@ object ActionManager : BaseActionManager(plugin) {
             itemStack,
             itemInfo,
             event,
-            "eat",
+            ItemActionType.EAT.type,
             cancel = true,
             cancelIfCooldown = false,
             giveLater = true
@@ -757,7 +775,15 @@ object ActionManager : BaseActionManager(plugin) {
         itemInfo: ItemInfo,
         event: PlayerDropItemEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "drop", cancel = false, cancelIfCooldown = true)
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            ItemActionType.DROP.type,
+            cancel = false,
+            cancelIfCooldown = true
+        )
     }
 
     // 拾取物品
@@ -772,7 +798,7 @@ object ActionManager : BaseActionManager(plugin) {
             itemStack,
             itemInfo,
             event,
-            "pick",
+            ItemActionType.PICK.type,
             cancel = false,
             cancelIfCooldown = true,
             consumeItem = false
@@ -786,7 +812,13 @@ object ActionManager : BaseActionManager(plugin) {
         itemInfo: ItemInfo,
         event: InventoryClickEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "click")
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            ItemActionType.CLICK.type
+        )
     }
 
     // 物品被点击
@@ -796,7 +828,13 @@ object ActionManager : BaseActionManager(plugin) {
         itemInfo: ItemInfo,
         event: InventoryClickEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "beclicked")
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            ItemActionType.BECLICKED.type
+        )
     }
 
     // 射箭时由弓触发
@@ -811,7 +849,7 @@ object ActionManager : BaseActionManager(plugin) {
             itemStack,
             itemInfo,
             event,
-            "shoot_bow",
+            ItemActionType.SHOOT_ARROW.type,
             cancel = false,
             cancelIfCooldown = true,
             consumeItem = false
@@ -830,7 +868,7 @@ object ActionManager : BaseActionManager(plugin) {
             itemStack,
             itemInfo,
             event,
-            "shoot_arrow",
+            ItemActionType.SHOOT_ARROW.type,
             cancel = false,
             cancelIfCooldown = true,
             consumeItem = false
@@ -844,7 +882,15 @@ object ActionManager : BaseActionManager(plugin) {
         itemInfo: ItemInfo,
         event: EntityDamageByEntityEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "blocking", cancel = false, cancelIfCooldown = true)
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            ItemActionType.BLOCKING.type,
+            cancel = false,
+            cancelIfCooldown = true
+        )
     }
 
     // 攻击实体时由主手物品触发
@@ -854,7 +900,15 @@ object ActionManager : BaseActionManager(plugin) {
         itemInfo: ItemInfo,
         event: EntityDamageByEntityEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "damage", cancel = false, cancelIfCooldown = true)
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            ItemActionType.DAMAGE.type,
+            cancel = false,
+            cancelIfCooldown = true
+        )
     }
 
     // 击杀实体时触发
@@ -865,7 +919,15 @@ object ActionManager : BaseActionManager(plugin) {
         event: EntityDamageByEntityEvent,
         key: String
     ) {
-        basicHandler(player, itemStack, itemInfo, event, key, cancel = false, consumeItem = false)
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            key,
+            cancel = false,
+            consumeItem = false
+        )
     }
 
     // 挖掘方块时由主手物品触发
@@ -875,7 +937,15 @@ object ActionManager : BaseActionManager(plugin) {
         itemInfo: ItemInfo,
         event: BlockBreakEvent
     ) {
-        basicHandler(player, itemStack, itemInfo, event, "break_block", cancel = false, cancelIfCooldown = true)
+        basicHandler(
+            player,
+            itemStack,
+            itemInfo,
+            event,
+            ItemActionType.BREAK_BLOCK.type,
+            cancel = false,
+            cancelIfCooldown = true
+        )
     }
 
     // 适用于基础情况
@@ -893,25 +963,28 @@ object ActionManager : BaseActionManager(plugin) {
         val id = itemInfo.id
         // 获取物品动作
         val itemAction = itemActions[id] ?: return
-        // 获取基础触发器
-        val trigger = itemAction.triggers[key]
-        // 没有对应物品动作就停止判断
-        if (trigger == null) return
+        // 获取基础触发器, 没有对应物品动作就停止判断
+        val trigger = itemAction.triggers[key] ?: return
 
         val itemTag = itemInfo.itemTag
         val neigeItems = itemInfo.neigeItems
         val data = itemInfo.data
 
-        // 取消事件
-        if (event is Cancellable && cancel) {
-            event.isCancelled = true
-        }
         // 检测冷却
         if (trigger.isCoolDown(player, itemStack, itemTag, data)) {
             if ((cancel || cancelIfCooldown) && event is Cancellable) {
                 event.isCancelled = true
             }
             return
+        }
+        val type = ItemActionType.matchType(key)
+        // 事件中止就停止判断
+        if (type != null && !ItemActionEvent(player, itemStack, itemInfo, type, trigger).call()) {
+            return
+        }
+        // 取消事件
+        if (event is Cancellable && cancel) {
+            event.isCancelled = true
         }
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
@@ -955,15 +1028,13 @@ object ActionManager : BaseActionManager(plugin) {
         player: Player,
         itemStack: ItemStack,
         itemInfo: ItemInfo,
-        type: String
+        key: String
     ) {
         val id = itemInfo.id
         // 获取物品动作
         val itemAction = itemActions[id] ?: let { return }
-        // 获取基础触发器
-        val trigger = itemAction.triggers[type]
-        // 没有对应物品动作就停止判断
-        if (trigger == null) return
+        // 获取基础触发器, 没有对应物品动作就停止判断
+        val trigger = itemAction.triggers[key] ?: return
 
         val itemTag = itemInfo.itemTag
         val data = itemInfo.data
@@ -978,10 +1049,14 @@ object ActionManager : BaseActionManager(plugin) {
             if (lastTick > 0) {
                 player.setMetadataEZ("NI-TICK-${trigger.group}", lastTick - 1)
                 return
-            } else {
-                player.setMetadataEZ("NI-TICK-${trigger.group}", tick)
             }
         }
+        val type = ItemActionType.matchType(key)
+        // 没有对应物品动作或事件中止就停止判断
+        if (type != null && !ItemActionEvent(player, itemStack, itemInfo, type, trigger).call()) {
+            return
+        }
+        player.setMetadataEZ("NI-TICK-${trigger.group}", tick)
         // 执行动作
         trigger.run(ActionContext(player, HashMap(), null, itemStack, itemTag, data))
     }

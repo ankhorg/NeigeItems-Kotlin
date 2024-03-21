@@ -9,6 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.item.ItemDurability
+import pers.neige.neigeitems.item.action.ItemActionType
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
@@ -82,12 +83,12 @@ object EntityDamageByEntityListener {
         if (event.finalDamage < defender.health) return
         // 执行动作
         val inventory = attacker.inventory
-        killAction(attacker, inventory.itemInMainHand, event, "kill_hand")
-        killAction(attacker, inventory.itemInOffHand, event, "kill_offhand")
-        inventory.helmet?.let { killAction(attacker, it, event, "kill_head") }
-        inventory.chestplate?.let { killAction(attacker, it, event, "kill_chest") }
-        inventory.leggings?.let { killAction(attacker, it, event, "kill_legs") }
-        inventory.boots?.let { killAction(attacker, it, event, "kill_feet") }
+        killAction(attacker, inventory.itemInMainHand, event, ItemActionType.KILL_HAND.type)
+        killAction(attacker, inventory.itemInOffHand, event, ItemActionType.KILL_OFFHAND.type)
+        inventory.helmet?.let { killAction(attacker, it, event, ItemActionType.KILL_HEAD.type) }
+        inventory.chestplate?.let { killAction(attacker, it, event, ItemActionType.KILL_CHEST.type) }
+        inventory.leggings?.let { killAction(attacker, it, event, ItemActionType.KILL_LEGS.type) }
+        inventory.boots?.let { killAction(attacker, it, event, ItemActionType.KILL_FEET.type) }
     }
 
     private fun killAction(
