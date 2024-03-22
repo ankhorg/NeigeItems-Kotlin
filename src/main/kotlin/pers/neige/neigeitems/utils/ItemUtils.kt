@@ -193,6 +193,7 @@ object ItemUtils {
     fun Any.toNbt(): Nbt<*> {
         return when (this) {
             is Nbt<*> -> this
+            is Boolean -> NbtByte.valueOf(this)
             is Byte -> NbtByte.valueOf(this)
             is Short -> NbtShort.valueOf(this)
             is Int -> NbtInt.valueOf(this)
