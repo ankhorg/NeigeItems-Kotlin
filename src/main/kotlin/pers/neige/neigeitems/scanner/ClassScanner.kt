@@ -229,7 +229,7 @@ class ClassScanner(
             try {
                 declaringClass.getDeclaredField("INSTANCE").type == declaringClass
             } catch (error: Throwable) {
-                plugin.logger.warning(msg)
+                plugin.logger.warning(msg + "${declaringClass.canonicalName}#${name}")
                 error.printStackTrace()
                 false
             }
