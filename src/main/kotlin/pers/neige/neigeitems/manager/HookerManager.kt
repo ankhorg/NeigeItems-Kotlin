@@ -75,6 +75,7 @@ object HookerManager {
                 else -> NMSHooker()
             }
         } catch (error: Throwable) {
+            error.printStackTrace()
             NMSHooker()
         }
 

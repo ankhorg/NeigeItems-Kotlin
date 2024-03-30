@@ -76,7 +76,6 @@ public enum ItemActionType {
     TICK_39("tick_39"),
     TICK_40("tick_40");
 
-    private final String type;
     private static final Map<String, ItemActionType> typeToEnum = new HashMap<>();
 
     static {
@@ -85,12 +84,10 @@ public enum ItemActionType {
         }
     }
 
+    private final String type;
+
     ItemActionType(String type) {
         this.type = type;
-    }
-
-    public String getType() {
-        return type;
     }
 
     @Nullable
@@ -98,5 +95,9 @@ public enum ItemActionType {
             @Nullable String type
     ) {
         return typeToEnum.get(type);
+    }
+
+    public String getType() {
+        return type;
     }
 }

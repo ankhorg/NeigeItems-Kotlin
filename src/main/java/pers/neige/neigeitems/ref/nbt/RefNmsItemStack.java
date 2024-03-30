@@ -21,6 +21,10 @@ public final class RefNmsItemStack {
         throw new UnsupportedOperationException();
     }
 
+    @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;of(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/item/ItemStack;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/ItemStack;a(Lnet/minecraft/server/v1_13_R1/NBTTagCompound;)Lnet/minecraft/server/v1_13_R1/ItemStack;", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
+    public native static RefNmsItemStack of(RefNbtTagCompound nbt);
+
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;hasTag()Z", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;hasTag()Z", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native boolean hasTag();
@@ -45,8 +49,4 @@ public final class RefNmsItemStack {
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/ItemStack;load(Lnet/minecraft/server/v1_13_R1/NBTTagCompound;)V", useAccessor = true, predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;load(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public native void load(RefNbtTagCompound nbt);
-
-    @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;of(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/world/item/ItemStack;", predicates = "craftbukkit_version:[v1_17_R1,)")
-    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/ItemStack;a(Lnet/minecraft/server/v1_13_R1/NBTTagCompound;)Lnet/minecraft/server/v1_13_R1/ItemStack;", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
-    public native static RefNmsItemStack of(RefNbtTagCompound nbt);
 }

@@ -188,14 +188,7 @@ object LocaleI18n {
                             sha1File.createFile().writeText(hash)
                             // 写入文件
                             file.createFile().writeText(
-                                URL(
-                                    "https://resources.download.minecraft.net/${
-                                        hash.substring(
-                                            0,
-                                            2
-                                        )
-                                    }/$hash"
-                                ).readText()
+                                URL("https://resources.download.minecraft.net/${hash.substring(0, 2)}/$hash").readText()
                             )
                             // sha1校验
                             if (file.sha1() != hash) {

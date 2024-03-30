@@ -82,7 +82,6 @@ repositories {
     maven("https://repo.dmulloy2.net/repository/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://jitpack.io/")
-    maven("https://repo.codemc.io/repository/nms/")
     // mmoitems
 //    maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
     maven("https://repo.oraxen.com/releases/")
