@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>ListenerUtils 1.17.1 API </title>
+    <title>ListenerUtils 1.17.2 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -370,7 +370,7 @@ public class <span class="typeNameLabel"><a href=ListenerUtils.html>ListenerUtil
                                     <li class="blockList">
                                         <h4>registerListener</h4>
                                         <pre class="methodSignature">@NotNull() static &lt;T extends Event&gt; Listener <a href=ListenerUtils.html#registerListener(java.lang.Class,java.util.function.Consumer)>registerListener</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=ListenerUtils.html#registerListener(java.lang.Class,java.util.function.Consumer)>T</a>&gt; eventClass, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;<a href=ListenerUtils.html#registerListener(java.lang.Class,java.util.function.Consumer)>T</a>&gt; eventExecutor)</pre>
-                                        <div class="block"><p>注册一个事件监听器. eventPriority 取默认值 EventPriority.NORMAL. plugin 取默认值 NeigeItems.INSTANCE.getPlugin(). ignoreCancelled 取默认值 true.</p></div>
+                                        <div class="block"><p>注册一个事件监听器. eventPriority 取默认值 EventPriority.NORMAL. plugin 取默认值 NeigeItems.getInstance(). ignoreCancelled 取默认值 true.</p></div>
 
                                         <dl>
 
@@ -448,7 +448,7 @@ public class <span class="typeNameLabel"><a href=ListenerUtils.html>ListenerUtil
                                     <li class="blockList">
                                         <h4>registerListener</h4>
                                         <pre class="methodSignature">@NotNull() static &lt;T extends Event&gt; Listener <a href=ListenerUtils.html#registerListener(java.lang.Class,org.bukkit.event.EventPriority,java.util.function.Consumer)>registerListener</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=ListenerUtils.html#registerListener(java.lang.Class,org.bukkit.event.EventPriority,java.util.function.Consumer)>T</a>&gt; eventClass, @NotNull() EventPriority eventPriority, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;<a href=ListenerUtils.html#registerListener(java.lang.Class,org.bukkit.event.EventPriority,java.util.function.Consumer)>T</a>&gt; eventExecutor)</pre>
-                                        <div class="block"><p>注册一个事件监听器. plugin 取默认值 NeigeItems.INSTANCE.getPlugin(). ignoreCancelled 取默认值 true.</p></div>
+                                        <div class="block"><p>注册一个事件监听器. plugin 取默认值 NeigeItems.getInstance(). ignoreCancelled 取默认值 true.</p></div>
 
                                         <dl>
 
@@ -534,7 +534,7 @@ public class <span class="typeNameLabel"><a href=ListenerUtils.html>ListenerUtil
                                     <li class="blockList">
                                         <h4>registerListener</h4>
                                         <pre class="methodSignature">@NotNull() static &lt;T extends Event&gt; Listener <a href=ListenerUtils.html#registerListener(java.lang.Class,org.bukkit.event.EventPriority,boolean,java.util.function.Consumer)>registerListener</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=ListenerUtils.html#registerListener(java.lang.Class,org.bukkit.event.EventPriority,boolean,java.util.function.Consumer)>T</a>&gt; eventClass, @NotNull() EventPriority eventPriority, boolean ignoreCancelled, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;<a href=ListenerUtils.html#registerListener(java.lang.Class,org.bukkit.event.EventPriority,boolean,java.util.function.Consumer)>T</a>&gt; eventExecutor)</pre>
-                                        <div class="block"><p>注册一个事件监听器. plugin 取默认值 NeigeItems.INSTANCE.getPlugin().</p></div>
+                                        <div class="block"><p>注册一个事件监听器. plugin 取默认值 NeigeItems.getInstance().</p></div>
 
                                         <dl>
 
