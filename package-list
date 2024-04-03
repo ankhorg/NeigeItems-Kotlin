@@ -21,8 +21,6 @@ pers.neige.neigeitems.action.impl
 pers.neige.neigeitems.action.result
 pers.neige.neigeitems.annotation
 pers.neige.neigeitems.command
-pers.neige.neigeitems.command.impl
-pers.neige.neigeitems.command.impl.sub
 pers.neige.neigeitems.command.subcommand
 pers.neige.neigeitems.event
 pers.neige.neigeitems.hook.easyitem
@@ -45,6 +43,7 @@ pers.neige.neigeitems.libs.bot.inker.bukkit.nbt
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.enchantment
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.level
@@ -53,6 +52,7 @@ pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils
 pers.neige.neigeitems.listener
 pers.neige.neigeitems.manager
 pers.neige.neigeitems.maven
+pers.neige.neigeitems.papi
 pers.neige.neigeitems.ref
 pers.neige.neigeitems.ref.argument
 pers.neige.neigeitems.ref.block

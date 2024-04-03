@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>NeigeItems 1.16.51 API </title>
+    <title>NeigeItems 1.17.0 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
@@ -40,7 +40,7 @@ var pathtoroot = "../../../";
     
     <li><a href="package-summary.html">Package</a></li>
     
-    <li>Class</li>
+    <li class="navBarCell1Rev">Class</li>
     
     <li><a href="package-tree.html">Tree</a></li>
     
@@ -89,7 +89,7 @@ var pathtoroot = "../../../";
 <main role="main">
     <div class="header">
         <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems</a></div>
-        <h2 title="Object NeigeItems" class="title">Object NeigeItems</h2>
+        <h2 title="Class NeigeItems" class="title">Class NeigeItems</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -108,6 +108,24 @@ var pathtoroot = "../../../";
                         <dt>All Implemented Interfaces:</dt>
                         <dd>
                             
+                            <code>org.bukkit.command.CommandExecutor</code>
+                            
+                            ,
+                            
+                            
+                            <code>org.bukkit.command.TabCompleter</code>
+                            
+                            ,
+                            
+                            
+                            <code>org.bukkit.command.TabExecutor</code>
+                            
+                            ,
+                            
+                            
+                            <code>org.bukkit.plugin.Plugin</code>
+                            
+                            
                         </dd>
                     </dl>
                     
@@ -115,9 +133,9 @@ var pathtoroot = "../../../";
                     <pre class="wrap-overflow">
 
 public class <span class="typeNameLabel"><a href=NeigeItems.html>NeigeItems</a></span>
-extends Plugin
+extends JavaPlugin
                     </pre>
-                    <div class="block"><p>插件主类</p></div>
+                    <div class="block"></div>
 
                     <dl>
 
@@ -173,14 +191,32 @@ extends Plugin
                                         </tr>
                                         
                                         <tr class="altColor">
-                                            <td class="colFirst"><code>private final BukkitPlugin</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#plugin>plugin</a></code></th>
+                                            <td class="colFirst"><code>public  static <a href=NeigeItems.html>NeigeItems</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#INSTANCE>INSTANCE</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr class="rowColor">
-                                            <td class="colFirst"><code>public final static <a href=NeigeItems.html>NeigeItems</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#INSTANCE>INSTANCE</a></code></th>
+                                            <td class="colFirst"><code>public  boolean</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#isEnabled()>isEnabled</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public  Server</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#server>server</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>public  PluginDescriptionFile</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#description>description</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public  <a href=https://docs.oracle.com/javase/8/docs/api/java/io/File.html>File</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#dataFolder>dataFolder</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -207,6 +243,12 @@ extends Plugin
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
 
+                                        
+                                            <tr class="altColor">
+                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
+                                                        href="#NeigeItems()">NeigeItems</a></span>()</code></th>
+                                                <td class="colLast"></td>
+                                            </tr>
                                         
 
                                         </tbody>
@@ -258,33 +300,41 @@ extends Plugin
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code>static <a href=NeigeItems.html>NeigeItems</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#onEnable()>onEnable</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#getInstance()>getInstance</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#onDisable()>onDisable</a>() </code>
-                                            </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code>final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NeigeItems.html#init()>init</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i3" class="rowColor">
-                                            <td class="colFirst"><code>final BukkitPlugin</code>
+                                        <tr id="i2" class="altColor">
+                                            <td class="colFirst"><code><a href=NeigeItems.html>NeigeItems</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=NeigeItems.html#getPlugin()>getPlugin</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i3" class="rowColor">
+                                            <td class="colFirst"><code>void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#onEnable()>onEnable</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i4" class="altColor">
+                                            <td class="colFirst"><code>void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=NeigeItems.html#onDisable()>onDisable</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -294,11 +344,17 @@ extends Plugin
                                 </div>
                                 <ul class="blockList">
                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.taboolib.common.platform.Plugin">
+                                    <li class="blockList"><a id="methods.inherited.from.class.org.bukkit.plugin.java.JavaPlugin">
                                             <!--   -->
                                         </a>
-                                            <h3>Methods inherited from class&nbsp;taboolib.common.platform.Plugin</h3>
-                                            <code>nativeDataFolder, nativeJarFile, onActive, onLoad</code></li>
+                                            <h3>Methods inherited from class&nbsp;org.bukkit.plugin.java.JavaPlugin</h3>
+                                            <code>getCommand, getConfig, getDataFolder, getDefaultWorldGenerator, getDescription, getLogger, getPlugin, getPluginLoader, getProvidingPlugin, getResource, getServer, isEnabled, isNaggable, onCommand, onLoad, onTabComplete, reloadConfig, saveConfig, saveDefaultConfig, saveResource, setNaggable, toString</code></li>
+                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.org.bukkit.plugin.PluginBase">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;org.bukkit.plugin.PluginBase</h3>
+                                            <code>equals, getName, hashCode</code></li>
                                  
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
@@ -326,6 +382,16 @@ extends Plugin
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
+                                <a name="NeigeItems()"></a>
+                                <ul class="blockList">
+                                    <li class="blockList">
+                                        <h4>NeigeItems</h4>
+                                        <pre>NeigeItems()</pre>
+                                        <div class="block"></div>
+                                        
+                                    </li>
+                                </ul>
+                                
                             </li>
                         </ul>
                     </section>
@@ -339,38 +405,15 @@ extends Plugin
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="onEnable()">
+                                <a id="getInstance()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>onEnable</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=NeigeItems.html#onEnable()>onEnable</a>()</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="onDisable()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>onDisable</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=NeigeItems.html#onDisable()>onDisable</a>()</pre>
+                                        <h4>getInstance</h4>
+                                        <pre class="methodSignature"> static <a href=NeigeItems.html>NeigeItems</a> <a href=NeigeItems.html#getInstance()>getInstance</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -393,7 +436,7 @@ extends Plugin
                                           >
                                     <li class="blockList">
                                         <h4>init</h4>
-                                        <pre class="methodSignature"> final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=NeigeItems.html#init()>init</a>()</pre>
+                                        <pre class="methodSignature"> static void <a href=NeigeItems.html#init()>init</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -412,11 +455,57 @@ extends Plugin
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>getPlugin</h4>
-                                        <pre class="methodSignature"> final BukkitPlugin <a href=NeigeItems.html#getPlugin()>getPlugin</a>()</pre>
+                                        <pre class="methodSignature">@<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html>Deprecated</a>() <a href=NeigeItems.html>NeigeItems</a> <a href=NeigeItems.html#getPlugin()>getPlugin</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="onEnable()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>onEnable</h4>
+                                        <pre class="methodSignature"> void <a href=NeigeItems.html#onEnable()>onEnable</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="onDisable()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>onDisable</h4>
+                                        <pre class="methodSignature"> void <a href=NeigeItems.html#onDisable()>onDisable</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -456,7 +545,7 @@ extends Plugin
     
     <li><a href="package-summary.html">Package</a></li>
     
-    <li>Class</li>
+    <li class="navBarCell1Rev">Class</li>
     
     <li><a href="package-tree.html">Tree</a></li>
     
