@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public class NeigeItems extends JavaPlugin {
-    public static NeigeItems INSTANCE;
+    private static NeigeItems INSTANCE;
 
     static {
         init();
@@ -60,11 +60,6 @@ public class NeigeItems extends JavaPlugin {
             System.out.println("[NeigeItems] failed to load ankh-invoke");
             e.printStackTrace();
         }
-    }
-
-    @Deprecated
-    public NeigeItems getPlugin() {
-        return this;
     }
 
     @Override

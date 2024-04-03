@@ -40,10 +40,10 @@ public class SpigotInventoryUtils {
             if (MINECRAFT_INVENTORY_CLASS.isAssignableFrom(container.getClass())) {
                 TITLE_FIELD.set(container, title);
             } else {
-                NeigeItems.INSTANCE.getPlugin().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
+                NeigeItems.getInstance().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
             }
         } else {
-            NeigeItems.INSTANCE.getPlugin().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
+            NeigeItems.getInstance().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
         }
     }
 
@@ -62,10 +62,10 @@ public class SpigotInventoryUtils {
             if (MINECRAFT_INVENTORY_CLASS.isAssignableFrom(container.getClass())) {
                 TITLE_FIELD.set(container, BaseComponent.toLegacyText(ComponentSerializer.parse(title)));
             } else {
-                NeigeItems.INSTANCE.getPlugin().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
+                NeigeItems.getInstance().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
             }
         } else {
-            NeigeItems.INSTANCE.getPlugin().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
+            NeigeItems.getInstance().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
         }
     }
 
@@ -84,10 +84,10 @@ public class SpigotInventoryUtils {
             if (MINECRAFT_INVENTORY_CLASS.isAssignableFrom(container.getClass())) {
                 TITLE_FIELD.set(container, BaseComponent.toLegacyText(title));
             } else {
-                NeigeItems.INSTANCE.getPlugin().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
+                NeigeItems.getInstance().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
             }
         } else {
-            NeigeItems.INSTANCE.getPlugin().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
+            NeigeItems.getInstance().getLogger().warning("InventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
         }
     }
 }

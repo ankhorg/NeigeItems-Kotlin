@@ -50,7 +50,6 @@ const ItemEditorManager = Packages.pers.neige.neigeitems.manager.ItemEditorManag
 const ItemManager = Packages.pers.neige.neigeitems.manager.ItemManager.INSTANCE
 const ItemPackManager = Packages.pers.neige.neigeitems.manager.ItemPackManager.INSTANCE
 
-const bukkitScheduler = Bukkit.getScheduler()
 const bukkitServer = Bukkit.getServer()
 const consoleSender = bukkitServer.getConsoleSender()
 const pluginManager = Bukkit.getPluginManager()

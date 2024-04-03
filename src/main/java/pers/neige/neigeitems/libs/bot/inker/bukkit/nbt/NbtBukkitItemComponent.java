@@ -38,7 +38,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     @Override
     public Nbt<?> get(String key) {
         if (HANDLED_TAGS.contains(key)) {
-            NeigeItems.INSTANCE.getPlugin().getLogger().warning("key " + key + "isn't support for direct access");
+            NeigeItems.getInstance().getLogger().warning("key " + key + "isn't support for direct access");
             return null;
         } else {
             return Nbt.fromNms(refItemMeta.unhandledTags.get(key));
@@ -48,7 +48,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     @Override
     public boolean containsKey(String key) {
         if (HANDLED_TAGS.contains(key)) {
-            NeigeItems.INSTANCE.getPlugin().getLogger().warning("key " + key + "isn't support for direct access");
+            NeigeItems.getInstance().getLogger().warning("key " + key + "isn't support for direct access");
             return false;
         } else {
             return refItemMeta.unhandledTags.containsKey(key);
@@ -58,7 +58,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     @Override
     public Nbt<?> put(String key, Nbt<?> value) {
         if (HANDLED_TAGS.contains(key)) {
-            NeigeItems.INSTANCE.getPlugin().getLogger().warning("key " + key + "isn't support for direct access");
+            NeigeItems.getInstance().getLogger().warning("key " + key + "isn't support for direct access");
             return null;
         } else {
             return Nbt.fromNms(refItemMeta.unhandledTags.put(key, value.delegate));
@@ -68,7 +68,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     @Override
     public Nbt<?> remove(String key) {
         if (HANDLED_TAGS.contains(key)) {
-            NeigeItems.INSTANCE.getPlugin().getLogger().warning("key " + key + "isn't support for direct access");
+            NeigeItems.getInstance().getLogger().warning("key " + key + "isn't support for direct access");
             return null;
         } else {
             return Nbt.fromNms(refItemMeta.unhandledTags.remove(key));

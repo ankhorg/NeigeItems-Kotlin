@@ -18,7 +18,7 @@ public class SchedulerUtils {
     public static void sync(
             @NotNull Runnable task
     ) {
-        sync(NeigeItems.INSTANCE.getPlugin(), task);
+        sync(NeigeItems.getInstance(), task);
     }
 
     /**
@@ -48,7 +48,7 @@ public class SchedulerUtils {
             long delay,
             @NotNull Runnable task
     ) {
-        syncLater(NeigeItems.INSTANCE.getPlugin(), delay, task);
+        syncLater(NeigeItems.getInstance(), delay, task);
     }
 
     /**
@@ -77,7 +77,7 @@ public class SchedulerUtils {
             long period,
             @NotNull Runnable task
     ) {
-        syncTimer(NeigeItems.INSTANCE.getPlugin(), delay, period, task);
+        syncTimer(NeigeItems.getInstance(), delay, period, task);
     }
 
     /**
@@ -105,7 +105,7 @@ public class SchedulerUtils {
     public static <T> T syncAndGet(
             @NotNull Callable<T> task
     ) {
-        return syncAndGet(NeigeItems.INSTANCE.getPlugin(), task);
+        return syncAndGet(NeigeItems.getInstance(), task);
     }
 
     /**
@@ -143,7 +143,7 @@ public class SchedulerUtils {
     public static void async(
             @NotNull Runnable task
     ) {
-        async(NeigeItems.INSTANCE.getPlugin(), task);
+        async(NeigeItems.getInstance(), task);
     }
 
     /**
@@ -169,7 +169,7 @@ public class SchedulerUtils {
             long delay,
             @NotNull Runnable task
     ) {
-        asyncLater(NeigeItems.INSTANCE.getPlugin(), delay, task);
+        asyncLater(NeigeItems.getInstance(), delay, task);
     }
 
     /**
@@ -198,7 +198,7 @@ public class SchedulerUtils {
             long period,
             @NotNull Runnable task
     ) {
-        asyncTimer(NeigeItems.INSTANCE.getPlugin(), delay, period, task);
+        asyncTimer(NeigeItems.getInstance(), delay, period, task);
     }
 
     /**
@@ -227,7 +227,7 @@ public class SchedulerUtils {
             long delay,
             @NotNull Runnable task
     ) {
-        runLater(NeigeItems.INSTANCE.getPlugin(), delay, task);
+        runLater(NeigeItems.getInstance(), delay, task);
     }
 
     /**

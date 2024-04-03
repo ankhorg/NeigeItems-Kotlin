@@ -83,9 +83,9 @@ class ScriptExpansion : CompiledScript {
                 const ItemManager = Packages.pers.neige.neigeitems.manager.ItemManager.INSTANCE
                 const ItemPackManager = Packages.pers.neige.neigeitems.manager.ItemPackManager.INSTANCE
                 
-                const plugin = Packages.pers.neige.neigeitems.NeigeItems.INSTANCE.plugin
                 const pluginManager = Bukkit.getPluginManager()
                 const scheduler = Bukkit.getScheduler()
+                const plugin = pluginManager.getPlugin("NeigeItems")
                 
                 let sync = SchedulerUtils.sync
                 let async = SchedulerUtils.async

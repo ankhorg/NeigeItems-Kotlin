@@ -77,10 +77,10 @@ public class PaperInventoryUtils {
                 PAPER_CUSTOM_INVENTORY_TITLE_FIELD.set(container, title);
                 PAPER_CUSTOM_INVENTORY_ADVENTURE_TITLE_FIELD.set(container, LegacyComponentSerializer.legacySection().deserialize(title));
             } else {
-                NeigeItems.INSTANCE.getPlugin().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
+                NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
             }
         } else {
-            NeigeItems.INSTANCE.getPlugin().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
+            NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
         }
     }
 
@@ -103,10 +103,10 @@ public class PaperInventoryUtils {
                 PAPER_CUSTOM_INVENTORY_TITLE_FIELD.set(container, LegacyComponentSerializer.legacySection().serialize(GsonComponentSerializer.gson().deserialize(title)));
                 PAPER_CUSTOM_INVENTORY_ADVENTURE_TITLE_FIELD.set(container, GsonComponentSerializer.gson().deserialize(title));
             } else {
-                NeigeItems.INSTANCE.getPlugin().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
+                NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
             }
         } else {
-            NeigeItems.INSTANCE.getPlugin().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
+            NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
         }
     }
 
@@ -129,10 +129,10 @@ public class PaperInventoryUtils {
                 PAPER_CUSTOM_INVENTORY_TITLE_FIELD.set(container, LegacyComponentSerializer.legacySection().serialize(title));
                 PAPER_CUSTOM_INVENTORY_ADVENTURE_TITLE_FIELD.set(container, title);
             } else {
-                NeigeItems.INSTANCE.getPlugin().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
+                NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
             }
         } else {
-            NeigeItems.INSTANCE.getPlugin().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
+            NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
         }
     }
 }

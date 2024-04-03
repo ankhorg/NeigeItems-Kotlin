@@ -16,7 +16,7 @@ public class ListenerUtils {
     /**
      * 注册一个事件监听器.
      * eventPriority 取默认值 EventPriority.NORMAL.
-     * plugin 取默认值 NeigeItems.INSTANCE.getPlugin().
+     * plugin 取默认值 NeigeItems.getInstance().
      * ignoreCancelled 取默认值 true.
      *
      * @param eventClass    事件类.
@@ -28,7 +28,7 @@ public class ListenerUtils {
             @NotNull Class<T> eventClass,
             @NotNull Consumer<T> eventExecutor
     ) {
-        return registerListener(eventClass, EventPriority.NORMAL, NeigeItems.INSTANCE.getPlugin(), true, eventExecutor);
+        return registerListener(eventClass, EventPriority.NORMAL, NeigeItems.getInstance(), true, eventExecutor);
     }
 
     /**
@@ -52,7 +52,7 @@ public class ListenerUtils {
 
     /**
      * 注册一个事件监听器.
-     * plugin 取默认值 NeigeItems.INSTANCE.getPlugin().
+     * plugin 取默认值 NeigeItems.getInstance().
      * ignoreCancelled 取默认值 true.
      *
      * @param eventClass    事件类.
@@ -66,7 +66,7 @@ public class ListenerUtils {
             @NotNull EventPriority eventPriority,
             @NotNull Consumer<T> eventExecutor
     ) {
-        return registerListener(eventClass, eventPriority, NeigeItems.INSTANCE.getPlugin(), true, eventExecutor);
+        return registerListener(eventClass, eventPriority, NeigeItems.getInstance(), true, eventExecutor);
     }
 
     /**
@@ -91,7 +91,7 @@ public class ListenerUtils {
 
     /**
      * 注册一个事件监听器.
-     * plugin 取默认值 NeigeItems.INSTANCE.getPlugin().
+     * plugin 取默认值 NeigeItems.getInstance().
      *
      * @param eventClass      事件类.
      * @param eventPriority   监听优先级.
@@ -106,7 +106,7 @@ public class ListenerUtils {
             boolean ignoreCancelled,
             @NotNull Consumer<T> eventExecutor
     ) {
-        return registerListener(eventClass, eventPriority, NeigeItems.INSTANCE.getPlugin(), ignoreCancelled, eventExecutor);
+        return registerListener(eventClass, eventPriority, NeigeItems.getInstance(), ignoreCancelled, eventExecutor);
     }
 
     /**
