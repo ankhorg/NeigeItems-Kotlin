@@ -21,7 +21,12 @@ pers.neige.neigeitems.action.impl
 pers.neige.neigeitems.action.result
 pers.neige.neigeitems.annotation
 pers.neige.neigeitems.command
+pers.neige.neigeitems.command.arguments
+pers.neige.neigeitems.command.coordinates
+pers.neige.neigeitems.command.selector
 pers.neige.neigeitems.command.subcommand
+pers.neige.neigeitems.command.subcommand.expansion
+pers.neige.neigeitems.command.subcommand.mm
 pers.neige.neigeitems.event
 pers.neige.neigeitems.hook.easyitem
 pers.neige.neigeitems.hook.easyitem.impl
