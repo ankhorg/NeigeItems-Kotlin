@@ -67,7 +67,7 @@ abstract class PapiHooker {
         identifier: String,
         author: String,
         version: String,
-        executor: BiFunction<OfflinePlayer, String, String>
+        executor: BiFunction<OfflinePlayer?, String, String>
     ): PlaceholderExpansion {
         return PlaceholderExpansion(identifier, author, version, executor)
     }

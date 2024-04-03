@@ -1,12 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.inksnow.ankhinvoke.gradle.ApplyReferenceTask
 import org.inksnow.ankhinvoke.gradle.BuildMappingsTask
-import java.io.FileOutputStream
-import java.util.jar.JarEntry
-import java.util.jar.JarFile
-import java.util.jar.JarOutputStream
-
-val taboolib_version: String by project
 
 plugins {
     `java-library`
@@ -42,10 +36,6 @@ subprojects {
         compileOnly(kotlin("stdlib"))
         compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
         compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
-
-        compileOnly("io.izzel.taboolib:common:$taboolib_version")
-        compileOnly("io.izzel.taboolib:module-metrics:$taboolib_version")
-        compileOnly("io.izzel.taboolib:platform-bukkit:$taboolib_version")
     }
 
     tasks.withType<JavaCompile> {
@@ -82,6 +72,7 @@ repositories {
     maven("https://repo.dmulloy2.net/repository/public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://jitpack.io/")
+    maven("https://libraries.minecraft.net")
     // mmoitems
 //    maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
     maven("https://repo.oraxen.com/releases/")
@@ -113,14 +104,6 @@ dependencies {
     // ankh-invoke
     implementation("org.inksnow:ankh-invoke-bukkit:1.0.10-SNAPSHOT")
 
-    // taboolib
-    implementation("io.izzel.taboolib:common:$taboolib_version")
-    implementation("io.izzel.taboolib:common-5:$taboolib_version")
-    implementation("io.izzel.taboolib:module-chat:$taboolib_version")
-    implementation("io.izzel.taboolib:module-configuration:$taboolib_version")
-    implementation("io.izzel.taboolib:module-metrics:$taboolib_version")
-    implementation("io.izzel.taboolib:platform-bukkit:$taboolib_version")
-
     // bstats
     implementation("org.bstats:bstats-bukkit:3.0.2")
     // kotlin
@@ -138,6 +121,8 @@ dependencies {
     // slf4j
     implementation("org.slf4j:slf4j-api:1.7.36")
     implementation("org.slf4j:slf4j-jdk14:1.7.36")
+    // brigadier
+    implementation("com.mojang:brigadier:1.1.8")
 }
 
 tasks {
@@ -148,12 +133,12 @@ tasks {
         exclude("META-INF/maven/**")
         exclude("META-INF/tf/**")
         exclude("module-info.java")
+        exclude("org/intellij/lang/annotations/**")
+        exclude("org/jetbrains/annotations/**")
         // kotlin
         relocate("kotlin.", "pers.neige.neigeitems.libs.kotlin.")
         // ankh-invoke
         relocate("org.inksnow.ankhinvoke", "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke")
-        // taboolib
-        relocate("taboolib", "pers.neige.neigeitems.taboolib")
         // bstats
         relocate("org.bstats", "pers.neige.neigeitems.libs.bstats")
         // stringsearcher
@@ -171,6 +156,8 @@ tasks {
         relocate("bot.inker.acj", "pers.neige.neigeitems.libs.acj")
         // slf4j
         relocate("org.slf4j", "pers.neige.neigeitems.libs.slf4j")
+        // brigadier
+        relocate("com.mojang.", "pers.neige.neigeitems.libs.com.mojang.")
     }
     kotlinSourcesJar {
         // include subprojects
@@ -241,89 +228,6 @@ publishing {
         }
     }
 }
-
-// 向BukkitPlugin的<clinit>块开头插入CallSiteNbt.install(this.getClass())
-// 删除被fastjson2连带打包的annotations类
-fun final(name: String) {
-//    val oldFile = File("$buildDir/libs/$name")
-//    val newFile = File("$buildDir/libs/Modified$name")
-    File("$buildDir/libs/$name.jar").delete()
-    val oldFile = File("$buildDir/libs/$name-shaded.jar")
-    val newFile = File("$buildDir/libs/Modified$name.jar")
-
-    if (!oldFile.exists()) return
-
-    JarOutputStream(FileOutputStream(newFile)).use { jarOutputStream ->
-        JarFile(oldFile).use { jarFile ->
-            val entries = jarFile.entries()
-            while (entries.hasMoreElements()) {
-                val entry = entries.nextElement()
-                val entryName = entry.name
-
-                if (entryName == "pers/neige/neigeitems/taboolib/platform/BukkitPlugin.class") {
-                    val targetClassBytes = jarFile.getInputStream(entry).readBytes()
-
-                    val classReader = org.objectweb.asm.ClassReader(targetClassBytes)
-                    val classWriter =
-                        org.objectweb.asm.ClassWriter(classReader, org.objectweb.asm.ClassWriter.COMPUTE_MAXS)
-                    val classVisitor =
-                        object : org.objectweb.asm.ClassVisitor(org.objectweb.asm.Opcodes.ASM9, classWriter) {
-                            override fun visitMethod(
-                                access: Int,
-                                name: String?,
-                                descriptor: String?,
-                                signature: String?,
-                                exceptions: Array<out String>?
-                            ): org.objectweb.asm.MethodVisitor? {
-                                val methodVisitor = super.visitMethod(access, name, descriptor, signature, exceptions)
-                                if (name == "<clinit>") {
-                                    return object :
-                                        org.objectweb.asm.MethodVisitor(org.objectweb.asm.Opcodes.ASM9, methodVisitor) {
-                                        override fun visitCode() {
-                                            visitMethodInsn(
-                                                org.objectweb.asm.Opcodes.INVOKESTATIC,
-                                                "pers/neige/neigeitems/NeigeItems",
-                                                "init",
-                                                "()V",
-                                                false
-                                            )
-                                            super.visitCode()
-                                        }
-                                    }
-                                }
-                                return methodVisitor
-                            }
-                        }
-                    classReader.accept(classVisitor, org.objectweb.asm.ClassReader.EXPAND_FRAMES)
-
-                    jarOutputStream.putNextEntry(JarEntry(entryName))
-                    jarOutputStream.write(classWriter.toByteArray())
-                    jarOutputStream.closeEntry()
-                } else {
-                    if (!(entryName.startsWith("org/intellij/lang/annotations")
-                                || entryName.startsWith("org/jetbrains/annotations"))
-                    ) {
-                        jarOutputStream.putNextEntry(entry)
-                        jarFile.getInputStream(entry).copyTo(jarOutputStream)
-                        jarOutputStream.closeEntry()
-                    }
-                }
-            }
-        }
-    }
-    oldFile.delete()
-//    newFile.renameTo(oldFile)
-    newFile.renameTo(File("$buildDir/libs/$name.jar"))
-}
-
-val finalTask = tasks.register("finalTask") {
-    doLast {
-//        final("${rootProject.name}-${project.property("version")}.jar")
-        final("${rootProject.name}-${project.property("version")}")
-    }
-}
-
-tasks.getByName("build").finalizedBy(finalTask)
 
 // 将plugin.yml中的"${version}"替换为插件版本
 tasks.processResources {

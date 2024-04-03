@@ -1,10 +1,15 @@
 package pers.neige.neigeitems.command.subcommand
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.command.CommandUtils.argument
+import pers.neige.neigeitems.command.CommandUtils.literal
+import pers.neige.neigeitems.command.arguments.IntegerArgumentType.getInteger
+import pers.neige.neigeitems.command.arguments.IntegerArgumentType.positiveInteger
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.append
@@ -17,27 +22,32 @@ import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.PlayerUtils.sendMessage
 import pers.neige.neigeitems.utils.SchedulerUtils.async
-import taboolib.common.platform.command.subCommand
 import java.util.*
 import kotlin.math.ceil
 
 object List {
-    val list = subCommand {
-        execute<CommandSender> { sender, _, _ ->
-            listCommandAsync(sender, 1)
-        }
-        dynamic {
-            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                (1..ceil(ItemManager.itemAmount.toDouble() / ConfigManager.config.getDouble("ItemList.ItemAmount")).toInt()).toList()
-                    .map { it.toString() }
+    val list: LiteralArgumentBuilder<CommandSender> =
+        // ni list
+        literal<CommandSender>("list").executes { context ->
+            list(context.source)
+            1
+        }.then(
+            // ni list (page)
+            argument<CommandSender, Int>("page", positiveInteger()).executes { context ->
+                list(context.source, getInteger(context, "page"))
+                1
+            }.suggests { _, builder ->
+                for (i in 1..ceil(ItemManager.itemAmount.toDouble() / ConfigManager.config.getDouble("ItemList.ItemAmount")).toInt()) {
+                    builder.suggest(i.toString())
+                }
+                builder.buildFuture()
             }
-            execute<CommandSender> { sender, _, argument ->
-                listCommandAsync(sender, argument.toIntOrNull() ?: 1)
-            }
-        }
-    }
+        )
 
-    private fun listCommandAsync(sender: CommandSender, page: Int) {
+    private fun list(
+        sender: CommandSender,
+        page: Int = 1
+    ) {
         async {
             listCommand(sender, page)
         }

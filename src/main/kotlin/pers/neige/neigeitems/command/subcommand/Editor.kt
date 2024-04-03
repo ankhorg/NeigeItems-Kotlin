@@ -1,171 +1,88 @@
 package pers.neige.neigeitems.command.subcommand
 
-import org.bukkit.Bukkit
+import com.mojang.brigadier.arguments.StringArgumentType.getString
+import com.mojang.brigadier.arguments.StringArgumentType.greedyString
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
-import pers.neige.neigeitems.command.subcommand.Help.help
+import pers.neige.neigeitems.command.CommandUtils.argument
+import pers.neige.neigeitems.command.CommandUtils.literal
+import pers.neige.neigeitems.command.arguments.EditorIDArgumentType.editorID
+import pers.neige.neigeitems.command.arguments.EditorIDArgumentType.getEditorID
+import pers.neige.neigeitems.command.arguments.IntegerArgumentType.getInteger
+import pers.neige.neigeitems.command.arguments.IntegerArgumentType.integer
+import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayer
+import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
+import pers.neige.neigeitems.command.selector.PlayerSelector
 import pers.neige.neigeitems.manager.ItemEditorManager
-import pers.neige.neigeitems.utils.SchedulerUtils.async
-import taboolib.common.platform.command.subCommand
 
 object Editor {
-    val edithand = subCommand {
-        execute<CommandSender> { sender, _, _ ->
-            async {
-                help(sender)
-            }
-        }
-        dynamic {
-            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                arrayListOf("me").also { list ->
-                    Bukkit.getOnlinePlayers().forEach { player ->
-                        list.add(player.name)
+    val editHand: LiteralArgumentBuilder<CommandSender> =
+        // ni edithand
+        literal<CommandSender>("editHand").then(
+            // ni edithand [player]
+            argument<CommandSender, PlayerSelector>("player", player()).then(
+                // ni edithand [player] [editor]
+                argument<CommandSender, String>("editor", editorID()).then(
+                    // ni edithand [player] [editor] [content]
+                    argument<CommandSender, String>("content", greedyString()).executes { context ->
+                        val player = getPlayer(context, "player") ?: return@executes 1
+                        ItemEditorManager.runEditor(
+                            getEditorID(context, "editor"),
+                            getString(context, "content"),
+                            player.inventory.itemInMainHand,
+                            player
+                        )
+                        1
                     }
-                }
-            }
-            execute<CommandSender> { sender, _, _ ->
-                async {
-                    help(sender)
-                }
-            }
-            dynamic {
-                suggestion<CommandSender>(uncheck = true) { _, _ ->
-                    ItemEditorManager.editorNames.sorted()
-                }
-                execute<CommandSender> { sender, _, _ ->
-                    async {
-                        help(sender)
+                )
+            )
+        )
+
+    val editOffHand: LiteralArgumentBuilder<CommandSender> =
+        // ni editoffhand
+        literal<CommandSender>("editOffHand").then(
+            // ni editoffhand [player]
+            argument<CommandSender, PlayerSelector>("player", player()).then(
+                // ni editoffhand [player] [editor]
+                argument<CommandSender, String>("editor", editorID()).then(
+                    // ni editoffhand [player] [editor] [content]
+                    argument<CommandSender, String>("content", greedyString()).executes { context ->
+                        val player = getPlayer(context, "player") ?: return@executes 1
+                        ItemEditorManager.runEditor(
+                            getEditorID(context, "editor"),
+                            getString(context, "content"),
+                            player.inventory.itemInOffHand,
+                            player
+                        )
+                        1
                     }
-                }
-                dynamic {
-                    suggestion<CommandSender>(uncheck = true) { _, _ ->
-                        arrayListOf("content")
-                    }
-                    execute<CommandSender> { sender, context, argument ->
-                        var player = Bukkit.getPlayerExact(context.argument(-2))
-                        if (player == null && sender is Player && context.argument(-2) == "me") {
-                            player = sender
-                        }
-                        player?.let { player ->
+                )
+            )
+        )
+
+    val editSlot: LiteralArgumentBuilder<CommandSender> =
+        // ni edithand
+        literal<CommandSender>("editSlot").then(
+            // ni edithand [player]
+            argument<CommandSender, PlayerSelector>("player", player()).then(
+                // ni edithand [player] [slot]
+                argument<CommandSender, Int>("slot", integer(0, 40)).then(
+                    // ni edithand [player] [slot] [editor]
+                    argument<CommandSender, String>("editor", editorID()).then(
+                        // ni edithand [player] [slot] [editor] [content]
+                        argument<CommandSender, String>("content", greedyString()).executes { context ->
+                            val player = getPlayer(context, "player") ?: return@executes 1
+                            val itemStack = player.inventory.getItem(getInteger(context, "slot")) ?: return@executes 1
                             ItemEditorManager.runEditor(
-                                context.argument(-1),
-                                argument,
-                                player.inventory.itemInMainHand,
+                                getEditorID(context, "editor"),
+                                getString(context, "content"),
+                                itemStack,
                                 player
                             )
+                            1
                         }
-                    }
-                }
-            }
-        }
-    }
-
-    val editoffhand = subCommand {
-        execute<CommandSender> { sender, _, _ ->
-            async {
-                help(sender)
-            }
-        }
-        dynamic {
-            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                arrayListOf("me").also { list ->
-                    Bukkit.getOnlinePlayers().forEach { player ->
-                        list.add(player.name)
-                    }
-                }
-            }
-            execute<CommandSender> { sender, _, _ ->
-                async {
-                    help(sender)
-                }
-            }
-            dynamic {
-                suggestion<CommandSender>(uncheck = true) { _, _ ->
-                    ItemEditorManager.editorNames.sorted()
-                }
-                execute<CommandSender> { sender, _, _ ->
-                    async {
-                        help(sender)
-                    }
-                }
-                dynamic {
-                    suggestion<CommandSender>(uncheck = true) { _, _ ->
-                        arrayListOf("content")
-                    }
-                    execute<CommandSender> { sender, context, argument ->
-                        var player = Bukkit.getPlayerExact(context.argument(-2))
-                        if (player == null && sender is Player && context.argument(-2) == "me") {
-                            player = sender
-                        }
-                        player?.let {
-                            ItemEditorManager.runEditor(
-                                context.argument(-1),
-                                argument,
-                                player.inventory.itemInOffHand,
-                                player
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    val editslot = subCommand {
-        execute<CommandSender> { sender, _, _ ->
-            async {
-                help(sender)
-            }
-        }
-        dynamic {
-            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                arrayListOf("me").also { list ->
-                    Bukkit.getOnlinePlayers().forEach { player ->
-                        list.add(player.name)
-                    }
-                }
-            }
-            execute<CommandSender> { sender, _, _ ->
-                async {
-                    help(sender)
-                }
-            }
-            dynamic {
-                suggestion<CommandSender>(uncheck = true) { _, _ ->
-                    arrayListOf("slot")
-                }
-                execute<CommandSender> { sender, _, _ ->
-                    async {
-                        help(sender)
-                    }
-                }
-                dynamic {
-                    suggestion<CommandSender>(uncheck = true) { _, _ ->
-                        ItemEditorManager.editorNames.sorted()
-                    }
-                    execute<CommandSender> { sender, _, _ ->
-                        async {
-                            help(sender)
-                        }
-                    }
-                    dynamic {
-                        suggestion<CommandSender>(uncheck = true) { _, _ ->
-                            arrayListOf("content")
-                        }
-                        execute<CommandSender> { sender, context, argument ->
-                            var player = Bukkit.getPlayerExact(context.argument(-3))
-                            if (player == null && sender is Player && context.argument(-3) == "me") {
-                                player = sender
-                            }
-                            player?.let {
-                                player.inventory.getItem(context.argument(-2).toIntOrNull() ?: 0)?.let { itemStack ->
-                                    ItemEditorManager.runEditor(context.argument(-1), argument, itemStack, player)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+                    )
+                )
+            )
+        )
 }

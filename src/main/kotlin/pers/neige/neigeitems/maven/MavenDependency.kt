@@ -167,19 +167,19 @@ class MavenDependency {
                         connection.useCaches = true
                         if (extension == "jar") {
                             // 后台发送信息
-                            NeigeItems.plugin.logger.info("Downloading $groupId:$artifactId:$version:jar")
+                            NeigeItems.getInstance().logger.info("Downloading $groupId:$artifactId:$version:jar")
                         }
                         // 将文件复制到对应目录
                         Files.copy(connection.getInputStream(), it.toPath(), StandardCopyOption.REPLACE_EXISTING)
                         if (extension == "jar") {
                             // 后台发送信息
-                            NeigeItems.plugin.logger.info("Successfully downloaded $groupId:$artifactId:$version:jar")
+                            NeigeItems.getInstance().logger.info("Successfully downloaded $groupId:$artifactId:$version:jar")
                         }
                         // 文件下载成功，退出循环
                         return@also
                     } catch (e: IOException) {
                         // 如果下载失败，则继续迭代下一个仓库地址
-                        NeigeItems.plugin.logger.info("Failed to download $groupId:$artifactId:$version:$extension from $repoUrl")
+                        NeigeItems.getInstance().logger.info("Failed to download $groupId:$artifactId:$version:$extension from $repoUrl")
                     }
                 }
 

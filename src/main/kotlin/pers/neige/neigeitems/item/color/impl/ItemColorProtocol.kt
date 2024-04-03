@@ -15,7 +15,7 @@ import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.scoreboard.Scoreboard
-import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ListenerUtils
@@ -81,7 +81,7 @@ class ItemColorProtocol : ItemColor() {
         // 用于设置物品发光颜色
         protocolManager.addPacketListener(object :
             PacketAdapter(
-                plugin,
+                NeigeItems.getInstance(),
                 ListenerPriority.NORMAL,
                 PacketType.Play.Server.ENTITY_METADATA
             ) {

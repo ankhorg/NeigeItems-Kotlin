@@ -1,51 +1,30 @@
 package pers.neige.neigeitems.command.subcommand
 
-import org.bukkit.Bukkit
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import pers.neige.neigeitems.action.ActionContext
-import pers.neige.neigeitems.command.subcommand.Help.help
+import pers.neige.neigeitems.command.CommandUtils.argument
+import pers.neige.neigeitems.command.CommandUtils.literal
+import pers.neige.neigeitems.command.arguments.ActionArgumentType.action
+import pers.neige.neigeitems.command.arguments.ActionArgumentType.getAction
+import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayer
+import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
+import pers.neige.neigeitems.command.selector.PlayerSelector
 import pers.neige.neigeitems.manager.ActionManager
-import pers.neige.neigeitems.utils.SchedulerUtils.async
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import taboolib.common.platform.command.subCommand
 
 object Action {
-    val action = subCommand {
-        execute<CommandSender> { sender, _, _ ->
-            async {
-                help(sender)
-            }
-        }
-        dynamic {
-            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                arrayListOf("me").also { list ->
-                    Bukkit.getOnlinePlayers().forEach { player ->
-                        list.add(player.name)
-                    }
+    val action: LiteralArgumentBuilder<CommandSender> =
+        // ni action
+        literal<CommandSender>("action").then(
+            // ni action [player]
+            argument<CommandSender, PlayerSelector>("player", player()).then(
+                // ni action [player] [actions]
+                argument<CommandSender, pers.neige.neigeitems.action.Action>("actions", action()).executes { context ->
+                    ActionManager.runAction(
+                        getAction(context, "actions"), ActionContext(getPlayer(context, "player"))
+                    )
+                    1
                 }
-            }
-            execute<CommandSender> { sender, _, _ ->
-                async {
-                    help(sender)
-                }
-            }
-            dynamic {
-                suggestion<CommandSender>(uncheck = true) { _, _ ->
-                    ActionManager.actions.keys.toList().sorted()
-                }
-                execute<CommandSender> { sender, context, argument ->
-                    var player = Bukkit.getPlayerExact(context.argument(-1))
-                    if (player == null && sender is Player && context.argument(-1) == "me") {
-                        player = sender
-                    }
-                    if (player != null) {
-                        ActionManager.runAction(argument.parseSection(player), ActionContext(player))
-                    } else {
-                        ActionManager.runAction(argument.parseSection())
-                    }
-                }
-            }
-        }
-    }
+            )
+        )
 }

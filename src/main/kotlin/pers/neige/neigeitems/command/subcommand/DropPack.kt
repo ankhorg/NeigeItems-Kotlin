@@ -1,358 +1,172 @@
 package pers.neige.neigeitems.command.subcommand
 
-import org.bukkit.Bukkit
+import com.mojang.brigadier.arguments.StringArgumentType
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import com.mojang.brigadier.builder.RequiredArgumentBuilder
+import com.mojang.brigadier.context.CommandContext
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.command.subcommand.Help.help
+import pers.neige.neigeitems.command.CommandUtils.argument
+import pers.neige.neigeitems.command.CommandUtils.literal
+import pers.neige.neigeitems.command.arguments.IntegerArgumentType.getInteger
+import pers.neige.neigeitems.command.arguments.IntegerArgumentType.positiveInteger
+import pers.neige.neigeitems.command.arguments.ItemPackArgumentType.getItemPackSelector
+import pers.neige.neigeitems.command.arguments.ItemPackArgumentType.pack
+import pers.neige.neigeitems.command.arguments.LocationArgumentType.getLocation
+import pers.neige.neigeitems.command.arguments.LocationArgumentType.location
+import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayerSelector
+import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
+import pers.neige.neigeitems.command.arguments.WorldArgumentType.getWorldSelector
+import pers.neige.neigeitems.command.arguments.WorldArgumentType.world
+import pers.neige.neigeitems.command.coordinates.Coordinates
+import pers.neige.neigeitems.command.selector.ItemPackSelector
+import pers.neige.neigeitems.command.selector.PlayerSelector
+import pers.neige.neigeitems.command.selector.WorldSelector
 import pers.neige.neigeitems.event.ItemPackDropEvent
-import pers.neige.neigeitems.manager.ItemPackManager
+import pers.neige.neigeitems.item.ItemPack
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
-import taboolib.common.platform.command.subCommand
 
 object DropPack {
-    val dropPack = subCommand {
-        // ni dropPack [物品包ID]
-        dynamic {
-            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                ItemPackManager.itemPackIds
-            }
-            execute<CommandSender> { sender, _, _ ->
-                async {
-                    help(sender)
-                }
-            }
-            // ni dropPack [物品包ID] [数量]
-            dynamic {
-                suggestion<CommandSender>(uncheck = true) { _, _ ->
-                    arrayListOf("amount")
-                }
-                execute<CommandSender> { sender, _, _ ->
-                    async {
-                        help(sender)
-                    }
-                }
-                // ni dropPack [物品包ID] [数量] [世界名]
-                dynamic {
-                    suggestion<CommandSender>(uncheck = true) { _, _ ->
-                        Bukkit.getWorlds().map { it.name }
-                    }
-                    execute<CommandSender> { sender, _, _ ->
-                        async {
-                            help(sender)
-                        }
-                    }
-                    // ni dropPack [物品包ID] [数量] [世界名] [X坐标]
-                    dynamic {
-                        suggestion<CommandSender>(uncheck = true) { _, _ ->
-                            arrayListOf("x")
-                        }
-                        execute<CommandSender> { sender, _, _ ->
-                            async {
-                                help(sender)
-                            }
-                        }
-                        // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标]
-                        dynamic {
-                            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                                arrayListOf("y")
-                            }
-                            execute<CommandSender> { sender, _, _ ->
-                                async {
-                                    help(sender)
-                                }
-                            }
-                            // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标]
-                            dynamic {
-                                suggestion<CommandSender>(uncheck = true) { _, _ ->
-                                    arrayListOf("z")
-                                }
-                                execute<CommandSender> { sender, _, _ ->
-                                    async {
-                                        help(sender)
-                                    }
-                                }
-                                // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象]
-                                dynamic {
-                                    suggestion<CommandSender>(uncheck = true) { _, _ ->
-                                        Bukkit.getOnlinePlayers().map { it.name }
-                                    }
-                                    execute<CommandSender> { sender, context, argument ->
-                                        dropPackCommandAsync(
-                                            sender,
-                                            context.argument(-6),
-                                            context.argument(-5),
-                                            context.argument(-4),
-                                            context.argument(-3),
-                                            context.argument(-2),
-                                            context.argument(-1),
-                                            argument
-                                        )
-                                    }
-                                    // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象] (指向数据)
-                                    dynamic {
-                                        suggestion<CommandSender>(uncheck = true) { _, _ ->
-                                            arrayListOf("data")
-                                        }
-                                        execute<CommandSender> { sender, context, argument ->
-                                            dropPackCommandAsync(
-                                                sender,
-                                                context.argument(-7),
-                                                context.argument(-6),
-                                                context.argument(-5),
-                                                context.argument(-4),
-                                                context.argument(-3),
-                                                context.argument(-2),
-                                                context.argument(-1),
-                                                argument
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    val dropPackSilent = subCommand {
-        // ni dropPack [物品包ID]
-        dynamic {
-            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                ItemPackManager.itemPackIds
-            }
-            execute<CommandSender> { sender, _, _ ->
-                async {
-                    help(sender)
-                }
-            }
-            // ni dropPack [物品包ID] [数量]
-            dynamic {
-                suggestion<CommandSender>(uncheck = true) { _, _ ->
-                    arrayListOf("amount")
-                }
-                execute<CommandSender> { sender, _, _ ->
-                    async {
-                        help(sender)
-                    }
-                }
-                // ni dropPack [物品包ID] [数量] [世界名]
-                dynamic {
-                    suggestion<CommandSender>(uncheck = true) { _, _ ->
-                        Bukkit.getWorlds().map { it.name }
-                    }
-                    execute<CommandSender> { sender, _, _ ->
-                        async {
-                            help(sender)
-                        }
-                    }
-                    // ni dropPack [物品包ID] [数量] [世界名] [X坐标]
-                    dynamic {
-                        suggestion<CommandSender>(uncheck = true) { _, _ ->
-                            arrayListOf("x")
-                        }
-                        execute<CommandSender> { sender, _, _ ->
-                            async {
-                                help(sender)
-                            }
-                        }
-                        // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标]
-                        dynamic {
-                            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                                arrayListOf("y")
-                            }
-                            execute<CommandSender> { sender, _, _ ->
-                                async {
-                                    help(sender)
-                                }
-                            }
-                            // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标]
-                            dynamic {
-                                suggestion<CommandSender>(uncheck = true) { _, _ ->
-                                    arrayListOf("z")
-                                }
-                                execute<CommandSender> { sender, _, _ ->
-                                    async {
-                                        help(sender)
-                                    }
-                                }
-                                // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象]
-                                dynamic {
-                                    suggestion<CommandSender>(uncheck = true) { _, _ ->
-                                        Bukkit.getOnlinePlayers().map { it.name }
-                                    }
-                                    execute<CommandSender> { sender, context, argument ->
-                                        dropPackCommandAsync(
-                                            sender,
-                                            context.argument(-6),
-                                            context.argument(-5),
-                                            context.argument(-4),
-                                            context.argument(-3),
-                                            context.argument(-2),
-                                            context.argument(-1),
-                                            argument,
-                                            tip = false
-                                        )
-                                    }
-                                    // ni dropPack [物品包ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [物品解析对象] (指向数据)
-                                    dynamic {
-                                        suggestion<CommandSender>(uncheck = true) { _, _ ->
-                                            arrayListOf("data")
-                                        }
-                                        execute<CommandSender> { sender, context, argument ->
-                                            dropPackCommandAsync(
-                                                sender,
-                                                context.argument(-7),
-                                                context.argument(-6),
-                                                context.argument(-5),
-                                                context.argument(-4),
-                                                context.argument(-3),
-                                                context.argument(-2),
-                                                context.argument(-1),
-                                                argument,
-                                                tip = false
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun dropPackCommandAsync(
-        sender: CommandSender,
-        id: String,
-        repeat: String?,
-        worldName: String,
-        xString: String,
-        yString: String,
-        zString: String,
-        parser: String,
-        data: String? = null,
-        tip: Boolean = true
-    ) {
-        async {
-            dropPackCommand(sender, id, repeat, worldName, xString, yString, zString, parser, data, tip)
-        }
-    }
-
-    private fun dropPackCommand(
-        // 行为发起人, 用于接收反馈信息
-        sender: CommandSender,
-        // 待掉落物品组ID
-        id: String,
-        // 重复次数
-        repeat: String?,
-        // 掉落世界名
-        worldName: String,
-        // 掉落世界x坐标
-        xString: String,
-        // 掉落世界y坐标
-        yString: String,
-        // 掉落世界z坐标
-        zString: String,
-        // 物品解析对象, 用于生成物品
-        parser: String,
-        // 指向数据
-        data: String? = null,
-        // 是否进行消息提示
-        tip: Boolean
-    ) {
-        Bukkit.getWorld(worldName)?.let { world ->
-            val x = xString.toDoubleOrNull()
-            val y = yString.toDoubleOrNull()
-            val z = zString.toDoubleOrNull()
-            if (x != null && y != null && z != null) {
-                dropPackCommand(
-                    sender,
-                    id,
-                    repeat?.toIntOrNull(),
-                    Location(world, x, y, z),
-                    Bukkit.getPlayerExact(parser),
-                    data,
-                    tip
-                )
-            } else {
-                sender.sendLang("Messages.invalidLocation")
-            }
-        } ?: let {
-            sender.sendLang("Messages.invalidWorld")
-        }
-    }
-
-    private fun dropPackCommand(
-        sender: CommandSender,
-        id: String,
-        repeat: Int?,
-        location: Location,
-        parser: Player?,
-        data: String? = null,
-        tip: Boolean
-    ) {
-        parser?.let {
-            ItemPackManager.getItemPack(id)?.let { itemPack ->
-                val packInfo = HashMap<Location, Int>()
-                repeat(repeat ?: 1) {
-                    // 预定于掉落物列表
-                    val dropItems = ArrayList<ItemStack>()
-                    // 加载掉落信息
-                    dropItems.addAll(itemPack.getItemStacks(parser, data))
-                    // 物品包掉落事件
-                    val event = ItemPackDropEvent(id, dropItems, location, parser)
-                    event.call()
-                    if (!event.isCancelled) {
-                        event.location.let { location ->
-                            if (itemPack.fancyDrop) {
-                                dropItems(
-                                    event.itemStacks,
-                                    location,
-                                    parser,
-                                    itemPack.offsetXString,
-                                    itemPack.offsetYString,
-                                    itemPack.angleType
-                                )
-                            } else {
-                                dropItems(event.itemStacks, location, parser)
-                            }
-                        }
-                        packInfo[event.location] = (packInfo[event.location] ?: 0) + 1
-                    }
-                }
-                if (tip) {
-                    for ((loc, amount) in packInfo) {
-                        sender.sendLang(
-                            "Messages.dropPackSuccessInfo", mapOf(
-                                Pair("{world}", loc.world?.name ?: ""),
-                                Pair("{x}", loc.x.toString()),
-                                Pair("{y}", loc.y.toString()),
-                                Pair("{z}", loc.z.toString()),
-                                Pair("{amount}", amount.toString()),
-                                Pair("{name}", id),
-                                Pair("{player}", parser.name)
+    private val dropPackLogic: RequiredArgumentBuilder<CommandSender, ItemPackSelector> =
+        // ni dropPack [pack]
+        argument<CommandSender, ItemPackSelector>("pack", pack()).then(
+            // ni dropPack [pack] [amount]
+            argument<CommandSender, Int>("amount", positiveInteger()).then(
+                // ni dropPack [pack] [amount] [world]
+                argument<CommandSender, WorldSelector>("world", world()).then(
+                    // ni dropPack [pack] [amount] [world] [location]
+                    argument<CommandSender, Coordinates>("location", location()).executes { context ->
+                        dropPack(context)
+                    }.then(
+                        // ni dropPack [pack] [amount] [world] [location] (target)
+                        argument<CommandSender, PlayerSelector>("target", player()).executes { context ->
+                            dropPack(
+                                context,
+                                getPlayerSelector(context, "target")
                             )
+                        }.then(
+                            // ni dropPack [pack] [amount] [world] [location] (target) (data)
+                            argument<CommandSender, String>(
+                                "data",
+                                StringArgumentType.greedyString()
+                            ).executes { context ->
+                                dropPack(
+                                    context,
+                                    getPlayerSelector(context, "target"),
+                                    StringArgumentType.getString(context, "data")
+                                )
+                            }
                         )
+                    )
+                )
+            )
+        )
+
+    // ni dropPack
+    val dropPack: LiteralArgumentBuilder<CommandSender> = literal<CommandSender>("dropPack").then(dropPackLogic)
+
+    // ni dropPackSilent
+    val dropPackSilent: LiteralArgumentBuilder<CommandSender> =
+        literal<CommandSender>("dropPackSilent").then(dropPackLogic)
+
+    fun dropPack(
+        context: CommandContext<CommandSender>,
+        parserSelector: PlayerSelector? = null,
+        data: String? = null
+    ): Int {
+        async {
+            val tip = context.nodes[0].node.name == "dropPack"
+            val sender = context.source
+
+            val itemPackSelector = getItemPackSelector(context, "pack")
+            val pack = itemPackSelector.getPack(context) ?: let {
+                sender.sendLang("Messages.unknownItemPack", mapOf(Pair("{packID}", itemPackSelector.id)))
+                return@async
+            }
+
+            val amount = getInteger(context, "amount")
+
+            val worldSelector = getWorldSelector(context, "world")
+            val world = worldSelector.getWorld(context) ?: let {
+                sender.sendLang("Messages.invalidWorld", mapOf(Pair("{world}", worldSelector.name)))
+                return@async
+            }
+
+            val location = getLocation(world, context, "location") ?: let {
+                sender.sendLang("Messages.invalidLocation")
+                return@async
+            }
+
+            val parser = if (parserSelector == null) {
+                null
+            } else {
+                parserSelector.getPlayer(context) ?: let {
+                    sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", parserSelector.name)))
+                    return@async
+                }
+            }
+
+            dropPackCommand(
+                sender, pack, amount, location, parser, data, tip
+            )
+        }
+        return 1
+    }
+
+    private fun dropPackCommand(
+        sender: CommandSender,
+        itemPack: ItemPack,
+        repeat: Int,
+        location: Location,
+        parser: Player? = null,
+        data: String? = null,
+        tip: Boolean
+    ) {
+        val packInfo = HashMap<Location, Int>()
+        repeat(repeat) {
+            // 预定于掉落物列表
+            val dropItems = ArrayList<ItemStack>()
+            // 加载掉落信息
+            dropItems.addAll(itemPack.getItemStacks(parser, data))
+            // 物品包掉落事件
+            val event = ItemPackDropEvent(itemPack.id, dropItems, location, parser)
+            event.call()
+            if (!event.isCancelled) {
+                event.location.let { location ->
+                    if (itemPack.fancyDrop) {
+                        dropItems(
+                            event.itemStacks,
+                            location,
+                            parser,
+                            itemPack.offsetXString,
+                            itemPack.offsetYString,
+                            itemPack.angleType
+                        )
+                    } else {
+                        dropItems(event.itemStacks, location, parser)
                     }
                 }
-                // 未知物品包
-            } ?: let {
+                packInfo[event.location] = (packInfo[event.location] ?: 0) + 1
+            }
+        }
+        if (tip) {
+            for ((loc, amount) in packInfo) {
                 sender.sendLang(
-                    "Messages.unknownItemPack", mapOf(
-                        Pair("{packID}", id)
+                    "Messages.dropPackSuccessInfo", mapOf(
+                        Pair("{world}", loc.world?.name ?: ""),
+                        Pair("{x}", loc.x.toString()),
+                        Pair("{y}", loc.y.toString()),
+                        Pair("{z}", loc.z.toString()),
+                        Pair("{amount}", amount.toString()),
+                        Pair("{name}", itemPack.id),
+                        Pair("{player}", parser?.name ?: "null")
                     )
                 )
             }
-            // 未知解析对象
-        } ?: let {
-            sender.sendLang("Messages.invalidParser")
         }
     }
 }

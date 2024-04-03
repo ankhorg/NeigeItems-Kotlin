@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.action.ActionResult
 import pers.neige.neigeitems.action.ResultType
@@ -48,7 +48,7 @@ import java.util.function.BiFunction
 /**
  * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
  */
-object ActionManager : BaseActionManager(plugin) {
+object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     /**
      * 获取拥有动作的物品ID及相关动作
      */

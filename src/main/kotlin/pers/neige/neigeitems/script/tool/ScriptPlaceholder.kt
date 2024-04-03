@@ -20,8 +20,8 @@ class ScriptPlaceholder(private val identifier: String) {
 
     private var version: String = "1.0.0"
 
-    private var executor: BiFunction<OfflinePlayer, String, String> =
-        BiFunction<OfflinePlayer, String, String> { _, _ ->
+    private var executor: BiFunction<OfflinePlayer?, String, String> =
+        BiFunction<OfflinePlayer?, String, String> { _, _ ->
             return@BiFunction ""
         }
 
@@ -55,7 +55,7 @@ class ScriptPlaceholder(private val identifier: String) {
      * @param executor PAPI 变量处理器
      * @return ScriptPlaceholder本身
      */
-    fun setExecutor(executor: BiFunction<OfflinePlayer, String, String>): ScriptPlaceholder {
+    fun setExecutor(executor: BiFunction<OfflinePlayer?, String, String>): ScriptPlaceholder {
         this.executor = executor
         return this
     }

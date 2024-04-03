@@ -1441,4 +1441,13 @@ object ItemUtils {
             saveTo(itemStack)
         }
     }
+
+    @JvmStatic
+    fun ItemStack?.removeOwnerNbt() {
+        val nbt = getNbtOrNull()
+        if (nbt != null) {
+            nbt.getCompound("NeigeItems")?.remove("owner")
+            nbt.saveToSafe(this!!)
+        }
+    }
 }

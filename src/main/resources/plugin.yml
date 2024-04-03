@@ -1,5 +1,5 @@
 name: NeigeItems
-main: pers.neige.neigeitems.taboolib.platform.BukkitPlugin
+main: pers.neige.neigeitems.NeigeItems
 version: ${version}
 
 authors:

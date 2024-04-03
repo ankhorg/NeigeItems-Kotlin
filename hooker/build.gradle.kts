@@ -27,14 +27,10 @@ tasks {
         exclude("module-info.java")
         // kotlin
         relocate("kotlin.", "pers.neige.neigeitems.libs.kotlin.")
-        // taboolib
-        relocate("taboolib", "pers.neige.neigeitems.taboolib")
         // stringsearcher
         relocate("org.neosearch.stringsearcher", "pers.neige.neigeitems.libs.stringsearcher")
         // javassist
         relocate("javassist", "pers.neige.neigeitems.libs.javassist")
-        // callsitenbt
-        relocate("bot.inker.bukkit.nbt", "pers.neige.neigeitems.libs.bot.inker.bukkit.nbt")
         // maven-model
         relocate("org.codehaus.plexus.util", "pers.neige.neigeitems.libs.plexus.util")
         relocate("org.apache.maven.model", "pers.neige.neigeitems.libs.maven.model")
@@ -51,9 +47,10 @@ tasks {
 }
 
 fun final() {
-    val mainFile = File("${rootProject.buildDir}/libs/${rootProject.name}-${rootProject.property("version")}.jar")
+    val mainFile =
+        File("${rootProject.buildDir}/libs/${rootProject.name}-${rootProject.property("version")}-shaded.jar")
     val newMainFile =
-        File("${rootProject.buildDir}/libs/Modified${rootProject.name}-${rootProject.property("version")}.jar")
+        File("${rootProject.buildDir}/libs/${rootProject.name}-${rootProject.property("version")}.jar")
     val currentFile = File("${project.buildDir}/libs/${project.name}-${project.property("version")}.jar")
 
     if (!mainFile.exists()) return
@@ -85,7 +82,6 @@ fun final() {
     }
 
     mainFile.delete()
-    newMainFile.renameTo(mainFile)
 }
 
 val finalTask = tasks.register("finalTask") {

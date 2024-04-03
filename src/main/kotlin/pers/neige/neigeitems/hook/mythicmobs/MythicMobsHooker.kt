@@ -314,7 +314,7 @@ abstract class MythicMobsHooker {
                         }
                     } catch (error: Throwable) {
                         ConfigManager.config.getString("Messages.equipFailed")?.let { message ->
-                            NeigeItems.plugin.logger.info(
+                            NeigeItems.getInstance().logger.info(
                                 message
                                     .replace("{mobID}", internalName)
                                     .replace("{itemID}", args[0])

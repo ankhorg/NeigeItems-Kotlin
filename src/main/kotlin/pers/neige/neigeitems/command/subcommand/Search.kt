@@ -1,10 +1,17 @@
 package pers.neige.neigeitems.command.subcommand
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.command.CommandUtils.argument
+import pers.neige.neigeitems.command.CommandUtils.literal
+import pers.neige.neigeitems.command.arguments.IntegerArgumentType.getInteger
+import pers.neige.neigeitems.command.arguments.IntegerArgumentType.positiveInteger
+import pers.neige.neigeitems.command.arguments.UnquotedStringArgumentType.getUnquotedString
+import pers.neige.neigeitems.command.arguments.UnquotedStringArgumentType.string
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.append
@@ -17,54 +24,48 @@ import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.PlayerUtils.sendMessage
 import pers.neige.neigeitems.utils.SchedulerUtils.async
-import taboolib.common.platform.command.subCommand
 import java.util.*
 import kotlin.math.ceil
 
 object Search {
-    // ni search [ID前缀] (页码) > 查看对应ID前缀的NI物品
-    val search = subCommand {
+    val search: LiteralArgumentBuilder<CommandSender> =
         // ni search
-        execute<CommandSender> { sender, _, _ ->
-            async {
-                Help.help(sender)
-            }
-        }
-        // ni search [ID前缀]
-        dynamic {
-            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                arrayListOf("idPrefix")
-            }
-            execute<CommandSender> { sender, _, argument ->
-                searchCommandAsync(sender, argument, 1)
-            }
-            // ni search [ID前缀] (页码)
-            dynamic {
-                suggestion<CommandSender>(uncheck = true) { _, context ->
-                    (1..ceil(
-                        ItemManager.itemIds.filter { id -> id.startsWith(context.argument(-1)) }.size.toDouble() / ConfigManager.config.getDouble(
+        literal<CommandSender>("search").then(
+            // ni search [prefix]
+            argument<CommandSender, String>("prefix", string()).executes { context ->
+                search(context.source, getUnquotedString(context, "prefix"))
+                1
+            }.then(
+                // ni search [prefix] (page)
+                argument<CommandSender, Int>("page", positiveInteger()).executes { context ->
+                    search(context.source, getUnquotedString(context, "prefix"), getInteger(context, "page"))
+                    1
+                }.suggests { context, builder ->
+                    for (i in 1..ceil(
+                        ItemManager.itemIds.filter { id ->
+                            id.startsWith(getUnquotedString(context, "prefix"))
+                        }.size.toDouble() / ConfigManager.config.getDouble(
                             "ItemList.ItemAmount"
                         )
-                    ).toInt()).toList().map { it.toString() }
+                    ).toInt()) {
+                        builder.suggest(i.toString())
+                    }
+                    builder.buildFuture()
                 }
-                execute<CommandSender> { sender, context, argument ->
-                    searchCommandAsync(sender, context.argument(-1), argument.toIntOrNull() ?: 1)
-                }
-            }
-        }
-    }
+            )
+        )
 
-    private fun searchCommandAsync(
+    private fun search(
         sender: CommandSender,
         idPrefix: String,
-        page: Int
+        page: Int = 1
     ) {
         async {
-            listCommand(sender, idPrefix, page)
+            searchCommand(sender, idPrefix, page)
         }
     }
 
-    private fun listCommand(
+    private fun searchCommand(
         // 行为发起人, 用于接收反馈信息
         sender: CommandSender,
         // id前缀
@@ -86,9 +87,9 @@ object Search {
             if (index == ids.size + 1) break
             val id = ids[index - 1]
             // 替换信息内变量
-            var listItemMessage = (ConfigManager.config.getString("ItemList.ItemFormat") ?: "")
-                .replace("{index}", index.toString())
-                .replace("{ID}", id)
+            var listItemMessage =
+                (ConfigManager.config.getString("ItemList.ItemFormat") ?: "").replace("{index}", index.toString())
+                    .replace("{ID}", id)
             // 构建信息及物品
             if (sender is Player) {
                 kotlin.runCatching { ItemManager.getItemStack(id, sender) }.getOrNull()?.let { itemStack ->
@@ -96,15 +97,13 @@ object Search {
                     val listItemRaw = ComponentBuilder("")
                     for ((i, it) in listItemMessageList.withIndex()) {
                         listItemRaw.append(
-                            ComponentBuilder(it)
-                                .runCommand("/ni get $id")
+                            ComponentBuilder(it).runCommand("/ni get $id")
                                 .hoverText(ConfigManager.config.getString("Messages.clickGiveMessage") ?: "")
                         )
                         if (i + 1 != listItemMessageList.size) {
                             HookerManager.parseItemPlaceholders(itemStack)
                             listItemRaw.append(
-                                ComponentBuilder(itemStack.getParsedComponent())
-                                    .hoverItem(itemStack)
+                                ComponentBuilder(itemStack.getParsedComponent()).hoverItem(itemStack)
                                     .runCommand("/ni get $id")
                             )
                         }
@@ -122,8 +121,7 @@ object Search {
                         itemKeySection?.contains("name") == true -> itemKeySection.getString("name")
                         else -> Material.matchMaterial(
                             (itemKeySection?.getString("material") ?: "").uppercase(Locale.getDefault())
-                        )
-                            ?.let { ItemStack(it).getName() }
+                        )?.let { ItemStack(it).getName() }
                     }
                     listItemMessage = itemName?.let { listItemMessage.replace("{name}", it) }.toString()
                     sender.sendMessage(listItemMessage)
@@ -132,22 +130,21 @@ object Search {
         }
         val prevRaw = ComponentBuilder(ConfigManager.config.getString("ItemList.Prev") ?: "")
         if (realPage != 1) {
-            prevRaw
-                .hoverText((ConfigManager.config.getString("ItemList.Prev") ?: "") + ": " + (realPage - 1).toString())
-                .runCommand("/ni search $idPrefix ${realPage - 1}")
+            prevRaw.hoverText(
+                (ConfigManager.config.getString("ItemList.Prev") ?: "") + ": " + (realPage - 1).toString()
+            ).runCommand("/ni search $idPrefix ${realPage - 1}")
         }
         val nextRaw = ComponentBuilder(ConfigManager.config.getString("ItemList.Next") ?: "")
         if (realPage != pageAmount) {
             nextRaw.hoverText((ConfigManager.config.getString("ItemList.Next") ?: "") + ": " + (realPage + 1))
             nextRaw.runCommand("/ni search $idPrefix ${realPage + 1}")
         }
-        var listSuffixMessage = (ConfigManager.config.getString("ItemList.Suffix") ?: "")
-            .replace("{current}", realPage.toString())
-            .replace("{total}", pageAmount.toString())
+        var listSuffixMessage =
+            (ConfigManager.config.getString("ItemList.Suffix") ?: "").replace("{current}", realPage.toString())
+                .replace("{total}", pageAmount.toString())
         if (sender is Player) {
-            listSuffixMessage = listSuffixMessage
-                .replace("{prev}", "!@#$%{prev}!@#$%")
-                .replace("{next}", "!@#$%{next}!@#$%")
+            listSuffixMessage =
+                listSuffixMessage.replace("{prev}", "!@#$%{prev}!@#$%").replace("{next}", "!@#$%{next}!@#$%")
             val listSuffixMessageList = listSuffixMessage.split("!@#$%")
             listSuffixMessageList.forEach { value ->
                 when (value) {
@@ -160,8 +157,7 @@ object Search {
             sender.sendMessage(listMessage)
         } else {
             sender.sendMessage(
-                listSuffixMessage
-                    .replace("{prev}", ConfigManager.config.getString("ItemList.Prev") ?: "")
+                listSuffixMessage.replace("{prev}", ConfigManager.config.getString("ItemList.Prev") ?: "")
                     .replace("{next}", ConfigManager.config.getString("ItemList.Next") ?: "")
             )
         }

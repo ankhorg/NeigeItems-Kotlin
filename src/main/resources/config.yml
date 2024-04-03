@@ -13,7 +13,7 @@ Messages:
     # 给予物品包是发送物品包提示还是发送所有物品提示
     givePackMessage: Pack
   # 玩家不在线提示
-  invalidPlayer: §bNeige§3Items §7> §7玩家不在线或不存在
+  invalidPlayer: §bNeige§3Items §7> §7玩家 {player} 不在线
   # 给予成功提示
   successInfo: §bNeige§3Items §7> §a成功给予 §f{player} {amount} §a个 §f{name}
   # 被给予成功提示
@@ -45,11 +45,11 @@ Messages:
   # 输入无效数字提示
   invalidAmount: §bNeige§3Items §7> §7无效数字
   # 输入无效世界提示
-  invalidWorld: §bNeige§3Items §7> §7无效世界
+  invalidWorld: §bNeige§3Items §7> §7找不到名为 {world} §7的世界
   # 输入无效坐标提示
   invalidLocation: §bNeige§3Items §7> §7无效坐标
   # 权限不足提示
-  insufficientPermissions: §bNeige§3Items §7> §7权限不足
+  insufficientPermissions: '§bNeige§3Items §7> §7缺少权限: §f{permission}'
   # 重载完毕提示
   reloadedMessage: §bNeige§3Items §7> §a重载完毕
   # 无效NBT提示

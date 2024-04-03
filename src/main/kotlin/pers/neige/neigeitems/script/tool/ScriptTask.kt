@@ -25,7 +25,7 @@ class ScriptTask {
 
     private var bukkitTask: BukkitTask? = null
 
-    private var plugin: Plugin = NeigeItems.plugin
+    private var plugin: Plugin = NeigeItems.getInstance()
 
     /**
      * 设置任务

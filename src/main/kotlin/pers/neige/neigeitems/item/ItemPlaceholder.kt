@@ -8,7 +8,7 @@ import com.comphenix.protocol.events.PacketEvent
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtNumeric
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtString
@@ -112,7 +112,7 @@ class ItemPlaceholder {
             // 监听数据包进行变量替换
             ProtocolLibrary.getProtocolManager().addPacketListener(object :
                 PacketAdapter(
-                    plugin,
+                    NeigeItems.getInstance(),
                     ListenerPriority.LOWEST,
                     PacketType.Play.Server.WINDOW_ITEMS,
                     PacketType.Play.Server.SET_SLOT

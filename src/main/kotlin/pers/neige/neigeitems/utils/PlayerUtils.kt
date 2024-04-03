@@ -8,7 +8,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.metadata.Metadatable
-import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.NeigeItems
 
 /**
  * 玩家相关工具类
@@ -123,7 +123,7 @@ object PlayerUtils {
      */
     @JvmStatic
     fun Metadatable.setMetadataEZ(key: String, value: Any) {
-        this.setMetadata(key, FixedMetadataValue(plugin, value))
+        this.setMetadata(key, FixedMetadataValue(NeigeItems.getInstance(), value))
     }
 
     @JvmStatic

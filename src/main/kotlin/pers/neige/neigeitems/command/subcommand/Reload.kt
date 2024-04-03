@@ -1,35 +1,45 @@
 package pers.neige.neigeitems.command.subcommand
 
+import com.mojang.brigadier.arguments.StringArgumentType.getString
+import com.mojang.brigadier.arguments.StringArgumentType.greedyString
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.command.CommandSender
+import pers.neige.neigeitems.command.CommandUtils.argument
+import pers.neige.neigeitems.command.CommandUtils.literal
 import pers.neige.neigeitems.event.PluginReloadEvent
 import pers.neige.neigeitems.manager.*
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
-import taboolib.common.platform.command.subCommand
 
 object Reload {
-    val reload = subCommand {
-        execute<CommandSender> { sender, _, _ ->
-            reloadCommand(sender)
-        }
-        dynamic {
-            suggestion<CommandSender>(uncheck = true) { _, _ ->
-                arrayListOf(
-                    "config",
-                    "item",
-                    "script",
-                    "pack",
-                    "action",
-                    "editor",
-                    "expansion",
-                )
+    private val types = arrayListOf(
+        "config",
+        "item",
+        "script",
+        "pack",
+        "action",
+        "editor",
+        "expansion",
+    )
+
+    val reload: LiteralArgumentBuilder<CommandSender> =
+        // ni reload
+        literal<CommandSender>("reload").executes { context ->
+            reloadCommand(context.source)
+            1
+        }.then(
+            // ni reload (type)
+            argument<CommandSender, String>("type", greedyString()).executes { context ->
+                reloadCommand(context.source, getString(context, "type"))
+                1
+            }.suggests { _, builder ->
+                types.forEach {
+                    builder.suggest(it)
+                }
+                builder.buildFuture()
             }
-            execute<CommandSender> { sender, _, argument ->
-                reloadCommand(sender, argument)
-            }
-        }
-    }
+        )
 
     private fun reloadCommand(sender: CommandSender, type: String? = null) {
         async {

@@ -13,6 +13,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.utils.ConfigUtils.clone
+import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
@@ -54,7 +55,7 @@ object ItemManager : ItemConfigManager() {
             if (debug) {
                 val current = System.currentTimeMillis() - time
                 if (current > 1) {
-                    NeigeItems.plugin.logger.info("  物品-$id-加载耗时: ${current}ms")
+                    NeigeItems.getInstance().logger.info("  物品-$id-加载耗时: ${current}ms")
                 }
                 time = System.currentTimeMillis()
             }
@@ -277,10 +278,7 @@ object ItemManager : ItemConfigManager() {
      * @return 1 保存成功; 0 ID冲突; 2 你保存了个空气
      */
     fun saveItem(itemStack: ItemStack, id: String, path: String = "$id.yml", cover: Boolean): Int {
-        val file = File(plugin.dataFolder, "${File.separator}Items${File.separator}$path")
-        if (!file.exists()) {
-            file.createNewFile()
-        }
+        val file = getFileOrCreate("Items${File.separator}$path")
         val config = YamlConfiguration.loadConfiguration(file)
         return saveItem(itemStack, id, file, config, cover)
     }

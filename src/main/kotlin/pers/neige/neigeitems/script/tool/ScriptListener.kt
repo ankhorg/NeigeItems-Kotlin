@@ -26,7 +26,7 @@ class ScriptListener(private val event: Class<Event>) {
 
     private var listener: Listener? = null
 
-    private var plugin: Plugin = NeigeItems.plugin
+    private var plugin: Plugin = NeigeItems.getInstance()
 
     /**
      * 设置注册监听器的插件

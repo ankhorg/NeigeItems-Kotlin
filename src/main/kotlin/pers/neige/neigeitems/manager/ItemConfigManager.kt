@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @constructor 构建物品配置管理器
  */
-open class ItemConfigManager(val plugin: JavaPlugin = NeigeItems.plugin, val dir: String = "Items") {
+open class ItemConfigManager(val plugin: JavaPlugin = NeigeItems.getInstance(), val dir: String = "Items") {
     /**
      * 获取全部物品文件
      */

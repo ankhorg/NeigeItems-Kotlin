@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONObject
 import com.alibaba.fastjson2.parseObject
 import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.Bukkit
-import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.manager.ConfigManager.language
 import pers.neige.neigeitems.utils.FileUtils.createFile
@@ -70,7 +70,7 @@ object LocaleI18n {
                             try {
                                 val file = File("lang/$version/$simpleFileName").createFile()
                                 val sha1File = File("lang/$version/$simpleFileName.sha1").createFile()
-                                plugin.logger.info("Downloading $version $simpleFileName")
+                                NeigeItems.getInstance().logger.info("Downloading $version $simpleFileName")
                                 // 写入sha1
                                 sha1File.createFile().writeText(hash)
                                 // 写入文件
@@ -90,9 +90,9 @@ object LocaleI18n {
                                     file.delete()
                                     throw IllegalStateException("file " + file.name + " sha1 not match.")
                                 }
-                                plugin.logger.info("Successfully downloaded $version $simpleFileName")
+                                NeigeItems.getInstance().logger.info("Successfully downloaded $version $simpleFileName")
                             } catch (e: IOException) {
-                                plugin.logger.info("Failed to download $version $simpleFileName")
+                                NeigeItems.getInstance().logger.info("Failed to download $version $simpleFileName")
                             }
                         }
                 }
@@ -123,7 +123,7 @@ object LocaleI18n {
                             try {
                                 val file = File("lang/$version/$simpleFileName").createFile()
                                 val sha1File = File("lang/$version/$simpleFileName.sha1").createFile()
-                                plugin.logger.info("Downloading $version $simpleFileName")
+                                NeigeItems.getInstance().logger.info("Downloading $version $simpleFileName")
                                 // 写入sha1
                                 sha1File.createFile().writeText(hash)
                                 // 写入文件
@@ -143,9 +143,9 @@ object LocaleI18n {
                                     file.delete()
                                     throw IllegalStateException("file " + file.name + " sha1 not match.")
                                 }
-                                plugin.logger.info("Successfully downloaded $version $simpleFileName")
+                                NeigeItems.getInstance().logger.info("Successfully downloaded $version $simpleFileName")
                             } catch (e: IOException) {
-                                plugin.logger.info("Failed to download $version $simpleFileName")
+                                NeigeItems.getInstance().logger.info("Failed to download $version $simpleFileName")
                             }
                         }
                 }
@@ -162,7 +162,7 @@ object LocaleI18n {
             // sha1校验不通过
             || file.sha1() != sha1File.readText()
         ) {
-            plugin.logger.info("Try to find $simpleFileName")
+            NeigeItems.getInstance().logger.info("Try to find $simpleFileName")
             try {
                 // 所有版本信息
                 "https://launchermeta.mojang.com/mc/game/version_manifest.json".connectAndParseObject()
@@ -183,7 +183,7 @@ object LocaleI18n {
                             .getJSONObject(fileName)
                             .getString("hash")
                         try {
-                            plugin.logger.info("Downloading $simpleFileName")
+                            NeigeItems.getInstance().logger.info("Downloading $simpleFileName")
                             // 写入sha1
                             sha1File.createFile().writeText(hash)
                             // 写入文件
@@ -196,13 +196,13 @@ object LocaleI18n {
                                 file.delete()
                                 throw IllegalStateException("file " + file.name + " sha1 not match.")
                             }
-                            plugin.logger.info("Successfully downloaded $simpleFileName")
+                            NeigeItems.getInstance().logger.info("Successfully downloaded $simpleFileName")
                         } catch (e: IOException) {
-                            plugin.logger.info("Failed to download $simpleFileName")
+                            NeigeItems.getInstance().logger.info("Failed to download $simpleFileName")
                         }
                     }
             } catch (error: Throwable) {
-                plugin.logger.warning("Error occurred while downloading $simpleFileName")
+                NeigeItems.getInstance().logger.warning("Error occurred while downloading $simpleFileName")
                 error.printStackTrace()
                 return
             }

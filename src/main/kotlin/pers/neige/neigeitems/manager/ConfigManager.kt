@@ -6,7 +6,7 @@ import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
-import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
 import pers.neige.neigeitems.utils.ConfigUtils.saveResourceNotWarn
 import java.io.File
@@ -21,7 +21,7 @@ object ConfigManager {
      * 获取默认Config
      */
     private val originConfig: FileConfiguration =
-        plugin.getResource("config.yml")?.use { input ->
+        NeigeItems.getInstance().getResource("config.yml")?.use { input ->
             InputStreamReader(input, StandardCharsets.UTF_8).use { reader ->
                 YamlConfiguration.loadConfiguration(reader)
             }
@@ -30,7 +30,7 @@ object ConfigManager {
     /**
      * 获取配置文件
      */
-    val config get() = plugin.config
+    val config get() = NeigeItems.getInstance().config
 
     var debug = config.getBoolean("Main.Debug", false)
     var updateCheck = config.getBoolean("Main.UpdateCheck", true)
@@ -45,31 +45,31 @@ object ConfigManager {
      */
     fun saveResource() {
         if (getFileOrNull("Expansions") == null) {
-            plugin.saveResourceNotWarn("Expansions${File.separator}CustomAction.js")
-            plugin.saveResourceNotWarn("Expansions${File.separator}CustomItemEditor.js")
-            plugin.saveResourceNotWarn("Expansions${File.separator}CustomSection.js")
-            plugin.saveResourceNotWarn("Expansions${File.separator}DefaultSection.js")
-            plugin.saveResourceNotWarn("Expansions${File.separator}ExampleExpansion.js")
+            NeigeItems.getInstance().saveResourceNotWarn("Expansions${File.separator}CustomAction.js")
+            NeigeItems.getInstance().saveResourceNotWarn("Expansions${File.separator}CustomItemEditor.js")
+            NeigeItems.getInstance().saveResourceNotWarn("Expansions${File.separator}CustomSection.js")
+            NeigeItems.getInstance().saveResourceNotWarn("Expansions${File.separator}DefaultSection.js")
+            NeigeItems.getInstance().saveResourceNotWarn("Expansions${File.separator}ExampleExpansion.js")
         }
         if (getFileOrNull("GlobalSections") == null) {
-            plugin.saveResourceNotWarn("GlobalSections${File.separator}ExampleSection.yml")
+            NeigeItems.getInstance().saveResourceNotWarn("GlobalSections${File.separator}ExampleSection.yml")
         }
         if (getFileOrNull("ItemActions") == null) {
-            plugin.saveResourceNotWarn("ItemActions${File.separator}ExampleAction.yml")
+            NeigeItems.getInstance().saveResourceNotWarn("ItemActions${File.separator}ExampleAction.yml")
         }
         if (getFileOrNull("ItemPacks") == null) {
-            plugin.saveResourceNotWarn("ItemPacks${File.separator}ExampleItemPack.yml")
+            NeigeItems.getInstance().saveResourceNotWarn("ItemPacks${File.separator}ExampleItemPack.yml")
         }
         if (getFileOrNull("Items") == null) {
-            plugin.saveResourceNotWarn("Items${File.separator}ExampleItem.yml")
+            NeigeItems.getInstance().saveResourceNotWarn("Items${File.separator}ExampleItem.yml")
         }
         if (getFileOrNull("Scripts") == null) {
-            plugin.saveResourceNotWarn("Scripts${File.separator}ExampleScript.js")
-            plugin.saveResourceNotWarn("Scripts${File.separator}ItemTime.js")
+            NeigeItems.getInstance().saveResourceNotWarn("Scripts${File.separator}ExampleScript.js")
+            NeigeItems.getInstance().saveResourceNotWarn("Scripts${File.separator}ItemTime.js")
         }
-        plugin.saveDefaultConfig()
+        NeigeItems.getInstance().saveDefaultConfig()
         // 加载bstats
-        val metrics = Metrics(plugin, 15750)
+        val metrics = Metrics(NeigeItems.getInstance(), 15750)
         metrics.addCustomChart(SingleLineChart("items") { ItemManager.itemIds.size })
         // 对当前Config查缺补漏
         loadConfig()
@@ -80,19 +80,19 @@ object ConfigManager {
      */
     fun loadConfig() {
         originConfig.getKeys(true).forEach { key ->
-            if (!plugin.config.contains(key)) {
-                plugin.config.set(key, originConfig.get(key))
+            if (!NeigeItems.getInstance().config.contains(key)) {
+                NeigeItems.getInstance().config.set(key, originConfig.get(key))
             } else {
                 val completeValue = originConfig.get(key)
-                val value = plugin.config.get(key)
+                val value = NeigeItems.getInstance().config.get(key)
                 if (completeValue is ConfigurationSection && value !is ConfigurationSection) {
-                    plugin.config.set(key, completeValue)
+                    NeigeItems.getInstance().config.set(key, completeValue)
                 } else {
-                    plugin.config.set(key, value)
+                    NeigeItems.getInstance().config.set(key, value)
                 }
             }
         }
-        plugin.saveConfig()
+        NeigeItems.getInstance().saveConfig()
         debug = config.getBoolean("Main.Debug", false)
         updateCheck = config.getBoolean("Main.UpdateCheck", true)
         comboInterval = config.getLong("ItemAction.comboInterval", 500)
@@ -106,7 +106,7 @@ object ConfigManager {
      * 重载配置管理器
      */
     fun reload() {
-        plugin.reloadConfig()
+        NeigeItems.getInstance().reloadConfig()
         loadConfig()
     }
 

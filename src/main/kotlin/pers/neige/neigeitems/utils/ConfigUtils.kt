@@ -5,7 +5,6 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 import pers.neige.neigeitems.NeigeItems
-import pers.neige.neigeitems.NeigeItems.plugin
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.utils.FileUtils.createDirectory
 import pers.neige.neigeitems.utils.FileUtils.createFile
@@ -46,7 +45,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getAllFiles(dir: String): ArrayList<File> {
-        return getAllFiles(File(plugin.dataFolder, File.separator + dir))
+        return getAllFiles(File(NeigeItems.getInstance().dataFolder, File.separator + dir))
     }
 
     /**
@@ -57,7 +56,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFile(file: String): File {
-        return File(plugin.dataFolder, File.separator + file)
+        return File(NeigeItems.getInstance().dataFolder, File.separator + file)
     }
 
     /**
@@ -68,7 +67,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrNull(file: String): File? {
-        return File(plugin.dataFolder, File.separator + file).let {
+        return File(NeigeItems.getInstance().dataFolder, File.separator + file).let {
             if (!it.exists()) null
             else it
         }
@@ -82,7 +81,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrCreate(file: String): File {
-        return File(plugin.dataFolder, File.separator + file).createFile()
+        return File(NeigeItems.getInstance().dataFolder, File.separator + file).createFile()
     }
 
     /**
@@ -147,7 +146,7 @@ object ConfigUtils {
     fun getAllFiles(plugin: String, dir: String): ArrayList<File> {
         return getAllFiles(
             File(
-                File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin),
+                File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin),
                 File.separator + dir
             )
         )
@@ -162,7 +161,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFile(plugin: String, file: String): File {
-        return File(File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin), File.separator + file)
+        return File(File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin), File.separator + file)
     }
 
     /**
@@ -174,7 +173,10 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrNull(plugin: String, file: String): File? {
-        return File(File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin), File.separator + file).let {
+        return File(
+            File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin),
+            File.separator + file
+        ).let {
             if (!it.exists()) null
             else it
         }
@@ -190,7 +192,7 @@ object ConfigUtils {
     @JvmStatic
     fun getFileOrCreate(plugin: String, file: String): File {
         return File(
-            File(NeigeItems.plugin.dataFolder.parent, File.separator + plugin),
+            File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin),
             File.separator + file
         ).createFile()
     }

@@ -1,32 +1,43 @@
 package pers.neige.neigeitems.command.subcommand
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder
+import com.mojang.brigadier.context.CommandContext
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.command.CommandUtils.literal
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
 import pers.neige.neigeitems.manager.HookerManager.append
 import pers.neige.neigeitems.manager.HookerManager.hoverText
 import pers.neige.neigeitems.manager.HookerManager.suggestCommand
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
+import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
-import taboolib.common.platform.command.subCommand
 
 object ItemNBT {
-    val itemNBT = subCommand {
-        execute<Player> { sender, _, _ ->
-            itemnbtCommandAsync(sender.inventory.itemInMainHand, sender)
+    // ni itemNBT
+    val itemNBT: LiteralArgumentBuilder<CommandSender> =
+        literal<CommandSender>("itemNBT").executes { context ->
+            itemNBT(context)
+            1
         }
-    }
 
-    private fun itemnbtCommandAsync(itemStack: ItemStack, sender: Player) {
+    private fun itemNBT(context: CommandContext<CommandSender>) {
         async {
-            itemnbtCommand(itemStack, sender)
+            val sender = context.source
+            if (sender !is Player) {
+                sender.sendLang("Messages.onlyPlayer")
+                return@async
+            }
+            val itemStack = sender.inventory.itemInMainHand
+            itemNBTCommand(sender, itemStack)
         }
     }
 
-    private fun itemnbtCommand(itemStack: ItemStack, sender: Player) {
+    private fun itemNBTCommand(sender: Player, itemStack: ItemStack) {
         if (itemStack.type != Material.AIR) {
             val components = itemStack.getNbt().format().create()
             var temp = TextComponent()
@@ -52,8 +63,8 @@ object ItemNBT {
         }
     }
 
-    val INDENT = "  "
-    val LIST_INDENT = "§e- "
+    private const val INDENT = "  "
+    private const val LIST_INDENT = "§e- "
 
     @JvmStatic
     fun NbtCompound.format(): ComponentBuilder {

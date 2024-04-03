@@ -2,7 +2,7 @@ package pers.neige.neigeitems.section
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.NeigeItems.plugin
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.SectionManager
 
 /**
@@ -46,10 +46,10 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
                 parser.onRequest(data, cache, player, sections)?.let {
                     return it
                 }
-                plugin.logger.info("$type 节点 $id 无法获取解析值")
+                NeigeItems.getInstance().logger.info("$type 节点 $id 无法获取解析值")
                 return null
             }
-            plugin.logger.info("$id 拥有未知节点类型 $type")
+            NeigeItems.getInstance().logger.info("$id 拥有未知节点类型 $type")
         }
         return null
     }
