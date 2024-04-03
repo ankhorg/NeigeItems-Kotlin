@@ -13,9 +13,9 @@ plugins {
 
 val realVersion = version
 
-if (!System.getenv("CI").toBoolean()) {
-    version = "dev"
-}
+//if (!System.getenv("CI").toBoolean()) {
+//    version = "dev"
+//}
 
 subprojects {
     apply<JavaPlugin>()

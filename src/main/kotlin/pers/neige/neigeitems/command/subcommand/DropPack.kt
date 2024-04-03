@@ -158,9 +158,9 @@ object DropPack {
                 sender.sendLang(
                     "Messages.dropPackSuccessInfo", mapOf(
                         Pair("{world}", loc.world?.name ?: ""),
-                        Pair("{x}", loc.x.toString()),
-                        Pair("{y}", loc.y.toString()),
-                        Pair("{z}", loc.z.toString()),
+                        Pair("{x}", String.format("%.2f", loc.x)),
+                        Pair("{y}", String.format("%.2f", loc.y)),
+                        Pair("{z}", String.format("%.2f", loc.z)),
                         Pair("{amount}", amount.toString()),
                         Pair("{name}", itemPack.id),
                         Pair("{player}", parser?.name ?: "null")
