@@ -27,12 +27,6 @@ public class NeigeItems extends JavaPlugin {
     private ClassScanner scanner = null;
 
     public static NeigeItems getInstance() {
-        if (INSTANCE == null) {
-            synchronized (NeigeItems.class) {
-                Plugin plugin = Bukkit.getPluginManager().getPlugin(NeigeItems.getInstance().getName());
-                INSTANCE = (NeigeItems) plugin;
-            }
-        }
         return INSTANCE;
     }
 

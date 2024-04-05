@@ -21,5 +21,3 @@ include("hooker-mythicmobs-v560")
 include("hooker-nms-NamespacedKey")
 include("hooker-nms-CustomModelData")
 include("hooker-nms-HoverEvent")
-
-//include("hooker-callsitenbt")
