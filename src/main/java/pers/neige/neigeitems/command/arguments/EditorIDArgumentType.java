@@ -7,13 +7,12 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import pers.neige.neigeitems.command.CommandUtils;
 import pers.neige.neigeitems.manager.ItemEditorManager;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
-
-import static pers.neige.neigeitems.command.CommandUtils.readAllString;
 
 /**
  * 编辑器ID参数类型
@@ -42,7 +41,7 @@ public class EditorIDArgumentType implements ArgumentType<String> {
     public String parse(
             @NotNull StringReader reader
     ) {
-        return readAllString(reader);
+        return CommandUtils.readUnquotedString(reader);
     }
 
     @NotNull

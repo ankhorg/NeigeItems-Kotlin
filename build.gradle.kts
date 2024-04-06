@@ -77,11 +77,6 @@ repositories {
 //    maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
     maven("https://repo.oraxen.com/releases/")
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven {
-        url = uri("http://ptms.ink:8081/repository/releases/")
-        isAllowInsecureProtocol = true
-    }
-    maven("https://repo.tabooproject.org/storages/public/releases/")
 }
 
 dependencies {
