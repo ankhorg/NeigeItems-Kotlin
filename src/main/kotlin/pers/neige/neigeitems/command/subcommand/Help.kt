@@ -29,12 +29,12 @@ object Help {
             // ni help (page)
             argument<CommandSender, Int>(
                 "page",
-                integer(1, (commandsPages / ConfigManager.config.getInt("Help.amount").toDouble()).toInt())
+                integer(1, ceil(commandsPages / ConfigManager.config.getInt("Help.amount").toDouble()).toInt())
             ).executes { context ->
                 help(context.source, getInteger(context, "page"))
                 1
             }.suggests { _, builder ->
-                for (i in 1..(commandsPages / ConfigManager.config.getInt("Help.amount").toDouble()).toInt()) {
+                for (i in 1..ceil(commandsPages / ConfigManager.config.getInt("Help.amount").toDouble()).toInt()) {
                     builder.suggest(i.toString())
                 }
                 builder.buildFuture()
@@ -62,7 +62,7 @@ object Help {
             // 获取当前序号
             val prevCommandAmount = ((realPage - 1) * amount)
             // 遍历指令并发送
-            for (index in prevCommandAmount..(prevCommandAmount + amount)) {
+            for (index in prevCommandAmount until (prevCommandAmount + amount)) {
                 if (index == commands.size) break
                 val command = commands[index]
                 // 替换信息内变量并发送
