@@ -3,17 +3,20 @@ package pers.neige.neigeitems;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 import org.inksnow.ankhinvoke.bukkit.AnkhInvokeBukkit;
 import org.inksnow.ankhinvoke.bukkit.injector.JarTransformInjector;
+import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.lang.LocaleI18n;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
 import pers.neige.neigeitems.manager.ConfigManager;
 import pers.neige.neigeitems.scanner.ClassScanner;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 
@@ -22,6 +25,16 @@ public class NeigeItems extends JavaPlugin {
 
     static {
         init();
+    }
+
+    public NeigeItems() {
+        super();
+        INSTANCE = this;
+    }
+
+    public NeigeItems(@NotNull JavaPluginLoader loader, @NotNull PluginDescriptionFile description, @NotNull File dataFolder, @NotNull File file) {
+        super(loader, description, dataFolder, file);
+        INSTANCE = this;
     }
 
     private ClassScanner scanner = null;
@@ -58,7 +71,6 @@ public class NeigeItems extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        INSTANCE = this;
         try {
             ItemStack itemStack = new ItemStack(Material.STONE);
             NbtItemStack nbtItemStack = new NbtItemStack(itemStack);
