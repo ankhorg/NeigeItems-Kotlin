@@ -202,3 +202,6 @@ ItemPlaceholder:
 ItemDurability:
   # 物品自定义耐久百分比与原版耐久百分比对不上的时候强制进行同步修正
   forceSync: false
+ItemCheck:
+  # 玩家打开容器界面时是否检测其中的物品是否过期及是否需要更新
+  checkInventory: true

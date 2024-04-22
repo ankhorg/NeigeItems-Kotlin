@@ -65,7 +65,7 @@ repositories {
     mavenLocal()
     maven("https://maven.aliyun.com/nexus/content/groups/public/")
     mavenCentral()
-    maven("https://r.irepo.space/maven/")
+    maven("https://s0.blobs.inksnow.org/maven/")
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/public")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")

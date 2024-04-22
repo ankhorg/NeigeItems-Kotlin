@@ -4,6 +4,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.event.ItemExpirationEvent
 import pers.neige.neigeitems.event.ItemUpdateEvent
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ItemUtils.getName
@@ -72,7 +73,7 @@ object ItemCheck {
                     }
                     // 进行待重构节点覆盖
                     rebuild.forEach { (key, value) ->
-                        data.set(key, value)
+                        data[key] = value
                     }
                     // 进行待刷新节点移除
                     refresh.forEach { key ->
@@ -129,6 +130,7 @@ object ItemCheck {
      * 当前是否可以检查物品(最多一秒检查一次玩家背包, 防止服务器噶了)
      */
     fun Player.couldCheckInventory(): Boolean {
+        if (!ConfigManager.checkInventory) return false
         // 获取当前时间
         val time = System.currentTimeMillis()
         // 获取上次检查时间

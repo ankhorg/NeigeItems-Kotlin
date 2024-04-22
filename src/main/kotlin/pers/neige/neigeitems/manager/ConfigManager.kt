@@ -39,6 +39,7 @@ object ConfigManager {
     var updateInterval = config.getLong("ItemUpdate.interval", -1)
     var language = config.getString("Language", "zh_cn")!!
     var forceSync = config.getBoolean("ItemDurability.forceSync", false)
+    var checkInventory = config.getBoolean("ItemCheck.checkInventory", true)
 
     /**
      * 加载默认配置文件
@@ -100,6 +101,7 @@ object ConfigManager {
         updateInterval = config.getLong("ItemUpdate.interval", -1)
         language = config.getString("Language", "zh_cn")!!
         forceSync = config.getBoolean("ItemDurability.forceSync", false)
+        checkInventory = config.getBoolean("ItemCheck.checkInventory", true)
     }
 
     /**
