@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>EntityPlayerUtils 1.17.8 API </title>
+    <title>EntityPlayerUtils 1.17.9 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../stylesheet.css" title="Style">
@@ -502,7 +502,7 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                         <tr id="i31" class="rowColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityLook(org.bukkit.entity.Entity,org.bukkit.entity.Player,byte,byte,boolean)>sendFakeEntityLook</a>(@NotNull() Entity entity, @NotNull() Player player, byte yRot, byte xRot, boolean onGround) </code>
+                                            <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityLookRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,float,float,boolean)>sendFakeEntityLookRaw</a>(@NotNull() Entity entity, @NotNull() Player player, float yaw, float pitch, boolean onGround) </code>
                                             </th>
                                             <td class="colLast">发送实体视角移动数据包.</td>
                                         </tr>
@@ -510,12 +510,36 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                         <tr id="i32" class="altColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityLook(org.bukkit.entity.Entity,org.bukkit.entity.Player,byte,byte,boolean)>sendFakeEntityLook</a>(@NotNull() Entity entity, @NotNull() Player player, byte yRot, byte xRot, boolean onGround) </code>
+                                            </th>
+                                            <td class="colLast">发送实体视角移动数据包.</td>
+                                        </tr>
+                                        
+                                        <tr id="i33" class="rowColor">
+                                            <td class="colFirst"><code>static void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityRelMoveRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,boolean)>sendFakeEntityRelMoveRaw</a>(@NotNull() Entity entity, @NotNull() Player player, double relX, double relY, double relZ, boolean onGround) </code>
+                                            </th>
+                                            <td class="colLast">发送实体位置相对移动数据包.</td>
+                                        </tr>
+                                        
+                                        <tr id="i34" class="altColor">
+                                            <td class="colFirst"><code>static void</code>
+                                            </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityRelMove(org.bukkit.entity.Entity,org.bukkit.entity.Player,long,long,long,boolean)>sendFakeEntityRelMove</a>(@NotNull() Entity entity, @NotNull() Player player, long xa, long ya, long za, boolean onGround) </code>
                                             </th>
                                             <td class="colLast">发送实体位置相对移动数据包.</td>
                                         </tr>
                                         
-                                        <tr id="i33" class="rowColor">
+                                        <tr id="i35" class="rowColor">
+                                            <td class="colFirst"><code>static void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityRelMoveLookRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,float,float,boolean)>sendFakeEntityRelMoveLookRaw</a>(@NotNull() Entity entity, @NotNull() Player player, double relX, double relY, double relZ, float yaw, float pitch, boolean onGround) </code>
+                                            </th>
+                                            <td class="colLast">发送实体位置相对移动及视角移动数据包.</td>
+                                        </tr>
+                                        
+                                        <tr id="i36" class="altColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityRelMoveLook(org.bukkit.entity.Entity,org.bukkit.entity.Player,long,long,long,byte,byte,boolean)>sendFakeEntityRelMoveLook</a>(@NotNull() Entity entity, @NotNull() Player player, long xa, long ya, long za, byte yRot, byte xRot, boolean onGround) </code>
@@ -523,7 +547,31 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <td class="colLast">发送实体位置相对移动及视角移动数据包.</td>
                                         </tr>
                                         
-                                        <tr id="i34" class="altColor">
+                                        <tr id="i37" class="rowColor">
+                                            <td class="colFirst"><code>static void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityTeleportRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,float,float,boolean)>sendFakeEntityTeleportRaw</a>(@NotNull() Entity entity, @NotNull() Player player, double x, double y, double z, float yaw, float pitch, boolean onGround) </code>
+                                            </th>
+                                            <td class="colLast">发送实体传送数据包.</td>
+                                        </tr>
+                                        
+                                        <tr id="i38" class="altColor">
+                                            <td class="colFirst"><code>static void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityTeleport(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,byte,byte,boolean)>sendFakeEntityTeleport</a>(@NotNull() Entity entity, @NotNull() Player player, double x, double y, double z, byte yRot, byte xRot, boolean onGround) </code>
+                                            </th>
+                                            <td class="colLast">发送实体传送数据包.</td>
+                                        </tr>
+                                        
+                                        <tr id="i39" class="rowColor">
+                                            <td class="colFirst"><code>static void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityHeadRotationRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,float)>sendFakeEntityHeadRotationRaw</a>(@NotNull() Entity entity, @NotNull() Player player, float yaw) </code>
+                                            </th>
+                                            <td class="colLast">发送实体头部转动数据包.</td>
+                                        </tr>
+                                        
+                                        <tr id="i40" class="altColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeEntityHeadRotation(org.bukkit.entity.Entity,org.bukkit.entity.Player,byte)>sendFakeEntityHeadRotation</a>(@NotNull() Entity entity, @NotNull() Player player, byte yHeadRot) </code>
@@ -531,7 +579,7 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <td class="colLast">发送实体头部转动数据包.</td>
                                         </tr>
                                         
-                                        <tr id="i35" class="rowColor">
+                                        <tr id="i41" class="rowColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#refreshFakeEntityHeadRotation(org.bukkit.entity.Entity,org.bukkit.entity.Player)>refreshFakeEntityHeadRotation</a>(@NotNull() Entity entity, @NotNull() Player player) </code>
@@ -539,7 +587,7 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <td class="colLast">刷新实体头部转动.</td>
                                         </tr>
                                         
-                                        <tr id="i36" class="altColor">
+                                        <tr id="i42" class="altColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#removeFakeCustomName(org.bukkit.entity.Entity,org.bukkit.entity.Player)>removeFakeCustomName</a>(@NotNull() Entity entity, @NotNull() Player player) </code>
@@ -547,7 +595,7 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <td class="colLast">移除实体虚拟显示名.</td>
                                         </tr>
                                         
-                                        <tr id="i37" class="rowColor">
+                                        <tr id="i43" class="rowColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#setFakeCustomName(org.bukkit.entity.Entity,org.bukkit.entity.Player,java.lang.String)>setFakeCustomName</a>(@NotNull() Entity entity, @NotNull() Player player, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name) </code>
@@ -555,7 +603,7 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <td class="colLast">为实体设置虚拟显示名.</td>
                                         </tr>
                                         
-                                        <tr id="i38" class="altColor">
+                                        <tr id="i44" class="altColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#setFakeCustomName(org.bukkit.entity.Entity,org.bukkit.entity.Player,net.md_5.bungee.api.chat.BaseComponent)>setFakeCustomName</a>(@NotNull() Entity entity, @NotNull() Player player, @NotNull() BaseComponent name) </code>
@@ -563,7 +611,7 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <td class="colLast">为实体设置虚拟显示名.</td>
                                         </tr>
                                         
-                                        <tr id="i39" class="rowColor">
+                                        <tr id="i45" class="rowColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#setFakeCustomName(org.bukkit.World,Object,net.md_5.bungee.api.chat.BaseComponent)>setFakeCustomName</a>(@NotNull() World world, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> packetObject, @NotNull() BaseComponent name) </code>
@@ -571,7 +619,7 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <td class="colLast">为实体设置虚拟显示名.</td>
                                         </tr>
                                         
-                                        <tr id="i40" class="altColor">
+                                        <tr id="i46" class="altColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendPacket(org.bukkit.entity.Player,Object)>sendPacket</a>(@NotNull() Player player, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> packetObject) </code>
@@ -579,7 +627,7 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <td class="colLast">向玩家发送 NMS 数据包.</td>
                                         </tr>
                                         
-                                        <tr id="i41" class="rowColor">
+                                        <tr id="i47" class="rowColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeInventoryTitle(org.bukkit.entity.Player,net.md_5.bungee.api.chat.BaseComponent)>sendFakeInventoryTitle</a>(@NotNull() Player player, @NotNull() BaseComponent title) </code>
@@ -587,7 +635,7 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <td class="colLast">向玩家发送虚假的容器标题.</td>
                                         </tr>
                                         
-                                        <tr id="i42" class="altColor">
+                                        <tr id="i48" class="altColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeInventoryTitle(org.bukkit.entity.Player,java.lang.String)>sendFakeInventoryTitle</a>(@NotNull() Player player, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> title) </code>
@@ -595,7 +643,7 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <td class="colLast">向玩家发送虚假的容器标题.</td>
                                         </tr>
                                         
-                                        <tr id="i43" class="rowColor">
+                                        <tr id="i49" class="rowColor">
                                             <td class="colFirst"><code>static void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=EntityPlayerUtils.html#sendFakeInventoryJsonTitle(org.bukkit.entity.Player,java.lang.String)>sendFakeInventoryJsonTitle</a>(@NotNull() Player player, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> title) </code>
@@ -1782,6 +1830,52 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                     </li>
                                 </ul>
                                 
+                                <a id="sendFakeEntityLookRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,float,float,boolean)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>sendFakeEntityLookRaw</h4>
+                                        <pre class="methodSignature"> static void <a href=EntityPlayerUtils.html#sendFakeEntityLookRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,float,float,boolean)>sendFakeEntityLookRaw</a>(@NotNull() Entity entity, @NotNull() Player player, float yaw, float pitch, boolean onGround)</pre>
+                                        <div class="block"><p>发送实体视角移动数据包.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>entity</code> - 待操作实体.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>player</code> - 待接收玩家.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>yaw</code> - 偏航角.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>pitch</code> - 俯仰角.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>onGround</code> - 实体在不在地上</dd>
+                                            
+                                            
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
                                 <a id="sendFakeEntityLook(org.bukkit.entity.Entity,org.bukkit.entity.Player,byte,byte,boolean)">
                                     <!--   -->
                                 </a>
@@ -1807,9 +1901,63 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             
                                             
                                             
+                                            <dd><code>yRot</code> - (byte) ((yaw*256.0)/360.0).</dd>
                                             
                                             
                                             
+                                            <dd><code>xRot</code> - (byte) ((pitch*256.0)/360.0).</dd>
+                                            
+                                            
+                                            
+                                            
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="sendFakeEntityRelMoveRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,boolean)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>sendFakeEntityRelMoveRaw</h4>
+                                        <pre class="methodSignature"> static void <a href=EntityPlayerUtils.html#sendFakeEntityRelMoveRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,boolean)>sendFakeEntityRelMoveRaw</a>(@NotNull() Entity entity, @NotNull() Player player, double relX, double relY, double relZ, boolean onGround)</pre>
+                                        <div class="block"><p>发送实体位置相对移动数据包.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>entity</code> - 待操作实体.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>player</code> - 待接收玩家.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>relX</code> - x轴相对移动量.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>relY</code> - y轴相对移动量.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>relZ</code> - z轴相对移动量.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>onGround</code> - 实体在不在地上</dd>
                                             
                                             
                                         
@@ -1847,11 +1995,77 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             
                                             
                                             
+                                            <dd><code>xa</code> - (x方向移动量*4096)向下取整.</dd>
                                             
                                             
                                             
+                                            <dd><code>ya</code> - (y方向移动量*4096)向下取整.</dd>
                                             
                                             
+                                            
+                                            <dd><code>za</code> - (z方向移动量*4096)向下取整.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>onGround</code> - 实体在不在地上</dd>
+                                            
+                                            
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="sendFakeEntityRelMoveLookRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,float,float,boolean)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>sendFakeEntityRelMoveLookRaw</h4>
+                                        <pre class="methodSignature"> static void <a href=EntityPlayerUtils.html#sendFakeEntityRelMoveLookRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,float,float,boolean)>sendFakeEntityRelMoveLookRaw</a>(@NotNull() Entity entity, @NotNull() Player player, double relX, double relY, double relZ, float yaw, float pitch, boolean onGround)</pre>
+                                        <div class="block"><p>发送实体位置相对移动及视角移动数据包.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>entity</code> - 待操作实体.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>player</code> - 待接收玩家.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>relX</code> - x轴相对移动量.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>relY</code> - y轴相对移动量.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>relZ</code> - z轴相对移动量.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>yaw</code> - 偏航角.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>pitch</code> - 俯仰角.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>onGround</code> - 实体在不在地上</dd>
                                             
                                             
                                         
@@ -1889,15 +2103,181 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             
                                             
                                             
+                                            <dd><code>xa</code> - (x方向移动量*4096)向下取整.</dd>
                                             
                                             
                                             
+                                            <dd><code>ya</code> - (y方向移动量*4096)向下取整.</dd>
                                             
                                             
                                             
+                                            <dd><code>za</code> - (z方向移动量*4096)向下取整.</dd>
                                             
                                             
                                             
+                                            <dd><code>yRot</code> - (byte) ((yaw*256.0)/360.0).</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>xRot</code> - (byte) ((pitch*256.0)/360.0).</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>onGround</code> - 实体在不在地上</dd>
+                                            
+                                            
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="sendFakeEntityTeleportRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,float,float,boolean)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>sendFakeEntityTeleportRaw</h4>
+                                        <pre class="methodSignature"> static void <a href=EntityPlayerUtils.html#sendFakeEntityTeleportRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,float,float,boolean)>sendFakeEntityTeleportRaw</a>(@NotNull() Entity entity, @NotNull() Player player, double x, double y, double z, float yaw, float pitch, boolean onGround)</pre>
+                                        <div class="block"><p>发送实体传送数据包.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>entity</code> - 待操作实体.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>player</code> - 待接收玩家.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>x</code> - 目标点x轴坐标.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>y</code> - 目标点y轴坐标.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>z</code> - 目标点z轴坐标.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>yaw</code> - 偏航角.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>pitch</code> - 俯仰角.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>onGround</code> - 实体在不在地上</dd>
+                                            
+                                            
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="sendFakeEntityTeleport(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,byte,byte,boolean)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>sendFakeEntityTeleport</h4>
+                                        <pre class="methodSignature"> static void <a href=EntityPlayerUtils.html#sendFakeEntityTeleport(org.bukkit.entity.Entity,org.bukkit.entity.Player,double,double,double,byte,byte,boolean)>sendFakeEntityTeleport</a>(@NotNull() Entity entity, @NotNull() Player player, double x, double y, double z, byte yRot, byte xRot, boolean onGround)</pre>
+                                        <div class="block"><p>发送实体传送数据包.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>entity</code> - 待操作实体.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>player</code> - 待接收玩家.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>x</code> - 目标点x轴坐标.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>y</code> - 目标点y轴坐标.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>z</code> - 目标点z轴坐标.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>yRot</code> - (byte) ((yaw*256.0)/360.0).</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>xRot</code> - (byte) ((pitch*256.0)/360.0).</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>onGround</code> - 实体在不在地上</dd>
+                                            
+                                            
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="sendFakeEntityHeadRotationRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,float)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>sendFakeEntityHeadRotationRaw</h4>
+                                        <pre class="methodSignature"> static void <a href=EntityPlayerUtils.html#sendFakeEntityHeadRotationRaw(org.bukkit.entity.Entity,org.bukkit.entity.Player,float)>sendFakeEntityHeadRotationRaw</a>(@NotNull() Entity entity, @NotNull() Player player, float yaw)</pre>
+                                        <div class="block"><p>发送实体头部转动数据包.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>entity</code> - 待操作实体.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>player</code> - 待接收玩家.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>yaw</code> - 偏航角.</dd>
                                             
                                             
                                         
@@ -1934,6 +2314,8 @@ public class <span class="typeNameLabel"><a href=EntityPlayerUtils.html>EntityPl
                                             <dd><code>player</code> - 待接收玩家.</dd>
                                             
                                             
+                                            
+                                            <dd><code>yHeadRot</code> - (byte) ((yaw*256.0)/360.0).</dd>
                                             
                                             
                                         
