@@ -27,6 +27,8 @@ public class NeigeItems extends JavaPlugin {
         init();
     }
 
+    private ClassScanner scanner = null;
+
     public NeigeItems() {
         super();
         INSTANCE = this;
@@ -36,8 +38,6 @@ public class NeigeItems extends JavaPlugin {
         super(loader, description, dataFolder, file);
         INSTANCE = this;
     }
-
-    private ClassScanner scanner = null;
 
     public static NeigeItems getInstance() {
         return INSTANCE;

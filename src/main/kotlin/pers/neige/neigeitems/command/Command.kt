@@ -17,7 +17,7 @@ import pers.neige.neigeitems.utils.LangUtils.sendLang
  * 插件指令
  */
 object Command {
-    const val COMMAND_NAME = "NeigeItems"
+    const val COMMAND_NAME = "neigeitems"
     private var command: PluginCommand? = null
     private val dispatcher: CommandDispatcher<CommandSender> = CommandDispatcher()
     private val mapping: MutableMap<String, String> = mutableMapOf()

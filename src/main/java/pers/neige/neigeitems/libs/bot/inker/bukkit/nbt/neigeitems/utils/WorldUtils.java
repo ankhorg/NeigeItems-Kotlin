@@ -415,6 +415,39 @@ public class WorldUtils {
     }
 
     /**
+     * 生成一个实体, 但不添加进世界里.
+     *
+     * @param location 待生成坐标.
+     * @param type     实体类型.
+     * @return 生成的实体.
+     */
+    @Nullable
+    public static Entity createEntity(
+            @NotNull Location location,
+            @NotNull EntityType type
+    ) {
+        return createEntity(location, type, true);
+    }
+
+    /**
+     * 生成一个实体, 但不添加进世界里.
+     *
+     * @param location      待生成坐标.
+     * @param type          实体类型.
+     * @param randomizeData 是否随机实体数据(仅在1.17+版本生效).
+     * @return 生成的实体.
+     */
+    @Nullable
+    public static Entity createEntity(
+            @NotNull Location location,
+            @NotNull EntityType type,
+            boolean randomizeData
+    ) {
+        RefEntity entity = createNmsEntity(location, type, randomizeData);
+        return entity == null ? null : entity.getBukkitEntity();
+    }
+
+    /**
      * 在指定世界的指定坐标生成一个实体, 生成实体前对实体进行一些操作.
      *
      * @param location 待生成坐标.
@@ -539,5 +572,47 @@ public class WorldUtils {
             return serverEntity.entity;
         }
         return null;
+    }
+
+    /**
+     * 生成一个实体, 但不添加进世界里.
+     *
+     * @param location 待生成坐标.
+     * @param type     实体类型.
+     * @return 生成的实体.
+     */
+    @Nullable
+    protected static RefEntity createNmsEntity(
+            @NotNull Location location,
+            @NotNull EntityType type
+    ) {
+        return createNmsEntity(location, type, true);
+    }
+
+    /**
+     * 生成一个实体, 但不添加进世界里.
+     *
+     * @param location      待生成坐标.
+     * @param type          实体类型.
+     * @param randomizeData 是否随机实体数据(仅在1.17+版本生效).
+     * @return 生成的实体.
+     */
+    @Nullable
+    protected static RefEntity createNmsEntity(
+            @NotNull Location location,
+            @NotNull EntityType type,
+            boolean randomizeData
+    ) {
+        World world = location.getWorld();
+        if (world == null) return null;
+        RefCraftWorld craftWorld = (RefCraftWorld) (Object) world;
+
+        RefEntity entity;
+        if (RANDOMIZE_DATA_SUPPORT) {
+            entity = craftWorld.createEntity(location, type.getEntityClass(), randomizeData);
+        } else {
+            entity = craftWorld.createEntity(location, type.getEntityClass());
+        }
+        return entity;
     }
 }

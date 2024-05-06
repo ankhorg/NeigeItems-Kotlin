@@ -645,16 +645,8 @@ public class EntityPlayerUtils {
             @Nullable Consumer<Entity> function,
             @NotNull Player player
     ) {
-        World world = location.getWorld();
-        if (world == null) return null;
-        RefCraftWorld craftWorld = (RefCraftWorld) (Object) world;
-
-        RefEntity entity;
-        if (RANDOMIZE_DATA_SUPPORT) {
-            entity = craftWorld.createEntity(location, type.getEntityClass(), randomizeData);
-        } else {
-            entity = craftWorld.createEntity(location, type.getEntityClass());
-        }
+        RefEntity entity = WorldUtils.createNmsEntity(location, type, randomizeData);
+        if (entity == null) return null;
         Entity bukkitEntity = entity.getBukkitEntity();
 
         if ((Object) player instanceof RefCraftPlayer) {
@@ -672,6 +664,32 @@ public class EntityPlayerUtils {
             }
         }
         return bukkitEntity;
+    }
+
+    /**
+     * 向玩家发送一个虚拟的实体数据包.
+     *
+     * @param entity 待发送实体.
+     * @param player 待接收玩家.
+     * @return 生成的实体.
+     */
+    @NotNull
+    public static Entity sendFakeEntity(
+            @NotNull Entity entity,
+            @NotNull Player player
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            if (ADD_ENTITY_PACKET_SUPPORT) {
+                nmsPlayer.playerConnection.sendPacket(nmsEntity.getAddEntityPacket());
+            } else {
+                RefServerEntity serverEntity = new RefServerEntity(nmsEntity, 0, 0, 0, false);
+                nmsPlayer.playerConnection.sendPacket(serverEntity.createPacket());
+            }
+        }
+        return entity;
     }
 
     /**
@@ -699,6 +717,134 @@ public class EntityPlayerUtils {
             } else {
                 packet = new RefPacketPlayOutEntityMetadata(nmsEntity.getId(), nmsEntity.getEntityData(), true);
             }
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    /**
+     * 移除虚拟实体.
+     *
+     * @param entity 待移除实体.
+     * @param player 待接收玩家.
+     */
+    public static void removeFakeEntity(
+            @NotNull Entity entity,
+            @NotNull Player player
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntityDestroy packet = new RefPacketPlayOutEntityDestroy(nmsEntity.getId());
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    /**
+     * 发送实体视角移动数据包.
+     *
+     * @param entity 待操作实体.
+     * @param player 待接收玩家.
+     */
+    public static void sendFakeEntityLook(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            byte yRot,
+            byte xRot,
+            boolean onGround
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntity.RefPacketPlayOutEntityLook packet = new RefPacketPlayOutEntity.RefPacketPlayOutEntityLook(nmsEntity.getId(), yRot, xRot, onGround);
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    /**
+     * 发送实体位置相对移动数据包.
+     *
+     * @param entity 待操作实体.
+     * @param player 待接收玩家.
+     */
+    public static void sendFakeEntityRelMove(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            long xa,
+            long ya,
+            long za,
+            boolean onGround
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove packet = new RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove(nmsEntity.getId(), xa, ya, za, onGround);
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    /**
+     * 发送实体位置相对移动及视角移动数据包.
+     *
+     * @param entity 待操作实体.
+     * @param player 待接收玩家.
+     */
+    public static void sendFakeEntityRelMoveLook(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            long xa,
+            long ya,
+            long za,
+            byte yRot,
+            byte xRot,
+            boolean onGround
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook packet = new RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook(nmsEntity.getId(), xa, ya, za, yRot, xRot, onGround);
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    /**
+     * 发送实体头部转动数据包.
+     *
+     * @param entity 待操作实体.
+     * @param player 待接收玩家.
+     */
+    public static void sendFakeEntityHeadRotation(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            byte yHeadRot
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntityHeadRotation packet = new RefPacketPlayOutEntityHeadRotation(nmsEntity, yHeadRot);
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    /**
+     * 刷新实体头部转动.
+     *
+     * @param entity 待操作实体.
+     * @param player 待接收玩家.
+     */
+    public static void refreshFakeEntityHeadRotation(
+            @NotNull Entity entity,
+            @NotNull Player player
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntityHeadRotation packet = new RefPacketPlayOutEntityHeadRotation(nmsEntity, (byte) Math.floor((nmsEntity.getHeadRotation() * 256.0f) / 360.0f));
             nmsPlayer.playerConnection.sendPacket(packet);
         }
     }
