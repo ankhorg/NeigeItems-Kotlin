@@ -126,6 +126,94 @@ public class EntityUtils {
     }
 
     /**
+     * 尝试tick实体.
+     *
+     * @param entity 待操作实体.
+     */
+    public static void tick(@NotNull Entity entity) {
+        if (entity instanceof RefCraftEntity) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            nmsEntity.tick();
+        }
+    }
+
+    /**
+     * 尝试tick实体寻路.
+     *
+     * @param entity 待操作实体.
+     */
+    public static void tickNavigation(@NotNull LivingEntity entity) {
+        if (entity instanceof RefCraftLivingEntity) {
+            RefEntityLiving living = ((RefCraftLivingEntity) entity).getHandle();
+            if (living instanceof RefMob) {
+                RefMob mob = (RefMob) living;
+                mob.getNavigation().tick();
+                mob.getLookControl().tick();
+                mob.getMoveControl().tick();
+                mob.getJumpControl().tick();
+                living.travel(living.xxa, living.yya, living.zza);
+
+                double d0 = living.locX - living.lastX;
+                double d1 = living.locZ - living.lastZ;
+                float f = (float) ((d0 * d0) + (d1 * d1));
+                float f1 = living.yBodyRot;
+                float f2 = 0.0f;
+                living.oRun = living.run;
+                float f3 = 0.0f;
+                if (f > 0.0025000002f) {
+                    f3 = 1.0f;
+                    f2 = ((float) Math.sqrt(f)) * 3.0f;
+                    float f4 = (((float) MathUtils.c(d1, d0)) * 57.295776f) - 90.0f;
+                    float f5 = MathUtils.e(MathUtils.g(living.yaw) - f4);
+                    if (95.0f < f5 && f5 < 265.0f) {
+                        f1 = f4 - 180.0f;
+                    } else {
+                        f1 = f4;
+                    }
+                }
+                if (living.attackAnim > 0.0f) {
+                    f1 = living.yaw;
+                }
+                if (!entity.isOnGround()) {
+                    f3 = 0.0f;
+                }
+                living.run += (f3 - living.run) * 0.3f;
+                float f22 = living.tickHeadTurn(f1, f2);
+                while (living.yaw - living.lastYaw < -180.0f) {
+                    living.lastYaw -= 360.0f;
+                }
+                while (living.yaw - living.lastYaw >= 180.0f) {
+                    living.lastYaw += 360.0f;
+                }
+                while (living.yBodyRot - living.yBodyRotO < -180.0f) {
+                    living.yBodyRotO -= 360.0f;
+                }
+                while (living.yBodyRot - living.yBodyRotO >= 180.0f) {
+                    living.yBodyRotO += 360.0f;
+                }
+                while (living.pitch - living.lastPitch < -180.0f) {
+                    living.lastPitch -= 360.0f;
+                }
+                while (living.pitch - living.lastPitch >= 180.0f) {
+                    living.lastPitch += 360.0f;
+                }
+                while (living.yHeadRot - living.yHeadRotO < -180.0f) {
+                    living.yHeadRotO -= 360.0f;
+                }
+                while (living.yHeadRot - living.yHeadRotO >= 180.0f) {
+                    living.yHeadRotO += 360.0f;
+                }
+                living.animStep += f22;
+                if (living.isFallFlying()) {
+                    living.fallFlyTicks++;
+                } else {
+                    living.fallFlyTicks = 0;
+                }
+            }
+        }
+    }
+
+    /**
      * 强制实体移动.
      *
      * @param entity 待操作实体.

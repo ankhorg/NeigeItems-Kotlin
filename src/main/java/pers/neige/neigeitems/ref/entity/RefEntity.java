@@ -54,6 +54,20 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;world:Lnet/minecraft/server/v1_12_R1/World;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefWorld world;
 
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;lastX:D", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public double lastX;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;lastY:D", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public double lastY;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;lastZ:D", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public double lastZ;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;locX:D", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public double locX;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;locY:D", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public double locY;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;locZ:D", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public double locZ;
+
+
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getBukkitEntity()Lorg/bukkit/craftbukkit/v1_17_R1/entity/CraftEntity;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;getBukkitEntity()Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftEntity;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native Entity getBukkitEntity();
@@ -183,4 +197,8 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getId()I", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;getId()I", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native int getId();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;tick()V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;B_()V", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public native void tick();
 }

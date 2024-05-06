@@ -99,10 +99,6 @@ public class EntityPlayerUtils {
      */
     private static final boolean ADD_ENTITY_PACKET_SUPPORT = CbVersion.v1_14_R1.isSupport();
     /**
-     * 1.17+ 版本起, spawnEntity 方法添加 boolean 类型 randomizeData 参数, 用于随机生成实体数据.
-     */
-    private static final boolean RANDOMIZE_DATA_SUPPORT = CbVersion.v1_17_R1.isSupport();
-    /**
      * 1.19.4+ 版本起, spawnEntity 方法添加 boolean 类型 randomizeData 参数, 用于随机生成实体数据.
      */
     private static final boolean METADATA_NEED_VALUE_LIST = CbVersion.v1_19_R3.isSupport();
@@ -743,8 +739,31 @@ public class EntityPlayerUtils {
     /**
      * 发送实体视角移动数据包.
      *
+     * @param entity   待操作实体.
+     * @param player   待接收玩家.
+     * @param yaw      偏航角.
+     * @param pitch    俯仰角.
+     * @param onGround 实体在不在地上
+     */
+    public static void sendFakeEntityLookRaw(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            float yaw,
+            float pitch,
+            boolean onGround
+    ) {
+        byte yRot = (byte) ((yaw * 256.0f) / 360.0f);
+        byte xRot = (byte) ((pitch * 256.0f) / 360.0f);
+        sendFakeEntityLook(entity, player, yRot, xRot, onGround);
+    }
+
+    /**
+     * 发送实体视角移动数据包.
+     *
      * @param entity 待操作实体.
      * @param player 待接收玩家.
+     * @param yRot   (byte) ((yaw*256.0)/360.0).
+     * @param xRot   (byte) ((pitch*256.0)/360.0).
      */
     public static void sendFakeEntityLook(
             @NotNull Entity entity,
@@ -765,8 +784,42 @@ public class EntityPlayerUtils {
     /**
      * 发送实体位置相对移动数据包.
      *
-     * @param entity 待操作实体.
-     * @param player 待接收玩家.
+     * @param entity   待操作实体.
+     * @param player   待接收玩家.
+     * @param relX     x轴相对移动量.
+     * @param relY     y轴相对移动量.
+     * @param relZ     z轴相对移动量.
+     * @param onGround 实体在不在地上
+     */
+    public static void sendFakeEntityRelMoveRaw(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            double relX,
+            double relY,
+            double relZ,
+            boolean onGround
+    ) {
+        double tempX = relX * 4096D;
+        long intTempX = (int) tempX;
+        long xa = tempX < ((double) intTempX) ? intTempX - 1 : intTempX;
+        double tempY = relY * 4096D;
+        long intTempY = (int) tempY;
+        long ya = tempY < ((double) intTempY) ? intTempY - 1 : intTempY;
+        double tempZ = relZ * 4096D;
+        long intTempZ = (int) tempZ;
+        long za = tempZ < ((double) intTempZ) ? intTempZ - 1 : intTempZ;
+        sendFakeEntityRelMove(entity, player, xa, ya, za, onGround);
+    }
+
+    /**
+     * 发送实体位置相对移动数据包.
+     *
+     * @param entity   待操作实体.
+     * @param player   待接收玩家.
+     * @param xa       (x方向移动量*4096)向下取整.
+     * @param ya       (y方向移动量*4096)向下取整.
+     * @param za       (z方向移动量*4096)向下取整.
+     * @param onGround 实体在不在地上
      */
     public static void sendFakeEntityRelMove(
             @NotNull Entity entity,
@@ -788,8 +841,50 @@ public class EntityPlayerUtils {
     /**
      * 发送实体位置相对移动及视角移动数据包.
      *
-     * @param entity 待操作实体.
-     * @param player 待接收玩家.
+     * @param entity   待操作实体.
+     * @param player   待接收玩家.
+     * @param relX     x轴相对移动量.
+     * @param relY     y轴相对移动量.
+     * @param relZ     z轴相对移动量.
+     * @param yaw      偏航角.
+     * @param pitch    俯仰角.
+     * @param onGround 实体在不在地上
+     */
+    public static void sendFakeEntityRelMoveLookRaw(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            double relX,
+            double relY,
+            double relZ,
+            float yaw,
+            float pitch,
+            boolean onGround
+    ) {
+        double tempX = relX * 4096D;
+        long intTempX = (int) tempX;
+        long xa = tempX < ((double) intTempX) ? intTempX - 1 : intTempX;
+        double tempY = relY * 4096D;
+        long intTempY = (int) tempY;
+        long ya = tempY < ((double) intTempY) ? intTempY - 1 : intTempY;
+        double tempZ = relZ * 4096D;
+        long intTempZ = (int) tempZ;
+        long za = tempZ < ((double) intTempZ) ? intTempZ - 1 : intTempZ;
+        byte yRot = (byte) ((yaw * 256.0f) / 360.0f);
+        byte xRot = (byte) ((pitch * 256.0f) / 360.0f);
+        sendFakeEntityRelMoveLook(entity, player, xa, ya, za, yRot, xRot, onGround);
+    }
+
+    /**
+     * 发送实体位置相对移动及视角移动数据包.
+     *
+     * @param entity   待操作实体.
+     * @param player   待接收玩家.
+     * @param xa       (x方向移动量*4096)向下取整.
+     * @param ya       (y方向移动量*4096)向下取整.
+     * @param za       (z方向移动量*4096)向下取整.
+     * @param yRot     (byte) ((yaw*256.0)/360.0).
+     * @param xRot     (byte) ((pitch*256.0)/360.0).
+     * @param onGround 实体在不在地上
      */
     public static void sendFakeEntityRelMoveLook(
             @NotNull Entity entity,
@@ -811,10 +906,91 @@ public class EntityPlayerUtils {
     }
 
     /**
+     * 发送实体传送数据包.
+     *
+     * @param entity   待操作实体.
+     * @param player   待接收玩家.
+     * @param x        目标点x轴坐标.
+     * @param y        目标点y轴坐标.
+     * @param z        目标点z轴坐标.
+     * @param yaw      偏航角.
+     * @param pitch    俯仰角.
+     * @param onGround 实体在不在地上
+     */
+    public static void sendFakeEntityTeleportRaw(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            double x,
+            double y,
+            double z,
+            float yaw,
+            float pitch,
+            boolean onGround
+    ) {
+        byte yRot = (byte) ((yaw * 256.0f) / 360.0f);
+        byte xRot = (byte) ((pitch * 256.0f) / 360.0f);
+        sendFakeEntityTeleport(entity, player, x, y, z, yRot, xRot, onGround);
+    }
+
+    /**
+     * 发送实体传送数据包.
+     *
+     * @param entity   待操作实体.
+     * @param player   待接收玩家.
+     * @param x        目标点x轴坐标.
+     * @param y        目标点y轴坐标.
+     * @param z        目标点z轴坐标.
+     * @param yRot     (byte) ((yaw*256.0)/360.0).
+     * @param xRot     (byte) ((pitch*256.0)/360.0).
+     * @param onGround 实体在不在地上
+     */
+    public static void sendFakeEntityTeleport(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            double x,
+            double y,
+            double z,
+            byte yRot,
+            byte xRot,
+            boolean onGround
+    ) {
+        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+
+            RefPacketPlayOutEntityTeleport packet = new RefPacketPlayOutEntityTeleport();
+            packet.entityId = nmsEntity.getId();
+            packet.x = x;
+            packet.y = y;
+            packet.z = z;
+            packet.yRot = yRot;
+            packet.xRot = xRot;
+            packet.onGround = onGround;
+            nmsPlayer.playerConnection.sendPacket(packet);
+        }
+    }
+
+    /**
      * 发送实体头部转动数据包.
      *
      * @param entity 待操作实体.
      * @param player 待接收玩家.
+     * @param yaw    偏航角.
+     */
+    public static void sendFakeEntityHeadRotationRaw(
+            @NotNull Entity entity,
+            @NotNull Player player,
+            float yaw
+    ) {
+        sendFakeEntityHeadRotation(entity, player, (byte) ((yaw * 256.0) / 360.0));
+    }
+
+    /**
+     * 发送实体头部转动数据包.
+     *
+     * @param entity   待操作实体.
+     * @param player   待接收玩家.
+     * @param yHeadRot (byte) ((yaw*256.0)/360.0).
      */
     public static void sendFakeEntityHeadRotation(
             @NotNull Entity entity,

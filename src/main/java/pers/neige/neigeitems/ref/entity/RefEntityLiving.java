@@ -46,6 +46,33 @@ public abstract class RefEntityLiving extends RefEntity {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aE:I", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public int attackStrengthTicker;
 
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;be:F", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public float xxa;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;bf:F", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public float yya;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;bg:F", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public float zza;
+
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aW:F", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public float oRun;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aX:F", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public float run;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aY:F", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public float animStep;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aZ:F", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public float animStep0;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;ba:F", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public float rotOffs;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aC:F", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public float oAttackAnim;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;aD:F", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public float attackAnim;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;bp:I", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public int useItemRemaining;
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;bq:I", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public int fallFlyTicks;
+
+
     @HandleBy(reference = "Lnet/minecraft/world/entity/LivingEntity;lastDamageSource:Lnet/minecraft/world/damagesource/DamageSource;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     public RefDamageSource lastDamageSource;
 
@@ -89,4 +116,13 @@ public abstract class RefEntityLiving extends RefEntity {
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/EntityLiving;z_()Z", predicates = "craftbukkit_version:[v1_13_R1,v1_14_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;m_()Z", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public native boolean onClimbable();
+
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;a(FFF)V", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public native void travel(float xxa, float yya, float zza);
+
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;g(FF)F", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public native float tickHeadTurn(float bodyRotation, float headRotation);
+
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityLiving;cP()Z", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public native boolean isFallFlying();
 }
