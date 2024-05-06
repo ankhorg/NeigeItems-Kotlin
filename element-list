@@ -15,6 +15,9 @@ $dokka.location:pers.neige.neigeitems.lang/LocaleI18n.TranslationProvider///Poin
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.Pos///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.Pos.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.PosRot///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.PosRot.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.Rot///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.Rot.html
+$dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutEntityLook///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutEntityLook.html
+$dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove.html
+$dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook.html
 pers.neige.neigeitems
 pers.neige.neigeitems.action
 pers.neige.neigeitems.action.impl
