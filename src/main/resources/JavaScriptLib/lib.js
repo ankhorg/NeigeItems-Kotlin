@@ -264,6 +264,75 @@ const runAction = function (action) {
 }
 
 /**
+ * 获取玩家背包中指定ID的NI物品的数量
+ *
+ * @param itemId String NI物品ID
+ * @return Integer 玩家背包中对应NI物品的数量
+ */
+const niItemAmount = function (itemId) {
+    const contents = player.inventory.contents
+    let amount = 0
+    for (let index = 0; index < contents.length; index++) {
+        const itemStack = contents[index]
+        const itemInfo = ItemUtils.isNiItem(itemStack)
+        if (itemInfo != null && itemInfo.id === itemId) {
+            amount += itemStack.amount
+        }
+    }
+    return amount
+}
+
+/**
+ * 检查玩家背包中指定ID的NI物品是否达到指定数量
+ *
+ * @param itemId String NI物品ID
+ * @param amount Integer 预期达到的物品数量
+ * @return Boolean 玩家背包中是否包含足够数量的对应NI物品
+ */
+const checkNiItemAmount = function (itemId, amount) {
+    const contents = player.inventory.contents
+    for (let index = 0; index < contents.length; index++) {
+        const itemStack = contents[index]
+        const itemInfo = ItemUtils.isNiItem(itemStack)
+        if (itemInfo != null && itemInfo.id === itemId) {
+            if (amount > itemStack.amount) {
+                amount -= itemStack.amount
+            } else {
+                amount = 0
+                break
+            }
+        }
+    }
+    return amount === 0
+}
+
+/**
+ * 获取玩家背包中扣除指定数量的NI物品
+ *
+ * @param itemId String NI物品ID
+ * @param amount Integer 需要扣除的数量
+ * @return String 玩家背包中的物品数量是否大于等于需要扣除的数量
+ */
+const takeNiItem = function (itemId, amount) {
+    const contents = player.inventory.contents
+    for (let index = 0; index < contents.length; index++) {
+        const itemStack = contents[index]
+        const itemInfo = ItemUtils.isNiItem(itemStack)
+        if (itemInfo != null && itemInfo.id === itemId) {
+            if (amount > itemStack.amount) {
+                amount -= itemStack.amount
+                itemStack.amount = 0
+            } else {
+                itemStack.amount -= amount
+                amount = 0
+                break
+            }
+        }
+    }
+    return amount === 0
+}
+
+/**
  * 同步执行一个函数
  *
  * @param func 待执行函数

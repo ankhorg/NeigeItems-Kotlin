@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -19,7 +20,9 @@ import pers.neige.neigeitems.action.result.DelayResult;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker;
 import pers.neige.neigeitems.hook.vault.VaultHooker;
+import pers.neige.neigeitems.item.ItemInfo;
 import pers.neige.neigeitems.item.action.ComboInfo;
+import pers.neige.neigeitems.utils.ItemUtils;
 import pers.neige.neigeitems.utils.PlayerUtils;
 import pers.neige.neigeitems.utils.SchedulerUtils;
 import pers.neige.neigeitems.utils.StringUtils;
@@ -653,5 +656,31 @@ public abstract class BaseActionManager {
             }
         });
         addConsumer("delglobal", (context, content) -> context.getGlobal().remove(content));
+        // 扣除NI物品
+        addConsumer("takeNiItem", (context, content) -> {
+            Player player = context.getPlayer();
+            if (player == null) return;
+            String parsedContent = HookerManager.papi(player, content);
+            String[] args = parsedContent.split(" ", 2);
+            if (args.length < 2) return;
+            String itemId = args[0];
+            SchedulerUtils.sync(plugin, () -> {
+                int amount = StringUtils.toInt(args[1], 0);
+                ItemStack[] contents = player.getInventory().getContents();
+                for (ItemStack itemStack : contents) {
+                    ItemInfo itemInfo = ItemUtils.isNiItem(itemStack);
+                    if (itemInfo != null && itemInfo.getId().equals(itemId)) {
+                        if (amount > itemStack.getAmount()) {
+                            amount -= itemStack.getAmount();
+                            itemStack.setAmount(0);
+                        } else {
+                            itemStack.setAmount(itemStack.getAmount() - amount);
+                            amount = 0;
+                            break;
+                        }
+                    }
+                }
+            });
+        });
     }
 }
