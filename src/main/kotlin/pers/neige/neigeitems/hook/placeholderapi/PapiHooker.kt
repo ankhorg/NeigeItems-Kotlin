@@ -17,7 +17,7 @@ abstract class PapiHooker {
      * @param text 待解析文本
      * @return 解析后文本
      */
-    abstract fun papi(player: OfflinePlayer, text: String): String
+    abstract fun papi(player: OfflinePlayer?, text: String): String
 
     /**
      * 将文本中的所有papi变量改写为papi节点

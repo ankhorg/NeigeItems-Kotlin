@@ -18,7 +18,7 @@ class LegacyPapiHookerImpl : PapiHooker() {
         placeholders
     }
 
-    override fun papi(player: OfflinePlayer, text: String): String {
+    override fun papi(player: OfflinePlayer?, text: String): String {
         val chars = text.toCharArray()
         val builder = StringBuilder(text.length)
 

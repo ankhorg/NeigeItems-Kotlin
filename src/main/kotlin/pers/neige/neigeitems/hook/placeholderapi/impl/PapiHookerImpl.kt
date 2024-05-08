@@ -18,7 +18,7 @@ class PapiHookerImpl : PapiHooker() {
         localExpansionManager
     }
 
-    override fun papi(player: OfflinePlayer, text: String): String {
+    override fun papi(player: OfflinePlayer?, text: String): String {
         val chars = text.toCharArray()
         val builder = StringBuilder(text.length)
 

@@ -248,7 +248,7 @@ object HookerManager {
      * @return 解析后文本
      */
     @JvmStatic
-    fun papi(player: OfflinePlayer, text: String): String {
+    fun papi(player: OfflinePlayer?, text: String): String {
         return when (papiHooker) {
             null -> text
             else -> papiHooker.papi(player, text)
@@ -263,7 +263,7 @@ object HookerManager {
      * @return 解析后文本
      */
     @JvmStatic
-    fun papiColor(player: OfflinePlayer, string: String): String {
+    fun papiColor(player: OfflinePlayer?, string: String): String {
         return when (papiHooker) {
             null -> ChatColor.translateAlternateColorCodes('&', string)
             else -> papiHooker.papi(player, ChatColor.translateAlternateColorCodes('&', string))
