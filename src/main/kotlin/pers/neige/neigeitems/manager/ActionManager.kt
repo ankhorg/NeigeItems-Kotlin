@@ -849,7 +849,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             itemStack,
             itemInfo,
             event,
-            ItemActionType.SHOOT_ARROW.type,
+            ItemActionType.SHOOT_BOW.type,
             cancel = false,
             cancelIfCooldown = true,
             consumeItem = false
