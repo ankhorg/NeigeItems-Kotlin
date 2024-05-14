@@ -2,6 +2,7 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.item.action.ActionTrigger
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ConfigManager
@@ -36,17 +37,16 @@ object ActionUtils {
      *
      * @param player 消耗物品的玩家
      * @param itemStack 物品
-     * @param itemTag 物品NBT
+     * @param itemInfo 物品信息
      * @return 是否处于冷却时间
      */
     @JvmStatic
     fun ActionTrigger.isCoolDown(
         player: Player,
         itemStack: ItemStack,
-        itemTag: NbtCompound,
-        data: MutableMap<String, String>?
+        itemInfo: ItemInfo
     ): Boolean {
-        val cd = cooldown?.parseItemSection(itemStack, itemTag, data, player)?.toLongOrNull() ?: 1000
+        val cd = cooldown?.parseItemSection(itemStack, itemInfo, player)?.toLongOrNull() ?: 1000
         return this.isCoolDown(player, cd)
     }
 

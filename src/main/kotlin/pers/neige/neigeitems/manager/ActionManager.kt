@@ -57,8 +57,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     init {
         try {
             plugin.getResource("JavaScriptLib/lib.js")?.use { input ->
-                InputStreamReader(input, StandardCharsets.UTF_8)
-                    .use { reader -> engine.eval(reader) }
+                InputStreamReader(input, StandardCharsets.UTF_8).use { reader -> engine.eval(reader) }
             }
         } catch (error: Throwable) {
             error.printStackTrace()
@@ -101,8 +100,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
      */
     @Deprecated("使用BaseActionManager中的方法代替")
     fun runAction(
-        action: Any?,
-        context: ActionContext
+        action: Any?, context: ActionContext
     ): ActionResult {
         when (action) {
             is String -> return runAction(action, context)
@@ -122,8 +120,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
      */
     @Deprecated("使用BaseActionManager中的方法代替")
     private fun runAction(
-        action: List<*>,
-        context: ActionContext
+        action: List<*>, context: ActionContext
     ): ActionResult {
         action.forEachIndexed { index, value ->
             val result = runAction(value, context)
@@ -151,8 +148,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
      */
     @Deprecated("使用BaseActionManager中的方法代替")
     private fun runAction(
-        action: String,
-        context: ActionContext
+        action: String, context: ActionContext
     ): ActionResult {
         // 解析物品变量
         val itemStack = context.itemStack
@@ -168,18 +164,11 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             val sections = context.params?.get("sections") as? ConfigurationSection
             val actionString = if (itemStack != null && nbt != null) {
                 action.parseItemSection(
-                    itemStack,
-                    nbt,
-                    context.data,
-                    context.player,
-                    cache,
-                    sections
+                    itemStack, nbt, context.data, context.player, cache, sections
                 )
             } else {
                 action.parseSection(
-                    cache,
-                    context.player,
-                    sections
+                    cache, context.player, sections
                 )
             }
             // 解析动作类型及动作内容
@@ -208,8 +197,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
      */
     @Deprecated("使用BaseActionManager中的方法代替")
     private fun runAction(
-        action: ConfigurationSection,
-        context: ActionContext
+        action: ConfigurationSection, context: ActionContext
     ): ActionResult {
         // 动作执行条件
         val condition: String? = action.getString("condition")
@@ -271,8 +259,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
      */
     @Deprecated("使用BaseActionManager中的方法代替")
     private fun runAction(
-        action: Map<String, *>,
-        context: ActionContext
+        action: Map<String, *>, context: ActionContext
     ): ActionResult {
         // 动作执行条件
         val condition: String? = action["condition"] as String?
@@ -327,9 +314,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
 
     @Deprecated("使用BaseActionManager中的方法代替")
     private fun runAction(
-        sync: Any?,
-        async: Any?,
-        context: ActionContext
+        sync: Any?, async: Any?, context: ActionContext
     ) {
         if (Bukkit.isPrimaryThread()) {
             runAction(sync, context)
@@ -353,8 +338,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
      */
     @Deprecated("使用BaseActionManager中的方法代替")
     fun runAction(
-        player: Player,
-        action: String
+        player: Player, action: String
     ): Boolean {
         val result = runAction(StringAction(action), ActionContext(player))
         return when (result.type) {
@@ -374,10 +358,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
      */
     @Deprecated("使用BaseActionManager中的方法代替")
     fun runAction(
-        player: Player,
-        action: Any?,
-        global: MutableMap<String, Any?> = HashMap(),
-        map: Map<String, Any?>? = null
+        player: Player, action: Any?, global: MutableMap<String, Any?> = HashMap(), map: Map<String, Any?>? = null
     ): Boolean {
         val result = runAction(action, ActionContext(player, global, map))
         return when (result.type) {
@@ -434,11 +415,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         map: Map<String, Any?>? = null
     ): Boolean {
         return parseCondition(
-            condition = condition,
-            player = player,
-            global = global,
-            map = map,
-            event = null
+            condition = condition, player = player, global = global, map = map, event = null
         )
     }
 
@@ -490,8 +467,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     }
 
     override fun runAction(
-        action: StringAction,
-        context: ActionContext
+        action: StringAction, context: ActionContext
     ): ActionResult {
         // 解析物品变量
         val itemStack = context.itemStack
@@ -504,18 +480,11 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             val sections = context.params?.get("sections") as? ConfigurationSection
             if (itemStack != null && nbt != null) {
                 action.content.parseItemSection(
-                    itemStack,
-                    nbt,
-                    context.data,
-                    context.player,
-                    cache,
-                    sections
+                    itemStack, nbt, context.data, context.player, cache, sections
                 )
             } else {
                 action.content.parseSection(
-                    cache,
-                    context.player,
-                    sections
+                    cache, context.player, sections
                 )
             }
         }
@@ -636,10 +605,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
 
     // 物品左右键交互
     fun interactListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: PlayerInteractEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: PlayerInteractEvent
     ) {
         val id = itemInfo.id
 
@@ -698,12 +664,11 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
 
         val itemTag = itemInfo.itemTag
         val neigeItems = itemInfo.neigeItems
-        val data = itemInfo.data
 
         // 取消交互事件
         event.isCancelled = true
         // 检测冷却
-        if ((basicTrigger ?: allTrigger)!!.isCoolDown(player, itemStack, itemTag, data)) return
+        if ((basicTrigger ?: allTrigger)!!.isCoolDown(player, itemStack, itemInfo)) return
         // 触发基础动作事件
         if (basicTrigger != null && !ItemActionEvent(player, itemStack, itemInfo, basicType, basicTrigger).call()) {
             return
@@ -714,6 +679,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         }
         // 获取消耗信息
         val consume = basicTrigger?.consume ?: allTrigger?.consume
+        val data = itemInfo.data
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 动作上下文
@@ -733,9 +699,13 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
                 }
             }
             // 获取待消耗数量
-            val amount: Int = consume.amount
-                ?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)
-                ?.toIntOrNull() ?: 1
+            val amount: Int = consume.amount?.parseItemSection(
+                    itemStack,
+                    itemInfo,
+                    player,
+                    global as? MutableMap<String, String>,
+                    null
+                )?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -751,10 +721,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
 
     // 吃或饮用
     fun eatListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: PlayerItemConsumeEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: PlayerItemConsumeEvent
     ) {
         basicHandler(
             player,
@@ -770,28 +737,16 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
 
     // 丢弃物品
     fun dropListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: PlayerDropItemEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: PlayerDropItemEvent
     ) {
         basicHandler(
-            player,
-            itemStack,
-            itemInfo,
-            event,
-            ItemActionType.DROP.type,
-            cancel = false,
-            cancelIfCooldown = true
+            player, itemStack, itemInfo, event, ItemActionType.DROP.type, cancel = false, cancelIfCooldown = true
         )
     }
 
     // 拾取物品
     fun pickListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: EntityPickupItemEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityPickupItemEvent
     ) {
         basicHandler(
             player,
@@ -807,42 +762,25 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
 
     // 点击物品
     fun clickListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: InventoryClickEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: InventoryClickEvent
     ) {
         basicHandler(
-            player,
-            itemStack,
-            itemInfo,
-            event,
-            ItemActionType.CLICK.type
+            player, itemStack, itemInfo, event, ItemActionType.CLICK.type
         )
     }
 
     // 物品被点击
     fun beClickedListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: InventoryClickEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: InventoryClickEvent
     ) {
         basicHandler(
-            player,
-            itemStack,
-            itemInfo,
-            event,
-            ItemActionType.BECLICKED.type
+            player, itemStack, itemInfo, event, ItemActionType.BECLICKED.type
         )
     }
 
     // 射箭时由弓触发
     fun shootBowListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: EntityShootBowEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityShootBowEvent
     ) {
         basicHandler(
             player,
@@ -858,10 +796,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
 
     // 射箭时由箭触发
     fun shootArrowListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: EntityShootBowEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityShootBowEvent
     ) {
         basicHandler(
             player,
@@ -877,74 +812,37 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
 
     // 格挡时由盾触发
     fun blockingListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: EntityDamageByEntityEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent
     ) {
         basicHandler(
-            player,
-            itemStack,
-            itemInfo,
-            event,
-            ItemActionType.BLOCKING.type,
-            cancel = false,
-            cancelIfCooldown = true
+            player, itemStack, itemInfo, event, ItemActionType.BLOCKING.type, cancel = false, cancelIfCooldown = true
         )
     }
 
     // 攻击实体时由主手物品触发
     fun damageListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: EntityDamageByEntityEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent
     ) {
         basicHandler(
-            player,
-            itemStack,
-            itemInfo,
-            event,
-            ItemActionType.DAMAGE.type,
-            cancel = false,
-            cancelIfCooldown = true
+            player, itemStack, itemInfo, event, ItemActionType.DAMAGE.type, cancel = false, cancelIfCooldown = true
         )
     }
 
     // 击杀实体时触发
     fun killListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: EntityDamageByEntityEvent,
-        key: String
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent, key: String
     ) {
         basicHandler(
-            player,
-            itemStack,
-            itemInfo,
-            event,
-            key,
-            cancel = false,
-            consumeItem = false
+            player, itemStack, itemInfo, event, key, cancel = false, consumeItem = false
         )
     }
 
     // 挖掘方块时由主手物品触发
     fun breakBlockListener(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        event: BlockBreakEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: BlockBreakEvent
     ) {
         basicHandler(
-            player,
-            itemStack,
-            itemInfo,
-            event,
-            ItemActionType.BREAK_BLOCK.type,
-            cancel = false,
-            cancelIfCooldown = true
+            player, itemStack, itemInfo, event, ItemActionType.BREAK_BLOCK.type, cancel = false, cancelIfCooldown = true
         )
     }
 
@@ -968,10 +866,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
 
         val itemTag = itemInfo.itemTag
         val neigeItems = itemInfo.neigeItems
-        val data = itemInfo.data
 
         // 检测冷却
-        if (trigger.isCoolDown(player, itemStack, itemTag, data)) {
+        if (trigger.isCoolDown(player, itemStack, itemInfo)) {
             if ((cancel || cancelIfCooldown) && event is Cancellable) {
                 event.isCancelled = true
             }
@@ -986,6 +883,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         if (event is Cancellable && cancel) {
             event.isCancelled = true
         }
+        val data = itemInfo.data
         // 用于存储整个动作执行过程中的全局变量
         val global = HashMap<String, Any?>()
         // 动作上下文
@@ -1008,9 +906,13 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
                     }
                 }
                 // 获取待消耗数量
-                val amount: Int = consume.amount
-                    ?.parseItemSection(itemStack, itemTag, data, player, global as? MutableMap<String, String>, null)
-                    ?.toIntOrNull() ?: 1
+                val amount: Int = consume.amount?.parseItemSection(
+                        itemStack,
+                        itemInfo,
+                        player,
+                        global as? MutableMap<String, String>,
+                        null
+                    )?.toIntOrNull() ?: 1
                 // 消耗物品
                 if (!itemStack.consume(player, amount, itemTag, neigeItems, giveLater)) {
                     // 跑一下deny动作
@@ -1025,10 +927,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     }
 
     fun tick(
-        player: Player,
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        key: String
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, key: String
     ) {
         val id = itemInfo.id
         // 获取物品动作
@@ -1037,10 +936,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         val trigger = itemAction.triggers[key] ?: return
 
         val itemTag = itemInfo.itemTag
-        val data = itemInfo.data
 
         // 检测冷却
-        val tick = trigger.tick?.parseItemSection(itemStack, itemTag, data, player)?.toLongOrNull() ?: 10
+        val tick = trigger.tick?.parseItemSection(itemStack, itemInfo, player)?.toLongOrNull() ?: 10
         // 如果冷却存在且大于0
         if (tick > 0) {
             // 获取上次使用时间
@@ -1058,6 +956,6 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         }
         player.setMetadataEZ("NI-TICK-${trigger.group}", tick)
         // 执行动作
-        trigger.run(ActionContext(player, HashMap(), null, itemStack, itemTag, data))
+        trigger.run(ActionContext(player, HashMap(), null, itemStack, itemTag, itemInfo.data))
     }
 }

@@ -6,6 +6,7 @@ import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
@@ -179,7 +180,6 @@ object SectionUtils {
      *
      * @param itemStack 物品
      * @param itemTag 物品NBT
-     * @param data NeigeItems.data 代表NI物品节点数据
      * @param player 用于解析物品的玩家
      * @return 解析值
      */
@@ -187,10 +187,69 @@ object SectionUtils {
     fun String.parseItemSection(
         itemStack: ItemStack,
         itemTag: NbtCompound,
+        player: OfflinePlayer
+    ): String {
+        return parseItemSection(itemStack, itemTag, null, player, null, null)
+    }
+
+    /**
+     * 对文本进行物品节点解析
+     *
+     * @param itemStack 物品
+     * @param itemTag 物品NBT
+     * @param data NeigeItems.data 代表NI物品节点数据
+     * @param player 用于解析物品的玩家
+     * @return 解析值
+     */
+    @JvmStatic
+    @Deprecated("多数情况下, 调用此方法意味着可能出现无意义性能损失")
+    fun String.parseItemSection(
+        itemStack: ItemStack,
+        itemTag: NbtCompound,
         data: MutableMap<String, String>?,
         player: OfflinePlayer
     ): String {
         return parseItemSection(itemStack, itemTag, data, player, null, null)
+    }
+
+    /**
+     * 对文本进行物品节点解析
+     *
+     * @param itemStack 物品
+     * @param itemInfo 物品信息
+     * @param player 用于解析物品的玩家
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.parseItemSection(
+        itemStack: ItemStack,
+        itemInfo: ItemInfo,
+        player: OfflinePlayer
+    ): String {
+        return parseItemSection(itemStack, itemInfo, player, null, null)
+    }
+
+    /**
+     * 对文本进行物品节点解析
+     *
+     * @param itemStack 物品
+     * @param itemInfo 物品信息
+     * @param player 用于解析物品的玩家
+     * @param cache 解析值缓存
+     * @param sections 节点池
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.parseItemSection(
+        itemStack: ItemStack,
+        itemInfo: ItemInfo,
+        player: OfflinePlayer?,
+        cache: MutableMap<String, String>?,
+        sections: ConfigurationSection?
+    ): String {
+        return this.parse {
+            return@parse it.getItemSection(itemStack, itemInfo, player, cache, sections)
+        }
     }
 
     /**
@@ -205,6 +264,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("多数情况下, 调用此方法意味着可能出现无意义性能损失")
     fun String.parseItemSection(
         itemStack: ItemStack,
         itemTag: NbtCompound,
@@ -230,6 +290,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("多数情况下, 调用此方法意味着可能出现无意义性能损失")
     fun String.getItemSection(
         itemStack: ItemStack,
         itemTag: NbtCompound,
@@ -289,6 +350,97 @@ object SectionUtils {
                     "data" -> {
                         (data ?: itemTag.getStringOrNull("NeigeItems.data")
                             ?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
+                    }
+
+                    "amount" -> {
+                        itemStack.amount.toString()
+                    }
+
+                    "type" -> {
+                        itemStack.type.toString()
+                    }
+
+                    "damage" -> {
+                        itemStack.durability.toString()
+                    }
+
+                    else -> {
+                        SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player)
+                            ?: "<$this>"
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 对物品节点内容进行解析 (已经去掉 <>)
+     *
+     * @param itemStack 物品
+     * @param itemInfo 物品信息
+     * @param player 用于解析物品的玩家
+     * @param cache 解析值缓存
+     * @param sections 节点池
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.getItemSection(
+        itemStack: ItemStack,
+        itemInfo: ItemInfo,
+        player: OfflinePlayer?,
+        cache: MutableMap<String, String>? = null,
+        sections: ConfigurationSection? = null
+    ): String {
+        when (val index = this.indexOf("::")) {
+            -1 -> {
+                // 尝试读取缓存
+                if (cache?.containsKey(this) ?: false) {
+                    // 直接返回对应节点值
+                    return (cache as Map<*, *>)[this].toString()
+                    // 读取失败, 尝试主动解析
+                } else {
+                    // 尝试解析并返回对应节点值
+                    if (sections != null && sections.contains(this)) {
+                        // 获取节点ConfigurationSection
+                        val section = sections.getConfigurationSection(this)
+                        // 简单节点
+                        if (section == null) {
+                            val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
+                            cache?.put(this, result)
+                            return result
+                        }
+                        // 加载节点
+                        return Section(section, this).load(cache, player, sections) ?: "<$this>"
+                    }
+                    if (this.startsWith("#")) {
+                        try {
+                            try {
+                                val hex = (this.substring(1).toIntOrNull(16) ?: 0)
+                                    .coerceAtLeast(0)
+                                    .coerceAtMost(0xFFFFFF)
+                                val color = Color(hex)
+                                return ChatColor.of(color).toString()
+                            } catch (_: NumberFormatException) {
+                            }
+                        } catch (error: NoSuchMethodError) {
+                            Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
+                        }
+                    }
+                }
+                return "<$this>"
+            }
+
+            else -> {
+                // 获取节点类型
+                val name = this.substring(0, index)
+                val param = this.substring(index + 2)
+                return when (name.lowercase(Locale.getDefault())) {
+                    "nbt" -> {
+                        itemInfo.itemTag.getDeepStringOrNull(param) ?: "<$this>"
+                    }
+
+                    "data" -> {
+                        itemInfo.data[param] ?: "<$this>"
                     }
 
                     "amount" -> {

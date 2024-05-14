@@ -469,7 +469,7 @@ object ItemEditorManager {
 
                                 value.replace("\\$(\\d+)".toRegex()) {
                                     groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                                }.parseItemSection(itemStack, itemStack.getNbt(), null, player)
+                                }.parseItemSection(itemStack, itemStack.getNbt(), player)
                             } else {
                                 matchResult.value
                             }
@@ -586,7 +586,7 @@ object ItemEditorManager {
 
                             value.replace("\\$(\\d+)".toRegex()) {
                                 groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                            }.parseItemSection(itemStack, itemStack.getNbt(), null, player)
+                            }.parseItemSection(itemStack, itemStack.getNbt(), player)
                         }
                     }
 
@@ -1016,7 +1016,7 @@ object ItemEditorManager {
 
                                     value.replace("\\$(\\d+)".toRegex()) {
                                         groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                                    }.parseItemSection(itemStack, itemStack.getNbt(), null, player)
+                                    }.parseItemSection(itemStack, itemStack.getNbt(), player)
                                 } else {
                                     matchResult.value
                                 }
@@ -1202,7 +1202,7 @@ object ItemEditorManager {
 
                                 value.replace("\\$(\\d+)".toRegex()) {
                                     groupValues.getOrNull(it.groupValues[1].toInt()) ?: it.value
-                                }.parseItemSection(itemStack, itemStack.getNbt(), null, player)
+                                }.parseItemSection(itemStack, itemStack.getNbt(), player)
                             }
                         }
 
@@ -1899,9 +1899,7 @@ object ItemEditorManager {
                 // (解析其中的即时声明节点)
                 addItemEditor("${id}Section") { player, itemStack, content ->
                     return@addItemEditor function.apply(
-                        player,
-                        itemStack,
-                        content.parseItemSection(itemStack, itemStack.getNbt(), null, player)
+                        player, itemStack, content.parseItemSection(itemStack, itemStack.getNbt(), player)
                     )
                 }
             }
