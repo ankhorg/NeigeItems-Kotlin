@@ -120,7 +120,24 @@ public class TranslationUtils {
     }
 
     /**
-     * 适用于1.17+版本, 将高版本json文本转化为传统文本.
+     * 将传统文本转化为高版本json文本(1.12.2-1.16.4不进行转换).
+     *
+     * @param json 待转换json.
+     * @return 传统文本.
+     */
+    @NotNull
+    public static String toJsonText(
+            @NotNull String json
+    ) {
+        if (CbVersion.v1_16_R3.isSupport()) {
+            return fromStringToJSON(json);
+        } else {
+            return json;
+        }
+    }
+
+    /**
+     * 适用于1.16.5+版本, 将高版本json文本转化为传统文本.
      *
      * @param jsonMessage 待转换json.
      * @return 传统文本.
@@ -130,13 +147,13 @@ public class TranslationUtils {
             @Nullable String jsonMessage
     ) {
         if (jsonMessage == null) return null;
-        if (CbVersion.v1_17_R1.isSupport())
+        if (CbVersion.v1_16_R3.isSupport())
             return RefCraftChatMessage.fromJSONComponent(jsonMessage);
         return null;
     }
 
     /**
-     * 适用于1.17+版本, 将传统文本转化为高版本json文本.
+     * 适用于1.16.5+版本, 将传统文本转化为高版本json文本.
      * keepNewlines 默认为 false.
      *
      * @param message 待转换传统文本.
@@ -144,13 +161,13 @@ public class TranslationUtils {
      */
     public static String fromStringToJSON(String message) {
         if (message == null) return null;
-        if (CbVersion.v1_17_R1.isSupport())
+        if (CbVersion.v1_16_R3.isSupport())
             return RefCraftChatMessage.fromStringToJSON(message);
         return null;
     }
 
     /**
-     * 适用于1.17+版本, 将传统文本转化为高版本json文本.
+     * 适用于1.16.5+版本, 将传统文本转化为高版本json文本.
      *
      * @param message      待转换传统文本.
      * @param keepNewlines 此选项为 true 时, 将把文本中的换行符转化为 \n 文本, 为 false 时, 将于换行符处直接断开停止识别.
@@ -158,7 +175,7 @@ public class TranslationUtils {
      */
     public static String fromStringToJSON(String message, boolean keepNewlines) {
         if (message == null) return null;
-        if (CbVersion.v1_17_R1.isSupport())
+        if (CbVersion.v1_16_R3.isSupport())
             return RefCraftChatMessage.fromStringToJSON(message, keepNewlines);
         return null;
     }
