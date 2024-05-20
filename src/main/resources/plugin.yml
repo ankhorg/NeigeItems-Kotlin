@@ -11,5 +11,6 @@ softdepend:
   - 'MythicMobs'
   - 'Oraxen'
   - 'Vault'
+  - 'MagicGem'
 
 api-version: 1.13

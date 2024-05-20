@@ -187,7 +187,7 @@ object SectionUtils {
     fun String.parseItemSection(
         itemStack: ItemStack,
         itemTag: NbtCompound,
-        player: OfflinePlayer
+        player: OfflinePlayer?
     ): String {
         return parseItemSection(itemStack, itemTag, null, player, null, null)
     }
@@ -207,7 +207,7 @@ object SectionUtils {
         itemStack: ItemStack,
         itemTag: NbtCompound,
         data: MutableMap<String, String>?,
-        player: OfflinePlayer
+        player: OfflinePlayer?
     ): String {
         return parseItemSection(itemStack, itemTag, data, player, null, null)
     }
@@ -224,7 +224,7 @@ object SectionUtils {
     fun String.parseItemSection(
         itemStack: ItemStack,
         itemInfo: ItemInfo,
-        player: OfflinePlayer
+        player: OfflinePlayer?
     ): String {
         return parseItemSection(itemStack, itemInfo, player, null, null)
     }

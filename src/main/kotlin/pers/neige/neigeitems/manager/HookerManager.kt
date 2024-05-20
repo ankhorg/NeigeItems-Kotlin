@@ -12,8 +12,10 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.easyitem.EasyItemHooker
+import pers.neige.neigeitems.hook.easyitem.MagicGemHooker
 import pers.neige.neigeitems.hook.easyitem.OraxenHooker
 import pers.neige.neigeitems.hook.easyitem.impl.EasyItemHookerImpl
+import pers.neige.neigeitems.hook.easyitem.impl.MagicGemHookerImpl
 import pers.neige.neigeitems.hook.easyitem.impl.OraxenHookerImpl
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
@@ -164,6 +166,15 @@ object HookerManager {
             OraxenHookerImpl()
         } catch (error: Throwable) {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "Oraxen"))
+            null
+        }
+
+    val magicGemHooker: MagicGemHooker? =
+        try {
+            Class.forName("pku.yim.magicgem.MagicGem")
+            MagicGemHookerImpl()
+        } catch (error: Throwable) {
+            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MagicGem"))
             null
         }
 
@@ -408,10 +419,18 @@ object HookerManager {
 
     /**
      * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
-     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     * 首先根据id尝试获取NI物品, 如获取不到对应的NI物品, 则进行如下操作:
+     * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
+     * "mm", "MythicMobs" -> MythicMobs
+     * "mg", "MagicGem" -> MagicGem
+     * "or", "Oraxen" -> Oraxen
+     * "ei", "EasyItem" -> EasyItem
+     * "vn", "Vanilla" -> 原版物品
+     * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
+     * MM > MagicGem > Oraxen > EI > 原版物品.
      *
      * @param id 物品ID
-     * @return 显示名或翻译名.
+     * @return 对应物品.
      */
     @JvmStatic
     fun getNiOrHookedItem(
@@ -426,11 +445,19 @@ object HookerManager {
 
     /**
      * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
-     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     * 首先根据id尝试获取NI物品, 如获取不到对应的NI物品, 则进行如下操作:
+     * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
+     * "mm", "MythicMobs" -> MythicMobs
+     * "mg", "MagicGem" -> MagicGem
+     * "or", "Oraxen" -> Oraxen
+     * "ei", "EasyItem" -> EasyItem
+     * "vn", "Vanilla" -> 原版物品
+     * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
+     * MM > MagicGem > Oraxen > EI > 原版物品.
      *
      * @param id 物品ID
      * @param player 用作参数的玩家
-     * @return 显示名或翻译名.
+     * @return 对应物品.
      */
     @JvmStatic
     fun getNiOrHookedItem(
@@ -446,12 +473,20 @@ object HookerManager {
 
     /**
      * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
-     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     * 首先根据id尝试获取NI物品, 如获取不到对应的NI物品, 则进行如下操作:
+     * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
+     * "mm", "MythicMobs" -> MythicMobs
+     * "mg", "MagicGem" -> MagicGem
+     * "or", "Oraxen" -> Oraxen
+     * "ei", "EasyItem" -> EasyItem
+     * "vn", "Vanilla" -> 原版物品
+     * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
+     * MM > MagicGem > Oraxen > EI > 原版物品.
      *
      * @param id 物品ID
      * @param player 用作参数的玩家
      * @param data 指向数据
-     * @return 显示名或翻译名.
+     * @return 对应物品.
      */
     @JvmStatic
     fun getNiOrHookedItem(
@@ -468,11 +503,19 @@ object HookerManager {
 
     /**
      * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
-     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     * 首先根据id尝试获取NI物品, 如获取不到对应的NI物品, 则进行如下操作:
+     * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
+     * "mm", "MythicMobs" -> MythicMobs
+     * "mg", "MagicGem" -> MagicGem
+     * "or", "Oraxen" -> Oraxen
+     * "ei", "EasyItem" -> EasyItem
+     * "vn", "Vanilla" -> 原版物品
+     * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
+     * MM > MagicGem > Oraxen > EI > 原版物品.
      *
      * @param id 物品ID
      * @param data 指向数据
-     * @return 显示名或翻译名.
+     * @return 对应物品.
      */
     @JvmStatic
     fun getNiOrHookedItem(
@@ -488,11 +531,19 @@ object HookerManager {
 
     /**
      * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
-     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     * 首先根据id尝试获取NI物品, 如获取不到对应的NI物品, 则进行如下操作:
+     * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
+     * "mm", "MythicMobs" -> MythicMobs
+     * "mg", "MagicGem" -> MagicGem
+     * "or", "Oraxen" -> Oraxen
+     * "ei", "EasyItem" -> EasyItem
+     * "vn", "Vanilla" -> 原版物品
+     * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
+     * MM > MagicGem > Oraxen > EI > 原版物品.
      *
      * @param id 物品ID
      * @param data 指向数据
-     * @return 显示名或翻译名.
+     * @return 对应物品.
      */
     @JvmStatic
     fun getNiOrHookedItem(
@@ -508,12 +559,20 @@ object HookerManager {
 
     /**
      * 根据各个参数, 尝试获取NI物品或挂钩的物品库中的物品.
-     * 优先级 NI > MM > Oraxen > EI > 原版物品.
+     * 首先根据id尝试获取NI物品, 如获取不到对应的NI物品, 则进行如下操作:
+     * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
+     * "mm", "MythicMobs" -> MythicMobs
+     * "mg", "MagicGem" -> MagicGem
+     * "or", "Oraxen" -> Oraxen
+     * "ei", "EasyItem" -> EasyItem
+     * "vn", "Vanilla" -> 原版物品
+     * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
+     * MM > MagicGem > Oraxen > EI > 原版物品.
      *
      * @param id 物品ID
      * @param player 用作参数的玩家
      * @param data 指向数据
-     * @return 显示名或翻译名.
+     * @return 对应物品.
      */
     @JvmStatic
     fun getNiOrHookedItem(
@@ -530,17 +589,61 @@ object HookerManager {
 
     /**
      * 根据各个参数, 尝试获取挂钩的物品库中的物品.
-     * 优先级 MM > Oraxen > EI > 原版物品.
+     * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
+     * "mm", "MythicMobs" -> MythicMobs
+     * "mg", "MagicGem" -> MagicGem
+     * "or", "Oraxen" -> Oraxen
+     * "ei", "EasyItem" -> EasyItem
+     * "vn", "Vanilla" -> 原版物品
+     * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
+     * MM > MagicGem > Oraxen > EI > 原版物品.
      *
      * @param id 物品ID
-     * @return 显示名或翻译名.
+     * @return 对应物品.
      */
     @JvmStatic
     fun getHookedItem(
         id: String
     ): ItemStack? {
+        if (id.contains(":")) {
+            val nameSpaceToItemId = id.split(":", limit = 2)
+            when (nameSpaceToItemId[0].lowercase()) {
+                "mm", "mythicmobs" -> {
+                    val itemStack = mythicMobsHooker?.getItemStackSync(nameSpaceToItemId[1])
+                    if (itemStack != null) return itemStack
+                }
+
+                "mg", "magicgem" -> {
+                    val itemStack = magicGemHooker?.getItemStack(nameSpaceToItemId[1])
+                    if (itemStack != null) return itemStack
+                }
+
+                "or", "oraxen" -> {
+                    val itemStack = oraxenHooker?.getItemStack(nameSpaceToItemId[1])
+                    if (itemStack != null) return itemStack
+                }
+
+                "ei", "easyitem" -> {
+                    val itemStack = easyItemHooker?.getItemStack(nameSpaceToItemId[1])
+                    if (itemStack != null) return itemStack
+                }
+
+                "vn", "vanilla" -> {
+                    val material = Material.matchMaterial(nameSpaceToItemId[1].uppercase())
+                    if (material != null) {
+                        return ItemStack(material)
+                    }
+                }
+            }
+        }
+
         if (mythicMobsHooker?.hasItem(id) == true) {
             val itemStack = mythicMobsHooker?.getItemStackSync(id)
+            if (itemStack != null) return itemStack
+        }
+
+        if (magicGemHooker?.hasItem(id) == true) {
+            val itemStack = magicGemHooker.getItemStack(id)
             if (itemStack != null) return itemStack
         }
 
@@ -554,7 +657,7 @@ object HookerManager {
             if (itemStack != null) return itemStack
         }
 
-        val material = Material.matchMaterial(id)
+        val material = Material.matchMaterial(id.uppercase())
         if (material != null) {
             return ItemStack(material)
         }
