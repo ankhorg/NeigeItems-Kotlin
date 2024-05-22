@@ -33,10 +33,16 @@ pers.neige.neigeitems.command.subcommand.mm
 pers.neige.neigeitems.event
 pers.neige.neigeitems.hook.easyitem
 pers.neige.neigeitems.hook.easyitem.impl
+pers.neige.neigeitems.hook.itemsadder
+pers.neige.neigeitems.hook.itemsadder.impl
+pers.neige.neigeitems.hook.magicgem
+pers.neige.neigeitems.hook.magicgem.impl
 pers.neige.neigeitems.hook.mythicmobs
 pers.neige.neigeitems.hook.nashorn
 pers.neige.neigeitems.hook.nashorn.impl
 pers.neige.neigeitems.hook.nms
+pers.neige.neigeitems.hook.oraxen
+pers.neige.neigeitems.hook.oraxen.impl
 pers.neige.neigeitems.hook.placeholderapi
 pers.neige.neigeitems.hook.placeholderapi.impl
 pers.neige.neigeitems.hook.vault
