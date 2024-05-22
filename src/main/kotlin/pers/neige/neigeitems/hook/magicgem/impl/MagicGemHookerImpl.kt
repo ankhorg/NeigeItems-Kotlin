@@ -1,7 +1,7 @@
-package pers.neige.neigeitems.hook.easyitem.impl
+package pers.neige.neigeitems.hook.magicgem.impl
 
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.hook.easyitem.MagicGemHooker
+import pers.neige.neigeitems.hook.magicgem.MagicGemHooker
 import pku.yim.magicgem.gem.GemManager
 
 /**

@@ -1,8 +1,8 @@
-package pers.neige.neigeitems.hook.easyitem.impl
+package pers.neige.neigeitems.hook.oraxen.impl
 
 import io.th0rgal.oraxen.api.OraxenItems
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.hook.easyitem.OraxenHooker
+import pers.neige.neigeitems.hook.oraxen.OraxenHooker
 
 /**
  * Oraxen挂钩

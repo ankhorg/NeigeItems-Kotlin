@@ -94,6 +94,7 @@ dependencies {
     compileOnly("net.kyori:adventure-api:4.16.0")
     compileOnly("net.kyori:adventure-text-serializer-legacy:4.16.0")
     compileOnly("net.kyori:adventure-text-serializer-gson:4.16.0")
+    compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.1")
 
     // ankh-invoke
     implementation("org.inksnow:ankh-invoke-bukkit:1.0.10-SNAPSHOT")

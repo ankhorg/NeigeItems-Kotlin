@@ -7,6 +7,8 @@ import pers.neige.neigeitems.ref.network.RefPlayerConnection;
 import pers.neige.neigeitems.ref.world.RefVec3;
 import pers.neige.neigeitems.ref.world.inventory.RefAbstractContainerMenu;
 
+import javax.annotation.Nullable;
+
 @HandleBy(reference = "net/minecraft/server/level/ServerPlayer", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/EntityPlayer", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public final class RefEntityPlayer extends RefEntityHuman {
@@ -35,4 +37,12 @@ public final class RefEntityPlayer extends RefEntityHuman {
     @HandleBy(reference = "Lnet/minecraft/server/level/ServerPlayer;initMenu(Lnet/minecraft/world/inventory/AbstractContainerMenu;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityPlayer;updateInventory(Lnet/minecraft/server/v1_12_R1/Container;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native void updateInventory(RefAbstractContainerMenu container);
+
+    @HandleBy(reference = "Lnet/minecraft/server/level/ServerPlayer;getCamera()Lnet/minecraft/world/entity/Entity;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityPlayer;getSpecatorTarget()Lnet/minecraft/server/v1_12_R1/Entity;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
+    public native RefEntity getCamera();
+
+    @HandleBy(reference = "Lnet/minecraft/server/level/ServerPlayer;setCamera(Lnet/minecraft/world/entity/Entity;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityPlayer;setSpectatorTarget(Lnet/minecraft/server/v1_12_R1/Entity;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
+    public native void setCamera(@Nullable RefEntity entity);
 }

@@ -1,4 +1,4 @@
-package pers.neige.neigeitems.hook.easyitem
+package pers.neige.neigeitems.hook.oraxen
 
 import org.bukkit.inventory.ItemStack
 

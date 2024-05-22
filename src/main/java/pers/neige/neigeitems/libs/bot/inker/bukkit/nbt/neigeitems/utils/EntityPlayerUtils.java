@@ -1274,6 +1274,39 @@ public class EntityPlayerUtils {
     }
 
     /**
+     * 获取玩家摄像机.
+     *
+     * @param player 待操作玩家.
+     * @return 玩家摄像机
+     */
+    public static Entity getCamera(
+            @NotNull Player player
+    ) {
+        if ((Object) player instanceof RefCraftPlayer) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            return nmsPlayer.getCamera().getBukkitEntity();
+        }
+        return player;
+    }
+
+    /**
+     * 设置玩家摄像机.
+     *
+     * @param player 待操作玩家.
+     * @param entity 待设置摄像机.
+     */
+    public static void setCamera(
+            @NotNull Player player,
+            @NotNull Entity entity
+    ) {
+        if ((Object) player instanceof RefCraftPlayer && entity instanceof RefCraftEntity) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntity nmsEntity = ((RefCraftEntity) (Object) entity).getHandle();
+            nmsPlayer.setCamera(nmsEntity);
+        }
+    }
+
+    /**
      * 向玩家发送虚假的容器标题.
      *
      * @param player 待接收玩家.

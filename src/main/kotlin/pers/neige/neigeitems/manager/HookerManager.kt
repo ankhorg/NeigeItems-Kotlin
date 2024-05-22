@@ -12,16 +12,18 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.easyitem.EasyItemHooker
-import pers.neige.neigeitems.hook.easyitem.MagicGemHooker
-import pers.neige.neigeitems.hook.easyitem.OraxenHooker
 import pers.neige.neigeitems.hook.easyitem.impl.EasyItemHookerImpl
-import pers.neige.neigeitems.hook.easyitem.impl.MagicGemHookerImpl
-import pers.neige.neigeitems.hook.easyitem.impl.OraxenHookerImpl
+import pers.neige.neigeitems.hook.itemsadder.ItemsAdderHooker
+import pers.neige.neigeitems.hook.itemsadder.impl.ItemsAdderHookerImpl
+import pers.neige.neigeitems.hook.magicgem.MagicGemHooker
+import pers.neige.neigeitems.hook.magicgem.impl.MagicGemHookerImpl
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.hook.nashorn.NashornHooker
 import pers.neige.neigeitems.hook.nashorn.impl.LegacyNashornHookerImpl
 import pers.neige.neigeitems.hook.nashorn.impl.NashornHookerImpl
 import pers.neige.neigeitems.hook.nms.NMSHooker
+import pers.neige.neigeitems.hook.oraxen.OraxenHooker
+import pers.neige.neigeitems.hook.oraxen.impl.OraxenHookerImpl
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker
 import pers.neige.neigeitems.hook.placeholderapi.impl.LegacyPapiHookerImpl
 import pers.neige.neigeitems.hook.placeholderapi.impl.PapiHookerImpl
@@ -175,6 +177,18 @@ object HookerManager {
             MagicGemHookerImpl()
         } catch (error: Throwable) {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MagicGem"))
+            null
+        }
+
+    val itemsAdderHooker: ItemsAdderHooker? =
+        if (Bukkit.getPluginManager().isPluginEnabled("ItemsAdder")) {
+            try {
+                ItemsAdderHookerImpl()
+            } catch (error: Throwable) {
+                null
+            }
+        } else {
+            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "ItemsAdder"))
             null
         }
 
@@ -423,6 +437,7 @@ object HookerManager {
      * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
      * "mm", "MythicMobs" -> MythicMobs
      * "mg", "MagicGem" -> MagicGem
+     * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
      * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
@@ -449,6 +464,7 @@ object HookerManager {
      * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
      * "mm", "MythicMobs" -> MythicMobs
      * "mg", "MagicGem" -> MagicGem
+     * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
      * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
@@ -477,6 +493,7 @@ object HookerManager {
      * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
      * "mm", "MythicMobs" -> MythicMobs
      * "mg", "MagicGem" -> MagicGem
+     * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
      * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
@@ -507,6 +524,7 @@ object HookerManager {
      * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
      * "mm", "MythicMobs" -> MythicMobs
      * "mg", "MagicGem" -> MagicGem
+     * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
      * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
@@ -535,6 +553,7 @@ object HookerManager {
      * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
      * "mm", "MythicMobs" -> MythicMobs
      * "mg", "MagicGem" -> MagicGem
+     * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
      * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
@@ -563,6 +582,7 @@ object HookerManager {
      * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
      * "mm", "MythicMobs" -> MythicMobs
      * "mg", "MagicGem" -> MagicGem
+     * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
      * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
@@ -592,6 +612,7 @@ object HookerManager {
      * 当id包含英文冒号:时, 根据冒号前的文本(不区分大小写)识别目标物品库, 根据冒号后的文本识别物品ID.
      * "mm", "MythicMobs" -> MythicMobs
      * "mg", "MagicGem" -> MagicGem
+     * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
      * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
@@ -615,6 +636,11 @@ object HookerManager {
 
                 "mg", "magicgem" -> {
                     val itemStack = magicGemHooker?.getItemStack(nameSpaceToItemId[1])
+                    if (itemStack != null) return itemStack
+                }
+
+                "ia", "itemsadder" -> {
+                    val itemStack = itemsAdderHooker?.getItemStack(nameSpaceToItemId[1])
                     if (itemStack != null) return itemStack
                 }
 
@@ -644,6 +670,11 @@ object HookerManager {
 
         if (magicGemHooker?.hasItem(id) == true) {
             val itemStack = magicGemHooker.getItemStack(id)
+            if (itemStack != null) return itemStack
+        }
+
+        if (itemsAdderHooker?.hasItem(id) == true) {
+            val itemStack = itemsAdderHooker.getItemStack(id)
             if (itemStack != null) return itemStack
         }
 
