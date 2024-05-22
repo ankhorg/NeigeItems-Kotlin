@@ -12,5 +12,6 @@ softdepend:
   - 'Oraxen'
   - 'Vault'
   - 'MagicGem'
+  - 'ItemsAdder'
 
 api-version: 1.13
