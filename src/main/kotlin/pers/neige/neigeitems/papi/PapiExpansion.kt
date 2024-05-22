@@ -6,11 +6,15 @@ import org.bukkit.entity.Player
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.placeholderapi.PlaceholderExpansion
+import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
+import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
+import pers.neige.neigeitems.utils.SchedulerUtils
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
+import pers.neige.neigeitems.utils.StringUtils
 import java.io.InputStreamReader
 import java.util.concurrent.ConcurrentHashMap
 import javax.script.CompiledScript
@@ -30,8 +34,8 @@ object PapiExpansion {
     @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
     private fun init() {
-        expansion = papiHooker?.newPlaceholderExpansion("ni", "Neige", "1.0.0") { player, args ->
-            val params = args.split("_", limit = 2)
+        expansion = papiHooker?.newPlaceholderExpansion("ni", "Neige", "1.0.0") { player, param ->
+            val params = param.split("_", limit = 2)
             when (val key = params[0].lowercase()) {
                 "parse" -> return@newPlaceholderExpansion params.getOrNull(1)?.parseSection(player) ?: ""
                 "data", "nbt" -> {
@@ -119,6 +123,19 @@ object PapiExpansion {
                         }
                     }
                     return@newPlaceholderExpansion ""
+                }
+                "amount" -> {
+                    if (player !is Player) return@newPlaceholderExpansion "0"
+                    val itemId = params.getOrNull(1) ?: return@newPlaceholderExpansion "0"
+                    var result = 0
+                    val contents = player.inventory.contents
+                    for (itemStack in contents) {
+                        val itemInfo = itemStack.isNiItem()
+                        if (itemInfo != null && itemInfo.id == itemId) {
+                            result += itemStack.amount
+                        }
+                    }
+                    return@newPlaceholderExpansion result.toString()
                 }
 
                 else -> return@newPlaceholderExpansion ""
