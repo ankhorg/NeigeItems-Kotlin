@@ -289,4 +289,215 @@ public class NbtUtils {
             return (ItemStack) (Object) RefCraftItemStack.asCraftMirror(new RefNmsItemStack(nbt.delegate));
         }
     }
+
+    @NotNull
+    public static String getNameNbtKey() {
+        return RefCraftMetaItem.NAME.NBT;
+    }
+
+    @NotNull
+    public static String getLocNameNbtKey() {
+        return RefCraftMetaItem.LOCNAME.NBT;
+    }
+
+    @NotNull
+    public static String getDisplayNbtKey() {
+        return RefCraftMetaItem.DISPLAY.NBT;
+    }
+
+    @NotNull
+    public static String getLoreNbtKey() {
+        return RefCraftMetaItem.LORE.NBT;
+    }
+
+    @Nullable
+    public static String getCustomModelDataNbtKeyOrNull() {
+        if (CbVersion.v1_14_R1.isSupport()) {
+            return RefCraftMetaItem.CUSTOM_MODEL_DATA.NBT;
+        } else {
+            return null;
+        }
+    }
+
+    @NotNull
+    public static String getCustomModelDataNbtKeyOrThrow() {
+        if (CbVersion.v1_14_R1.isSupport()) {
+            return RefCraftMetaItem.CUSTOM_MODEL_DATA.NBT;
+        } else {
+            throw new UnsupportedOperationException("invalid version");
+        }
+    }
+
+    @NotNull
+    public static String getEnchantmentsNbtKey() {
+        return RefCraftMetaItem.ENCHANTMENTS.NBT;
+    }
+
+    @NotNull
+    public static String getEnchantmentIdNbtKey() {
+        return RefCraftMetaItem.ENCHANTMENTS_ID.NBT;
+    }
+
+    @NotNull
+    public static String getEnchantmentLvlNbtKey() {
+        return RefCraftMetaItem.ENCHANTMENTS_LVL.NBT;
+    }
+
+    @NotNull
+    public static String getRepairNbtKey() {
+        return RefCraftMetaItem.REPAIR.NBT;
+    }
+
+    @NotNull
+    public static String getAttributesNbtKey() {
+        return RefCraftMetaItem.ATTRIBUTES.NBT;
+    }
+
+    @NotNull
+    public static String getAttributesIdentifierNbtKey() {
+        return RefCraftMetaItem.ATTRIBUTES_IDENTIFIER.NBT;
+    }
+
+    @NotNull
+    public static String getAttributesNameNbtKey() {
+        return RefCraftMetaItem.ATTRIBUTES_NAME.NBT;
+    }
+
+    @NotNull
+    public static String getAttributesValueNbtKey() {
+        return RefCraftMetaItem.ATTRIBUTES_VALUE.NBT;
+    }
+
+    @NotNull
+    public static String getAttributesTypeNbtKey() {
+        return RefCraftMetaItem.ATTRIBUTES_TYPE.NBT;
+    }
+
+    @NotNull
+    public static String getAttributesUUIDHighNbtKey() {
+        return RefCraftMetaItem.ATTRIBUTES_UUID_HIGH.NBT;
+    }
+
+    @NotNull
+    public static String getAttributesUUIDLowNbtKey() {
+        return RefCraftMetaItem.ATTRIBUTES_UUID_LOW.NBT;
+    }
+
+    @Nullable
+    public static String getAttributesSlotNbtKeyOrNull() {
+        if (CbVersion.v1_13_R1.isSupport()) {
+            return RefCraftMetaItem.ATTRIBUTES_SLOT.NBT;
+        } else {
+            return null;
+        }
+    }
+
+    @NotNull
+    public static String getAttributesSlotNbtKeyOrThrow() {
+        if (CbVersion.v1_13_R1.isSupport()) {
+            return RefCraftMetaItem.ATTRIBUTES_SLOT.NBT;
+        } else {
+            throw new UnsupportedOperationException("invalid version");
+        }
+    }
+
+    @NotNull
+    public static String getHideFlagsNbtKey() {
+        return RefCraftMetaItem.HIDEFLAGS.NBT;
+    }
+
+    @NotNull
+    public static String getUnbreakableNbtKey() {
+        return RefCraftMetaItem.UNBREAKABLE.NBT;
+    }
+
+    @Nullable
+    public static String getDamageNbtKeyOrNull() {
+        if (CbVersion.v1_13_R1.isSupport()) {
+            return RefCraftMetaItem.DAMAGE.NBT;
+        } else {
+            return null;
+        }
+    }
+
+    @NotNull
+    public static String getDamageNbtKeyOrThrow() {
+        if (CbVersion.v1_13_R1.isSupport()) {
+            return RefCraftMetaItem.DAMAGE.NBT;
+        } else {
+            throw new UnsupportedOperationException("invalid version");
+        }
+    }
+
+    @Nullable
+    public static String getBlockDataNbtKeyOrNull() {
+        if (CbVersion.v1_14_R1.isSupport()) {
+            return RefCraftMetaItem.BLOCK_DATA.NBT;
+        } else {
+            return null;
+        }
+    }
+
+    @NotNull
+    public static String getBlockDataNbtKeyOrThrow() {
+        if (CbVersion.v1_14_R1.isSupport()) {
+            return RefCraftMetaItem.BLOCK_DATA.NBT;
+        } else {
+            throw new UnsupportedOperationException("invalid version");
+        }
+    }
+
+    @Nullable
+    public static String getBukkitCustomTagNbtKeyOrNull() {
+        if (CbVersion.v1_13_R1.isSupport()) {
+            return RefCraftMetaItem.BUKKIT_CUSTOM_TAG.NBT;
+        } else {
+            return null;
+        }
+    }
+
+    @NotNull
+    public static String getBukkitCustomTagNbtKeyOrThrow() {
+        if (CbVersion.v1_13_R1.isSupport()) {
+            return RefCraftMetaItem.BUKKIT_CUSTOM_TAG.NBT;
+        } else {
+            throw new UnsupportedOperationException("invalid version");
+        }
+    }
+
+    @Nullable
+    public static String getCanDestroyNbtKeyOrNull() {
+        if (CbVersion.v1_18_R1.isSupport()) {
+            return RefCraftMetaItem.CAN_DESTROY.NBT;
+        } else {
+            return null;
+        }
+    }
+
+    @NotNull
+    public static String getCanDestroyNbtKeyOrThrow() {
+        if (CbVersion.v1_18_R1.isSupport()) {
+            return RefCraftMetaItem.CAN_DESTROY.NBT;
+        } else {
+            throw new UnsupportedOperationException("invalid version");
+        }
+    }
+
+    @Nullable
+    public static String getCanPlaceOnNbtKeyOrNull() {
+        if (CbVersion.v1_18_R1.isSupport()) {
+            return RefCraftMetaItem.CAN_PLACE_ON.NBT;
+        } else {
+            return null;
+        }
+    }
+
+    @NotNull
+    public static String getCanPlaceOnNbtKeyOrThrow() {
+        if (CbVersion.v1_18_R1.isSupport()) {
+            return RefCraftMetaItem.CAN_PLACE_ON.NBT;
+        } else {
+            throw new UnsupportedOperationException("invalid version");
+        }
+    }
 }

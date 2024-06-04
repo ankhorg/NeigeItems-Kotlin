@@ -4,7 +4,7 @@ import org.bukkit.inventory.ItemStack;
 import org.inksnow.ankhinvoke.comments.HandleBy;
 
 @HandleBy(reference = "org/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack", predicates = "craftbukkit_version:[v1_12_R1,)")
-public final class RefCraftItemStack {
+public final class RefCraftItemStack extends ItemStack {
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;handle:Lnet/minecraft/world/item/ItemStack;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;handle:Lnet/minecraft/server/v1_12_R1/ItemStack;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefNmsItemStack handle;

@@ -2,6 +2,7 @@ package pers.neige.neigeitems.ref.entity;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
+import pers.neige.neigeitems.ref.network.syncher.RefEntityDataAccessor;
 import pers.neige.neigeitems.ref.world.RefWorld;
 
 import java.util.UUID;
@@ -9,6 +10,11 @@ import java.util.UUID;
 @HandleBy(reference = "net/minecraft/world/entity/item/ItemEntity", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/EntityItem", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public final class RefEntityItem extends RefEntity {
+    @HandleBy(reference = "Lnet/minecraft/world/entity/item/ItemEntity;DATA_ITEM:Lnet/minecraft/network/syncher/EntityDataAccessor;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/EntityItem;ITEM:Lnet/minecraft/server/v1_14_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_14_R1,v1_17_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/EntityItem;b:Lnet/minecraft/server/v1_13_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_13_R1,v1_14_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityItem;c:Lnet/minecraft/server/v1_12_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public static final RefEntityDataAccessor<RefNmsItemStack> DATA_ITEM = null;
     @HandleBy(reference = "Lnet/minecraft/world/entity/item/ItemEntity;despawnRate:I", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     public int despawnRate;
     @HandleBy(reference = "Lnet/minecraft/world/entity/item/ItemEntity;age:I", predicates = "craftbukkit_version:[v1_17_R1,)")

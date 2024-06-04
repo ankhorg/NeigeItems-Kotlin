@@ -11,6 +11,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +26,7 @@ import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
 import pers.neige.neigeitems.ref.chat.RefEnumTitleAction;
 import pers.neige.neigeitems.ref.entity.*;
+import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
 import pers.neige.neigeitems.ref.network.*;
 import pers.neige.neigeitems.ref.network.syncher.RefEntityDataAccessor;
@@ -99,7 +101,7 @@ public class EntityPlayerUtils {
      */
     private static final boolean ADD_ENTITY_PACKET_SUPPORT = CbVersion.v1_14_R1.isSupport();
     /**
-     * 1.19.4+ 版本起, spawnEntity 方法添加 boolean 类型 randomizeData 参数, 用于随机生成实体数据.
+     * 1.19.4+ 版本起, EntityMetadata数据包构造函数发生了改变.
      */
     private static final boolean METADATA_NEED_VALUE_LIST = CbVersion.v1_19_R3.isSupport();
     /**
@@ -1212,6 +1214,51 @@ public class EntityPlayerUtils {
                 if (setCustomVisible) {
                     defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_VISIBLE, true);
                 }
+                result.addAll(new RefPacketPlayOutEntityMetadata(entityId, entityData, true).packedItems0);
+                packet.packedItems0 = result;
+            }
+        }
+    }
+
+    /**
+     * 为掉落物实体设置虚拟物品.
+     *
+     * @param world        所处世界.
+     * @param packetObject 待修改的数据包(nms实例).
+     * @param itemStack    实体对应的物品.
+     */
+    public static void setFakeItem(
+            @NotNull World world,
+            @NotNull Object packetObject,
+            @NotNull ItemStack itemStack
+    ) {
+        RefNmsItemStack nmsItemStack;
+        if (itemStack instanceof RefCraftItemStack) {
+            nmsItemStack = ((RefCraftItemStack) itemStack).handle;
+        } else {
+            nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
+        }
+        if (packetObject instanceof RefPacketPlayOutEntityMetadata) {
+            RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
+
+            RefWorldServer worldServer = ((RefCraftWorld) (Object) world).getHandle();
+            int entityId = packet.id;
+            RefEntity entity = WorldUtils.getEntityFromIDByNms(worldServer, entityId);
+            if (!(entity instanceof RefEntityItem)) return;
+            RefEntityItem item = (RefEntityItem) entity;
+
+            RefSynchedEntityData entityData = new RefSynchedEntityData(entity);
+            defineAndForceSet(entityData, RefEntityItem.DATA_ITEM, nmsItemStack);
+            if (METADATA_NEED_VALUE_LIST) {
+                List<RefSynchedEntityData$DataValue> result = new CopyOnWriteArrayList<>(packet.packedItems1);
+                List<RefSynchedEntityData$DataValue> dataList = entityData.packDirty();
+                if (dataList == null) {
+                    dataList = entityData.getNonDefaultValues();
+                }
+                result.addAll(new RefPacketPlayOutEntityMetadata(entityId, dataList).packedItems1);
+                packet.packedItems1 = result;
+            } else {
+                List<RefSynchedEntityData$DataItem> result = new CopyOnWriteArrayList<>(packet.packedItems0);
                 result.addAll(new RefPacketPlayOutEntityMetadata(entityId, entityData, true).packedItems0);
                 packet.packedItems0 = result;
             }

@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.inventory.meta.MapMeta
 import org.bukkit.inventory.meta.PotionMeta
 import pers.neige.neigeitems.event.ItemGenerateEvent
+import pers.neige.neigeitems.item.builder.ItemBuilder
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import pers.neige.neigeitems.manager.ConfigManager.debug
@@ -25,6 +26,7 @@ import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ConfigUtils.toMap
 import pers.neige.neigeitems.utils.ItemUtils.asCraftCopy
 import pers.neige.neigeitems.utils.ItemUtils.copy
+import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isCraftItem
 import pers.neige.neigeitems.utils.ItemUtils.toNbtCompound
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -166,160 +168,89 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         cache: Map<String, String>? = null
     ): ItemStack? {
         config ?: return base
-        val material = baseMaterial ?: config.getString("material")
-            ?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) }
-        val itemStack = if (base.isCraftItem()) base!! else base?.asCraftCopy() ?: ItemStack(
-            material ?: Material.STONE
+        val builder = ItemBuilder(baseMaterial)
+        builder.load(config)
+        builder.itemStack = if (base.isCraftItem()) base!! else base?.asCraftCopy() ?: ItemStack(
+            builder.type ?: Material.STONE
         ).asCraftCopy()
-        if (material != null) {
-            itemStack.type = material
-        }
-        // 设置子ID/损伤值
-        if (config.contains("damage")) {
-            itemStack.durability = config.getInt("damage").toShort()
-        }
-        // 设置物品附魔
-        if (config.contains("enchantments")) {
-            // 获取所有待设置附魔
-            val enchantSection = config.getConfigurationSection("enchantments")
-            // 遍历添加
-            enchantSection?.getKeys(false)?.forEach {
-                val level = enchantSection.getInt(it)
-                val enchant = Enchantment.getByName(it.uppercase(Locale.getDefault()))
-                // 判断等级 && 附魔名称 是否合法
-                if (level > 0 && enchant != null) {
-                    // 添加附魔
-                    itemStack.addUnsafeEnchantment(enchant, level)
+        builder.setPreCover { itemStack, nbt ->
+            if (!config.getBoolean("options.removeNBT", false) || !config.getBoolean("options.remove-nbt", false)) {
+                val neigeItems = nbt.getOrCreateCompound("NeigeItems")
+                if (cache != null) {
+                    neigeItems.putString("id", id)
+                    neigeItems.putString("data", cache.toJSONString())
+                    neigeItems.putInt("hashCode", hashCode)
                 }
-            }
-        }
-        // 获取ItemMeta
-        val itemMeta = itemStack.itemMeta
-        // 设置CustomModelData
-        if (config.contains("custommodeldata")) {
-            nmsHooker.setCustomModelData(itemMeta, config.getInt("custommodeldata"))
-        }
-        // 设置物品名
-        if (config.contains("name")) {
-            itemMeta?.setDisplayName(config.getString("name")
-                ?.let { ChatColor.translateAlternateColorCodes('&', it) })
-        }
-        // 设置Lore
-        if (config.contains("lore")) {
-            val originLores = config.getStringList("lore")
-            val finalLores = ArrayList<String>()
-            for (i in originLores.indices) {
-                val lores = ChatColor.translateAlternateColorCodes('&', originLores[i]).split("\n")
-                finalLores.addAll(lores)
-            }
-            itemMeta?.lore = finalLores
-        }
-        // 设置是否无法破坏
-        if (config.contains("unbreakable")) {
-            itemMeta?.isUnbreakable = config.getBoolean("unbreakable")
-        }
-        // 设置ItemFlags
-        if (config.contains("hideflags")) {
-            val flags = config.getStringList("hideflags")
-            for (value in flags) {
-                try {
-                    val itemFlag = ItemFlag.valueOf(value)
-                    itemMeta?.addItemFlags(itemFlag)
-                } catch (_: IllegalArgumentException) {
-                }
-            }
-        }
-        // 设置物品颜色
-        if (config.contains("color")) {
-            var color = config.get("color")
-            color = when (color) {
-                is String -> color.toIntOrNull(16) ?: 0
-                else -> color.toString().toIntOrNull() ?: 0
-            }
-            color = color.coerceAtLeast(0).coerceAtMost(0xFFFFFF)
-            when (itemMeta) {
-                is LeatherArmorMeta -> itemMeta.setColor(Color.fromRGB(color))
-                is MapMeta -> itemMeta.setColor(Color.fromRGB(color))
-                is PotionMeta -> itemMeta.setColor(Color.fromRGB(color))
-            }
-        }
-        itemStack.itemMeta = itemMeta
-        // 获取NBT物品
-        val nbtItemStack = NbtItemStack(itemStack)
-        // 设置物品NBT
-        val itemTag = nbtItemStack.orCreateTag
-        // 检测是否移除NI自带NBT
-        if (!config.getBoolean("options.removeNBT", false)) {
-            val neigeItems = itemTag.getOrCreateCompound("NeigeItems")
-            if (cache != null) {
-                neigeItems.putString("id", id)
-                neigeItems.putString("data", cache.toJSONString())
-                neigeItems.putInt("hashCode", hashCode)
-            }
-            // 设置物品使用次数
-            if (config.contains("options.charge")) {
-                neigeItems.putInt("charge", config.getInt("options.charge"))
-                neigeItems.putInt("maxCharge", config.getInt("options.charge"))
-            }
-            // 设置物品最大使用次数
-            if (config.contains("options.maxcharge")) {
-                if (!neigeItems.contains("charge")) {
-                    neigeItems.putInt("charge", config.getInt("options.maxcharge"))
-                }
-                neigeItems.putInt("maxCharge", config.getInt("options.maxcharge"))
-            }
-            // 设置物品自定义耐久
-            if (config.contains("options.durability")) {
-                neigeItems.putInt("durability", config.getInt("options.durability"))
-                neigeItems.putInt("maxDurability", config.getInt("options.durability"))
-            }
-            // 设置物品最大自定义耐久
-            if (config.contains("options.maxdurability")) {
-                if (!neigeItems.contains("durability")) {
-                    neigeItems.putInt("durability", config.getInt("options.maxdurability"))
-                }
-                neigeItems.putInt("maxDurability", config.getInt("options.maxdurability"))
-            }
-            // 设置物品自定义耐久为0时是否破坏
-            if (config.contains("options.itembreak")) {
-                neigeItems.putBoolean("itemBreak", config.getBoolean("options.itembreak", true))
-            }
-            // 设置具有owner的掉落物是否对其他人不可见
-            if (config.contains("options.hide")) {
-                neigeItems.putBoolean("hide", config.getBoolean("options.hide", true))
-            }
-            // 首次掉落归属
-            if (config.contains("options.owner")) {
-                neigeItems.putString("owner", config.getString("options.owner"))
-            }
-            // 设置掉落物闪光颜色
-            if (config.contains("options.color")) {
-                config.getString("options.color")?.uppercase(Locale.getDefault())?.let {
-                    // 判断你这颜色保不保熟
-                    if (ItemColor.colors.containsKey(it)) {
-                        neigeItems.putString("color", it)
+                val optionsConfig = config.getConfigurationSection("options")
+                if (optionsConfig != null) {
+                    for (key in optionsConfig.getKeys(false)) {
+                        when (key.lowercase()) {
+                            // 设置物品使用次数
+                            "charge" -> {
+                                val charge = optionsConfig.getInt(key)
+                                neigeItems.putInt("charge", charge)
+                                neigeItems.putInt("maxCharge", charge)
+                            }
+                            // 设置物品最大使用次数
+                            "maxcharge", "max-charge" -> {
+                                val maxCharge = optionsConfig.getInt(key)
+                                if (!neigeItems.contains("charge")) {
+                                    neigeItems.putInt("charge", maxCharge)
+                                }
+                                neigeItems.putInt("maxCharge", maxCharge)
+                            }
+                            // 设置物品自定义耐久
+                            "durability" -> {
+                                val durability = optionsConfig.getInt(key)
+                                neigeItems.putInt("durability", durability)
+                                neigeItems.putInt("maxDurability", durability)
+                            }
+                            // 设置物品最大自定义耐久
+                            "maxdurability", "max-durability" -> {
+                                val maxDurability = optionsConfig.getInt(key)
+                                if (!neigeItems.contains("durability")) {
+                                    neigeItems.putInt("durability", maxDurability)
+                                }
+                                neigeItems.putInt("maxDurability", maxDurability)
+                            }
+                            // 设置物品自定义耐久为0时是否破坏
+                            "itembreak", "item-break" -> {
+                                neigeItems.putBoolean("itemBreak", optionsConfig.getBoolean(key, true))
+                            }
+                            // 设置具有owner的掉落物是否对其他人不可见
+                            "hide" -> {
+                                neigeItems.putBoolean("hide", optionsConfig.getBoolean(key, true))
+                            }
+                            // 首次掉落归属
+                            "owner" -> {
+                                neigeItems.putString("owner", optionsConfig.getString(key))
+                            }
+                            // 设置掉落物闪光颜色
+                            "color" -> {
+                                optionsConfig.getString(key)?.uppercase(Locale.getDefault())?.let {
+                                    // 判断你这颜色保不保熟
+                                    if (ItemColor.colors.containsKey(it)) {
+                                        neigeItems.putString("color", it)
+                                    }
+                                }
+                            }
+                            // 设置掉落执行技能
+                            "dropskill", "drop-skill" -> {
+                                neigeItems.putString("dropSkill", optionsConfig.getString(key, ""))
+                            }
+                            // 设置物品时限
+                            "itemtime", "item-time" -> {
+                                neigeItems.putLong(
+                                    "itemTime",
+                                    System.currentTimeMillis() + (optionsConfig.getLong(key, 0) * 1000)
+                                )
+                            }
+                        }
                     }
                 }
             }
-            // 设置掉落执行技能
-            if (config.contains("options.dropskill")) {
-                neigeItems.putString("dropSkill", config.getString("options.dropskill", ""))
-            }
-            // 设置物品时限
-            if (config.contains("options.itemtime")) {
-                neigeItems.putLong(
-                    "itemTime",
-                    System.currentTimeMillis() + (config.getLong("options.itemtime", 0) * 1000)
-                )
-            }
         }
-        // 设置物品NBT
-        if (config.contains("nbt")) {
-            // 获取配置NBT
-            val itemNBT = config.getConfigurationSection("nbt")?.toNbtCompound()
-            // NBT覆盖
-            itemNBT?.let { itemTag.coverWith(it) }
-        }
+        val itemStack = builder.build()
         return itemStack
     }
 

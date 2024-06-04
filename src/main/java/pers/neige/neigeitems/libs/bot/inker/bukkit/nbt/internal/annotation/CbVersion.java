@@ -31,4 +31,8 @@ public enum CbVersion {
     public boolean isSupport() {
         return current().ordinal() >= ordinal();
     }
+
+    public boolean isUpTo() {
+        return current().ordinal() <= ordinal();
+    }
 }

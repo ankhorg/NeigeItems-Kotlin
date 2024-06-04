@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import org.bukkit.enchantments.Enchantment;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.enchantment.RefBukkitEnchantment;
 import pers.neige.neigeitems.ref.enchantment.RefEnchantment;
 import pers.neige.neigeitems.ref.enchantment.RefEnchantments;
@@ -48,5 +50,12 @@ public class EnchantmentUtils {
         } catch (Throwable error) {
             error.printStackTrace();
         }
+    }
+
+    public static int getId(Enchantment enchantment) {
+        if (CbVersion.current() == CbVersion.v1_12_R1) {
+            return ((RefBukkitEnchantment) (Object) enchantment).getId();
+        }
+        return 0;
     }
 }
