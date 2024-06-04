@@ -52,6 +52,9 @@ object ConfigManager {
             NeigeItems.getInstance().saveResourceNotWarn("Expansions${File.separator}DefaultSection.js")
             NeigeItems.getInstance().saveResourceNotWarn("Expansions${File.separator}ExampleExpansion.js")
         }
+        if (getFileOrNull("Functions") == null) {
+            NeigeItems.getInstance().saveResourceNotWarn("Functions${File.separator}ExampleFunction.yml")
+        }
         if (getFileOrNull("GlobalSections") == null) {
             NeigeItems.getInstance().saveResourceNotWarn("GlobalSections${File.separator}ExampleSection.yml")
         }

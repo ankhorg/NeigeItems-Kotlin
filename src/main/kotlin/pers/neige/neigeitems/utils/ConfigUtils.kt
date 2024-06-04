@@ -312,6 +312,35 @@ object ConfigUtils {
     }
 
     /**
+     * 获取文件中所有ConfigurationSection
+     *
+     * @return 文件中所有ConfigurationSection
+     */
+    @JvmStatic
+    fun File.getMap(): MutableMap<String, Any?> {
+        val map = HashMap<String, Any?>()
+        val config = YamlConfiguration.loadConfiguration(this)
+        config.getKeys(false).forEach { key ->
+            map[key] = config.get(key)
+        }
+        return map
+    }
+
+    /**
+     * 获取所有文件中所有ConfigurationSection
+     *
+     * @return 文件中所有ConfigurationSection
+     */
+    @JvmStatic
+    fun List<File>.getMap(): MutableMap<String, Any?> {
+        val map = HashMap<String, Any?>()
+        for (file: File in this) {
+            map.putAll(file.getMap())
+        }
+        return map
+    }
+
+    /**
      * 获取文件中所有顶级节点内容
      *
      * @return 文件中所有顶级节点内容

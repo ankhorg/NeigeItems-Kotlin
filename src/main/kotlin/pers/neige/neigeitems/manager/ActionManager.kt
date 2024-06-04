@@ -32,6 +32,8 @@ import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.ActionUtils.consume
 import pers.neige.neigeitems.utils.ActionUtils.isCoolDown
 import pers.neige.neigeitems.utils.ConfigUtils
+import pers.neige.neigeitems.utils.ConfigUtils.getConfigSectionMap
+import pers.neige.neigeitems.utils.ConfigUtils.getMap
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
@@ -44,6 +46,7 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
+import java.util.logging.Level
 
 /**
  * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
@@ -53,6 +56,8 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
      * 获取拥有动作的物品ID及相关动作
      */
     val itemActions: ConcurrentHashMap<String, ItemAction> = ConcurrentHashMap<String, ItemAction>()
+    val functions: ConcurrentHashMap<String, pers.neige.neigeitems.action.Action> =
+        ConcurrentHashMap<String, pers.neige.neigeitems.action.Action>()
 
     init {
         try {
@@ -66,6 +71,8 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         loadItemActions()
         // 加载自定义动作
         loadCustomActions()
+        // 加载动作组
+        loadFunctions()
     }
 
     /**
@@ -74,8 +81,10 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     override fun reload() {
         super.reload()
         itemActions.clear()
+        functions.clear()
         loadItemActions()
         loadCustomActions()
+        loadFunctions()
     }
 
     /**
@@ -586,6 +595,29 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         return upgraded
     }
 
+    private fun loadFunctions() {
+        ConfigUtils.getAllFiles("Functions").filter { it.name.endsWith(".yml") }.getMap()
+            .forEach { (id, config) ->
+                try {
+                    functions[id] = compile(config)
+                } catch (throwable: Throwable) {
+                    NeigeItems.getInstance().logger.log(Level.WARNING, throwable) {
+                        "error occurred while loading function: $id"
+                    }
+                }
+            }
+    }
+
+    override fun loadBasicActions() {
+        super.loadBasicActions()
+        // 触发动作组
+        addConsumer("func") { context, content ->
+            content ?: return@addConsumer
+            val function = functions[content] ?: return@addConsumer
+            runAction(function, context)
+        }
+    }
+
     /**
      * 加载自定义动作
      */
@@ -700,12 +732,12 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             }
             // 获取待消耗数量
             val amount: Int = consume.amount?.parseItemSection(
-                    itemStack,
-                    itemInfo,
-                    player,
-                    global as? MutableMap<String, String>,
-                    null
-                )?.toIntOrNull() ?: 1
+                itemStack,
+                itemInfo,
+                player,
+                global as? MutableMap<String, String>,
+                null
+            )?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
@@ -907,12 +939,12 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
                 }
                 // 获取待消耗数量
                 val amount: Int = consume.amount?.parseItemSection(
-                        itemStack,
-                        itemInfo,
-                        player,
-                        global as? MutableMap<String, String>,
-                        null
-                    )?.toIntOrNull() ?: 1
+                    itemStack,
+                    itemInfo,
+                    player,
+                    global as? MutableMap<String, String>,
+                    null
+                )?.toIntOrNull() ?: 1
                 // 消耗物品
                 if (!itemStack.consume(player, amount, itemTag, neigeItems, giveLater)) {
                     // 跑一下deny动作
