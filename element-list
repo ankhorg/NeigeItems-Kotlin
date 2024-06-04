@@ -49,6 +49,7 @@ pers.neige.neigeitems.hook.vault
 pers.neige.neigeitems.hook.vault.impl
 pers.neige.neigeitems.item
 pers.neige.neigeitems.item.action
+pers.neige.neigeitems.item.builder
 pers.neige.neigeitems.item.color
 pers.neige.neigeitems.item.color.impl
 pers.neige.neigeitems.lang
