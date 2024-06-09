@@ -1343,6 +1343,18 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
         putDeep(key, value, false);
     }
 
+    /**
+     * 将指定的 NBT键 设置为给定值.
+     * 若 force 为 false 且对应的 key 无效, 则不进行设置.
+     * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
+     * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
+     * NBT键 以 . 做分隔符.
+     *
+     * @param key   待设置的 NBT键.
+     * @param value 待设置的 NBT键 的新值.
+     * @param force key 无效时是否强制设置.
+     */
     default void putDeepByte(@NotNull String key, byte value, boolean force) {
         putDeep(key, NbtByte.valueOf(value), force);
     }
@@ -1365,7 +1377,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1394,7 +1406,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1423,7 +1435,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1452,7 +1464,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1481,7 +1493,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1510,7 +1522,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1539,7 +1551,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1568,7 +1580,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1597,7 +1609,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1626,7 +1638,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1655,7 +1667,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1684,7 +1696,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.
@@ -1713,7 +1725,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * 若 force 为 false 且对应的 key 无效, 则不进行设置.
      * 若 force 为 true 且对应的 key 无效, 则进行强制设置.
      * key 无效的例子: 你想要将 t1.t2.t3 设置为一个 1, 这需要 t1.t2 的值是 NbtCompound, 如果 t1.t2 的值不是 NbtCompound, 则 key 无效.
-     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound()
+     * 强制设置的例子: 你想要将 t1.t2.t3 设置为一个 1, t1.t2 的值不是 NbtCompound, 则强制将 t1.t2 的值设置为 new NbtCompound().
      * NBT键 以 . 做分隔符.
      *
      * @param key   待设置的 NBT键.

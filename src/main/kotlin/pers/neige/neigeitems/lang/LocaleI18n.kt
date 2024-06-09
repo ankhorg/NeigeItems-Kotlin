@@ -4,7 +4,9 @@ import com.alibaba.fastjson2.JSONObject
 import com.alibaba.fastjson2.parseObject
 import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.Bukkit
+import org.bukkit.event.EventPriority
 import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.manager.ConfigManager.language
 import pers.neige.neigeitems.utils.FileUtils.createFile
@@ -152,6 +154,8 @@ object LocaleI18n {
         }
     }
 
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.ENABLE, priority = EventPriority.LOW)
     fun init() {
         // 检测是否需要下载语言文件
         if (

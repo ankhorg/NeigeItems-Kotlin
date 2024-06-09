@@ -105,8 +105,6 @@ public class NeigeItems extends JavaPlugin {
             pluginManager.disablePlugin(this);
             return;
         }
-        ConfigManager.INSTANCE.saveResource();
-        LocaleI18n.INSTANCE.init();
         scanner = new ClassScanner(
                 this,
                 NeigeItems.class.getPackage().getName(),

@@ -6,7 +6,9 @@ import org.bukkit.Bukkit
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.event.EventPriority
 import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
 import pers.neige.neigeitems.utils.ConfigUtils.saveResourceNotWarn
 import java.io.File
@@ -44,6 +46,8 @@ object ConfigManager {
     /**
      * 加载默认配置文件
      */
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.ENABLE, priority = EventPriority.LOWEST)
     fun saveResource() {
         if (getFileOrNull("Expansions") == null) {
             NeigeItems.getInstance().saveResourceNotWarn("Expansions${File.separator}CustomAction.js")
