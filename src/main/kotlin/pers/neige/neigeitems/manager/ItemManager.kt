@@ -568,4 +568,63 @@ object ItemManager : ItemConfigManager() {
         }
         return false
     }
+
+    /**
+     * 重构物品
+     *
+     * @param player 用于重构物品的玩家
+     * @param protectSections 保留的节点ID
+     * @param protectNBT 需要保护的NBT(重构后不刷新), 可以填null
+     * @return 物品是空气时返回false, 其余情况返回true
+     */
+    @JvmStatic
+    fun ItemStack.rebuild(
+        player: OfflinePlayer,
+        protectSections: List<String>,
+        protectNBT: List<String>?
+    ): Boolean {
+        // 判断是不是空气
+        if (type != Material.AIR) {
+            // 获取NI物品信息
+            val itemInfo = isNiItem(true) ?: return true
+            // 填入重构节点
+            val data = mutableMapOf<String, String>()
+            protectSections.forEach { key ->
+                itemInfo.data[key]?.let {
+                    data[key] = it
+                }
+            }
+            // 生成新物品
+            getItemStack(itemInfo.id, player, data)?.let { newItemStack ->
+                // 获取新物品的NBT
+                newItemStack.getNbt().also { newItemTag ->
+                    // 把NeigeItems的特殊NBT掏出来
+                    newItemTag.getCompound("NeigeItems")?.also { newNeigeItems ->
+                        // 还原物品使用次数
+                        if (itemInfo.neigeItems.containsKey("charge")) {
+                            newNeigeItems.putInt("charge", itemInfo.neigeItems.getInt("charge"))
+                        }
+                        // 还原物品自定义耐久
+                        if (itemInfo.neigeItems.containsKey("durability")) {
+                            newNeigeItems.putInt("durability", itemInfo.neigeItems.getInt("durability"))
+                        }
+                        // 修复保护NBT
+                        protectNBT?.forEach { key ->
+                            itemInfo.itemTag.getDeep(key)?.also {
+                                newItemTag.putDeep(key, it)
+                            }
+                        }
+                        // 将新物品的NBT覆盖至原物品
+                        itemInfo.nbtItemStack.setTag(newItemTag)
+                    }
+                }
+                // 还原物品类型
+                type = newItemStack.type
+                // 还原损伤值(1.12.2需要)
+                durability = newItemStack.durability
+            }
+            return true
+        }
+        return false
+    }
 }
