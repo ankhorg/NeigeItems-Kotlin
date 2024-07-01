@@ -1,7 +1,5 @@
 package pers.neige.neigeitems.command.subcommand
 
-import com.mojang.brigadier.arguments.StringArgumentType.getString
-import com.mojang.brigadier.arguments.StringArgumentType.greedyString
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
@@ -9,6 +7,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import pers.neige.neigeitems.command.CommandUtils.argument
 import pers.neige.neigeitems.command.CommandUtils.literal
+import pers.neige.neigeitems.command.arguments.FileNameArgumentType.fileName
+import pers.neige.neigeitems.command.arguments.FileNameArgumentType.getFileName
 import pers.neige.neigeitems.command.arguments.ItemArgumentType.item
 import pers.neige.neigeitems.command.arguments.UnquotedStringArgumentType.getUnquotedString
 import pers.neige.neigeitems.command.arguments.UnquotedStringArgumentType.string
@@ -16,7 +16,6 @@ import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
-import java.io.File
 
 object Save {
     private val saveLogic: RequiredArgumentBuilder<CommandSender, String> =
@@ -28,19 +27,9 @@ object Save {
             item().listSuggestions(context, builder)
         }.then(
             // ni save [item] (path)
-            argument<CommandSender, String>("path", greedyString()).executes { context ->
-                save(context, getUnquotedString(context, "item"), getString(context, "path"))
+            argument<CommandSender, String>("path", fileName("Items")).executes { context ->
+                save(context, getUnquotedString(context, "item"), getFileName(context, "path"))
                 1
-            }.suggests { _, builder ->
-                ItemManager.files.forEach {
-                    builder.suggest(
-                        it.path.replace(
-                            "plugins${File.separator}NeigeItems${File.separator}Items${File.separator}",
-                            ""
-                        )
-                    )
-                }
-                builder.buildFuture()
             }
         )
 

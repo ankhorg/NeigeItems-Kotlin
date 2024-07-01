@@ -1,7 +1,5 @@
 package pers.neige.neigeitems.command.subcommand.mm
 
-import com.mojang.brigadier.arguments.StringArgumentType.getString
-import com.mojang.brigadier.arguments.StringArgumentType.greedyString
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
@@ -10,6 +8,8 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import pers.neige.neigeitems.command.CommandUtils.argument
 import pers.neige.neigeitems.command.CommandUtils.literal
+import pers.neige.neigeitems.command.arguments.FileNameArgumentType.fileName
+import pers.neige.neigeitems.command.arguments.FileNameArgumentType.getFileName
 import pers.neige.neigeitems.command.arguments.UnquotedStringArgumentType.getUnquotedString
 import pers.neige.neigeitems.command.arguments.UnquotedStringArgumentType.string
 import pers.neige.neigeitems.manager.ConfigManager
@@ -34,19 +34,9 @@ object Load {
             builder.buildFuture()
         }.then(
             // ni mm load [item] (path)
-            argument<CommandSender, String>("path", greedyString()).executes { context ->
-                save(context, getUnquotedString(context, "item"), getString(context, "path"))
+            argument<CommandSender, String>("path", fileName("Items")).executes { context ->
+                save(context, getUnquotedString(context, "item"), getFileName(context, "path"))
                 1
-            }.suggests { _, builder ->
-                ItemManager.files.forEach {
-                    builder.suggest(
-                        it.path.replace(
-                            "plugins${File.separator}NeigeItems${File.separator}Items${File.separator}",
-                            ""
-                        )
-                    )
-                }
-                builder.buildFuture()
             }
         )
 
@@ -64,20 +54,10 @@ object Load {
             1
         }.then(
             // ni mm loadAll (path)
-            argument<CommandSender, String>("path", greedyString()).executes { context ->
-                val path = getString(context, "path")
+            argument<CommandSender, String>("path", fileName("Items")).executes { context ->
+                val path = getFileName(context, "path")
                 saveAll(context, path)
                 1
-            }.suggests { _, builder ->
-                ItemManager.files.forEach {
-                    builder.suggest(
-                        it.path.replace(
-                            "plugins${File.separator}NeigeItems${File.separator}Items${File.separator}",
-                            ""
-                        )
-                    )
-                }
-                builder.buildFuture()
             }
         )
 
