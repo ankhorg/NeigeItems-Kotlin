@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.DelegateAbstractMap;
@@ -14,6 +16,8 @@ import pers.neige.neigeitems.ref.nbt.RefNbtBase;
 import java.util.*;
 
 public class NbtBukkitItemComponent implements NbtComponentLike {
+    private static final Logger logger = LoggerFactory.getLogger(NbtBukkitItemComponent.class);
+
     private static final Set<String> HANDLED_TAGS = ImmutableSet.copyOf(RefCraftMetaItem.HANDLED_TAGS);
 
     private final Map<String, Nbt<?>> delegateMap;
@@ -38,7 +42,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     @Override
     public Nbt<?> get(String key) {
         if (HANDLED_TAGS.contains(key)) {
-            NeigeItems.getInstance().getLogger().warning("key " + key + "isn't support for direct access");
+            logger.warn("key {} isn't support for direct access", key);
             return null;
         } else {
             return Nbt.fromNms(refItemMeta.unhandledTags.get(key));
@@ -48,7 +52,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     @Override
     public boolean containsKey(String key) {
         if (HANDLED_TAGS.contains(key)) {
-            NeigeItems.getInstance().getLogger().warning("key " + key + "isn't support for direct access");
+            logger.warn("key {} isn't support for direct access", key);
             return false;
         } else {
             return refItemMeta.unhandledTags.containsKey(key);
@@ -58,7 +62,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     @Override
     public Nbt<?> put(String key, Nbt<?> value) {
         if (HANDLED_TAGS.contains(key)) {
-            NeigeItems.getInstance().getLogger().warning("key " + key + "isn't support for direct access");
+            logger.warn("key " + key + "isn't support for direct access");
             return null;
         } else {
             return Nbt.fromNms(refItemMeta.unhandledTags.put(key, value.delegate));
@@ -68,7 +72,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     @Override
     public Nbt<?> remove(String key) {
         if (HANDLED_TAGS.contains(key)) {
-            NeigeItems.getInstance().getLogger().warning("key " + key + "isn't support for direct access");
+            logger.warn("key {} isn't support for direct access", key);
             return null;
         } else {
             return Nbt.fromNms(refItemMeta.unhandledTags.remove(key));

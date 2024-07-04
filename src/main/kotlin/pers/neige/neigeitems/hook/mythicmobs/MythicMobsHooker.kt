@@ -10,6 +10,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.Event
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
+import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.event.MythicDropEvent
@@ -314,7 +315,7 @@ abstract class MythicMobsHooker {
                         }
                     } catch (error: Throwable) {
                         ConfigManager.config.getString("Messages.equipFailed")?.let { message ->
-                            NeigeItems.getInstance().logger.info(
+                            logger.info(
                                 message
                                     .replace("{mobID}", internalName)
                                     .replace("{itemID}", args[0])
@@ -604,5 +605,10 @@ abstract class MythicMobsHooker {
                 }
             }
         }
+    }
+
+    private companion object {
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(MythicMobsHooker::class.java)
     }
 }

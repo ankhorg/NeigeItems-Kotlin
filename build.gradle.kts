@@ -97,6 +97,7 @@ dependencies {
     compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.1")
 
     // ankh-invoke
+    implementation("org.inksnow.cputil:logger:1.9")
     implementation("org.inksnow:ankh-invoke-bukkit:1.0.10-SNAPSHOT")
 
     // bstats
@@ -113,9 +114,6 @@ dependencies {
     implementation("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
     // maven-model
     implementation("org.apache.maven:maven-model:3.9.1")
-    // slf4j
-    implementation("org.slf4j:slf4j-api:1.7.36")
-    implementation("org.slf4j:slf4j-jdk14:1.7.36")
     // brigadier
     implementation("com.mojang:brigadier:1.1.8")
 }
@@ -150,6 +148,7 @@ tasks {
         // JvmHacker
         relocate("bot.inker.acj", "pers.neige.neigeitems.libs.acj")
         // slf4j
+        relocate("org.inksnow.cputil", "apers.neige.neigeitems.libs.cputil")
         relocate("org.slf4j", "pers.neige.neigeitems.libs.slf4j")
         // brigadier
         relocate("com.mojang.", "pers.neige.neigeitems.libs.com.mojang.")
