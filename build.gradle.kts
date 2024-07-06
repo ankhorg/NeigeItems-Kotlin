@@ -8,7 +8,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.22"
     id("org.jetbrains.dokka") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.10-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.12-SNAPSHOT"
 }
 
 val realVersion = version
@@ -97,7 +97,7 @@ dependencies {
     compileOnly("com.github.LoneDev6:API-ItemsAdder:3.6.1")
 
     // ankh-invoke
-    implementation("org.inksnow:ankh-invoke-bukkit:1.0.10-SNAPSHOT")
+    implementation("org.inksnow:ankh-invoke-bukkit:1.0.12-SNAPSHOT")
 
     // bstats
     implementation("org.bstats:bstats-bukkit:3.0.2")
