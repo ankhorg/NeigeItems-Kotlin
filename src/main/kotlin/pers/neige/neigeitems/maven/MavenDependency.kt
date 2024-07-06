@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.maven
 
+import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.utils.FileUtils.sha1
 import java.io.File
@@ -167,19 +168,19 @@ class MavenDependency {
                         connection.useCaches = true
                         if (extension == "jar") {
                             // 后台发送信息
-                            NeigeItems.getInstance().logger.info("Downloading $groupId:$artifactId:$version:jar")
+                            logger.info("Downloading {}:{}:{}", groupId, artifactId, version)
                         }
                         // 将文件复制到对应目录
                         Files.copy(connection.getInputStream(), it.toPath(), StandardCopyOption.REPLACE_EXISTING)
                         if (extension == "jar") {
                             // 后台发送信息
-                            NeigeItems.getInstance().logger.info("Successfully downloaded $groupId:$artifactId:$version:jar")
+                            logger.info("Successfully downloaded {}:{}:{}", groupId, artifactId, version)
                         }
                         // 文件下载成功，退出循环
                         return@also
                     } catch (e: IOException) {
                         // 如果下载失败，则继续迭代下一个仓库地址
-                        NeigeItems.getInstance().logger.info("Failed to download $groupId:$artifactId:$version:$extension from $repoUrl")
+                        logger.info("Failed to download {} {} {} {} from {}", groupId, artifactId, version, extension, repoUrl)
                     }
                 }
 
@@ -187,5 +188,9 @@ class MavenDependency {
                 throw RuntimeException("Failed to download file: $groupId:$artifactId:$version:$extension")
             }
         }
+    }
+
+    private companion object {
+        private val logger = LoggerFactory.getLogger(MavenDependency::class.java)
     }
 }

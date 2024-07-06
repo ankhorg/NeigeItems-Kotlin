@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemStack
+import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.action.ActionResult
@@ -52,6 +53,8 @@ import java.util.logging.Level
  * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
  */
 object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
+    private val logger = LoggerFactory.getLogger(ActionManager::class.java)
+
     /**
      * 获取拥有动作的物品ID及相关动作
      */
@@ -601,9 +604,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
                 try {
                     functions[id] = compile(config)
                 } catch (throwable: Throwable) {
-                    NeigeItems.getInstance().logger.log(Level.WARNING, throwable) {
-                        "error occurred while loading function: $id"
-                    }
+                    logger.warn("error occurred while loading function: $id", throwable)
                 }
             }
     }

@@ -8,6 +8,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.world.inventory.RefContainer;
@@ -16,6 +18,8 @@ import pers.neige.neigeitems.ref.world.inventory.RefCraftInventory;
 import java.lang.reflect.Field;
 
 public class PaperInventoryUtils {
+    private static final Logger logger = LoggerFactory.getLogger(PaperInventoryUtils.class);
+
     private final static Class<?> MINECRAFT_INVENTORY_CLASS;
     private final static Class<?> PAPER_CUSTOM_INVENTORY_CLASS;
     private final static Field MINECRAFT_INVENTORY_TITLE_FIELD;
@@ -77,10 +81,10 @@ public class PaperInventoryUtils {
                 PAPER_CUSTOM_INVENTORY_TITLE_FIELD.set(container, title);
                 PAPER_CUSTOM_INVENTORY_ADVENTURE_TITLE_FIELD.set(container, LegacyComponentSerializer.legacySection().deserialize(title));
             } else {
-                NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
+                logger.warn("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
             }
         } else {
-            NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
+            logger.warn("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: {}", inventory.getClass().getCanonicalName());
         }
     }
 
@@ -103,10 +107,10 @@ public class PaperInventoryUtils {
                 PAPER_CUSTOM_INVENTORY_TITLE_FIELD.set(container, LegacyComponentSerializer.legacySection().serialize(GsonComponentSerializer.gson().deserialize(title)));
                 PAPER_CUSTOM_INVENTORY_ADVENTURE_TITLE_FIELD.set(container, GsonComponentSerializer.gson().deserialize(title));
             } else {
-                NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
+                logger.warn("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: {}", container.getClass().getName());
             }
         } else {
-            NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
+            logger.warn("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: {}", inventory.getClass().getName());
         }
     }
 
@@ -129,10 +133,10 @@ public class PaperInventoryUtils {
                 PAPER_CUSTOM_INVENTORY_TITLE_FIELD.set(container, LegacyComponentSerializer.legacySection().serialize(title));
                 PAPER_CUSTOM_INVENTORY_ADVENTURE_TITLE_FIELD.set(container, title);
             } else {
-                NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
+                logger.warn("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: {}", container.getClass().getName());
             }
         } else {
-            NeigeItems.getInstance().getLogger().warning("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: " + inventory.getClass().getCanonicalName());
+            logger.warn("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: {}", inventory.getClass().getName());
         }
     }
 }

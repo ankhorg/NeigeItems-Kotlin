@@ -2,6 +2,7 @@ package pers.neige.neigeitems.section
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.SectionManager
 
@@ -46,10 +47,10 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
                 parser.onRequest(data, cache, player, sections)?.let {
                     return it
                 }
-                NeigeItems.getInstance().logger.info("$type 节点 $id 无法获取解析值")
+               logger.info("{} 节点 {} 无法获取解析值", type, id)
                 return null
             }
-            NeigeItems.getInstance().logger.info("$id 拥有未知节点类型 $type")
+            logger.info("{} 拥有未知节点类型 {}", id, type)
         }
         return null
     }
@@ -70,5 +71,9 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
         val result = get(cache, player, sections)
         result?.let { cache?.put(id, it) }
         return result
+    }
+
+    private companion object {
+        private val logger = LoggerFactory.getLogger(Section::class.java)
     }
 }

@@ -1,12 +1,15 @@
 package pers.neige.neigeitems.task
 
 import com.alibaba.fastjson2.parseObject
+import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.manager.ConfigManager.updateCheck
 import java.net.URL
 
 object Updater {
+    private val logger = LoggerFactory.getLogger(Updater::class.java)
+
     private val VERSION_REGEX = Regex("\\d+\\.\\d+\\.\\d+")
     val currentVersion = VERSION_REGEX.find(NeigeItems.getInstance().description.version)?.value
     var latestVersion = currentVersion
@@ -22,8 +25,8 @@ object Updater {
                 )?.value
 
                 if (latestVersion != currentVersion) {
-                    NeigeItems.getInstance().logger.info("发现新版本: $latestVersion")
-                    NeigeItems.getInstance().logger.info("链接: https://github.com/ankhorg/NeigeItems-Kotlin/releases/latest")
+                    logger.info("发现新版本: {}", latestVersion)
+                    logger.info("链接: https://github.com/ankhorg/NeigeItems-Kotlin/releases/latest")
                 }
             }
         }

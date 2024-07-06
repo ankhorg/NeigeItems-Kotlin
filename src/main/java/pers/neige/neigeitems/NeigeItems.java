@@ -9,11 +9,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.inksnow.ankhinvoke.bukkit.AnkhInvokeBukkit;
 import org.inksnow.ankhinvoke.bukkit.injector.JarTransformInjector;
+import org.inksnow.cputil.logger.AuroraLoggerFactory;
 import org.jetbrains.annotations.NotNull;
-import pers.neige.neigeitems.lang.LocaleI18n;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
-import pers.neige.neigeitems.manager.ConfigManager;
 import pers.neige.neigeitems.scanner.ClassScanner;
 
 import java.io.File;
@@ -22,8 +23,16 @@ import java.util.HashSet;
 
 public class NeigeItems extends JavaPlugin {
     private static NeigeItems INSTANCE;
+    private static final Logger logger;
 
     static {
+        AuroraLoggerFactory.instance().nameMapping(it -> {
+            int split = it.indexOf('.');
+            return split == -1
+                ? ("NeigeItems " + it)
+                : ("NeigeItems " + it.substring(split + 1));
+        });
+        logger = LoggerFactory.getLogger(NeigeItems.class);
         init();
     }
 
@@ -45,7 +54,7 @@ public class NeigeItems extends JavaPlugin {
 
     public static void init() {
         try {
-            System.out.println("[NeigeItems] loading ankh-invoke");
+            logger.info("loading ankh-invoke");
             AnkhInvokeBukkit.forBukkit(NeigeItems.class)
                     .reference()
                     .appendPackage("pers.neige.neigeitems.ref")
@@ -62,10 +71,9 @@ public class NeigeItems extends JavaPlugin {
                     .setApplyMapRegistry("neigeitems")
                     .build()
                     .build();
-            System.out.println("[NeigeItems] ankh-invoke loaded");
+            logger.info("ankh-invoke loaded");
         } catch (Throwable e) {
-            System.out.println("[NeigeItems] failed to load ankh-invoke");
-            e.printStackTrace();
+            logger.error("failed to load ankh-invoke", e);
         }
     }
 
@@ -78,9 +86,9 @@ public class NeigeItems extends JavaPlugin {
             nbt.putString("test", "test");
             nbt.getString("test");
         } catch (Throwable error) {
-            NeigeItems.getInstance().getLogger().warning("插件NBT前置库未正常加载依赖, 本插件不支持包括但不限于 Mohist/Catserver/Arclight 等混合服务端, 对于每个大版本, 本插件仅支持最新小版本, 如支持 1.19.4 但不支持 1.19.2, 请选用正确的服务端, 或卸载本插件");
-            NeigeItems.getInstance().getLogger().warning("The plugin's NBT pre-requisite library failed to load. This plugin does not support mixed server platforms including but not limited to Mohist/Catserver/Arclight, etc. For each major version, this plugin only supports the latest minor version. For example, it supports 1.19.4 but not 1.19.2. Please use the correct server platform or uninstall this plugin.");
-            error.printStackTrace();
+            logger.warn("插件NBT前置库未正常加载依赖, 本插件不支持包括但不限于 Mohist/Catserver/Arclight 等混合服务端, 对于每个大版本, 本插件仅支持最新小版本, 如支持 1.19.4 但不支持 1.19.2, 请选用正确的服务端, 或卸载本插件");
+            logger.warn("The plugin's NBT pre-requisite library failed to load. This plugin does not support mixed server platforms including but not limited to Mohist/Catserver/Arclight, etc. For each major version, this plugin only supports the latest minor version. For example, it supports 1.19.4 but not 1.19.2. Please use the correct server platform or uninstall this plugin", error);
+
             PluginManager pluginManager = Bukkit.getPluginManager();
             pluginManager.disablePlugin(this);
             return;
@@ -123,9 +131,8 @@ public class NeigeItems extends JavaPlugin {
             Class.forName("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils." + className);
             return true;
         } catch (Throwable error) {
-            NeigeItems.getInstance().getLogger().warning(className + " 类未正常加载, 这可能造成不可预知的错误, 请联系作者修复");
-            NeigeItems.getInstance().getLogger().warning("class " + className + " did not load properly, which may cause unpredictable errors. Please contact the author for repair.");
-            error.printStackTrace();
+            logger.warn("{} 类未正常加载, 这可能造成不可预知的错误, 请联系作者修复", className);
+            logger.warn("class {} did not load properly, which may cause unpredictable errors. Please contact the author for repair.", className, error);
             return false;
         }
     }

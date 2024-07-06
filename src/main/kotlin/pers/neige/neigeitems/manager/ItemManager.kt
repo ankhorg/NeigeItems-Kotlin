@@ -5,6 +5,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
+import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
@@ -28,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap
  * @constructor 构建物品管理器
  */
 object ItemManager : ItemConfigManager() {
+    private val logger = LoggerFactory.getLogger(ItemManager::class.java)
     /**
      * 获取所有物品生成器
      */
@@ -55,7 +57,7 @@ object ItemManager : ItemConfigManager() {
             if (debug) {
                 val current = System.currentTimeMillis() - time
                 if (current > 1) {
-                    NeigeItems.getInstance().logger.info("  物品-$id-加载耗时: ${current}ms")
+                    logger.info("  物品-{}-加载耗时: {}ms", id, current)
                 }
                 time = System.currentTimeMillis()
             }
