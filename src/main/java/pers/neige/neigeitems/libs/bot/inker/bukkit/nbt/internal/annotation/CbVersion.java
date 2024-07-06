@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation;
 
 import org.bukkit.Bukkit;
+import org.inksnow.ankhinvoke.bukkit.util.CraftBukkitVersion;
 
 public enum CbVersion {
     ALL,
@@ -20,9 +21,10 @@ public enum CbVersion {
     v1_19_R3,
     v1_20_R1,
     v1_20_R2,
-    v1_20_R3;
+    v1_20_R3,
+    v1_20_R4;
 
-    private static final CbVersion CURRENT = valueOf(Bukkit.getServer().getClass().getName().split("\\.")[3]);
+    private static final CbVersion CURRENT = valueOf(CraftBukkitVersion.current().name());
 
     public static CbVersion current() {
         return CURRENT;
