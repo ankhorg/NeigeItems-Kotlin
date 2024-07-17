@@ -81,7 +81,7 @@ public class PaperInventoryUtils {
                 PAPER_CUSTOM_INVENTORY_TITLE_FIELD.set(container, title);
                 PAPER_CUSTOM_INVENTORY_ADVENTURE_TITLE_FIELD.set(container, LegacyComponentSerializer.legacySection().deserialize(title));
             } else {
-                logger.warn("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: " + container.getClass().getCanonicalName());
+                logger.warn("PaperInventoryUtils#setTitle 方法仅支持转换自定义容器(MinecraftInventory/PaperInventoryCustomHolderContainer)! 当前容器全限定类名: {}", container.getClass().getCanonicalName());
             }
         } else {
             logger.warn("PaperInventoryUtils#setTitle 方法仅支持转换 CraftInventory! 当前容器全限定类名: {}", inventory.getClass().getCanonicalName());
