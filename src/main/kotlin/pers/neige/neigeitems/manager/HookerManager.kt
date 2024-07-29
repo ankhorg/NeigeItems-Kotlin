@@ -135,12 +135,20 @@ object HookerManager {
         try {
             PapiHookerImpl()
         } catch (error: Throwable) {
+            if (ConfigManager.debug) {
+                println("[NeigeItems] 新版papi兼容失败, 准备尝试兼容旧版papi, 报错如下:")
+                error.printStackTrace()
+            }
             try {
                 LegacyPapiHookerImpl()
             } catch (error: Throwable) {
+                ConfigManager.debug("[NeigeItems] 旧版papi兼容失败, 报错如下:")
                 if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
                     error.printStackTrace()
                 } else {
+                    if (ConfigManager.debug) {
+                        error.printStackTrace()
+                    }
                     Bukkit.getLogger()
                         .info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "PlaceholderAPI"))
                 }

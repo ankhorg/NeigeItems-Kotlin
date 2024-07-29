@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.hook.placeholderapi.impl
 
 import me.clip.placeholderapi.PlaceholderAPIPlugin
+import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker
 import pers.neige.neigeitems.hook.placeholderapi.PlaceholderExpansion
@@ -12,7 +13,7 @@ import java.util.*
  * @constructor 启用高版本PlaceholderAPI挂钩
  */
 class PapiHookerImpl : PapiHooker() {
-    private val localExpansionManager get() = PlaceholderAPIPlugin.getInstance().localExpansionManager
+    private val localExpansionManager get() = (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") as PlaceholderAPIPlugin).localExpansionManager
 
     init {
         localExpansionManager

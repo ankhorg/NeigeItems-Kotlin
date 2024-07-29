@@ -4,9 +4,10 @@ import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.slf4j.LoggerFactory
-import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.event.ItemUpdateEvent
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
@@ -15,10 +16,13 @@ import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
+import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.toStringMap
+import pers.neige.neigeitems.utils.LangUtils.sendLang
+import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -30,6 +34,7 @@ import java.util.concurrent.ConcurrentHashMap
  */
 object ItemManager : ItemConfigManager() {
     private val logger = LoggerFactory.getLogger(ItemManager::class.java)
+
     /**
      * 获取所有物品生成器
      */
@@ -290,7 +295,7 @@ object ItemManager : ItemConfigManager() {
      *
      * @return NI物品信息, 非NI物品返回null
      */
-    fun isNiItem(itemStack: ItemStack): ItemInfo? {
+    fun isNiItem(itemStack: ItemStack?): ItemInfo? {
         return itemStack.isNiItem(false)
     }
 
@@ -300,7 +305,7 @@ object ItemManager : ItemConfigManager() {
      * @param parseData 是否将data解析为HashMap
      * @return NI物品信息, 非NI物品返回null
      */
-    fun isNiItem(itemStack: ItemStack, parseData: Boolean): ItemInfo? {
+    fun isNiItem(itemStack: ItemStack?, parseData: Boolean): ItemInfo? {
         return itemStack.isNiItem(parseData)
     }
 
@@ -628,5 +633,102 @@ object ItemManager : ItemConfigManager() {
             return true
         }
         return false
+    }
+
+    /**
+     * 根据物品内的 options.update 配置进行物品更新
+     *
+     * @param player 用于重构物品的玩家
+     * @param itemStack 物品本身
+     * @param forceUpdate 是否忽略检测, 强制更新物品
+     * @param sendMessage 更新后是否向玩家发送更新提示文本
+     */
+    fun update(
+        player: Player,
+        itemStack: ItemStack?,
+        forceUpdate: Boolean = false,
+        sendMessage: Boolean = false
+    ) {
+        val itemInfo = itemStack.isNiItem() ?: return
+        val id = itemInfo.id
+        val itemTag = itemInfo.itemTag
+        val neigeItems = itemInfo.neigeItems
+        val nbtItemStack = itemInfo.nbtItemStack
+        // 物品更新
+        getItem(id)?.let { item ->
+            // 检测hashCode匹配情况, 不匹配代表需要更新
+            if (item.update && ((neigeItems.containsKey("hashCode") && (neigeItems.getInt("hashCode") != item.hashCode)) || forceUpdate)) {
+                val data = itemInfo.data
+                // 获取待重构节点
+                val rebuild = hashMapOf<String, String>().also {
+                    item.rebuildData?.forEach { (key, value) ->
+                        when (value) {
+                            is String -> it[key.parseSection(data, player, item.sections)] =
+                                value.parseSection(data, player, item.sections)
+
+                            is Number -> it[key.parseSection(data, player, item.sections)] = value.toString()
+                        }
+                    }
+                }
+                // 获取待刷新节点
+                val refresh = arrayListOf<String>().also {
+                    item.refreshData.forEach { key ->
+                        it.add(key.parseSection(data, player, item.sections))
+                    }
+                }
+                // 进行待重构节点覆盖
+                rebuild.forEach { (key, value) ->
+                    data[key] = value
+                }
+                // 进行待刷新节点移除
+                refresh.forEach { key ->
+                    data.remove(key)
+                }
+                // 触发预生成事件
+                val preGenerateEvent = ItemUpdateEvent.PreGenerate(player, itemStack!!, data, item)
+                preGenerateEvent.call()
+                if (preGenerateEvent.isCancelled) return
+                // 生成新物品
+                preGenerateEvent.item.getItemStack(player, preGenerateEvent.data)?.let { newItemStack ->
+                    // 触发生成后事件
+                    val postGenerateEvent = ItemUpdateEvent.PostGenerate(player, itemStack, newItemStack)
+                    postGenerateEvent.call()
+                    if (postGenerateEvent.isCancelled) return
+                    // 获取旧物品名称
+                    val oldName = itemStack.getName()
+
+                    // 获取新物品的NBT
+                    newItemStack.getNbt().also { newItemTag ->
+                        // 把NeigeItems的特殊NBT掏出来
+                        newItemTag.getCompound("NeigeItems")?.also { newNeigeItems ->
+                            // 还原物品使用次数
+                            if (neigeItems.containsKey("charge")) {
+                                newNeigeItems.putInt("charge", neigeItems.getInt("charge"))
+                            }
+                            // 还原物品自定义耐久
+                            if (neigeItems.containsKey("durability")) {
+                                newNeigeItems.putInt("durability", neigeItems.getInt("durability"))
+                            }
+                            // 修复保护NBT
+                            preGenerateEvent.item.protectNBT.forEach { key ->
+                                itemTag.getDeep(key)?.also {
+                                    newItemTag.putDeep(key, it)
+                                }
+                            }
+                            // 将新物品的NBT覆盖至原物品
+                            nbtItemStack.setTag(newItemTag)
+                        }
+                    }
+                    // 还原物品类型
+                    itemStack.type = newItemStack.type
+                    // 还原损伤值(1.12.2需要)
+                    itemStack.durability = newItemStack.durability
+                    // 发送提示信息
+                    if (sendMessage) {
+                        player.sendLang("Messages.legacyItemUpdateMessage", mapOf("{name}" to oldName))
+                    }
+                }
+            }
+        }
     }
 }
