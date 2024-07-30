@@ -9,6 +9,7 @@ import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.event.EventPriority
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.easyitem.EasyItemHooker
@@ -62,8 +63,6 @@ object HookerManager {
             else -> NashornHookerImpl()
         }
 
-    var mythicMobsHooker: MythicMobsHooker? = null
-
     val nmsHooker: NMSHooker =
         try {
             when {
@@ -83,169 +82,110 @@ object HookerManager {
             NMSHooker()
         }
 
-    /**
-     * 加载MM挂钩功能
-     */
-    @JvmStatic
-    @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
-    private fun loadMythicMobsHooker() {
-        // 没事儿改包名很爽吗, 写MM的, 你妈死了
-        mythicMobsHooker = kotlin.runCatching {
-            // 5.6.0+
-            if (Class.forName("io.lumine.mythic.core.config.MythicConfigImpl")
-                    .getDeclaredMethod("getFileConfiguration").returnType == FileConfiguration::class.java
-            ) {
-                Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl560")
-                    .newInstance() as MythicMobsHooker
-            } else {
-                null
-            }
-        }.getOrNull() ?: kotlin.runCatching {
-            // 5.1.0+
-            Class.forName("io.lumine.mythic.bukkit.utils.config.file.YamlConfiguration")
-            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510")
-                .newInstance() as MythicMobsHooker
-        }.getOrNull() ?: kotlin.runCatching {
-            // 5.0.2+
-            Class.forName("io.lumine.mythic.utils.config.file.YamlConfiguration")
-            Class.forName("io.lumine.mythic.bukkit.MythicBukkit")
-            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl502")
-                .newInstance() as MythicMobsHooker
-        }.getOrNull() ?: kotlin.runCatching {
-            // 4.9.0+
-            Class.forName("io.lumine.xikage.mythicmobs.utils.config.file.YamlConfiguration")
-            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl490")
-                .newInstance() as MythicMobsHooker
-        }.getOrNull() ?: kotlin.runCatching {
-            // 4.5.9+
-            Class.forName("io.lumine.utils.config.file.YamlConfiguration")
-            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl459")
-                .newInstance() as MythicMobsHooker
-        }.getOrNull() ?: kotlin.runCatching {
-            // 4.4.0+
-            Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl440")
-                .newInstance() as MythicMobsHooker
-        }.getOrNull() ?: null.also {
-            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
-        }
-    }
+    var mythicMobsHooker: MythicMobsHooker? = null
 
-    // papi中间有一些兼容版本存在, 先构建新版的Hooker实现, 解析效率更高
-    val papiHooker: PapiHooker? =
-        try {
-            PapiHookerImpl()
-        } catch (error: Throwable) {
-            if (ConfigManager.debug) {
-                println("[NeigeItems] 新版papi兼容失败, 准备尝试兼容旧版papi, 报错如下:")
-                error.printStackTrace()
-            }
-            try {
-                LegacyPapiHookerImpl()
-            } catch (error: Throwable) {
-                ConfigManager.debug("[NeigeItems] 旧版papi兼容失败, 报错如下:")
-                if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                    error.printStackTrace()
-                } else {
-                    if (ConfigManager.debug) {
-                        error.printStackTrace()
-                    }
-                    Bukkit.getLogger()
-                        .info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "PlaceholderAPI"))
-                }
-                null
-            }
-        }
+    var papiHooker: PapiHooker? = null
 
-    val vaultHooker: VaultHooker? =
-        if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
-            try {
-                VaultHookerImpl()
-            } catch (error: Throwable) {
-                null
-            }
-        } else {
-            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "Vault"))
-            null
-        }
+    var vaultHooker: VaultHooker? = null
 
     var easyItemHooker: EasyItemHooker? = null
 
-    val oraxenHooker: OraxenHooker? =
-        try {
-            Class.forName("io.th0rgal.oraxen.api.OraxenItems")
-            OraxenHookerImpl()
-        } catch (error: Throwable) {
-            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "Oraxen"))
-            null
-        }
+    var oraxenHooker: OraxenHooker? = null
 
-    val magicGemHooker: MagicGemHooker? =
-        try {
-            Class.forName("pku.yim.magicgem.MagicGem")
-            MagicGemHookerImpl()
-        } catch (error: Throwable) {
-            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MagicGem"))
-            null
-        }
+    var magicGemHooker: MagicGemHooker? = null
 
-    val itemsAdderHooker: ItemsAdderHooker? =
-        if (Bukkit.getPluginManager().isPluginEnabled("ItemsAdder")) {
-            try {
-                ItemsAdderHookerImpl()
-            } catch (error: Throwable) {
-                null
-            }
-        } else {
-            Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "ItemsAdder"))
-            null
-        }
-
-    /**
-     * 加载EI挂钩功能
-     */
-    @JvmStatic
-    @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
-    private fun loadEasyItemHooker() {
-        easyItemHooker =
-            try {
-                Class.forName("pers.neige.easyitem.manager.ItemManager")
-                EasyItemHookerImpl()
-            } catch (error: Throwable) {
-                Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "EasyItem"))
-                null
-            }
-    }
+    var itemsAdderHooker: ItemsAdderHooker? = null
 
     /**
      * 物品变量功能
      */
-    val itemPlaceholder: ItemPlaceholder?
+    var itemPlaceholder: ItemPlaceholder? = null
 
     /**
      * 物品隐藏功能
      */
-    val itemHider: ItemHider?
+    var itemHider: ItemHider? = null
 
     /**
      * 物品光效功能
      */
-    val itemColor: ItemColor? by lazy {
-        if (config.getString("ItemColor.type")?.lowercase(Locale.getDefault()) == "protocol") {
-            if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
+    var itemColor: ItemColor? = null
+
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.ENABLE, priority = EventPriority.HIGH)
+    private fun init0() {
+        papiHooker =
+            try {
+                PapiHookerImpl()
+            } catch (error: Throwable) {
+                if (ConfigManager.debug) {
+                    println("[NeigeItems] 新版papi兼容失败, 准备尝试兼容旧版papi, 报错如下:")
+                    error.printStackTrace()
+                }
                 try {
-                    ItemColorProtocol()
+                    LegacyPapiHookerImpl()
                 } catch (error: Throwable) {
-                    ItemColorVanilla()
+                    ConfigManager.debug("[NeigeItems] 旧版papi兼容失败, 报错如下:")
+                    if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                        error.printStackTrace()
+                    } else {
+                        if (ConfigManager.debug) {
+                            error.printStackTrace()
+                        }
+                        Bukkit.getLogger()
+                            .info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "PlaceholderAPI"))
+                    }
+                    null
+                }
+            }
+
+        vaultHooker =
+            if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+                try {
+                    VaultHookerImpl()
+                } catch (error: Throwable) {
+                    if (ConfigManager.debug) {
+                        println("[NeigeItems] Vault兼容失败, 报错如下:")
+                        error.printStackTrace()
+                    }
+                    null
                 }
             } else {
-                ItemColorVanilla()
+                ConfigManager.debug("[NeigeItems] 未检测到Vault插件")
+                Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "Vault"))
+                null
             }
-        } else {
-            ItemColorVanilla()
-        }
-    }
 
-    init {
+        oraxenHooker =
+            try {
+                Class.forName("io.th0rgal.oraxen.api.OraxenItems")
+                OraxenHookerImpl()
+            } catch (error: Throwable) {
+                Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "Oraxen"))
+                null
+            }
+
+        magicGemHooker =
+            try {
+                Class.forName("pku.yim.magicgem.MagicGem")
+                MagicGemHookerImpl()
+            } catch (error: Throwable) {
+                Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MagicGem"))
+                null
+            }
+
+        itemsAdderHooker =
+            if (Bukkit.getPluginManager().isPluginEnabled("ItemsAdder")) {
+                try {
+                    ItemsAdderHookerImpl()
+                } catch (error: Throwable) {
+                    null
+                }
+            } else {
+                Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "ItemsAdder"))
+                null
+            }
+
         if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
             itemPlaceholder = try {
                 ItemPlaceholder()
@@ -262,15 +202,75 @@ object HookerManager {
             itemPlaceholder = null
             itemHider = null
         }
+
+        itemColor =
+            if (config.getString("ItemColor.type")?.lowercase(Locale.getDefault()) == "protocol") {
+                if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
+                    try {
+                        ItemColorProtocol()
+                    } catch (error: Throwable) {
+                        ItemColorVanilla()
+                    }
+                } else {
+                    ItemColorVanilla()
+                }
+            } else {
+                ItemColorVanilla()
+            }
     }
 
-    /**
-     * 掉落物光效功能
-     */
     @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.ACTIVE)
-    private fun loadItemColor() {
-        itemColor
+    private fun init1() {
+        // 没事儿改包名很爽吗, 写MM的, 你妈死了
+        mythicMobsHooker =
+            kotlin.runCatching {
+                // 5.6.0+
+                if (Class.forName("io.lumine.mythic.core.config.MythicConfigImpl")
+                        .getDeclaredMethod("getFileConfiguration").returnType == FileConfiguration::class.java
+                ) {
+                    Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl560")
+                        .newInstance() as MythicMobsHooker
+                } else {
+                    null
+                }
+            }.getOrNull() ?: kotlin.runCatching {
+                // 5.1.0+
+                Class.forName("io.lumine.mythic.bukkit.utils.config.file.YamlConfiguration")
+                Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl510")
+                    .newInstance() as MythicMobsHooker
+            }.getOrNull() ?: kotlin.runCatching {
+                // 5.0.2+
+                Class.forName("io.lumine.mythic.utils.config.file.YamlConfiguration")
+                Class.forName("io.lumine.mythic.bukkit.MythicBukkit")
+                Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl502")
+                    .newInstance() as MythicMobsHooker
+            }.getOrNull() ?: kotlin.runCatching {
+                // 4.9.0+
+                Class.forName("io.lumine.xikage.mythicmobs.utils.config.file.YamlConfiguration")
+                Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl490")
+                    .newInstance() as MythicMobsHooker
+            }.getOrNull() ?: kotlin.runCatching {
+                // 4.5.9+
+                Class.forName("io.lumine.utils.config.file.YamlConfiguration")
+                Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl459")
+                    .newInstance() as MythicMobsHooker
+            }.getOrNull() ?: kotlin.runCatching {
+                // 4.4.0+
+                Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl440")
+                    .newInstance() as MythicMobsHooker
+            }.getOrNull() ?: null.also {
+                Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
+            }
+
+        easyItemHooker =
+            try {
+                Class.forName("pers.neige.easyitem.manager.ItemManager")
+                EasyItemHookerImpl()
+            } catch (error: Throwable) {
+                Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "EasyItem"))
+                null
+            }
     }
 
     /**
@@ -282,10 +282,7 @@ object HookerManager {
      */
     @JvmStatic
     fun papi(player: OfflinePlayer?, text: String): String {
-        return when (papiHooker) {
-            null -> text
-            else -> papiHooker.papi(player, text)
-        }
+        return papiHooker?.papi(player, text) ?: text
     }
 
     /**
@@ -296,11 +293,8 @@ object HookerManager {
      * @return 解析后文本
      */
     @JvmStatic
-    fun papiColor(player: OfflinePlayer?, string: String): String {
-        return when (papiHooker) {
-            null -> ChatColor.translateAlternateColorCodes('&', string)
-            else -> papiHooker.papi(player, ChatColor.translateAlternateColorCodes('&', string))
-        }
+    fun papiColor(player: OfflinePlayer?, text: String): String {
+        return papiHooker?.papi(player, ChatColor.translateAlternateColorCodes('&', text)) ?: ChatColor.translateAlternateColorCodes('&', text)
     }
 
     /**
@@ -311,10 +305,7 @@ object HookerManager {
      */
     @JvmStatic
     fun hasPapi(text: String): Boolean {
-        return when (papiHooker) {
-            null -> false
-            else -> papiHooker.hasPapi(text)
-        }
+        return papiHooker?.hasPapi(text) ?: false
     }
 
     /**
@@ -325,25 +316,20 @@ object HookerManager {
      */
     @JvmStatic
     fun toSection(text: String): String {
-        return when (papiHooker) {
-            null -> text
-            else -> papiHooker.toSection(text)
-        }
+        return papiHooker?.toSection(text) ?: text
     }
 
     /**
-     * 解析papi变量, 不解析颜色代码
+     * 获取papi解析值
      *
      * @param player 用于解析PAPI变量的玩家对象
-     * @param text 待解析文本
+     * @param identifier 识别符, 如 %player_name% 中的 player
+     * @param parameters 参数, 如 %player_name% 中的 name
      * @return 解析后文本
      */
     @JvmStatic
     fun requestPapi(player: OfflinePlayer, identifier: String, parameters: String): String {
-        return when (papiHooker) {
-            null -> "%${identifier}_$parameters%"
-            else -> papiHooker.request(player, identifier, parameters)
-        }
+        return papiHooker?.request(player, identifier, parameters) ?: "%${identifier}_$parameters%"
     }
 
     /**
@@ -355,10 +341,7 @@ object HookerManager {
      */
     @JvmStatic
     fun parseItemPlaceholder(itemStack: ItemStack, text: String): String {
-        return when (itemPlaceholder) {
-            null -> text
-            else -> itemPlaceholder.parse(itemStack, text)
-        }
+        return itemPlaceholder?.parse(itemStack, text) ?: text
     }
 
     /**
@@ -369,10 +352,7 @@ object HookerManager {
     @JvmStatic
     fun ItemStack.getParsedName(): String {
         TranslationUtils.getDisplayName(this)?.let { displayName ->
-            return when (itemPlaceholder) {
-                null -> displayName
-                else -> itemPlaceholder.parse(this, displayName)
-            }
+            return itemPlaceholder?.parse(this, displayName) ?: displayName
         }
         return TranslationUtils.getTranslationName(this)
     }
@@ -385,10 +365,7 @@ object HookerManager {
     @JvmStatic
     fun ItemStack.getParsedComponent(): BaseComponent {
         TranslationUtils.getDisplayName(this)?.let { displayName ->
-            return when (itemPlaceholder) {
-                null -> TextComponent(displayName)
-                else -> TextComponent(itemPlaceholder.parse(this, displayName))
-            }
+            return TextComponent(itemPlaceholder?.parse(this, displayName) ?: displayName)
         }
         return TranslationUtils.getTranslationComponent(this)
     }
@@ -400,7 +377,7 @@ object HookerManager {
      */
     @JvmStatic
     fun parseItemPlaceholders(itemStack: ItemStack) {
-        itemPlaceholder?.let { itemPlaceholder.itemParse(itemStack) }
+        itemPlaceholder?.itemParse(itemStack)
     }
 
     /**
@@ -411,7 +388,7 @@ object HookerManager {
      */
     @JvmStatic
     fun addItemPlaceholderExpansion(id: String, function: BiFunction<ItemStack, String, String?>) {
-        itemPlaceholder?.let { itemPlaceholder.addExpansion(id, function) }
+        itemPlaceholder?.addExpansion(id, function)
     }
 
     @JvmStatic
@@ -677,17 +654,17 @@ object HookerManager {
         }
 
         if (magicGemHooker?.hasItem(id) == true) {
-            val itemStack = magicGemHooker.getItemStack(id)
+            val itemStack = magicGemHooker?.getItemStack(id)
             if (itemStack != null) return itemStack
         }
 
         if (itemsAdderHooker?.hasItem(id) == true) {
-            val itemStack = itemsAdderHooker.getItemStack(id)
+            val itemStack = itemsAdderHooker?.getItemStack(id)
             if (itemStack != null) return itemStack
         }
 
         if (oraxenHooker?.hasItem(id) == true) {
-            val itemStack = oraxenHooker.getItemStack(id)
+            val itemStack = oraxenHooker?.getItemStack(id)
             if (itemStack != null) return itemStack
         }
 

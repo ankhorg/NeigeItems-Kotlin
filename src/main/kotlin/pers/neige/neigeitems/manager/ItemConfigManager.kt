@@ -50,8 +50,8 @@ open class ItemConfigManager(val plugin: JavaPlugin = NeigeItems.getInstance(), 
             // 将文件中所有的有效 %xxx_xxx% 替换为 <papi::xxx_xxx>
             HookerManager.papiHooker?.let {
                 val text = file.readText()
-                if (HookerManager.papiHooker.hasPapi(text)) {
-                    file.writeText(HookerManager.papiHooker.toSection(text))
+                if (it.hasPapi(text)) {
+                    file.writeText(it.toSection(text))
                 }
             }
             val config = YamlConfiguration.loadConfiguration(file)
