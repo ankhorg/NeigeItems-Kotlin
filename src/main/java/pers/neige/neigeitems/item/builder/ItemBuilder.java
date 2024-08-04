@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class ItemBuilder {
     public static final ItemStack air = new ItemStack(Material.AIR);
@@ -67,7 +68,9 @@ public class ItemBuilder {
     private NbtCompound coverNbt = null;
     private boolean hasBuild = false;
     @Nullable
-    private BiConsumer<ItemStack, NbtCompound> preCover = null;
+    private Consumer<ItemStack> postItemInit = null;
+    @Nullable
+    private BiConsumer<ItemStack, NbtCompound> preCoverNbt = null;
 
     public ItemBuilder() {
     }
@@ -210,6 +213,9 @@ public class ItemBuilder {
         this.hasBuild = true;
         if (this.material == Material.AIR) {
             this.itemStack = air;
+            if (postItemInit != null) {
+                postItemInit.accept(air.clone());
+            }
             return air;
         }
         ItemStack result;
@@ -218,11 +224,20 @@ public class ItemBuilder {
             if (this.material != null) {
                 result.setType(this.material);
             }
+            if (postItemInit != null) {
+                postItemInit.accept(result);
+            }
         } else {
             if (this.material != null) {
                 result = NbtUtils.asCraftCopy(new ItemStack(this.material));
+                if (postItemInit != null) {
+                    postItemInit.accept(result);
+                }
             } else {
                 this.itemStack = air;
+                if (postItemInit != null) {
+                    postItemInit.accept(air.clone());
+                }
                 return air;
             }
         }
@@ -306,8 +321,8 @@ public class ItemBuilder {
             if (hideFlag != null) {
                 nbt.putInt(NbtUtils.getHideFlagsNbtKey(), hideFlag);
             }
-            if (preCover != null) {
-                preCover.accept(result, nbt);
+            if (preCoverNbt != null) {
+                preCoverNbt.accept(result, nbt);
             }
             if (coverNbt != null) {
                 nbt.coverWith(coverNbt);
@@ -388,12 +403,21 @@ public class ItemBuilder {
         this.coverNbt = coverNbt;
     }
 
-    @Nullable
-    public BiConsumer<ItemStack, NbtCompound> getPreCover() {
-        return preCover;
+    /**
+     * build方法内, 根据material生成ItemStack实例或执行ItemStack#setType后执行的动作.
+     *
+     * @param postItemInit 执行的动作
+     */
+    public void runPostItemInit(@Nullable Consumer<ItemStack> postItemInit) {
+        this.postItemInit = postItemInit;
     }
 
-    public void setPreCover(@Nullable BiConsumer<ItemStack, NbtCompound> preCover) {
-        this.preCover = preCover;
+    /**
+     * build方法内, 物品各个属性设置完毕, 将额外NBT覆盖至物品当前NBT前执行的动作.
+     *
+     * @param preCoverNbt 执行的动作
+     */
+    public void runPreCoverNbt(@Nullable BiConsumer<ItemStack, NbtCompound> preCoverNbt) {
+        this.preCoverNbt = preCoverNbt;
     }
 }

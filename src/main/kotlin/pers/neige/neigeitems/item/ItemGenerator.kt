@@ -51,7 +51,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     /**
      * 获取物品解析后配置(经过继承和全局节点调用)
      */
-    val configSection = loadGlobalSections(inherit((YamlConfiguration() as ConfigurationSection), originConfigSection))
+    val configSection = loadGlobalSections(inherit(YamlConfiguration() as ConfigurationSection, originConfigSection))
 
     /**
      * 获取物品节点配置
@@ -62,8 +62,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
      * 获取物品是否需要更新
      */
     val update = configSection.getBoolean(
-        "options.update.enable",
-        configSection.getBoolean("static.options.update.enable", false)
+        "options.update.enable", configSection.getBoolean("static.options.update.enable", false)
     )
 
     /**
@@ -166,12 +165,11 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         builder.itemStack = if (base.isCraftItem()) base!! else base?.asCraftCopy() ?: ItemStack(
             builder.type ?: Material.STONE
         ).asCraftCopy()
-        builder.setPreCover { itemStack, nbt ->
+        builder.runPreCoverNbt { itemStack, nbt ->
             if (config.getBoolean("options.removeNBT", false) || config.getBoolean(
-                    "options.remove-nbt",
-                    false
+                    "options.remove-nbt", false
                 )
-            ) return@setPreCover
+            ) return@runPreCoverNbt
             val neigeItems = nbt.getOrCreateCompound("NeigeItems")
             if (cache != null) {
                 neigeItems.putString("id", id)
@@ -238,8 +236,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                         // 设置物品时限
                         "itemtime", "item-time" -> {
                             neigeItems.putLong(
-                                "itemTime",
-                                System.currentTimeMillis() + (optionsConfig.getLong(key, 0) * 1000)
+                                "itemTime", System.currentTimeMillis() + (optionsConfig.getLong(key, 0) * 1000)
                             )
                         }
                     }
@@ -256,8 +253,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     val staticItemStack get() = originStaticItemStack.copy()
 
     private fun inherit(
-        configSection: ConfigurationSection,
-        originConfigSection: ConfigurationSection
+        configSection: ConfigurationSection, originConfigSection: ConfigurationSection
     ): ConfigurationSection {
         // 检测是否需要进行继承
         if (originConfigSection.contains("inherit") == true) {
@@ -280,8 +276,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                             if (currentSection != null) {
                                 val realConfig = loadGlobalSections(
                                     inherit(
-                                        (YamlConfiguration() as ConfigurationSection),
-                                        currentSection
+                                        (YamlConfiguration() as ConfigurationSection), currentSection
                                     ), false
                                 )
                                 if (realConfig.contains(key)) {
@@ -297,8 +292,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                     ItemManager.getOriginConfig(inheritInfo)?.let { inheritConfigSection ->
                         val realConfig = loadGlobalSections(
                             inherit(
-                                (YamlConfiguration() as ConfigurationSection),
-                                inheritConfigSection
+                                (YamlConfiguration() as ConfigurationSection), inheritConfigSection
                             ), false
                         )
                         configSection.coverWith(realConfig)
@@ -312,8 +306,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                         ItemManager.getOriginConfig(templateId as String)?.let { currentSection ->
                             val realConfig = loadGlobalSections(
                                 inherit(
-                                    (YamlConfiguration() as ConfigurationSection),
-                                    currentSection
+                                    (YamlConfiguration() as ConfigurationSection), currentSection
                                 ), false
                             )
                             // 进行模板覆盖
@@ -387,8 +380,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
             } else {
                 Bukkit.getConsoleSender().sendLang(
                     "Messages.invalidMaterial", mapOf(
-                        Pair("{itemID}", id),
-                        Pair("{material}", configSection.getString("material") ?: "")
+                        Pair("{itemID}", id), Pair("{material}", configSection.getString("material") ?: "")
                     )
                 )
             }
