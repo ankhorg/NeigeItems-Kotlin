@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation;
 
-import org.bukkit.Bukkit;
 import org.inksnow.ankhinvoke.bukkit.util.CraftBukkitVersion;
 
 public enum CbVersion {

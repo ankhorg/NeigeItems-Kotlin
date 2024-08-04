@@ -2,22 +2,17 @@ package pers.neige.neigeitems.item
 
 import com.alibaba.fastjson2.parseObject
 import com.alibaba.fastjson2.toJSONString
-import org.bukkit.*
+import org.bukkit.Bukkit
+import org.bukkit.Material
+import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.YamlConfiguration
-import org.bukkit.enchantments.Enchantment
-import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.LeatherArmorMeta
-import org.bukkit.inventory.meta.MapMeta
-import org.bukkit.inventory.meta.PotionMeta
 import pers.neige.neigeitems.event.ItemGenerateEvent
 import pers.neige.neigeitems.item.builder.ItemBuilder
 import pers.neige.neigeitems.item.color.ItemColor
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
 import pers.neige.neigeitems.manager.ConfigManager.debug
-import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
@@ -26,9 +21,7 @@ import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ConfigUtils.toMap
 import pers.neige.neigeitems.utils.ItemUtils.asCraftCopy
 import pers.neige.neigeitems.utils.ItemUtils.copy
-import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isCraftItem
-import pers.neige.neigeitems.utils.ItemUtils.toNbtCompound
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.util.*
@@ -174,7 +167,11 @@ class ItemGenerator(val itemConfig: ItemConfig) {
             builder.type ?: Material.STONE
         ).asCraftCopy()
         builder.setPreCover { itemStack, nbt ->
-            if (config.getBoolean("options.removeNBT", false) || config.getBoolean("options.remove-nbt", false)) return@setPreCover
+            if (config.getBoolean("options.removeNBT", false) || config.getBoolean(
+                    "options.remove-nbt",
+                    false
+                )
+            ) return@setPreCover
             val neigeItems = nbt.getOrCreateCompound("NeigeItems")
             if (cache != null) {
                 neigeItems.putString("id", id)

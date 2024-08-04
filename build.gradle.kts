@@ -27,10 +27,6 @@ subprojects {
         maven("https://maven.aliyun.com/nexus/content/groups/public/")
         mavenCentral()
         maven("https://hub.spigotmc.org/nexus/content/repositories/public")
-        maven {
-            url = uri("http://ptms.ink:8081/repository/releases/")
-            isAllowInsecureProtocol = true
-        }
     }
     dependencies {
         compileOnly(kotlin("stdlib"))

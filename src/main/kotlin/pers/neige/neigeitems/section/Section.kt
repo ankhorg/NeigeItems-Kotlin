@@ -3,7 +3,6 @@ package pers.neige.neigeitems.section
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.slf4j.LoggerFactory
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.SectionManager
 
 /**
@@ -47,7 +46,7 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
                 parser.onRequest(data, cache, player, sections)?.let {
                     return it
                 }
-               logger.info("{} 节点 {} 无法获取解析值", type, id)
+                logger.info("{} 节点 {} 无法获取解析值", type, id)
                 return null
             }
             logger.info("{} 拥有未知节点类型 {}", id, type)

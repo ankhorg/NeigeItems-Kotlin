@@ -6,7 +6,6 @@ import net.md_5.bungee.api.chat.TranslatableComponent
 import org.bukkit.Bukkit
 import org.bukkit.event.EventPriority
 import org.slf4j.LoggerFactory
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.manager.ConfigManager.language

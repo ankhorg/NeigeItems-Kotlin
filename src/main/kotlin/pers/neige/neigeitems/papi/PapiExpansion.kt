@@ -6,15 +6,11 @@ import org.bukkit.entity.Player
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.placeholderapi.PlaceholderExpansion
-import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
-import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import pers.neige.neigeitems.utils.SchedulerUtils
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import pers.neige.neigeitems.utils.StringUtils
 import java.io.InputStreamReader
 import java.util.concurrent.ConcurrentHashMap
 import javax.script.CompiledScript
@@ -124,6 +120,7 @@ object PapiExpansion {
                     }
                     return@newPlaceholderExpansion ""
                 }
+
                 "amount" -> {
                     if (player !is Player) return@newPlaceholderExpansion "0"
                     val itemId = params.getOrNull(1) ?: return@newPlaceholderExpansion "0"

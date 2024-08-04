@@ -13,7 +13,8 @@ import java.util.*
  * @constructor 启用高版本PlaceholderAPI挂钩
  */
 class PapiHookerImpl : PapiHooker() {
-    private val localExpansionManager get() = (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") as PlaceholderAPIPlugin).localExpansionManager
+    private val localExpansionManager
+        get() = (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") as PlaceholderAPIPlugin).localExpansionManager
 
     init {
         localExpansionManager

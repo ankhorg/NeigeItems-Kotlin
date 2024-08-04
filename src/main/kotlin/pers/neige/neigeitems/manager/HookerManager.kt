@@ -112,7 +112,7 @@ object HookerManager {
     var itemColor: ItemColor? = null
 
     @JvmStatic
-    @Awake(lifeCycle = Awake.LifeCycle.ENABLE, priority = EventPriority.HIGH)
+    @Awake(lifeCycle = Awake.LifeCycle.ENABLE, priority = EventPriority.LOW)
     private fun init0() {
         papiHooker =
             try {
@@ -294,7 +294,8 @@ object HookerManager {
      */
     @JvmStatic
     fun papiColor(player: OfflinePlayer?, text: String): String {
-        return papiHooker?.papi(player, ChatColor.translateAlternateColorCodes('&', text)) ?: ChatColor.translateAlternateColorCodes('&', text)
+        return papiHooker?.papi(player, ChatColor.translateAlternateColorCodes('&', text))
+            ?: ChatColor.translateAlternateColorCodes('&', text)
     }
 
     /**

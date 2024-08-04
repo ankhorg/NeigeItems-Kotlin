@@ -65,12 +65,10 @@ function commandExample() {
          * @param args 指令参数
          * @return Boolean 指令是否执行成功
          */
-        .setExecutor(
-            function (sender, command, label, args) {
-                sender.sendMessage("测试指令")
-                return true
-            }
-        )
+        .setExecutor(function (sender, command, label, args) {
+            sender.sendMessage("测试指令")
+            return true
+        })
         /**
          * 指令补全器
          *
@@ -80,11 +78,9 @@ function commandExample() {
          * @param args 指令参数
          * @return List<String> 补全内容
          */
-        .setTabCompleter(
-            function (sender, command, label, args) {
-                return ["测试补全"]
-            }
-        )
+        .setTabCompleter(function (sender, command, label, args) {
+            return ["测试补全"]
+        })
     /**
      * 注册指令
      * 为了防止默认配置给你带来困扰, 我默认不进行注册
@@ -123,13 +119,11 @@ function listenerExample() {
          *
          * @param event 你监听的事件
          */
-        .setExecutor(
-            function (event) {
-                event.player.sendMessage(
-                    '你是不是打算说: " ' + event.message + ' " ?'
-                )
-            }
-        )
+        .setExecutor(function (event) {
+            event.player.sendMessage(
+                '你是不是打算说: " ' + event.message + ' " ?'
+            )
+        })
     /**
      * 注册监听器
      * 为了防止默认配置给你带来困扰, 我默认不进行注册
@@ -162,12 +156,10 @@ function placeholderExample() {
          * @param params String 变量参数
          * @return String 变量返回值
          */
-        .setExecutor(
-            function (player, params) {
-                // %test% 返回玩家名
-                return player.name
-            }
-        )
+        .setExecutor(function (player, params) {
+            // %test% 返回玩家名
+            return player.name
+        })
     /**
      * 注册PAPI变量
      * 为了防止默认配置给你带来困扰, 我默认不进行注册
@@ -189,11 +181,9 @@ function taskExample() {
      */
     new Task()
         // 设置任务中你要执行的代码
-        .setTask(
-            function () {
-                print(Bukkit.isPrimaryThread())
-            }
-        )
+        .setTask(function () {
+            print(Bukkit.isPrimaryThread())
+        })
         // 设置任务执行间隔(不设置的话任务只会执行一次)
         .setPeriod(10)
         // 设置任务执行延迟(不设置的话任务会立即执行)

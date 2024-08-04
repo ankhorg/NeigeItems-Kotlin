@@ -1,7 +1,6 @@
 package pers.neige.neigeitems.maven
 
 import org.slf4j.LoggerFactory
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.utils.FileUtils.sha1
 import java.io.File
 import java.io.IOException
@@ -180,7 +179,14 @@ class MavenDependency {
                         return@also
                     } catch (e: IOException) {
                         // 如果下载失败，则继续迭代下一个仓库地址
-                        logger.info("Failed to download {} {} {} {} from {}", groupId, artifactId, version, extension, repoUrl)
+                        logger.info(
+                            "Failed to download {} {} {} {} from {}",
+                            groupId,
+                            artifactId,
+                            version,
+                            extension,
+                            repoUrl
+                        )
                     }
                 }
 

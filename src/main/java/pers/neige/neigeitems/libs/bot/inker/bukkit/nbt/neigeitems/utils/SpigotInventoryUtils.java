@@ -7,7 +7,6 @@ import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.ref.world.inventory.RefContainer;
 import pers.neige.neigeitems.ref.world.inventory.RefCraftInventory;
 
