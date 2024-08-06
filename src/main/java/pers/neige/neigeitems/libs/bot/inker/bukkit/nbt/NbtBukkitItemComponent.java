@@ -15,7 +15,7 @@ import pers.neige.neigeitems.ref.nbt.RefNbtBase;
 import java.util.*;
 
 public class NbtBukkitItemComponent implements NbtComponentLike {
-    private static final Logger logger = LoggerFactory.getLogger(NbtBukkitItemComponent.class);
+    private static final Logger logger = LoggerFactory.getLogger(NbtBukkitItemComponent.class.getSimpleName());
 
     private static final Set<String> HANDLED_TAGS = ImmutableSet.copyOf(RefCraftMetaItem.HANDLED_TAGS);
 

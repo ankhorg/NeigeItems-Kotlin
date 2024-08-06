@@ -197,6 +197,6 @@ class MavenDependency {
     }
 
     private companion object {
-        private val logger = LoggerFactory.getLogger(MavenDependency::class.java)
+        private val logger = LoggerFactory.getLogger(MavenDependency::class.java.simpleName)
     }
 }

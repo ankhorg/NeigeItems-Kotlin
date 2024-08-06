@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap
  * @constructor 构建物品管理器
  */
 object ItemManager : ItemConfigManager() {
-    private val logger = LoggerFactory.getLogger(ItemManager::class.java)
+    private val logger = LoggerFactory.getLogger(ItemManager::class.java.simpleName)
 
     /**
      * 获取所有物品生成器

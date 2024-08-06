@@ -18,7 +18,7 @@ import java.net.URL
 import java.util.*
 
 object LocaleI18n {
-    private val logger = LoggerFactory.getLogger(LocaleI18n::class.java)
+    private val logger = LoggerFactory.getLogger(LocaleI18n::class.java.simpleName)
 
     private val minecraftVersion = Bukkit.getServer().version.let { version ->
         version.substring(version.indexOf("(MC: ") + 5).let { temp ->

@@ -8,7 +8,7 @@ import pers.neige.neigeitems.manager.ConfigManager.updateCheck
 import java.net.URL
 
 object Updater {
-    private val logger = LoggerFactory.getLogger(Updater::class.java)
+    private val logger = LoggerFactory.getLogger(Updater::class.java.simpleName)
 
     private val VERSION_REGEX = Regex("\\d+\\.\\d+\\.\\d+")
     val currentVersion = VERSION_REGEX.find(NeigeItems.getInstance().description.version)?.value

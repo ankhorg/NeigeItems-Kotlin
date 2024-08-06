@@ -13,7 +13,7 @@ import pers.neige.neigeitems.ref.world.inventory.RefCraftInventory;
 import java.lang.reflect.Field;
 
 public class SpigotInventoryUtils {
-    private static final Logger logger = LoggerFactory.getLogger(SpigotInventoryUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpigotInventoryUtils.class.getSimpleName());
 
     private final static Class<?> MINECRAFT_INVENTORY_CLASS;
     private final static Field TITLE_FIELD;

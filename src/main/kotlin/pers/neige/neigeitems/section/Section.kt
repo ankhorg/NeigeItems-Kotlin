@@ -73,6 +73,6 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
     }
 
     private companion object {
-        private val logger = LoggerFactory.getLogger(Section::class.java)
+        private val logger = LoggerFactory.getLogger(Section::class.java.simpleName)
     }
 }

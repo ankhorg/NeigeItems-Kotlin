@@ -144,7 +144,7 @@ tasks {
         // JvmHacker
         relocate("bot.inker.acj", "pers.neige.neigeitems.libs.acj")
         // slf4j
-        relocate("org.inksnow.cputil", "apers.neige.neigeitems.libs.cputil")
+        relocate("org.inksnow.cputil", "pers.neige.neigeitems.libs.cputil")
         relocate("org.slf4j", "pers.neige.neigeitems.libs.slf4j")
         // brigadier
         relocate("com.mojang.", "pers.neige.neigeitems.libs.com.mojang.")

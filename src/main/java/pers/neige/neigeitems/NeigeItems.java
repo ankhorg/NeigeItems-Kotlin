@@ -26,13 +26,8 @@ public class NeigeItems extends JavaPlugin {
     private static NeigeItems INSTANCE;
 
     static {
-        AuroraLoggerFactory.instance().nameMapping(it -> {
-            int split = it.indexOf('.');
-            return split == -1
-                    ? ("NeigeItems " + it)
-                    : ("NeigeItems " + it.substring(split + 1));
-        });
-        logger = LoggerFactory.getLogger(NeigeItems.class);
+        AuroraLoggerFactory.instance().nameMapping(it -> "NeigeItems " + it);
+        logger = LoggerFactory.getLogger(NeigeItems.class.getSimpleName());
         init();
     }
 

@@ -608,6 +608,6 @@ abstract class MythicMobsHooker {
 
     private companion object {
         @JvmStatic
-        private val logger = LoggerFactory.getLogger(MythicMobsHooker::class.java)
+        private val logger = LoggerFactory.getLogger(MythicMobsHooker::class.java.simpleName)
     }
 }

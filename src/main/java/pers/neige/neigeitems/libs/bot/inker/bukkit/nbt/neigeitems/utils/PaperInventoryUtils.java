@@ -17,7 +17,7 @@ import pers.neige.neigeitems.ref.world.inventory.RefCraftInventory;
 import java.lang.reflect.Field;
 
 public class PaperInventoryUtils {
-    private static final Logger logger = LoggerFactory.getLogger(PaperInventoryUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(PaperInventoryUtils.class.getSimpleName());
 
     private final static Class<?> MINECRAFT_INVENTORY_CLASS;
     private final static Class<?> PAPER_CUSTOM_INVENTORY_CLASS;

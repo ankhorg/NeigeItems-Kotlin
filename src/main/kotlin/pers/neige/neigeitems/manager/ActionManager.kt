@@ -51,7 +51,7 @@ import java.util.function.BiFunction
  * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
  */
 object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
-    private val logger = LoggerFactory.getLogger(ActionManager::class.java)
+    private val logger = LoggerFactory.getLogger(ActionManager::class.java.simpleName)
 
     /**
      * 获取拥有动作的物品ID及相关动作
