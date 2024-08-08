@@ -26,6 +26,7 @@ abstract class VaultHooker {
      * 获取玩家Vault金钱
      *
      * @param player 待操作玩家
+     * @return 玩家当前金钱
      */
     abstract fun getMoney(player: OfflinePlayer): Double
 }
