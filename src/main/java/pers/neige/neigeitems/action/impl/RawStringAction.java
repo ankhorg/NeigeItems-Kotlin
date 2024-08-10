@@ -10,7 +10,7 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
-public class StringAction extends Action {
+public class RawStringAction extends Action {
     @NotNull
     private final String action;
     @NotNull
@@ -18,7 +18,7 @@ public class StringAction extends Action {
     @NotNull
     private final String content;
 
-    public StringAction(
+    public RawStringAction(
             @NotNull String action
     ) {
         this.action = action;
@@ -27,7 +27,7 @@ public class StringAction extends Action {
         content = info.length > 1 ? info[1] : "";
     }
 
-    public StringAction(
+    public RawStringAction(
             @NotNull String action,
             @NotNull String key,
             @NotNull String content
@@ -39,7 +39,7 @@ public class StringAction extends Action {
 
     @Override
     public @NotNull ActionType getType() {
-        return ActionType.STRING;
+        return ActionType.RAW_STRING;
     }
 
     /**

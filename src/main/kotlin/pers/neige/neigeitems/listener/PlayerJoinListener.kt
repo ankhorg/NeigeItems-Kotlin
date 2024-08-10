@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.listener
 
 import org.bukkit.event.player.PlayerJoinEvent
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.task.Updater
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -9,6 +10,7 @@ object PlayerJoinListener {
     @JvmStatic
     @Listener
     fun listener(event: PlayerJoinEvent) {
+        NeigeItems.getUserManager().getOrMake(event.player.uniqueId)
         if (!event.player.isOp) return
         if (Updater.latestVersion == null || Updater.latestVersion == Updater.currentVersion) return
         event.player.sendLang(

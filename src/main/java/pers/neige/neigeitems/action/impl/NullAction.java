@@ -8,6 +8,8 @@ import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
+import java.util.concurrent.CompletableFuture;
+
 public class NullAction extends Action {
     public static Action INSTANCE = new NullAction();
 
@@ -24,10 +26,10 @@ public class NullAction extends Action {
      */
     @Override
     @NotNull
-    public ActionResult eval(
+    public CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {
-        return Results.SUCCESS;
+        return CompletableFuture.completedFuture(Results.SUCCESS);
     }
 }

@@ -1,0 +1,17 @@
+package pers.neige.neigeitems.listener
+
+import org.bukkit.event.EventPriority
+import org.bukkit.event.player.AsyncPlayerChatEvent
+import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.annotation.Listener
+
+object AsyncPlayerChatListener {
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
+    fun listener(event: AsyncPlayerChatEvent) {
+        val user = NeigeItems.getUserManager().getIfLoaded(event.player.uniqueId) ?: return
+        val catcher = user.chatCatchers.poll() ?: return
+        event.isCancelled = catcher.isCancel
+        catcher.future.complete(event.message)
+    }
+}

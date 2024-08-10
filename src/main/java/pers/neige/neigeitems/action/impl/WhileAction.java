@@ -10,6 +10,7 @@ import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class WhileAction extends Action {
     @Nullable
@@ -62,7 +63,7 @@ public class WhileAction extends Action {
      */
     @Override
     @NotNull
-    public ActionResult eval(
+    public CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {

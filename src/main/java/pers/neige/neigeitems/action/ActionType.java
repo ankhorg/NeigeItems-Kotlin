@@ -1,9 +1,11 @@
 package pers.neige.neigeitems.action;
 
 public enum ActionType {
-    STRING,
-    LIST,
+    CHAT_CATCHER,
     CONDITION,
-    WHILE,
-    NULL
+    LIST,
+    NULL,
+    RAW_STRING,
+    STRING,
+    WHILE
 }

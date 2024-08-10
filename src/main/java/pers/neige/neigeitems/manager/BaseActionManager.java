@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.manager;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import kotlin.text.StringsKt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,6 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -22,14 +25,13 @@ import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker;
 import pers.neige.neigeitems.hook.vault.VaultHooker;
 import pers.neige.neigeitems.item.ItemInfo;
 import pers.neige.neigeitems.item.action.ComboInfo;
-import pers.neige.neigeitems.utils.ItemUtils;
-import pers.neige.neigeitems.utils.PlayerUtils;
-import pers.neige.neigeitems.utils.SchedulerUtils;
-import pers.neige.neigeitems.utils.StringUtils;
+import pers.neige.neigeitems.user.User;
+import pers.neige.neigeitems.utils.*;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -103,7 +105,15 @@ public abstract class BaseActionManager {
             @Nullable Object action
     ) {
         if (action instanceof String) {
-            return new StringAction((String) action);
+            String string = (String) action;
+            String[] info = string.split(": ", 2);
+            String key = info[0].toLowerCase(Locale.ROOT);
+            String content = info.length > 1 ? info[1] : "";
+            if (key.equals("js")) {
+                return new RawStringAction(string, key, content);
+            } else {
+                return new StringAction(string, key, content);
+            }
         } else if (action instanceof List<?>) {
             return new ListAction(this, (List<?>) action);
         } else if (action instanceof Map<?, ?>) {
@@ -111,39 +121,73 @@ public abstract class BaseActionManager {
                 return new ConditionAction(this, (Map<?, ?>) action);
             } else if (((Map<?, ?>) action).containsKey("while")) {
                 return new WhileAction(this, (Map<?, ?>) action);
+            } else if (((Map<?, ?>) action).containsKey("catch")) {
+                return new ChatCatcherAction(this, (Map<?, ?>) action);
             }
         } else if (action instanceof ConfigurationSection) {
             if (((ConfigurationSection) action).contains("condition")) {
                 return new ConditionAction(this, (ConfigurationSection) action);
             } else if (((ConfigurationSection) action).contains("while")) {
                 return new WhileAction(this, (ConfigurationSection) action);
+            } else if (((ConfigurationSection) action).contains("catch")) {
+                return new ChatCatcherAction(this, (ConfigurationSection) action);
             }
         }
         return NullAction.INSTANCE;
     }
 
     /**
-     * 执行物品动作
+     * 执行动作
      *
      * @param action 动作内容
-     * @return 执行结果
+     * @return 永远返回 Results.SUCCESS, 这是历史遗留问题, 要获取真实结果请调用 runActionWithResult 方法.
      */
     @NotNull
     public ActionResult runAction(
             @NotNull Action action
     ) {
-        return runAction(action, ActionContext.empty());
+        runAction(action, ActionContext.empty());
+        return Results.SUCCESS;
     }
 
     /**
-     * 执行物品动作
+     * 执行动作
+     *
+     * @param action 动作内容
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runActionWithResult(
+            @NotNull Action action
+    ) {
+        return runActionWithResult(action, ActionContext.empty());
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 永远返回 Results.SUCCESS, 这是历史遗留问题, 要获取真实结果请调用 runActionWithResult 方法.
+     */
+    @NotNull
+    public ActionResult runAction(
+            @NotNull Action action,
+            @NotNull ActionContext context
+    ) {
+        action.eval(this, context);
+        return Results.SUCCESS;
+    }
+
+    /**
+     * 执行动作
      *
      * @param action  动作内容
      * @param context 动作上下文
      * @return 执行结果
      */
     @NotNull
-    public ActionResult runAction(
+    public CompletableFuture<ActionResult> runActionWithResult(
             @NotNull Action action,
             @NotNull ActionContext context
     ) {
@@ -151,65 +195,115 @@ public abstract class BaseActionManager {
     }
 
     /**
-     * 执行物品动作
+     * 执行动作
      *
      * @param action  动作内容
      * @param context 动作上下文
      * @return 执行结果
      */
     @NotNull
-    public ActionResult runAction(
+    public CompletableFuture<ActionResult> runAction(
+            @NotNull RawStringAction action,
+            @NotNull ActionContext context
+    ) {
+        BiFunction<ActionContext, String, ActionResult> handler = actions.get(action.getKey());
+        if (handler != null) {
+            ActionResult result = handler.apply(context, action.getContent());
+            if (result != null) {
+                return CompletableFuture.completedFuture(result);
+            }
+        }
+        return CompletableFuture.completedFuture(Results.SUCCESS);
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
             @NotNull StringAction action,
             @NotNull ActionContext context
     ) {
         BiFunction<ActionContext, String, ActionResult> handler = actions.get(action.getKey());
         if (handler != null) {
-            return handler.apply(context, action.getContent());
-        } else {
-            return Results.SUCCESS;
+            String content = SectionUtils.parseSection(
+                    action.getContent(),
+                    (Map<String, String>) (Object) context.getGlobal(),
+                    context.getPlayer(),
+                    null
+            );
+            ActionResult result = handler.apply(context, content);
+            if (result != null) {
+                return CompletableFuture.completedFuture(result);
+            }
         }
+        return CompletableFuture.completedFuture(Results.SUCCESS);
     }
 
     /**
-     * 执行物品动作
+     * 执行动作
      *
      * @param action  动作内容
      * @param context 动作上下文
      * @return 执行结果
      */
     @NotNull
-    public ActionResult runAction(
+    public CompletableFuture<ActionResult> runAction(
             @NotNull ListAction action,
             @NotNull ActionContext context
     ) {
-        List<Action> actions = action.getActions();
-        for (int index = 0; index < actions.size(); index++) {
-            Action value = actions.get(index);
-            ActionResult result = value.eval(this, context);
-            switch (result.getType()) {
-                case DELAY: {
-                    int fromIndex = index + 1;
-                    int toIndex = actions.size();
-                    SchedulerUtils.runLater(plugin, ((DelayResult) result).getDelay(), () -> runAction(action.subList(fromIndex, toIndex), context));
-                    return Results.SUCCESS;
-                }
-                case STOP: {
-                    return result;
-                }
-            }
-        }
-        return Results.SUCCESS;
+        return runAction(action, context, 0);
     }
 
     /**
-     * 执行物品动作
+     * 执行动作
+     *
+     * @param action    动作内容
+     * @param context   动作上下文
+     * @param fromIndex 从这个索引对应的位置开始执行
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
+            @NotNull ListAction action,
+            @NotNull ActionContext context,
+            int fromIndex
+    ) {
+        List<Action> actions = action.getActions();
+        if (fromIndex >= actions.size()) return CompletableFuture.completedFuture(Results.SUCCESS);
+        return actions.get(fromIndex).eval(this, context).thenCompose((result) -> {
+            switch (result.getType()) {
+                case SUCCESS: {
+                    return runAction(action, context, fromIndex + 1);
+                }
+                case DELAY: {
+                    CompletableFuture<ActionResult> newResult = new CompletableFuture<>();
+                    SchedulerUtils.runLater(plugin, ((DelayResult) result).getDelay(), () -> {
+                        runAction(action, context, fromIndex + 1).thenAccept(newResult::complete);
+                    });
+                    return newResult;
+                }
+                case STOP: {
+                    return CompletableFuture.completedFuture(result);
+                }
+            }
+            return CompletableFuture.completedFuture(Results.SUCCESS);
+        });
+    }
+
+    /**
+     * 执行动作
      *
      * @param action  动作内容
      * @param context 动作上下文
      * @return 执行结果
      */
     @NotNull
-    public ActionResult runAction(
+    public CompletableFuture<ActionResult> runAction(
             @NotNull ConditionAction action,
             @NotNull ActionContext context
     ) {
@@ -226,31 +320,55 @@ public abstract class BaseActionManager {
     }
 
     /**
-     * 执行物品动作
+     * 执行动作
      *
      * @param action  动作内容
      * @param context 动作上下文
      * @return 执行结果
      */
     @NotNull
-    public ActionResult runAction(
+    public CompletableFuture<ActionResult> runAction(
             @NotNull WhileAction action,
             @NotNull ActionContext context
     ) {
         // while循环判断条件
-        while (parseCondition(action.getCondition(), context).getType() == ResultType.SUCCESS) {
-            // 执行动作
+        if (parseCondition(action.getCondition(), context).getType() == ResultType.SUCCESS) {
             Action.eval(action.getSync(), action.getAsync(), this, context);
-            ActionResult result = action.getActions().eval(this, context);
-            // 执行中止
-            if (result.getType() == ResultType.STOP) {
-                action.getFinally().eval(this, context);
-                return Results.STOP;
-            }
+            return action.getActions().eval(this, context).thenCompose((result) -> {
+                // 执行中止
+                if (result.getType() == ResultType.STOP) {
+                    // 执行finally块
+                    return action.getFinally().eval(this, context);
+                } else {
+                    // 继续执行
+                    return runAction(action, context);
+                }
+            });
+        } else {
+            // 执行finally块
+            return action.getFinally().eval(this, context);
         }
-        // 执行finally块
-        action.getFinally().eval(this, context);
-        return Results.SUCCESS;
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
+            @NotNull ChatCatcherAction action,
+            @NotNull ActionContext context
+    ) {
+        Player player = context.getPlayer();
+        if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+        User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
+        if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+        CompletableFuture<ActionResult> result = new CompletableFuture<>();
+        user.getChatCatchers().add(action.getCatcher(context, result));
+        return result;
     }
 
     /**
@@ -649,13 +767,15 @@ public abstract class BaseActionManager {
                 return Results.SUCCESS;
             }
         });
-        addConsumer("setglobal", (context, content) -> {
+        // 向global中设置内容
+        addConsumer("setGlobal", (context, content) -> {
             String[] info = content.split(" ", 2);
             if (info.length > 1) {
                 context.getGlobal().put(info[0], info[1]);
             }
         });
-        addConsumer("delglobal", (context, content) -> context.getGlobal().remove(content));
+        // 从global中删除内容
+        addConsumer("delGlobal", (context, content) -> context.getGlobal().remove(content));
         // 扣除NI物品
         addConsumer("takeNiItem", (context, content) -> {
             Player player = context.getPlayer();
@@ -681,6 +801,15 @@ public abstract class BaseActionManager {
                     }
                 }
             });
+        });
+        // 跨服
+        addConsumer("server", (context, content) -> {
+            Player player = context.getPlayer();
+            if (player == null) return;
+            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            out.writeUTF("Connect");
+            out.writeUTF(content);
+            player.sendPluginMessage(NeigeItems.getInstance(), "BungeeCord", out.toByteArray());
         });
     }
 }

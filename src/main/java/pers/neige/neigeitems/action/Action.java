@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SchedulerUtils;
 
+import java.util.concurrent.CompletableFuture;
+
 public abstract class Action {
     public static void eval(
             Action sync,
@@ -25,10 +27,10 @@ public abstract class Action {
     public abstract ActionType getType();
 
     @NotNull
-    public ActionResult eval(
+    public CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {
-        return manager.runAction(this, context);
+        return manager.runActionWithResult(this, context);
     }
 }

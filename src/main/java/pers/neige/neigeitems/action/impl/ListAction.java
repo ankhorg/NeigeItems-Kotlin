@@ -9,6 +9,7 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ListAction extends Action {
     @NotNull
@@ -35,11 +36,25 @@ public class ListAction extends Action {
      */
     @Override
     @NotNull
-    public ActionResult eval(
+    public CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {
         return manager.runAction(this, context);
+    }
+
+    /**
+     * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
+     *
+     * @param fromIndex 从这个索引对应的位置开始执行
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> eval(
+            @NotNull BaseActionManager manager,
+            @NotNull ActionContext context,
+            int fromIndex
+    ) {
+        return manager.runAction(this, context, fromIndex);
     }
 
     @NotNull

@@ -44,6 +44,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.BiFunction
 
@@ -350,8 +351,8 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun runAction(
         player: Player, action: String
     ): Boolean {
-        val result = runAction(StringAction(action), ActionContext(player))
-        return when (result.type) {
+        val result = runActionWithResult(compile(action), ActionContext(player))
+        return when (result.join().type) {
             ResultType.STOP -> false
             else -> true
         }
@@ -478,13 +479,11 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
 
     override fun runAction(
         action: StringAction, context: ActionContext
-    ): ActionResult {
+    ): CompletableFuture<ActionResult> {
         // 解析物品变量
         val itemStack = context.itemStack
         val type = action.key
-        val content = if (type == "js") {
-            action.content
-        } else {
+        val content = let {
             val nbt = context.nbt
             val cache = (context.params?.get("cache") ?: context.global) as? MutableMap<String, String>
             val sections = context.params?.get("sections") as? ConfigurationSection
@@ -499,15 +498,13 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             }
         }
         // 尝试加载物品动作, 返回执行结果
-        actions[type]?.apply(context, content)?.also { return it }
+        actions[type]?.apply(context, content)?.also { return CompletableFuture.completedFuture(it) }
         // 尝试加载物品编辑函数, 返回执行结果
         val player = context.player
         if (itemStack != null && player != null) {
-            return Results.fromBoolean(
-                ItemEditorManager.runEditorWithResult(type, content, itemStack, player) ?: return Results.SUCCESS
-            )
+            ItemEditorManager.runEditorWithResult(type, content, itemStack, player)
         }
-        return Results.SUCCESS
+        return CompletableFuture.completedFuture(Results.SUCCESS)
     }
 
     /**
@@ -597,14 +594,13 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     }
 
     private fun loadFunctions() {
-        ConfigUtils.getAllFiles("Functions").filter { it.name.endsWith(".yml") }.getMap()
-            .forEach { (id, config) ->
-                try {
-                    functions[id] = compile(config)
-                } catch (throwable: Throwable) {
-                    logger.warn("error occurred while loading function: $id", throwable)
-                }
+        ConfigUtils.getAllFiles("Functions").filter { it.name.endsWith(".yml") }.getMap().forEach { (id, config) ->
+            try {
+                functions[id] = compile(config)
+            } catch (throwable: Throwable) {
+                logger.warn("error occurred while loading function: $id", throwable)
             }
+        }
     }
 
     override fun loadBasicActions() {
@@ -731,11 +727,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             }
             // 获取待消耗数量
             val amount: Int = consume.amount?.parseItemSection(
-                itemStack,
-                itemInfo,
-                player,
-                global as? MutableMap<String, String>,
-                null
+                itemStack, itemInfo, player, global as? MutableMap<String, String>, null
             )?.toIntOrNull() ?: 1
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
@@ -938,11 +930,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
                 }
                 // 获取待消耗数量
                 val amount: Int = consume.amount?.parseItemSection(
-                    itemStack,
-                    itemInfo,
-                    player,
-                    global as? MutableMap<String, String>,
-                    null
+                    itemStack, itemInfo, player, global as? MutableMap<String, String>, null
                 )?.toIntOrNull() ?: 1
                 // 消耗物品
                 if (!itemStack.consume(player, amount, itemTag, neigeItems, giveLater)) {

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
+import pers.neige.neigeitems.manager.UserManager;
 import pers.neige.neigeitems.scanner.ClassScanner;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import java.util.HashSet;
 
 public class NeigeItems extends JavaPlugin {
     private static final Logger logger;
+    private final static UserManager userManager = new UserManager();
     private static NeigeItems INSTANCE;
 
     static {
@@ -72,8 +74,13 @@ public class NeigeItems extends JavaPlugin {
         }
     }
 
+    public static UserManager getUserManager() {
+        return userManager;
+    }
+
     @Override
     public void onEnable() {
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         try {
             ItemStack itemStack = new ItemStack(Material.STONE);
             NbtItemStack nbtItemStack = new NbtItemStack(itemStack);
