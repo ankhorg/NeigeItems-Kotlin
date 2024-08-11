@@ -65,8 +65,6 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         }
         // 加载所有拥有动作的物品及相关动作
         loadItemActions()
-        // 加载自定义动作
-        loadCustomActions()
         // 加载动作组
         loadFunctions()
     }
@@ -79,7 +77,6 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         itemActions.clear()
         functions.clear()
         loadItemActions()
-        loadCustomActions()
         loadFunctions()
     }
 
@@ -240,23 +237,6 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             content ?: return@addFunction CompletableFuture.completedFuture(Results.SUCCESS)
             val function = functions[content] ?: return@addFunction CompletableFuture.completedFuture(Results.SUCCESS)
             return@addFunction runActionWithResult(function, context)
-        }
-    }
-
-    /**
-     * 加载自定义动作
-     */
-    @Deprecated("现在建议使用 Expansion 进行自定义动作注册")
-    private fun loadCustomActions() {
-        for (file in ConfigUtils.getAllFiles("CustomActions")) {
-            // 仅加载.js文件
-            if (!file.name.endsWith(".js")) continue
-            // 防止某个脚本出错导致加载中断
-            try {
-                val script = pers.neige.neigeitems.script.CompiledScript(file)
-                script.invoke("main", null)
-            } catch (_: Throwable) {
-            }
         }
     }
 

@@ -41,8 +41,6 @@ object SectionManager {
         loadGlobalSections()
         // 加载基础节点解析器
         loadBasicParser()
-        // 加载自定义节点解析器
-        loadCustomSections()
     }
 
     /**
@@ -66,7 +64,6 @@ object SectionManager {
 //        sectionParsers.clear()
         loadGlobalSections()
         loadBasicParser()
-        loadCustomSections()
     }
 
     /**
@@ -152,18 +149,5 @@ object SectionManager {
         WeightJoinParser.register()
         WeightParser.register()
         WhenParser.register()
-    }
-
-    /**
-     * 加载自定义节点解析器
-     */
-    private fun loadCustomSections() {
-        for (file in getAllFiles("CustomSections")) {
-            // 防止某个脚本出错导致加载中断
-            try {
-                pers.neige.neigeitems.script.CompiledScript(file).invoke("main", null)
-            } catch (_: Throwable) {
-            }
-        }
     }
 }

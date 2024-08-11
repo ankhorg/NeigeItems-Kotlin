@@ -60,8 +60,6 @@ object ItemEditorManager {
     init {
         // 加载基础物品编辑函数
         loadBasicItemEditors()
-        // 加载自定义物品编辑函数
-        loadCustomItemEditors()
     }
 
     /**
@@ -71,7 +69,6 @@ object ItemEditorManager {
         itemEditors.clear()
         editorNames.clear()
         loadBasicItemEditors()
-        loadCustomItemEditors()
     }
 
     /**
@@ -112,19 +109,6 @@ object ItemEditorManager {
 
     private fun addBasicItemEditor(id: String, function: TriFunction<Player, ItemStack, String, Boolean?>) {
         basicItemEditors[id] = function
-    }
-
-    /**
-     * 加载自定义物品编辑函数
-     */
-    private fun loadCustomItemEditors() {
-        for (file in ConfigUtils.getAllFiles("CustomItemEditors")) {
-            // 防止某个脚本出错导致加载中断
-            try {
-                pers.neige.neigeitems.script.CompiledScript(file).invoke("main", null)
-            } catch (error: Throwable) {
-            }
-        }
     }
 
     /**
