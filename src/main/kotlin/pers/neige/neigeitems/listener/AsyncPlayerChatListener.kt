@@ -10,7 +10,7 @@ object AsyncPlayerChatListener {
     @Listener(eventPriority = EventPriority.LOWEST)
     fun listener(event: AsyncPlayerChatEvent) {
         val user = NeigeItems.getUserManager().getIfLoaded(event.player.uniqueId) ?: return
-        val catcher = user.chatCatchers.poll() ?: return
+        val catcher = user.pollChatCatcher() ?: return
         event.isCancelled = catcher.isCancel
         catcher.future.complete(event.message)
     }

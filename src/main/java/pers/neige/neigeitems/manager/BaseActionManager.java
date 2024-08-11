@@ -45,7 +45,7 @@ public abstract class BaseActionManager {
      * 物品动作实现函数
      */
     @NotNull
-    private final HashMap<String, BiFunction<ActionContext, String, ActionResult>> actions = new HashMap<>();
+    private final HashMap<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>> actions = new HashMap<>();
     /**
      * 用于编译condition的脚本引擎
      */
@@ -76,7 +76,7 @@ public abstract class BaseActionManager {
     }
 
     @NotNull
-    public HashMap<String, BiFunction<ActionContext, String, ActionResult>> getActions() {
+    public HashMap<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>> getActions() {
         return actions;
     }
 
@@ -206,12 +206,9 @@ public abstract class BaseActionManager {
             @NotNull RawStringAction action,
             @NotNull ActionContext context
     ) {
-        BiFunction<ActionContext, String, ActionResult> handler = actions.get(action.getKey());
+        BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler = actions.get(action.getKey());
         if (handler != null) {
-            ActionResult result = handler.apply(context, action.getContent());
-            if (result != null) {
-                return CompletableFuture.completedFuture(result);
-            }
+            return handler.apply(context, action.getContent());
         }
         return CompletableFuture.completedFuture(Results.SUCCESS);
     }
@@ -228,7 +225,7 @@ public abstract class BaseActionManager {
             @NotNull StringAction action,
             @NotNull ActionContext context
     ) {
-        BiFunction<ActionContext, String, ActionResult> handler = actions.get(action.getKey());
+        BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler = actions.get(action.getKey());
         if (handler != null) {
             String content = SectionUtils.parseSection(
                     action.getContent(),
@@ -236,10 +233,7 @@ public abstract class BaseActionManager {
                     context.getPlayer(),
                     null
             );
-            ActionResult result = handler.apply(context, content);
-            if (result != null) {
-                return CompletableFuture.completedFuture(result);
-            }
+            return handler.apply(context, content);
         }
         return CompletableFuture.completedFuture(Results.SUCCESS);
     }
@@ -367,7 +361,7 @@ public abstract class BaseActionManager {
         User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
         if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
         CompletableFuture<ActionResult> result = new CompletableFuture<>();
-        user.getChatCatchers().add(action.getCatcher(context, result));
+        user.addChatCatcher(action.getCatcher(context, result));
         return result;
     }
 
@@ -417,9 +411,13 @@ public abstract class BaseActionManager {
      */
     public void addFunction(
             @NotNull String id,
-            @NotNull BiFunction<ActionContext, String, ActionResult> function
+            @NotNull BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
-        actions.put(id.toLowerCase(Locale.ROOT), function);
+        actions.put(id.toLowerCase(Locale.ROOT), (context, content) -> {
+            CompletableFuture<ActionResult> result = function.apply(context, content);
+            if (result == null) result = CompletableFuture.completedFuture(Results.SUCCESS);
+            return result;
+        });
     }
 
     /**
@@ -434,7 +432,7 @@ public abstract class BaseActionManager {
     ) {
         actions.put(id.toLowerCase(Locale.ROOT), (context, content) -> {
             function.accept(context, content);
-            return Results.SUCCESS;
+            return CompletableFuture.completedFuture(Results.SUCCESS);
         });
     }
 
@@ -740,16 +738,16 @@ public abstract class BaseActionManager {
             }
         });
         // 延迟(单位是tick)
-        addFunction("delay", (context, content) -> new DelayResult(StringUtils.toInt(content, 0)));
+        addFunction("delay", (context, content) -> CompletableFuture.completedFuture(new DelayResult(StringUtils.toInt(content, 0))));
         // 终止
-        addFunction("return", (context, content) -> Results.STOP);
+        addFunction("return", (context, content) -> CompletableFuture.completedFuture(Results.STOP));
         // js
         addFunction("js", (context, content) -> {
             Object result;
             try {
                 result = actionScripts.computeIfAbsent(content, (key) -> HookerManager.INSTANCE.getNashornHooker().compile(engine, key)).eval(context.getBindings());
                 if (result == null) {
-                    return Results.SUCCESS;
+                    return CompletableFuture.completedFuture(Results.SUCCESS);
                 }
             } catch (Throwable error) {
                 plugin.getLogger().warning("JS动作执行异常, 动作内容如下:");
@@ -757,14 +755,14 @@ public abstract class BaseActionManager {
                     plugin.getLogger().warning(contentLine);
                 }
                 error.printStackTrace();
-                return Results.SUCCESS;
+                return CompletableFuture.completedFuture(Results.SUCCESS);
             }
             if (result instanceof ActionResult) {
-                return (ActionResult) result;
+                return CompletableFuture.completedFuture((ActionResult) result);
             } else if (result instanceof Boolean) {
-                return Results.fromBoolean((Boolean) result);
+                return CompletableFuture.completedFuture(Results.fromBoolean((Boolean) result));
             } else {
-                return Results.SUCCESS;
+                return CompletableFuture.completedFuture(Results.SUCCESS);
             }
         });
         // 向global中设置内容

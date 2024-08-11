@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.user;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.impl.ChatCatcherAction;
 
 import java.util.ArrayDeque;
@@ -26,5 +27,18 @@ public class User {
     @NotNull
     public ArrayDeque<ChatCatcherAction.Catcher> getChatCatchers() {
         return chatCatchers;
+    }
+
+    public void addChatCatcher(ChatCatcherAction.Catcher catcher) {
+        synchronized (this) {
+            chatCatchers.add(catcher);
+        }
+    }
+
+    @Nullable
+    public ChatCatcherAction.Catcher pollChatCatcher() {
+        synchronized (this) {
+            return chatCatchers.poll();
+        }
     }
 }

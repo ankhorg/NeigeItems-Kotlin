@@ -52,7 +52,7 @@ object CheckParser : SectionParser() {
                     Pair("sections", sections)
                 ).let { params ->
                     ActionManager.runAction(
-                        actions,
+                        ActionManager.compile(actions),
                         ActionContext(
                             it,
                             params,
