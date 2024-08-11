@@ -833,5 +833,23 @@ public abstract class BaseActionManager {
             out.writeUTF(content);
             player.sendPluginMessage(NeigeItems.getInstance(), "BungeeCord", out.toByteArray());
         });
+        // 切换至主线程
+        addFunction("sync", (context, content) -> {
+            if (Bukkit.isPrimaryThread()) {
+                return CompletableFuture.completedFuture(Results.SUCCESS);
+            }
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            Bukkit.getScheduler().runTask(plugin, () -> result.complete(Results.SUCCESS));
+            return result;
+        });
+        // 切换至异步线程
+        addFunction("async", (context, content) -> {
+            if (!Bukkit.isPrimaryThread()) {
+                return CompletableFuture.completedFuture(Results.SUCCESS);
+            }
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> result.complete(Results.SUCCESS));
+            return result;
+        });
     }
 }
