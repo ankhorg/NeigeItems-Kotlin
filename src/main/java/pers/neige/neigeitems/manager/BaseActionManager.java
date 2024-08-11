@@ -19,8 +19,8 @@ import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ResultType;
 import pers.neige.neigeitems.action.impl.*;
-import pers.neige.neigeitems.action.result.DelayResult;
 import pers.neige.neigeitems.action.result.Results;
+import pers.neige.neigeitems.action.result.StopResult;
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker;
 import pers.neige.neigeitems.hook.vault.VaultHooker;
 import pers.neige.neigeitems.item.ItemInfo;
@@ -123,6 +123,8 @@ public abstract class BaseActionManager {
                 return new WhileAction(this, (Map<?, ?>) action);
             } else if (((Map<?, ?>) action).containsKey("catch")) {
                 return new ChatCatcherAction(this, (Map<?, ?>) action);
+            } else if (((Map<?, ?>) action).containsKey("label")) {
+                return new LabelAction(this, (Map<?, ?>) action);
             }
         } else if (action instanceof ConfigurationSection) {
             if (((ConfigurationSection) action).contains("condition")) {
@@ -131,6 +133,8 @@ public abstract class BaseActionManager {
                 return new WhileAction(this, (ConfigurationSection) action);
             } else if (((ConfigurationSection) action).contains("catch")) {
                 return new ChatCatcherAction(this, (ConfigurationSection) action);
+            } else if (((ConfigurationSection) action).contains("label")) {
+                return new LabelAction(this, (ConfigurationSection) action);
             }
         }
         return NullAction.INSTANCE;
@@ -270,22 +274,10 @@ public abstract class BaseActionManager {
         List<Action> actions = action.getActions();
         if (fromIndex >= actions.size()) return CompletableFuture.completedFuture(Results.SUCCESS);
         return actions.get(fromIndex).eval(this, context).thenCompose((result) -> {
-            switch (result.getType()) {
-                case SUCCESS: {
-                    return runAction(action, context, fromIndex + 1);
-                }
-                case DELAY: {
-                    CompletableFuture<ActionResult> newResult = new CompletableFuture<>();
-                    SchedulerUtils.runLater(plugin, ((DelayResult) result).getDelay(), () -> {
-                        runAction(action, context, fromIndex + 1).thenAccept(newResult::complete);
-                    });
-                    return newResult;
-                }
-                case STOP: {
-                    return CompletableFuture.completedFuture(result);
-                }
+            if (result.getType() == ResultType.STOP) {
+                return CompletableFuture.completedFuture(result);
             }
-            return CompletableFuture.completedFuture(Results.SUCCESS);
+            return runAction(action, context, fromIndex + 1);
         });
     }
 
@@ -311,6 +303,26 @@ public abstract class BaseActionManager {
             // 执行deny动作
             return action.getDeny().eval(this, context);
         }
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
+            @NotNull LabelAction action,
+            @NotNull ActionContext context
+    ) {
+        return action.getActions().eval(this, context).thenApply((result) -> {
+            if (result instanceof StopResult && action.getLabel().equals(((StopResult) result).getLabel())) {
+                return Results.SUCCESS;
+            }
+            return result;
+        });
     }
 
     /**
@@ -738,9 +750,21 @@ public abstract class BaseActionManager {
             }
         });
         // 延迟(单位是tick)
-        addFunction("delay", (context, content) -> CompletableFuture.completedFuture(new DelayResult(StringUtils.toInt(content, 0))));
+        addFunction("delay", (context, content) -> {
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.runLater(plugin, StringUtils.toInt(content, 0), () -> {
+                result.complete(Results.SUCCESS);
+            });
+            return result;
+        });
         // 终止
-        addFunction("return", (context, content) -> CompletableFuture.completedFuture(Results.STOP));
+        addFunction("return", (context, content) -> {
+            if (content.isEmpty()) {
+                return CompletableFuture.completedFuture(Results.STOP);
+            } else {
+                return CompletableFuture.completedFuture(new StopResult(content));
+            }
+        });
         // js
         addFunction("js", (context, content) -> {
             Object result;
