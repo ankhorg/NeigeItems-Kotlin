@@ -339,7 +339,6 @@ public abstract class BaseActionManager {
     ) {
         // while循环判断条件
         if (parseCondition(action.getCondition(), context).getType() == ResultType.SUCCESS) {
-            Action.eval(action.getSync(), action.getAsync(), this, context);
             return action.getActions().eval(this, context).thenCompose((result) -> {
                 // 执行中止
                 if (result.getType() == ResultType.STOP) {

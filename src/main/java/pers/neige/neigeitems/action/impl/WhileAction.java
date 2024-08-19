@@ -18,10 +18,6 @@ public class WhileAction extends Action {
     @NotNull
     private final Action actions;
     @NotNull
-    private final Action async;
-    @NotNull
-    private final Action sync;
-    @NotNull
     private final Action _finally;
 
     public WhileAction(BaseActionManager manager, ConfigurationSection action) {
@@ -31,8 +27,6 @@ public class WhileAction extends Action {
             condition = null;
         }
         actions = manager.compile(action.get("actions"));
-        async = manager.compile(action.get("async"));
-        sync = manager.compile(action.get("sync"));
         _finally = manager.compile(action.get("finally"));
     }
 
@@ -48,8 +42,6 @@ public class WhileAction extends Action {
             condition = null;
         }
         actions = manager.compile(action.get("actions"));
-        async = manager.compile(action.get("async"));
-        sync = manager.compile(action.get("sync"));
         _finally = manager.compile(action.get("finally"));
     }
 
@@ -78,16 +70,6 @@ public class WhileAction extends Action {
     @NotNull
     public Action getActions() {
         return actions;
-    }
-
-    @NotNull
-    public Action getAsync() {
-        return async;
-    }
-
-    @NotNull
-    public Action getSync() {
-        return sync;
     }
 
     @NotNull
