@@ -1,7 +1,5 @@
 package pers.neige.neigeitems.command.subcommand.expansion
 
-import com.mojang.brigadier.arguments.StringArgumentType.getString
-import com.mojang.brigadier.arguments.StringArgumentType.greedyString
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import javassist.ClassClassPath
 import javassist.ClassPool
@@ -13,6 +11,8 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
 import pers.neige.neigeitems.command.CommandUtils.argument
 import pers.neige.neigeitems.command.CommandUtils.literal
+import pers.neige.neigeitems.command.arguments.FileNameArgumentType.fileName
+import pers.neige.neigeitems.command.arguments.FileNameArgumentType.getFileName
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ExpansionManager
 import pers.neige.neigeitems.manager.HookerManager
@@ -34,8 +34,8 @@ object Build {
         // ni expansion build
         literal<CommandSender>("build").then(
             // ni expansion build [path]
-            argument<CommandSender, String>("path", greedyString()).executes { context ->
-                val path = getString(context, "path")
+            argument<CommandSender, String>("path", fileName("Expansions")).executes { context ->
+                val path = getFileName(context, "path")
                 val sender = context.source
                 async {
                     ExpansionManager.expansions[path]?.also { script ->
