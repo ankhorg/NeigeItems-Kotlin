@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>LocaleI18n 1.18.6 API </title>
+    <title>LocaleI18n 1.18.7 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -259,35 +259,35 @@ public class <span class="typeNameLabel"><a href=LocaleI18n.html>LocaleI18n</a><
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
+                                            <td class="colFirst"><code>final static <a href=LocaleI18n.TranslationProvider.html>LocaleI18n.TranslationProvider</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=LocaleI18n.html#loadLanguage(java.lang.String)>loadLanguage</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> language) </code>
+                                            </th>
+                                            <td class="colLast">加载对应语言文件, 可能耗时较久, 注意不要在主线程调用.</td>
+                                        </tr>
+                                        
+                                        <tr id="i1" class="rowColor">
+                                            <td class="colFirst"><code>final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=LocaleI18n.html#loadAllLanguage()>loadAllLanguage</a>() </code>
+                                            </th>
+                                            <td class="colLast">加载所有语言文件, 可能耗时较久, 注意不要在主线程调用.</td>
+                                        </tr>
+                                        
+                                        <tr id="i2" class="altColor">
                                             <td class="colFirst"><code>final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=LocaleI18n.html#translate(java.lang.String)>translate</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
                                             </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=LocaleI18n.html#asyncLoadAllVersions()>asyncLoadAllVersions</a>() </code>
-                                            </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=LocaleI18n.html#asyncLoadCurrentVersion()>asyncLoadCurrentVersion</a>() </code>
-                                            </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">根据翻译键获取翻译内容, 默认采用NeigeItems的config.yml中配置的语言.</td>
                                         </tr>
                                         
                                         <tr id="i3" class="rowColor">
-                                            <td class="colFirst"><code>final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code>final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=LocaleI18n.html#init()>init</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=LocaleI18n.html#translate(java.lang.String,java.lang.String)>translate</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> language) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">根据翻译键获取对应语言的翻译内容.</td>
                                         </tr>
                                         
                                         </tbody>
@@ -334,6 +334,59 @@ public class <span class="typeNameLabel"><a href=LocaleI18n.html>LocaleI18n</a><
                             </a>
                                 <h3>Method Detail</h3>
                                 
+                                <a id="loadLanguage(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>loadLanguage</h4>
+                                        <pre class="methodSignature"> final static <a href=LocaleI18n.TranslationProvider.html>LocaleI18n.TranslationProvider</a> <a href=LocaleI18n.html#loadLanguage(java.lang.String)>loadLanguage</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> language)</pre>
+                                        <div class="block"><p>加载对应语言文件, 可能耗时较久, 注意不要在主线程调用.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>language</code> - 对应语言</dd>
+                                            
+                                            
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="loadAllLanguage()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>loadAllLanguage</h4>
+                                        <pre class="methodSignature"> final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=LocaleI18n.html#loadAllLanguage()>loadAllLanguage</a>()</pre>
+                                        <div class="block"><p>加载所有语言文件, 可能耗时较久, 注意不要在主线程调用.</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
                                 <a id="translate(java.lang.String)">
                                     <!--   -->
                                 </a>
@@ -343,12 +396,22 @@ public class <span class="typeNameLabel"><a href=LocaleI18n.html>LocaleI18n</a><
                                     <li class="blockList">
                                         <h4>translate</h4>
                                         <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=LocaleI18n.html#translate(java.lang.String)>translate</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>根据翻译键获取翻译内容, 默认采用NeigeItems的config.yml中配置的语言.</p></div>
 
                                         <dl>
 
                                         
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>key</code> - 翻译键</dd>
+                                            
+                                            
+                                        
 
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>翻译内容</p></dd>
                                         
 
                                         
@@ -357,67 +420,35 @@ public class <span class="typeNameLabel"><a href=LocaleI18n.html>LocaleI18n</a><
                                     </li>
                                 </ul>
                                 
-                                <a id="asyncLoadAllVersions()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>asyncLoadAllVersions</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=LocaleI18n.html#asyncLoadAllVersions()>asyncLoadAllVersions</a>()</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="asyncLoadCurrentVersion()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>asyncLoadCurrentVersion</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=LocaleI18n.html#asyncLoadCurrentVersion()>asyncLoadCurrentVersion</a>()</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="init()">
+                                <a id="translate(java.lang.String,java.lang.String)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>init</h4>
-                                        <pre class="methodSignature"> final static <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=LocaleI18n.html#init()>init</a>()</pre>
-                                        <div class="block"></div>
+                                        <h4>translate</h4>
+                                        <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=LocaleI18n.html#translate(java.lang.String,java.lang.String)>translate</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> language)</pre>
+                                        <div class="block"><p>根据翻译键获取对应语言的翻译内容.</p></div>
 
                                         <dl>
 
                                         
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>key</code> - 翻译键</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>language</code> - 对应语言, 需要预先通过LocaleI18n.INSTANCE.</dd>
+                                            
+                                            
+                                        
 
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>翻译内容</p></dd>
                                         
 
                                         
