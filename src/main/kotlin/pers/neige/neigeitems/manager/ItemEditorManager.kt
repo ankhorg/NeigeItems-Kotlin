@@ -21,7 +21,6 @@ import pers.neige.neigeitems.manager.ItemManager.setCharge
 import pers.neige.neigeitems.manager.ItemManager.setCustomDurability
 import pers.neige.neigeitems.manager.ItemManager.setMaxCharge
 import pers.neige.neigeitems.manager.ItemManager.setMaxCustomDurability
-import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.castToNbt
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
