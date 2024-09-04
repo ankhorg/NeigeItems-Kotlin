@@ -201,4 +201,8 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;tick()V", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;B_()V", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public native void tick();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;setInvisible(Z)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;setInvisible(Z)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
+    public native void setInvisible(boolean invisible);
 }

@@ -463,6 +463,21 @@ public class EntityUtils {
         return 0;
     }
 
+    /**
+     * 设置实体隐身状态.
+     *
+     * @param entity    待操作实体.
+     * @param invisible 是否隐身.
+     */
+    public static void setInvisible(
+            @NotNull Entity entity,
+            boolean invisible
+    ) {
+        if (entity instanceof RefCraftEntity) {
+            ((RefCraftEntity) entity).getHandle().setInvisible(invisible);
+        }
+    }
+
     protected static RefComponent toNms(BaseComponent component) {
         return RefChatSerializer.fromJson(ComponentSerializer.toString(component));
     }

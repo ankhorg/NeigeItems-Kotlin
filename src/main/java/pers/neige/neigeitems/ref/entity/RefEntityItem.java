@@ -39,7 +39,7 @@ public final class RefEntityItem extends RefEntity {
 
     @HandleBy(reference = "Lnet/minecraft/world/entity/item/ItemEntity;<init>(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/item/ItemStack;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityItem;<init>(Lnet/minecraft/server/v1_12_R1/World;DDDLnet/minecraft/server/v1_12_R1/ItemStack;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
-    public RefEntityItem(RefWorld world, double x, double y, double z, RefNmsItemStack itemstack) {
+    public RefEntityItem(RefWorld world, double x, double y, double z, RefNmsItemStack itemStack) {
         throw new UnsupportedOperationException();
     }
 

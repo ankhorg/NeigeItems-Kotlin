@@ -71,6 +71,7 @@ object ItemManager : ItemConfigManager() {
 
     /**
      * 添加物品生成器
+     *
      * @param itemGenerator 待添加物品生成器
      */
     private fun addItem(itemGenerator: ItemGenerator) {

@@ -125,7 +125,9 @@ public class NeigeItems extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        scanner.onDisable();
+        if (scanner != null) {
+            scanner.onDisable();
+        }
     }
 
     private boolean checkMagicUtils(String className) {
