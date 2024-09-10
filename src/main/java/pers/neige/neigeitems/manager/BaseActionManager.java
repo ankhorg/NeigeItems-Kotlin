@@ -788,6 +788,22 @@ public abstract class BaseActionManager {
                 return CompletableFuture.completedFuture(Results.SUCCESS);
             }
         });
+        // jsFuture
+        addFunction("jsFuture", (context, content) -> {
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            try {
+                context.getGlobal().put("nextResult", result);
+                actionScripts.computeIfAbsent(content, (key) -> HookerManager.INSTANCE.getNashornHooker().compile(engine, key)).eval(context.getBindings());
+            } catch (Throwable error) {
+                plugin.getLogger().warning("JS FUTURE动作执行异常, 动作内容如下:");
+                for (String contentLine : content.split("\n")) {
+                    plugin.getLogger().warning(contentLine);
+                }
+                error.printStackTrace();
+                return CompletableFuture.completedFuture(Results.SUCCESS);
+            }
+            return result;
+        });
         // 向global中设置内容
         addConsumer("setGlobal", (context, content) -> {
             String[] info = content.split(" ", 2);

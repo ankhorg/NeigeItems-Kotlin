@@ -5,6 +5,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
+import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.getHookedItem
 import pers.neige.neigeitems.manager.ItemManager
@@ -29,6 +30,10 @@ class ItemPack(
     val id: String,
     rawConfigSection: ConfigurationSection
 ) {
+    companion object {
+        private val logger = LoggerFactory.getLogger(ItemPack::class.java.simpleName)
+    }
+
     /**
      * 获取物品包配置
      */
@@ -126,8 +131,10 @@ class ItemPack(
         // 对文本化配置进行全局节点解析
         val configString = configString.parseSection(cache, player, sections)
         // Debug信息
-        debug(configString)
-        sections?.let { debug(sections.saveToString("$id-sections")) }
+        if (debug) {
+            logger.info(configString)
+            sections?.let { logger.info(sections.saveToString("$id-sections")) }
+        }
         return configString.loadFromString(id) ?: YamlConfiguration()
     }
 

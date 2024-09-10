@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
+import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.event.ItemGenerateEvent
 import pers.neige.neigeitems.item.builder.ItemBuilder
 import pers.neige.neigeitems.item.color.ItemColor
@@ -33,6 +34,10 @@ import java.util.*
  * @constructor 根据物品基础配置构建物品生成器
  */
 class ItemGenerator(val itemConfig: ItemConfig) {
+    companion object {
+        private val logger = LoggerFactory.getLogger(ItemGenerator::class.java.simpleName)
+    }
+
     /**
      * 获取物品ID
      */
@@ -352,8 +357,10 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         // 对文本化配置进行全局节点解析
         val configString = configStringNoSection.parseSection(cache, player, sections)
         // Debug信息
-        debug(configString)
-        sections?.let { debug(sections.saveToString("$id-sections")) }
+        if (debug) {
+            logger.info(configString)
+            sections?.let { logger.info(sections.saveToString("$id-sections")) }
+        }
         val configSection = configString.loadFromString(id) ?: YamlConfiguration()
 
         // 构建物品
