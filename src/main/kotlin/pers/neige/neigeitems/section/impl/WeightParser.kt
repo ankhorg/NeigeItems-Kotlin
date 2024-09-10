@@ -67,18 +67,14 @@ object WeightParser : SectionParser() {
             when (val index = value.indexOf("::")) {
                 // 无权重, 直接记录
                 -1 -> {
-                    info[value]?.let {
-                        info[value] = it.add(BigDecimal.ONE)
-                    } ?: let { info[value] = BigDecimal.ONE }
+                    info[value] = info.getOrDefault(value, BigDecimal.ZERO).add(BigDecimal.ONE)
                     total = total.add(BigDecimal.ONE)
                 }
                 // 有权重, 根据权重大小进行记录
                 else -> {
                     val weight = value.substring(0, index).toBigDecimalOrNull() ?: BigDecimal.ONE
                     val string = value.substring(index + 2, value.length)
-                    info[string]?.let {
-                        info[string] = it.add(weight)
-                    } ?: let { info[string] = weight }
+                    info[string] = info.getOrDefault(string, BigDecimal.ZERO).add(weight)
                     total = total.add(weight)
                 }
             }

@@ -9,13 +9,13 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * weightjoin节点解析器
+ * repeatableweightjoin节点解析器
  */
-object WeightJoinParser : SectionParser() {
-    override val id: String = "weightjoin"
+object RepeatableWeightJoinParser : SectionParser() {
+    override val id: String = "rweightjoin"
 
     /**
-     * 获取所有用于weightjoin节点的已编译的js脚本文件及文本
+     * 获取所有用于rweightjoin节点的已编译的js脚本文件及文本
      */
     val compiledScripts = ConcurrentHashMap<String, CompiledScript>()
 
@@ -103,7 +103,7 @@ object WeightJoinParser : SectionParser() {
             }
 
             // 加权随机取值
-            val info = HashMap<String, Double>()
+            val info = ArrayList<Pair<String, Double>>()
             // 加载所有参数并遍历
             list.forEachIndexed { i, raw ->
                 val value = raw.parseSection(cache, player, sections)
@@ -111,7 +111,7 @@ object WeightJoinParser : SectionParser() {
                 when (val index = value.indexOf("::")) {
                     // 无权重, 直接记录
                     -1 -> {
-                        info[value] = info.getOrDefault(value, 0.0) + 1
+                        info.add(value to 1.0)
                         // 索引记录
                         indexMap?.put(value, i)
                     }
@@ -119,7 +119,7 @@ object WeightJoinParser : SectionParser() {
                     else -> {
                         val weight = value.substring(0, index).toDoubleOrNull() ?: 1.0
                         val string = value.substring(index + 2, value.length)
-                        info[string] = info.getOrDefault(string, 0.0) + weight
+                        info.add(string to weight)
                         // 索引记录
                         indexMap?.put(string, i)
                     }

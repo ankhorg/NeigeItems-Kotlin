@@ -72,9 +72,7 @@ object WeightDeclareParser : SectionParser() {
             when (val index = value.indexOf("::")) {
                 // 无权重, 直接记录
                 -1 -> {
-                    info[value]?.let {
-                        info[value] = it + 1
-                    } ?: let { info[value] = 1.0 }
+                    info[value] = info.getOrDefault(value, 0.0) + 1
                     // 索引记录
                     indexMap?.put(value, i)
                 }
@@ -82,9 +80,7 @@ object WeightDeclareParser : SectionParser() {
                 else -> {
                     val weight = value.substring(0, index).toDoubleOrNull() ?: 1.0
                     val string = value.substring(index + 2, value.length)
-                    info[string]?.let {
-                        info[string] = it + weight
-                    } ?: let { info[string] = weight }
+                    info[string] = info.getOrDefault(string, 0.0) + weight
                     // 索引记录
                     indexMap?.put(string, i)
                 }
