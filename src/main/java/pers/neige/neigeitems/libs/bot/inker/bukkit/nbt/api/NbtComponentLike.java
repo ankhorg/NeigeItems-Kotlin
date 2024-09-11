@@ -32,7 +32,11 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     }
 
     default Nbt<?> removeDeep(@NotNull String key) {
-        List<String> keys = StringUtils.split(key, '.', '\\');
+        return removeDeep(key, '.', '\\');
+    }
+
+    default Nbt<?> removeDeep(@NotNull String key, char separator, char escape) {
+        List<String> keys = StringUtils.split(key, separator, escape);
 
         NbtComponentLike currentNbtCompound = this;
         for (int i = 0; i < (keys.size() - 1); i++) {
@@ -79,71 +83,129 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
         put(key, value);
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putByte(String key, byte value) {
         set(key, NbtByte.valueOf(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putShort(String key, short value) {
         set(key, NbtShort.valueOf(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putInt(String key, int value) {
         set(key, NbtInt.valueOf(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putLong(String key, long value) {
         set(key, NbtLong.valueOf(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putUUID(String key, UUID value) {
         set(key + "Most", NbtLong.valueOf(value.getMostSignificantBits()));
         set(key + "Least", NbtLong.valueOf(value.getLeastSignificantBits()));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putFloat(String key, float value) {
         set(key, NbtFloat.valueOf(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putDouble(String key, double value) {
         set(key, NbtDouble.valueOf(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putString(String key, String value) {
         set(key, NbtString.valueOf(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putByteArray(String key, byte[] value) {
         set(key, new NbtByteArray(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putByteArray(String key, List<Byte> value) {
         set(key, new NbtByteArray(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putIntArray(String key, int[] value) {
         set(key, new NbtIntArray(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putIntArray(String key, List<Integer> value) {
         set(key, new NbtIntArray(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putLongArray(String key, long[] value) {
         set(key, new NbtLongArray(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putLongArray(String key, List<Long> value) {
         set(key, new NbtLongArray(value));
     }
 
+    /**
+     * 等价于 Map#put(Object, Object) 方法, 区别在于将 value 转换为了对应类型的 NBT实例.
+     */
     default void putBoolean(String key, boolean value) {
         set(key, NbtByte.valueOf(value));
     }
 
+    /**
+     * 获取指定 NBT键 对应的 NBT值 的 NBT类型.
+     *
+     * @param key   待检测的 NBT键.
+     * @return 指定 NBT键 对应的 NBT值 的 NBT类型, 数字与类型的对应关系详见 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtType 类所属的公有静态变量.
+     */
     default byte getTagType(String key) {
         return get(key).getId();
     }
 
+    /**
+     * 检测指定 NBT键 对应的 NBT值 是否属于对应类型.
+     *
+     * @param key   待检测的 NBT键.
+     * @param value NBT类型, 数字与类型的对应关系详见 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtType 类所属的公有静态变量.
+     * @return 指定 NBT键 对应的 NBT值 是否属于对应类型.
+     */
     default boolean contains(String key, int value) {
         Nbt<?> nbtValue = get(key);
         return nbtValue != null && nbtValue.getId() == value;

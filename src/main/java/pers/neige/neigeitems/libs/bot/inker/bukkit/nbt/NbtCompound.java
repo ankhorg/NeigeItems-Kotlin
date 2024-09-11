@@ -80,17 +80,6 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public Nbt<?> remove(Object key) {
-        if (key instanceof String) {
-            RefNbtBase oldValue = delegate.get((String) key);
-            delegate.remove((String) key);
-            return Nbt.fromNms(oldValue);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
     public void putAll(@NotNull Map<? extends String, ? extends Nbt<?>> m) {
         delegateMap.putAll(m);
     }

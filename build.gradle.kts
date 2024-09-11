@@ -8,7 +8,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.22"
     id("org.jetbrains.dokka") version "1.9.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.12-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.13-SNAPSHOT"
 }
 
 val realVersion = version
@@ -94,7 +94,7 @@ dependencies {
 
     // ankh-invoke
     implementation("org.inksnow.cputil:logger:1.9")
-    implementation("org.inksnow:ankh-invoke-bukkit:1.0.12-SNAPSHOT")
+    implementation("org.inksnow:ankh-invoke-bukkit:1.0.13-SNAPSHOT")
 
     // bstats
     implementation("org.bstats:bstats-bukkit:3.0.2")
@@ -233,6 +233,9 @@ tasks.create<BuildMappingsTask>("build-mappings") {
     outputDirectory = buildDir.resolve("cache/build-mappings")
     ankhInvokePackage = "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke"
 
+//    mapping("nms", "1.21") {
+//        predicates = arrayOf("craftbukkit_version:{v1_21_R1}")
+//    }
     mapping("nms", "1.20.4") {
         predicates = arrayOf("craftbukkit_version:{v1_20_R3}")
     }

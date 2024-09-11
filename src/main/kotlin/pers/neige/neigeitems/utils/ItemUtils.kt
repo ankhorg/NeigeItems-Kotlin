@@ -15,6 +15,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtListLike
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
@@ -534,6 +535,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun ItemStack?.isNiItem(parseData: Boolean): ItemInfo? {
+        // if (CbVersion.v1_20_R4.isSupport) return null
         if (this != null && this.type != Material.AIR) {
             // 读取物品
             val nbtItemStack = NbtItemStack(this)
