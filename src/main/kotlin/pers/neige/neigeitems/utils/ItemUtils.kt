@@ -15,7 +15,6 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtListLike
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
@@ -99,26 +98,28 @@ object ItemUtils {
      */
     @JvmStatic
     fun String.cast(): Any {
-        return when {
-            this.startsWith("(Byte) ") -> this.substring(7, this.length).toByteOrNull() ?: this
-            this.startsWith("(Short) ") -> this.substring(8, this.length).toShortOrNull() ?: this
-            this.startsWith("(Int) ") -> this.substring(6, this.length).toIntOrNull() ?: this
-            this.startsWith("(Long) ") -> this.substring(7, this.length).toLongOrNull() ?: this
-            this.startsWith("(Float) ") -> this.substring(8, this.length).toFloatOrNull() ?: this
-            this.startsWith("(Double) ") -> this.substring(9, this.length).toDoubleOrNull() ?: this
-            this.startsWith("[") && this.endsWith("]") -> {
-                val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
-                when {
-                    list.isEmpty() -> NbtString.valueOf(this)
-                    list[0] is Byte -> (list as List<Byte>).toTypedArray()
-                    list[0] is Int -> (list as List<Int>).toTypedArray()
-                    list[0] is Long -> (list as List<Long>).toTypedArray()
-                    else -> this
-                }
-
+        if (this.startsWith("(")) {
+            return when {
+                this.startsWith("(String) ") -> this.substring(8, this.length)
+                this.startsWith("(Byte) ") -> this.substring(7, this.length).toByteOrNull() ?: this
+                this.startsWith("(Short) ") -> this.substring(8, this.length).toShortOrNull() ?: this
+                this.startsWith("(Int) ") -> this.substring(6, this.length).toIntOrNull() ?: this
+                this.startsWith("(Long) ") -> this.substring(7, this.length).toLongOrNull() ?: this
+                this.startsWith("(Float) ") -> this.substring(8, this.length).toFloatOrNull() ?: this
+                this.startsWith("(Double) ") -> this.substring(9, this.length).toDoubleOrNull() ?: this
+                else -> this
             }
-
-            else -> this
+        } else if (this.startsWith("[") && this.endsWith("]")) {
+            val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
+            return when {
+                list.isEmpty() -> NbtString.valueOf(this)
+                list[0] is Byte -> (list as List<Byte>).toTypedArray()
+                list[0] is Int -> (list as List<Int>).toTypedArray()
+                list[0] is Long -> (list as List<Long>).toTypedArray()
+                else -> this
+            }
+        } else {
+            return this
         }
     }
 
@@ -144,44 +145,56 @@ object ItemUtils {
      */
     @JvmStatic
     fun String.castToNbt(): Nbt<*> {
-        return when {
-            this.startsWith("(Byte) ") -> {
-                this.substring(7, this.length).toByteOrNull()?.let { NbtByte.valueOf(it) } ?: NbtString.valueOf(this)
-            }
-
-            this.startsWith("(Short) ") -> {
-                this.substring(8, this.length).toShortOrNull()?.let { NbtShort.valueOf(it) } ?: NbtString.valueOf(this)
-            }
-
-            this.startsWith("(Int) ") -> {
-                this.substring(6, this.length).toIntOrNull()?.let { NbtInt.valueOf(it) } ?: NbtString.valueOf(this)
-            }
-
-            this.startsWith("(Long) ") -> {
-                this.substring(7, this.length).toLongOrNull()?.let { NbtLong.valueOf(it) } ?: NbtString.valueOf(this)
-            }
-
-            this.startsWith("(Float) ") -> {
-                this.substring(8, this.length).toFloatOrNull()?.let { NbtFloat.valueOf(it) } ?: NbtString.valueOf(this)
-            }
-
-            this.startsWith("(Double) ") -> {
-                this.substring(9, this.length).toDoubleOrNull()?.let { NbtDouble.valueOf(it) }
-                    ?: NbtString.valueOf(this)
-            }
-
-            this.startsWith("[") && this.endsWith("]") -> {
-                val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
-                when {
-                    list.isEmpty() -> NbtString.valueOf(this)
-                    list[0] is Byte -> NbtByteArray(list as List<Byte>)
-                    list[0] is Int -> NbtIntArray(list as List<Int>)
-                    list[0] is Long -> NbtLongArray(list as List<Long>)
-                    else -> NbtString.valueOf(this)
+        if (this.startsWith("(")) {
+            return when {
+                this.startsWith("(String) ") -> {
+                    NbtString.valueOf(this.substring(8, this.length))
                 }
-            }
 
-            else -> NbtString.valueOf(this)
+                this.startsWith("(Byte) ") -> {
+                    this.substring(7, this.length).toByteOrNull()?.let { NbtByte.valueOf(it) }
+                        ?: NbtString.valueOf(this)
+                }
+
+                this.startsWith("(Short) ") -> {
+                    this.substring(8, this.length).toShortOrNull()?.let { NbtShort.valueOf(it) } ?: NbtString.valueOf(
+                        this
+                    )
+                }
+
+                this.startsWith("(Int) ") -> {
+                    this.substring(6, this.length).toIntOrNull()?.let { NbtInt.valueOf(it) } ?: NbtString.valueOf(this)
+                }
+
+                this.startsWith("(Long) ") -> {
+                    this.substring(7, this.length).toLongOrNull()?.let { NbtLong.valueOf(it) }
+                        ?: NbtString.valueOf(this)
+                }
+
+                this.startsWith("(Float) ") -> {
+                    this.substring(8, this.length).toFloatOrNull()?.let { NbtFloat.valueOf(it) } ?: NbtString.valueOf(
+                        this
+                    )
+                }
+
+                this.startsWith("(Double) ") -> {
+                    this.substring(9, this.length).toDoubleOrNull()?.let { NbtDouble.valueOf(it) }
+                        ?: NbtString.valueOf(this)
+                }
+
+                else -> NbtString.valueOf(this)
+            }
+        } else if (this.startsWith("[") && this.endsWith("]")) {
+            val list = this.substring(1, this.lastIndex).split(",").map { it.cast() }
+            return when {
+                list.isEmpty() -> NbtString.valueOf(this)
+                list[0] is Byte -> NbtByteArray(list as List<Byte>)
+                list[0] is Int -> NbtIntArray(list as List<Int>)
+                list[0] is Long -> NbtLongArray(list as List<Long>)
+                else -> NbtString.valueOf(this)
+            }
+        } else {
+            return NbtString.valueOf(this)
         }
     }
 

@@ -103,11 +103,11 @@ public class EntityPlayerUtils {
     /**
      * 1.19.4+ 版本起, EntityMetadata数据包构造函数发生了改变.
      */
-    private static final boolean METADATA_NEED_VALUE_LIST = CbVersion.v1_19_R3.isSupport();
+    static final boolean METADATA_NEED_VALUE_LIST = CbVersion.v1_19_R3.isSupport();
     /**
      * 1.13+ 版本起, Entity 类 setCustomName 方法由接收 String 改为接收 IChatBaseComponent.
      */
-    private static final boolean COMPONENT_NAME_SUPPORT = CbVersion.v1_13_R1.isSupport();
+    static final boolean COMPONENT_NAME_SUPPORT = CbVersion.v1_13_R1.isSupport();
     /**
      * 1.19.4+ 版本起, SynchedEntityData 下 set 方法添加 boolean 类型 force 参数, 用于强制设置.
      */
@@ -1140,132 +1140,6 @@ public class EntityPlayerUtils {
     }
 
     /**
-     * 为实体设置虚拟显示名.
-     *
-     * @param world        所处世界.
-     * @param packetObject 待修改的数据包(nms实例).
-     * @param name         显示名.
-     */
-    public static void setFakeCustomName(
-            @NotNull World world,
-            @NotNull Object packetObject,
-            @NotNull BaseComponent name
-    ) {
-        if (packetObject instanceof RefPacketPlayOutEntityMetadata) {
-            RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
-
-            RefWorldServer worldServer = ((RefCraftWorld) (Object) world).getHandle();
-            int entityId = packet.id;
-            RefEntity entity = WorldUtils.getEntityFromIDByNms(worldServer, entityId);
-
-            RefSynchedEntityData entityData = new RefSynchedEntityData(entity);
-            if (COMPONENT_NAME_SUPPORT) {
-                defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_COMPONENT, Optional.of(EntityUtils.toNms(name)));
-            } else {
-                defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_STRING, name.toLegacyText());
-            }
-            if (METADATA_NEED_VALUE_LIST) {
-                boolean setCustomVisible = true;
-                List<RefSynchedEntityData$DataValue> result = new CopyOnWriteArrayList<>();
-                for (RefSynchedEntityData$DataValue next : packet.packedItems1) {
-                    if (next.id() == RefEntity.DATA_CUSTOM_NAME_VISIBLE.getId()) {
-                        setCustomVisible = false;
-                        result.add(next);
-                    } else {
-                        if (COMPONENT_NAME_SUPPORT) {
-                            if (next.id() != RefEntity.DATA_CUSTOM_NAME_COMPONENT.getId()) {
-                                result.add(next);
-                            }
-                        } else {
-                            if (next.id() != RefEntity.DATA_CUSTOM_NAME_STRING.getId()) {
-                                result.add(next);
-                            }
-                        }
-                    }
-                }
-                if (setCustomVisible) {
-                    defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_VISIBLE, true);
-                }
-                List<RefSynchedEntityData$DataValue> dataList = entityData.packDirty();
-                if (dataList == null) {
-                    dataList = entityData.getNonDefaultValues();
-                }
-                result.addAll(new RefPacketPlayOutEntityMetadata(entityId, dataList).packedItems1);
-                packet.packedItems1 = result;
-            } else {
-                boolean setCustomVisible = true;
-                List<RefSynchedEntityData$DataItem> result = new CopyOnWriteArrayList<>();
-                for (RefSynchedEntityData$DataItem next : packet.packedItems0) {
-                    if (next.getAccessor() == RefEntity.DATA_CUSTOM_NAME_VISIBLE) {
-                        setCustomVisible = false;
-                        result.add(next);
-                    } else {
-                        if (COMPONENT_NAME_SUPPORT) {
-                            if (next.getAccessor() != RefEntity.DATA_CUSTOM_NAME_COMPONENT) {
-                                result.add(next);
-                            }
-                        } else {
-                            if (next.getAccessor() != RefEntity.DATA_CUSTOM_NAME_STRING) {
-                                result.add(next);
-                            }
-                        }
-                    }
-                }
-                if (setCustomVisible) {
-                    defineAndForceSet(entityData, RefEntity.DATA_CUSTOM_NAME_VISIBLE, true);
-                }
-                result.addAll(new RefPacketPlayOutEntityMetadata(entityId, entityData, true).packedItems0);
-                packet.packedItems0 = result;
-            }
-        }
-    }
-
-    /**
-     * 为掉落物实体设置虚拟物品.
-     *
-     * @param world        所处世界.
-     * @param packetObject 待修改的数据包(nms实例).
-     * @param itemStack    实体对应的物品.
-     */
-    public static void setFakeItem(
-            @NotNull World world,
-            @NotNull Object packetObject,
-            @NotNull ItemStack itemStack
-    ) {
-        RefNmsItemStack nmsItemStack;
-        if (itemStack instanceof RefCraftItemStack) {
-            nmsItemStack = ((RefCraftItemStack) itemStack).handle;
-        } else {
-            nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
-        }
-        if (packetObject instanceof RefPacketPlayOutEntityMetadata) {
-            RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
-
-            RefWorldServer worldServer = ((RefCraftWorld) (Object) world).getHandle();
-            int entityId = packet.id;
-            RefEntity entity = WorldUtils.getEntityFromIDByNms(worldServer, entityId);
-            if (!(entity instanceof RefEntityItem)) return;
-            RefEntityItem item = (RefEntityItem) entity;
-
-            RefSynchedEntityData entityData = new RefSynchedEntityData(entity);
-            defineAndForceSet(entityData, RefEntityItem.DATA_ITEM, nmsItemStack);
-            if (METADATA_NEED_VALUE_LIST) {
-                List<RefSynchedEntityData$DataValue> result = new CopyOnWriteArrayList<>(packet.packedItems1);
-                List<RefSynchedEntityData$DataValue> dataList = entityData.packDirty();
-                if (dataList == null) {
-                    dataList = entityData.getNonDefaultValues();
-                }
-                result.addAll(new RefPacketPlayOutEntityMetadata(entityId, dataList).packedItems1);
-                packet.packedItems1 = result;
-            } else {
-                List<RefSynchedEntityData$DataItem> result = new CopyOnWriteArrayList<>(packet.packedItems0);
-                result.addAll(new RefPacketPlayOutEntityMetadata(entityId, entityData, true).packedItems0);
-                packet.packedItems0 = result;
-            }
-        }
-    }
-
-    /**
      * 向玩家发送 NMS 数据包.
      *
      * @param player       待接收玩家.
@@ -1385,7 +1259,7 @@ public class EntityPlayerUtils {
         }
     }
 
-    private static <T> void defineAndForceSet(
+    static <T> void defineAndForceSet(
             @NotNull RefSynchedEntityData entityData,
             @NotNull RefEntityDataAccessor<T> key,
             @NotNull T value

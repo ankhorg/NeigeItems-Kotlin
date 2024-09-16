@@ -520,7 +520,7 @@ public class TranslationUtils {
             if (NEW_ENTITY_TYPE_SUPPORT) {
                 return nmsEntity.getType().getDescriptionId();
             } else {
-                return RefEntityTypes.getTranslationKey(RefEntityTypes.getMinecraftKey(nmsEntity));
+                return "entity." + RefEntityTypes.getTranslationKey(RefEntityTypes.getMinecraftKey(nmsEntity)) + ".name";
             }
         }
         return null;

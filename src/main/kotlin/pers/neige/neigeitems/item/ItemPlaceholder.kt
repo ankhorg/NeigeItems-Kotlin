@@ -14,6 +14,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtNumeric
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtString
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.PacketUtils
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import java.util.*
@@ -121,22 +122,23 @@ class ItemPlaceholder {
                     val gameMode = event.player.gameMode
                     if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
                         if (event.packetType == PacketType.Play.Server.WINDOW_ITEMS) {
-                            val items = event.packet.itemListModifier.read(0)
-                            items.forEach { itemStack ->
-                                itemParse(itemStack)
+                            PacketUtils.getItemsFromPacketPlayOutWindowItems(event.packet.handle)
+                                ?.forEach { itemStack ->
+                                    itemParse(itemStack)
+                                }
+                            PacketUtils.getCarriedItemFromPacketPlayOutWindowItems(event.packet.handle)?.let {
+                                itemParse(it)
                             }
-                            event.packet.itemListModifier.write(0, items)
                         } else {
-                            val itemStack = event.packet.itemModifier.read(0)
-                            itemParse(itemStack)
-                            event.packet.itemModifier.write(0, itemStack)
+                            PacketUtils.getItemStackFromPacketPlayOutSetSlot(event.packet.handle)?.let {
+                                itemParse(it)
+                            }
                         }
                     }
                 }
 
                 override fun onPacketReceiving(event: PacketEvent) {}
-            }
-            )
+            })
         }
     }
 
