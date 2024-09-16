@@ -1,12 +1,33 @@
 package pers.neige.neigeitems.hook.placeholderapi
 
+import javassist.ClassClassPath
+import javassist.ClassPool
 import org.bukkit.OfflinePlayer
+import pers.neige.neigeitems.JvmHacker
+import java.lang.instrument.ClassDefinition
 import java.util.function.BiFunction
 
 /**
  * PlaceholderAPI挂钩
  */
 abstract class PapiHooker {
+    init {
+        val pool = ClassPool.getDefault()
+        pool.insertClassPath(ClassClassPath(Class.forName("me.clip.placeholderapi.PlaceholderAPIPlugin")))
+        pool.insertClassPath(ClassClassPath(Class.forName("org.bukkit.command.CommandSender")))
+        pool.insertClassPath(ClassClassPath(Class.forName("pers.neige.neigeitems.event.PapiReloadEvent")))
+        val ctClass = pool.get("me.clip.placeholderapi.PlaceholderAPIPlugin")
+        ctClass.defrost()
+
+        val reloadConf = ctClass.getDeclaredMethod("reloadConf", arrayOf(pool.get("org.bukkit.command.CommandSender")))
+        reloadConf.insertAfter("new pers.neige.neigeitems.event.PapiReloadEvent().call();")
+        JvmHacker.instrumentation().redefineClasses(
+            ClassDefinition(
+                Class.forName("me.clip.placeholderapi.PlaceholderAPIPlugin"), ctClass.toBytecode()
+            )
+        )
+    }
+
     /**
      * 解析一段文本中的papi变量, 不解析其中的颜色代码
      * 在以往的众多版本中, papi都会强制解析文本中的代码
@@ -64,10 +85,7 @@ abstract class PapiHooker {
      * @return papi扩展
      */
     fun newPlaceholderExpansion(
-        identifier: String,
-        author: String,
-        version: String,
-        executor: BiFunction<OfflinePlayer?, String, String>
+        identifier: String, author: String, version: String, executor: BiFunction<OfflinePlayer?, String, String>
     ): PlaceholderExpansion {
         return PlaceholderExpansion(identifier, author, version, executor)
     }
