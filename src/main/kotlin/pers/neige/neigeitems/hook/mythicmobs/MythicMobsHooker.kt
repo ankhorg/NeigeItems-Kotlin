@@ -11,6 +11,7 @@ import org.bukkit.event.Event
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
 import org.slf4j.LoggerFactory
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.event.MythicDropEvent
 import pers.neige.neigeitems.event.MythicEquipEvent
@@ -185,9 +186,7 @@ abstract class MythicMobsHooker {
      * @param internalName 怪物ID
      */
     fun spawnEvent(
-        internalName: String,
-        entity: LivingEntity,
-        mobLevel: Int
+        internalName: String, entity: LivingEntity, mobLevel: Int
     ) {
         // 获取MM怪物的ConfigurationSection
         mobInfos[internalName]?.let { config ->
@@ -248,9 +247,9 @@ abstract class MythicMobsHooker {
                     }
 
                     try {
-                        (ItemManager.getItemStack(args[0], null, data)
-                            ?: HookerManager.easyItemHooker?.getItemStack(args[0])
-                            ?: getItemStackSync(args[0]))?.let { itemStack ->
+                        (ItemManager.getItemStack(args[0], null, data) ?: HookerManager.easyItemHooker?.getItemStack(
+                            args[0]
+                        ) ?: getItemStackSync(args[0]))?.let { itemStack ->
                             if (itemStack.type != Material.AIR) {
                                 dropChance[slot]?.let { chance ->
                                     val itemTag = itemStack.getNbt()
@@ -315,9 +314,7 @@ abstract class MythicMobsHooker {
                     } catch (error: Throwable) {
                         ConfigManager.config.getString("Messages.equipFailed")?.let { message ->
                             logger.info(
-                                message
-                                    .replace("{mobID}", internalName)
-                                    .replace("{itemID}", args[0])
+                                message.replace("{mobID}", internalName).replace("{itemID}", args[0])
                             )
                         }
                         error.printStackTrace()
@@ -328,10 +325,7 @@ abstract class MythicMobsHooker {
     }
 
     fun deathEvent(
-        killer: LivingEntity?,
-        entity: LivingEntity,
-        internalName: String,
-        mobLevel: Int
+        killer: LivingEntity?, entity: LivingEntity, internalName: String, mobLevel: Int
     ) {
         // 获取MM怪物的ConfigurationSection
         mobInfos[internalName]?.let { configSection ->
@@ -448,12 +442,7 @@ abstract class MythicMobsHooker {
                         ArrayList<ItemStack>().also {
                             configLoadedEvent.fishDrops?.let { fishDrops ->
                                 loadItems(
-                                    it,
-                                    fishDrops,
-                                    player as? OfflinePlayer,
-                                    params,
-                                    null,
-                                    true
+                                    it, fishDrops, player as? OfflinePlayer, params, null, true
                                 )
                             }
                         }
@@ -461,12 +450,7 @@ abstract class MythicMobsHooker {
                     } else {
                         configLoadedEvent.fishDrops?.let {
                             loadItems(
-                                dropItems,
-                                it,
-                                player as? OfflinePlayer,
-                                params,
-                                null,
-                                true
+                                dropItems, it, player as? OfflinePlayer, params, null, true
                             )
                         }
                         null
@@ -474,14 +458,7 @@ abstract class MythicMobsHooker {
 
                 // 物品都加载好了, 触发一下事件
                 val dropEvent = MythicDropEvent.Drop(
-                    internalName,
-                    entity,
-                    player,
-                    dropItems,
-                    fishDropItems,
-                    offsetXString,
-                    offsetYString,
-                    angleType
+                    internalName, entity, player, dropItems, fishDropItems, offsetXString, offsetYString, angleType
                 )
                 dropEvent.call()
                 if (dropEvent.isCancelled) return
@@ -503,10 +480,7 @@ abstract class MythicMobsHooker {
                         dropEvent.fishDropItems?.forEach { itemStack ->
                             // 掉落
                             WorldUtils.dropItem(
-                                entity.world,
-                                entity.location,
-                                itemStack,
-                                caughtVelocity
+                                entity.world, entity.location, itemStack, caughtVelocity
                             )
                         }
                     }
@@ -522,15 +496,41 @@ abstract class MythicMobsHooker {
     fun loadMobInfos() {
         async {
             mobInfos.clear()
-            for (file: File in ConfigUtils.getAllFiles("MythicMobs", "Mobs")) {
-                val config = YamlConfiguration.loadConfiguration(file)
-                config.getKeys(false).forEach { id ->
-                    config.getConfigurationSection(id)?.let {
-                        mobInfos[id] = it
-                    }
-                }
-            }
+            ConfigUtils.getAllFiles("MythicMobs", "Mobs").forEach(this::loadMobInfosFromMobFile)
+            loadMobInfosFromPackDir(
+                File(
+                    File(
+                        NeigeItems.getInstance().dataFolder.parent, File.separator + "MythicMobs"
+                    ), File.separator + "Packs"
+                )
+            )
+            loadMobInfosFromPackDir(
+                File(
+                    File(
+                        NeigeItems.getInstance().dataFolder.parent, File.separator + "MythicMobs"
+                    ), File.separator + "packs"
+                )
+            )
             MobInfoReloadedEvent().call()
+        }
+    }
+
+    private fun loadMobInfosFromMobFile(mobFile: File) {
+        val config = YamlConfiguration.loadConfiguration(mobFile)
+        config.getKeys(false).forEach { id ->
+            config.getConfigurationSection(id)?.let {
+                mobInfos[id] = it
+            }
+        }
+    }
+
+    private fun loadMobInfosFromPackDir(packDir: File) {
+        if (!packDir.exists() || !packDir.isDirectory) return
+        val packs = packDir.listFiles() ?: arrayOf<File>()
+        for (packFile: File in packs) {
+            if (!packFile.isDirectory) continue
+            val mobDir = File(packFile, "Mobs")
+            ConfigUtils.getAllFiles(mobDir).forEach(this::loadMobInfosFromMobFile)
         }
     }
 
@@ -542,9 +542,7 @@ abstract class MythicMobsHooker {
      * @param player 用于解析物品的玩家
      */
     private fun loadEquipmentDrop(
-        entity: LivingEntity,
-        dropItems: ArrayList<ItemStack>,
-        player: LivingEntity?
+        entity: LivingEntity, dropItems: ArrayList<ItemStack>, player: LivingEntity?
     ) {
         // 获取MM怪物身上的装备
         val entityEquipment = entity.equipment
@@ -568,9 +566,7 @@ abstract class MythicMobsHooker {
      * @param player 用于解析物品的玩家
      */
     private fun loadEquipmentDrop(
-        equipments: ArrayList<ItemStack>,
-        dropItems: ArrayList<ItemStack>,
-        player: LivingEntity?
+        equipments: ArrayList<ItemStack>, dropItems: ArrayList<ItemStack>, player: LivingEntity?
     ) {
         // 遍历怪物身上的装备, 看看哪个是生成时自带的需要掉落的NI装备
         for (itemStack in equipments) {
