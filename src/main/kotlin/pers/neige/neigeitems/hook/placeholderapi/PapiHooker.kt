@@ -3,6 +3,7 @@ package pers.neige.neigeitems.hook.placeholderapi
 import javassist.ClassClassPath
 import javassist.ClassPool
 import org.bukkit.OfflinePlayer
+import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.JvmHacker
 import java.lang.instrument.ClassDefinition
 import java.util.function.BiFunction
@@ -11,21 +12,36 @@ import java.util.function.BiFunction
  * PlaceholderAPI挂钩
  */
 abstract class PapiHooker {
-    init {
-        val pool = ClassPool.getDefault()
-        pool.insertClassPath(ClassClassPath(Class.forName("me.clip.placeholderapi.PlaceholderAPIPlugin")))
-        pool.insertClassPath(ClassClassPath(Class.forName("org.bukkit.command.CommandSender")))
-        pool.insertClassPath(ClassClassPath(Class.forName("pers.neige.neigeitems.event.PapiReloadEvent")))
-        val ctClass = pool.get("me.clip.placeholderapi.PlaceholderAPIPlugin")
-        ctClass.defrost()
+    private companion object {
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(PapiHooker::class.java.simpleName)
+    }
 
-        val reloadConf = ctClass.getDeclaredMethod("reloadConf", arrayOf(pool.get("org.bukkit.command.CommandSender")))
-        reloadConf.insertAfter("new pers.neige.neigeitems.event.PapiReloadEvent().call();")
-        JvmHacker.instrumentation().redefineClasses(
-            ClassDefinition(
-                Class.forName("me.clip.placeholderapi.PlaceholderAPIPlugin"), ctClass.toBytecode()
+    fun hack() {
+        try {
+            val pool = ClassPool.getDefault()
+            pool.insertClassPath(ClassClassPath(Class.forName("me.clip.placeholderapi.PlaceholderAPIPlugin")))
+            pool.insertClassPath(ClassClassPath(Class.forName("org.bukkit.command.CommandSender")))
+            pool.insertClassPath(ClassClassPath(Class.forName("pers.neige.neigeitems.event.PapiReloadEvent")))
+            val ctClass = pool.get("me.clip.placeholderapi.PlaceholderAPIPlugin")
+            ctClass.defrost()
+
+            val reloadConf =
+                ctClass.getDeclaredMethod("reloadConf", arrayOf(pool.get("org.bukkit.command.CommandSender")))
+            reloadConf.insertAfter("new pers.neige.neigeitems.event.PapiReloadEvent().call();")
+            JvmHacker.instrumentation().redefineClasses(
+                ClassDefinition(
+                    Class.forName("me.clip.placeholderapi.PlaceholderAPIPlugin"), ctClass.toBytecode()
+                )
             )
-        )
+        } catch (exception: IllegalStateException) {
+            if (exception.message == "Failed to attach agent hacker") {
+                logger.info("你他妈了个逼的不会是用jre开的服吧？")
+            }
+            exception.printStackTrace()
+        } catch (throwable: Throwable) {
+            throwable.printStackTrace()
+        }
     }
 
     /**

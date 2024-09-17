@@ -138,6 +138,7 @@ object HookerManager {
                     null
                 }
             }
+        papiHooker?.hack()
 
         vaultHooker =
             if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
