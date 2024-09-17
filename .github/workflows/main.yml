@@ -68,7 +68,7 @@ jobs:
           IREPO_USERNAME: ${{ secrets.IREPO_USERNAME }}
           IREPO_PASSWORD: ${{ secrets.IREPO_PASSWORD }}
       - name: capture build artifacts
-        uses: actions/upload-artifact@3.2.1
+        uses: actions/upload-artifact@v3.2.1
         with:
           name: Artifacts
           path: build/libs/
