@@ -192,7 +192,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     /**
      * 获取指定 NBT键 对应的 NBT值 的 NBT类型.
      *
-     * @param key   待检测的 NBT键.
+     * @param key 待检测的 NBT键.
      * @return 指定 NBT键 对应的 NBT值 的 NBT类型, 数字与类型的对应关系详见 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtType 类所属的公有静态变量.
      */
     default byte getTagType(String key) {

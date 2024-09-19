@@ -6,12 +6,10 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,12 +24,10 @@ import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
 import pers.neige.neigeitems.ref.chat.RefEnumTitleAction;
 import pers.neige.neigeitems.ref.entity.*;
-import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
 import pers.neige.neigeitems.ref.network.*;
 import pers.neige.neigeitems.ref.network.syncher.RefEntityDataAccessor;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData;
-import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataItem;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataValue;
 import pers.neige.neigeitems.ref.server.level.RefServerEntity;
 import pers.neige.neigeitems.ref.server.level.RefWorldServer;
@@ -41,65 +37,9 @@ import pers.neige.neigeitems.ref.world.inventory.RefCraftContainer;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 public class EntityPlayerUtils {
-    /**
-     * 1.15+ 版本起, EntityLiving 内部 swing 方法可以传入一个布尔量.
-     * 该布尔量为 true 时, 向周围生物及该实体本身发送摆动对应手臂的动作数据包.
-     * 该布尔量为 false 时, 仅向周围生物发送数据包, 不向该实体本身发送.
-     * 以往版本中默认不向该实体本身发送.
-     */
-    private static final boolean SWING_AND_SEND_SUPPORT = CbVersion.v1_15_R1.isSupport();
-
-    /**
-     * 1.16.2+ 版本起, Damageable 接口下添加 getAbsorptionAmount 及 setAbsorptionAmount 方法, 用于操作伤害吸收的黄心数值.
-     * 高版本的 getAbsorptionAmount 返回的是 double, 而 NMS 内部返回的实质上是 float, 是 OBC 将 float 强转为 double 并返回.
-     * 总觉得有一种小脑发育不完全的美, 所以本工具类的 getAbsorptionAmount 干脆全盘使用 NMS 操作, 不在 1.16.2+ 版本调用 BukkitAPI 了.
-     */
-    private static final boolean ABSORPTION_SUPPORT = CbVersion.v1_16_R2.isSupport();
-
-    /**
-     * 1.15.2+ 版本起, HumanEntity 接口下添加 getAttackCooldown 方法, 用于获取玩家当前攻击冷却.
-     * 但是 1.15 - 1.15.2 版本的 CraftBukkit 版本均为 v1_15_R1.
-     * 为防止出现问题, 直接看作 v1_16_R1 起步.
-     */
-    private static final boolean ATTACK_COOLDOWN_SUPPORT = CbVersion.v1_16_R1.isSupport();
-
-    /**
-     * 1.14+ 版本起, Entity 接口添加 setRotation 方法, 用于设置实体朝向.
-     */
-    private static final boolean SET_ROTATION_SUPPORT = CbVersion.v1_14_R1.isSupport();
-
-    /**
-     * 1.17+ 版本起, Entity 内部的添加 lookAt 方法, 用于使玩家看向指定位置.
-     */
-    private static final boolean LOOK_AT_SUPPORT = CbVersion.v1_17_R1.isSupport();
-
-    /**
-     * 1.13+ 版本起, 添加 PacketPlayOutLookAt 数据包, 用于使玩家看向指定位置.
-     */
-    private static final boolean PACKET_LOOK_AT_SUPPORT = CbVersion.v1_13_R1.isSupport();
-
-    /**
-     * 1.17+ 版本起, SignBlockEntity 构造函数发生变化.
-     */
-    private static final boolean NEW_SIGN_ENTITY_CONSTRUCTOR = CbVersion.v1_17_R1.isSupport();
-
-    /**
-     * 1.20+ 版本起, 告示牌开始出现正反面区别.
-     */
-    private static final boolean SIGN_SIDE_SUPPORT = CbVersion.v1_20_R1.isSupport();
-
-    /**
-     * 1.17+ 版本起, Title 相关数据包发生变化.
-     */
-    private static final boolean TITLE_PACKET_CHANGED = CbVersion.v1_17_R1.isSupport();
-    /**
-     * 1.14+ 版本起, Entity 类添加 addEntityPacket 方法, 返回对应的添加实体数据包.
-     */
-    private static final boolean ADD_ENTITY_PACKET_SUPPORT = CbVersion.v1_14_R1.isSupport();
     /**
      * 1.19.4+ 版本起, EntityMetadata数据包构造函数发生了改变.
      */
@@ -108,6 +48,53 @@ public class EntityPlayerUtils {
      * 1.13+ 版本起, Entity 类 setCustomName 方法由接收 String 改为接收 IChatBaseComponent.
      */
     static final boolean COMPONENT_NAME_SUPPORT = CbVersion.v1_13_R1.isSupport();
+    /**
+     * 1.15+ 版本起, EntityLiving 内部 swing 方法可以传入一个布尔量.
+     * 该布尔量为 true 时, 向周围生物及该实体本身发送摆动对应手臂的动作数据包.
+     * 该布尔量为 false 时, 仅向周围生物发送数据包, 不向该实体本身发送.
+     * 以往版本中默认不向该实体本身发送.
+     */
+    private static final boolean SWING_AND_SEND_SUPPORT = CbVersion.v1_15_R1.isSupport();
+    /**
+     * 1.16.2+ 版本起, Damageable 接口下添加 getAbsorptionAmount 及 setAbsorptionAmount 方法, 用于操作伤害吸收的黄心数值.
+     * 高版本的 getAbsorptionAmount 返回的是 double, 而 NMS 内部返回的实质上是 float, 是 OBC 将 float 强转为 double 并返回.
+     * 总觉得有一种小脑发育不完全的美, 所以本工具类的 getAbsorptionAmount 干脆全盘使用 NMS 操作, 不在 1.16.2+ 版本调用 BukkitAPI 了.
+     */
+    private static final boolean ABSORPTION_SUPPORT = CbVersion.v1_16_R2.isSupport();
+    /**
+     * 1.15.2+ 版本起, HumanEntity 接口下添加 getAttackCooldown 方法, 用于获取玩家当前攻击冷却.
+     * 但是 1.15 - 1.15.2 版本的 CraftBukkit 版本均为 v1_15_R1.
+     * 为防止出现问题, 直接看作 v1_16_R1 起步.
+     */
+    private static final boolean ATTACK_COOLDOWN_SUPPORT = CbVersion.v1_16_R1.isSupport();
+    /**
+     * 1.14+ 版本起, Entity 接口添加 setRotation 方法, 用于设置实体朝向.
+     */
+    private static final boolean SET_ROTATION_SUPPORT = CbVersion.v1_14_R1.isSupport();
+    /**
+     * 1.17+ 版本起, Entity 内部的添加 lookAt 方法, 用于使玩家看向指定位置.
+     */
+    private static final boolean LOOK_AT_SUPPORT = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.13+ 版本起, 添加 PacketPlayOutLookAt 数据包, 用于使玩家看向指定位置.
+     */
+    private static final boolean PACKET_LOOK_AT_SUPPORT = CbVersion.v1_13_R1.isSupport();
+    /**
+     * 1.17+ 版本起, SignBlockEntity 构造函数发生变化.
+     */
+    private static final boolean NEW_SIGN_ENTITY_CONSTRUCTOR = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.20+ 版本起, 告示牌开始出现正反面区别.
+     */
+    private static final boolean SIGN_SIDE_SUPPORT = CbVersion.v1_20_R1.isSupport();
+    /**
+     * 1.17+ 版本起, Title 相关数据包发生变化.
+     */
+    private static final boolean TITLE_PACKET_CHANGED = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.14+ 版本起, Entity 类添加 addEntityPacket 方法, 返回对应的添加实体数据包.
+     */
+    private static final boolean ADD_ENTITY_PACKET_SUPPORT = CbVersion.v1_14_R1.isSupport();
     /**
      * 1.19.4+ 版本起, SynchedEntityData 下 set 方法添加 boolean 类型 force 参数, 用于强制设置.
      */

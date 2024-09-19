@@ -12,9 +12,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtListLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
@@ -100,7 +97,7 @@ object ItemUtils {
     fun String.cast(): Any {
         if (this.startsWith("(")) {
             return when {
-                this.startsWith("(String) ") -> this.substring(8, this.length)
+                this.startsWith("(String) ") -> this.substring(9, this.length)
                 this.startsWith("(Byte) ") -> this.substring(7, this.length).toByteOrNull() ?: this
                 this.startsWith("(Short) ") -> this.substring(8, this.length).toShortOrNull() ?: this
                 this.startsWith("(Int) ") -> this.substring(6, this.length).toIntOrNull() ?: this
@@ -148,7 +145,7 @@ object ItemUtils {
         if (this.startsWith("(")) {
             return when {
                 this.startsWith("(String) ") -> {
-                    NbtString.valueOf(this.substring(8, this.length))
+                    NbtString.valueOf(this.substring(9, this.length))
                 }
 
                 this.startsWith("(Byte) ") -> {
@@ -908,267 +905,6 @@ object ItemUtils {
         return Vector(d0 * 0.1, d1 * 0.1 + sqrt(sqrt(d0 * d0 + d1 * d1 + d2 * d2)) * 0.08, d2 * 0.1)
     }
 
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getByteOrNull(key: String): Byte? {
-        val value: Nbt<*>? = get(key)
-        return if (value is NbtNumeric<*>) {
-            value.asByte
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getShortOrNull(key: String): Short? {
-        val value: Nbt<*>? = get(key)
-        return if (value is NbtNumeric<*>) {
-            value.asShort
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getIntOrNull(key: String): Int? {
-        val value: Nbt<*>? = get(key)
-        return if (value is NbtNumeric<*>) {
-            value.asInt
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getLongOrNull(key: String): Long? {
-        val value: Nbt<*>? = get(key)
-        return if (value is NbtNumeric<*>) {
-            value.asLong
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getFloatOrNull(key: String): Float? {
-        val value: Nbt<*>? = get(key)
-        return if (value is NbtNumeric<*>) {
-            value.asFloat
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getDoubleOrNull(key: String): Double? {
-        val value: Nbt<*>? = get(key)
-        return if (value is NbtNumeric<*>) {
-            value.asDouble
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getStringOrNull(key: String): String? {
-        return when (val value: Nbt<*>? = get(key)) {
-            is NbtString -> value.asString
-            is NbtByte -> value.asByte.toString()
-            is NbtShort -> value.asShort.toString()
-            is NbtInt -> value.asInt.toString()
-            is NbtLong -> value.asLong.toString()
-            is NbtFloat -> value.asFloat.toString()
-            is NbtDouble -> value.asDouble.toString()
-            else -> value?.asString
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getExactStringOrNull(key: String): String? {
-        val value: Nbt<*>? = get(key)
-        return if (value is NbtString) {
-            value.asString
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getDeepByteOrNull(key: String): Byte? {
-        val value: Nbt<*>? = getDeep(key)
-        return if (value is NbtNumeric<*>) {
-            value.asByte
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getDeepShortOrNull(key: String): Short? {
-        val value: Nbt<*>? = getDeep(key)
-        return if (value is NbtNumeric<*>) {
-            value.asShort
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getDeepIntOrNull(key: String): Int? {
-        val value: Nbt<*>? = getDeep(key)
-        return if (value is NbtNumeric<*>) {
-            value.asInt
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getDeepLongOrNull(key: String): Long? {
-        val value: Nbt<*>? = getDeep(key)
-        return if (value is NbtNumeric<*>) {
-            value.asLong
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getDeepFloatOrNull(key: String): Float? {
-        val value: Nbt<*>? = getDeep(key)
-        return if (value is NbtNumeric<*>) {
-            value.asFloat
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getDeepDoubleOrNull(key: String): Double? {
-        val value: Nbt<*>? = getDeep(key)
-        return if (value is NbtNumeric<*>) {
-            value.asDouble
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getDeepStringOrNull(key: String): String? {
-        return when (val value: Nbt<*>? = getDeep(key)) {
-            is NbtString -> value.asString
-            is NbtByte -> value.asByte.toString()
-            is NbtShort -> value.asShort.toString()
-            is NbtInt -> value.asInt.toString()
-            is NbtLong -> value.asLong.toString()
-            is NbtFloat -> value.asFloat.toString()
-            is NbtDouble -> value.asDouble.toString()
-            else -> value?.asString
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该方法")
-    fun NbtComponentLike.getDeepExactStringOrNull(key: String): String? {
-        val value: Nbt<*>? = getDeep(key)
-        return if (value is NbtString) {
-            value.asString
-        } else {
-            null
-        }
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该功能")
-    fun NbtComponentLike.getDeepWithEscape(
-        key: String,
-        escape: Char = '\\',
-        separator: Char = '.'
-    ): Nbt<*>? {
-        val keys = key.split(separator, escape)
-        var currentNbt: NbtLike? = this
-        var value: Nbt<*>? = null
-        for (k in keys) {
-            if (currentNbt == null) {
-                return null
-            }
-            if (currentNbt is NbtComponentLike) {
-                val obj = currentNbt[k] ?: return null
-                value = obj
-                currentNbt = if (obj is NbtComponentLike || obj is NbtListLike) {
-                    obj
-                } else {
-                    null
-                }
-            } else if (currentNbt is NbtListLike) {
-                val index = k.toIntOrNull() ?: return null
-                val obj = currentNbt.getOrNull(index) ?: return null
-                value = obj
-                currentNbt = if (obj is NbtComponentLike || obj is NbtListLike) {
-                    obj
-                } else {
-                    null
-                }
-            } else {
-                return null
-            }
-        }
-        return value
-    }
-
-    @JvmStatic
-    @Deprecated("本体已包含该功能")
-    fun NbtComponentLike.putDeepWithEscape(
-        key: String,
-        value: Nbt<*>,
-        force: Boolean = true,
-        escape: Char = '\\',
-        separator: Char = '.'
-    ) {
-        val keys = key.split(separator, escape)
-        var currentNbtCompound: NbtComponentLike = this
-        for (i in keys.indices) {
-            val k = keys[i]
-            if (i == keys.size - 1) {
-                currentNbtCompound[k] = value // is last node
-            } else {
-                if (currentNbtCompound.containsKey(k)) {
-                    var obj = currentNbtCompound[k]
-                    if (obj is NbtComponentLike) {
-                        currentNbtCompound = obj
-                    } else {
-                        // 如果需要强制设置
-                        if (force) {
-                            obj = NbtCompound()
-                            currentNbtCompound[k] = obj
-                            currentNbtCompound = obj
-                        } else {
-                            return
-                        }
-                    }
-                } else {
-                    val obj = NbtCompound()
-                    currentNbtCompound[k] = obj
-                    currentNbtCompound = obj
-                }
-            }
-        }
-    }
-
     /**
      * 向NbtCompound中插入一个值(key默认以.作分隔, 默认以\转义, 如果key可以转换成Int, 就认为你当前层级是一个NbtList, 而非NbtCompound).
      * 我向前追溯500年, 向后预测500年, 也找不出比这还烂的代码了, 建议不要细看, 能用就行, 避免脏了眼睛.
@@ -1459,10 +1195,8 @@ object ItemUtils {
 
     @JvmStatic
     fun ItemStack?.removeOwnerNbt() {
-        val nbt = getNbtOrNull()
-        if (nbt != null) {
-            nbt.getCompound("NeigeItems")?.remove("owner")
-            nbt.saveToSafe(this!!)
-        }
+        if (this == null || this.type == Material.AIR) return
+        val nbt = NbtItemStack(this).directTag
+        nbt.getCompound("NeigeItems")?.remove("owner")
     }
 }
