@@ -12,6 +12,7 @@ import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.utils.ConfigUtils.clone
@@ -570,7 +571,9 @@ object ItemManager : ItemConfigManager() {
                 // 还原物品类型
                 type = newItemStack.type
                 // 还原损伤值(1.12.2需要)
-                durability = newItemStack.durability
+                if (CbVersion.current() == CbVersion.v1_12_R1) {
+                    durability = newItemStack.durability
+                }
             }
             return true
         }
@@ -629,7 +632,9 @@ object ItemManager : ItemConfigManager() {
                 // 还原物品类型
                 type = newItemStack.type
                 // 还原损伤值(1.12.2需要)
-                durability = newItemStack.durability
+                if (CbVersion.current() == CbVersion.v1_12_R1) {
+                    durability = newItemStack.durability
+                }
             }
             return true
         }
@@ -723,7 +728,9 @@ object ItemManager : ItemConfigManager() {
                     // 还原物品类型
                     itemStack.type = newItemStack.type
                     // 还原损伤值(1.12.2需要)
-                    itemStack.durability = newItemStack.durability
+                    if (CbVersion.current() == CbVersion.v1_12_R1) {
+                        itemStack.durability = newItemStack.durability
+                    }
                     // 发送提示信息
                     if (sendMessage) {
                         player.sendLang("Messages.legacyItemUpdateMessage", mapOf("{name}" to oldName))

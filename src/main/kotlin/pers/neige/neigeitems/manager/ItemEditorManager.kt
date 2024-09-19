@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack
 import org.neosearch.stringsearcher.StringSearcher
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.manager.HookerManager.papi
 import pers.neige.neigeitems.manager.ItemManager.addCharge
@@ -1634,7 +1635,9 @@ object ItemEditorManager {
                     // 还原物品类型
                     itemStack.type = newItemStack.type
                     // 还原损伤值(1.12.2需要)
-                    itemStack.durability = newItemStack.durability
+                    if (CbVersion.current() == CbVersion.v1_12_R1) {
+                        itemStack.durability = newItemStack.durability
+                    }
                 }
                 return@addBasicItemEditor true
             }
@@ -1699,7 +1702,9 @@ object ItemEditorManager {
                     // 还原物品类型
                     itemStack.type = newItemStack.type
                     // 还原损伤值(1.12.2需要)
-                    itemStack.durability = newItemStack.durability
+                    if (CbVersion.current() == CbVersion.v1_12_R1) {
+                        itemStack.durability = newItemStack.durability
+                    }
                 }
                 return@addBasicItemEditor true
             }
@@ -1765,7 +1770,9 @@ object ItemEditorManager {
                     // 还原物品类型
                     itemStack.type = newItemStack.type
                     // 还原损伤值(1.12.2需要)
-                    itemStack.durability = newItemStack.durability
+                    if (CbVersion.current() == CbVersion.v1_12_R1) {
+                        itemStack.durability = newItemStack.durability
+                    }
                 }
                 return@addBasicItemEditor true
             }

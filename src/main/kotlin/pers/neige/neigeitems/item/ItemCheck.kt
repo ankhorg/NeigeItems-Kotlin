@@ -4,6 +4,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.event.ItemExpirationEvent
 import pers.neige.neigeitems.event.ItemUpdateEvent
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
@@ -117,7 +118,9 @@ object ItemCheck {
                         // 还原物品类型
                         itemStack.type = newItemStack.type
                         // 还原损伤值(1.12.2需要)
-                        itemStack.durability = newItemStack.durability
+                        if (CbVersion.current() == CbVersion.v1_12_R1) {
+                            itemStack.durability = newItemStack.durability
+                        }
                         // 发送提示信息
                         player.sendLang("Messages.legacyItemUpdateMessage", mapOf("{name}" to oldName))
                     }
