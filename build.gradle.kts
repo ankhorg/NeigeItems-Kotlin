@@ -66,7 +66,6 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/public")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://repo.dmulloy2.net/repository/public/")
-    maven("https://repo.extendedclip.com/content/")
     maven("https://jitpack.io/")
     maven("https://libraries.minecraft.net")
     // mmoitems
@@ -81,7 +80,6 @@ dependencies {
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
     compileOnly("org.spigotmc:spigot:1.16.5-R0.1-SNAPSHOT")
     compileOnly("com.comphenix.protocol:ProtocolLib:4.8.0")
-    compileOnly("me.clip:placeholderapi:2.10.9")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     compileOnly("org.ow2.asm:asm:9.4")
     compileOnly("io.th0rgal:oraxen:1.170.0")
