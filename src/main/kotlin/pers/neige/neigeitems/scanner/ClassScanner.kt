@@ -226,7 +226,9 @@ class ClassScanner(
             entryName = entryName.substring(0, entry.name.length - 6)
             try {
                 classes.add(Class.forName(entryName))
-            } catch (error: NoClassDefFoundError) {
+            } catch (_: NoClassDefFoundError) {
+            } catch (_: ClassNotFoundException) {
+            } catch (_: UnsupportedClassVersionError) {
             } catch (error: Throwable) {
                 plugin.logger.warning("error occurred while get Class $entryName")
                 error.printStackTrace()
