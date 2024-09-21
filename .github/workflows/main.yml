@@ -20,11 +20,11 @@ jobs:
             ~/.gradle/wrapper
       - name: validate gradle wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: setup jdk 8.0
+      - name: setup jdk 21.0
         uses: actions/setup-java@v2
         with:
           distribution: adopt
-          java-version: 8.0
+          java-version: 21.0
       # 编译出静态页面
       - name: Build
         run: |-
@@ -52,11 +52,11 @@ jobs:
             ~/.gradle/wrapper
       - name: validate gradle wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: setup jdk 8.0
+      - name: setup jdk 21.0
         uses: actions/setup-java@v2
         with:
           distribution: adopt
-          java-version: 8.0
+          java-version: 21.0
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       # 构建项目成品
