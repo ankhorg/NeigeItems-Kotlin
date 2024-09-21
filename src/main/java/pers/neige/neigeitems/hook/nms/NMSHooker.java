@@ -6,12 +6,24 @@ import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.item.builder.ItemBuilder;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
+import pers.neige.neigeitems.ref.chat.RefChatFormatting;
+import pers.neige.neigeitems.ref.chat.RefChatSerializer;
+import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
+import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
+import pers.neige.neigeitems.ref.nbt.RefNbtBase;
+import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
+import pers.neige.neigeitems.ref.nbt.RefNbtTagString;
 import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.util.HashMap;
@@ -143,5 +155,73 @@ public class NMSHooker {
                         ItemTag.ofNbt(nbtString)
                 )
         );
+    }
+
+    @NotNull
+    public ItemBuilder newItemBuilder() {
+        return new ItemBuilder();
+    }
+
+    @NotNull
+    public ItemBuilder newItemBuilder(
+            @Nullable Material material
+    ) {
+        return new ItemBuilder(material);
+    }
+
+    @NotNull
+    public ItemBuilder newItemBuilder(
+            @Nullable ItemStack itemStack
+    ) {
+        return new ItemBuilder(itemStack);
+    }
+
+    @NotNull
+    public ItemBuilder newItemBuilder(
+            @Nullable ConfigurationSection config
+    ) {
+        return new ItemBuilder(config);
+    }
+
+    @Nullable
+    public NbtCompound getCustomNbt(@Nullable ItemStack itemStack) {
+        if (itemStack != null && itemStack.getType() != Material.AIR) {
+            return new NbtItemStack(itemStack).getTag();
+        }
+        return null;
+    }
+
+    @Nullable
+    public NbtCompound getOrCreateCustomNbt(@Nullable ItemStack itemStack) {
+        if (itemStack != null && itemStack.getType() != Material.AIR) {
+            return new NbtItemStack(itemStack).getOrCreateTag();
+        }
+        return null;
+    }
+
+    @Nullable
+    public String getDisplayNameFromCraftItemStack(@Nullable ItemStack itemStack) {
+        if (itemStack instanceof RefCraftItemStack) {
+            if (itemStack.getType() != Material.AIR) {
+                RefNbtTagCompound tag = ((RefCraftItemStack) itemStack).handle.getTag();
+                if (tag != null) {
+                    RefNbtBase display = tag.get("display");
+                    if (display instanceof RefNbtTagCompound) {
+                        RefNbtBase tagName = ((RefNbtTagCompound) display).get("Name");
+                        if (tagName instanceof RefNbtTagString) {
+                            String rawName = tagName.asString();
+                            if (CbVersion.current() == CbVersion.v1_12_R1) {
+                                return rawName;
+                            } else if (CbVersion.v1_15_R1.isSupport()) {
+                                return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName));
+                            } else {
+                                return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName), RefChatFormatting.WHITE);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

@@ -116,7 +116,7 @@ dependencies {
 
 tasks {
     withType<ShadowJar> {
-        archiveClassifier.set("")
+        archiveClassifier.set("test")
 
         mergeServiceFiles()
         exclude("META-INF/maven/**")
@@ -200,7 +200,7 @@ tasks.assemble {
 publishing {
     repositories {
         if (!System.getenv("CI").toBoolean()) {
-            maven(buildDir.resolve("repo"))
+            maven(layout.buildDirectory.file("repo").get().asFile)
         } else if (!version.toString().endsWith("-SNAPSHOT")) {
             maven("https://s0.blobs.inksnow.org/maven/") {
                 credentials {
@@ -230,7 +230,7 @@ tasks.processResources {
 
 tasks.create<BuildMappingsTask>("build-mappings") {
     registryName = "neigeitems"
-    outputDirectory = buildDir.resolve("cache/build-mappings")
+    outputDirectory = layout.buildDirectory.file("cache/build-mappings").get().asFile
     ankhInvokePackage = "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke"
 
 //    mapping("nms", "1.21") {
@@ -266,7 +266,7 @@ tasks.create<ApplyReferenceTask>("apply-reference") {
     ankhInvokePackage = "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke"
     appendReferencePackage("pers.neige.neigeitems.ref")
     inputJars = tasks.getByName("shadowJar").outputs.files
-    outputJar = buildDir.resolve("libs/NeigeItems-$version-shaded.jar")
+    outputJar = layout.buildDirectory.file("libs/NeigeItems-$version-shaded.jar").get().asFile
 }
 
 tasks.assemble {

@@ -152,8 +152,7 @@ object Give {
                         player.giveItems(event.itemStack, event.amount)
                     }
                     giveData[event.itemStack.getParsedName()] =
-                        giveData[event.itemStack.getParsedName()]?.let { it + event.amount }
-                            ?: event.amount
+                        giveData.getOrDefault(event.itemStack.getParsedName(), 0) + event.amount
                 }
             }
         } else {

@@ -145,7 +145,7 @@ object Drop {
                     event.location.dropNiItems(event.itemStack, event.amount, parser)
                     val currentData = dropData.computeIfAbsent(event.location) { HashMap() }
                     currentData[event.itemStack.getParsedName()] =
-                        currentData[event.itemStack.getParsedName()]?.let { it + event.amount } ?: event.amount
+                        currentData.getOrDefault(event.itemStack.getParsedName(), 0) + event.amount
                 }
             }
         } else {

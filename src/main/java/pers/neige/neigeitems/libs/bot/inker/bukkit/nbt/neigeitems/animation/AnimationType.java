@@ -9,7 +9,7 @@ public enum AnimationType {
 
     private final int value;
 
-    private AnimationType(int value) {
+    AnimationType(int value) {
         this.value = value;
     }
 

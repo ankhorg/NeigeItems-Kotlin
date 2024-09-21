@@ -14,6 +14,7 @@ import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
+import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.easyItemHooker
 import pers.neige.neigeitems.manager.HookerManager.getHookedItem
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
@@ -370,7 +371,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun ItemStack.getNbt(): NbtCompound {
-        return NbtItemStack(this).orCreateTag
+        return HookerManager.nmsHooker.getOrCreateCustomNbt(this)!!
     }
 
     /**
@@ -380,10 +381,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun ItemStack?.getNbtOrNull(): NbtCompound? {
-        if (this != null && this.type != Material.AIR) {
-            return NbtItemStack(this).tag
-        }
-        return null
+        return HookerManager.nmsHooker.getCustomNbt(this)
     }
 
     /**
@@ -545,12 +543,9 @@ object ItemUtils {
      */
     @JvmStatic
     fun ItemStack?.isNiItem(parseData: Boolean): ItemInfo? {
-        // if (CbVersion.v1_20_R4.isSupport) return null
         if (this != null && this.type != Material.AIR) {
-            // 读取物品
-            val nbtItemStack = NbtItemStack(this)
             // 获取物品NBT
-            val itemTag = nbtItemStack.tag ?: return null
+            val itemTag = this.getNbtOrNull() ?: return null
             // 如果为非NI物品则终止操作
             val neigeItems = itemTag.getCompound("NeigeItems") ?: return null
             // 获取物品id
@@ -559,7 +554,7 @@ object ItemUtils {
                 parseData -> neigeItems.getString("data")?.parseObject<java.util.HashMap<String, String>>()
                 else -> null
             }
-            return ItemInfo(this, nbtItemStack, itemTag, neigeItems, id, data)
+            return ItemInfo(this, NbtItemStack(this), itemTag, neigeItems, id, data)
         }
         return null
     }

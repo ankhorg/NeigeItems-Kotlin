@@ -34,8 +34,6 @@ object ConfigManager {
      */
     val config get() = NeigeItems.getInstance().config
 
-    var skipAvailabilityCheck = config.getBoolean("SkipAvailabilityCheck", false)
-
     var debug = config.getBoolean("Main.Debug", false)
     var updateCheck = config.getBoolean("Main.UpdateCheck", true)
     var comboInterval = config.getLong("ItemAction.comboInterval", 500)
@@ -103,8 +101,6 @@ object ConfigManager {
             }
         }
         NeigeItems.getInstance().saveConfig()
-
-        skipAvailabilityCheck = config.getBoolean("SkipAvailabilityCheck", false)
 
         debug = config.getBoolean("Main.Debug", false)
         updateCheck = config.getBoolean("Main.UpdateCheck", true)

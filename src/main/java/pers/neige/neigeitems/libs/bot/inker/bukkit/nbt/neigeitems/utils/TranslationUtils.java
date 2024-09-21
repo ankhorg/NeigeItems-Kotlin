@@ -13,6 +13,7 @@ import pers.neige.neigeitems.lang.LocaleI18n;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtType;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.ref.chat.RefChatFormatting;
 import pers.neige.neigeitems.ref.chat.RefChatSerializer;
 import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
@@ -69,26 +70,8 @@ public class TranslationUtils {
     public static String getDisplayName(
             @NotNull ItemStack itemStack
     ) {
-        if ((Object) itemStack instanceof RefCraftItemStack) {
-            if (itemStack.getType() != Material.AIR) {
-                RefNbtTagCompound tag = ((RefCraftItemStack) (Object) itemStack).handle.getTag();
-                if (tag != null) {
-                    RefNbtBase display = tag.get("display");
-                    if (display instanceof RefNbtTagCompound) {
-                        RefNbtBase tagName = ((RefNbtTagCompound) display).get("Name");
-                        if (tagName instanceof RefNbtTagString) {
-                            String rawName = tagName.asString();
-                            if (CbVersion.current() == CbVersion.v1_12_R1) {
-                                return rawName;
-                            } else if (CbVersion.v1_15_R1.isSupport()) {
-                                return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName));
-                            } else {
-                                return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName), RefChatFormatting.WHITE);
-                            }
-                        }
-                    }
-                }
-            }
+        if (itemStack instanceof RefCraftItemStack) {
+            return HookerManager.INSTANCE.getNmsHooker().getDisplayNameFromCraftItemStack(itemStack);
         } else {
             ItemMeta itemMeta = NbtUtils.getItemMeta(itemStack);
             if (itemMeta != null && itemMeta.hasDisplayName()) {

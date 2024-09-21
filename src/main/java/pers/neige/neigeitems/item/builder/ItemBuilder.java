@@ -41,36 +41,36 @@ public class ItemBuilder {
     }
 
     @Nullable
-    private Material material = null;
+    protected Material material = null;
     @Nullable
-    private ItemStack itemStack = null;
+    protected ItemStack itemStack = null;
     @Nullable
-    private Short damage = null;
+    protected Short damage = null;
     @NotNull
-    private Map<Enchantment, Short> enchantments = new HashMap<>();
+    protected Map<Enchantment, Short> enchantments = new HashMap<>();
     @NotNull
-    private Map<Short, Short> enchantmentIdToLevel = new HashMap<>();
+    protected Map<Short, Short> enchantmentIdToLevel = new HashMap<>();
     @NotNull
-    private Map<String, Short> enchantmentKeyToLevel = new HashMap<>();
+    protected Map<String, Short> enchantmentKeyToLevel = new HashMap<>();
     @Nullable
-    private Integer customModelData = null;
+    protected Integer customModelData = null;
     @Nullable
-    private NbtString name = null;
+    protected NbtString name = null;
     @Nullable
-    private NbtList lore = null;
+    protected NbtList lore = null;
     @Nullable
-    private Integer color = null;
+    protected Integer color = null;
     @Nullable
-    private Boolean unbreakable = null;
+    protected Boolean unbreakable = null;
     @Nullable
-    private Integer hideFlag = null;
+    protected Integer hideFlag = null;
     @Nullable
-    private NbtCompound coverNbt = null;
-    private boolean hasBuild = false;
+    protected NbtCompound coverNbt = null;
+    protected boolean hasBuild = false;
     @Nullable
-    private Consumer<ItemStack> postItemInit = null;
+    protected Consumer<ItemStack> postItemInit = null;
     @Nullable
-    private BiConsumer<ItemStack, NbtCompound> preCoverNbt = null;
+    protected BiConsumer<ItemStack, NbtCompound> preCoverNbt = null;
 
     public ItemBuilder() {
     }

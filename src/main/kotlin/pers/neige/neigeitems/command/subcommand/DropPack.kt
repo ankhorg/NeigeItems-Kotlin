@@ -150,7 +150,7 @@ object DropPack {
                         dropItems(event.itemStacks, location, parser)
                     }
                 }
-                packInfo[event.location] = (packInfo[event.location] ?: 0) + 1
+                packInfo[event.location] = packInfo.getOrDefault(event.location, 0) + 1
             }
         }
         if (tip) {

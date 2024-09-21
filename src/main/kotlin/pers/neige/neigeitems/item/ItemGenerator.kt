@@ -11,9 +11,9 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
 import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.event.ItemGenerateEvent
-import pers.neige.neigeitems.item.builder.ItemBuilder
 import pers.neige.neigeitems.item.color.ItemColor
 import pers.neige.neigeitems.manager.ConfigManager.debug
+import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
@@ -165,7 +165,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         cache: Map<String, String>? = null
     ): ItemStack? {
         config ?: return base
-        val builder = ItemBuilder(baseMaterial)
+        val builder = HookerManager.nmsHooker.newItemBuilder(baseMaterial)
         builder.load(config)
         builder.itemStack = if (base.isCraftItem()) base!! else base?.asCraftCopy() ?: ItemStack(
             builder.type ?: Material.STONE

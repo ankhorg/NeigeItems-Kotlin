@@ -6,6 +6,16 @@ plugins {
     id("com.github.johnrengelman.shadow")
 }
 
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+tasks {
+    compileJava {
+        options.release = 21
+    }
+}
+
 dependencies {
     implementation(project(":hooker-mythicmobs-v440"))
     implementation(project(":hooker-mythicmobs-v459"))
@@ -17,6 +27,7 @@ dependencies {
     implementation(project(":hooker-nms-NamespacedKey"))
     implementation(project(":hooker-nms-CustomModelData"))
     implementation(project(":hooker-nms-HoverEvent"))
+    compileOnly(project(":hooker-nms-ItemStack"))
 }
 
 tasks {
@@ -48,10 +59,17 @@ tasks {
 
 fun final() {
     val mainFile =
-        File("${rootProject.buildDir}/libs/${rootProject.name}-${rootProject.property("version")}-shaded.jar")
+        rootProject.layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.property("version")}-shaded.jar")
+            .get().asFile
     val newMainFile =
-        File("${rootProject.buildDir}/libs/${rootProject.name}-${rootProject.property("version")}.jar")
-    val currentFile = File("${project.buildDir}/libs/${project.name}-${project.property("version")}.jar")
+        rootProject.layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.property("version")}.jar")
+            .get().asFile
+    val currentFile =
+        project.layout.buildDirectory.file("libs/${project.name}-${project.property("version")}.jar").get().asFile
+    val j21Project = rootProject.project("hooker-nms-ItemStack")
+    val j21File =
+        j21Project.layout.buildDirectory.file("libs/${j21Project.name}-${j21Project.property("version")}-dev.jar")
+            .get().asFile
 
     if (!mainFile.exists()) return
     if (!currentFile.exists()) return
@@ -61,7 +79,6 @@ fun final() {
             val entries = jarFile.entries()
             while (entries.hasMoreElements()) {
                 val entry = entries.nextElement()
-
                 jarOutputStream.putNextEntry(entry)
                 jarFile.getInputStream(entry).copyTo(jarOutputStream)
                 jarOutputStream.closeEntry()
@@ -79,9 +96,23 @@ fun final() {
                 }
             }
         }
+        JarFile(j21File).use { jarFile ->
+            val entries = jarFile.entries()
+            while (entries.hasMoreElements()) {
+                val entry = entries.nextElement()
+                val entryName = entry.name
+                if (entryName.endsWith(".class")) {
+                    jarOutputStream.putNextEntry(entry)
+                    jarFile.getInputStream(entry).copyTo(jarOutputStream)
+                    jarOutputStream.closeEntry()
+                }
+            }
+        }
     }
 
     mainFile.delete()
+    rootProject.layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.property("version")}-test.jar")
+        .get().asFile.delete()
 }
 
 val finalTask = tasks.register("finalTask") {

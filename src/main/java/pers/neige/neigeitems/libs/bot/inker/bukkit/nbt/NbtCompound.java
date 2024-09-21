@@ -32,6 +32,13 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
         this.delegateMap = new DelegateAbstractMap<>(this);
     }
 
+    public static NbtCompound createUnsafe(Object delegate) {
+        if (delegate instanceof RefNbtTagCompound) {
+            return new NbtCompound((RefNbtTagCompound) delegate);
+        }
+        return null;
+    }
+
     public Set<String> getAllKeys() {
         return delegate.getKeys();
     }
