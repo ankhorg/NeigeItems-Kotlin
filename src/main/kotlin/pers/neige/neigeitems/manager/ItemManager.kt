@@ -19,6 +19,7 @@ import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
+import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.toStringMap
@@ -224,8 +225,6 @@ object ItemManager : ItemConfigManager() {
                 if (itemStack.hasItemMeta()) {
                     // 获取ItemMeta
                     val itemMeta = itemStack.itemMeta
-                    // 获取物品NBT
-                    val itemNBT = itemStack.getNbt()
                     // 设置CustomModelData
                     nmsHooker.getCustomModelData(itemMeta)?.let {
                         configSection.set("custommodeldata", it)
@@ -255,14 +254,18 @@ object ItemManager : ItemConfigManager() {
                             configSection.set("hideflags", it.map { flag -> flag.name })
                         }
                     }
-                    // 设置物品颜色
-                    val color = itemNBT.getDeepInt("display.color", -1)
-                    if (color != -1) {
-                        configSection.set("color", color.toString(16).uppercase(Locale.getDefault()))
-                    }
-                    // 设置物品NBT
-                    if (!itemNBT.isEmpty()) {
-                        configSection.set("nbt", itemNBT.toStringMap(invalidNBT))
+                    // 获取物品NBT
+                    val itemNBT = itemStack.getNbtOrNull()
+                    if (itemNBT != null) {
+                        // 设置物品颜色
+                        val color = itemNBT.getDeepInt("display.color", -1)
+                        if (color != -1) {
+                            configSection.set("color", color.toString(16).uppercase(Locale.getDefault()))
+                        }
+                        // 设置物品NBT
+                        if (!itemNBT.isEmpty()) {
+                            configSection.set("nbt", itemNBT.toStringMap(invalidNBT))
+                        }
                     }
                 }
                 // 保存文件

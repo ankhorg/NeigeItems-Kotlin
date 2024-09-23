@@ -36,6 +36,7 @@ class PlaceholderExpansion(
         }
 
     fun register() {
+        expansion.persist()
         expansion.register()
     }
 

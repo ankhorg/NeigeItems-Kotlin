@@ -3,11 +3,8 @@ package pers.neige.neigeitems.papi
 import com.alibaba.fastjson2.parseObject
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import org.bukkit.event.EventPriority
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Awake
-import pers.neige.neigeitems.annotation.Listener
-import pers.neige.neigeitems.event.PapiReloadEvent
 import pers.neige.neigeitems.hook.placeholderapi.PlaceholderExpansion
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
@@ -142,11 +139,5 @@ object PapiExpansion {
             }
         }
         expansion?.register()
-    }
-
-    @JvmStatic
-    @Listener(eventPriority = EventPriority.LOWEST)
-    fun listener(event: PapiReloadEvent) {
-        init()
     }
 }
