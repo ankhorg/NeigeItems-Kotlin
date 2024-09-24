@@ -56,13 +56,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         ConcurrentHashMap<String, pers.neige.neigeitems.action.Action>()
 
     init {
-        try {
-            plugin.getResource("JavaScriptLib/lib.js")?.use { input ->
-                InputStreamReader(input, StandardCharsets.UTF_8).use { reader -> engine.eval(reader) }
-            }
-        } catch (error: Throwable) {
-            error.printStackTrace()
-        }
+        loadJSLib()
         // 加载所有拥有动作的物品及相关动作
         loadItemActions()
         // 加载动作组

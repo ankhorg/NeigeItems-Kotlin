@@ -30,11 +30,16 @@ import pers.neige.neigeitems.utils.*;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.logging.Level;
 
 import static pers.neige.neigeitems.utils.ListUtils.*;
 
@@ -445,6 +450,53 @@ public abstract class BaseActionManager {
             function.accept(context, content);
             return CompletableFuture.completedFuture(Results.SUCCESS);
         });
+    }
+
+    /**
+     * 将当前BaseActionManager所属插件的"JavaScriptLib/lib.js"资源文件加载至JS引擎
+     */
+    public void loadJSLib() {
+        loadJSLib(plugin, "JavaScriptLib" + File.separator + "lib.js");
+    }
+
+    /**
+     * 将其他插件的资源文件加载至JS引擎
+     *
+     * @param pluginName   目标插件名
+     * @param resourceName 资源文件名
+     */
+    public void loadJSLib(
+            @NotNull String pluginName,
+            @NotNull String resourceName
+    ) {
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        if (plugin == null) return;
+        loadJSLib(plugin, resourceName);
+    }
+
+    /**
+     * 将其他插件的资源文件加载至JS引擎
+     *
+     * @param plugin       目标插件
+     * @param resourceName 资源文件名
+     */
+    public void loadJSLib(
+            @NotNull Plugin plugin,
+            @NotNull String resourceName
+    ) {
+        try (InputStream input = plugin.getResource(resourceName)) {
+            if (input != null) {
+                try (InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8)) {
+                    getEngine().eval(reader);
+                } catch (Throwable error) {
+                    this.plugin.getLogger().log(Level.WARNING, "error occurred while loading " + resourceName + " from " + plugin.getName(), error);
+                }
+            } else {
+                this.plugin.getLogger().log(Level.WARNING, "there is no resource called " + resourceName + " in " + plugin.getName());
+            }
+        } catch (Throwable error) {
+            this.plugin.getLogger().log(Level.WARNING, "error occurred while loading " + resourceName + " from " + plugin.getName(), error);
+        }
     }
 
     /**

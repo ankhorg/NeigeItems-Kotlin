@@ -402,4 +402,210 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
         add(index, nbt);
         return nbt;
     }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtByte setByte(int index, byte value) {
+        NbtByte nbt = NbtByte.valueOf(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtShort setShort(int index, short value) {
+        NbtShort nbt = NbtShort.valueOf(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtInt setInt(int index, int value) {
+        NbtInt nbt = NbtInt.valueOf(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtLong setLong(int index, long value) {
+        NbtLong nbt = NbtLong.valueOf(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtFloat setFloat(int index, float value) {
+        NbtFloat nbt = NbtFloat.valueOf(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtDouble setDouble(int index, double value) {
+        NbtDouble nbt = NbtDouble.valueOf(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtString setString(int index, String value) {
+        NbtString nbt = NbtString.valueOf(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtByteArray setByteArray(int index, byte[] value) {
+        NbtByteArray nbt = new NbtByteArray(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtByteArray setByteArray(int index, List<Byte> value) {
+        NbtByteArray nbt = new NbtByteArray(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtIntArray setIntArray(int index, int[] value) {
+        NbtIntArray nbt = new NbtIntArray(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtIntArray setIntArray(int index, List<Integer> value) {
+        NbtIntArray nbt = new NbtIntArray(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtLongArray setLongArray(int index, long[] value) {
+        NbtLongArray nbt = new NbtLongArray(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtLongArray setLongArray(int index, List<Long> value) {
+        NbtLongArray nbt = new NbtLongArray(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将 value 转换为对应类型的 NBT实例 后替换指定位置的元素.
+     *
+     * @param index 待替换元素的索引.
+     * @param value 待添加元素.
+     * @return 插入的 NBT实例.
+     */
+    default NbtByte setBoolean(int index, boolean value) {
+        NbtByte nbt = NbtByte.valueOf(value);
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将指定位置的元素替换为 new NbtCompound().
+     *
+     * @param index 待替换元素的索引.
+     * @return 插入的 NBT实例.
+     */
+    default NbtCompound setEmptyCompound(int index) {
+        NbtCompound nbt = new NbtCompound();
+        set(index, nbt);
+        return nbt;
+    }
+
+    /**
+     * 将指定位置的元素替换为 new NbtList().
+     *
+     * @param index 待替换元素的索引.
+     * @return 插入的 NBT实例.
+     */
+    default NbtList setEmptyList(int index) {
+        NbtList nbt = new NbtList();
+        set(index, nbt);
+        return nbt;
+    }
 }
