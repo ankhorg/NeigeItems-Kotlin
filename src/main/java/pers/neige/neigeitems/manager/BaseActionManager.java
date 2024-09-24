@@ -456,7 +456,7 @@ public abstract class BaseActionManager {
      * 将当前BaseActionManager所属插件的"JavaScriptLib/lib.js"资源文件加载至JS引擎
      */
     public void loadJSLib() {
-        loadJSLib(plugin, "JavaScriptLib" + File.separator + "lib.js");
+        loadJSLib(plugin, "JavaScriptLib/lib.js");
     }
 
     /**
