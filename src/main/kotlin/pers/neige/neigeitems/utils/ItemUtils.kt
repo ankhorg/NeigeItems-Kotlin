@@ -560,6 +560,20 @@ object ItemUtils {
     }
 
     /**
+     * 根据ItemStack获取对应的NI物品ID
+     *
+     * @return NI物品ID, 非NI物品返回null
+     */
+    @JvmStatic
+    fun ItemStack?.getItemId(): String? {
+        if (this != null && this.type != Material.AIR) {
+            val directTag = NbtItemStack(this).directTag
+            return directTag.getDeepString("NeigeItems.id")
+        }
+        return null
+    }
+
+    /**
      * 根据数量将物品超级加倍, 返回一个列表
      *
      * @param amount 需要的物品数量

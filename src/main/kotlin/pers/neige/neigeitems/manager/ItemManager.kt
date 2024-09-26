@@ -17,6 +17,7 @@ import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
+import pers.neige.neigeitems.utils.ItemUtils.getItemId
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
@@ -312,6 +313,15 @@ object ItemManager : ItemConfigManager() {
      */
     fun isNiItem(itemStack: ItemStack?, parseData: Boolean): ItemInfo? {
         return itemStack.isNiItem(parseData)
+    }
+
+    /**
+     * 根据ItemStack获取对应的NI物品ID
+     *
+     * @return NI物品ID, 非NI物品返回null
+     */
+    fun getItemId(itemStack: ItemStack?): String? {
+        return itemStack.getItemId()
     }
 
     /**
