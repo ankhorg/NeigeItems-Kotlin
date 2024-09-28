@@ -9,20 +9,33 @@ import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class WhileAction extends Action {
     @Nullable
-    private final String condition;
+    private final String conditionString;
+    @Nullable
+    private final CompiledScript condition;
     @NotNull
     private final Action actions;
     @NotNull
     private final Action _finally;
 
-    public WhileAction(BaseActionManager manager, ConfigurationSection action) {
-        if (action.contains("while")) {
-            condition = action.getString("while");
+    public WhileAction(
+            @NotNull BaseActionManager manager,
+            @NotNull ConfigurationSection action
+    ) {
+        conditionString = action.getString("while");
+        if (conditionString != null) {
+            try {
+                condition = ((Compilable) manager.getEngine()).compile(conditionString);
+            } catch (ScriptException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             condition = null;
         }
@@ -30,15 +43,20 @@ public class WhileAction extends Action {
         _finally = manager.compile(action.get("finally"));
     }
 
-    public WhileAction(BaseActionManager manager, Map<?, ?> action) {
-        if (action.containsKey("while")) {
-            Object value = action.get("while");
-            if (value instanceof String) {
-                condition = (String) value;
-            } else {
-                condition = null;
+    public WhileAction(
+            @NotNull BaseActionManager manager,
+            @NotNull Map<?, ?> action
+    ) {
+        Object value = action.get("while");
+        if (value instanceof String) {
+            conditionString = (String) value;
+            try {
+                condition = ((Compilable) manager.getEngine()).compile(conditionString);
+            } catch (ScriptException e) {
+                throw new RuntimeException(e);
             }
         } else {
+            conditionString = null;
             condition = null;
         }
         actions = manager.compile(action.get("actions"));
@@ -63,7 +81,12 @@ public class WhileAction extends Action {
     }
 
     @Nullable
-    public String getCondition() {
+    public String getConditionString() {
+        return conditionString;
+    }
+
+    @Nullable
+    public CompiledScript getCondition() {
         return condition;
     }
 

@@ -30,7 +30,6 @@ import pers.neige.neigeitems.utils.*;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -115,7 +114,7 @@ public abstract class BaseActionManager {
             String key = info[0].toLowerCase(Locale.ROOT);
             String content = info.length > 1 ? info[1] : "";
             if (key.equals("js")) {
-                return new RawStringAction(string, key, content);
+                return new JsAction(this, content);
             } else {
                 return new StringAction(string, key, content);
             }
@@ -127,7 +126,7 @@ public abstract class BaseActionManager {
             } else if (((Map<?, ?>) action).containsKey("while")) {
                 return new WhileAction(this, (Map<?, ?>) action);
             } else if (((Map<?, ?>) action).containsKey("catch")) {
-                return new ChatCatcherAction(this, (Map<?, ?>) action);
+                return new ChatCatcherAction((Map<?, ?>) action);
             } else if (((Map<?, ?>) action).containsKey("label")) {
                 return new LabelAction(this, (Map<?, ?>) action);
             }
@@ -137,7 +136,7 @@ public abstract class BaseActionManager {
             } else if (((ConfigurationSection) action).contains("while")) {
                 return new WhileAction(this, (ConfigurationSection) action);
             } else if (((ConfigurationSection) action).contains("catch")) {
-                return new ChatCatcherAction(this, (ConfigurationSection) action);
+                return new ChatCatcherAction((ConfigurationSection) action);
             } else if (((ConfigurationSection) action).contains("label")) {
                 return new LabelAction(this, (ConfigurationSection) action);
             }
@@ -256,6 +255,45 @@ public abstract class BaseActionManager {
      */
     @NotNull
     public CompletableFuture<ActionResult> runAction(
+            @NotNull JsAction action,
+            @NotNull ActionContext context
+    ) {
+        Object result;
+        try {
+            result = action.getScript().eval(context.getBindings());
+            if (result == null) {
+                return CompletableFuture.completedFuture(Results.SUCCESS);
+            }
+        } catch (Throwable error) {
+            plugin.getLogger().warning("JS动作执行异常, 动作内容如下:");
+            String[] lines = action.getScriptString().split("\n");
+            for (int i = 0; i < lines.length; i++) {
+                String contentLine = lines[i];
+                plugin.getLogger().warning((i + 1) + ". " + contentLine);
+            }
+            error.printStackTrace();
+            return CompletableFuture.completedFuture(Results.SUCCESS);
+        }
+        if (result instanceof ActionResult) {
+            return CompletableFuture.completedFuture((ActionResult) result);
+        } else if (result instanceof Boolean) {
+            return CompletableFuture.completedFuture(Results.fromBoolean((Boolean) result));
+        } else if (result instanceof CompletableFuture<?>) {
+            return (CompletableFuture<ActionResult>) result;
+        } else {
+            return CompletableFuture.completedFuture(Results.SUCCESS);
+        }
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
             @NotNull ListAction action,
             @NotNull ActionContext context
     ) {
@@ -299,7 +337,7 @@ public abstract class BaseActionManager {
             @NotNull ActionContext context
     ) {
         // 如果条件通过
-        if (parseCondition(action.getCondition(), context).getType() == ResultType.SUCCESS) {
+        if (parseCondition(action.getConditionString(), action.getCondition(), context).getType() == ResultType.SUCCESS) {
             // 执行动作
             Action.eval(action.getSync(), action.getAsync(), this, context);
             return action.getActions().eval(this, context);
@@ -343,7 +381,7 @@ public abstract class BaseActionManager {
             @NotNull ActionContext context
     ) {
         // while循环判断条件
-        if (parseCondition(action.getCondition(), context).getType() == ResultType.SUCCESS) {
+        if (parseCondition(action.getConditionString(), action.getCondition(), context).getType() == ResultType.SUCCESS) {
             return action.getActions().eval(this, context).thenCompose((result) -> {
                 // 执行中止
                 if (result.getType() == ResultType.STOP) {
@@ -393,19 +431,46 @@ public abstract class BaseActionManager {
             @Nullable String condition,
             @NotNull ActionContext context
     ) {
+        return parseCondition(
+                condition,
+                conditionScripts.computeIfAbsent(condition, (key) -> HookerManager.INSTANCE.getNashornHooker().compile(engine, key)),
+                context
+        );
+    }
+
+    /**
+     * 解析条件
+     *
+     * @param conditionString 条件文本(用于在报错的时候向后台提示)
+     * @param condition       已编译条件
+     * @param context         动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public ActionResult parseCondition(
+            @Nullable String conditionString,
+            @Nullable CompiledScript condition,
+            @NotNull ActionContext context
+    ) {
         if (condition == null) {
             return Results.SUCCESS;
         }
         Object result;
         try {
-            result = conditionScripts.computeIfAbsent(condition, (key) -> HookerManager.INSTANCE.getNashornHooker().compile(engine, key)).eval(context.getBindings());
+            result = condition.eval(context.getBindings());
             if (result == null) {
                 return Results.STOP;
             }
         } catch (Throwable error) {
-            plugin.getLogger().warning("条件解析异常, 条件内容如下:");
-            for (String conditionLine : condition.split("\n")) {
-                plugin.getLogger().warning(conditionLine);
+            if (conditionString != null) {
+                plugin.getLogger().warning("条件解析异常, 条件内容如下:");
+                String[] lines = conditionString.split("\n");
+                for (int i = 0; i < lines.length; i++) {
+                    String conditionLine = lines[i];
+                    plugin.getLogger().warning((i + 1) + ". " + conditionLine);
+                }
+            } else {
+                plugin.getLogger().warning("条件解析异常, 条件内容未知");
             }
             error.printStackTrace();
             return Results.STOP;
@@ -815,46 +880,6 @@ public abstract class BaseActionManager {
             } else {
                 return CompletableFuture.completedFuture(new StopResult(content));
             }
-        });
-        // js
-        addFunction("js", (context, content) -> {
-            Object result;
-            try {
-                result = actionScripts.computeIfAbsent(content, (key) -> HookerManager.INSTANCE.getNashornHooker().compile(engine, key)).eval(context.getBindings());
-                if (result == null) {
-                    return CompletableFuture.completedFuture(Results.SUCCESS);
-                }
-            } catch (Throwable error) {
-                plugin.getLogger().warning("JS动作执行异常, 动作内容如下:");
-                for (String contentLine : content.split("\n")) {
-                    plugin.getLogger().warning(contentLine);
-                }
-                error.printStackTrace();
-                return CompletableFuture.completedFuture(Results.SUCCESS);
-            }
-            if (result instanceof ActionResult) {
-                return CompletableFuture.completedFuture((ActionResult) result);
-            } else if (result instanceof Boolean) {
-                return CompletableFuture.completedFuture(Results.fromBoolean((Boolean) result));
-            } else {
-                return CompletableFuture.completedFuture(Results.SUCCESS);
-            }
-        });
-        // jsFuture
-        addFunction("jsFuture", (context, content) -> {
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            try {
-                context.getGlobal().put("nextResult", result);
-                actionScripts.computeIfAbsent(content, (key) -> HookerManager.INSTANCE.getNashornHooker().compile(engine, key)).eval(context.getBindings());
-            } catch (Throwable error) {
-                plugin.getLogger().warning("JS FUTURE动作执行异常, 动作内容如下:");
-                for (String contentLine : content.split("\n")) {
-                    plugin.getLogger().warning(contentLine);
-                }
-                error.printStackTrace();
-                return CompletableFuture.completedFuture(Results.SUCCESS);
-            }
-            return result;
         });
         // 向global中设置内容
         addConsumer("setGlobal", (context, content) -> {

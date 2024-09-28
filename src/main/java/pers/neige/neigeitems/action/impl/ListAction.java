@@ -15,14 +15,21 @@ public class ListAction extends Action {
     @NotNull
     private final List<Action> actions;
 
-    public ListAction(BaseActionManager manager, List<?> action) {
+    public ListAction(
+            @NotNull BaseActionManager manager,
+            @NotNull List<?> action
+    ) {
         actions = new ArrayList<>();
         for (Object it : action) {
             actions.add(manager.compile(it));
         }
     }
 
-    private ListAction(ListAction action, int fromIndex, int toIndex) {
+    private ListAction(
+            @NotNull ListAction action,
+            int fromIndex,
+            int toIndex
+    ) {
         actions = action.actions.subList(fromIndex, toIndex);
     }
 

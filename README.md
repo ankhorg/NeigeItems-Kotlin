@@ -25,26 +25,35 @@ dependencies {
 ## API
 
 ### 获取物品
+
 ```java
 ItemStack itemStack = ItemManager.INSTANCE.getItemStack(itemId, player, data);
 ```
+
 ### 获取物品包
+
 ```java
 ItemPack itemPack = ItemPackManager.INSTANCE.getItemPack(packId);
 if (itemPack == null) return;
 List<ItemStack> itemStacks = itemPack.getItemStacks(player, data);
 ```
+
 ### 获取NI物品ID
+
 ```java
 String itemId = ItemUtils.getItemId(itemStack);
 if (itemId == null) return;
 ```
+
 ### 获取NI物品ID及物品节点信息
+
 ```java
 ItemInfo itemInfo = ItemUtils.isNiItem(itemStack);
 if (itemInfo == null) return;
 ```
+
 ### 我想在我的插件里使用NI的动作系统
+
 ```java
 // 继承一个BaseActionManager
 public class ActionManager extends BaseActionManager {
@@ -56,6 +65,7 @@ public class ActionManager extends BaseActionManager {
     }
 }
 ```
+
 ```java
 // 插件里new一个ActionManager出来, new的时候把插件实例传进去
 public class MyPlugin extends JavaPlugin {
@@ -83,6 +93,7 @@ public class MyPlugin extends JavaPlugin {
     }
 }
 ```
+
 ```java
 // 动作是需要编译的
 // config就是Bukkit的ConfigurationSection
@@ -114,11 +125,14 @@ ActionContext context = new ActionContext();
 // 动作执行
 MyPlugin.getActionManager().runAction(action, context);
 ```
+
 ### 我想通过NI获取MM的怪物配置
+
 ```java
 MythicMobsHooker hooker = HookerManager.INSTANCE.getMythicMobsHooker();
 if (hooker == null) return;
 // key是怪物ID, value是怪物配置
 Map<String, ConfigurationSection> mobInfos = hooker.getMobInfos();
 ```
+
 MM重载时NI会尝试重新加载怪物配置并触发MobInfoReloadedEvent

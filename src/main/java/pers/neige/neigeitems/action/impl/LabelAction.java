@@ -17,7 +17,10 @@ public class LabelAction extends Action {
     @NotNull
     private final Action actions;
 
-    public LabelAction(BaseActionManager manager, ConfigurationSection action) {
+    public LabelAction(
+            @NotNull BaseActionManager manager,
+            @NotNull ConfigurationSection action
+    ) {
         if (action.contains("label")) {
             label = action.getString("label", "label");
         } else {
@@ -26,7 +29,10 @@ public class LabelAction extends Action {
         actions = manager.compile(action.get("actions"));
     }
 
-    public LabelAction(BaseActionManager manager, Map<?, ?> action) {
+    public LabelAction(
+            @NotNull BaseActionManager manager,
+            @NotNull Map<?, ?> action
+    ) {
         if (action.containsKey("label")) {
             Object value = action.get("label");
             if (value instanceof String) {

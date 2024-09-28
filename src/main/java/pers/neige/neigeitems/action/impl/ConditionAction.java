@@ -9,12 +9,17 @@ import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.ScriptException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ConditionAction extends Action {
     @Nullable
-    private final String condition;
+    private final String conditionString;
+    @Nullable
+    private final CompiledScript condition;
     @NotNull
     private final Action actions;
     @NotNull
@@ -24,9 +29,17 @@ public class ConditionAction extends Action {
     @NotNull
     private final Action deny;
 
-    public ConditionAction(BaseActionManager manager, ConfigurationSection action) {
-        if (action.contains("condition")) {
-            condition = action.getString("condition");
+    public ConditionAction(
+            @NotNull BaseActionManager manager,
+            @NotNull ConfigurationSection action
+    ) {
+        conditionString = action.getString("condition");
+        if (conditionString != null) {
+            try {
+                condition = ((Compilable) manager.getEngine()).compile(conditionString);
+            } catch (ScriptException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             condition = null;
         }
@@ -36,15 +49,20 @@ public class ConditionAction extends Action {
         deny = manager.compile(action.get("deny"));
     }
 
-    public ConditionAction(BaseActionManager manager, Map<?, ?> action) {
-        if (action.containsKey("condition")) {
-            Object value = action.get("condition");
-            if (value instanceof String) {
-                condition = (String) value;
-            } else {
-                condition = null;
+    public ConditionAction(
+            @NotNull BaseActionManager manager,
+            @NotNull Map<?, ?> action
+    ) {
+        Object value = action.get("condition");
+        if (value instanceof String) {
+            conditionString = (String) value;
+            try {
+                condition = ((Compilable) manager.getEngine()).compile(conditionString);
+            } catch (ScriptException e) {
+                throw new RuntimeException(e);
             }
         } else {
+            conditionString = null;
             condition = null;
         }
         actions = manager.compile(action.get("actions"));
@@ -71,7 +89,12 @@ public class ConditionAction extends Action {
     }
 
     @Nullable
-    public String getCondition() {
+    public String getConditionString() {
+        return conditionString;
+    }
+
+    @Nullable
+    public CompiledScript getCondition() {
         return condition;
     }
 

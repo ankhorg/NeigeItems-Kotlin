@@ -17,12 +17,16 @@ public class ChatCatcherAction extends Action {
     private final String messageKey;
     private final boolean cancel;
 
-    public ChatCatcherAction(BaseActionManager manager, ConfigurationSection action) {
+    public ChatCatcherAction(
+            @NotNull ConfigurationSection action
+    ) {
         messageKey = action.getString("catch", "catch");
         cancel = action.getBoolean("cancel", true);
     }
 
-    public ChatCatcherAction(BaseActionManager manager, Map<?, ?> action) {
+    public ChatCatcherAction(
+            @NotNull Map<?, ?> action
+    ) {
         if (action.containsKey("catch")) {
             messageKey = action.get("catch").toString();
         } else {
