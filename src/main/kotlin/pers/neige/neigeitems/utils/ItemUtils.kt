@@ -501,7 +501,7 @@ object ItemUtils {
             itemTag.saveToSafe(itemStack)
         }
         // 记录掉落物拥有者
-        val hide = neigeItems?.get("hide")
+        val hide = neigeItems?.getByteOrNull("hide")
         return syncAndGet {
             this.world?.let { world ->
                 WorldUtils.dropItem(
@@ -514,8 +514,9 @@ object ItemUtils {
                         item.setMetadataEZ("NI-Owner", it)
                     }
                     hide?.let {
-                        item.setMetadataEZ("NI-Hide", (it as NbtNumeric).asByte)
+                        item.setMetadataEZ("NI-Hide", it)
                     }
+                    item.addScoreboardTag("NeigeItems")
                     // 掉落物技能
                     neigeItems?.getString("dropSkill")?.let { dropSkill ->
                         mythicMobsHooker?.castSkill(item, dropSkill, entity)

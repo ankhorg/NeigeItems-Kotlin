@@ -18,6 +18,7 @@ import pers.neige.neigeitems.event.MythicEquipEvent
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
+import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ConfigUtils
@@ -28,6 +29,7 @@ import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ItemUtils.loadItems
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
+import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 import pers.neige.neigeitems.utils.SchedulerUtils.sync
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -478,10 +480,33 @@ abstract class MythicMobsHooker {
                     // 拟渔获掉落
                     sync {
                         dropEvent.fishDropItems?.forEach { itemStack ->
+                            val nbt = itemStack.getNbtOrNull()
+                            val neigeItems = nbt?.getCompound("NeigeItems")
+                            // 记录掉落物拥有者
+                            val owner = neigeItems?.getString("owner")
+                            // 移除相关nbt, 防止物品无法堆叠
+                            owner?.let {
+                                neigeItems.remove("owner")
+                                nbt.saveToSafe(itemStack)
+                            }
+                            // 记录掉落物拥有者
+                            val hide = neigeItems?.getByteOrNull("hide")
                             // 掉落
-                            WorldUtils.dropItem(
-                                entity.world, entity.location, itemStack, caughtVelocity
-                            )
+                            WorldUtils.dropItem(entity.world, entity.location, itemStack) { item ->
+                                // 设置拥有者相关Metadata
+                                owner?.let {
+                                    item.setMetadataEZ("NI-Owner", it)
+                                }
+                                hide?.let {
+                                    item.setMetadataEZ("NI-Hide", it)
+                                }
+                                item.velocity = caughtVelocity
+                                item.addScoreboardTag("NeigeItems")
+                                // 掉落物技能
+                                neigeItems?.getString("dropSkill")?.let { dropSkill ->
+                                    mythicMobsHooker?.castSkill(item, dropSkill, entity)
+                                }
+                            }
                         }
                     }
                 }
