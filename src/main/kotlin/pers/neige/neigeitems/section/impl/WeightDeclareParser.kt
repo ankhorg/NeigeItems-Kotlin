@@ -3,7 +3,7 @@ package pers.neige.neigeitems.section.impl
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
-import pers.neige.neigeitems.utils.SamplingUtils.aExpj
+import pers.neige.neigeitems.utils.SamplingUtils.weight
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 /**
@@ -115,9 +115,9 @@ object WeightDeclareParser : SectionParser() {
 
         // 获取结果
         val realList = when {
-            shuffled -> aExpj(info, amount).shuffled()
-            order -> aExpj(info, amount).sortedBy { indexMap!![it] }
-            else -> aExpj(info, amount)
+            shuffled -> weight(info, amount).shuffled()
+            order -> weight(info, amount).sortedBy { indexMap!![it] }
+            else -> weight(info, amount)
         }
 
         // 是否记录未选中内容

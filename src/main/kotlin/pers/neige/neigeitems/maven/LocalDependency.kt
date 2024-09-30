@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.maven
 
-import java.nio.file.Paths
+import java.io.File
 
 class LocalDependency(val path: String) {
     fun load() {
-        JarLoader.load(Paths.get(path).toFile())
+        JarLoader.load(File(path))
     }
 }

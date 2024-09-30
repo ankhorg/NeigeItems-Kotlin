@@ -29,9 +29,6 @@ class NashornHookerImpl : NashornHooker() {
     }
 
     override fun isFunction(engine: ScriptEngine, func: Any?): Boolean {
-        if (func is ScriptObjectMirror && func.isFunction) {
-            return true
-        }
-        return false
+        return func is ScriptObjectMirror && func.isFunction
     }
 }

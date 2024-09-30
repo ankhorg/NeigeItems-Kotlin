@@ -15,7 +15,6 @@ import pers.neige.neigeitems.utils.FileUtils.sha1
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import java.net.URL
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 

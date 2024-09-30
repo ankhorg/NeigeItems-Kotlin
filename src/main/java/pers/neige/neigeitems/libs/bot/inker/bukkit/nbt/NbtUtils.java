@@ -76,7 +76,7 @@ public class NbtUtils {
      * @return 检测结果.
      */
     public static boolean isCraftItemStack(@NotNull ItemStack itemStack) {
-        return (Object) itemStack instanceof RefCraftItemStack;
+        return itemStack instanceof RefCraftItemStack;
     }
 
     /**
@@ -89,7 +89,7 @@ public class NbtUtils {
      */
     @Nullable
     public static ItemMeta getItemMeta(@NotNull ItemStack itemStack) {
-        if ((Object) itemStack instanceof RefCraftItemStack) {
+        if (itemStack instanceof RefCraftItemStack) {
             return itemStack.getItemMeta();
         } else {
             return ((RefBukkitItemStack) (Object) itemStack).meta;
@@ -128,7 +128,7 @@ public class NbtUtils {
      * @return 物品克隆.
      */
     public static ItemStack asCopy(@NotNull ItemStack itemStack) {
-        if ((Object) itemStack instanceof RefCraftItemStack) {
+        if (itemStack instanceof RefCraftItemStack) {
             return itemStack.clone();
         } else {
             return bukkitCopy(itemStack);
@@ -143,8 +143,8 @@ public class NbtUtils {
      * @return org.bukkit.inventory.ItemStack 形式的物品克隆.
      */
     public static ItemStack asBukkitCopy(@NotNull ItemStack itemStack) {
-        if ((Object) itemStack instanceof RefCraftItemStack) {
-            return RefCraftItemStack.asBukkitCopy(((RefCraftItemStack) (Object) itemStack).handle);
+        if (itemStack instanceof RefCraftItemStack) {
+            return RefCraftItemStack.asBukkitCopy(((RefCraftItemStack) itemStack).handle);
         } else {
             return bukkitCopy(itemStack);
         }
@@ -158,10 +158,10 @@ public class NbtUtils {
      * @return CraftItemStack 形式的物品克隆.
      */
     public static ItemStack asCraftCopy(@NotNull ItemStack itemStack) {
-        if ((Object) itemStack instanceof RefCraftItemStack) {
+        if (itemStack instanceof RefCraftItemStack) {
             return itemStack.clone();
         } else {
-            return (ItemStack) (Object) RefCraftItemStack.asCraftCopy(itemStack);
+            return RefCraftItemStack.asCraftCopy(itemStack);
         }
     }
 
@@ -266,8 +266,8 @@ public class NbtUtils {
     ) {
         RefNbtTagCompound nmsNbt = new RefNbtTagCompound();
         RefNmsItemStack nmsItemStack;
-        if ((Object) itemStack instanceof RefCraftItemStack) {
-            nmsItemStack = ((RefCraftItemStack) (Object) itemStack).handle;
+        if (itemStack instanceof RefCraftItemStack) {
+            nmsItemStack = ((RefCraftItemStack) itemStack).handle;
         } else {
             nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
         }
@@ -284,9 +284,9 @@ public class NbtUtils {
     ) {
         if (nbt == null) return new ItemStack(Material.AIR);
         if (CbVersion.v1_13_R1.isSupport()) {
-            return (ItemStack) (Object) RefCraftItemStack.asCraftMirror(RefNmsItemStack.of(nbt.delegate));
+            return RefCraftItemStack.asCraftMirror(RefNmsItemStack.of(nbt.delegate));
         } else {
-            return (ItemStack) (Object) RefCraftItemStack.asCraftMirror(new RefNmsItemStack(nbt.delegate));
+            return RefCraftItemStack.asCraftMirror(new RefNmsItemStack(nbt.delegate));
         }
     }
 

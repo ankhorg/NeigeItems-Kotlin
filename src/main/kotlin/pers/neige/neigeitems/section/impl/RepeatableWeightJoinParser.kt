@@ -4,7 +4,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.script.CompiledScript
 import pers.neige.neigeitems.section.SectionParser
-import pers.neige.neigeitems.utils.SamplingUtils.aExpj
+import pers.neige.neigeitems.utils.SamplingUtils.weight
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.util.concurrent.ConcurrentHashMap
 
@@ -137,9 +137,9 @@ object RepeatableWeightJoinParser : SectionParser() {
 
             // 获取结果
             val realList = when {
-                shuffled -> aExpj(info, amount).shuffled()
-                order -> aExpj(info, amount).sortedBy { indexMap!![it] }
-                else -> aExpj(info, amount)
+                shuffled -> weight(info, amount).shuffled()
+                order -> weight(info, amount).sortedBy { indexMap!![it] }
+                else -> weight(info, amount)
             }
 
             // 预定义参数map

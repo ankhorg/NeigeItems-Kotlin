@@ -129,7 +129,7 @@ object SectionUtils {
             // 私有节点调用
             -1 -> {
                 // 尝试读取缓存
-                if (cache?.containsKey(this) ?: false) {
+                if (cache?.containsKey(this) == true) {
                     // 直接返回对应节点值
                     return (cache as Map<*, *>)[this].toString()
                     // 读取失败, 尝试主动解析
@@ -302,7 +302,7 @@ object SectionUtils {
         when (val index = this.indexOf("::")) {
             -1 -> {
                 // 尝试读取缓存
-                if (cache?.containsKey(this) ?: false) {
+                if (cache?.containsKey(this) == true) {
                     // 直接返回对应节点值
                     return (cache as Map<*, *>)[this].toString()
                     // 读取失败, 尝试主动解析
@@ -394,7 +394,7 @@ object SectionUtils {
         when (val index = this.indexOf("::")) {
             -1 -> {
                 // 尝试读取缓存
-                if (cache?.containsKey(this) ?: false) {
+                if (cache?.containsKey(this) == true) {
                     // 直接返回对应节点值
                     return (cache as Map<*, *>)[this].toString()
                     // 读取失败, 尝试主动解析

@@ -119,7 +119,7 @@ public class ItemBuilder {
                             short level = (short) enchantSection.getInt(enchantId);
                             Enchantment enchant = Enchantment.getByName(uppercaseEnchantId);
                             if (enchant == null) {
-                                enchant = this.byFieldName.get(uppercaseEnchantId);
+                                enchant = byFieldName.get(uppercaseEnchantId);
                             }
                             if (level > 0 && enchant != null) {
                                 this.enchantments.put(enchant, level);

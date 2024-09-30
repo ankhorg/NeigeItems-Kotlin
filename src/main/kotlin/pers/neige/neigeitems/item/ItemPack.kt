@@ -13,7 +13,7 @@ import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ItemUtils.getItems
-import pers.neige.neigeitems.utils.SamplingUtils.aExpj
+import pers.neige.neigeitems.utils.SamplingUtils.weight
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.util.concurrent.ThreadLocalRandom
 
@@ -123,7 +123,7 @@ class ItemPack(
      * @param data 指向数据
      * @return 解析后物品包配置
      */
-    fun getSection(player: OfflinePlayer?, data: HashMap<String, String>?): ConfigurationSection? {
+    fun getSection(player: OfflinePlayer?, data: HashMap<String, String>?): ConfigurationSection {
         // 加载缓存
         val cache = data ?: HashMap()
         // 获取私有节点配置
@@ -243,7 +243,7 @@ class ItemPack(
                 }
 
                 // 根据概率抽选最小数量信息, 将概率更改为100%(即必定成功生成)
-                aExpj(info, trueMin).forEach { itemInfo ->
+                weight(info, trueMin).forEach { itemInfo ->
                     itemInfo.probability = 1.0
                 }
                 // 添加物品
@@ -265,7 +265,7 @@ class ItemPack(
                 }
 
                 // 根据概率抽选最小数量信息, 将概率更改为100%(即必定成功生成)
-                aExpj(info, trueMin).forEach { itemInfo ->
+                weight(info, trueMin).forEach { itemInfo ->
                     itemInfo.probability = 1.0
                 }
                 var amount = 0

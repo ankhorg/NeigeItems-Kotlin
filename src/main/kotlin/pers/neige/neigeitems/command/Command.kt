@@ -48,7 +48,7 @@ object Command {
             .registerAndRecord(Give.giveAllSilent)
             .registerAndRecord(GivePack.givePack)
             .registerAndRecord(GivePack.givePackSilent)
-            .registerAndRecord(Help.help)
+            .registerAndRecord(help)
             .registerAndRecord(ItemNBT.itemNBT)
             .registerAndRecord(List.list)
             .registerAndRecord(MM.mm)

@@ -72,7 +72,7 @@ object ChanceParser : SectionParser() {
         repeatString: String?,
         minString: String?,
         maxString: String?
-    ): String? {
+    ): String {
         // 获取成功概率
         val successRate = successString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull() ?: 0.0
         // 获取总概率

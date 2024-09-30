@@ -6,7 +6,6 @@ import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.manager.ConfigManager.updateCheck
 import java.net.URI
-import java.net.URL
 
 object Updater {
     private val logger = LoggerFactory.getLogger(Updater::class.java.simpleName)

@@ -17,7 +17,7 @@ public final class LazyLoadEntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> {
     @Override
     public Iterator<Map.Entry<K, V>> iterator() {
         return new Iterator<Map.Entry<K, V>>() {
-            private Iterator<K> i = keySet.iterator();
+            private final Iterator<K> i = keySet.iterator();
             private K latestKey;
 
             public boolean hasNext() {

@@ -1209,7 +1209,7 @@ public class EntityPlayerUtils {
     ) {
         if ((Object) player instanceof RefCraftPlayer && entity instanceof RefCraftEntity) {
             RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
-            RefEntity nmsEntity = ((RefCraftEntity) (Object) entity).getHandle();
+            RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
             nmsPlayer.setCamera(nmsEntity);
         }
     }
@@ -1226,7 +1226,7 @@ public class EntityPlayerUtils {
     ) {
         if ((Object) player instanceof RefCraftPlayer) {
             RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
-            RefEntityHuman nmsHuman = (RefEntityHuman) nmsPlayer;
+            RefEntityHuman nmsHuman = nmsPlayer;
             if (nmsHuman.containerMenu != nmsHuman.inventoryMenu) {
                 RefPacketPlayOutOpenWindow packet;
                 if (FUCKING_STRING_MENU_TYPE) {

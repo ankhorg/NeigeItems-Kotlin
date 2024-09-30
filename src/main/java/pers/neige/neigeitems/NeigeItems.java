@@ -100,9 +100,8 @@ public class NeigeItems extends JavaPlugin {
             return;
         }
 
-        boolean safe = true;
+        boolean safe = checkMagicUtils("DamageEventUtils");
 
-        if (!checkMagicUtils("DamageEventUtils")) safe = false;
         if (!checkMagicUtils("EnchantmentUtils")) safe = false;
         if (!checkMagicUtils("EntityItemUtils")) safe = false;
         if (!checkMagicUtils("EntityPlayerUtils")) safe = false;

@@ -13,11 +13,11 @@ public final class NbtItemStack {
     private final RefBukkitItemStack bukkitItemStack;
     private final RefCraftItemStack craftItemStack;
 
-    public NbtItemStack(ItemStack itemStack) {
+    public NbtItemStack(@NotNull ItemStack itemStack) {
         this.itemStack = itemStack;
         this.bukkitItemStack = (RefBukkitItemStack) (Object) itemStack;
-        if ((Object) itemStack instanceof RefCraftItemStack) {
-            this.craftItemStack = (RefCraftItemStack) (Object) itemStack;
+        if (itemStack instanceof RefCraftItemStack) {
+            this.craftItemStack = (RefCraftItemStack) itemStack;
         } else {
             this.craftItemStack = null;
         }
@@ -63,7 +63,7 @@ public final class NbtItemStack {
             bukkitItemStack.meta = null;
             RefCraftItemStack craftItemStack = RefCraftItemStack.asCraftCopy(itemStack);
             craftItemStack.handle.setTag(compound.delegate);
-            bukkitItemStack.meta = ((ItemStack) (Object) craftItemStack).getItemMeta();
+            bukkitItemStack.meta = craftItemStack.getItemMeta();
         } else {
             craftItemStack.handle.setTag(compound.delegate);
         }
@@ -94,7 +94,7 @@ public final class NbtItemStack {
 
     public ItemStack asCraftCopy() {
         if (craftItemStack == null) {
-            return (ItemStack) (Object) RefCraftItemStack.asCraftCopy(itemStack);
+            return RefCraftItemStack.asCraftCopy(itemStack);
         } else {
             return itemStack.clone();
         }

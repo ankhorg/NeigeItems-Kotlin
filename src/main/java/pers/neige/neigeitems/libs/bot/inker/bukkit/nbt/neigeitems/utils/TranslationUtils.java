@@ -172,9 +172,9 @@ public class TranslationUtils {
     public static boolean hasDisplayName(
             @NotNull ItemStack itemStack
     ) {
-        if ((Object) itemStack instanceof RefCraftItemStack) {
+        if (itemStack instanceof RefCraftItemStack) {
             if (itemStack.getType() != Material.AIR) {
-                RefNbtTagCompound tag = ((RefCraftItemStack) (Object) itemStack).handle.getTag();
+                RefNbtTagCompound tag = ((RefCraftItemStack) itemStack).handle.getTag();
                 if (tag != null) {
                     RefNbtBase display = tag.get("display");
                     if (display instanceof RefNbtTagCompound) {
@@ -201,8 +201,8 @@ public class TranslationUtils {
             @NotNull ItemStack itemStack
     ) {
         RefNmsItemStack nmsItemStack;
-        if ((Object) itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
-            nmsItemStack = ((RefCraftItemStack) (Object) itemStack).handle;
+        if (itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
+            nmsItemStack = ((RefCraftItemStack) itemStack).handle;
         } else {
             nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
         }
@@ -315,8 +315,8 @@ public class TranslationUtils {
             @NotNull ItemStack itemStack
     ) {
         RefNmsItemStack nmsItemStack;
-        if ((Object) itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
-            nmsItemStack = ((RefCraftItemStack) (Object) itemStack).handle;
+        if (itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
+            nmsItemStack = ((RefCraftItemStack) itemStack).handle;
         } else {
             nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
         }

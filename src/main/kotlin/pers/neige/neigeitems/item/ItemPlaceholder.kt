@@ -153,7 +153,7 @@ class ItemPlaceholder {
         val value: Nbt<*>? = nbt.getDeep(key, '`', '\\')
         return if ((value != null)) {
             value.asString
-        } else null;
+        } else null
     }
 
     /**

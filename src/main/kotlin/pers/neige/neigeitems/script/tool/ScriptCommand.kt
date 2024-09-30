@@ -66,7 +66,7 @@ class ScriptCommand(rawName: String) {
      * @return ScriptCommand 本身
      */
     fun setTabCompleter(tabCompleter: TabCompleter): ScriptCommand {
-        command.setTabCompleter(tabCompleter)
+        command.tabCompleter = tabCompleter
         return this
     }
 
