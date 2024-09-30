@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.manager.ConfigManager.updateCheck
+import java.net.URI
 import java.net.URL
 
 object Updater {
@@ -20,7 +21,7 @@ object Updater {
         if (updateCheck) {
             kotlin.runCatching {
                 latestVersion = VERSION_REGEX.find(
-                    URL("https://api.github.com/repos/ankhorg/NeigeItems-Kotlin/releases/latest").readText()
+                    URI("https://api.github.com/repos/ankhorg/NeigeItems-Kotlin/releases/latest").toURL().readText()
                         .parseObject().getString("tag_name")
                 )?.value
 

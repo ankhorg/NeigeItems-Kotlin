@@ -58,7 +58,7 @@ class ClassScanner(
         loadMethods()
         listenerMethods.forEach { method ->
             val annotation = method.getAnnotation(Listener::class.java)
-            val eventClass = method.parameterTypes[0]
+            val eventClass = method.parameterTypes[0].asSubclass(Event::class.java)
             val eventPriority = annotation.eventPriority
             val ignoreCancelled = annotation.ignoreCancelled
             val instance = if (Modifier.isStatic(method.modifiers)) {
@@ -67,7 +67,7 @@ class ClassScanner(
                 method.declaringClass.getDeclaredField("INSTANCE").get(null)
             }
             ListenerUtils.registerListener(
-                eventClass as Class<Event>,
+                eventClass,
                 eventPriority,
                 plugin,
                 ignoreCancelled

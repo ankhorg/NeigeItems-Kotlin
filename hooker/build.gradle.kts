@@ -17,17 +17,17 @@ tasks {
 }
 
 dependencies {
-    implementation(project(":hooker-mythicmobs-v440"))
-    implementation(project(":hooker-mythicmobs-v459"))
-    implementation(project(":hooker-mythicmobs-v490"))
-    implementation(project(":hooker-mythicmobs-v502"))
-    implementation(project(":hooker-mythicmobs-v510"))
-    implementation(project(":hooker-mythicmobs-v560"))
+    implementation(project(":hooker:mythicmobs:v440"))
+    implementation(project(":hooker:mythicmobs:v459"))
+    implementation(project(":hooker:mythicmobs:v490"))
+    implementation(project(":hooker:mythicmobs:v502"))
+    implementation(project(":hooker:mythicmobs:v510"))
+    implementation(project(":hooker:mythicmobs:v560"))
 
-    implementation(project(":hooker-nms-NamespacedKey"))
-    implementation(project(":hooker-nms-CustomModelData"))
-    implementation(project(":hooker-nms-HoverEvent"))
-    compileOnly(project(":hooker-nms-ItemStack"))
+    implementation(project(":hooker:nms:v1_12_R1"))
+    implementation(project(":hooker:nms:v1_14_R1"))
+    implementation(project(":hooker:nms:v1_16_R2"))
+    compileOnly(project(":hooker:nms:v1_21+"))
 }
 
 tasks {
@@ -66,7 +66,7 @@ fun final() {
             .get().asFile
     val currentFile =
         project.layout.buildDirectory.file("libs/${project.name}-${project.property("version")}.jar").get().asFile
-    val j21Project = rootProject.project("hooker-nms-ItemStack")
+    val j21Project = rootProject.project("hooker").project("nms").project("v1_21+")
     val j21File =
         j21Project.layout.buildDirectory.file("libs/${j21Project.name}-${j21Project.property("version")}-dev.jar")
             .get().asFile

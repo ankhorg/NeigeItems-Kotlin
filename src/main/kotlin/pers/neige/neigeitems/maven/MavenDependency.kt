@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.utils.FileUtils.sha1
 import java.io.File
 import java.io.IOException
+import java.net.URI
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -155,9 +156,9 @@ class MavenDependency {
                 // 遍历仓库链接尝试下载
                 for (repoUrl in repos) {
                     // 构建目标链接
-                    val url = URL(
+                    val url = URI(
                         "$repoUrl/${groupId.replace(".", "/")}/$artifactId/$version/$artifactId-$version.$extension"
-                    )
+                    ).toURL()
                     // 尝试下载
                     try {
                         // 开启链接

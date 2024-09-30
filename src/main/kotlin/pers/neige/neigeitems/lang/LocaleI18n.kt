@@ -14,6 +14,7 @@ import pers.neige.neigeitems.utils.FileUtils.createFile
 import pers.neige.neigeitems.utils.FileUtils.sha1
 import java.io.File
 import java.io.IOException
+import java.net.URI
 import java.net.URL
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -218,7 +219,7 @@ object LocaleI18n {
                 sha1File.createFile().writeText(hash)
                 // 写入文件
                 file.writeText(
-                    URL("https://resources.download.minecraft.net/${hash.substring(0, 2)}/$hash").readText()
+                    URI("https://resources.download.minecraft.net/${hash.substring(0, 2)}/$hash").toURL().readText()
                 )
                 // sha1校验
                 if (file.sha1() != hash) {
@@ -284,7 +285,7 @@ object LocaleI18n {
     }
 
     private fun String.connectAndParseObject(): JSONObject {
-        return URL(this).readText().parseObject()
+        return URI(this).toURL().readText().parseObject()
     }
 
     interface TranslationProvider {
