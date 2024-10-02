@@ -53,6 +53,8 @@ pers.neige.neigeitems.item.action
 pers.neige.neigeitems.item.builder
 pers.neige.neigeitems.item.color
 pers.neige.neigeitems.item.color.impl
+pers.neige.neigeitems.item.lore
+pers.neige.neigeitems.item.lore.impl
 pers.neige.neigeitems.lang
 pers.neige.neigeitems.libs.asahi.util.calculate
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt
