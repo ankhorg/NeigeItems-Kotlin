@@ -72,30 +72,6 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         loadFunctions()
     }
 
-    /**
-     * 添加物品动作
-     *
-     * @param id 动作ID
-     * @param function 动作执行函数
-     */
-    @Deprecated("用BaseActionManager里那个")
-    fun addAction(id: String, function: BiFunction<Player, String, Boolean>) {
-        addFunction(id, BiFunction { context, content ->
-            val player = context.player
-            if (player != null) {
-                return@BiFunction CompletableFuture.completedFuture(
-                    Results.fromBoolean(
-                        function.apply(
-                            player,
-                            content
-                        )
-                    )
-                )
-            }
-            return@BiFunction CompletableFuture.completedFuture(Results.SUCCESS)
-        })
-    }
-
     override fun runAction(
         action: StringAction, context: ActionContext
     ): CompletableFuture<ActionResult> {

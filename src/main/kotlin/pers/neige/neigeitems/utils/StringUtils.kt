@@ -21,6 +21,23 @@ object StringUtils {
     }
 
     /**
+     * Array转文本
+     *
+     * @param separator 分隔符
+     * @param start 起始索引
+     * @return 结果文本
+     */
+    @JvmStatic
+    fun Array<String>.joinToString(separator: CharSequence = ", ", start: Int = 0): String {
+        val buffer = StringBuilder()
+        for (count in start until this.size) {
+            if (count > start) buffer.append(separator)
+            buffer.append(this[count])
+        }
+        return buffer.toString()
+    }
+
+    /**
      * 对文本进行分割
      *
      * @param separator 分隔符
