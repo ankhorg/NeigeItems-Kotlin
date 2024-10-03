@@ -18,7 +18,6 @@ import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.annotation.Awake;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.user.User;
-import pers.neige.neigeitems.utils.StringUtils;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -99,8 +98,7 @@ public class SignCatcherAction extends Action {
 
         private Catcher(@NotNull SignCatcherAction action, @NotNull ActionContext context, @NotNull CompletableFuture<ActionResult> result) {
             future.thenAccept((texts) -> {
-                context.getGlobal().put(action.getMessageKey(), StringUtils.joinToString(texts, "\n", 0));
-                context.getGlobal().put(action.getMessageKey() + ".array", texts);
+                context.getGlobal().put(action.getMessageKey(), texts);
                 context.getGlobal().put(action.getMessageKey() + ".length", texts.length);
                 for (int index = 0; index < texts.length; index++) {
                     String text = texts[index];
