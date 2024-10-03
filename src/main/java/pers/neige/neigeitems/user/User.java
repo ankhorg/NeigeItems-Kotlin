@@ -3,6 +3,7 @@ package pers.neige.neigeitems.user;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.impl.ChatCatcherAction;
+import pers.neige.neigeitems.action.impl.SignCatcherAction;
 
 import java.util.ArrayDeque;
 import java.util.UUID;
@@ -12,6 +13,8 @@ public class User {
     private final UUID uuid;
     @NotNull
     private final ArrayDeque<ChatCatcherAction.Catcher> chatCatchers = new ArrayDeque<>();
+    @NotNull
+    private final ArrayDeque<SignCatcherAction.Catcher> signCatchers = new ArrayDeque<>();
 
     public User(
             @NotNull UUID uuid
@@ -39,6 +42,24 @@ public class User {
     public ChatCatcherAction.Catcher pollChatCatcher() {
         synchronized (this) {
             return chatCatchers.poll();
+        }
+    }
+
+    @NotNull
+    public ArrayDeque<SignCatcherAction.Catcher> getSignCatchers() {
+        return signCatchers;
+    }
+
+    public void addSignCatcher(SignCatcherAction.Catcher catcher) {
+        synchronized (this) {
+            signCatchers.add(catcher);
+        }
+    }
+
+    @Nullable
+    public SignCatcherAction.Catcher pollSignCatcher() {
+        synchronized (this) {
+            return signCatchers.poll();
         }
     }
 }

@@ -14,7 +14,11 @@ object JarLoader {
         this::class.java.classLoader,
         unsafe.objectFieldOffset(
             // sun.misc.Launcher$AppClassLoader
-            Bukkit::class.java.classLoader.javaClass.getDeclaredField("ucp")
+            try {
+                this::class.java.classLoader.javaClass.getDeclaredField("ucp")
+            } catch (e: NoSuchFieldException) {
+                this::class.java.classLoader.javaClass.superclass.getDeclaredField("ucp")
+            }
         )
     )
 

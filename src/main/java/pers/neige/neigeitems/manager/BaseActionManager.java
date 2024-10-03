@@ -25,6 +25,7 @@ import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker;
 import pers.neige.neigeitems.hook.vault.VaultHooker;
 import pers.neige.neigeitems.item.ItemInfo;
 import pers.neige.neigeitems.item.action.ComboInfo;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils;
 import pers.neige.neigeitems.user.User;
 import pers.neige.neigeitems.utils.*;
 
@@ -127,6 +128,8 @@ public abstract class BaseActionManager {
                 return new WhileAction(this, (Map<?, ?>) action);
             } else if (((Map<?, ?>) action).containsKey("catch")) {
                 return new ChatCatcherAction((Map<?, ?>) action);
+            } else if (((Map<?, ?>) action).containsKey("catch-sign")) {
+                return new SignCatcherAction((Map<?, ?>) action);
             } else if (((Map<?, ?>) action).containsKey("label")) {
                 return new LabelAction(this, (Map<?, ?>) action);
             }
@@ -137,6 +140,8 @@ public abstract class BaseActionManager {
                 return new WhileAction(this, (ConfigurationSection) action);
             } else if (((ConfigurationSection) action).contains("catch")) {
                 return new ChatCatcherAction((ConfigurationSection) action);
+            } else if (((ConfigurationSection) action).contains("catch-sign")) {
+                return new SignCatcherAction((ConfigurationSection) action);
             } else if (((ConfigurationSection) action).contains("label")) {
                 return new LabelAction(this, (ConfigurationSection) action);
             }
@@ -418,6 +423,29 @@ public abstract class BaseActionManager {
         user.addChatCatcher(action.getCatcher(context, result));
         return result;
     }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
+            @NotNull SignCatcherAction action,
+            @NotNull ActionContext context
+    ) {
+        Player player = context.getPlayer();
+        if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+        User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
+        if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+        CompletableFuture<ActionResult> result = new CompletableFuture<>();
+        user.addSignCatcher(action.getCatcher(context, result));
+        EntityPlayerUtils.openSign(player);
+        return result;
+    }
+
 
     /**
      * 解析条件
