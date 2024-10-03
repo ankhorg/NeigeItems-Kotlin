@@ -48,7 +48,7 @@ public class LabelAction extends Action {
 
     @Override
     public @NotNull ActionType getType() {
-        return ActionType.CONDITION;
+        return ActionType.LABEL;
     }
 
     /**

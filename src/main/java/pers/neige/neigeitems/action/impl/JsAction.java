@@ -32,7 +32,7 @@ public class JsAction extends Action {
 
     @Override
     public @NotNull ActionType getType() {
-        return ActionType.RAW_STRING;
+        return ActionType.JS;
     }
 
     /**

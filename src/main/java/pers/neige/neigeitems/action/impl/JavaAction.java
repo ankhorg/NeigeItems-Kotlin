@@ -22,7 +22,7 @@ public class JavaAction extends Action {
 
     @Override
     public @NotNull ActionType getType() {
-        return ActionType.STRING;
+        return ActionType.JAVA;
     }
 
     @Override

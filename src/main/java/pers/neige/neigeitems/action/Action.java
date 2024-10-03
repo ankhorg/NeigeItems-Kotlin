@@ -24,7 +24,9 @@ public abstract class Action {
     }
 
     @NotNull
-    public abstract ActionType getType();
+    public ActionType getType() {
+        return ActionType.UNKNOWN;
+    }
 
     @NotNull
     public CompletableFuture<ActionResult> eval(
