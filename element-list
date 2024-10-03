@@ -1,6 +1,7 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
 $dokka.location:pers.neige.neigeitems.action.impl/ChatCatcherAction.Catcher///PointingToDeclaration/pers/neige/neigeitems/action/impl/ChatCatcherAction.Catcher.html
+$dokka.location:pers.neige.neigeitems.action.impl/SignCatcherAction.Catcher///PointingToDeclaration/pers/neige/neigeitems/action/impl/SignCatcherAction.Catcher.html
 $dokka.location:pers.neige.neigeitems.annotation/Awake.LifeCycle///PointingToDeclaration/pers/neige/neigeitems/annotation/Awake.LifeCycle.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PostGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PostGenerate.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PreGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PreGenerate.html
