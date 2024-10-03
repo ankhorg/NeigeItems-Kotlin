@@ -18,6 +18,8 @@ import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ResultType;
+import pers.neige.neigeitems.action.catcher.ChatCatcher;
+import pers.neige.neigeitems.action.catcher.SignCatcher;
 import pers.neige.neigeitems.action.impl.*;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.action.result.StopResult;
@@ -126,10 +128,6 @@ public abstract class BaseActionManager {
                 return new ConditionAction(this, (Map<?, ?>) action);
             } else if (((Map<?, ?>) action).containsKey("while")) {
                 return new WhileAction(this, (Map<?, ?>) action);
-            } else if (((Map<?, ?>) action).containsKey("catch")) {
-                return new ChatCatcherAction((Map<?, ?>) action);
-            } else if (((Map<?, ?>) action).containsKey("catch-sign")) {
-                return new SignCatcherAction((Map<?, ?>) action);
             } else if (((Map<?, ?>) action).containsKey("label")) {
                 return new LabelAction(this, (Map<?, ?>) action);
             }
@@ -138,10 +136,6 @@ public abstract class BaseActionManager {
                 return new ConditionAction(this, (ConfigurationSection) action);
             } else if (((ConfigurationSection) action).contains("while")) {
                 return new WhileAction(this, (ConfigurationSection) action);
-            } else if (((ConfigurationSection) action).contains("catch")) {
-                return new ChatCatcherAction((ConfigurationSection) action);
-            } else if (((ConfigurationSection) action).contains("catch-sign")) {
-                return new SignCatcherAction((ConfigurationSection) action);
             } else if (((ConfigurationSection) action).contains("label")) {
                 return new LabelAction(this, (ConfigurationSection) action);
             }
@@ -402,50 +396,6 @@ public abstract class BaseActionManager {
             return action.getFinally().eval(this, context);
         }
     }
-
-    /**
-     * 执行动作
-     *
-     * @param action  动作内容
-     * @param context 动作上下文
-     * @return 执行结果
-     */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull ChatCatcherAction action,
-            @NotNull ActionContext context
-    ) {
-        Player player = context.getPlayer();
-        if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-        User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
-        if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-        CompletableFuture<ActionResult> result = new CompletableFuture<>();
-        user.addChatCatcher(action.getCatcher(context, result));
-        return result;
-    }
-
-    /**
-     * 执行动作
-     *
-     * @param action  动作内容
-     * @param context 动作上下文
-     * @return 执行结果
-     */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull SignCatcherAction action,
-            @NotNull ActionContext context
-    ) {
-        Player player = context.getPlayer();
-        if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-        User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
-        if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-        CompletableFuture<ActionResult> result = new CompletableFuture<>();
-        user.addSignCatcher(action.getCatcher(context, result));
-        EntityPlayerUtils.openSign(player);
-        return result;
-    }
-
 
     /**
      * 解析条件
@@ -969,6 +919,30 @@ public abstract class BaseActionManager {
             }
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> result.complete(Results.SUCCESS));
+            return result;
+        });
+        // 聊天捕获器
+        addFunction("catchChat", (context, content) -> {
+            Player player = context.getPlayer();
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            ArrayList<String> args = StringUtils.split(content, ' ', '\\');
+            String messageKey = getOrDefault(args, 0, "catchChat");
+            boolean cancel = getAndApply(args, 1, true, StringsKt::toBooleanStrictOrNull);
+            User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
+            if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            user.addChatCatcher(new ChatCatcher(messageKey, cancel, context, result));
+            return result;
+        });
+        // 告示牌捕获器
+        addFunction("catchSign", (context, content) -> {
+            Player player = context.getPlayer();
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
+            if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            user.addSignCatcher(new SignCatcher(content, context, result));
+            EntityPlayerUtils.openSign(player);
             return result;
         });
     }
