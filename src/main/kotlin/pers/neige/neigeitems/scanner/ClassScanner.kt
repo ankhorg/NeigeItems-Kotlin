@@ -5,6 +5,7 @@ import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.plugin.Plugin
 import pers.neige.neigeitems.annotation.Awake
+import pers.neige.neigeitems.annotation.Awake.LifeCycle.*
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.utils.ListenerUtils
@@ -23,12 +24,22 @@ class ClassScanner(
     /**
      * 所有插件类
      */
-    val classes = mutableListOf<Class<*>>()
+    private val classes = mutableListOf<Class<*>>()
 
     /**
      * 待加载监听器方法
      */
     private val listenerMethods = mutableListOf<Method>()
+
+    /**
+     * INIT 加载方法
+     */
+    private val initMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
+
+    /**
+     * LOAD 加载方法
+     */
+    private val loadMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
 
     /**
      * ENABLE 加载方法
@@ -50,12 +61,35 @@ class ClassScanner(
      */
     private val scheduleMethods = mutableListOf<Method>()
 
+    init {
+        scan()
+        initMethods.values.forEach { methods ->
+            methods.forEach { method ->
+                method.invokeSafe()
+            }
+        }
+    }
+
+    private fun scan() {
+        loadClasses(plugin, packageName, except)
+        loadMethods()
+    }
+
+    /**
+     * load阶段调用
+     */
+    fun onLoad() {
+        loadMethods.values.forEach { methods ->
+            methods.forEach { method ->
+                method.invokeSafe()
+            }
+        }
+    }
+
     /**
      * enable阶段调用
      */
     fun onEnable() {
-        loadClasses(plugin, packageName, except)
-        loadMethods()
         listenerMethods.forEach { method ->
             val annotation = method.getAnnotation(Listener::class.java)
             val eventClass = method.parameterTypes[0].asSubclass(Event::class.java)
@@ -78,32 +112,14 @@ class ClassScanner(
 
         enableMethods.values.forEach { methods ->
             methods.forEach { method ->
-                try {
-                    val instance = if (Modifier.isStatic(method.modifiers)) {
-                        null
-                    } else {
-                        method.declaringClass.getDeclaredField("INSTANCE").get(null)
-                    }
-                    method.invoke(instance)
-                } catch (error: Throwable) {
-                    error.printStackTrace()
-                }
+                method.invokeSafe()
             }
         }
 
         Bukkit.getScheduler().runTask(plugin, Runnable {
             activeMethods.values.forEach { methods ->
                 methods.forEach { method ->
-                    try {
-                        val instance = if (Modifier.isStatic(method.modifiers)) {
-                            null
-                        } else {
-                            method.declaringClass.getDeclaredField("INSTANCE").get(null)
-                        }
-                        method.invoke(instance)
-                    } catch (error: Throwable) {
-                        error.printStackTrace()
-                    }
+                    method.invokeSafe()
                 }
             }
         })
@@ -174,13 +190,19 @@ class ClassScanner(
                         if (method.check("错误的生命周期注解")) {
                             val annotation = method.getAnnotation(Awake::class.java)
                             when (annotation.lifeCycle) {
-                                Awake.LifeCycle.ENABLE -> enableMethods.getOrPut(annotation.priority) { mutableListOf() }
+                                INIT -> initMethods.getOrPut(annotation.priority) { mutableListOf() }
                                     .add(method)
 
-                                Awake.LifeCycle.ACTIVE -> activeMethods.getOrPut(annotation.priority) { mutableListOf() }
+                                LOAD -> loadMethods.getOrPut(annotation.priority) { mutableListOf() }
                                     .add(method)
 
-                                Awake.LifeCycle.DISABLE -> disableMethods.getOrPut(annotation.priority) { mutableListOf() }
+                                ENABLE -> enableMethods.getOrPut(annotation.priority) { mutableListOf() }
+                                    .add(method)
+
+                                ACTIVE -> activeMethods.getOrPut(annotation.priority) { mutableListOf() }
+                                    .add(method)
+
+                                DISABLE -> disableMethods.getOrPut(annotation.priority) { mutableListOf() }
                                     .add(method)
                             }
                         }
@@ -223,11 +245,10 @@ class ClassScanner(
             for (name in except) {
                 if (entryName.startsWith(name)) continue@loop
             }
-            entryName = entryName.substring(0, entry.name.length - 6)
+            entryName = entryName.substring(0, entry.name.length - 6).removeSuffix(".ankh-invoke")
             try {
                 classes.add(Class.forName(entryName))
             } catch (_: NoClassDefFoundError) {
-            } catch (_: ClassNotFoundException) {
             } catch (_: UnsupportedClassVersionError) {
             } catch (error: Throwable) {
                 plugin.logger.warning("error occurred while get Class $entryName")
@@ -250,6 +271,19 @@ class ClassScanner(
             }
         } else {
             true
+        }
+    }
+
+    private fun Method.invokeSafe() {
+        try {
+            val instance = if (Modifier.isStatic(modifiers)) {
+                null
+            } else {
+                declaringClass.getDeclaredField("INSTANCE").get(null)
+            }
+            invoke(instance)
+        } catch (error: Throwable) {
+            error.printStackTrace()
         }
     }
 }

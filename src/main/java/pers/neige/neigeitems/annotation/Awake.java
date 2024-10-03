@@ -15,6 +15,8 @@ public @interface Awake {
     EventPriority priority() default EventPriority.NORMAL;
 
     enum LifeCycle {
+        INIT,
+        LOAD,
         ENABLE,
         ACTIVE,
         DISABLE

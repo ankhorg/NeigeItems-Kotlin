@@ -25,32 +25,12 @@ import java.util.HashSet;
 
 public class NeigeItems extends JavaPlugin {
     private static final Logger logger;
-    private final static UserManager userManager = new UserManager();
+    private static final UserManager userManager = new UserManager();
     private static NeigeItems INSTANCE;
 
     static {
         AuroraLoggerFactory.instance().nameMapping(it -> "NeigeItems " + it);
         logger = LoggerFactory.getLogger(NeigeItems.class.getSimpleName());
-        init();
-    }
-
-    private ClassScanner scanner = null;
-
-    public NeigeItems() {
-        super();
-        INSTANCE = this;
-    }
-
-    public NeigeItems(@NotNull JavaPluginLoader loader, @NotNull PluginDescriptionFile description, @NotNull File dataFolder, @NotNull File file) {
-        super(loader, description, dataFolder, file);
-        INSTANCE = this;
-    }
-
-    public static NeigeItems getInstance() {
-        return INSTANCE;
-    }
-
-    public static void init() {
         try {
             logger.info("loading ankh-invoke");
             AnkhInvokeBukkit.forBukkit(NeigeItems.class)
@@ -75,14 +55,27 @@ public class NeigeItems extends JavaPlugin {
         }
     }
 
+    private ClassScanner scanner = null;
+
+    public NeigeItems() {
+        super();
+        onInit();
+    }
+
+    public NeigeItems(@NotNull JavaPluginLoader loader, @NotNull PluginDescriptionFile description, @NotNull File dataFolder, @NotNull File file) {
+        super(loader, description, dataFolder, file);
+        onInit();
+    }
+
+    public static NeigeItems getInstance() {
+        return INSTANCE;
+    }
+
     public static UserManager getUserManager() {
         return userManager;
     }
 
-    @Override
-    public void onEnable() {
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-
+    public void onInit() {
         try {
             if (!CbVersion.v1_20_R4.isSupport()) {
                 ItemStack itemStack = new ItemStack(Material.STONE);
@@ -118,11 +111,18 @@ public class NeigeItems extends JavaPlugin {
             pluginManager.disablePlugin(this);
             return;
         }
+        INSTANCE = this;
         scanner = new ClassScanner(
                 this,
                 NeigeItems.class.getPackage().getName(),
                 new HashSet<>(Collections.singletonList(NeigeItems.class.getPackage().getName() + ".libs"))
         );
+        scanner.onLoad();
+    }
+
+    @Override
+    public void onEnable() {
+        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         scanner.onEnable();
     }
 
