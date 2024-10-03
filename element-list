@@ -1,7 +1,5 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
-$dokka.location:pers.neige.neigeitems.action.impl/ChatCatcherAction.Catcher///PointingToDeclaration/pers/neige/neigeitems/action/impl/ChatCatcherAction.Catcher.html
-$dokka.location:pers.neige.neigeitems.action.impl/SignCatcherAction.Catcher///PointingToDeclaration/pers/neige/neigeitems/action/impl/SignCatcherAction.Catcher.html
 $dokka.location:pers.neige.neigeitems.annotation/Awake.LifeCycle///PointingToDeclaration/pers/neige/neigeitems/annotation/Awake.LifeCycle.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PostGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PostGenerate.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PreGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PreGenerate.html
@@ -22,6 +20,7 @@ $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPack
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook.html
 pers.neige.neigeitems
 pers.neige.neigeitems.action
+pers.neige.neigeitems.action.catcher
 pers.neige.neigeitems.action.impl
 pers.neige.neigeitems.action.result
 pers.neige.neigeitems.annotation
