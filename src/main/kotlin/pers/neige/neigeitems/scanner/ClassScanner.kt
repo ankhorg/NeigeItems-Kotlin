@@ -24,7 +24,7 @@ class ClassScanner(
     /**
      * 所有插件类
      */
-    private val classes = mutableListOf<Class<*>>()
+    val classes = mutableListOf<Class<*>>()
 
     /**
      * 待加载监听器方法
