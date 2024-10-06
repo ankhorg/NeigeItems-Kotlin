@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ActionContext {
-    private static final ActionContext EMPTY = new ActionContext();
     @NotNull
     private final Bindings basicBindings;
     @Nullable
@@ -95,7 +94,7 @@ public class ActionContext {
      */
     @NotNull
     public static ActionContext empty() {
-        return EMPTY;
+        return new ActionContext();
     }
 
     /**

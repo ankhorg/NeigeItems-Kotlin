@@ -338,7 +338,8 @@ public abstract class BaseActionManager {
         // 如果条件通过
         if (parseCondition(action.getConditionString(), action.getCondition(), context).getType() == ResultType.SUCCESS) {
             // 执行动作
-            Action.eval(action.getSync(), action.getAsync(), this, context);
+            SchedulerUtils.sync(plugin, () -> action.getSync().eval(this, context));
+            SchedulerUtils.async(plugin, () -> action.getAsync().eval(this, context));
             return action.getActions().eval(this, context);
             // 条件未通过
         } else {
