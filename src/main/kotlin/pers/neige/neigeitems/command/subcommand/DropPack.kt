@@ -117,7 +117,7 @@ object DropPack {
         return 1
     }
 
-    private fun dropPackCommand(
+    fun dropPackCommand(
         sender: CommandSender,
         itemPack: ItemPack,
         repeat: Int,

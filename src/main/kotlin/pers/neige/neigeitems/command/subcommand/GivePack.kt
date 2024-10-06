@@ -85,7 +85,7 @@ object GivePack {
         return 1
     }
 
-    private fun givePackCommand(
+    fun givePackCommand(
         sender: CommandSender,
         player: Player,
         itemPack: ItemPack,

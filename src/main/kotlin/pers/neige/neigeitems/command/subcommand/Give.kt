@@ -126,7 +126,7 @@ object Give {
         return 1
     }
 
-    private fun giveCommand(
+    fun giveCommand(
         sender: CommandSender,
         player: Player,
         item: ItemGenerator,

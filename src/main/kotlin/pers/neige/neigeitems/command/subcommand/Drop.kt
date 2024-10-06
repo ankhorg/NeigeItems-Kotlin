@@ -122,7 +122,7 @@ object Drop {
         return 1
     }
 
-    private fun dropCommand(
+    fun dropCommand(
         sender: CommandSender,
         item: ItemGenerator,
         amount: Int,
