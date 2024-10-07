@@ -3,6 +3,7 @@ package pers.neige.neigeitems.listener
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityShootBowEvent
+import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.item.ItemDurability
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
@@ -35,29 +36,30 @@ object EntityShootBowListener {
         if (event.isCancelled) return
     }
 
-    val shootArrowListener = if (GET_CONSUMABLE_SUPPORT) {
-        ListenerUtils.registerListener(
-            EntityShootBowEvent::class.java,
-            EventPriority.LOWEST
-        ) { event ->
-            // 获取玩家
-            val player = event.entity
-            if (player !is Player) return@registerListener
-            // 获取箭
-            val itemStack = event.consumable
-            // 获取NI物品信息(不是NI物品就停止操作)
-            val itemInfo = itemStack?.isNiItem() ?: return@registerListener
-            // NI物品数据
-            val neigeItems: NbtCompound = itemInfo.neigeItems
+    @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
+    fun init() {
+        if (GET_CONSUMABLE_SUPPORT) {
+            ListenerUtils.registerListener(
+                EntityShootBowEvent::class.java,
+                EventPriority.LOWEST
+            ) { event ->
+                // 获取玩家
+                val player = event.entity
+                if (player !is Player) return@registerListener
+                // 获取箭
+                val itemStack = event.consumable
+                // 获取NI物品信息(不是NI物品就停止操作)
+                val itemInfo = itemStack?.isNiItem() ?: return@registerListener
+                // NI物品数据
+                val neigeItems: NbtCompound = itemInfo.neigeItems
 
-            // 检测已损坏物品
-            ItemDurability.basic(player, neigeItems, event)
-            if (event.isCancelled) return@registerListener
-            // 执行物品动作
-            ActionManager.shootArrowListener(player, itemStack, itemInfo, event)
-            if (event.isCancelled) return@registerListener
+                // 检测已损坏物品
+                ItemDurability.basic(player, neigeItems, event)
+                if (event.isCancelled) return@registerListener
+                // 执行物品动作
+                ActionManager.shootArrowListener(player, itemStack, itemInfo, event)
+                if (event.isCancelled) return@registerListener
+            }
         }
-    } else {
-        null
     }
 }

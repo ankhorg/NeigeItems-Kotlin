@@ -49,7 +49,7 @@ public class ConfigSectionManager<T> extends ConcurrentHashMap<String, T> {
         load();
     }
 
-    private void load() {
+    protected void load() {
         for (Entry<String, ConfigurationSection> entry : getConfigs().entrySet()) {
             String id = entry.getKey();
             ConfigurationSection config = entry.getValue();
