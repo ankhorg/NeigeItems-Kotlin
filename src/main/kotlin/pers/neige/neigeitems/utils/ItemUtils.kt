@@ -399,29 +399,6 @@ object ItemUtils {
         return NbtUtils.asCopy(this)
     }
 
-    @JvmStatic
-    fun ItemStack?.setDamage(damage: Short) {
-        if (this == null || this.type == Material.AIR) return
-        if (CbVersion.current() == CbVersion.v1_12_R1 || CbVersion.v1_20_R4.isSupport) {
-            this.durability = damage
-        } else {
-            val nbt = NbtItemStack(this).orCreateTag
-            nbt.putInt(NbtUtils.getDamageNbtKeyOrThrow(), damage.toInt())
-            nbt.saveToSafe(this)
-        }
-    }
-
-    @JvmStatic
-    fun ItemStack?.getDamage(): Short {
-        if (this == null || this.type == Material.AIR) return -1
-        if (CbVersion.current() == CbVersion.v1_12_R1 || CbVersion.v1_20_R4.isSupport) {
-            return this.durability
-        } else {
-            val nbt = NbtItemStack(this).tag ?: return -1
-            return nbt.getShort(NbtUtils.getDamageNbtKeyOrThrow(), -1)
-        }
-    }
-
     /**
      * 获取CraftItemStack形式的物品复制
      *
@@ -950,64 +927,63 @@ object ItemUtils {
             // 我姑且认为没炸
             var boom = false
             let {
-                if (nodeIndex != null) {
-                    // 判断当前Nbt类型
-                    when (temp) {
-                        // 是LIST
-                        is NbtList -> {
-                            val originFather = father
-                            // 记录父级NbtList
-                            father = temp
-                            // 获取下一级
-                            val content = (temp as NbtList).getOrNull(nodeIndex)
-                            // 如果下一级有东西
-                            if (content != null) {
-                                // 皆大欢喜
-                                temp = content
-                                // 如果下一级没东西
+                if (nodeIndex == null) return@let
+                // 判断当前Nbt类型
+                when (temp) {
+                    // 是LIST
+                    is NbtList -> {
+                        val originFather = father
+                        // 记录父级NbtList
+                        father = temp
+                        // 获取下一级
+                        val content = (temp as NbtList).getOrNull(nodeIndex)
+                        // 如果下一级有东西
+                        if (content != null) {
+                            // 皆大欢喜
+                            temp = content
+                            // 如果下一级没东西
+                        } else {
+                            // 如果刚好是比list的大小多一个
+                            if (nodeIndex == (temp as NbtList).size) {
+                                // 创建一个新的NbtCompound
+                                val newItemTag = NbtCompound()
+                                // 丢进去
+                                (temp as NbtList).add(newItemTag)
+                                // 记录一下
+                                temp = newItemTag
+                                // 如果现在这个index很离谱
                             } else {
-                                // 如果刚好是比list的大小多一个
-                                if (nodeIndex == (temp as NbtList).size) {
-                                    // 创建一个新的NbtCompound
-                                    val newItemTag = NbtCompound()
-                                    // 丢进去
-                                    (temp as NbtList).add(newItemTag)
-                                    // 记录一下
-                                    temp = newItemTag
-                                    // 如果现在这个index很离谱
-                                } else {
-                                    // 你妈, 爬(变成NbtCompound)
-                                    boom = true
-                                    father = originFather
-                                    return@let
-                                }
-                            }
-                            // 记录当前Nbt的Id
-                            tempId = node
-                        }
-                        // 其他情况
-                        else -> {
-                            // 其他情况说明需要重新创建一个NbtList, 所以nodeIndex必须为0
-                            if (nodeIndex == 0) {
-                                // 新建一个NbtCompound
-                                val fatherItemTagList = NbtList()
-                                // 覆盖上一层
-                                (father as NbtCompound)[tempId] = fatherItemTagList
-                                // 新建当前Nbt
-                                val tempItemTag = NbtCompound()
-                                // 建立下一级Nbt
-                                fatherItemTagList.add(tempItemTag)
-                                // 记录父级NbtCompound
-                                father = fatherItemTagList
-                                // 记录当前Nbt
-                                temp = tempItemTag
-                                // 记录当前Nbt的Id
-                                tempId = node
-                            } else {
-                                // 你给我爬(变成NbtCompound)
+                                // 你妈, 爬(变成NbtCompound)
                                 boom = true
+                                father = originFather
                                 return@let
                             }
+                        }
+                        // 记录当前Nbt的Id
+                        tempId = node
+                    }
+                    // 其他情况
+                    else -> {
+                        // 其他情况说明需要重新创建一个NbtList, 所以nodeIndex必须为0
+                        if (nodeIndex == 0) {
+                            // 新建一个NbtCompound
+                            val fatherItemTagList = NbtList()
+                            // 覆盖上一层
+                            (father as NbtCompound)[tempId] = fatherItemTagList
+                            // 新建当前Nbt
+                            val tempItemTag = NbtCompound()
+                            // 建立下一级Nbt
+                            fatherItemTagList.add(tempItemTag)
+                            // 记录父级NbtCompound
+                            father = fatherItemTagList
+                            // 记录当前Nbt
+                            temp = tempItemTag
+                            // 记录当前Nbt的Id
+                            tempId = node
+                        } else {
+                            // 你给我爬(变成NbtCompound)
+                            boom = true
+                            return@let
                         }
                     }
                 }
@@ -1054,115 +1030,114 @@ object ItemUtils {
         var boom = false
         // 我姑且认为没炸
         let {
-            if (nodeIndex != null) {
-                // ByteArray插入
-                if (temp is NbtByteArray && value is NbtByte) {
-                    val byteArray = (temp as NbtByteArray).asByteArray
-                    // 检测是否越界
-                    if (nodeIndex >= 0 && nodeIndex < byteArray.size) {
-                        byteArray[nodeIndex] = value.asByte
-                        // 刚好大一个
-                    } else if (nodeIndex == byteArray.size) {
-                        // 复制扩容
-                        val newArray = byteArray.copyOf(byteArray.size + 1)
-                        newArray[nodeIndex] = value.asByte
-                        // 覆盖上一层
-                        when (father) {
-                            is NbtList -> {
-                                (father as NbtList)[tempId.toInt()] = NbtByteArray(
-                                    newArray
-                                )
-                            }
-
-                            else -> {
-                                (father as NbtCompound)[tempId] = NbtByteArray(
-                                    newArray
-                                )
-                            }
+            if (nodeIndex == null) return@let
+            // ByteArray插入
+            if (temp is NbtByteArray && value is NbtByte) {
+                val byteArray = (temp as NbtByteArray).asByteArray
+                // 检测是否越界
+                if (nodeIndex >= 0 && nodeIndex < byteArray.size) {
+                    byteArray[nodeIndex] = value.asByte
+                    // 刚好大一个
+                } else if (nodeIndex == byteArray.size) {
+                    // 复制扩容
+                    val newArray = byteArray.copyOf(byteArray.size + 1)
+                    newArray[nodeIndex] = value.asByte
+                    // 覆盖上一层
+                    when (father) {
+                        is NbtList -> {
+                            (father as NbtList)[tempId.toInt()] = NbtByteArray(
+                                newArray
+                            )
                         }
-                        // 越界了, 爬
-                    } else {
-                        // 你给我爬(变成ItemTag)
-                        boom = true
-                        return@let
-                    }
-                    // IntArray插入
-                } else if (temp is NbtIntArray && value is NbtInt) {
-                    val intArray = (temp as NbtIntArray).asIntArray
-                    // 检测是否越界
-                    if (nodeIndex >= 0 && nodeIndex < intArray.size) {
-                        intArray[nodeIndex] = value.asInt
-                        // 刚好大一个
-                    } else if (nodeIndex == intArray.size) {
-                        // 复制扩容
-                        val newArray = intArray.copyOf(intArray.size + 1)
-                        newArray[nodeIndex] = value.asInt
-                        // 覆盖上一层
-                        when (father) {
-                            is NbtList -> {
-                                (father as NbtList)[tempId.toInt()] = NbtIntArray(
-                                    newArray
-                                )
-                            }
 
-                            else -> {
-                                (father as NbtCompound)[tempId] = NbtIntArray(
-                                    newArray
-                                )
-                            }
+                        else -> {
+                            (father as NbtCompound)[tempId] = NbtByteArray(
+                                newArray
+                            )
                         }
-                        // 越界了, 爬
-                    } else {
-                        // 你给我爬(变成NbtCompound)
-                        boom = true
-                        return@let
                     }
-                    // LongArray插入
-                } else if (temp is NbtLongArray && value is NbtLong) {
-                    val longArray = (temp as NbtLongArray).asLongArray
-                    // 检测是否越界
-                    if (nodeIndex >= 0 && nodeIndex < longArray.size) {
-                        longArray[nodeIndex] = value.asLong
-                        // 刚好大一个
-                    } else if (nodeIndex == longArray.size) {
-                        // 复制扩容
-                        val newArray = longArray.copyOf(longArray.size + 1)
-                        newArray[nodeIndex] = value.asLong
-                        // 覆盖上一层
-                        when (father) {
-                            is NbtList -> {
-                                (father as NbtList)[tempId.toInt()] = NbtLongArray(
-                                    newArray
-                                )
-                            }
+                    // 越界了, 爬
+                } else {
+                    // 你给我爬(变成ItemTag)
+                    boom = true
+                    return@let
+                }
+                // IntArray插入
+            } else if (temp is NbtIntArray && value is NbtInt) {
+                val intArray = (temp as NbtIntArray).asIntArray
+                // 检测是否越界
+                if (nodeIndex >= 0 && nodeIndex < intArray.size) {
+                    intArray[nodeIndex] = value.asInt
+                    // 刚好大一个
+                } else if (nodeIndex == intArray.size) {
+                    // 复制扩容
+                    val newArray = intArray.copyOf(intArray.size + 1)
+                    newArray[nodeIndex] = value.asInt
+                    // 覆盖上一层
+                    when (father) {
+                        is NbtList -> {
+                            (father as NbtList)[tempId.toInt()] = NbtIntArray(
+                                newArray
+                            )
+                        }
 
-                            else -> {
-                                (father as NbtCompound)[tempId] = NbtLongArray(
-                                    newArray
-                                )
-                            }
+                        else -> {
+                            (father as NbtCompound)[tempId] = NbtIntArray(
+                                newArray
+                            )
                         }
-                        // 越界了, 爬
-                    } else {
-                        // 你给我爬(变成NbtCompound)
-                        boom = true
-                        return@let
                     }
-                    // List插入
-                } else if (temp is NbtList) {
-                    val list = temp as NbtList
-                    // 检测是否越界
-                    if (nodeIndex >= 0 && nodeIndex < list.size) {
-                        list[nodeIndex] = value
-                        // 刚好大一个, 直接add
-                    } else if (nodeIndex == list.size) {
-                        list.add(value)
-                        // 越界了, 爬
-                    } else {
-                        // 你给我爬(变成NbtCompound)
-                        boom = true
-                        return@let
+                    // 越界了, 爬
+                } else {
+                    // 你给我爬(变成NbtCompound)
+                    boom = true
+                    return@let
+                }
+                // LongArray插入
+            } else if (temp is NbtLongArray && value is NbtLong) {
+                val longArray = (temp as NbtLongArray).asLongArray
+                // 检测是否越界
+                if (nodeIndex >= 0 && nodeIndex < longArray.size) {
+                    longArray[nodeIndex] = value.asLong
+                    // 刚好大一个
+                } else if (nodeIndex == longArray.size) {
+                    // 复制扩容
+                    val newArray = longArray.copyOf(longArray.size + 1)
+                    newArray[nodeIndex] = value.asLong
+                    // 覆盖上一层
+                    when (father) {
+                        is NbtList -> {
+                            (father as NbtList)[tempId.toInt()] = NbtLongArray(
+                                newArray
+                            )
+                        }
+
+                        else -> {
+                            (father as NbtCompound)[tempId] = NbtLongArray(
+                                newArray
+                            )
+                        }
                     }
+                    // 越界了, 爬
+                } else {
+                    // 你给我爬(变成NbtCompound)
+                    boom = true
+                    return@let
+                }
+                // List插入
+            } else if (temp is NbtList) {
+                val list = temp as NbtList
+                // 检测是否越界
+                if (nodeIndex >= 0 && nodeIndex < list.size) {
+                    list[nodeIndex] = value
+                    // 刚好大一个, 直接add
+                } else if (nodeIndex == list.size) {
+                    list.add(value)
+                    // 越界了, 爬
+                } else {
+                    // 你给我爬(变成NbtCompound)
+                    boom = true
+                    return@let
                 }
             }
         }
@@ -1183,6 +1158,11 @@ object ItemUtils {
         }
     }
 
+    /**
+     * 如果物品不是CraftItemStack则将NBT应用到物品上.
+     *
+     * @param itemStack 待应用NBT的物品
+     */
     @JvmStatic
     fun NbtCompound.saveToSafe(itemStack: ItemStack) {
         if (itemStack.type != Material.AIR && itemStack.amount != 0 && !NbtUtils.isCraftItemStack(itemStack)) {
@@ -1190,10 +1170,46 @@ object ItemUtils {
         }
     }
 
+    /**
+     * 移除物品上用于记录NI物品拥有者的NBT.
+     */
     @JvmStatic
     fun ItemStack?.removeOwnerNbt() {
         if (this == null || this.type == Material.AIR) return
         val nbt = NbtItemStack(this).directTag
         nbt.getCompound("NeigeItems")?.remove("owner")
+    }
+
+    /**
+     * 设置物品损伤值, 在1.13到1.20.4版本中拥有更佳的性能表现.
+     *
+     * @param damage 损伤值
+     */
+    @JvmStatic
+    fun ItemStack?.setDamage(damage: Short) {
+        if (this == null || this.type == Material.AIR) return
+        if (CbVersion.current() == CbVersion.v1_12_R1 || CbVersion.v1_20_R4.isSupport) {
+            this.durability = damage
+        } else {
+            val nbt = NbtItemStack(this).orCreateTag
+            nbt.putInt(NbtUtils.getDamageNbtKeyOrThrow(), damage.toInt())
+            nbt.saveToSafe(this)
+        }
+    }
+
+    /**
+     * 获取物品损伤值, 在1.13到1.20.4版本中拥有更佳的性能表现.
+     *
+     * @return 物品损伤值
+     */
+    @JvmStatic
+    fun ItemStack?.getDamage(): Short {
+        if (this == null || this.type == Material.AIR) return -1
+        if (CbVersion.current() == CbVersion.v1_12_R1 || CbVersion.v1_20_R4.isSupport) {
+            return this.durability
+        } else {
+            val nbt = NbtItemStack(this).tag ?: return -1
+            return nbt.getShort(NbtUtils.getDamageNbtKeyOrThrow(), -1)
+        }
     }
 }

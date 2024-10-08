@@ -29,6 +29,9 @@ import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 import pers.neige.neigeitems.utils.SchedulerUtils.sync
 
+/**
+ * ni givepack指令
+ */
 object GivePack {
     private val givePackLogic: RequiredArgumentBuilder<CommandSender, PlayerSelector> =
         // ni givePack [player]

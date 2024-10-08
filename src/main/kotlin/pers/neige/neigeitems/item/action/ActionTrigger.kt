@@ -6,6 +6,13 @@ import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.SchedulerUtils
 
+/**
+ * 物品动作触发器
+ *
+ * @property id 物品ID
+ * @property type 触发器类型
+ * @property config 触发器配置
+ */
 class ActionTrigger(val id: String, val type: String, val config: ConfigurationSection) {
     /**
      * 获取物品使用冷却

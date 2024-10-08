@@ -28,7 +28,9 @@ import java.util.*
 import java.util.jar.JarEntry
 import java.util.jar.JarOutputStream
 
-
+/**
+ * ni expansion build指令
+ */
 object Build {
     val build: LiteralArgumentBuilder<CommandSender> =
         // ni expansion build

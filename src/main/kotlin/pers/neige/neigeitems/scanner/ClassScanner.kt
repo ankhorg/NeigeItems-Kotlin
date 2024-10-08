@@ -16,6 +16,9 @@ import java.lang.reflect.Modifier
 import java.util.*
 import java.util.jar.JarFile
 
+/**
+ * 类扫描器
+ */
 class ClassScanner(
     private val plugin: Plugin,
     private val packageName: String = plugin.javaClass.`package`.name,
@@ -25,40 +28,12 @@ class ClassScanner(
      * 所有插件类
      */
     val classes = mutableListOf<Class<*>>()
-
-    /**
-     * 待加载监听器方法
-     */
     private val listenerMethods = mutableListOf<Method>()
-
-    /**
-     * INIT 加载方法
-     */
     private val initMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
-
-    /**
-     * LOAD 加载方法
-     */
     private val loadMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
-
-    /**
-     * ENABLE 加载方法
-     */
     private val enableMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
-
-    /**
-     * ACTIVE 加载方法
-     */
     private val activeMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
-
-    /**
-     * DISABLE 加载方法
-     */
     private val disableMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
-
-    /**
-     * 周期触发方法
-     */
     private val scheduleMethods = mutableListOf<Method>()
 
     init {
@@ -101,10 +76,7 @@ class ClassScanner(
                 method.declaringClass.getDeclaredField("INSTANCE").get(null)
             }
             ListenerUtils.registerListener(
-                eventClass,
-                eventPriority,
-                plugin,
-                ignoreCancelled
+                eventClass, eventPriority, plugin, ignoreCancelled
             ) {
                 method.invoke(instance, it)
             }
@@ -177,44 +149,30 @@ class ClassScanner(
             }
             methods?.forEach { method ->
                 // 监听器方法
-                if (method.isAnnotationPresent(Listener::class.java)) {
-                    if (method.parameterCount == 1 && Event::class.java.isAssignableFrom(method.parameterTypes[0])) {
-                        if (method.check("错误的监听器注解")) {
-                            listenerMethods.add(method)
-                        }
-                    }
+                if (method.isAnnotationPresent(Listener::class.java) && method.parameterCount == 1 && Event::class.java.isAssignableFrom(
+                        method.parameterTypes[0]
+                    ) && method.check("错误的监听器注解")
+                ) {
+                    listenerMethods.add(method)
                 }
                 // 生命周期方法
-                if (method.isAnnotationPresent(Awake::class.java)) {
-                    if (method.parameterCount == 0) {
-                        if (method.check("错误的生命周期注解")) {
-                            val annotation = method.getAnnotation(Awake::class.java)
-                            when (annotation.lifeCycle) {
-                                INIT -> initMethods.getOrPut(annotation.priority) { mutableListOf() }
-                                    .add(method)
+                if (method.isAnnotationPresent(Awake::class.java) && method.parameterCount == 0 && method.check("错误的生命周期注解")) {
+                    val annotation = method.getAnnotation(Awake::class.java)
+                    when (annotation.lifeCycle) {
+                        INIT -> initMethods.getOrPut(annotation.priority) { mutableListOf() }.add(method)
 
-                                LOAD -> loadMethods.getOrPut(annotation.priority) { mutableListOf() }
-                                    .add(method)
+                        LOAD -> loadMethods.getOrPut(annotation.priority) { mutableListOf() }.add(method)
 
-                                ENABLE -> enableMethods.getOrPut(annotation.priority) { mutableListOf() }
-                                    .add(method)
+                        ENABLE -> enableMethods.getOrPut(annotation.priority) { mutableListOf() }.add(method)
 
-                                ACTIVE -> activeMethods.getOrPut(annotation.priority) { mutableListOf() }
-                                    .add(method)
+                        ACTIVE -> activeMethods.getOrPut(annotation.priority) { mutableListOf() }.add(method)
 
-                                DISABLE -> disableMethods.getOrPut(annotation.priority) { mutableListOf() }
-                                    .add(method)
-                            }
-                        }
+                        DISABLE -> disableMethods.getOrPut(annotation.priority) { mutableListOf() }.add(method)
                     }
                 }
                 // 周期触发方法
-                if (method.isAnnotationPresent(Schedule::class.java)) {
-                    if (method.parameterCount == 0) {
-                        if (method.check("错误的周期触发注解")) {
-                            scheduleMethods.add(method)
-                        }
-                    }
+                if (method.isAnnotationPresent(Schedule::class.java) && method.parameterCount == 0 && method.check("错误的周期触发注解")) {
+                    scheduleMethods.add(method)
                 }
             }
         }

@@ -9,7 +9,7 @@ import pers.neige.neigeitems.utils.LangUtils.sendLang
 object PlayerJoinListener {
     @JvmStatic
     @Listener
-    fun listener(event: PlayerJoinEvent) {
+    private fun listener(event: PlayerJoinEvent) {
         NeigeItems.getUserManager().getOrMake(event.player.uniqueId)
         if (!event.player.isOp) return
         if (Updater.latestVersion == null || Updater.latestVersion == Updater.currentVersion) return

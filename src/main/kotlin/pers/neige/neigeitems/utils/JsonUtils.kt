@@ -3,6 +3,9 @@ package pers.neige.neigeitems.utils
 import com.alibaba.fastjson2.parseObject
 import com.alibaba.fastjson2.toJSONString
 
+/**
+ * JSON相关工具类
+ */
 object JsonUtils {
     /**
      * String 转 HashMap<String, String>

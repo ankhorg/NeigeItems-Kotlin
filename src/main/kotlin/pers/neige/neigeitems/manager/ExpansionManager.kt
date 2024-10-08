@@ -1,7 +1,6 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.Bukkit
-import org.bukkit.event.EventPriority
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.event.PluginReloadEvent

@@ -11,6 +11,9 @@ import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
 import pers.neige.neigeitems.command.selector.PlayerSelector
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
+/**
+ * ni parse指令
+ */
 object Parse {
     val parse: LiteralArgumentBuilder<CommandSender> =
         // ni parse

@@ -5,6 +5,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 物品动作基础触发类型
+ */
 public enum ItemActionType {
     LEFT("left"),
     SHIFT_LEFT("shift_left"),

@@ -6,11 +6,11 @@ import java.io.Reader
 import javax.script.Invocable
 import javax.script.ScriptEngine
 
+/**
+ * 对已编译脚本的简单包装
+ */
 open class CompiledScript {
-    /**
-     * 获取已编译脚本
-     */
-    private val compiledScript: javax.script.CompiledScript
+    private val handle: javax.script.CompiledScript
 
     /**
      * 获取该脚本对应的ScriptEngine
@@ -26,7 +26,7 @@ open class CompiledScript {
     constructor(reader: Reader) {
         scriptEngine = nashornHooker.getNashornEngine()
         loadLib()
-        compiledScript = nashornHooker.compile(scriptEngine, reader)
+        handle = nashornHooker.compile(scriptEngine, reader)
         magicFunction()
     }
 
@@ -40,7 +40,7 @@ open class CompiledScript {
         scriptEngine = nashornHooker.getNashornEngine()
         loadLib()
         file.reader().use {
-            compiledScript = nashornHooker.compile(scriptEngine, it)
+            handle = nashornHooker.compile(scriptEngine, it)
         }
         magicFunction()
     }
@@ -54,10 +54,13 @@ open class CompiledScript {
     constructor(script: String) {
         scriptEngine = nashornHooker.getNashornEngine()
         loadLib()
-        compiledScript = nashornHooker.compile(scriptEngine, script)
+        handle = nashornHooker.compile(scriptEngine, script)
         magicFunction()
     }
 
+    /**
+     * 加载JS前置库
+     */
     open fun loadLib() {}
 
     /**
@@ -87,7 +90,7 @@ open class CompiledScript {
      * 此段代码用于解决js脚本的高并发调用问题, 只可意会不可言传
      */
     private fun magicFunction() {
-        compiledScript.eval()
+        handle.eval()
         scriptEngine.eval(
             """
             function NeigeItemsNumberOne() {}

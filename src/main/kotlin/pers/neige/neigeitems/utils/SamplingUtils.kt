@@ -6,6 +6,13 @@ import java.util.concurrent.ThreadLocalRandom
  * 随机采样相关工具类
  */
 object SamplingUtils {
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @param amount 采样数量
+     * @return 采样结果
+     */
     @Deprecated(
         "啥也不是, 折腾半天比无脑整还慢",
         ReplaceWith("weight(samples, amount)", "pers.neige.neigeitems.utils.SamplingUtils.weight")
@@ -15,6 +22,13 @@ object SamplingUtils {
         return weight(samples, amount)
     }
 
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @param amount 采样数量
+     * @return 采样结果
+     */
     @Deprecated(
         "啥也不是, 折腾半天比无脑整还慢",
         ReplaceWith("weight(samples, amount)", "pers.neige.neigeitems.utils.SamplingUtils.weight")
@@ -24,6 +38,13 @@ object SamplingUtils {
         return weight(samples, amount)
     }
 
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @param amount 采样数量
+     * @return 采样结果
+     */
     @JvmStatic
     fun <T> weight(
         samples: Map<T, Double>,
@@ -44,6 +65,13 @@ object SamplingUtils {
         return result
     }
 
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @param amount 采样数量
+     * @return 采样结果
+     */
     @JvmStatic
     fun <T> weight(
         samples: List<Pair<T, Double>>,
@@ -65,6 +93,12 @@ object SamplingUtils {
         return result
     }
 
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @return 采样结果
+     */
     @JvmStatic
     fun <T> weight(
         samples: Map<T, Double>
@@ -76,6 +110,13 @@ object SamplingUtils {
         return weight(samples, total)
     }
 
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @param total 权重和
+     * @return 采样结果
+     */
     @JvmStatic
     fun <T> weight(
         samples: Map<T, Double>,

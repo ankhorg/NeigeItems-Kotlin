@@ -9,7 +9,7 @@ import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
 object PlayerGameModeChangeListener {
     @JvmStatic
     @Listener
-    fun listener(event: PlayerGameModeChangeEvent) {
+    private fun listener(event: PlayerGameModeChangeEvent) {
         val player = event.player
         if (player.gameMode == GameMode.CREATIVE || event.newGameMode == GameMode.CREATIVE) {
             if (ConfigManager.config.getBoolean("ItemPlaceholder.enable")) {

@@ -11,7 +11,7 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 object PlayerInteractEntityListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST, ignoreCancelled = true)
-    fun listener(event: PlayerInteractEntityEvent) {
+    private fun listener(event: PlayerInteractEntityEvent) {
         val player = event.player
         // 对于已损坏物品取消事件
         val itemStack = when (event.hand) {
@@ -24,7 +24,7 @@ object PlayerInteractEntityListener {
         val neigeItems: NbtCompound = itemInfo.neigeItems
 
         // 检测已损坏物品
-        ItemDurability.basic(player, neigeItems, event)
+        ItemDurability.durabilityChecker(player, neigeItems, event)
         if (event.isCancelled) return
     }
 }

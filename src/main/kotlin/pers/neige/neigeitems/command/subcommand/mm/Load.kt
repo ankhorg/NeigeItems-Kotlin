@@ -21,6 +21,9 @@ import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 import java.io.File
 
+/**
+ * ni mm load指令
+ */
 object Load {
     private val loadLogic: RequiredArgumentBuilder<CommandSender, String> =
         // ni mm load [item]
@@ -61,13 +64,13 @@ object Load {
             }
         )
 
-    fun save(context: CommandContext<CommandSender>, id: String, path: String = "$id.yml") {
+    private fun save(context: CommandContext<CommandSender>, id: String, path: String = "$id.yml") {
         val file = getFileOrCreate("Items${File.separator}$path")
         val config = YamlConfiguration.loadConfiguration(file)
         save(context, id, file, config)
     }
 
-    fun saveAll(context: CommandContext<CommandSender>, path: String) {
+    private fun saveAll(context: CommandContext<CommandSender>, path: String) {
         val file = getFileOrCreate("Items${File.separator}$path")
         val config = YamlConfiguration.loadConfiguration(file)
         mythicMobsHooker!!.getItemIds().forEach {
@@ -75,7 +78,7 @@ object Load {
         }
     }
 
-    fun save(context: CommandContext<CommandSender>, id: String, file: File, config: YamlConfiguration) {
+    private fun save(context: CommandContext<CommandSender>, id: String, file: File, config: YamlConfiguration) {
         val cover = context.nodes[0].node.name == "cover"
         val sender = context.source
         if (sender !is Player) {

@@ -26,11 +26,13 @@ import pers.neige.neigeitems.command.selector.PlayerSelector
 import pers.neige.neigeitems.command.selector.WorldSelector
 import pers.neige.neigeitems.event.ItemPackDropEvent
 import pers.neige.neigeitems.item.ItemPack
-import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 
+/**
+ * ni droppack指令
+ */
 object DropPack {
     private val dropPackLogic: RequiredArgumentBuilder<CommandSender, ItemPackSelector> =
         // ni dropPack [pack]
@@ -74,7 +76,7 @@ object DropPack {
     val dropPackSilent: LiteralArgumentBuilder<CommandSender> =
         literal<CommandSender>("dropPackSilent").then(dropPackLogic)
 
-    fun dropPack(
+    private fun dropPack(
         context: CommandContext<CommandSender>,
         parserSelector: PlayerSelector? = null,
         data: String? = null

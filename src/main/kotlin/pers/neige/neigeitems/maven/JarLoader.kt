@@ -1,12 +1,14 @@
 package pers.neige.neigeitems.maven
 
-import org.bukkit.Bukkit
 import pers.neige.neigeitems.JvmHacker
 import sun.misc.Unsafe
 import java.io.File
 import java.lang.invoke.MethodHandle
 import java.net.URL
 
+/**
+ * jar文件加载器
+ */
 object JarLoader {
     private val unsafe: Unsafe = JvmHacker.unsafe()
 
@@ -26,6 +28,11 @@ object JarLoader {
         JvmHacker.lookup().unreflect(ucp.javaClass.getDeclaredMethod("addURL", URL::class.java))
 
 
+    /**
+     * 加载jar文件
+     *
+     * @param file 待加载jar文件
+     */
     @JvmStatic
     fun load(file: File): File {
         addURLMethodHandle.invoke(ucp, file.toURI().toURL())

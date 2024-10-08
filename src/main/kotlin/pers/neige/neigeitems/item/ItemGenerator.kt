@@ -35,6 +35,7 @@ import java.util.*
  */
 class ItemGenerator(val itemConfig: ItemConfig) {
     companion object {
+        @JvmStatic
         private val logger = LoggerFactory.getLogger(ItemGenerator::class.java.simpleName)
     }
 
@@ -73,47 +74,35 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     /**
      * 获取更新时保护的NBT
      */
-    val protectNBT = when (update) {
-        true -> {
-            if (configSection.contains("options.update.protect")) {
-                configSection.getStringList("options.update.protect")
-            } else {
-                configSection.getStringList("static.options.update.protect")
-            }
+    val protectNBT = if (update) {
+        if (configSection.contains("options.update.protect")) {
+            configSection.getStringList("options.update.protect")
+        } else {
+            configSection.getStringList("static.options.update.protect")
         }
-
-        else -> listOf()
-    }
+    } else listOf()
 
     /**
      * 获取更新时刷新的节点
      */
-    val refreshData = when (update) {
-        true -> {
-            if (configSection.contains("options.update.refresh")) {
-                configSection.getStringList("options.update.refresh")
-            } else {
-                configSection.getStringList("static.options.update.refresh")
-            }
+    val refreshData = if (update) {
+        if (configSection.contains("options.update.refresh")) {
+            configSection.getStringList("options.update.refresh")
+        } else {
+            configSection.getStringList("static.options.update.refresh")
         }
-
-        else -> listOf()
-    }
+    } else listOf()
 
     /**
      * 获取更新时重构的节点
      */
-    val rebuildData = when (update) {
-        true -> {
-            if (configSection.contains("options.update.rebuild")) {
-                configSection.getConfigurationSection("options.update.rebuild")?.toMap()
-            } else {
-                configSection.getConfigurationSection("static.options.update.rebuild")?.toMap()
-            }
+    val rebuildData = if (update) {
+        if (configSection.contains("options.update.rebuild")) {
+            configSection.getConfigurationSection("options.update.rebuild")?.toMap()
+        } else {
+            configSection.getConfigurationSection("static.options.update.rebuild")?.toMap()
         }
-
-        else -> null
-    }
+    } else null
 
     /**
      * 获取物品静态配置
@@ -153,9 +142,6 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     val hasStaticMaterial =
         static?.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) } != null
 
-    /**
-     * 获取原始静态物品
-     */
     private val originStaticItemStack = load(static) ?: ItemStack(Material.STONE).asCraftCopy()
 
     private fun load(
@@ -181,69 +167,67 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                 neigeItems.putString("data", cache.toJSONString())
                 neigeItems.putInt("hashCode", hashCode)
             }
-            val optionsConfig = config.getConfigurationSection("options")
-            if (optionsConfig != null) {
-                for (key in optionsConfig.getKeys(false)) {
-                    when (key.lowercase()) {
-                        // 设置物品使用次数
-                        "charge" -> {
-                            val charge = optionsConfig.getInt(key)
-                            neigeItems.putInt("charge", charge)
-                            neigeItems.putInt("maxCharge", charge)
+            val optionsConfig = config.getConfigurationSection("options") ?: return@runPreCoverNbt
+            for (key in optionsConfig.getKeys(false)) {
+                when (key.lowercase()) {
+                    // 设置物品使用次数
+                    "charge" -> {
+                        val charge = optionsConfig.getInt(key)
+                        neigeItems.putInt("charge", charge)
+                        neigeItems.putInt("maxCharge", charge)
+                    }
+                    // 设置物品最大使用次数
+                    "maxcharge", "max-charge" -> {
+                        val maxCharge = optionsConfig.getInt(key)
+                        if (!neigeItems.contains("charge")) {
+                            neigeItems.putInt("charge", maxCharge)
                         }
-                        // 设置物品最大使用次数
-                        "maxcharge", "max-charge" -> {
-                            val maxCharge = optionsConfig.getInt(key)
-                            if (!neigeItems.contains("charge")) {
-                                neigeItems.putInt("charge", maxCharge)
-                            }
-                            neigeItems.putInt("maxCharge", maxCharge)
+                        neigeItems.putInt("maxCharge", maxCharge)
+                    }
+                    // 设置物品自定义耐久
+                    "durability" -> {
+                        val durability = optionsConfig.getInt(key)
+                        neigeItems.putInt("durability", durability)
+                        neigeItems.putInt("maxDurability", durability)
+                    }
+                    // 设置物品最大自定义耐久
+                    "maxdurability", "max-durability" -> {
+                        val maxDurability = optionsConfig.getInt(key)
+                        if (!neigeItems.contains("durability")) {
+                            neigeItems.putInt("durability", maxDurability)
                         }
-                        // 设置物品自定义耐久
-                        "durability" -> {
-                            val durability = optionsConfig.getInt(key)
-                            neigeItems.putInt("durability", durability)
-                            neigeItems.putInt("maxDurability", durability)
-                        }
-                        // 设置物品最大自定义耐久
-                        "maxdurability", "max-durability" -> {
-                            val maxDurability = optionsConfig.getInt(key)
-                            if (!neigeItems.contains("durability")) {
-                                neigeItems.putInt("durability", maxDurability)
-                            }
-                            neigeItems.putInt("maxDurability", maxDurability)
-                        }
-                        // 设置物品自定义耐久为0时是否破坏
-                        "itembreak", "item-break" -> {
-                            neigeItems.putBoolean("itemBreak", optionsConfig.getBoolean(key, true))
-                        }
-                        // 设置具有owner的掉落物是否对其他人不可见
-                        "hide" -> {
-                            neigeItems.putBoolean("hide", optionsConfig.getBoolean(key, true))
-                        }
-                        // 首次掉落归属
-                        "owner" -> {
-                            neigeItems.putString("owner", optionsConfig.getString(key))
-                        }
-                        // 设置掉落物闪光颜色
-                        "color" -> {
-                            optionsConfig.getString(key)?.uppercase(Locale.getDefault())?.let {
-                                // 判断你这颜色保不保熟
-                                if (ItemColor.colors.containsKey(it)) {
-                                    neigeItems.putString("color", it)
-                                }
+                        neigeItems.putInt("maxDurability", maxDurability)
+                    }
+                    // 设置物品自定义耐久为0时是否破坏
+                    "itembreak", "item-break" -> {
+                        neigeItems.putBoolean("itemBreak", optionsConfig.getBoolean(key, true))
+                    }
+                    // 设置具有owner的掉落物是否对其他人不可见
+                    "hide" -> {
+                        neigeItems.putBoolean("hide", optionsConfig.getBoolean(key, true))
+                    }
+                    // 首次掉落归属
+                    "owner" -> {
+                        neigeItems.putString("owner", optionsConfig.getString(key))
+                    }
+                    // 设置掉落物闪光颜色
+                    "color" -> {
+                        optionsConfig.getString(key)?.uppercase(Locale.getDefault())?.let {
+                            // 判断你这颜色保不保熟
+                            if (ItemColor.colors.containsKey(it)) {
+                                neigeItems.putString("color", it)
                             }
                         }
-                        // 设置掉落执行技能
-                        "dropskill", "drop-skill" -> {
-                            neigeItems.putString("dropSkill", optionsConfig.getString(key, ""))
-                        }
-                        // 设置物品时限
-                        "itemtime", "item-time" -> {
-                            neigeItems.putLong(
-                                "itemTime", System.currentTimeMillis() + (optionsConfig.getLong(key, 0) * 1000)
-                            )
-                        }
+                    }
+                    // 设置掉落执行技能
+                    "dropskill", "drop-skill" -> {
+                        neigeItems.putString("dropSkill", optionsConfig.getString(key, ""))
+                    }
+                    // 设置物品时限
+                    "itemtime", "item-time" -> {
+                        neigeItems.putLong(
+                            "itemTime", System.currentTimeMillis() + (optionsConfig.getLong(key, 0) * 1000)
+                        )
                     }
                 }
             }
@@ -260,63 +244,60 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     private fun inherit(
         configSection: ConfigurationSection, originConfigSection: ConfigurationSection
     ): ConfigurationSection {
-        // 检测是否需要进行继承
-        if (originConfigSection.contains("inherit") == true) {
-            // 检测进行全局继承/部分继承
-            when (val inheritInfo = originConfigSection.get("inherit")) {
-                is MemorySection -> {
-                    /**
-                     * 指定多个ID, 进行部分继承
-                     * @variable key String 要进行继承的节点ID
-                     * @variable value String 用于获取继承值的模板ID
-                     */
-                    inheritInfo.getKeys(true).forEach { key ->
-                        // 获取模板ID
-                        val id = inheritInfo.get(key)
-                        // 检测当前键是否为末级键
-                        if (id is String) {
-                            // 获取模板
-                            val currentSection = ItemManager.getOriginConfig(id)
-                            // 如果存在对应模板且模板存在对应键, 进行继承
-                            if (currentSection != null) {
-                                val realConfig = loadGlobalSections(
-                                    inherit(
-                                        (YamlConfiguration() as ConfigurationSection), currentSection
-                                    ), false
-                                )
-                                if (realConfig.contains(key)) {
-                                    configSection.set(key, realConfig.get(key))
-                                }
-                            }
-                        }
-                    }
-                }
-
-                is String -> {
-                    // 仅指定单个模板ID，进行全局继承
-                    ItemManager.getOriginConfig(inheritInfo)?.let { inheritConfigSection ->
-                        val realConfig = loadGlobalSections(
-                            inherit(
-                                (YamlConfiguration() as ConfigurationSection), inheritConfigSection
-                            ), false
-                        )
-                        configSection.coverWith(realConfig)
-                    }
-                }
-
-                is List<*> -> {
-                    // 顺序继承, 按顺序进行覆盖式继承
-                    for (templateId in inheritInfo) {
-                        // 逐个获取模板
-                        ItemManager.getOriginConfig(templateId as String)?.let { currentSection ->
+        // 检测进行全局继承/部分继承
+        when (val inheritInfo = originConfigSection.get("inherit")) {
+            is MemorySection -> {
+                /**
+                 * 指定多个ID, 进行部分继承
+                 * @variable key String 要进行继承的节点ID
+                 * @variable value String 用于获取继承值的模板ID
+                 */
+                inheritInfo.getKeys(true).forEach { key ->
+                    // 获取模板ID
+                    val id = inheritInfo.get(key)
+                    // 检测当前键是否为末级键
+                    if (id is String) {
+                        // 获取模板
+                        val currentSection = ItemManager.getOriginConfig(id)
+                        // 如果存在对应模板且模板存在对应键, 进行继承
+                        if (currentSection != null) {
                             val realConfig = loadGlobalSections(
                                 inherit(
                                     (YamlConfiguration() as ConfigurationSection), currentSection
                                 ), false
                             )
-                            // 进行模板覆盖
-                            configSection.coverWith(realConfig)
+                            if (realConfig.contains(key)) {
+                                configSection.set(key, realConfig.get(key))
+                            }
                         }
+                    }
+                }
+            }
+
+            is String -> {
+                // 仅指定单个模板ID，进行全局继承
+                ItemManager.getOriginConfig(inheritInfo)?.let { inheritConfigSection ->
+                    val realConfig = loadGlobalSections(
+                        inherit(
+                            (YamlConfiguration() as ConfigurationSection), inheritConfigSection
+                        ), false
+                    )
+                    configSection.coverWith(realConfig)
+                }
+            }
+
+            is List<*> -> {
+                // 顺序继承, 按顺序进行覆盖式继承
+                for (templateId in inheritInfo) {
+                    // 逐个获取模板
+                    ItemManager.getOriginConfig(templateId as String)?.let { currentSection ->
+                        val realConfig = loadGlobalSections(
+                            inherit(
+                                (YamlConfiguration() as ConfigurationSection), currentSection
+                            ), false
+                        )
+                        // 进行模板覆盖
+                        configSection.coverWith(realConfig)
                     }
                 }
             }

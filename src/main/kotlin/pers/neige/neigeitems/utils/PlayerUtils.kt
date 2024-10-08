@@ -15,7 +15,8 @@ import pers.neige.neigeitems.NeigeItems
  */
 object PlayerUtils {
     /**
-     * 给予玩家物品
+     * 给予玩家物品.
+     *
      * @param itemStack 待给予物品
      */
     @JvmStatic
@@ -26,7 +27,8 @@ object PlayerUtils {
     }
 
     /**
-     * 重复给予玩家物品一定次数
+     * 重复给予玩家物品一定次数.
+     *
      * @param itemStack 待给予物品
      * @param repeat 重复次数
      */
@@ -43,7 +45,8 @@ object PlayerUtils {
     }
 
     /**
-     * 给予玩家一定数量的物品
+     * 给予玩家一定数量的物品.
+     *
      * @param itemStack 待给予物品
      * @param amount 给予数量
      */
@@ -72,7 +75,7 @@ object PlayerUtils {
     }
 
     /**
-     * 获取Metadata, 不含对应Metadata将设置并返回默认值
+     * 获取Metadata, 不含对应Metadata将设置并返回默认值.
      *
      * @param key Metadata键
      * @param def 默认值
@@ -88,7 +91,7 @@ object PlayerUtils {
     }
 
     /**
-     * 设置Metadata
+     * 设置Metadata.
      *
      * @param key Metadata键
      * @param value Metadata值
@@ -98,11 +101,21 @@ object PlayerUtils {
         this.setMetadata(key, FixedMetadataValue(NeigeItems.getInstance(), value))
     }
 
+    /**
+     * 向玩家发送聊天栏消息.
+     *
+     * @param builder 待发送消息
+     */
     @JvmStatic
     fun Player.sendMessage(builder: ComponentBuilder) {
         this.spigot().sendMessage(*builder.create())
     }
 
+    /**
+     * 向玩家发送动作栏消息.
+     *
+     * @param message 待发送消息
+     */
     @JvmStatic
     fun Player.sendActionBar(message: String) {
         this.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))

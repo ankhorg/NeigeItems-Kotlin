@@ -15,6 +15,9 @@ import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
 import pers.neige.neigeitems.command.selector.PlayerSelector
 import pers.neige.neigeitems.manager.ItemEditorManager
 
+/**
+ * ni edithand/editoffhand/editslot指令
+ */
 object Editor {
     val editHand: LiteralArgumentBuilder<CommandSender> =
         // ni edithand

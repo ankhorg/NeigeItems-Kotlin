@@ -12,7 +12,7 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 object BlockBreakListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun breakBlock(event: BlockBreakEvent) {
+    private fun breakBlock(event: BlockBreakEvent) {
         // 获取挖掘者
         val player = event.player
         // 获取主手物品
@@ -25,7 +25,7 @@ object BlockBreakListener {
         val neigeItems: NbtCompound = itemInfo.neigeItems
 
         // 检测已损坏物品
-        ItemDurability.basic(player, neigeItems, event)
+        ItemDurability.durabilityChecker(player, neigeItems, event)
         if (event.isCancelled) return
         // 执行物品动作
         ActionManager.breakBlockListener(player, itemStack, itemInfo, event)

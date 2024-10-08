@@ -12,7 +12,7 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 object PlayerInteractListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST, ignoreCancelled = false)
-    fun listener(event: PlayerInteractEvent) {
+    private fun listener(event: PlayerInteractEvent) {
         // 获取玩家
         val player = event.player
         // 获取操作物品

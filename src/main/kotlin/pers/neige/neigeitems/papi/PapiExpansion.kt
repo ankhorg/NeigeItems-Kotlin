@@ -16,6 +16,9 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.script.CompiledScript
 import javax.script.SimpleBindings
 
+/**
+ * ni papi扩展
+ */
 object PapiExpansion {
     private var expansion: PlaceholderExpansion? = null
     private val engine = HookerManager.nashornHooker.getGlobalEngine().also { engine ->

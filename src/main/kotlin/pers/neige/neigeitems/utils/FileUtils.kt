@@ -21,9 +21,8 @@ object FileUtils {
     fun charset(file: File): String {
         var charset = "GBK"
         val first3Bytes = ByteArray(3)
-        try {
-            var checked = false
-            val bis = BufferedInputStream(FileInputStream(file))
+        var checked = false
+        BufferedInputStream(FileInputStream(file)).use { bis ->
             bis.mark(0)
             var read = bis.read(first3Bytes, 0, 3)
             if (read == -1) {
@@ -40,30 +39,26 @@ object FileUtils {
                 checked = true
             }
             bis.reset()
-            if (!checked) {
-                while (bis.read().also { read = it } != -1) {
-                    if (read >= 0xF0) break
+            if (checked) return@use
+            while (bis.read().also { read = it } != -1) {
+                if (read >= 0xF0) break
+                if (read in 0x80..0xBF)
+                    break
+                if (read in 0xC0..0xDF) {
+                    read = bis.read()
                     if (read in 0x80..0xBF)
-                        break
-                    if (read in 0xC0..0xDF) {
-                        read = bis.read()
-                        if (read in 0x80..0xBF)
-                            continue else break
-                    } else if (read in 0xE0..0xEF) {
+                        continue else break
+                } else if (read in 0xE0..0xEF) {
+                    read = bis.read()
+                    if (read in 0x80..0xBF) {
                         read = bis.read()
                         if (read in 0x80..0xBF) {
-                            read = bis.read()
-                            if (read in 0x80..0xBF) {
-                                charset = "UTF-8"
-                                break
-                            } else break
+                            charset = "UTF-8"
+                            break
                         } else break
-                    }
+                    } else break
                 }
             }
-            bis.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
         return charset
     }
@@ -119,6 +114,9 @@ object FileUtils {
         }
     }
 
+    /**
+     * 如果当前文件不存在, 则创建一个新文件
+     */
     @JvmStatic
     fun File.createFile(): File {
         if (!exists()) {
@@ -130,6 +128,9 @@ object FileUtils {
         return this
     }
 
+    /**
+     * 如果当前目录不存在, 则创建一个新目录
+     */
     @JvmStatic
     fun File.createDirectory(): File {
         if (!exists()) {

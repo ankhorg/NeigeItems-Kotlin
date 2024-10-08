@@ -79,12 +79,9 @@ class ItemColorProtocol : ItemColor() {
         }
 
         // 用于设置物品发光颜色
-        protocolManager.addPacketListener(object :
-            PacketAdapter(
-                NeigeItems.getInstance(),
-                ListenerPriority.NORMAL,
-                PacketType.Play.Server.ENTITY_METADATA
-            ) {
+        protocolManager.addPacketListener(object : PacketAdapter(
+            NeigeItems.getInstance(), ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY_METADATA
+        ) {
             override fun onPacketSending(event: PacketEvent) {
                 // 数据包接收者
                 val receiver = event.player
@@ -139,9 +136,6 @@ class ItemColorProtocol : ItemColor() {
                     }
                 }
             }
-
-            override fun onPacketReceiving(event: PacketEvent) {}
-        }
-        )
+        })
     }
 }

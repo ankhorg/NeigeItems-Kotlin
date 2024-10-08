@@ -59,26 +59,35 @@ object ActionUtils {
      */
     @JvmStatic
     fun ActionTrigger.isCoolDown(player: Player, cd: Long): Boolean {
-        // 如果冷却存在且大于0
-        if (cd > 0) {
-            // 获取当前时间
-            val time = System.currentTimeMillis()
-            // 获取上次使用时间
-            val lastTime = player.getMetadataEZ("NI-CD-$group", 0.toLong()) as Long
-            // 如果仍处于冷却时间
-            if (lastTime > time) {
-                ConfigManager.config.getString("Messages.itemCooldown")?.let {
-                    val message = it.replace("{time}", "%.1f".format((lastTime - time).toDouble() / 1000))
-                    player.sendActionBar(message)
-                }
-                // 冷却中
-                return true
+        // 如果冷却小于等于0
+        if (cd <= 0) return false
+        // 获取当前时间
+        val time = System.currentTimeMillis()
+        // 获取上次使用时间
+        val lastTime = player.getMetadataEZ("NI-CD-$group", 0.toLong()) as Long
+        // 如果仍处于冷却时间
+        if (lastTime > time) {
+            ConfigManager.config.getString("Messages.itemCooldown")?.let {
+                val message = it.replace("{time}", "%.1f".format((lastTime - time).toDouble() / 1000))
+                player.sendActionBar(message)
             }
-            player.setMetadataEZ("NI-CD-$group", time + cd)
+            // 冷却中
+            return true
         }
+        player.setMetadataEZ("NI-CD-$group", time + cd)
         return false
     }
 
+    /**
+     * 消耗一定数量物品
+     *
+     * @param player 物品持有者, 用于接收拆分出的物品
+     * @param amount 消耗数
+     * @param itemTag 物品NBT
+     * @param neigeItems NI特殊NBT
+     * @param charge 已弃用的无意义参数
+     * @return 是否消耗成功
+     */
     @Deprecated(
         "已弃用",
         ReplaceWith(
@@ -140,7 +149,7 @@ object ActionUtils {
                 // 拆分物品
                 if (this.amount != 1) {
                     itemClone = this.copy()
-                    itemClone.amount = itemClone.amount - 1
+                    itemClone.amount -= 1
                     this.amount = 1
                 }
                 // 更新次数
@@ -163,7 +172,7 @@ object ActionUtils {
             }
         } else {
             if (this.amount >= amount) {
-                this.amount = this.amount - amount
+                this.amount -= amount
                 return true
             }
         }

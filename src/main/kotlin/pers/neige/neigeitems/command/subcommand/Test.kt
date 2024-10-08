@@ -14,6 +14,9 @@ import pers.neige.neigeitems.command.selector.ItemSelector
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 
+/**
+ * ni test指令
+ */
 object Test {
     // ni test
     val test: LiteralArgumentBuilder<CommandSender> =

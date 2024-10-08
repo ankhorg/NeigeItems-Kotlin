@@ -6,6 +6,9 @@ import pers.neige.neigeitems.manager.HookerManager.nashornHooker
 import java.io.File
 import java.io.Reader
 
+/**
+ * NI脚本扩展
+ */
 class ScriptExpansion : CompiledScript {
     /**
      * 构建JavaScript脚本扩展

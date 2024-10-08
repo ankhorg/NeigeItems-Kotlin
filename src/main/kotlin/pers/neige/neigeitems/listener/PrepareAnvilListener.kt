@@ -9,7 +9,7 @@ import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 object PrepareAnvilListener {
     @JvmStatic
     @Listener
-    fun listener(event: PrepareAnvilEvent) {
+    private fun listener(event: PrepareAnvilEvent) {
         val origin = event.inventory.getItem(0) ?: return
         val originNbt = origin.getNbtOrNull() ?: return
         val result = event.result ?: return

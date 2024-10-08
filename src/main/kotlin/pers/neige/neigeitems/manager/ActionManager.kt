@@ -38,12 +38,12 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.io.File
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
-import java.util.function.BiFunction
 
 /**
  * 用于管理所有物品动作、所有拥有物品动作的物品及相关动作、监听相关事件做到动作触发
  */
 object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
+    @JvmStatic
     private val logger = LoggerFactory.getLogger(ActionManager::class.java.simpleName)
 
     /**
@@ -155,13 +155,14 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             if (configurationSection.contains(id) && configurationSection.getConfigurationSection(id) == null) {
                 upgraded = true
                 val config = YamlConfiguration()
+                var hasConsumeConfig = consume?.getBoolean(id) == true
+                if (!hasConsumeConfig && id == "all") {
+                    hasConsumeConfig = consume?.getBoolean("left") == true || consume?.getBoolean("right") == true
+                }
                 // 当前配置有消耗动作
-                if (consume?.getBoolean(id) == true
-                    // all类型的特殊判断
-                    || (id == "all" && consume?.getBoolean("left") == true || consume?.getBoolean("right") == true)
-                ) {
+                if (hasConsumeConfig) {
                     // 转换消耗数量
-                    config.set("consume.amount", consume.get("amount"))
+                    config.set("consume.amount", consume!!.get("amount"))
                     // 转换冷却时间
                     config.get("consume.cooldown")?.let { config.set("cooldown", cooldown) }
                     // 转换冷却组
@@ -208,7 +209,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         }
     }
 
-    // 物品左右键交互
+    /**
+     * 物品左右键交互
+     */
     fun interactListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: PlayerInteractEvent
     ) {
@@ -320,7 +323,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         allTrigger?.run(context)
     }
 
-    // 吃或饮用
+    /**
+     * 吃或饮用
+     */
     fun eatListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: PlayerItemConsumeEvent
     ) {
@@ -336,7 +341,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 丢弃物品
+    /**
+     * 丢弃物品
+     */
     fun dropListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: PlayerDropItemEvent
     ) {
@@ -345,7 +352,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 拾取物品
+    /**
+     * 拾取物品
+     */
     fun pickListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityPickupItemEvent
     ) {
@@ -361,7 +370,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 点击物品
+    /**
+     * 背包内点击物品
+     */
     fun clickListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: InventoryClickEvent
     ) {
@@ -370,7 +381,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 物品被点击
+    /**
+     * 背包内物品被点击
+     */
     fun beClickedListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: InventoryClickEvent
     ) {
@@ -379,7 +392,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 射箭时由弓触发
+    /**
+     * 射箭时由弓触发
+     */
     fun shootBowListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityShootBowEvent
     ) {
@@ -395,7 +410,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 射箭时由箭触发
+    /**
+     * 射箭时由箭触发
+     */
     fun shootArrowListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityShootBowEvent
     ) {
@@ -411,7 +428,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 格挡时由盾触发
+    /**
+     * 格挡时由盾触发
+     */
     fun blockingListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent
     ) {
@@ -420,7 +439,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 攻击实体时由主手物品触发
+    /**
+     * 攻击实体时由主手物品触发
+     */
     fun damageListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent
     ) {
@@ -429,7 +450,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 击杀实体时触发
+    /**
+     * 击杀实体时触发
+     */
     fun killListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent, key: String
     ) {
@@ -438,7 +461,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 挖掘方块时由主手物品触发
+    /**
+     * 挖掘方块时由主手物品触发
+     */
     fun breakBlockListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: BlockBreakEvent
     ) {
@@ -447,7 +472,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         )
     }
 
-    // 适用于基础情况
+    /**
+     * 适用于基础情况
+     */
     fun basicHandler(
         player: Player,
         itemStack: ItemStack,
@@ -523,6 +550,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         trigger.run(context)
     }
 
+    /**
+     * tick动作
+     */
     fun tick(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, key: String
     ) {

@@ -395,26 +395,41 @@ object HookerManager {
         itemPlaceholder?.addExpansion(id, function)
     }
 
+    /**
+     * 向聊天组件添加文本浮窗
+     */
     @JvmStatic
     fun ComponentBuilder.hoverText(text: String): ComponentBuilder {
         return event(nmsHooker.hoverText(text))
     }
 
+    /**
+     * 向聊天组件添加物品浮窗
+     */
     @JvmStatic
     fun ComponentBuilder.hoverItem(itemStack: ItemStack): ComponentBuilder {
         return event(nmsHooker.hoverItem(itemStack))
     }
 
+    /**
+     * 向聊天组件添加指令执行
+     */
     @JvmStatic
     fun ComponentBuilder.runCommand(text: String): ComponentBuilder {
         return event(ClickEvent(ClickEvent.Action.RUN_COMMAND, text))
     }
 
+    /**
+     * 向聊天组件添加指令建议
+     */
     @JvmStatic
     fun ComponentBuilder.suggestCommand(text: String): ComponentBuilder {
         return event(ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, text))
     }
 
+    /**
+     * 组合聊天组件
+     */
     @JvmStatic
     fun ComponentBuilder.append(builder: ComponentBuilder): ComponentBuilder {
         return append(builder.create())

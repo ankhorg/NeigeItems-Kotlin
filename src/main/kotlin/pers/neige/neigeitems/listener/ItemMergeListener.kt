@@ -8,7 +8,7 @@ import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 object ItemMergeListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun listener(event: ItemMergeEvent) {
+    private fun listener(event: ItemMergeEvent) {
         val entity = event.entity
         val target = event.target
         if (entity.hasMetadata("NI-Owner") && target.hasMetadata("NI-Owner")) {

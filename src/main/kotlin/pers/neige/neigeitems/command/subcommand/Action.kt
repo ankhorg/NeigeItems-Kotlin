@@ -12,6 +12,9 @@ import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
 import pers.neige.neigeitems.command.selector.PlayerSelector
 import pers.neige.neigeitems.manager.ActionManager
 
+/**
+ * ni action指令
+ */
 object Action {
     val action: LiteralArgumentBuilder<CommandSender> =
         // ni action

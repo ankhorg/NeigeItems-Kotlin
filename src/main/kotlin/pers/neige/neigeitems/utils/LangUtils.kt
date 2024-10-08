@@ -3,6 +3,9 @@ package pers.neige.neigeitems.utils
 import org.bukkit.command.CommandSender
 import pers.neige.neigeitems.manager.ConfigManager.config
 
+/**
+ * 语言文件相关工具类
+ */
 object LangUtils {
     /**
      * 发送消息

@@ -111,13 +111,12 @@ class ItemPlaceholder {
         // 检测是否开启物品变量功能
         if (config.getBoolean("ItemPlaceholder.enable")) {
             // 监听数据包进行变量替换
-            ProtocolLibrary.getProtocolManager().addPacketListener(object :
-                PacketAdapter(
-                    NeigeItems.getInstance(),
-                    ListenerPriority.LOWEST,
-                    PacketType.Play.Server.WINDOW_ITEMS,
-                    PacketType.Play.Server.SET_SLOT
-                ) {
+            ProtocolLibrary.getProtocolManager().addPacketListener(object : PacketAdapter(
+                NeigeItems.getInstance(),
+                ListenerPriority.LOWEST,
+                PacketType.Play.Server.WINDOW_ITEMS,
+                PacketType.Play.Server.SET_SLOT
+            ) {
                 override fun onPacketSending(event: PacketEvent) {
                     val gameMode = event.player.gameMode
                     if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
@@ -136,8 +135,6 @@ class ItemPlaceholder {
                         }
                     }
                 }
-
-                override fun onPacketReceiving(event: PacketEvent) {}
             })
         }
     }

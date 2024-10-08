@@ -7,7 +7,11 @@ import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.manager.ConfigManager.updateCheck
 import java.net.URI
 
+/**
+ * 新版本检查任务
+ */
 object Updater {
+    @JvmStatic
     private val logger = LoggerFactory.getLogger(Updater::class.java.simpleName)
 
     private val VERSION_REGEX = Regex("\\d+\\.\\d+\\.\\d+")
@@ -16,7 +20,7 @@ object Updater {
 
     @JvmStatic
     @Schedule(period = 72000, async = true)
-    fun schedule() {
+    private fun schedule() {
         if (updateCheck) {
             kotlin.runCatching {
                 latestVersion = VERSION_REGEX.find(

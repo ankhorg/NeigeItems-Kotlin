@@ -20,7 +20,7 @@ dependencies {
 
 ## bStats
 
-![](https://bstats.org/signatures/bukkit/NeigeItems.svg)
+![bstats统计图](https://bstats.org/signatures/bukkit/NeigeItems.svg)
 
 ## API
 

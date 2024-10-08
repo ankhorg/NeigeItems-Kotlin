@@ -8,7 +8,7 @@ import pers.neige.neigeitems.annotation.Listener
 object AsyncPlayerChatListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun listener(event: AsyncPlayerChatEvent) {
+    private fun listener(event: AsyncPlayerChatEvent) {
         val user = NeigeItems.getUserManager().getIfLoaded(event.player.uniqueId) ?: return
         val catcher = user.pollChatCatcher() ?: return
         event.isCancelled = catcher.isCancel

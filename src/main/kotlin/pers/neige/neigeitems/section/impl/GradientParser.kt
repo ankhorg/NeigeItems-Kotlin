@@ -71,70 +71,68 @@ object GradientParser : SectionParser() {
         stepString: String?,
         rawText: String?
     ): String? {
-        if (colorStartString != null && colorEndString != null && rawText != null) {
-            val colorStart = Color(
-                (colorStartString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
-                    .coerceAtLeast(0)
-                    .coerceAtMost(0xFFFFFF)
-            )
-            val colorEnd = Color(
-                (colorEndString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
-                    .coerceAtLeast(0)
-                    .coerceAtMost(0xFFFFFF)
-            )
+        if (colorStartString == null || colorEndString == null || rawText == null) return null
+        val colorStart = Color(
+            (colorStartString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
+                .coerceAtLeast(0)
+                .coerceAtMost(0xFFFFFF)
+        )
+        val colorEnd = Color(
+            (colorEndString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
+                .coerceAtLeast(0)
+                .coerceAtMost(0xFFFFFF)
+        )
 
-            val step = (stepString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 1)
-                .coerceAtLeast(1)
+        val step = (stepString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 1)
+            .coerceAtLeast(1)
 
-            val text = rawText.parseSection(parse, cache, player, sections)
+        val text = rawText.parseSection(parse, cache, player, sections)
 
-            if (text.length <= step) {
-                return ChatColor.of(colorStart).toString() + text
+        if (text.length <= step) {
+            return ChatColor.of(colorStart).toString() + text
+        }
+
+        val chars = text.toCharArray()
+        val result = StringBuilder()
+
+        var redCurrent = colorStart.red
+        var greenCurrent = colorStart.green
+        var blueCurrent = colorStart.blue
+
+        if (step == 1) {
+            val redStep = (colorEnd.red - colorStart.red) / chars.lastIndex
+            val greenStep = (colorEnd.green - colorStart.green) / chars.lastIndex
+            val blueStep = (colorEnd.blue - colorStart.blue) / chars.lastIndex
+
+            for (char in chars) {
+                result.append(ChatColor.of(Color(redCurrent, greenCurrent, blueCurrent)).toString())
+                result.append(char)
+                redCurrent += redStep
+                greenCurrent += greenStep
+                blueCurrent += blueStep
             }
+        } else {
+            val redStep = (colorEnd.red - colorStart.red) * step / chars.lastIndex
+            val greenStep = (colorEnd.green - colorStart.green) * step / chars.lastIndex
+            val blueStep = (colorEnd.blue - colorStart.blue) * step / chars.lastIndex
 
-            val chars = text.toCharArray()
-            val result = StringBuilder()
+            var current = 1
 
-            var redCurrent = colorStart.red
-            var greenCurrent = colorStart.green
-            var blueCurrent = colorStart.blue
-
-            if (step == 1) {
-                val redStep = (colorEnd.red - colorStart.red) / chars.lastIndex
-                val greenStep = (colorEnd.green - colorStart.green) / chars.lastIndex
-                val blueStep = (colorEnd.blue - colorStart.blue) / chars.lastIndex
-
-                for (char in chars) {
+            for (char in chars) {
+                if (current == 1) {
                     result.append(ChatColor.of(Color(redCurrent, greenCurrent, blueCurrent)).toString())
-                    result.append(char)
                     redCurrent += redStep
                     greenCurrent += greenStep
                     blueCurrent += blueStep
                 }
-            } else {
-                val redStep = (colorEnd.red - colorStart.red) * step / chars.lastIndex
-                val greenStep = (colorEnd.green - colorStart.green) * step / chars.lastIndex
-                val blueStep = (colorEnd.blue - colorStart.blue) * step / chars.lastIndex
-
-                var current = 1
-
-                for (char in chars) {
-                    if (current == 1) {
-                        result.append(ChatColor.of(Color(redCurrent, greenCurrent, blueCurrent)).toString())
-                        redCurrent += redStep
-                        greenCurrent += greenStep
-                        blueCurrent += blueStep
-                    }
-                    result.append(char)
-                    if (current == step) {
-                        current = 1
-                    } else {
-                        current++
-                    }
+                result.append(char)
+                if (current == step) {
+                    current = 1
+                } else {
+                    current++
                 }
             }
-            return result.toString()
         }
-        return null
+        return result.toString()
     }
 }

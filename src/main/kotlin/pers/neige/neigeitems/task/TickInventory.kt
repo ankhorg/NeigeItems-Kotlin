@@ -10,10 +10,13 @@ import pers.neige.neigeitems.utils.ItemUtils.getDamage
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.setDamage
 
+/**
+ * 玩家背包扫描任务, 用于物品过期检查、耐久百分比同步、物品更新、tick动作执行
+ */
 object TickInventory {
     @JvmStatic
     @Schedule(period = 1, async = true)
-    fun schedule() {
+    private fun schedule() {
         Bukkit.getOnlinePlayers().forEach { player ->
             val inventory = player.inventory
             for (index in 0 until 41) {

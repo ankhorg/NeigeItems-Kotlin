@@ -30,9 +30,7 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.parseSection(
-        cache: MutableMap<String, String>? = null,
-        player: OfflinePlayer? = null,
-        sections: ConfigurationSection? = null
+        cache: MutableMap<String, String>? = null, player: OfflinePlayer? = null, sections: ConfigurationSection? = null
     ): String {
         return this.parse {
             return@parse it.getSection(cache, player, sections)
@@ -122,57 +120,51 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.getSection(
-        cache: MutableMap<String, String>?,
-        player: OfflinePlayer?,
-        sections: ConfigurationSection?
+        cache: MutableMap<String, String>?, player: OfflinePlayer?, sections: ConfigurationSection?
     ): String {
-        when (val index = this.indexOf("::")) {
-            // 私有节点调用
-            -1 -> {
-                // 尝试读取缓存
-                if (cache?.containsKey(this) == true) {
-                    // 直接返回对应节点值
-                    return (cache as Map<*, *>)[this].toString()
-                    // 读取失败, 尝试主动解析
-                } else {
-                    // 尝试解析并返回对应节点值
-                    if (sections != null && sections.contains(this)) {
-                        // 获取节点ConfigurationSection
-                        val section = sections.getConfigurationSection(this)
-                        // 简单节点
-                        if (section == null) {
-                            val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
-                            cache?.put(this, result)
-                            return result
-                        }
-                        // 加载节点
-                        return Section(section, this).load(cache, player, sections) ?: "<$this>"
+        val index = this.indexOf("::")
+        // 私有节点调用
+        if (index == -1) {
+            // 尝试读取缓存
+            if (cache?.containsKey(this) == true) {
+                // 直接返回对应节点值
+                return cache[this].toString()
+                // 读取失败, 尝试主动解析
+            } else {
+                // 尝试解析并返回对应节点值
+                if (sections != null && sections.contains(this)) {
+                    // 获取节点ConfigurationSection
+                    val section = sections.getConfigurationSection(this)
+                    // 简单节点
+                    if (section == null) {
+                        val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
+                        cache?.put(this, result)
+                        return result
                     }
-                    if (this.startsWith("#")) {
+                    // 加载节点
+                    return Section(section, this).load(cache, player, sections) ?: "<$this>"
+                }
+                if (this.startsWith("#")) {
+                    try {
                         try {
-                            try {
-                                val hex = (this.substring(1).toIntOrNull(16) ?: 0)
-                                    .coerceAtLeast(0)
-                                    .coerceAtMost(0xFFFFFF)
-                                val color = Color(hex)
-                                return ChatColor.of(color).toString()
-                            } catch (_: NumberFormatException) {
-                            }
-                        } catch (error: NoSuchMethodError) {
-                            Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
+                            val hex = (this.substring(1).toIntOrNull(16) ?: 0).coerceAtLeast(0).coerceAtMost(0xFFFFFF)
+                            val color = Color(hex)
+                            return ChatColor.of(color).toString()
+                        } catch (_: NumberFormatException) {
                         }
+                    } catch (error: NoSuchMethodError) {
+                        Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
                     }
                 }
-                return "<$this>"
             }
+            return "<$this>"
             // 即时声明节点解析
-            else -> {
-                // 获取节点类型
-                val type = this.substring(0, index)
-                // 所有参数
-                val args = this.substring(index + 2).split('_', '\\')
-                return SectionManager.sectionParsers[type]?.onRequest(args, cache, player, sections) ?: "<$this>"
-            }
+        } else {
+            // 获取节点类型
+            val type = this.substring(0, index)
+            // 所有参数
+            val args = this.substring(index + 2).split('_', '\\')
+            return SectionManager.sectionParsers[type]?.onRequest(args, cache, player, sections) ?: "<$this>"
         }
     }
 
@@ -186,9 +178,7 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.parseItemSection(
-        itemStack: ItemStack,
-        itemTag: NbtCompound,
-        player: OfflinePlayer?
+        itemStack: ItemStack, itemTag: NbtCompound, player: OfflinePlayer?
     ): String {
         return parseItemSection(itemStack, itemTag, null, player, null, null)
     }
@@ -205,10 +195,7 @@ object SectionUtils {
     @JvmStatic
     @Deprecated("多数情况下, 调用此方法意味着可能出现无意义性能损失")
     fun String.parseItemSection(
-        itemStack: ItemStack,
-        itemTag: NbtCompound,
-        data: MutableMap<String, String>?,
-        player: OfflinePlayer?
+        itemStack: ItemStack, itemTag: NbtCompound, data: MutableMap<String, String>?, player: OfflinePlayer?
     ): String {
         return parseItemSection(itemStack, itemTag, data, player, null, null)
     }
@@ -223,9 +210,7 @@ object SectionUtils {
      */
     @JvmStatic
     fun String.parseItemSection(
-        itemStack: ItemStack,
-        itemInfo: ItemInfo,
-        player: OfflinePlayer?
+        itemStack: ItemStack, itemInfo: ItemInfo, player: OfflinePlayer?
     ): String {
         return parseItemSection(itemStack, itemInfo, player, null, null)
     }
@@ -300,75 +285,70 @@ object SectionUtils {
         cache: MutableMap<String, String>? = null,
         sections: ConfigurationSection? = null
     ): String {
-        when (val index = this.indexOf("::")) {
-            -1 -> {
-                // 尝试读取缓存
-                if (cache?.containsKey(this) == true) {
-                    // 直接返回对应节点值
-                    return (cache as Map<*, *>)[this].toString()
-                    // 读取失败, 尝试主动解析
-                } else {
-                    // 尝试解析并返回对应节点值
-                    if (sections != null && sections.contains(this)) {
-                        // 获取节点ConfigurationSection
-                        val section = sections.getConfigurationSection(this)
-                        // 简单节点
-                        if (section == null) {
-                            val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
-                            cache?.put(this, result)
-                            return result
-                        }
-                        // 加载节点
-                        return Section(section, this).load(cache, player, sections) ?: "<$this>"
+        val index = this.indexOf("::")
+        if (index == -1) {
+            // 尝试读取缓存
+            if (cache?.containsKey(this) == true) {
+                // 直接返回对应节点值
+                return cache[this].toString()
+                // 读取失败, 尝试主动解析
+            } else {
+                // 尝试解析并返回对应节点值
+                if (sections != null && sections.contains(this)) {
+                    // 获取节点ConfigurationSection
+                    val section = sections.getConfigurationSection(this)
+                    // 简单节点
+                    if (section == null) {
+                        val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
+                        cache?.put(this, result)
+                        return result
                     }
-                    if (this.startsWith("#")) {
+                    // 加载节点
+                    return Section(section, this).load(cache, player, sections) ?: "<$this>"
+                }
+                if (this.startsWith("#")) {
+                    try {
                         try {
-                            try {
-                                val hex = (this.substring(1).toIntOrNull(16) ?: 0)
-                                    .coerceAtLeast(0)
-                                    .coerceAtMost(0xFFFFFF)
-                                val color = Color(hex)
-                                return ChatColor.of(color).toString()
-                            } catch (_: NumberFormatException) {
-                            }
-                        } catch (error: NoSuchMethodError) {
-                            Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
+                            val hex = (this.substring(1).toIntOrNull(16) ?: 0).coerceAtLeast(0).coerceAtMost(0xFFFFFF)
+                            val color = Color(hex)
+                            return ChatColor.of(color).toString()
+                        } catch (_: NumberFormatException) {
                         }
+                    } catch (error: NoSuchMethodError) {
+                        Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
                     }
                 }
-                return "<$this>"
             }
+            return "<$this>"
+        } else {
+            // 获取节点类型
+            val name = this.substring(0, index)
+            val param = this.substring(index + 2)
+            return when (name.lowercase(Locale.getDefault())) {
+                "nbt" -> {
+                    itemTag.getDeepStringOrNull(param) ?: "<$this>"
+                }
 
-            else -> {
-                // 获取节点类型
-                val name = this.substring(0, index)
-                val param = this.substring(index + 2)
-                return when (name.lowercase(Locale.getDefault())) {
-                    "nbt" -> {
-                        itemTag.getDeepStringOrNull(param) ?: "<$this>"
-                    }
+                "data" -> {
+                    (data ?: itemTag.getStringOrNull("NeigeItems.data")?.parseObject<HashMap<String, String>>())?.get(
+                        param
+                    ) ?: "<$this>"
+                }
 
-                    "data" -> {
-                        (data ?: itemTag.getStringOrNull("NeigeItems.data")
-                            ?.parseObject<HashMap<String, String>>())?.get(param) ?: "<$this>"
-                    }
+                "amount" -> {
+                    itemStack.amount.toString()
+                }
 
-                    "amount" -> {
-                        itemStack.amount.toString()
-                    }
+                "type" -> {
+                    itemStack.type.toString()
+                }
 
-                    "type" -> {
-                        itemStack.type.toString()
-                    }
+                "damage" -> {
+                    itemStack.getDamage().toString()
+                }
 
-                    "damage" -> {
-                        itemStack.getDamage().toString()
-                    }
-
-                    else -> {
-                        SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player)
-                            ?: "<$this>"
-                    }
+                else -> {
+                    SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player) ?: "<$this>"
                 }
             }
         }
@@ -392,74 +372,68 @@ object SectionUtils {
         cache: MutableMap<String, String>? = null,
         sections: ConfigurationSection? = null
     ): String {
-        when (val index = this.indexOf("::")) {
-            -1 -> {
-                // 尝试读取缓存
-                if (cache?.containsKey(this) == true) {
-                    // 直接返回对应节点值
-                    return (cache as Map<*, *>)[this].toString()
-                    // 读取失败, 尝试主动解析
-                } else {
-                    // 尝试解析并返回对应节点值
-                    if (sections != null && sections.contains(this)) {
-                        // 获取节点ConfigurationSection
-                        val section = sections.getConfigurationSection(this)
-                        // 简单节点
-                        if (section == null) {
-                            val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
-                            cache?.put(this, result)
-                            return result
-                        }
-                        // 加载节点
-                        return Section(section, this).load(cache, player, sections) ?: "<$this>"
+        val index = this.indexOf("::")
+        if (index == -1) {
+            // 尝试读取缓存
+            if (cache?.containsKey(this) == true) {
+                // 直接返回对应节点值
+                return cache[this].toString()
+                // 读取失败, 尝试主动解析
+            } else {
+                // 尝试解析并返回对应节点值
+                if (sections != null && sections.contains(this)) {
+                    // 获取节点ConfigurationSection
+                    val section = sections.getConfigurationSection(this)
+                    // 简单节点
+                    if (section == null) {
+                        val result = sections.getString(this)?.parseSection(cache, player, sections) ?: "<$this>"
+                        cache?.put(this, result)
+                        return result
                     }
-                    if (this.startsWith("#")) {
+                    // 加载节点
+                    return Section(section, this).load(cache, player, sections) ?: "<$this>"
+                }
+                if (this.startsWith("#")) {
+                    try {
                         try {
-                            try {
-                                val hex = (this.substring(1).toIntOrNull(16) ?: 0)
-                                    .coerceAtLeast(0)
-                                    .coerceAtMost(0xFFFFFF)
-                                val color = Color(hex)
-                                return ChatColor.of(color).toString()
-                            } catch (_: NumberFormatException) {
-                            }
-                        } catch (error: NoSuchMethodError) {
-                            Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
+                            val hex = (this.substring(1).toIntOrNull(16) ?: 0).coerceAtLeast(0).coerceAtMost(0xFFFFFF)
+                            val color = Color(hex)
+                            return ChatColor.of(color).toString()
+                        } catch (_: NumberFormatException) {
                         }
+                    } catch (error: NoSuchMethodError) {
+                        Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
                     }
                 }
-                return "<$this>"
             }
+            return "<$this>"
+        } else {
+            // 获取节点类型
+            val name = this.substring(0, index)
+            val param = this.substring(index + 2)
+            return when (name.lowercase(Locale.getDefault())) {
+                "nbt" -> {
+                    itemInfo.itemTag.getDeepStringOrNull(param) ?: "<$this>"
+                }
 
-            else -> {
-                // 获取节点类型
-                val name = this.substring(0, index)
-                val param = this.substring(index + 2)
-                return when (name.lowercase(Locale.getDefault())) {
-                    "nbt" -> {
-                        itemInfo.itemTag.getDeepStringOrNull(param) ?: "<$this>"
-                    }
+                "data" -> {
+                    itemInfo.data[param] ?: "<$this>"
+                }
 
-                    "data" -> {
-                        itemInfo.data[param] ?: "<$this>"
-                    }
+                "amount" -> {
+                    itemStack.amount.toString()
+                }
 
-                    "amount" -> {
-                        itemStack.amount.toString()
-                    }
+                "type" -> {
+                    itemStack.type.toString()
+                }
 
-                    "type" -> {
-                        itemStack.type.toString()
-                    }
+                "damage" -> {
+                    itemStack.getDamage().toString()
+                }
 
-                    "damage" -> {
-                        itemStack.getDamage().toString()
-                    }
-
-                    else -> {
-                        SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player)
-                            ?: "<$this>"
-                    }
+                else -> {
+                    SectionManager.sectionParsers[name]?.onRequest(param.split('_', '\\'), null, player) ?: "<$this>"
                 }
             }
         }

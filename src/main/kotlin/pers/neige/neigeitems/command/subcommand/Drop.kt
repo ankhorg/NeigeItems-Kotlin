@@ -33,6 +33,9 @@ import pers.neige.neigeitems.utils.ItemUtils.dropNiItems
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 
+/**
+ * ni drop指令
+ */
 object Drop {
     private val dropLogic: RequiredArgumentBuilder<CommandSender, ItemSelector> =
         // ni drop [item]
@@ -77,7 +80,7 @@ object Drop {
     // ni dropSilent
     val dropSilent: LiteralArgumentBuilder<CommandSender> = literal<CommandSender>("dropSilent").then(dropLogic)
 
-    fun drop(
+    private fun drop(
         context: CommandContext<CommandSender>,
         random: Boolean = true,
         parserSelector: PlayerSelector? = null,

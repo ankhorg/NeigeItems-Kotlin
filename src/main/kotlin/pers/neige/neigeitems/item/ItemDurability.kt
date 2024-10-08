@@ -18,23 +18,17 @@ import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getDamage
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
-import pers.neige.neigeitems.utils.ItemUtils.setDamage
 import pers.neige.neigeitems.utils.LangUtils.getLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
 import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
 import java.util.concurrent.ThreadLocalRandom
 
+/**
+ * 物品自定义耐久实现类
+ */
 object ItemDurability {
-    /**
-     * 火焰弹
-     */
-    private val FIRE_CHARGE = (Material.matchMaterial("FIRE_CHARGE") ?: Material.matchMaterial("FIREBALL"))!!
-
-    /**
-     * 是否为1.12.2
-     */
-    private val LEGACY = FIRE_CHARGE.toString() == "FIREBALL"
+    private val FIRE_CHARGE_MATERIAL = (Material.matchMaterial("FIRE_CHARGE") ?: Material.matchMaterial("FIREBALL"))!!
 
     /**
      * 方块交互
@@ -73,7 +67,7 @@ object ItemDurability {
         // 非创造模式玩家
             event.player.gameMode != GameMode.CREATIVE
             // 使用火焰弹
-            && itemStack.type == FIRE_CHARGE
+            && itemStack.type == FIRE_CHARGE_MATERIAL
             // 交互TNT
             && block?.type == Material.TNT
             // 右键交互
@@ -104,11 +98,13 @@ object ItemDurability {
                     player.updateInventory()
                 }
             }
-            return
         }
     }
 
-    fun basic(
+    /**
+     * 已损坏物品检测
+     */
+    fun durabilityChecker(
         player: Player,
         neigeItems: NbtCompound,
         event: Cancellable
@@ -256,7 +252,7 @@ object ItemDurability {
                     }
                 }
                 // 为玩家添加一个破坏物品的统计数据
-                if (itemStack.type != FIRE_CHARGE) {
+                if (itemStack.type != FIRE_CHARGE_MATERIAL) {
                     player.incrementStatistic(Statistic.BREAK_ITEM, itemStack.type)
                 }
                 // 播放物品破碎声
@@ -300,6 +296,9 @@ object ItemDurability {
         }
     }
 
+    /**
+     * 耐久消耗事件的各种结果
+     */
     enum class DamageResult {
         /**
          * 原版物品, 无自定义耐久

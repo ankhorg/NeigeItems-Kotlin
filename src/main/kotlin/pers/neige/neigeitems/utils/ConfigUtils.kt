@@ -585,13 +585,12 @@ object ConfigUtils {
     fun JavaPlugin.saveResourceNotWarn(resourcePath: String, outFile: File) {
         this.getResource(resourcePath.replace('\\', '/'))?.use { inputStream ->
             outFile.parentFile.createDirectory()
-            if (!outFile.exists()) {
-                FileOutputStream(outFile).use { fileOutputStream ->
-                    var len: Int
-                    val buf = ByteArray(1024)
-                    while (inputStream.read(buf).also { len = it } > 0) {
-                        (fileOutputStream as OutputStream).write(buf, 0, len)
-                    }
+            if (outFile.exists()) return
+            FileOutputStream(outFile).use { fileOutputStream ->
+                var len: Int
+                val buf = ByteArray(1024)
+                while (inputStream.read(buf).also { len = it } > 0) {
+                    (fileOutputStream as OutputStream).write(buf, 0, len)
                 }
             }
         }

@@ -10,7 +10,7 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 object PlayerItemDamageListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun listener(event: PlayerItemDamageEvent) {
+    private fun listener(event: PlayerItemDamageEvent) {
         // 获取玩家
         val player = event.player
         // 获取消耗耐久物品

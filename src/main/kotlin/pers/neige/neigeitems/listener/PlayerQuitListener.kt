@@ -7,7 +7,7 @@ import pers.neige.neigeitems.annotation.Listener
 object PlayerQuitListener {
     @JvmStatic
     @Listener
-    fun listener(event: PlayerQuitEvent) {
+    private fun listener(event: PlayerQuitEvent) {
         NeigeItems.getUserManager().getOrMake(event.player.uniqueId)
     }
 

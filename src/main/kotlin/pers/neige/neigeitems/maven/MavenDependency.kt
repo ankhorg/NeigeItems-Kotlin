@@ -19,6 +19,11 @@ import java.nio.file.StandardCopyOption
  * @property repos 仓库地址
  */
 class MavenDependency {
+    private companion object {
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(MavenDependency::class.java.simpleName)
+    }
+
     private val libPath: String
     private val groupId: String
     private val artifactId: String
@@ -194,9 +199,5 @@ class MavenDependency {
                 throw RuntimeException("Failed to download file: $groupId:$artifactId:$version:$extension")
             }
         }
-    }
-
-    private companion object {
-        private val logger = LoggerFactory.getLogger(MavenDependency::class.java.simpleName)
     }
 }

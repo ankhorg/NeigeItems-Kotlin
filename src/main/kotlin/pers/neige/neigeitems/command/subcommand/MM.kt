@@ -6,6 +6,9 @@ import pers.neige.neigeitems.command.CommandUtils
 import pers.neige.neigeitems.command.subcommand.mm.Give
 import pers.neige.neigeitems.command.subcommand.mm.Load
 
+/**
+ * ni mm指令
+ */
 object MM {
     // ni mm
     val mm: LiteralArgumentBuilder<CommandSender> = CommandUtils.literal<CommandSender>("mm")

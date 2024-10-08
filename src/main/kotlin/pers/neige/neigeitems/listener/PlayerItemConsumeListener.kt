@@ -13,7 +13,7 @@ import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 object PlayerItemConsumeListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun listener(event: PlayerItemConsumeEvent) {
+    private fun listener(event: PlayerItemConsumeEvent) {
         // 获取玩家
         val player = event.player
         // 获取手持物品
@@ -34,7 +34,7 @@ object PlayerItemConsumeListener {
 
         try {
             // 检测已损坏物品
-            ItemDurability.basic(player, neigeItems, event)
+            ItemDurability.durabilityChecker(player, neigeItems, event)
             if (event.isCancelled) return
             // 执行物品动作
             ActionManager.eatListener(player, itemStack, itemInfo, event)

@@ -10,7 +10,7 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 object InventoryClickListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun click(event: InventoryClickEvent) {
+    private fun click(event: InventoryClickEvent) {
         // 获取玩家
         val player = event.whoClicked
         if (player !is Player) return
@@ -25,7 +25,7 @@ object InventoryClickListener {
 
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun beClicked(event: InventoryClickEvent) {
+    private fun beClicked(event: InventoryClickEvent) {
         // 获取玩家
         val player = event.whoClicked
         if (player !is Player) return

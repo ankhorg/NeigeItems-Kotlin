@@ -27,6 +27,9 @@ import pers.neige.neigeitems.utils.SchedulerUtils.async
 import java.util.*
 import kotlin.math.ceil
 
+/**
+ * ni search指令
+ */
 object Search {
     val search: LiteralArgumentBuilder<CommandSender> =
         // ni search

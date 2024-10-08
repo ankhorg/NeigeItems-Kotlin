@@ -17,7 +17,7 @@ object ChanceParser : SectionParser() {
         cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?
-    ): String? {
+    ): String {
         return handler(
             cache,
             player,
@@ -47,7 +47,7 @@ object ChanceParser : SectionParser() {
             args.getOrNull(2),
             args.getOrNull(3),
             args.getOrNull(4)
-        ) ?: "<$id::${args.joinToString("_")}>"
+        )
     }
 
     /**

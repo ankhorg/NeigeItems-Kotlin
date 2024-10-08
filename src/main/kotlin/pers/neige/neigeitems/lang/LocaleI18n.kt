@@ -18,7 +18,11 @@ import java.net.URI
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Minecraft语言文件获取工具
+ */
 object LocaleI18n {
+    @JvmStatic
     private val logger = LoggerFactory.getLogger(LocaleI18n::class.java.simpleName)
     private val releaseVersionRegex = Regex("""^\d+(\.\d+)+$""")
     private val minecraftVersion = Bukkit.getServer().version.let { version ->
@@ -287,6 +291,9 @@ object LocaleI18n {
         return URI(this).toURL().readText().parseObject()
     }
 
+    /**
+     * Minecraft语言文件读取器
+     */
     interface TranslationProvider {
         fun translate(key: String): String?
     }

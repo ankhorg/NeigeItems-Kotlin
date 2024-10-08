@@ -17,7 +17,7 @@ object EntityShootBowListener {
 
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun shootBow(event: EntityShootBowEvent) {
+    private fun shootBow(event: EntityShootBowEvent) {
         // 获取玩家
         val player = event.entity
         if (player !is Player) return
@@ -29,7 +29,7 @@ object EntityShootBowListener {
         val neigeItems: NbtCompound = itemInfo.neigeItems
 
         // 检测已损坏物品
-        ItemDurability.basic(player, neigeItems, event)
+        ItemDurability.durabilityChecker(player, neigeItems, event)
         if (event.isCancelled) return
         // 执行物品动作
         ActionManager.shootBowListener(player, itemStack, itemInfo, event)
@@ -37,7 +37,7 @@ object EntityShootBowListener {
     }
 
     @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
-    fun init() {
+    private fun init() {
         if (GET_CONSUMABLE_SUPPORT) {
             ListenerUtils.registerListener(
                 EntityShootBowEvent::class.java,
@@ -54,7 +54,7 @@ object EntityShootBowListener {
                 val neigeItems: NbtCompound = itemInfo.neigeItems
 
                 // 检测已损坏物品
-                ItemDurability.basic(player, neigeItems, event)
+                ItemDurability.durabilityChecker(player, neigeItems, event)
                 if (event.isCancelled) return@registerListener
                 // 执行物品动作
                 ActionManager.shootArrowListener(player, itemStack, itemInfo, event)

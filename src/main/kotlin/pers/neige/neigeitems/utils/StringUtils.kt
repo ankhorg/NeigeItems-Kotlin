@@ -2,6 +2,9 @@ package pers.neige.neigeitems.utils
 
 import java.math.BigDecimal
 
+/**
+ * 字符串相关工具类
+ */
 object StringUtils {
     /**
      * List转文本

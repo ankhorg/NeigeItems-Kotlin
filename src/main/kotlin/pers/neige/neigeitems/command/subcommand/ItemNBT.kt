@@ -17,6 +17,9 @@ import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 
+/**
+ * ni itemnbt指令
+ */
 object ItemNBT {
     // ni itemNBT
     val itemNBT: LiteralArgumentBuilder<CommandSender> =
@@ -38,34 +41,38 @@ object ItemNBT {
     }
 
     private fun itemNBTCommand(sender: Player, itemStack: ItemStack) {
-        if (itemStack.type != Material.AIR) {
-            val components = itemStack.getNbt().format().create()
-            var temp = TextComponent()
-            var length = 0
-            // 我这么搞不是闲得蛋疼, 我知道 Player.Spigot#sendMessage 可以直接传数组
-            // 这样操作是为了把一个大号的复合文本以行为单位进行拆分
-            // 1.12.2 对聊天包的大小有限制, 超过 32767 就直接踹人
-            // 拆成一行一行的, 大小超限制的可能性就大大降低了
-            components.forEach { component ->
-                val plainText = component.toPlainText()
-                if (plainText == "\n") {
-                    sender.spigot().sendMessage(temp)
-                    temp = TextComponent()
-                    length = 0
-                } else {
-                    temp.addExtra(component)
-                    length++
-                }
-            }
-            if (length != 0) {
+        if (itemStack.type == Material.AIR) return
+        val components = itemStack.getNbt().format().create()
+        var temp = TextComponent()
+        var length = 0
+        // 我这么搞不是闲得蛋疼, 我知道 Player.Spigot#sendMessage 可以直接传数组
+        // 这样操作是为了把一个大号的复合文本以行为单位进行拆分
+        // 1.12.2 对聊天包的大小有限制, 超过 32767 就直接踹人
+        // 拆成一行一行的, 大小超限制的可能性就大大降低了
+        components.forEach { component ->
+            val plainText = component.toPlainText()
+            if (plainText == "\n") {
                 sender.spigot().sendMessage(temp)
+                temp = TextComponent()
+                length = 0
+            } else {
+                temp.addExtra(component)
+                length++
             }
+        }
+        if (length != 0) {
+            sender.spigot().sendMessage(temp)
         }
     }
 
     private const val INDENT = "  "
     private const val LIST_INDENT = "§e- "
 
+    /**
+     * 将NBT转换为可视化的聊天组件
+     *
+     * @return 用于表示NBT的聊天组件
+     */
     @JvmStatic
     fun NbtCompound.format(): ComponentBuilder {
         val result = ComponentBuilder("§e§m                                                                      ")
@@ -88,6 +95,11 @@ object ItemNBT {
         return result.append("\n").append("§e§m                                                                      ")
     }
 
+    /**
+     * 根据NBT获取类型后缀
+     *
+     * @return NBT类型后缀
+     */
     @JvmStatic
     fun Nbt<*>.asPostfix(): String {
         return when (this) {
@@ -107,6 +119,11 @@ object ItemNBT {
         }
     }
 
+    /**
+     * 将文本转换为聊天组件, 超过20字符的文本将进行省略
+     *
+     * @return 聊天组件
+     */
     @JvmStatic
     fun String.toBuilder(): ComponentBuilder {
         return ComponentBuilder(if (length > 20) "${substring(0, 19)}..." else this)
@@ -114,6 +131,12 @@ object ItemNBT {
             .suggestCommand(this)
     }
 
+    /**
+     * 根据当前级数将NBT转换为聊天组件
+     *
+     * @param level 当前级数
+     * @return 聊天组件
+     */
     @JvmStatic
     fun Nbt<*>.asValueString(level: Int): ComponentBuilder {
         return when (this) {

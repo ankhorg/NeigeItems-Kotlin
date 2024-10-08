@@ -44,38 +44,31 @@ object WhenParser : SectionParser() {
         value: String?,
         conditions: Any?
     ): String? {
-        if (conditions is List<*>) {
-            value?.let { cache?.put("value", value) }
-            // 遍历条件
-            conditions.forEach { info ->
-                when (info) {
-                    // 是Map说明需要条件判断
-                    is Map<*, *> -> {
-                        // 获取一下条件和结果
-                        val condition = info["condition"]
-                        val result = info["result"]
-                        // 确认类型正确
-                        if (condition is String?) {
-                            // 如果符合条件
-                            if (parseCondition(
-                                    condition, ActionContext(
-                                        player?.player, mapOf(
-                                            Pair("value", value),
-                                            Pair("cache", cache),
-                                            Pair("sections", sections)
-                                        )
-                                    )
-                                ).type != ResultType.STOP
-                            ) {
-                                // 返回
-                                return result.toString().parseSection(cache, player, sections)
-                                    .also { cache?.remove("value") }
-                            }
-                        }
-                    }
-                    // 其他情况说明可以直接返回
-                    else -> return info.toString().parseSection(cache, player, sections).also { cache?.remove("value") }
+        if (conditions !is List<*>) return null
+        value?.let { cache?.put("value", value) }
+        // 遍历条件
+        conditions.forEach { info ->
+            // 是Map说明需要条件判断
+            if (info is Map<*, *>) {
+                // 获取一下条件和结果
+                val condition = info["condition"]
+                val result = info["result"]
+                // 确认类型正确
+                if (condition !is String?) return@forEach
+                // 如果符合条件
+                if (parseCondition(
+                        condition, ActionContext(
+                            player?.player,
+                            mapOf(Pair("value", value), Pair("cache", cache), Pair("sections", sections))
+                        )
+                    ).type != ResultType.STOP
+                ) {
+                    // 返回
+                    return result.toString().parseSection(cache, player, sections).also { cache?.remove("value") }
                 }
+            } else {
+                // 其他情况说明可以直接返回
+                return info.toString().parseSection(cache, player, sections).also { cache?.remove("value") }
             }
         }
         return null

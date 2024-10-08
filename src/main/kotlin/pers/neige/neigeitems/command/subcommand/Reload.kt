@@ -12,6 +12,9 @@ import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 
+/**
+ * ni reload指令
+ */
 object Reload {
     private val types = arrayListOf(
         "config",

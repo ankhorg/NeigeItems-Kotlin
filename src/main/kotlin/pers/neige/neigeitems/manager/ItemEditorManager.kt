@@ -48,9 +48,6 @@ object ItemEditorManager {
     val itemEditors: HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>> =
         HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>>()
 
-    /**
-     * 基础物品编辑函数
-     */
     private val basicItemEditors: HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>> =
         HashMap<String, TriFunction<Player, ItemStack, String, Boolean?>>()
 

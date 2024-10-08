@@ -2,14 +2,14 @@
  * 服务器开启后 及 ni reload后异步执行
  */
 function enable() {
-    // 调用指令注册
-    commandExample()
-    // 调用监听器注册
-    listenerExample()
-    // 调用PAPI变量注册
-    placeholderExample()
-    // 调用Bukkit任务
-    taskExample()
+    // // 调用指令注册
+    // commandExample()
+    // // 调用监听器注册
+    // listenerExample()
+    // // 调用PAPI变量注册
+    // placeholderExample()
+    // // 调用Bukkit任务
+    // taskExample()
 }
 
 /**
@@ -81,12 +81,12 @@ function commandExample() {
         .setTabCompleter(function (sender, command, label, args) {
             return ["测试补全"]
         })
-    /**
-     * 注册指令
-     * 为了防止默认配置给你带来困扰, 我默认不进行注册
-     * 你想实验的话删掉前面的"// "就好, 那是注释符号
-     */
-    // .register()
+        /**
+         * 注册指令
+         * 为了防止默认配置给你带来困扰, 我默认不进行注册
+         * 你想实验的话删掉前面的"// "就好, 那是注释符号
+         */
+        .register()
 }
 
 /**
@@ -124,12 +124,12 @@ function listenerExample() {
                 '你是不是打算说: " ' + event.message + ' " ?'
             )
         })
-    /**
-     * 注册监听器
-     * 为了防止默认配置给你带来困扰, 我默认不进行注册
-     * 你想实验的话删掉前面的"// "就好, 那是注释符号
-     */
-    // .register()
+        /**
+         * 注册监听器
+         * 为了防止默认配置给你带来困扰, 我默认不进行注册
+         * 你想实验的话删掉前面的"// "就好, 那是注释符号
+         */
+        .register()
 }
 
 /**
@@ -160,12 +160,12 @@ function placeholderExample() {
             // %test% 返回玩家名
             return player.name
         })
-    /**
-     * 注册PAPI变量
-     * 为了防止默认配置给你带来困扰, 我默认不进行注册
-     * 你想实验的话删掉前面的"// "就好, 那是注释符号
-     */
-    // .register()
+        /**
+         * 注册PAPI变量
+         * 为了防止默认配置给你带来困扰, 我默认不进行注册
+         * 你想实验的话删掉前面的"// "就好, 那是注释符号
+         */
+        .register()
 }
 
 /**
@@ -190,10 +190,10 @@ function taskExample() {
         .setDelay(10)
         // 设置任务是否异步执行(不设置的话任务将同步进行)
         .setAsync(true)
-    /**
-     * 注册Bukkit任务
-     * 为了防止默认配置给你带来困扰, 我默认不进行注册
-     * 你想实验的话删掉前面的"// "就好, 那是注释符号
-     */
-    // .register()
+        /**
+         * 注册Bukkit任务
+         * 为了防止默认配置给你带来困扰, 我默认不进行注册
+         * 你想实验的话删掉前面的"// "就好, 那是注释符号
+         */
+        .register()
 }

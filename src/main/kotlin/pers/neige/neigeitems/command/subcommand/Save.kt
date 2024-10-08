@@ -17,6 +17,9 @@ import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 
+/**
+ * ni save指令
+ */
 object Save {
     private val saveLogic: RequiredArgumentBuilder<CommandSender, String> =
         // ni save [item]
@@ -39,7 +42,7 @@ object Save {
     // ni cover
     val cover: LiteralArgumentBuilder<CommandSender> = literal<CommandSender>("cover").then(saveLogic)
 
-    fun save(context: CommandContext<CommandSender>, id: String, path: String = "$id.yml") {
+    private fun save(context: CommandContext<CommandSender>, id: String, path: String = "$id.yml") {
         val cover = context.nodes[0].node.name == "cover"
         val sender = context.source
         if (sender !is Player) {

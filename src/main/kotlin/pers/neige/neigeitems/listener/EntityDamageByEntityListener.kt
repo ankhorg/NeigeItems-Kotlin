@@ -17,7 +17,7 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 object EntityDamageByEntityListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun damage(event: EntityDamageByEntityEvent) {
+    private fun damage(event: EntityDamageByEntityEvent) {
         if (event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK || event.damager !is Player) return
         // 获取玩家(攻击者)
         val player = event.damager as Player
@@ -29,7 +29,7 @@ object EntityDamageByEntityListener {
         val neigeItems: NbtCompound = itemInfo.neigeItems
 
         // 检测已损坏物品
-        ItemDurability.basic(player, neigeItems, event)
+        ItemDurability.durabilityChecker(player, neigeItems, event)
         if (event.isCancelled) return
         // 执行物品动作
         ActionManager.damageListener(player, itemStack, itemInfo, event)
@@ -38,7 +38,7 @@ object EntityDamageByEntityListener {
 
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun blocking(event: EntityDamageByEntityEvent) {
+    private fun blocking(event: EntityDamageByEntityEvent) {
         // 获取受击者
         val player = event.entity
         // 检测是否为玩家
@@ -60,7 +60,7 @@ object EntityDamageByEntityListener {
         val neigeItems: NbtCompound = itemInfo.neigeItems
 
         // 检测已损坏物品
-        ItemDurability.basic(player, neigeItems, event)
+        ItemDurability.durabilityChecker(player, neigeItems, event)
         if (event.isCancelled) return
         // 执行物品动作
         ActionManager.blockingListener(player, itemStack, itemInfo, event)
@@ -69,7 +69,7 @@ object EntityDamageByEntityListener {
 
     @JvmStatic
     @Listener(eventPriority = EventPriority.MONITOR)
-    fun kill(event: EntityDamageByEntityEvent) {
+    private fun kill(event: EntityDamageByEntityEvent) {
         // 获取攻击者
         val attacker = event.damager
         // 获取受击者

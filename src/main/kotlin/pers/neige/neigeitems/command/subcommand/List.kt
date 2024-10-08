@@ -25,6 +25,9 @@ import pers.neige.neigeitems.utils.SchedulerUtils.async
 import java.util.*
 import kotlin.math.ceil
 
+/**
+ * ni list指令
+ */
 object List {
     val list: LiteralArgumentBuilder<CommandSender> =
         // ni list

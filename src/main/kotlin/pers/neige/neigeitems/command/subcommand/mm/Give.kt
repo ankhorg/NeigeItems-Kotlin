@@ -23,6 +23,9 @@ import pers.neige.neigeitems.utils.PlayerUtils.giveItems
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 import pers.neige.neigeitems.utils.SchedulerUtils.sync
 
+/**
+ * ni mm give指令
+ */
 object Give {
     private val getLogic: RequiredArgumentBuilder<CommandSender, String> =
         // ni mm get [item]

@@ -15,6 +15,11 @@ import pers.neige.neigeitems.manager.SectionManager
  * @constructor 编译js脚本并进行包装
  */
 class Section(configSection: ConfigurationSection, val id: String = configSection.name) {
+    private companion object {
+        @JvmStatic
+        private val logger = LoggerFactory.getLogger(Section::class.java.simpleName)
+    }
+
     /**
      * 获取节点类型
      */
@@ -70,9 +75,5 @@ class Section(configSection: ConfigurationSection, val id: String = configSectio
         val result = get(cache, player, sections)
         result?.let { cache?.put(id, it) }
         return result
-    }
-
-    private companion object {
-        private val logger = LoggerFactory.getLogger(Section::class.java.simpleName)
     }
 }

@@ -179,8 +179,12 @@ public class ItemBuilder {
                     if (!flags.isEmpty()) {
                         this.hideFlag = 0;
                         for (String flagText : flags) {
-                            ItemFlag flag = ItemFlag.valueOf(flagText);
-                            this.hideFlag |= (1 << flag.ordinal());
+                            try {
+                                ItemFlag flag = ItemFlag.valueOf(flagText);
+                                this.hideFlag |= (1 << flag.ordinal());
+                            } catch (IllegalArgumentException exception) {
+                                exception.printStackTrace();
+                            }
                         }
                     }
                     break;

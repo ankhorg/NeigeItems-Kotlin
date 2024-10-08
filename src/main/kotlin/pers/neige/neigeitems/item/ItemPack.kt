@@ -31,6 +31,7 @@ class ItemPack(
     rawConfigSection: ConfigurationSection
 ) {
     companion object {
+        @JvmStatic
         private val logger = LoggerFactory.getLogger(ItemPack::class.java.simpleName)
     }
 
@@ -86,7 +87,7 @@ class ItemPack(
      *
      * @return 解析后物品包配置
      */
-    fun getSection(): ConfigurationSection? {
+    fun getSection(): ConfigurationSection {
         return getSection(null, null as? HashMap<String, String>)
     }
 
@@ -96,7 +97,7 @@ class ItemPack(
      * @param player 用于解析内容的玩家
      * @return 解析后物品包配置
      */
-    fun getSection(player: OfflinePlayer?): ConfigurationSection? {
+    fun getSection(player: OfflinePlayer?): ConfigurationSection {
         return getSection(player, null as? HashMap<String, String>)
     }
 
@@ -107,7 +108,7 @@ class ItemPack(
      * @param data 指向数据
      * @return 解析后物品包配置
      */
-    fun getSection(player: OfflinePlayer?, data: String?): ConfigurationSection? {
+    fun getSection(player: OfflinePlayer?, data: String?): ConfigurationSection {
         return getSection(
             player, when (data) {
                 null -> HashMap<String, String>()
@@ -182,7 +183,7 @@ class ItemPack(
      */
     fun getItemStacks(player: OfflinePlayer?, data: HashMap<String, String>?): List<ItemStack> {
         val itemStacks = ArrayList<ItemStack>()
-        getSection(player, data)?.also { config ->
+        getSection(player, data).also { config ->
             val minItems = config.get("MinItems") as? Int
             val maxItems = config.get("MaxItems") as? Int
             val items = config.getStringList("Items")

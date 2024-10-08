@@ -62,7 +62,12 @@ public class NeigeItems extends JavaPlugin {
         onInit();
     }
 
-    public NeigeItems(@NotNull JavaPluginLoader loader, @NotNull PluginDescriptionFile description, @NotNull File dataFolder, @NotNull File file) {
+    public NeigeItems(
+            @NotNull JavaPluginLoader loader,
+            @NotNull PluginDescriptionFile description,
+            @NotNull File dataFolder,
+            @NotNull File file
+    ) {
         super(loader, description, dataFolder, file);
         onInit();
     }

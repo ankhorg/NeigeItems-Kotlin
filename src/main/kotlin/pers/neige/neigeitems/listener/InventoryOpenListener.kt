@@ -11,7 +11,7 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 object InventoryOpenListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    fun listener(event: InventoryOpenEvent) {
+    private fun listener(event: InventoryOpenEvent) {
         val player = event.player as Player
         val inventory = event.inventory
         // 如果允许检测物品过期

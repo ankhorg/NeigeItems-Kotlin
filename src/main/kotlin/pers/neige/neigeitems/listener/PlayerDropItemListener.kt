@@ -11,7 +11,7 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 object PlayerDropItemListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST, ignoreCancelled = true)
-    fun listener(event: PlayerDropItemEvent) {
+    private fun listener(event: PlayerDropItemEvent) {
         // 获取玩家
         val player = event.player
         // 获取掉落物品

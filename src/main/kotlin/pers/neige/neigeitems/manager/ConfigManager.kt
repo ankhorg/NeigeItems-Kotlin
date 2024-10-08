@@ -19,9 +19,6 @@ import java.nio.charset.StandardCharsets
  * 配置文件管理器, 用于管理config.yml文件, 对其中缺少的配置项进行主动补全, 同时释放默认配置文件
  */
 object ConfigManager {
-    /**
-     * 获取默认Config
-     */
     private val originConfig: FileConfiguration =
         NeigeItems.getInstance().getResource("config.yml")?.use { input ->
             InputStreamReader(input, StandardCharsets.UTF_8).use { reader ->
@@ -120,6 +117,9 @@ object ConfigManager {
         loadConfig()
     }
 
+    /**
+     * config.yml 中 Main.Debug 为 true 时向后台发送文本
+     */
     fun debug(text: String) {
         if (debug) {
             Bukkit.getLogger().info(text)
