@@ -8,8 +8,10 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVer
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.ItemUtils.getDamage
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
+import pers.neige.neigeitems.utils.ItemUtils.setDamage
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
@@ -119,7 +121,7 @@ object ItemCheck {
                         itemStack.type = newItemStack.type
                         // 还原损伤值(1.12.2需要)
                         if (CbVersion.current() == CbVersion.v1_12_R1) {
-                            itemStack.durability = newItemStack.durability
+                            itemStack.setDamage(newItemStack.getDamage())
                         }
                         // 发送提示信息
                         player.sendLang("Messages.legacyItemUpdateMessage", mapOf("{name}" to oldName))

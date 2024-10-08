@@ -6,7 +6,9 @@ import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.item.ItemCheck
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.neigeitems.utils.ItemUtils.getDamage
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
+import pers.neige.neigeitems.utils.ItemUtils.setDamage
 
 object TickInventory {
     @JvmStatic
@@ -30,8 +32,8 @@ object TickInventory {
                         val theoreticalDamage =
                             (itemStack.type.maxDurability * (1 - (durability.toDouble() / maxDurability))).toInt()
                                 .toShort()
-                        if (itemStack.durability != theoreticalDamage) {
-                            itemStack.durability = theoreticalDamage
+                        if (itemStack.getDamage() != theoreticalDamage) {
+                            itemStack.setDamage(theoreticalDamage)
                         }
                     }
                     if (itemStack.amount != 0 && itemStack.type != Material.AIR) {

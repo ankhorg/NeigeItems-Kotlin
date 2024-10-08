@@ -10,6 +10,7 @@ import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
+import pers.neige.neigeitems.utils.ItemUtils.getDamage
 import pers.neige.neigeitems.utils.StringUtils.split
 import java.awt.Color
 import java.util.*
@@ -361,7 +362,7 @@ object SectionUtils {
                     }
 
                     "damage" -> {
-                        itemStack.durability.toString()
+                        itemStack.getDamage().toString()
                     }
 
                     else -> {
@@ -452,7 +453,7 @@ object SectionUtils {
                     }
 
                     "damage" -> {
-                        itemStack.durability.toString()
+                        itemStack.getDamage().toString()
                     }
 
                     else -> {

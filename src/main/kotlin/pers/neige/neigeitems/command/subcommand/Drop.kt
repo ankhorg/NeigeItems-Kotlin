@@ -144,8 +144,7 @@ object Drop {
                     if (event.isCancelled) return@alsoItem
                     event.location.dropNiItems(event.itemStack, event.amount, parser)
                     val currentData = dropData.computeIfAbsent(event.location) { HashMap() }
-                    currentData[event.itemStack.getParsedName()] =
-                        currentData.getOrDefault(event.itemStack.getParsedName(), 0) + event.amount
+                    currentData.merge(event.itemStack.getParsedName(), event.amount, Integer::sum)
                 }
             }
         } else {

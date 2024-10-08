@@ -2,6 +2,7 @@ package pers.neige.neigeitems.section.impl
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
+import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SamplingUtils.weight
 import pers.neige.neigeitems.utils.SectionUtils.parseSection

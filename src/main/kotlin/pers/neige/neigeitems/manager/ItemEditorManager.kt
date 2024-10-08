@@ -24,10 +24,12 @@ import pers.neige.neigeitems.manager.ItemManager.setMaxCharge
 import pers.neige.neigeitems.manager.ItemManager.setMaxCustomDurability
 import pers.neige.neigeitems.utils.ItemUtils.castToNbt
 import pers.neige.neigeitems.utils.ItemUtils.copy
+import pers.neige.neigeitems.utils.ItemUtils.getDamage
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.putDeepWithList
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
+import pers.neige.neigeitems.utils.ItemUtils.setDamage
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
@@ -1231,12 +1233,12 @@ object ItemEditorManager {
                             itemStack.amount = 0
                         } else {
                             // 设置物品材质子ID/损伤值
-                            itemStack.durability = damage.coerceAtLeast(0)
+                            itemStack.setDamage(damage.coerceAtLeast(0))
                         }
                         // 如果物品属于无耐久物品
                     } else {
                         // 设置物品材质子ID/损伤值
-                        itemStack.durability = damage
+                        itemStack.setDamage(damage)
                     }
                     return@addBasicItemEditor true
                 }
@@ -1250,7 +1252,7 @@ object ItemEditorManager {
                 // 获取待设置子ID/损伤值
                 content.toShortOrNull()?.let { damage ->
                     // 计算目标值
-                    val result = (itemStack.durability + damage).toShort()
+                    val result = (itemStack.getDamage() + damage).toShort()
                     // 获取物品最大耐久
                     val maxDurability = itemStack.type.maxDurability
                     // 如果最大耐久不为0(属于有耐久物品)
@@ -1261,12 +1263,12 @@ object ItemEditorManager {
                             itemStack.amount = 0
                         } else {
                             // 设置物品材质子ID/损伤值
-                            itemStack.durability = result.coerceAtLeast(0)
+                            itemStack.setDamage(result.coerceAtLeast(0))
                         }
                         // 如果物品属于无耐久物品
                     } else {
                         // 设置物品材质子ID/损伤值
-                        itemStack.durability = result
+                        itemStack.setDamage(result)
                     }
                     return@addBasicItemEditor true
                 }
@@ -1280,7 +1282,7 @@ object ItemEditorManager {
                 // 获取待设置子ID/损伤值
                 content.toShortOrNull()?.let { damage ->
                     // 计算目标值
-                    val result = (itemStack.durability - damage).toShort()
+                    val result = (itemStack.getDamage() - damage).toShort()
                     // 获取物品最大耐久
                     val maxDurability = itemStack.type.maxDurability
                     // 如果最大耐久不为0(属于有耐久物品)
@@ -1291,12 +1293,12 @@ object ItemEditorManager {
                             itemStack.amount = 0
                         } else {
                             // 设置物品材质子ID/损伤值
-                            itemStack.durability = result.coerceAtLeast(0)
+                            itemStack.setDamage(result.coerceAtLeast(0))
                         }
                         // 如果物品属于无耐久物品
                     } else {
                         // 设置物品材质子ID/损伤值
-                        itemStack.durability = result
+                        itemStack.setDamage(result)
                     }
                     return@addBasicItemEditor true
                 }
@@ -1351,11 +1353,10 @@ object ItemEditorManager {
                 // 遍历添加
                 enchantments.forEach { (key, value) ->
                     val enchantment = Enchantment.getByName(key.uppercase(Locale.getDefault()))
-                    val level = value
                     // 判断附魔名称 && 等级 是否合法
-                    if (enchantment != null && level > 0) {
+                    if (enchantment != null && value > 0) {
                         // 添加附魔
-                        itemStack.addUnsafeEnchantment(enchantment, level)
+                        itemStack.addUnsafeEnchantment(enchantment, value)
                     }
                 }
                 return@addBasicItemEditor true
@@ -1371,11 +1372,10 @@ object ItemEditorManager {
                 // 遍历添加
                 enchantments.forEach { (key, value) ->
                     val enchantment = Enchantment.getByName(key.uppercase(Locale.getDefault()))
-                    val level = value
                     // 判断附魔名称 && 等级 是否合法
-                    if (enchantment != null && level > 0) {
+                    if (enchantment != null && value > 0) {
                         // 添加附魔
-                        itemStack.addUnsafeEnchantment(enchantment, level)
+                        itemStack.addUnsafeEnchantment(enchantment, value)
                     }
                 }
                 return@addBasicItemEditor true
@@ -1391,13 +1391,12 @@ object ItemEditorManager {
                 // 遍历添加
                 enchantments.forEach { (key, value) ->
                     val enchantment = Enchantment.getByName(key.uppercase(Locale.getDefault()))
-                    val level = value
                     // 判断附魔名称 && 等级 是否合法
-                    if (enchantment != null && level > 0) {
+                    if (enchantment != null && value > 0) {
                         // 如果该物品不包含当前附魔
                         if (!itemStack.containsEnchantment(enchantment)) {
                             // 添加附魔
-                            itemStack.addUnsafeEnchantment(enchantment, level)
+                            itemStack.addUnsafeEnchantment(enchantment, value)
                         }
                     }
                 }
@@ -1636,7 +1635,7 @@ object ItemEditorManager {
                     itemStack.type = newItemStack.type
                     // 还原损伤值(1.12.2需要)
                     if (CbVersion.current() == CbVersion.v1_12_R1) {
-                        itemStack.durability = newItemStack.durability
+                        itemStack.setDamage(newItemStack.getDamage())
                     }
                 }
                 return@addBasicItemEditor true
@@ -1703,7 +1702,7 @@ object ItemEditorManager {
                     itemStack.type = newItemStack.type
                     // 还原损伤值(1.12.2需要)
                     if (CbVersion.current() == CbVersion.v1_12_R1) {
-                        itemStack.durability = newItemStack.durability
+                        itemStack.setDamage(newItemStack.getDamage())
                     }
                 }
                 return@addBasicItemEditor true
@@ -1771,7 +1770,7 @@ object ItemEditorManager {
                     itemStack.type = newItemStack.type
                     // 还原损伤值(1.12.2需要)
                     if (CbVersion.current() == CbVersion.v1_12_R1) {
-                        itemStack.durability = newItemStack.durability
+                        itemStack.setDamage(newItemStack.getDamage())
                     }
                 }
                 return@addBasicItemEditor true

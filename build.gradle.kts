@@ -5,8 +5,8 @@ import org.inksnow.ankhinvoke.gradle.BuildMappingsTask
 plugins {
     `java-library`
     `maven-publish`
-    id("org.jetbrains.kotlin.jvm") version "1.9.22"
-    id("org.jetbrains.dokka") version "1.9.10"
+    id("org.jetbrains.kotlin.jvm") version "2.0.20"
+    id("org.jetbrains.dokka") version "1.9.20"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.13-SNAPSHOT"
 }
@@ -34,26 +34,20 @@ subprojects {
         compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
     }
 
-    tasks.withType<JavaCompile> {
+    tasks.compileJava {
         options.encoding = "UTF-8"
     }
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+
+    tasks.compileKotlin {
         kotlinOptions {
             jvmTarget = "1.8"
-            freeCompilerArgs = listOf("-Xjvm-default=all", "-Xextended-compiler-checks")
+            freeCompilerArgs = listOf("-Xextended-compiler-checks")
         }
     }
+
     java {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlin {
-        sourceSets.all {
-            languageSettings {
-                languageVersion = "2.0"
-            }
-        }
     }
 }
 
@@ -74,7 +68,7 @@ repositories {
 }
 
 dependencies {
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.10")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.20")
     compileOnly(fileTree("libs"))
     compileOnly("io.netty:netty-all:5.0.0.Alpha2")
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
@@ -161,14 +155,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-kotlin {
-    sourceSets.all {
-        languageSettings {
-            languageVersion = "2.0"
-        }
-    }
-}
-
 tasks.compileJava {
     options.encoding = "UTF-8"
 }
@@ -176,7 +162,7 @@ tasks.compileJava {
 tasks.compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-Xjvm-default=all")
+        freeCompilerArgs = listOf("-Xextended-compiler-checks")
     }
 }
 

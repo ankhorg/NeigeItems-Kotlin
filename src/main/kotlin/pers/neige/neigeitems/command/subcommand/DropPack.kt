@@ -26,6 +26,7 @@ import pers.neige.neigeitems.command.selector.PlayerSelector
 import pers.neige.neigeitems.command.selector.WorldSelector
 import pers.neige.neigeitems.event.ItemPackDropEvent
 import pers.neige.neigeitems.item.ItemPack
+import pers.neige.neigeitems.manager.HookerManager.getParsedName
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
@@ -150,7 +151,7 @@ object DropPack {
                         dropItems(event.itemStacks, location, parser)
                     }
                 }
-                packInfo[event.location] = packInfo.getOrDefault(event.location, 0) + 1
+                packInfo.merge(event.location, 1, Integer::sum)
             }
         }
         if (tip) {

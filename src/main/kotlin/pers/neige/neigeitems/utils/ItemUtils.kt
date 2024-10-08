@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import pers.neige.neigeitems.manager.HookerManager
@@ -35,14 +36,7 @@ import kotlin.math.sqrt
 object ItemUtils {
     val invalidNBT by lazy {
         arrayListOf(
-            "display",
-            "Enchantments",
-            "VARIABLES_DATA",
-            "ench",
-            "Damage",
-            "HideFlags",
-            "Unbreakable",
-            "CustomModelData"
+            "display", "Enchantments", "VARIABLES_DATA", "ench", "Damage", "HideFlags", "Unbreakable", "CustomModelData"
         )
     }
 
@@ -176,8 +170,9 @@ object ItemUtils {
                 }
 
                 this.startsWith("(Double) ") -> {
-                    this.substring(9, this.length).toDoubleOrNull()?.let { NbtDouble.valueOf(it) }
-                        ?: NbtString.valueOf(this)
+                    this.substring(9, this.length).toDoubleOrNull()?.let { NbtDouble.valueOf(it) } ?: NbtString.valueOf(
+                        this
+                    )
                 }
 
                 else -> NbtString.valueOf(this)
@@ -404,6 +399,29 @@ object ItemUtils {
         return NbtUtils.asCopy(this)
     }
 
+    @JvmStatic
+    fun ItemStack?.setDamage(damage: Short) {
+        if (this == null || this.type == Material.AIR) return
+        if (CbVersion.current() == CbVersion.v1_12_R1 || CbVersion.v1_20_R4.isSupport) {
+            this.durability = damage
+        } else {
+            val nbt = NbtItemStack(this).orCreateTag
+            nbt.putInt(NbtUtils.getDamageNbtKeyOrThrow(), damage.toInt())
+            nbt.saveToSafe(this)
+        }
+    }
+
+    @JvmStatic
+    fun ItemStack?.getDamage(): Short {
+        if (this == null || this.type == Material.AIR) return -1
+        if (CbVersion.current() == CbVersion.v1_12_R1 || CbVersion.v1_20_R4.isSupport) {
+            return this.durability
+        } else {
+            val nbt = NbtItemStack(this).tag ?: return -1
+            return nbt.getShort(NbtUtils.getDamageNbtKeyOrThrow(), -1)
+        }
+    }
+
     /**
      * 获取CraftItemStack形式的物品复制
      *
@@ -505,9 +523,7 @@ object ItemUtils {
         return syncAndGet {
             this.world?.let { world ->
                 WorldUtils.dropItem(
-                    world,
-                    this,
-                    itemStack
+                    world, this, itemStack
                 ) { item ->
                     // 设置拥有者相关Metadata
                     owner?.let {
@@ -605,8 +621,7 @@ object ItemUtils {
      * 用于兼容旧版本API
      */
     @Deprecated(
-        "已弃用",
-        ReplaceWith(
+        "已弃用", ReplaceWith(
             "loadItems(items, itemInfos, player as? OfflinePlayer, null, null, true)",
             "pers.neige.neigeitems.utils.ItemUtils.loadItems",
             "org.bukkit.OfflinePlayer"
@@ -614,9 +629,7 @@ object ItemUtils {
     )
     @JvmStatic
     fun loadItems(
-        items: ArrayList<ItemStack>,
-        itemInfos: List<String>,
-        player: Player? = null
+        items: ArrayList<ItemStack>, itemInfos: List<String>, player: Player? = null
     ) {
         loadItems(items, itemInfos, player as? OfflinePlayer, null, null, true)
     }
@@ -625,8 +638,7 @@ object ItemUtils {
      * 用于兼容旧版本API
      */
     @Deprecated(
-        "已弃用",
-        ReplaceWith(
+        "已弃用", ReplaceWith(
             "loadItems(items, itemInfos, player as? OfflinePlayer, cache, sections, true)",
             "pers.neige.neigeitems.utils.ItemUtils.loadItems",
             "org.bukkit.OfflinePlayer"
@@ -647,8 +659,7 @@ object ItemUtils {
      * 用于兼容旧版本API
      */
     @Deprecated(
-        "已弃用",
-        ReplaceWith(
+        "已弃用", ReplaceWith(
             "loadItems(items, itemInfos, player, cache, sections, true)",
             "pers.neige.neigeitems.utils.ItemUtils.loadItems",
             "org.bukkit.OfflinePlayer"
@@ -674,9 +685,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun loadItems(
-        items: ArrayList<ItemStack>,
-        itemInfos: List<String>,
-        player: OfflinePlayer? = null
+        items: ArrayList<ItemStack>, itemInfos: List<String>, player: OfflinePlayer? = null
     ) {
         loadItems(items, itemInfos, player, null, null, true)
     }
@@ -722,8 +731,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun loadItems(
-        itemInfos: List<String>,
-        player: OfflinePlayer? = null
+        itemInfos: List<String>, player: OfflinePlayer? = null
     ): ArrayList<ItemStack> {
         return ArrayList<ItemStack>().also {
             loadItems(it, itemInfos, player, null, null, false)
@@ -739,8 +747,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun loadItems(
-        info: String,
-        player: OfflinePlayer? = null
+        info: String, player: OfflinePlayer? = null
     ): ArrayList<ItemStack> {
         return ArrayList<ItemStack>().also {
             loadItems(it, info, player)
@@ -756,9 +763,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun loadItems(
-        items: ArrayList<ItemStack>,
-        info: String,
-        player: OfflinePlayer? = null
+        items: ArrayList<ItemStack>, info: String, player: OfflinePlayer? = null
     ) {
         // [物品ID] (数量(或随机最小数量-随机最大数量)) (生成概率) (是否反复随机) (指向数据)
         val args = info.split(" ", limit = 5)
@@ -772,9 +777,9 @@ object ItemUtils {
             if (probability != null && ThreadLocalRandom.current().nextDouble() > probability) return
         }
         // 如果NI和MM都不存在对应物品就跳过去
-        if (!ItemManager.hasItem(args[0])
-            && mythicMobsHooker?.getItemStackSync(args[0]) == null
-            && easyItemHooker?.hasItem(args[0]) != true
+        if (!ItemManager.hasItem(args[0]) && mythicMobsHooker?.getItemStackSync(args[0]) == null && easyItemHooker?.hasItem(
+                args[0]
+            ) != true
         ) return
 
         // 获取掉落数量
@@ -926,10 +931,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun NbtCompound.putDeepWithList(
-        key: String,
-        value: Nbt<*>,
-        escape: Char = '\\',
-        separator: Char = '.'
+        key: String, value: Nbt<*>, escape: Char = '\\', separator: Char = '.'
     ) {
         // 父级NbtCompound
         var father: Nbt<*> = this
@@ -967,8 +969,7 @@ object ItemUtils {
                                 // 如果刚好是比list的大小多一个
                                 if (nodeIndex == (temp as NbtList).size) {
                                     // 创建一个新的NbtCompound
-                                    val newItemTag =
-                                        NbtCompound()
+                                    val newItemTag = NbtCompound()
                                     // 丢进去
                                     (temp as NbtList).add(newItemTag)
                                     // 记录一下
@@ -989,13 +990,11 @@ object ItemUtils {
                             // 其他情况说明需要重新创建一个NbtList, 所以nodeIndex必须为0
                             if (nodeIndex == 0) {
                                 // 新建一个NbtCompound
-                                val fatherItemTagList =
-                                    NbtList()
+                                val fatherItemTagList = NbtList()
                                 // 覆盖上一层
                                 (father as NbtCompound)[tempId] = fatherItemTagList
                                 // 新建当前Nbt
-                                val tempItemTag =
-                                    NbtCompound()
+                                val tempItemTag = NbtCompound()
                                 // 建立下一级Nbt
                                 fatherItemTagList.add(tempItemTag)
                                 // 记录父级NbtCompound
@@ -1031,13 +1030,11 @@ object ItemUtils {
                     // 其他情况
                     else -> {
                         // 新建一个NbtCompound
-                        val fatherItemTag =
-                            NbtCompound()
+                        val fatherItemTag = NbtCompound()
                         // 覆盖上一层
                         (father as NbtCompound)[tempId] = fatherItemTag
                         // 新建当前Nbt
-                        val tempItemTag =
-                            NbtCompound()
+                        val tempItemTag = NbtCompound()
                         // 建立下一级Nbt
                         fatherItemTag[node] = tempItemTag
                         // 记录父级NbtCompound
@@ -1072,17 +1069,15 @@ object ItemUtils {
                         // 覆盖上一层
                         when (father) {
                             is NbtList -> {
-                                (father as NbtList)[tempId.toInt()] =
-                                    NbtByteArray(
-                                        newArray
-                                    )
+                                (father as NbtList)[tempId.toInt()] = NbtByteArray(
+                                    newArray
+                                )
                             }
 
                             else -> {
-                                (father as NbtCompound)[tempId] =
-                                    NbtByteArray(
-                                        newArray
-                                    )
+                                (father as NbtCompound)[tempId] = NbtByteArray(
+                                    newArray
+                                )
                             }
                         }
                         // 越界了, 爬
@@ -1105,17 +1100,15 @@ object ItemUtils {
                         // 覆盖上一层
                         when (father) {
                             is NbtList -> {
-                                (father as NbtList)[tempId.toInt()] =
-                                    NbtIntArray(
-                                        newArray
-                                    )
+                                (father as NbtList)[tempId.toInt()] = NbtIntArray(
+                                    newArray
+                                )
                             }
 
                             else -> {
-                                (father as NbtCompound)[tempId] =
-                                    NbtIntArray(
-                                        newArray
-                                    )
+                                (father as NbtCompound)[tempId] = NbtIntArray(
+                                    newArray
+                                )
                             }
                         }
                         // 越界了, 爬
@@ -1138,17 +1131,15 @@ object ItemUtils {
                         // 覆盖上一层
                         when (father) {
                             is NbtList -> {
-                                (father as NbtList)[tempId.toInt()] =
-                                    NbtLongArray(
-                                        newArray
-                                    )
+                                (father as NbtList)[tempId.toInt()] = NbtLongArray(
+                                    newArray
+                                )
                             }
 
                             else -> {
-                                (father as NbtCompound)[tempId] =
-                                    NbtLongArray(
-                                        newArray
-                                    )
+                                (father as NbtCompound)[tempId] = NbtLongArray(
+                                    newArray
+                                )
                             }
                         }
                         // 越界了, 爬
@@ -1194,11 +1185,7 @@ object ItemUtils {
 
     @JvmStatic
     fun NbtCompound.saveToSafe(itemStack: ItemStack) {
-        if (
-            itemStack.type != Material.AIR
-            && itemStack.amount != 0
-            && !NbtUtils.isCraftItemStack(itemStack)
-        ) {
+        if (itemStack.type != Material.AIR && itemStack.amount != 0 && !NbtUtils.isCraftItemStack(itemStack)) {
             saveTo(itemStack)
         }
     }

@@ -17,12 +17,14 @@ import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
+import pers.neige.neigeitems.utils.ItemUtils.getDamage
 import pers.neige.neigeitems.utils.ItemUtils.getItemId
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
+import pers.neige.neigeitems.utils.ItemUtils.setDamage
 import pers.neige.neigeitems.utils.ItemUtils.toStringMap
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -219,8 +221,8 @@ object ItemManager : ItemConfigManager() {
                 // 设置物品材质
                 configSection.set("material", itemStack.type.toString())
                 // 设置子ID/损伤值
-                if (itemStack.durability > 0) {
-                    configSection.set("damage", itemStack.durability)
+                if (itemStack.getDamage() > 0) {
+                    configSection.set("damage", itemStack.getDamage())
                 }
                 // 如果物品有ItemMeta
                 if (itemStack.hasItemMeta()) {
@@ -440,7 +442,7 @@ object ItemManager : ItemConfigManager() {
         } else {
             // 修改耐久值
             neigeItems.putInt("durability", newDurability)
-            this.durability = (type.maxDurability * (1 - (newDurability.toDouble() / maxDurability))).toInt().toShort()
+            this.setDamage((type.maxDurability * (1 - (newDurability.toDouble() / maxDurability))).toInt().toShort())
         }
     }
 
@@ -471,7 +473,7 @@ object ItemManager : ItemConfigManager() {
         } else {
             // 修改耐久值
             neigeItems.putInt("durability", newDurability)
-            this.durability = (type.maxDurability * (1 - (newDurability.toDouble() / maxDurability))).toInt().toShort()
+            this.setDamage((type.maxDurability * (1 - (newDurability.toDouble() / maxDurability))).toInt().toShort())
         }
     }
 
@@ -495,7 +497,7 @@ object ItemManager : ItemConfigManager() {
         neigeItems.putInt("durability", durability)
         // 修改最大耐久值
         neigeItems.putInt("maxDurability", realAmount)
-        this.durability = (type.maxDurability * (1 - (durability.toDouble() / realAmount))).toInt().toShort()
+        this.setDamage((type.maxDurability * (1 - (durability.toDouble() / realAmount))).toInt().toShort())
     }
 
     /**
@@ -518,7 +520,7 @@ object ItemManager : ItemConfigManager() {
         neigeItems.putInt("durability", durability)
         // 修改最大耐久值
         neigeItems.putInt("maxDurability", maxDurability)
-        this.durability = (type.maxDurability * (1 - (durability.toDouble() / maxDurability))).toInt().toShort()
+        this.setDamage((type.maxDurability * (1 - (durability.toDouble() / maxDurability))).toInt().toShort())
     }
 
     /**
@@ -585,7 +587,7 @@ object ItemManager : ItemConfigManager() {
                 type = newItemStack.type
                 // 还原损伤值(1.12.2需要)
                 if (CbVersion.current() == CbVersion.v1_12_R1) {
-                    durability = newItemStack.durability
+                    setDamage(newItemStack.getDamage())
                 }
             }
             return true
@@ -646,7 +648,7 @@ object ItemManager : ItemConfigManager() {
                 type = newItemStack.type
                 // 还原损伤值(1.12.2需要)
                 if (CbVersion.current() == CbVersion.v1_12_R1) {
-                    durability = newItemStack.durability
+                    setDamage(newItemStack.getDamage())
                 }
             }
             return true
@@ -742,7 +744,7 @@ object ItemManager : ItemConfigManager() {
                     itemStack.type = newItemStack.type
                     // 还原损伤值(1.12.2需要)
                     if (CbVersion.current() == CbVersion.v1_12_R1) {
-                        itemStack.durability = newItemStack.durability
+                        itemStack.setDamage(newItemStack.getDamage())
                     }
                     // 发送提示信息
                     if (sendMessage) {

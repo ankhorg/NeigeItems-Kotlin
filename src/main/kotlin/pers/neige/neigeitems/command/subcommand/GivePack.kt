@@ -116,9 +116,7 @@ object GivePack {
                         player.giveItem(itemStack)
                     }
                     val name = itemStack.getParsedName()
-                    if (dropData != null) {
-                        dropData[name] = dropData.getOrDefault(name, 0) + itemStack.amount
-                    }
+                    dropData?.merge(name, itemStack.amount, Integer::sum)
                 }
             }
         }

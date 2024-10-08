@@ -151,8 +151,7 @@ object Give {
                     sync {
                         player.giveItems(event.itemStack, event.amount)
                     }
-                    giveData[event.itemStack.getParsedName()] =
-                        giveData.getOrDefault(event.itemStack.getParsedName(), 0) + event.amount
+                    giveData.merge(event.itemStack.getParsedName(), event.amount, Integer::sum)
                 }
             }
         } else {

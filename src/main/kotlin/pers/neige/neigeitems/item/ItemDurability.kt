@@ -15,8 +15,10 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
 import pers.neige.neigeitems.utils.ItemUtils.copy
+import pers.neige.neigeitems.utils.ItemUtils.getDamage
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
+import pers.neige.neigeitems.utils.ItemUtils.setDamage
 import pers.neige.neigeitems.utils.LangUtils.getLang
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
@@ -250,7 +252,7 @@ object ItemDurability {
                     if (damageEvent == null) {
                         itemStack.amount -= 1
                     } else {
-                        damageEvent.damage = itemStack.type.maxDurability - itemStack.durability + 1
+                        damageEvent.damage = itemStack.type.maxDurability - itemStack.getDamage() + 1
                     }
                 }
                 // 为玩家添加一个破坏物品的统计数据
@@ -269,7 +271,7 @@ object ItemDurability {
             } else {
                 // 修改耐久值
                 neigeItems.putInt("durability", 0)
-                damageEvent?.let { damageEvent.damage = itemStack.type.maxDurability - itemStack.durability - 1 }
+                damageEvent?.let { damageEvent.damage = itemStack.type.maxDurability - itemStack.getDamage() - 1 }
                 // 保存NBT
                 itemTag.saveToSafe(itemStack)
                 // 播放物品破碎声
@@ -289,7 +291,7 @@ object ItemDurability {
             if (damageEvent != null) {
                 val maxDurability = neigeItems.getInt("maxDurability")
                 damageEvent.damage =
-                    (itemStack.type.maxDurability * (1 - (finalDurability.toDouble() / maxDurability))).toInt() - itemStack.durability
+                    (itemStack.type.maxDurability * (1 - (finalDurability.toDouble() / maxDurability))).toInt() - itemStack.getDamage()
             }
             // 保存NBT
             itemTag.saveToSafe(itemStack)

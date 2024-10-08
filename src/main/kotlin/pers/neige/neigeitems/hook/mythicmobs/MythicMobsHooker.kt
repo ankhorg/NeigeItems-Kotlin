@@ -2,6 +2,7 @@ package pers.neige.neigeitems.hook.mythicmobs
 
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
+import org.bukkit.attribute.Attribute
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Entity
@@ -181,6 +182,25 @@ abstract class MythicMobsHooker {
 
     private val df2 = DecimalFormat("#0.00")
 
+    private fun getMobParams(entity: LivingEntity, internalName: String, mobLevel: Int): MutableMap<String, String> {
+        return mutableMapOf<String, String>().also { map ->
+            map["mobMaxHealth"] = df2.format(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)!!.value)
+            map["mobId"] = internalName
+            map["mobLevel"] = mobLevel.toString()
+            val location = entity.location
+            map["mobLocationX"] = df2.format(location.x)
+            map["mobLocationY"] = df2.format(location.y)
+            map["mobLocationZ"] = df2.format(location.z)
+            map["mobLocationYaw"] = df2.format(location.yaw)
+            map["mobLocationPitch"] = df2.format(location.pitch)
+            map["mobWorld"] = entity.world.name
+            map["mobName"] = entity.name
+            entity.customName?.let {
+                map["mobCustomName"] = it
+            }
+        }
+    }
+
     /**
      * 为MM怪物穿戴装备
      *
@@ -201,22 +221,7 @@ abstract class MythicMobsHooker {
             val dropChance = HashMap<String, Double>()
 
             // 构建怪物参数
-            val params = mutableMapOf<String, String>().also { map ->
-                map["mobMaxHealth"] = df2.format(entity.maxHealth)
-                map["mobId"] = internalName
-                map["mobLevel"] = mobLevel.toString()
-                val location = entity.location
-                map["mobLocationX"] = df2.format(location.x)
-                map["mobLocationY"] = df2.format(location.y)
-                map["mobLocationZ"] = df2.format(location.z)
-                map["mobLocationYaw"] = df2.format(location.yaw)
-                map["mobLocationPitch"] = df2.format(location.pitch)
-                map["mobWorld"] = entity.world.name
-                map["mobName"] = entity.name
-                entity.customName?.let {
-                    map["mobCustomName"] = it
-                }
-            }
+            val params = getMobParams(entity, internalName, mobLevel)
 
             // 获取死亡后相应NI物品掉落几率
             for (value in dropEquipment) {
@@ -365,22 +370,7 @@ abstract class MythicMobsHooker {
                 angleType = configLoadedEvent.angleType
 
                 // 构建怪物参数
-                val params = mutableMapOf<String, String>().also { map ->
-                    map["mobMaxHealth"] = df2.format(entity.maxHealth)
-                    map["mobId"] = internalName
-                    map["mobLevel"] = mobLevel.toString()
-                    val location = entity.location
-                    map["mobLocationX"] = df2.format(location.x)
-                    map["mobLocationY"] = df2.format(location.y)
-                    map["mobLocationZ"] = df2.format(location.z)
-                    map["mobLocationYaw"] = df2.format(location.yaw)
-                    map["mobLocationPitch"] = df2.format(location.pitch)
-                    map["mobWorld"] = entity.world.name
-                    map["mobName"] = entity.name
-                    entity.customName?.let {
-                        map["mobCustomName"] = it
-                    }
-                }
+                val params = getMobParams(entity, internalName, mobLevel)
 
                 // 预定掉落物列表
                 val dropItems = ArrayList<ItemStack>()
