@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.manager
 
 import org.bukkit.Bukkit
+import org.bukkit.event.EventPriority
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.event.PluginReloadEvent
@@ -49,10 +50,6 @@ object ExpansionManager {
      * 所有脚本扩展注册的Bukkit任务
      */
     val tasks = ConcurrentHashMap.newKeySet<ScriptTask>()
-
-    init {
-        load()
-    }
 
     /**
      * 重载管理器
@@ -105,6 +102,7 @@ object ExpansionManager {
     /**
      * 加载脚本扩展
      */
+    @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
     private fun load() {
         var time = System.currentTimeMillis()
         // 加载文件中的扩展
