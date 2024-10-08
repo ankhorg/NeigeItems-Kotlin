@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>ItemNBT 1.19.22 API </title>
+    <title>ItemNBT 1.19.23 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
@@ -117,7 +117,7 @@ var pathtoroot = "../../../../../";
 public class <span class="typeNameLabel"><a href=ItemNBT.html>ItemNBT</a></span>
 
                     </pre>
-                    <div class="block"></div>
+                    <div class="block"><p>ni itemnbt指令</p></div>
 
                     <dl>
 
@@ -262,7 +262,7 @@ public class <span class="typeNameLabel"><a href=ItemNBT.html>ItemNBT</a></span>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ItemNBT.html#format(pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound)>format</a>(<a href=../../libs/bot/inker/bukkit/nbt/NbtCompound.html>NbtCompound</a> $self) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">将NBT转换为可视化的聊天组件</td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
@@ -270,7 +270,7 @@ public class <span class="typeNameLabel"><a href=ItemNBT.html>ItemNBT</a></span>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ItemNBT.html#asPostfix(pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt)>asPostfix</a>(<a href=../../libs/bot/inker/bukkit/nbt/Nbt.html>Nbt</a>&lt;?&gt; $self) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">根据NBT获取类型后缀</td>
                                         </tr>
                                         
                                         <tr id="i2" class="altColor">
@@ -278,7 +278,7 @@ public class <span class="typeNameLabel"><a href=ItemNBT.html>ItemNBT</a></span>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ItemNBT.html#toBuilder(java.lang.String)>toBuilder</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> $self) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">将文本转换为聊天组件, 超过20字符的文本将进行省略</td>
                                         </tr>
                                         
                                         <tr id="i3" class="rowColor">
@@ -286,7 +286,7 @@ public class <span class="typeNameLabel"><a href=ItemNBT.html>ItemNBT</a></span>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ItemNBT.html#asValueString(pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt,java.lang.Integer)>asValueString</a>(<a href=../../libs/bot/inker/bukkit/nbt/Nbt.html>Nbt</a>&lt;?&gt; $self, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> level) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">根据当前级数将NBT转换为聊天组件</td>
                                         </tr>
                                         
                                         <tr id="i4" class="altColor">
@@ -350,12 +350,15 @@ public class <span class="typeNameLabel"><a href=ItemNBT.html>ItemNBT</a></span>
                                     <li class="blockList">
                                         <h4>format</h4>
                                         <pre class="methodSignature"> final static ComponentBuilder <a href=ItemNBT.html#format(pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound)>format</a>(<a href=../../libs/bot/inker/bukkit/nbt/NbtCompound.html>NbtCompound</a> $self)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>将NBT转换为可视化的聊天组件</p></div>
 
                                         <dl>
 
                                         
 
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>用于表示NBT的聊天组件</p></dd>
                                         
 
                                         
@@ -373,12 +376,15 @@ public class <span class="typeNameLabel"><a href=ItemNBT.html>ItemNBT</a></span>
                                     <li class="blockList">
                                         <h4>asPostfix</h4>
                                         <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=ItemNBT.html#asPostfix(pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt)>asPostfix</a>(<a href=../../libs/bot/inker/bukkit/nbt/Nbt.html>Nbt</a>&lt;?&gt; $self)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>根据NBT获取类型后缀</p></div>
 
                                         <dl>
 
                                         
 
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>NBT类型后缀</p></dd>
                                         
 
                                         
@@ -396,12 +402,15 @@ public class <span class="typeNameLabel"><a href=ItemNBT.html>ItemNBT</a></span>
                                     <li class="blockList">
                                         <h4>toBuilder</h4>
                                         <pre class="methodSignature"> final static ComponentBuilder <a href=ItemNBT.html#toBuilder(java.lang.String)>toBuilder</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> $self)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>将文本转换为聊天组件, 超过20字符的文本将进行省略</p></div>
 
                                         <dl>
 
                                         
 
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>聊天组件</p></dd>
                                         
 
                                         
@@ -419,12 +428,24 @@ public class <span class="typeNameLabel"><a href=ItemNBT.html>ItemNBT</a></span>
                                     <li class="blockList">
                                         <h4>asValueString</h4>
                                         <pre class="methodSignature"> final static ComponentBuilder <a href=ItemNBT.html#asValueString(pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt,java.lang.Integer)>asValueString</a>(<a href=../../libs/bot/inker/bukkit/nbt/Nbt.html>Nbt</a>&lt;?&gt; $self, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> level)</pre>
-                                        <div class="block"></div>
+                                        <div class="block"><p>根据当前级数将NBT转换为聊天组件</p></div>
 
                                         <dl>
 
                                         
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            
+                                            
+                                            <dd><code>level</code> - 当前级数</dd>
+                                            
+                                            
+                                        
 
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>聊天组件</p></dd>
                                         
 
                                         
