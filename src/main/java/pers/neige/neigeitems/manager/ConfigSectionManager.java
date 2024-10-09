@@ -11,10 +11,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConfigSectionManager<T> extends ConcurrentHashMap<String, T> {
     @NotNull
-    private final JavaPlugin plugin;
+    private final String pluginName;
+    private final Logger logger;
     @NotNull
     private final BiFunction<String, ConfigurationSection, T> converter;
     @NotNull
@@ -28,8 +30,23 @@ public class ConfigSectionManager<T> extends ConcurrentHashMap<String, T> {
             @NotNull String directory,
             @NotNull BiFunction<String, ConfigurationSection, T> converter
     ) {
+        this.pluginName = plugin.getName();
+        this.logger = plugin.getLogger();
         this.elementName = elementName;
-        this.plugin = plugin;
+        this.directory = directory;
+        this.converter = converter;
+    }
+
+    public ConfigSectionManager(
+            @NotNull String pluginName,
+            @NotNull Logger logger,
+            @NotNull String elementName,
+            @NotNull String directory,
+            @NotNull BiFunction<String, ConfigurationSection, T> converter
+    ) {
+        this.pluginName = pluginName;
+        this.logger = logger;
+        this.elementName = elementName;
         this.directory = directory;
         this.converter = converter;
     }
@@ -37,7 +54,7 @@ public class ConfigSectionManager<T> extends ConcurrentHashMap<String, T> {
     @NotNull
     protected Map<String, ConfigurationSection> getConfigs() {
         Map<String, ConfigurationSection> result = new HashMap<>();
-        for (File file : ConfigUtils.getAllFiles(plugin, directory)) {
+        for (File file : ConfigUtils.getAllFiles(pluginName, directory)) {
             if (!file.getName().endsWith(".yml")) continue;
             result.putAll(ConfigUtils.getConfigSectionMap(file));
         }
@@ -56,7 +73,7 @@ public class ConfigSectionManager<T> extends ConcurrentHashMap<String, T> {
             try {
                 put(id, converter.apply(id, config));
             } catch (Throwable throwable) {
-                plugin.getLogger().log(Level.WARNING, throwable, () -> "error occurred while loading " + elementName + ": " + id);
+                logger.log(Level.WARNING, throwable, () -> "error occurred while loading " + elementName + ": " + id);
             }
         }
     }
