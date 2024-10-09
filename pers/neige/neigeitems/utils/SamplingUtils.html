@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>SamplingUtils 1.19.23 API </title>
+    <title>SamplingUtils 1.19.24 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -147,6 +147,13 @@ public class <span class="typeNameLabel"><a href=SamplingUtils.html>SamplingUtil
                                             <th class="colFirst" scope="col">Modifier and Type</th>
                                             <th class="colSecond" scope="col">Class</th>
                                             <th class="colLast" scope="col">Description</th>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public final class</code></td>
+                                            <th class="colSecond" scope="row"><code><a href="SamplingUtils.SamplingResult.html">SamplingUtils.SamplingResult</a></span></code>
+                                            </th>
+                                            <td class="colLast"></td>
                                         </tr>
                                         
                                     </table>
@@ -295,6 +302,46 @@ public class <span class="typeNameLabel"><a href=SamplingUtils.html>SamplingUtil
                                             <td class="colFirst"><code>final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=SamplingUtils.html#weight(java.util.Map,java.lang.Double)>T</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=SamplingUtils.html#weight(java.util.Map,java.lang.Double)>weight</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=SamplingUtils.html#weight(java.util.Map,java.lang.Double)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt; samples, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> total) </code>
+                                            </th>
+                                            <td class="colLast">加权随机采样.</td>
+                                        </tr>
+                                        
+                                        <tr id="i6" class="altColor">
+                                            <td class="colFirst"><code>final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=SamplingUtils.html#weight(java.util.List)>T</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=SamplingUtils.html#weight(java.util.List)>weight</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html>Pair</a>&lt;<a href=SamplingUtils.html#weight(java.util.List)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; samples) </code>
+                                            </th>
+                                            <td class="colLast">加权随机采样.</td>
+                                        </tr>
+                                        
+                                        <tr id="i7" class="rowColor">
+                                            <td class="colFirst"><code>final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=SamplingUtils.html#weight(java.util.List,java.lang.Double)>T</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=SamplingUtils.html#weight(java.util.List,java.lang.Double)>weight</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html>Pair</a>&lt;<a href=SamplingUtils.html#weight(java.util.List,java.lang.Double)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; samples, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> total) </code>
+                                            </th>
+                                            <td class="colLast">加权随机采样.</td>
+                                        </tr>
+                                        
+                                        <tr id="i8" class="altColor">
+                                            <td class="colFirst"><code>final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=SamplingUtils.SamplingResult.html>SamplingUtils.SamplingResult</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Integer)>T</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Integer)>weightWithIndex</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html>Pair</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Integer)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; samples, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> amount) </code>
+                                            </th>
+                                            <td class="colLast">加权随机采样.</td>
+                                        </tr>
+                                        
+                                        <tr id="i9" class="rowColor">
+                                            <td class="colFirst"><code>final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=SamplingUtils.SamplingResult.html>SamplingUtils.SamplingResult</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List)>T</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=SamplingUtils.html#weightWithIndex(java.util.List)>weightWithIndex</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html>Pair</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; samples) </code>
+                                            </th>
+                                            <td class="colLast">加权随机采样.</td>
+                                        </tr>
+                                        
+                                        <tr id="i10" class="altColor">
+                                            <td class="colFirst"><code>final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=SamplingUtils.SamplingResult.html>SamplingUtils.SamplingResult</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Double)>T</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Double)>weightWithIndex</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html>Pair</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Double)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; samples, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> total) </code>
                                             </th>
                                             <td class="colLast">加权随机采样.</td>
                                         </tr>
@@ -528,11 +575,188 @@ public class <span class="typeNameLabel"><a href=SamplingUtils.html>SamplingUtil
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>weight</h4>
                                         <pre class="methodSignature"> final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=SamplingUtils.html#weight(java.util.Map,java.lang.Double)>T</a> <a href=SamplingUtils.html#weight(java.util.Map,java.lang.Double)>weight</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=SamplingUtils.html#weight(java.util.Map,java.lang.Double)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt; samples, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> total)</pre>
+                                        <div class="block"><p>加权随机采样.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>samples</code> - 样本集</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>total</code> - 权重和</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>采样结果</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="weight(java.util.List)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>weight</h4>
+                                        <pre class="methodSignature"> final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=SamplingUtils.html#weight(java.util.List)>T</a> <a href=SamplingUtils.html#weight(java.util.List)>weight</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html>Pair</a>&lt;<a href=SamplingUtils.html#weight(java.util.List)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; samples)</pre>
+                                        <div class="block"><p>加权随机采样.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>samples</code> - 样本集</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>采样结果</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="weight(java.util.List,java.lang.Double)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>weight</h4>
+                                        <pre class="methodSignature"> final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=SamplingUtils.html#weight(java.util.List,java.lang.Double)>T</a> <a href=SamplingUtils.html#weight(java.util.List,java.lang.Double)>weight</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html>Pair</a>&lt;<a href=SamplingUtils.html#weight(java.util.List,java.lang.Double)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; samples, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> total)</pre>
+                                        <div class="block"><p>加权随机采样.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>samples</code> - 样本集</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>total</code> - 权重和</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>采样结果</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="weightWithIndex(java.util.List,java.lang.Integer)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>weightWithIndex</h4>
+                                        <pre class="methodSignature"> final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=SamplingUtils.SamplingResult.html>SamplingUtils.SamplingResult</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Integer)>T</a>&gt;&gt; <a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Integer)>weightWithIndex</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html>Pair</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Integer)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; samples, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> amount)</pre>
+                                        <div class="block"><p>加权随机采样.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>samples</code> - 样本集</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>amount</code> - 采样数量</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>采样结果</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="weightWithIndex(java.util.List)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>weightWithIndex</h4>
+                                        <pre class="methodSignature"> final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=SamplingUtils.SamplingResult.html>SamplingUtils.SamplingResult</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List)>T</a>&gt; <a href=SamplingUtils.html#weightWithIndex(java.util.List)>weightWithIndex</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html>Pair</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; samples)</pre>
+                                        <div class="block"><p>加权随机采样.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>samples</code> - 样本集</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>采样结果</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="weightWithIndex(java.util.List,java.lang.Double)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>weightWithIndex</h4>
+                                        <pre class="methodSignature"> final static &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=SamplingUtils.SamplingResult.html>SamplingUtils.SamplingResult</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Double)>T</a>&gt; <a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Double)>weightWithIndex</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/index.html>Pair</a>&lt;<a href=SamplingUtils.html#weightWithIndex(java.util.List,java.lang.Double)>T</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; samples, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a> total)</pre>
                                         <div class="block"><p>加权随机采样.</p></div>
 
                                         <dl>
