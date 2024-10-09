@@ -48,8 +48,8 @@ public class WhileAction extends Action {
             @NotNull Map<?, ?> action
     ) {
         Object value = action.get("while");
-        if (value instanceof String) {
-            conditionString = (String) value;
+        if (value != null) {
+            conditionString = value.toString();
             try {
                 condition = ((Compilable) manager.getEngine()).compile(conditionString);
             } catch (ScriptException e) {

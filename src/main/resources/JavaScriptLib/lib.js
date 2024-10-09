@@ -275,8 +275,8 @@ const niItemAmount = function (itemId) {
     let amount = 0
     for (let index = 0; index < contents.length; index++) {
         const itemStack = contents[index]
-        const itemInfo = ItemUtils.isNiItem(itemStack)
-        if (itemInfo != null && itemInfo.id === itemId) {
+        const currentItemId = ItemUtils.getItemId(itemStack)
+        if (currentItemId === itemId) {
             amount += itemStack.amount
         }
     }
@@ -294,8 +294,8 @@ const checkNiItemAmount = function (itemId, amount) {
     const contents = player.inventory.contents
     for (let index = 0; index < contents.length; index++) {
         const itemStack = contents[index]
-        const itemInfo = ItemUtils.isNiItem(itemStack)
-        if (itemInfo != null && itemInfo.id === itemId) {
+        const currentItemId = ItemUtils.getItemId(itemStack)
+        if (currentItemId === itemId) {
             if (amount > itemStack.amount) {
                 amount -= itemStack.amount
             } else {
@@ -318,8 +318,8 @@ const takeNiItem = function (itemId, amount) {
     const contents = player.inventory.contents
     for (let index = 0; index < contents.length; index++) {
         const itemStack = contents[index]
-        const itemInfo = ItemUtils.isNiItem(itemStack)
-        if (itemInfo != null && itemInfo.id === itemId) {
+        const currentItemId = ItemUtils.getItemId(itemStack)
+        if (currentItemId === itemId) {
             if (amount > itemStack.amount) {
                 amount -= itemStack.amount
                 itemStack.amount = 0

@@ -2,6 +2,7 @@ package pers.neige.neigeitems.manager;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import kotlin.Pair;
 import kotlin.text.StringsKt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,7 +26,6 @@ import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.action.result.StopResult;
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker;
 import pers.neige.neigeitems.hook.vault.VaultHooker;
-import pers.neige.neigeitems.item.ItemInfo;
 import pers.neige.neigeitems.item.action.ComboInfo;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils;
 import pers.neige.neigeitems.user.User;
@@ -39,6 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.logging.Level;
@@ -124,20 +125,68 @@ public abstract class BaseActionManager {
         } else if (action instanceof List<?>) {
             return new ListAction(this, (List<?>) action);
         } else if (action instanceof Map<?, ?>) {
-            if (((Map<?, ?>) action).containsKey("condition")) {
-                return new ConditionAction(this, (Map<?, ?>) action);
-            } else if (((Map<?, ?>) action).containsKey("while")) {
-                return new WhileAction(this, (Map<?, ?>) action);
-            } else if (((Map<?, ?>) action).containsKey("label")) {
-                return new LabelAction(this, (Map<?, ?>) action);
+            Map<?, ?> current = (Map<?, ?>) action;
+            if (current.containsKey("type")) {
+                Object rawType = current.get("type");
+                if (rawType instanceof String) {
+                    String type = ((String) rawType).toLowerCase();
+                    switch (type) {
+                        case "condition": {
+                            return new ConditionAction(this, current);
+                        }
+                        case "condition-weight": {
+                            return new ConditionWeightAction(this, current);
+                        }
+                        case "label": {
+                            return new LabelAction(this, current);
+                        }
+                        case "weight": {
+                            return new WeightAction(this, current);
+                        }
+                        case "while": {
+                            return new WhileAction(this, current);
+                        }
+                    }
+                }
+            }
+            if (current.containsKey("condition")) {
+                return new ConditionAction(this, current);
+            } else if (current.containsKey("while")) {
+                return new WhileAction(this, current);
+            } else if (current.containsKey("label")) {
+                return new LabelAction(this, current);
             }
         } else if (action instanceof ConfigurationSection) {
-            if (((ConfigurationSection) action).contains("condition")) {
-                return new ConditionAction(this, (ConfigurationSection) action);
-            } else if (((ConfigurationSection) action).contains("while")) {
-                return new WhileAction(this, (ConfigurationSection) action);
-            } else if (((ConfigurationSection) action).contains("label")) {
-                return new LabelAction(this, (ConfigurationSection) action);
+            ConfigurationSection current = (ConfigurationSection) action;
+            if (current.contains("type")) {
+                String type = current.getString("type");
+                if (type != null) {
+                    type = type.toLowerCase();
+                    switch (type) {
+                        case "condition": {
+                            return new ConditionAction(this, current);
+                        }
+                        case "condition-weight": {
+                            return new ConditionWeightAction(this, current);
+                        }
+                        case "label": {
+                            return new LabelAction(this, current);
+                        }
+                        case "weight": {
+                            return new WeightAction(this, current);
+                        }
+                        case "while": {
+                            return new WhileAction(this, current);
+                        }
+                    }
+                }
+            }
+            if (current.contains("condition")) {
+                return new ConditionAction(this, current);
+            } else if (current.contains("while")) {
+                return new WhileAction(this, current);
+            } else if (current.contains("label")) {
+                return new LabelAction(this, current);
             }
         }
         return NullAction.INSTANCE;
@@ -238,11 +287,22 @@ public abstract class BaseActionManager {
                     action.getContent(),
                     (Map<String, String>) (Object) context.getGlobal(),
                     context.getPlayer(),
-                    null
+                    getSectionConfig(context)
             );
             return handler.apply(context, content);
         }
         return CompletableFuture.completedFuture(Results.SUCCESS);
+    }
+
+    /**
+     * 执行 StringAction 进行节点解析的时候传入的节点配置
+     *
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @Nullable
+    protected ConfigurationSection getSectionConfig(@NotNull ActionContext context) {
+        return null;
     }
 
     /**
@@ -377,6 +437,117 @@ public abstract class BaseActionManager {
      */
     @NotNull
     public CompletableFuture<ActionResult> runAction(
+            @NotNull WeightAction action,
+            @NotNull ActionContext context
+    ) {
+        if (action.getTotalWeight() <= 0 || action.getActions().isEmpty())
+            return CompletableFuture.completedFuture(Results.SUCCESS);
+        int amount = action.getAmount(this, context);
+        if (amount >= action.getActions().size()) {
+            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
+            for (Pair<Action, Double> currentAction : action.getActions()) {
+                result = result.thenCombine(currentAction.getFirst().eval(this, context), (r1, r2) -> {
+                    if (r1.compareTo(r2) < 0) {
+                        return r2;
+                    } else {
+                        return r1;
+                    }
+                });
+            }
+            return result;
+        }
+        if (amount == 1) {
+            Action result;
+            if (action.isEqualWeight()) {
+                result = action.getActions().get(ThreadLocalRandom.current().nextInt(0, action.getActions().size())).getFirst();
+            } else {
+                result = SamplingUtils.weight(action.getActions(), action.getTotalWeight());
+            }
+            if (result != null) {
+                return result.eval(this, context);
+            }
+        } else if (amount > 1) {
+            List<SamplingUtils.SamplingResult<Action>> actions = SamplingUtils.weightWithIndex(action.getActions(), amount);
+            if (action.isOrder()) {
+                actions.sort(Comparator.comparingInt(SamplingUtils.SamplingResult::getIndex));
+            }
+            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
+            for (SamplingUtils.SamplingResult<Action> currentAction : actions) {
+                result = result.thenCombine(currentAction.getValue().eval(this, context), (r1, r2) -> {
+                    if (r1.compareTo(r2) < 0) {
+                        return r2;
+                    } else {
+                        return r1;
+                    }
+                });
+            }
+            return result;
+        }
+        return CompletableFuture.completedFuture(Results.SUCCESS);
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
+            @NotNull ConditionWeightAction action,
+            @NotNull ActionContext context
+    ) {
+        List<Pair<Action, Double>> actions = action.getActions(this, context);
+        if (actions.isEmpty()) return CompletableFuture.completedFuture(Results.SUCCESS);
+        int amount = action.getAmount(this, context);
+        if (amount >= actions.size()) {
+            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
+            for (Pair<Action, Double> currentAction : actions) {
+                result = result.thenCombine(currentAction.getFirst().eval(this, context), (r1, r2) -> {
+                    if (r1.compareTo(r2) < 0) {
+                        return r2;
+                    } else {
+                        return r1;
+                    }
+                });
+            }
+            return result;
+        }
+        if (amount == 1) {
+            Action result = SamplingUtils.weight(actions);
+            if (result != null) {
+                return result.eval(this, context);
+            }
+        } else if (amount > 1) {
+            List<SamplingUtils.SamplingResult<Action>> finalActions = SamplingUtils.weightWithIndex(actions, amount);
+            if (action.isOrder()) {
+                finalActions.sort(Comparator.comparingInt(SamplingUtils.SamplingResult::getIndex));
+            }
+            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
+            for (SamplingUtils.SamplingResult<Action> currentAction : finalActions) {
+                result = result.thenCombine(currentAction.getValue().eval(this, context), (r1, r2) -> {
+                    if (r1.compareTo(r2) < 0) {
+                        return r2;
+                    } else {
+                        return r1;
+                    }
+                });
+            }
+            return result;
+        }
+        return CompletableFuture.completedFuture(Results.SUCCESS);
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
             @NotNull WhileAction action,
             @NotNull ActionContext context
     ) {
@@ -471,8 +642,9 @@ public abstract class BaseActionManager {
      */
     public void addFunction(
             @NotNull String id,
-            @NotNull BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
+            @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
+        if (function == null) return;
         actions.put(id.toLowerCase(Locale.ROOT), (context, content) -> {
             CompletableFuture<ActionResult> result = function.apply(context, content);
             if (result == null) result = CompletableFuture.completedFuture(Results.SUCCESS);
@@ -484,14 +656,15 @@ public abstract class BaseActionManager {
      * 添加物品动作
      *
      * @param id       动作ID
-     * @param function 动作执行函数
+     * @param consumer 动作执行函数
      */
     public void addConsumer(
             @NotNull String id,
-            @NotNull BiConsumer<ActionContext, String> function
+            @Nullable BiConsumer<ActionContext, String> consumer
     ) {
+        if (consumer == null) return;
         actions.put(id.toLowerCase(Locale.ROOT), (context, content) -> {
-            function.accept(context, content);
+            consumer.accept(context, content);
             return CompletableFuture.completedFuture(Results.SUCCESS);
         });
     }
@@ -560,48 +733,84 @@ public abstract class BaseActionManager {
             player.sendMessage(HookerManager.papi(player, content));
         });
         // 强制玩家发送消息
-        addConsumer("chat", (context, content) -> {
+        addFunction("chat", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.chat(HookerManager.papi(player, content)));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.chat(HookerManager.papi(player, content));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 强制玩家发送消息(将&解析为颜色符号)
-        addConsumer("chatWithColor", (context, content) -> {
+        addFunction("chatWithColor", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.chat(HookerManager.papiColor(player, content)));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.chat(HookerManager.papiColor(player, content));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 强制玩家执行指令
-        addConsumer("command", (context, content) -> {
+        addFunction("command", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(player, HookerManager.papiColor(player, content)));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                Bukkit.dispatchCommand(player, HookerManager.papiColor(player, content));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 强制玩家执行指令
         addFunction("player", actions.get("command"));
         // 强制玩家执行指令(不将&解析为颜色符号)
-        addConsumer("commandNoColor", (context, content) -> {
+        addFunction("commandNoColor", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(player, HookerManager.papi(player, content)));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                Bukkit.dispatchCommand(player, HookerManager.papi(player, content));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 后台执行指令
-        addConsumer("console", (context, content) -> {
+        addFunction("console", (context, content) -> {
             Player player = context.getPlayer();
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
             if (player != null) {
-                SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papiColor(player, content)));
+                SchedulerUtils.sync(plugin, () -> {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papiColor(player, content));
+                    result.complete(Results.SUCCESS);
+                });
             } else {
-                SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', content)));
+                SchedulerUtils.sync(plugin, () -> {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', content));
+                    result.complete(Results.SUCCESS);
+                });
             }
+            return result;
         });
         // 后台执行指令(不将&解析为颜色符号)
-        addConsumer("consoleNoColor", (context, content) -> {
+        addFunction("consoleNoColor", (context, content) -> {
             Player player = context.getPlayer();
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
             if (player != null) {
-                SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papi(player, content)));
+                SchedulerUtils.sync(plugin, () -> {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papi(player, content));
+                    result.complete(Results.SUCCESS);
+                });
             } else {
-                SchedulerUtils.sync(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content));
+                SchedulerUtils.sync(plugin, () -> {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content);
+                    result.complete(Results.SUCCESS);
+                });
             }
+            return result;
         });
         // 公告
         addConsumer("broadcast", (context, content) -> {
@@ -625,41 +834,37 @@ public abstract class BaseActionManager {
         addConsumer("title", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> {
-                ArrayList<String> args = StringUtils.split(HookerManager.papiColor(player, content), ' ', '\\');
-                String title = getOrNull(args, 0);
-                String subtitle = getOrDefault(args, 1, "");
-                int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
-                int stay = getAndApply(args, 3, 70, StringsKt::toIntOrNull);
-                int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
-                player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-            });
+            ArrayList<String> args = StringUtils.split(HookerManager.papiColor(player, content), ' ', '\\');
+            String title = getOrNull(args, 0);
+            String subtitle = getOrDefault(args, 1, "");
+            int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
+            int stay = getAndApply(args, 3, 70, StringsKt::toIntOrNull);
+            int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
+            player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         });
         // 发送Title(不将&解析为颜色符号)
         addConsumer("titleNoColor", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> {
-                ArrayList<String> args = StringUtils.split(HookerManager.papi(player, content), ' ', '\\');
-                String title = getOrNull(args, 0);
-                String subtitle = getOrDefault(args, 1, "");
-                int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
-                int stay = getAndApply(args, 3, 70, StringsKt::toIntOrNull);
-                int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
-                player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
-            });
+            ArrayList<String> args = StringUtils.split(HookerManager.papi(player, content), ' ', '\\');
+            String title = getOrNull(args, 0);
+            String subtitle = getOrDefault(args, 1, "");
+            int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
+            int stay = getAndApply(args, 3, 70, StringsKt::toIntOrNull);
+            int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
+            player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         });
         // 发送ActionBar
         addConsumer("actionBar", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> PlayerUtils.sendActionBar(player, HookerManager.papiColor(player, content)));
+            PlayerUtils.sendActionBar(player, HookerManager.papiColor(player, content));
         });
         // 发送ActionBar(不将&解析为颜色符号)
         addConsumer("actionBarNoColor", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> PlayerUtils.sendActionBar(player, HookerManager.papi(player, content)));
+            PlayerUtils.sendActionBar(player, HookerManager.papi(player, content));
         });
         // 播放音乐
         addConsumer("sound", (context, content) -> {
@@ -690,94 +895,169 @@ public abstract class BaseActionManager {
             }
         });
         // 给予玩家经验
-        addConsumer("giveExp", (context, content) -> {
+        addFunction("giveExp", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.giveExp(StringUtils.toInt(HookerManager.papi(player, content), 0)));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.giveExp(StringUtils.toInt(HookerManager.papi(player, content), 0));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 扣除玩家经验
-        addConsumer("takeExp", (context, content) -> {
+        addFunction("takeExp", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.giveExp(StringUtils.toInt(HookerManager.papi(player, content), 0) * -1));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.giveExp(StringUtils.toInt(HookerManager.papi(player, content), 0) * -1);
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 设置玩家经验
-        addConsumer("setExp", (context, content) -> {
+        addFunction("setExp", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setTotalExperience(StringUtils.toInt(HookerManager.papi(player, content), 0)));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setTotalExperience(StringUtils.toInt(HookerManager.papi(player, content), 0));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 给予玩家经验等级
-        addConsumer("giveLevel", (context, content) -> {
+        addFunction("giveLevel", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.giveExpLevels(StringUtils.toInt(HookerManager.papi(player, content), 0)));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.giveExpLevels(StringUtils.toInt(HookerManager.papi(player, content), 0));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 扣除玩家经验等级
-        addConsumer("takeLevel", (context, content) -> {
+        addFunction("takeLevel", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.giveExpLevels(StringUtils.toInt(HookerManager.papi(player, content), 0) * -1));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.giveExpLevels(StringUtils.toInt(HookerManager.papi(player, content), 0) * -1);
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 设置玩家经验等级
-        addConsumer("setLevel", (context, content) -> {
+        addFunction("setLevel", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setLevel(StringUtils.toInt(HookerManager.papi(player, content), 0)));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setLevel(StringUtils.toInt(HookerManager.papi(player, content), 0));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 给予玩家饱食度
-        addConsumer("giveFood", (context, content) -> {
+        addFunction("giveFood", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0)))));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0))));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 扣除玩家饱食度
-        addConsumer("takeFood", (context, content) -> {
+        addFunction("takeFood", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0)))));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0))));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 设置玩家饱食度
-        addConsumer("setFood", (context, content) -> {
+        addFunction("setFood", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0)))));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0))));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 给予玩家饱和度
-        addConsumer("giveSaturation", (context, content) -> {
+        addFunction("giveSaturation", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.toFloat(HookerManager.papi(player, content), 0)))));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.toFloat(HookerManager.papi(player, content), 0))));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 扣除玩家饱和度
-        addConsumer("takeSaturation", (context, content) -> {
+        addFunction("takeSaturation", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.toFloat(HookerManager.papi(player, content), 0)))));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.toFloat(HookerManager.papi(player, content), 0))));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 设置玩家饱和度
-        addConsumer("setSaturation", (context, content) -> {
+        addFunction("setSaturation", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.toFloat(HookerManager.papi(player, content), 0)))));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.toFloat(HookerManager.papi(player, content), 0))));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 给予玩家生命
-        addConsumer("giveHealth", (context, content) -> {
+        addFunction("giveHealth", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setHealth(Math.max(0, Math.min(player.getMaxHealth(), player.getHealth() + StringUtils.toDouble(HookerManager.papi(player, content), 0)))));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setHealth(Math.max(0, Math.min(player.getMaxHealth(), player.getHealth() + StringUtils.toDouble(HookerManager.papi(player, content), 0))));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 扣除玩家生命
-        addConsumer("takeHealth", (context, content) -> {
+        addFunction("takeHealth", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setHealth(Math.max(0, Math.min(player.getMaxHealth(), player.getHealth() - StringUtils.toDouble(HookerManager.papi(player, content), 0)))));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setHealth(Math.max(0, Math.min(player.getMaxHealth(), player.getHealth() - StringUtils.toDouble(HookerManager.papi(player, content), 0))));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 设置玩家生命
-        addConsumer("setHealth", (context, content) -> {
+        addFunction("setHealth", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
-            SchedulerUtils.sync(plugin, () -> player.setHealth(Math.max(0, Math.min(player.getMaxHealth(), StringUtils.toDouble(HookerManager.papi(player, content), 0)))));
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            SchedulerUtils.sync(plugin, () -> {
+                player.setHealth(Math.max(0, Math.min(player.getMaxHealth(), StringUtils.toDouble(HookerManager.papi(player, content), 0))));
+                result.complete(Results.SUCCESS);
+            });
+            return result;
         });
         // 释放MM技能
         addConsumer("castSkill", (context, content) -> {
@@ -822,27 +1102,38 @@ public abstract class BaseActionManager {
             PlayerUtils.setMetadataEZ(player, "NI-Combo-" + HookerManager.papi(player, content), new ArrayList<ComboInfo>());
         });
         // 设置药水效果
-        addConsumer("setPotionEffect", (context, content) -> {
+        addFunction("setPotionEffect", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             String[] args = content.split(" ", 3);
             if (args.length == 3) {
                 PotionEffectType type = PotionEffectType.getByName(args[0].toUpperCase(Locale.ROOT));
                 Integer amplifier = StringUtils.toIntOrNull(args[1]);
                 Integer duration = StringUtils.toIntOrNull(args[2]);
                 if (type != null && duration != null && amplifier != null) {
-                    SchedulerUtils.sync(plugin, () -> player.addPotionEffect(new PotionEffect(type, duration * 20, amplifier - 1), true));
+                    CompletableFuture<ActionResult> result = new CompletableFuture<>();
+                    SchedulerUtils.sync(plugin, () -> {
+                        player.addPotionEffect(new PotionEffect(type, duration * 20, amplifier - 1), true);
+                        result.complete(Results.SUCCESS);
+                    });
+                    return result;
                 }
             }
+            return CompletableFuture.completedFuture(Results.SUCCESS);
         });
         // 移除药水效果
-        addConsumer("removePotionEffect", (context, content) -> {
+        addFunction("removePotionEffect", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             PotionEffectType type = PotionEffectType.getByName(content.toUpperCase(Locale.ROOT));
             if (type != null) {
-                SchedulerUtils.sync(plugin, () -> player.removePotionEffect(type));
+                CompletableFuture<ActionResult> result = new CompletableFuture<>();
+                SchedulerUtils.sync(plugin, () -> {
+                    player.removePotionEffect(type);
+                    result.complete(Results.SUCCESS);
+                });
             }
+            return CompletableFuture.completedFuture(Results.SUCCESS);
         });
         // 延迟(单位是tick)
         addFunction("delay", (context, content) -> {
@@ -860,6 +1151,13 @@ public abstract class BaseActionManager {
                 return CompletableFuture.completedFuture(new StopResult(content));
             }
         });
+        // 终止
+        addFunction("returnWeight", (context, content) -> {
+            String[] args = content.split(" ", 2);
+            int priority = getAndApply(args, 0, 1, StringsKt::toIntOrNull);
+            String label = getOrNull(args, 1);
+            return CompletableFuture.completedFuture(new StopResult(label, priority));
+        });
         // 向global中设置内容
         addConsumer("setGlobal", (context, content) -> {
             String[] info = content.split(" ", 2);
@@ -870,30 +1168,32 @@ public abstract class BaseActionManager {
         // 从global中删除内容
         addConsumer("delGlobal", (context, content) -> context.getGlobal().remove(content));
         // 扣除NI物品
-        addConsumer("takeNiItem", (context, content) -> {
+        addFunction("takeNiItem", (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return;
+            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             String parsedContent = HookerManager.papi(player, content);
             String[] args = parsedContent.split(" ", 2);
-            if (args.length < 2) return;
+            if (args.length < 2) return CompletableFuture.completedFuture(Results.SUCCESS);
             String itemId = args[0];
+            CompletableFuture<ActionResult> result = new CompletableFuture<>();
             SchedulerUtils.sync(plugin, () -> {
                 int amount = StringUtils.toInt(args[1], 0);
                 ItemStack[] contents = player.getInventory().getContents();
                 for (ItemStack itemStack : contents) {
-                    ItemInfo itemInfo = ItemUtils.isNiItem(itemStack);
-                    if (itemInfo != null && itemInfo.getId().equals(itemId)) {
-                        if (amount > itemStack.getAmount()) {
-                            amount -= itemStack.getAmount();
-                            itemStack.setAmount(0);
-                        } else {
-                            itemStack.setAmount(itemStack.getAmount() - amount);
-                            amount = 0;
-                            break;
-                        }
+                    String currentItemId = ItemUtils.getItemId(itemStack);
+                    if (!itemId.equals(currentItemId)) continue;
+                    if (amount > itemStack.getAmount()) {
+                        amount -= itemStack.getAmount();
+                        itemStack.setAmount(0);
+                    } else {
+                        itemStack.setAmount(itemStack.getAmount() - amount);
+                        amount = 0;
+                        break;
                     }
                 }
+                result.complete(Results.SUCCESS);
             });
+            return result;
         });
         // 跨服
         addConsumer("server", (context, content) -> {

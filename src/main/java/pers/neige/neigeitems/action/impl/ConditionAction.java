@@ -54,8 +54,8 @@ public class ConditionAction extends Action {
             @NotNull Map<?, ?> action
     ) {
         Object value = action.get("condition");
-        if (value instanceof String) {
-            conditionString = (String) value;
+        if (value != null) {
+            conditionString = value.toString();
             try {
                 condition = ((Compilable) manager.getEngine()).compile(conditionString);
             } catch (ScriptException e) {

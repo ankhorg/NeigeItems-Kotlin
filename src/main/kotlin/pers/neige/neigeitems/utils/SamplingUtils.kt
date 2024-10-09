@@ -85,8 +85,36 @@ object SamplingUtils {
         }
         val result = ArrayList<T>()
         repeat(amount) {
-            val current = weight(temp, total) ?: return@repeat
+            val current = weightWithIndex(temp, total) ?: return@repeat
             result.add(current.value)
+            temp.removeAt(current.index)
+            total -= current.weight
+        }
+        return result
+    }
+
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @param amount 采样数量
+     * @return 采样结果
+     */
+    @JvmStatic
+    fun <T> weightWithIndex(
+        samples: List<Pair<T, Double>>,
+        amount: Int
+    ): List<SamplingResult<T>> {
+        var total = 0.0
+        val temp: MutableList<Pair<T, Double>> = ArrayList()
+        for (pair in samples) {
+            total += pair.second
+            temp.add(pair)
+        }
+        val result = ArrayList<SamplingResult<T>>()
+        repeat(amount) {
+            val current = weightWithIndex(temp, total) ?: return@repeat
+            result.add(current)
             temp.removeAt(current.index)
             total -= current.weight
         }
@@ -134,22 +162,87 @@ object SamplingUtils {
         return null
     }
 
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @return 采样结果
+     */
     @JvmStatic
-    private fun <T> weight(
+    fun <T> weight(
+        samples: List<Pair<T, Double>>
+    ): T? {
+        var total = 0.0
+        for (value in samples) {
+            total += value.second
+        }
+        return weight(samples, total)
+    }
+
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @param total 权重和
+     * @return 采样结果
+     */
+    @JvmStatic
+    fun <T> weight(
         samples: List<Pair<T, Double>>,
         total: Double
-    ): RepeatableWeightResult<T>? {
+    ): T? {
         if (samples.isEmpty()) return null
         val random = ThreadLocalRandom.current().nextDouble() * total
         var current = 0.0
         samples.forEachIndexed { index, pair ->
             current += pair.second
             if (random <= current) {
-                return RepeatableWeightResult(pair.first, pair.second, index)
+                return SamplingResult(pair.first, pair.second, index).value
             }
         }
         return null
     }
 
-    private class RepeatableWeightResult<T>(val value: T, val weight: Double, val index: Int)
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @return 采样结果
+     */
+    @JvmStatic
+    fun <T> weightWithIndex(
+        samples: List<Pair<T, Double>>
+    ): SamplingResult<T>? {
+        var total = 0.0
+        for (value in samples) {
+            total += value.second
+        }
+        return weightWithIndex(samples, total)
+    }
+
+    /**
+     * 加权随机采样.
+     *
+     * @param samples 样本集
+     * @param total 权重和
+     * @return 采样结果
+     */
+    @JvmStatic
+    fun <T> weightWithIndex(
+        samples: List<Pair<T, Double>>,
+        total: Double
+    ): SamplingResult<T>? {
+        if (samples.isEmpty()) return null
+        val random = ThreadLocalRandom.current().nextDouble() * total
+        var current = 0.0
+        samples.forEachIndexed { index, pair ->
+            current += pair.second
+            if (random <= current) {
+                return SamplingResult(pair.first, pair.second, index)
+            }
+        }
+        return null
+    }
+
+    class SamplingResult<T>(val value: T, val weight: Double, val index: Int)
 }

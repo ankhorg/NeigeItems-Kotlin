@@ -122,6 +122,10 @@ public class NeigeItems extends JavaPlugin {
                 NeigeItems.class.getPackage().getName(),
                 new HashSet<>(Collections.singletonList(NeigeItems.class.getPackage().getName() + ".libs"))
         );
+    }
+
+    @Override
+    public void onLoad() {
         scanner.onLoad();
     }
 
