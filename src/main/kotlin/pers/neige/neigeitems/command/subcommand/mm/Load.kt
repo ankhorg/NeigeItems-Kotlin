@@ -81,10 +81,6 @@ object Load {
     private fun save(context: CommandContext<CommandSender>, id: String, file: File, config: YamlConfiguration) {
         val cover = context.nodes[0].node.name == "cover"
         val sender = context.source
-        if (sender !is Player) {
-            sender.sendLang("Messages.onlyPlayer")
-            return
-        }
         val itemStack = try {
             mythicMobsHooker!!.getItemStackSync(id) ?: let {
                 sender.sendLang(

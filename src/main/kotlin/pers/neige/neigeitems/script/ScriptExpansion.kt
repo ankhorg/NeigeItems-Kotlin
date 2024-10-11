@@ -82,6 +82,7 @@ class ScriptExpansion : CompiledScript {
                 
                 const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
                 const ConfigManager = Packages.pers.neige.neigeitems.manager.ConfigManager.INSTANCE
+                const ConfigSectionManager = Packages.pers.neige.neigeitems.manager.ConfigSectionManager
                 const HookerManager = Packages.pers.neige.neigeitems.manager.HookerManager
                 const ItemEditorManager = Packages.pers.neige.neigeitems.manager.ItemEditorManager.INSTANCE
                 const ItemManager = Packages.pers.neige.neigeitems.manager.ItemManager.INSTANCE
