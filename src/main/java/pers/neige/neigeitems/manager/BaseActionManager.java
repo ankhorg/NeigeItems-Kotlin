@@ -581,6 +581,9 @@ public abstract class BaseActionManager {
             @Nullable String condition,
             @NotNull ActionContext context
     ) {
+        if (condition == null) {
+            return Results.SUCCESS;
+        }
         return parseCondition(
                 condition,
                 conditionScripts.computeIfAbsent(condition, (key) -> HookerManager.INSTANCE.getNashornHooker().compile(engine, key)),
