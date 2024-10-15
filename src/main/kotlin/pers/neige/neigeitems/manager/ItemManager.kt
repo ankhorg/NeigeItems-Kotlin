@@ -651,12 +651,7 @@ object ItemManager : ItemConfigManager() {
         // 获取待重构节点
         val rebuild = hashMapOf<String, String>().also {
             item.rebuildData?.forEach { (key, value) ->
-                when (value) {
-                    is String -> it[key.parseSection(data, player, item.sections)] =
-                        value.parseSection(data, player, item.sections)
-
-                    is Number -> it[key.parseSection(data, player, item.sections)] = value.toString()
-                }
+                it[key.parseSection(data, player, item.sections)] = value.parseSection(data, player, item.sections)
             }
         }
         // 获取待刷新节点

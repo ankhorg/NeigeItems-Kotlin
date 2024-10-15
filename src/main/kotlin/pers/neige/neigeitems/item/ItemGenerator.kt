@@ -19,7 +19,7 @@ import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
-import pers.neige.neigeitems.utils.ConfigUtils.toMap
+import pers.neige.neigeitems.utils.ConfigUtils.toStringMap
 import pers.neige.neigeitems.utils.ItemUtils.asCraftCopy
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.isCraftItem
@@ -98,9 +98,9 @@ class ItemGenerator(val itemConfig: ItemConfig) {
      */
     val rebuildData = if (update) {
         if (configSection.contains("options.update.rebuild")) {
-            configSection.getConfigurationSection("options.update.rebuild")?.toMap()
+            configSection.getConfigurationSection("options.update.rebuild")?.toStringMap()
         } else {
-            configSection.getConfigurationSection("static.options.update.rebuild")?.toMap()
+            configSection.getConfigurationSection("static.options.update.rebuild")?.toStringMap()
         }
     } else null
 

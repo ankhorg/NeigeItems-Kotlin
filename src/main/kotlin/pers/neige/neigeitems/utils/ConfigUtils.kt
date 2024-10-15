@@ -464,6 +464,20 @@ object ConfigUtils {
     }
 
     /**
+     * ConfigurationSection 转 单层级HashMap<String, String>
+     * @return 转换结果
+     */
+    @JvmStatic
+    fun ConfigurationSection.toStringMap(): HashMap<String, String> {
+        val map = HashMap<String, String>()
+        this.getKeys(true).forEach { key ->
+            val current = this.get(key)
+            if (current is String) map[key] = current
+        }
+        return map
+    }
+
+    /**
      * ConfigurationSection 转 String
      * @param id 转换后呈现的节点ID, 一般可以为this.name(针对MemorySection)
      * @return 转换结果
