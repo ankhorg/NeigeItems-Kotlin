@@ -86,7 +86,7 @@ public class ConditionLore implements Lore {
     @Override
     public <T, R extends List<T>> R getLore(
             @NotNull R result,
-            @NotNull ActionManager manager,
+            @NotNull BaseActionManager manager,
             @NotNull ActionContext context,
             Function<String, T> converter
     ) {

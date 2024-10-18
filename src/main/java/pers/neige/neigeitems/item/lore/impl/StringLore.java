@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.item.lore.Lore;
 import pers.neige.neigeitems.manager.ActionManager;
+import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SectionUtils;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class StringLore implements Lore {
     @Override
     public <T, R extends List<T>> R getLore(
             @NotNull R result,
-            @NotNull ActionManager manager,
+            @NotNull BaseActionManager manager,
             @NotNull ActionContext context,
             Function<String, T> converter
     ) {

@@ -43,12 +43,12 @@ public interface Lore {
     }
 
     @NotNull
-    default <T, R extends List<T>> R getLore(@NotNull R result, @NotNull ActionManager manager, @NotNull ActionContext context, Function<String, T> converter) {
+    default <T, R extends List<T>> R getLore(@NotNull R result, @NotNull BaseActionManager manager, @NotNull ActionContext context, Function<String, T> converter) {
         return result;
     }
 
     @NotNull
-    default NbtList getLoreNbt(@NotNull ActionManager manager, @NotNull ActionContext context) {
+    default NbtList getLoreNbt(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
         if (CbVersion.v1_20_R4.isSupport()) {
             throw new InvalidParameterException("1.20.5+版本, 你拿你妈了个逼的NBT形式Lore啊? 你Lore是NBT形式吗你就拿?");
         } else if (CbVersion.current() == CbVersion.v1_12_R1) {
