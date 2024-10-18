@@ -321,6 +321,21 @@ object ConfigUtils {
         return map
     }
 
+    @JvmStatic
+    fun File.getConfigStringMap(): MutableMap<String, String> {
+        val config = YamlConfiguration.loadConfiguration(this)
+        return config.getConfigStringMap()
+    }
+
+    @JvmStatic
+    fun ConfigurationSection.getConfigStringMap(): MutableMap<String, String> {
+        val map = HashMap<String, String>()
+        this.getKeys(false).forEach { key ->
+            this.getString(key)?.let { map[key] = it }
+        }
+        return map
+    }
+
     /**
      * 获取文件中所有ConfigurationSection
      *
