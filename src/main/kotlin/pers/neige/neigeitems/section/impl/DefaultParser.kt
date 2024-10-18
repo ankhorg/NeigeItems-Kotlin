@@ -4,6 +4,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.getSection
+import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.joinToString
 
 /**
@@ -22,6 +23,7 @@ object DefaultParser : SectionParser() {
             cache,
             player,
             sections,
+            true,
             data.getString("key"),
             data.getString("default")
         )
@@ -37,6 +39,7 @@ object DefaultParser : SectionParser() {
             cache,
             player,
             sections,
+            false,
             args.getOrNull(0),
             args.getOrNull(1)
         ) ?: "<$id::${args.joinToString("_")}>"
@@ -55,10 +58,12 @@ object DefaultParser : SectionParser() {
         cache: MutableMap<String, String>?,
         player: OfflinePlayer?,
         sections: ConfigurationSection?,
+        parse: Boolean,
         key: String?,
         default: String?
     ): String? {
-        key?.getSection(cache, player, sections)
-        return cache?.getOrDefault(key, default) ?: default
+        val realKey = key?.parseSection(parse, cache, player, sections)
+        realKey?.getSection(cache, player, sections)
+        return cache?.getOrDefault(realKey, default) ?: default
     }
 }
