@@ -5,8 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ResultType;
-import pers.neige.neigeitems.item.lore.Lore;
-import pers.neige.neigeitems.manager.ActionManager;
+import pers.neige.neigeitems.item.lore.Text;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
 import javax.script.Compilable;
@@ -16,17 +15,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class ConditionLore implements Lore {
+public class ConditionText implements Text {
     @Nullable
     private final String conditionString;
     @Nullable
     private final CompiledScript condition;
     @NotNull
-    private final Lore lore;
+    private final Text text;
     @NotNull
-    private final Lore deny;
+    private final Text deny;
 
-    public ConditionLore(
+    public ConditionText(
             @NotNull BaseActionManager manager,
             @NotNull ConfigurationSection lore
     ) {
@@ -40,11 +39,11 @@ public class ConditionLore implements Lore {
         } else {
             condition = null;
         }
-        this.lore = Lore.compile(manager, lore.get("lore"));
-        deny = Lore.compile(manager, lore.get("deny"));
+        this.text = Text.compile(manager, lore.get("text"));
+        deny = Text.compile(manager, lore.get("deny"));
     }
 
-    public ConditionLore(
+    public ConditionText(
             @NotNull BaseActionManager manager,
             @NotNull Map<?, ?> lore
     ) {
@@ -60,8 +59,8 @@ public class ConditionLore implements Lore {
             conditionString = null;
             condition = null;
         }
-        this.lore = Lore.compile(manager, lore.get("lore"));
-        deny = Lore.compile(manager, lore.get("deny"));
+        this.text = Text.compile(manager, lore.get("text"));
+        deny = Text.compile(manager, lore.get("deny"));
     }
 
     public @Nullable String getConditionString() {
@@ -73,27 +72,27 @@ public class ConditionLore implements Lore {
     }
 
     @NotNull
-    public Lore getLore() {
-        return lore;
+    public Text getLore() {
+        return text;
     }
 
     @NotNull
-    public Lore getDeny() {
+    public Text getDeny() {
         return deny;
     }
 
     @NotNull
     @Override
-    public <T, R extends List<T>> R getLore(
+    public <T, R extends List<T>> R getText(
             @NotNull R result,
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context,
             Function<String, T> converter
     ) {
         if (manager.parseCondition(conditionString, condition, context).getType() == ResultType.SUCCESS) {
-            return lore.getLore(result, manager, context, converter);
+            return text.getText(result, manager, context, converter);
         } else {
-            return deny.getLore(result, manager, context, converter);
+            return deny.getText(result, manager, context, converter);
         }
     }
 }

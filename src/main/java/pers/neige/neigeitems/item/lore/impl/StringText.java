@@ -2,8 +2,7 @@ package pers.neige.neigeitems.item.lore.impl;
 
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.ActionContext;
-import pers.neige.neigeitems.item.lore.Lore;
-import pers.neige.neigeitems.manager.ActionManager;
+import pers.neige.neigeitems.item.lore.Text;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SectionUtils;
 
@@ -11,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class StringLore implements Lore {
+public class StringText implements Text {
     @NotNull
     private final String lore;
 
-    public StringLore(
+    public StringText(
             @NotNull String lore
     ) {
         this.lore = lore;
@@ -23,7 +22,7 @@ public class StringLore implements Lore {
 
     @NotNull
     @Override
-    public <T, R extends List<T>> R getLore(
+    public <T, R extends List<T>> R getText(
             @NotNull R result,
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context,
