@@ -14,6 +14,7 @@ import pers.neige.neigeitems.command.subcommand.Help;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.function.Consumer;
 
 public class CommandUtils {
     @NotNull
@@ -53,6 +54,24 @@ public class CommandUtils {
     }
 
     public static <S, T> RequiredArgumentBuilder<S, T> argument(String name, ArgumentType<T> type) {
+        return argument(name, type, (context) -> {
+            Object sender = context.getSource();
+            if (sender instanceof CommandSender) {
+                Help.INSTANCE.help((CommandSender) sender, 1);
+            }
+        });
+    }
+
+    public static <S> LiteralArgumentBuilder<S> literal(String name) {
+        return literal(name, (context) -> {
+            Object sender = context.getSource();
+            if (sender instanceof CommandSender) {
+                Help.INSTANCE.help((CommandSender) sender, 1);
+            }
+        });
+    }
+
+    public static <S, T> RequiredArgumentBuilder<S, T> argument(String name, ArgumentType<T> type, Consumer<CommandContext<S>> help) {
         RequiredArgumentBuilder<S, T> result = RequiredArgumentBuilder.argument(name, type);
         try {
             type.getClass().getDeclaredMethod("listSuggestions", CommandContext.class, SuggestionsBuilder.class);
@@ -65,22 +84,16 @@ public class CommandUtils {
             });
         }
         result.executes((context) -> {
-            Object sender = context.getSource();
-            if (sender instanceof CommandSender) {
-                Help.INSTANCE.help((CommandSender) sender, 1);
-            }
+            help.accept(context);
             return 1;
         });
         return result;
     }
 
-    public static <S> LiteralArgumentBuilder<S> literal(String name) {
+    public static <S> LiteralArgumentBuilder<S> literal(String name, Consumer<CommandContext<S>> help) {
         LiteralArgumentBuilder<S> result = LiteralArgumentBuilder.literal(name);
         result.executes((context) -> {
-            Object sender = context.getSource();
-            if (sender instanceof CommandSender) {
-                Help.INSTANCE.help((CommandSender) sender, 1);
-            }
+            help.accept(context);
             return 1;
         });
         return result;
