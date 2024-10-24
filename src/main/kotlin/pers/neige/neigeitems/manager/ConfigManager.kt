@@ -33,6 +33,7 @@ object ConfigManager {
 
     var debug = config.getBoolean("Main.Debug", false)
     var updateCheck = config.getBoolean("Main.UpdateCheck", true)
+    var newDataFormat = config.getBoolean("Main.NewDataFormat", false)
     var comboInterval = config.getLong("ItemAction.comboInterval", 500)
     var removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
     var updateInterval = config.getLong("ItemUpdate.interval", -1)
@@ -101,6 +102,7 @@ object ConfigManager {
 
         debug = config.getBoolean("Main.Debug", false)
         updateCheck = config.getBoolean("Main.UpdateCheck", true)
+        newDataFormat = config.getBoolean("Main.NewDataFormat", false)
         comboInterval = config.getLong("ItemAction.comboInterval", 500)
         removeNBTWhenGive = config.getBoolean("ItemOwner.removeNBTWhenGive")
         updateInterval = config.getLong("ItemUpdate.interval", -1)

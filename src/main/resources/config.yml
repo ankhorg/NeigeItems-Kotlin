@@ -6,6 +6,8 @@ Main:
   Debug: false
   # 是否开启更新检查
   UpdateCheck: true
+  # 是否启用新的物品数据保存模式(启用后新旧物品可能无法重叠, 但某些方面存在性能提升)
+  NewDataFormat: false
 Messages:
   # 一些消息的提示类型
   type:

@@ -3,6 +3,7 @@ package pers.neige.neigeitems.item;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
 import pers.neige.neigeitems.utils.JsonUtils;
@@ -21,10 +22,12 @@ public final class ItemInfo {
     private final NbtCompound itemTag;
     @NotNull
     private final NbtCompound neigeItems;
+    @Nullable
+    private final Nbt<?> dataNbt;
     @NotNull
     private final String id;
     @Nullable
-    private HashMap<String, String> data;
+    private volatile HashMap<String, String> data;
 
     /**
      * 用于在判断NI物品后返回NI物品信息, 详见ItemUtils#isNiItem
@@ -48,8 +51,29 @@ public final class ItemInfo {
         this.nbtItemStack = nbtItemStack;
         this.itemTag = itemTag;
         this.neigeItems = neigeItems;
+        this.dataNbt = neigeItems.get("data");
         this.id = id;
         this.data = data;
+    }
+
+    private static HashMap<String, String> toFlatStringMap(@NotNull NbtCompound compound) {
+        HashMap<String, String> result = new HashMap<>();
+        toFlatStringMap(compound, "", result);
+        return result;
+    }
+
+    private static void toFlatStringMap(
+            @NotNull NbtCompound compound,
+            @NotNull String keyPrefix,
+            @NotNull HashMap<String, String> result
+    ) {
+        compound.forEach((key, nbt) -> {
+            if (nbt instanceof NbtCompound) {
+                toFlatStringMap((NbtCompound) nbt, keyPrefix + key + ".", result);
+            } else {
+                result.put(keyPrefix + key, nbt.getAsString());
+            }
+        });
     }
 
     @NotNull
@@ -80,11 +104,27 @@ public final class ItemInfo {
     @NotNull
     public HashMap<String, String> getData() {
         if (this.data == null) {
-            String dataString = this.neigeItems.getString("data");
-            if (dataString != null) {
-                this.data = JsonUtils.toMap(dataString);
+            synchronized (this) {
+                if (this.data == null) {
+                    if (dataNbt instanceof NbtCompound) {
+                        this.data = toFlatStringMap((NbtCompound) dataNbt);
+                    } else if (dataNbt != null) {
+                        this.data = JsonUtils.toMap(dataNbt.getAsString());
+                    } else {
+                        this.data = new HashMap<>();
+                    }
+                }
             }
         }
         return this.data;
+    }
+
+    @Nullable
+    public String getDataValue(@NotNull String dataKey) {
+        if (this.dataNbt instanceof NbtCompound) {
+            return ((NbtCompound) dataNbt).getDeepString(dataKey);
+        } else {
+            return getData().get(dataKey);
+        }
     }
 }

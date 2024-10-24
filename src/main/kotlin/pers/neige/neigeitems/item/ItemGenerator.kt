@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack
 import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.event.ItemGenerateEvent
 import pers.neige.neigeitems.item.color.ItemColor
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager
@@ -164,7 +165,15 @@ class ItemGenerator(val itemConfig: ItemConfig) {
             val neigeItems = nbt.getOrCreateCompound("NeigeItems")
             if (cache != null) {
                 neigeItems.putString("id", id)
-                neigeItems.putString("data", cache.toJSONString())
+                if (ConfigManager.newDataFormat && cache.isNotEmpty()) {
+                    val data = neigeItems.getOrCreateCompound("data")
+                    cache.forEach { (key, value) ->
+                        if (value !is String) return@forEach
+                        data.putDeepString(key, value)
+                    }
+                } else {
+                    neigeItems.putString("data", cache.toJSONString())
+                }
                 neigeItems.putInt("hashCode", hashCode)
             }
             val optionsConfig = config.getConfigurationSection("options") ?: return@runPreCoverNbt
