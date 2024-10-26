@@ -11,6 +11,7 @@ import pers.neige.neigeitems.manager.*
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
+import java.util.*
 
 /**
  * ni reload指令
@@ -38,7 +39,9 @@ object Reload {
                 1
             }.suggests { _, builder ->
                 types.forEach {
-                    builder.suggest(it)
+                    if (it.startsWith(builder.remaining.lowercase(Locale.getDefault()))) {
+                        builder.suggest(it)
+                    }
                 }
                 builder.buildFuture()
             }

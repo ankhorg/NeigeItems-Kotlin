@@ -167,9 +167,9 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                 neigeItems.putString("id", id)
                 if (ConfigManager.newDataFormat && cache.isNotEmpty()) {
                     val data = neigeItems.getOrCreateCompound("data")
-                    cache.forEach { (key, value) ->
-                        if (value !is String) return@forEach
-                        data.putDeepString(key, value)
+                    (cache as Map<String, Any?>).forEach { (key, value) ->
+                        if (value == null) return@forEach
+                        data.putDeepString(key, value.toString())
                     }
                 } else {
                     neigeItems.putString("data", cache.toJSONString())
