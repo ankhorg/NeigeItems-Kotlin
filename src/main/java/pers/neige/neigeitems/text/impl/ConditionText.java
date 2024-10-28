@@ -1,11 +1,11 @@
-package pers.neige.neigeitems.item.lore.impl;
+package pers.neige.neigeitems.text.impl;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ResultType;
-import pers.neige.neigeitems.item.lore.Text;
+import pers.neige.neigeitems.text.Text;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
 import javax.script.Compilable;

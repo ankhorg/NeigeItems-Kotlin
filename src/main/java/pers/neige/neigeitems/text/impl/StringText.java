@@ -1,8 +1,8 @@
-package pers.neige.neigeitems.item.lore.impl;
+package pers.neige.neigeitems.text.impl;
 
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.ActionContext;
-import pers.neige.neigeitems.item.lore.Text;
+import pers.neige.neigeitems.text.Text;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SectionUtils;
 

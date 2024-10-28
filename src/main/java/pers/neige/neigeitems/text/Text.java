@@ -1,13 +1,13 @@
-package pers.neige.neigeitems.item.lore;
+package pers.neige.neigeitems.text;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
-import pers.neige.neigeitems.item.lore.impl.ConditionText;
-import pers.neige.neigeitems.item.lore.impl.ListText;
-import pers.neige.neigeitems.item.lore.impl.NullText;
-import pers.neige.neigeitems.item.lore.impl.StringText;
+import pers.neige.neigeitems.text.impl.ConditionText;
+import pers.neige.neigeitems.text.impl.ListText;
+import pers.neige.neigeitems.text.impl.NullText;
+import pers.neige.neigeitems.text.impl.StringText;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtString;
