@@ -544,11 +544,9 @@ object ItemUtils {
             val neigeItems = itemTag.getCompound("NeigeItems") ?: return null
             // 获取物品id
             val id = neigeItems.getString("id") ?: return null
-            val data = when {
-                parseData -> neigeItems.getString("data")?.parseObject<java.util.HashMap<String, String>>()
-                else -> null
-            }
-            return ItemInfo(this, NbtItemStack(this), itemTag, neigeItems, id, data)
+            val result = ItemInfo(this, NbtItemStack(this), itemTag, neigeItems, id, null)
+            if (parseData) result.data
+            return result
         }
         return null
     }
