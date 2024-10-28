@@ -5,9 +5,11 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityPickupItemEvent
 import pers.neige.neigeitems.annotation.Listener
-import pers.neige.neigeitems.item.ItemOwner
 import pers.neige.neigeitems.manager.ActionManager
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
+import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
+import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
 
 object EntityPickupItemListener {
     @JvmStatic
@@ -16,10 +18,26 @@ object EntityPickupItemListener {
         // 获取玩家
         val player = event.entity
         if (player !is Player) return
-
         // 物品拥有者检测
-        ItemOwner.check(player, event.item, event)
-        if (event.isCancelled) return
+        val item = event.item
+        if (!item.hasMetadata("NI-Owner")) return
+        // 获取归属者
+        val owner = item.getMetadataEZ("NI-Owner", "") as String
+        // 检测拾取者是否是拥有者
+        if (player.name == owner) return
+        // 不是拥有者, 禁止拾取
+        event.isCancelled = true
+        // 是否隐藏掉落物
+        val hide = item.scoreboardTags.contains("NI-Hide")
+        // 不隐藏的话给予提示
+        if (hide) return
+        // 通过actionbar进行对应提示
+        ConfigManager.config.getString("Messages.invalidOwnerMessage")?.let {
+            when (ConfigManager.config.getString("ItemOwner.messageType")) {
+                "actionbar" -> player.sendActionBar(it.replace("{name}", owner))
+                "message" -> player.sendMessage(it.replace("{name}", owner))
+            }
+        }
     }
 
     @JvmStatic
