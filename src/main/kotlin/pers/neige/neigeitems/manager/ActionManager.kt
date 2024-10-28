@@ -569,10 +569,10 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         // 如果冷却存在且大于0
         if (tick > 0) {
             // 获取上次使用时间
-            val lastTick = player.getMetadataEZ("NI-TICK-${trigger.group}", 0.toLong()) as Long
+            val lastTick = player.getMetadataEZ("TICK-${trigger.group}", 0.toLong()) as Long
             // 如果仍处于冷却时间
             if (lastTick > 0) {
-                player.setMetadataEZ("NI-TICK-${trigger.group}", lastTick - 1)
+                player.setMetadataEZ("TICK-${trigger.group}", lastTick - 1)
                 return
             }
         }
@@ -581,7 +581,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         if (type != null && !ItemActionEvent(player, itemStack, itemInfo, type, trigger).call()) {
             return
         }
-        player.setMetadataEZ("NI-TICK-${trigger.group}", tick)
+        player.setMetadataEZ("TICK-${trigger.group}", tick)
         // 执行动作
         trigger.run(ActionContext(player, HashMap(), null, itemStack, itemTag, itemInfo.data))
     }

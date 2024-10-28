@@ -1,32 +1,32 @@
 package pers.neige.neigeitems.event;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 /**
- * 数据包发送事件(未实际启用, 监听无效).
+ * 数据包发送事件.
  *
- * @property player 接收数据包的玩家
+ * @property uuid   接收数据包的玩家 UUID
  * @property packet 发送的数据包
  */
 public final class PacketSendEvent extends CancellableEvent {
     private static final HandlerList handlers = new HandlerList();
-    @Nullable
-    private final Player player;
+    @NotNull
+    private final UUID uuid;
     @NotNull
     private final Object packet;
 
     /**
-     * @param player 接收数据包的玩家
+     * @param uuid   接收数据包的玩家 UUID
      * @param packet 发送的数据包
      */
     public PacketSendEvent(
-            @Nullable Player player,
+            @NotNull UUID uuid,
             @NotNull Object packet
     ) {
-        this.player = player;
+        this.uuid = uuid;
         this.packet = packet;
     }
 
@@ -36,17 +36,17 @@ public final class PacketSendEvent extends CancellableEvent {
     }
 
     /**
-     * 获取接收数据包的玩家
+     * 获取接收数据包的玩家 UUID
      */
-    @Nullable
-    public Player getPlayer() {
-        return player;
+    @NotNull
+    public UUID getUuid() {
+        return uuid;
     }
 
     /**
      * 获取发送的数据包
      */
-    @Nullable
+    @NotNull
     public Object getPacket() {
         return packet;
     }

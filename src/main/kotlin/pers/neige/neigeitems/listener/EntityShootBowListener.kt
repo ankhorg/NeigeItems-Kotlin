@@ -36,7 +36,7 @@ object EntityShootBowListener {
         if (event.isCancelled) return
     }
 
-    @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
+    @Awake
     private fun init() {
         if (GET_CONSUMABLE_SUPPORT) {
             ListenerUtils.registerListener(

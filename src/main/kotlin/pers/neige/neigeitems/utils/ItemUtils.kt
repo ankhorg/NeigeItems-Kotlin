@@ -496,7 +496,7 @@ object ItemUtils {
             itemTag.saveToSafe(itemStack)
         }
         // 记录掉落物拥有者
-        val hide = neigeItems?.getByteOrNull("hide")
+        val hide = neigeItems?.getBoolean("hide", false)
         return syncAndGet {
             this.world?.let { world ->
                 WorldUtils.dropItem(
@@ -506,8 +506,8 @@ object ItemUtils {
                     owner?.let {
                         item.setMetadataEZ("NI-Owner", it)
                     }
-                    hide?.let {
-                        item.setMetadataEZ("NI-Hide", it)
+                    if (hide == true) {
+                        item.addScoreboardTag("NI-Hide")
                     }
                     item.addScoreboardTag("NeigeItems")
                     // 掉落物技能

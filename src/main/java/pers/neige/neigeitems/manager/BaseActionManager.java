@@ -1080,13 +1080,13 @@ public abstract class BaseActionManager {
             String comboGroup = info[0];
             // 连击类型
             String comboType = getOrDefault(info, 1, "");
-            if (!player.hasMetadata("NI-Combo-" + comboGroup)) {
-                PlayerUtils.setMetadataEZ(player, "NI-Combo-" + comboGroup, new ArrayList<ComboInfo>());
+            if (!PlayerUtils.hasMetadataEZ(player, "Combo-" + comboGroup)) {
+                PlayerUtils.setMetadataEZ(player, "Combo-" + comboGroup, new ArrayList<ComboInfo>());
             }
             // 当前时间
             long time = System.currentTimeMillis();
             // 记录列表
-            ArrayList<ComboInfo> comboInfos = (ArrayList<ComboInfo>) player.getMetadata("NI-Combo-" + comboGroup).get(0).value();
+            ArrayList<ComboInfo> comboInfos = (ArrayList<ComboInfo>) PlayerUtils.getMetadataEZ(player, "Combo-" + comboGroup, null);
             // 为空则填入
             assert comboInfos != null;
             if (!comboInfos.isEmpty()) {
@@ -1102,7 +1102,7 @@ public abstract class BaseActionManager {
         addConsumer("comboClear", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            PlayerUtils.setMetadataEZ(player, "NI-Combo-" + HookerManager.papi(player, content), new ArrayList<ComboInfo>());
+            PlayerUtils.setMetadataEZ(player, "Combo-" + HookerManager.papi(player, content), new ArrayList<ComboInfo>());
         });
         // 设置药水效果
         addFunction("setPotionEffect", (context, content) -> {

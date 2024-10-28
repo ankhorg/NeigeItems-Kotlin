@@ -75,7 +75,44 @@ object PlayerUtils {
     }
 
     /**
-     * 获取Metadata, 不含对应Metadata将设置并返回默认值.
+     * 检测是否存在对应Metadata.
+     *
+     * @param key Metadata键
+     * @return Metadata值
+     */
+    @JvmStatic
+    fun Player.hasMetadataEZ(key: String): Boolean {
+        val user = NeigeItems.getUserManager().getIfLoaded(uniqueId) ?: return false
+        return user.metadata.containsKey(key)
+    }
+
+    /**
+     * 获取Metadata, 不含对应Metadata将返回默认值.
+     *
+     * @param key Metadata键
+     * @param def 默认值
+     * @return Metadata值
+     */
+    @JvmStatic
+    fun Player.getMetadataEZ(key: String, def: Any): Any? {
+        val user = NeigeItems.getUserManager().getIfLoaded(uniqueId) ?: return def
+        return user.metadata.getOrDefault(key, def)
+    }
+
+    /**
+     * 设置Metadata.
+     *
+     * @param key Metadata键
+     * @param value Metadata值
+     */
+    @JvmStatic
+    fun Player.setMetadataEZ(key: String, value: Any) {
+        val user = NeigeItems.getUserManager().getIfLoaded(uniqueId) ?: return
+        user.metadata[key] = value
+    }
+
+    /**
+     * 获取Metadata, 不含对应Metadata将返回默认值.
      *
      * @param key Metadata键
      * @param def 默认值
@@ -84,7 +121,6 @@ object PlayerUtils {
     @JvmStatic
     fun Metadatable.getMetadataEZ(key: String, def: Any): Any? {
         if (!this.hasMetadata(key)) {
-            this.setMetadataEZ(key, def)
             return def
         }
         return this.getMetadata(key)[0].value()

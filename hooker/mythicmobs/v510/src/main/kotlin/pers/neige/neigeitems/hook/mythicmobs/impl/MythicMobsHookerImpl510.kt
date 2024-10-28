@@ -47,7 +47,7 @@ class MythicMobsHookerImpl510 : MythicMobsHooker() {
                 spawnEvent(
                     event.mobType.internalName,
                     event.entity as LivingEntity,
-                    event.mobLevel.roundToInt()
+                    event.mobLevel.toInt()
                 )
             }
         }

@@ -105,9 +105,11 @@ public class NeigeItems extends JavaPlugin {
         if (!checkMagicUtils("EntityPlayerUtils")) safe = false;
         if (!checkMagicUtils("EntityUtils")) safe = false;
         if (!checkMagicUtils("InventoryUtils")) safe = false;
-        if (!checkMagicUtils("SpigotInventoryUtils")) safe = false;
+        if (!checkMagicUtils("MathUtils")) safe = false;
+        if (!checkMagicUtils("PacketUtils")) safe = false;
         if (!checkMagicUtils("PaperInventoryUtils")) safe = false;
         if (!checkMagicUtils("ServerUtils")) safe = false;
+        if (!checkMagicUtils("SpigotInventoryUtils")) safe = false;
         if (!checkMagicUtils("TranslationUtils")) safe = false;
         if (!checkMagicUtils("WorldUtils")) safe = false;
 

@@ -454,15 +454,15 @@ abstract class MythicMobsHooker {
                         nbt.saveToSafe(itemStack)
                     }
                     // 记录掉落物拥有者
-                    val hide = neigeItems?.getByteOrNull("hide")
+                    val hide = neigeItems?.getBoolean("hide")
                     // 掉落
                     WorldUtils.dropItem(entity.world, entity.location, itemStack) { item ->
                         // 设置拥有者相关Metadata
                         owner?.let {
                             item.setMetadataEZ("NI-Owner", it)
                         }
-                        hide?.let {
-                            item.setMetadataEZ("NI-Hide", it)
+                        if (hide == true) {
+                            item.addScoreboardTag("NI-Hide")
                         }
                         item.velocity = caughtVelocity
                         item.addScoreboardTag("NeigeItems")

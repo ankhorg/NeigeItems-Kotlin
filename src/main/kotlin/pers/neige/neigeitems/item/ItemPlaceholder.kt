@@ -1,14 +1,11 @@
 package pers.neige.neigeitems.item
 
-import com.comphenix.protocol.PacketType
-import com.comphenix.protocol.ProtocolLibrary
-import com.comphenix.protocol.events.ListenerPriority
-import com.comphenix.protocol.events.PacketAdapter
-import com.comphenix.protocol.events.PacketEvent
+import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.annotation.Awake
+import pers.neige.neigeitems.event.ItemPacketEvent
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtNumeric
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtString
@@ -17,13 +14,14 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.PacketUtils
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
+import pers.neige.neigeitems.utils.ListenerUtils
 import java.util.*
 import java.util.function.BiFunction
 
 /**
  * 用于实现物品变量功能
  */
-class ItemPlaceholder {
+object ItemPlaceholder {
     /**
      * 获取物品变量附属
      */
@@ -107,35 +105,15 @@ class ItemPlaceholder {
                 else -> null
             }
         }
+    }
 
+    @Awake
+    private fun initListener() {
         // 检测是否开启物品变量功能
         if (config.getBoolean("ItemPlaceholder.enable")) {
-            // 监听数据包进行变量替换
-            ProtocolLibrary.getProtocolManager().addPacketListener(object : PacketAdapter(
-                NeigeItems.getInstance(),
-                ListenerPriority.LOWEST,
-                PacketType.Play.Server.WINDOW_ITEMS,
-                PacketType.Play.Server.SET_SLOT
-            ) {
-                override fun onPacketSending(event: PacketEvent) {
-                    val gameMode = event.player.gameMode
-                    if (gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE) {
-                        if (event.packetType == PacketType.Play.Server.WINDOW_ITEMS) {
-                            PacketUtils.getItemsFromPacketPlayOutWindowItems(event.packet.handle)
-                                ?.forEach { itemStack ->
-                                    itemParse(itemStack)
-                                }
-                            PacketUtils.getCarriedItemFromPacketPlayOutWindowItems(event.packet.handle)?.let {
-                                itemParse(it)
-                            }
-                        } else {
-                            PacketUtils.getItemStackFromPacketPlayOutSetSlot(event.packet.handle)?.let {
-                                itemParse(it)
-                            }
-                        }
-                    }
-                }
-            })
+            ListenerUtils.registerListener(ItemPacketEvent::class.java) {
+                itemParse(it.itemStack)
+            }
         }
     }
 

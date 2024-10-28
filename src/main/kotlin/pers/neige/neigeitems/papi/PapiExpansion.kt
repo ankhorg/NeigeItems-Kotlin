@@ -31,7 +31,7 @@ object PapiExpansion {
     private val scripts = ConcurrentHashMap<String, CompiledScript>()
 
     @JvmStatic
-    @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
+    @Awake
     private fun init() {
         expansion = papiHooker?.newPlaceholderExpansion("ni", "Neige", "1.0.0") { player, param ->
             val params = param.split("_", limit = 2)

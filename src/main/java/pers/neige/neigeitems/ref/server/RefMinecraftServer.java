@@ -1,4 +1,4 @@
-package pers.neige.neigeitems.ref.world;
+package pers.neige.neigeitems.ref.server;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
 import pers.neige.neigeitems.ref.network.RefServerConnection;

@@ -6,7 +6,9 @@ import pers.neige.neigeitems.action.catcher.ChatCatcher;
 import pers.neige.neigeitems.action.catcher.SignCatcher;
 
 import java.util.ArrayDeque;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class User {
     @NotNull
@@ -15,6 +17,8 @@ public class User {
     private final ArrayDeque<ChatCatcher> chatCatchers = new ArrayDeque<>();
     @NotNull
     private final ArrayDeque<SignCatcher> signCatchers = new ArrayDeque<>();
+    @NotNull
+    private final Map<String, Object> metadata = new ConcurrentHashMap<>();
 
     public User(
             @NotNull UUID uuid
@@ -61,5 +65,10 @@ public class User {
         synchronized (this) {
             return signCatchers.poll();
         }
+    }
+
+    @NotNull
+    public Map<String, Object> getMetadata() {
+        return metadata;
     }
 }

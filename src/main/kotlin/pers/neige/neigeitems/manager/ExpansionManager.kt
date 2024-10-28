@@ -101,7 +101,7 @@ object ExpansionManager {
     /**
      * 加载脚本扩展
      */
-    @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
+    @Awake
     private fun load() {
         var time = System.currentTimeMillis()
         // 加载文件中的扩展

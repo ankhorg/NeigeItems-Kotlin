@@ -32,13 +32,9 @@ import pers.neige.neigeitems.hook.vault.VaultHooker
 import pers.neige.neigeitems.hook.vault.impl.VaultHookerImpl
 import pers.neige.neigeitems.item.ItemHider
 import pers.neige.neigeitems.item.ItemPlaceholder
-import pers.neige.neigeitems.item.color.ItemColor
-import pers.neige.neigeitems.item.color.impl.ItemColorProtocol
-import pers.neige.neigeitems.item.color.impl.ItemColorVanilla
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.manager.ConfigManager.config
-import java.util.*
 import java.util.function.BiFunction
 
 /**
@@ -102,17 +98,12 @@ object HookerManager {
     /**
      * 物品变量功能
      */
-    var itemPlaceholder: ItemPlaceholder? = null
+    var itemPlaceholder: ItemPlaceholder = ItemPlaceholder
 
     /**
      * 物品隐藏功能
      */
     var itemHider: ItemHider? = null
-
-    /**
-     * 物品光效功能
-     */
-    var itemColor: ItemColor? = null
 
     @JvmStatic
     @Awake(lifeCycle = Awake.LifeCycle.ENABLE, priority = EventPriority.LOW)
@@ -190,11 +181,6 @@ object HookerManager {
             }
 
         if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-            itemPlaceholder = try {
-                ItemPlaceholder()
-            } catch (error: Throwable) {
-                null
-            }
             itemHider = try {
                 ItemHider()
             } catch (error: Throwable) {
@@ -202,24 +188,8 @@ object HookerManager {
             }
         } else {
             Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "ProtocolLib"))
-            itemPlaceholder = null
             itemHider = null
         }
-
-        itemColor =
-            if (config.getString("ItemColor.type")?.lowercase(Locale.getDefault()) == "protocol") {
-                if (Bukkit.getPluginManager().isPluginEnabled("ProtocolLib")) {
-                    try {
-                        ItemColorProtocol()
-                    } catch (error: Throwable) {
-                        ItemColorVanilla()
-                    }
-                } else {
-                    ItemColorVanilla()
-                }
-            } else {
-                ItemColorVanilla()
-            }
     }
 
     @JvmStatic

@@ -7,6 +7,8 @@ import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketEvent
 import org.bukkit.entity.Item
 import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.PacketUtils
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 
 /**
@@ -19,23 +21,16 @@ class ItemHider {
             NeigeItems.getInstance(), ListenerPriority.LOWEST, PacketType.Play.Server.ENTITY_METADATA
         ) {
             override fun onPacketSending(event: PacketEvent) {
-                val receiver = event.player
-                val id = event.packet.integers.read(0)
+                val player = event.player
+                val packet = event.packet.handle
+                val id = PacketUtils.getEntityIdFromPacketPlayOutEntityMetadata(packet)
                 if (id < 0) return
-                val entity = kotlin.runCatching {
-                    protocolManager.getEntityFromID(receiver.world, id)
-                }.getOrNull()
+                val entity = WorldUtils.getEntityFromID(player.world, id) ?: return
                 if (entity !is Item || !entity.hasMetadata("NI-Owner")) return
                 // 获取归属者
                 val owner = entity.getMetadataEZ("NI-Owner", "") as String
-                // 是否隐藏掉落物
-                val hide = entity.getMetadataEZ("NI-Hide", 0.toByte()) as Byte
-
                 // 检测拾取者是否是拥有者以及是否隐藏掉落物
-                if (receiver.name != owner && hide == 1.toByte()) {
-                    // 隐藏掉落物
-                    event.isCancelled = true
-                }
+                event.isCancelled = entity.getScoreboardTags().contains("NI-Hide") && player.name != owner
             }
         })
     }

@@ -28,7 +28,7 @@ object Command {
         return this
     }
 
-    @Awake(lifeCycle = Awake.LifeCycle.ENABLE)
+    @Awake
     fun init() {
         dispatcher
             .registerAndRecord(Action.action)

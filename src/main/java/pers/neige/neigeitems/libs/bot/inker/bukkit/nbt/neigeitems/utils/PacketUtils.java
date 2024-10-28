@@ -3,6 +3,7 @@ package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
@@ -10,17 +11,18 @@ import pers.neige.neigeitems.ref.entity.RefEntity;
 import pers.neige.neigeitems.ref.entity.RefEntityItem;
 import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
-import pers.neige.neigeitems.ref.network.RefPacketPlayOutEntityMetadata;
-import pers.neige.neigeitems.ref.network.RefPacketPlayOutSetSlot;
-import pers.neige.neigeitems.ref.network.RefPacketPlayOutWindowItems;
+import pers.neige.neigeitems.ref.network.*;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataItem;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataValue;
+import pers.neige.neigeitems.ref.scores.RefCraftTeam;
 import pers.neige.neigeitems.ref.server.level.RefWorldServer;
 import pers.neige.neigeitems.ref.world.RefCraftWorld;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,47 @@ public class PacketUtils {
      * 1.17+ 版本起, PacketPlayOutWindowItems 内部添加一个 carriedItem 字段, 用于存储指针上的物品.
      */
     private static final boolean CARRIED_ITEM_SUPPORT = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.17+ 版本起, PacketPlayOutScoreboardTeam 颜色存储于一个 Optional<Parameter> 之中.
+     */
+    private static final boolean PARAMETER_TEAM_PACKET = CbVersion.v1_17_R1.isSupport();
+
+    @NotNull
+    public static final String SET_SLOT = RefPacketPlayOutSetSlot.class.getSimpleName();
+    @NotNull
+    public static final String WINDOW_ITEMS = RefPacketPlayOutWindowItems.class.getSimpleName();
+    @NotNull
+    public static final String ENTITY_METADATA = RefPacketPlayOutEntityMetadata.class.getSimpleName();
+    @NotNull
+    public static final String SPAWN_ENTITY = RefPacketPlayOutSpawnEntity.class.getSimpleName();
+
+    /**
+     * 获取 PacketPlayOutEntityMetadata 数据包中的 id 字段, 意为实体 id, 无法获取时返回 -1.
+     *
+     * @param packetObject 待操作的数据包(nms实例).
+     * @return 数据包中的 id 字段, 意为实体 id, 无法获取时返回 -1.
+     */
+    public static int getEntityIdFromPacketPlayOutEntityMetadata(@NotNull Object packetObject) {
+        if (packetObject instanceof RefPacketPlayOutEntityMetadata) {
+            RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
+            return packet.id;
+        }
+        return -1;
+    }
+
+    /**
+     * 获取 PacketPlayOutSpawnEntity 数据包中的 id 字段, 意为实体 id, 无法获取时返回 -1.
+     *
+     * @param packetObject 待操作的数据包(nms实例).
+     * @return 数据包中的 id 字段, 意为实体 id, 无法获取时返回 -1.
+     */
+    public static int getEntityIdFromPacketPlayOutSpawnEntity(@NotNull Object packetObject) {
+        if (packetObject instanceof RefPacketPlayOutSpawnEntity) {
+            RefPacketPlayOutSpawnEntity packet = (RefPacketPlayOutSpawnEntity) packetObject;
+            return packet.id;
+        }
+        return -1;
+    }
 
     /**
      * 为实体设置虚拟显示名.
@@ -200,5 +243,21 @@ public class PacketUtils {
             return RefCraftItemStack.asCraftMirror(packet.carriedItem);
         }
         return null;
+    }
+
+    @NotNull
+    public static Object newScoreboardTeamPacket(@NotNull Team team, UUID item) {
+        RefPacketPlayOutScoreboardTeam packet;
+        if (PARAMETER_TEAM_PACKET) {
+            packet = RefPacketPlayOutScoreboardTeam.createAddOrModifyPacket(RefCraftTeam.class.cast(team).team, false);
+            packet.method = RefPacketPlayOutScoreboardTeam.METHOD_JOIN;
+            packet.entities = Collections.singletonList(item.toString());
+        } else {
+            packet = new RefPacketPlayOutScoreboardTeam();
+            packet.name = team.getName();
+            packet.method = RefPacketPlayOutScoreboardTeam.METHOD_JOIN;
+            packet.entities.add(item.toString());
+        }
+        return packet;
     }
 }
