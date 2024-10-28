@@ -27,15 +27,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class PacketUtils {
-    /**
-     * 1.17+ 版本起, PacketPlayOutWindowItems 内部添加一个 carriedItem 字段, 用于存储指针上的物品.
-     */
-    private static final boolean CARRIED_ITEM_SUPPORT = CbVersion.v1_17_R1.isSupport();
-    /**
-     * 1.17+ 版本起, PacketPlayOutScoreboardTeam 颜色存储于一个 Optional<Parameter> 之中.
-     */
-    private static final boolean PARAMETER_TEAM_PACKET = CbVersion.v1_17_R1.isSupport();
-
     @NotNull
     public static final String SET_SLOT = RefPacketPlayOutSetSlot.class.getSimpleName();
     @NotNull
@@ -44,6 +35,14 @@ public class PacketUtils {
     public static final String ENTITY_METADATA = RefPacketPlayOutEntityMetadata.class.getSimpleName();
     @NotNull
     public static final String SPAWN_ENTITY = RefPacketPlayOutSpawnEntity.class.getSimpleName();
+    /**
+     * 1.17+ 版本起, PacketPlayOutWindowItems 内部添加一个 carriedItem 字段, 用于存储指针上的物品.
+     */
+    private static final boolean CARRIED_ITEM_SUPPORT = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.17+ 版本起, PacketPlayOutScoreboardTeam 颜色存储于一个 Optional<Parameter> 之中.
+     */
+    private static final boolean PARAMETER_TEAM_PACKET = CbVersion.v1_17_R1.isSupport();
 
     /**
      * 获取 PacketPlayOutEntityMetadata 数据包中的 id 字段, 意为实体 id, 无法获取时返回 -1.
@@ -249,7 +248,7 @@ public class PacketUtils {
     public static Object newScoreboardTeamPacket(@NotNull Team team, UUID item) {
         RefPacketPlayOutScoreboardTeam packet;
         if (PARAMETER_TEAM_PACKET) {
-            packet = RefPacketPlayOutScoreboardTeam.createAddOrModifyPacket(RefCraftTeam.class.cast(team).team, false);
+            packet = RefPacketPlayOutScoreboardTeam.createAddOrModifyPacket(((RefCraftTeam) team).team, false);
             packet.method = RefPacketPlayOutScoreboardTeam.METHOD_JOIN;
             packet.entities = Collections.singletonList(item.toString());
         } else {

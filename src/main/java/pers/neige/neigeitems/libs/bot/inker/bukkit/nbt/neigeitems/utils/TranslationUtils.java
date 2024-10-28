@@ -30,11 +30,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TranslationUtils {
+    protected static final Map<String, RefChatFormatting> CHAT_COLORS = new HashMap<>();
     /**
      * 1.13+ 版本起, EntityTypes 类发生了一些巨大的变化.
      */
     private static final boolean NEW_ENTITY_TYPE_SUPPORT = CbVersion.v1_13_R1.isSupport();
-    protected static final Map<String, RefChatFormatting> CHAT_COLORS = new HashMap<>();
 
     static {
         CHAT_COLORS.put("BLACK", RefChatFormatting.BLACK);

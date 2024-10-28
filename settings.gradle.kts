@@ -9,6 +9,8 @@ pluginManagement {
     }
 }
 
+include("fake-api")
+
 include("hooker")
 
 include("hooker:mythicmobs:v440")

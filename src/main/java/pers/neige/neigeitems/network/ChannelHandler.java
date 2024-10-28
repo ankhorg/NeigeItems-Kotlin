@@ -6,7 +6,6 @@ import io.netty.channel.ChannelPromise;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.event.PacketReceiveEvent;
 import pers.neige.neigeitems.event.PacketSendEvent;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.PacketUtils;
 
 import java.util.UUID;
 import java.util.function.BiFunction;

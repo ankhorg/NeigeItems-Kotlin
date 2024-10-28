@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import org.bukkit.command.CommandSender
 import org.bukkit.configuration.file.YamlConfiguration
-import org.bukkit.entity.Player
 import pers.neige.neigeitems.command.CommandUtils.argument
 import pers.neige.neigeitems.command.CommandUtils.literal
 import pers.neige.neigeitems.command.arguments.FileNameArgumentType.fileName

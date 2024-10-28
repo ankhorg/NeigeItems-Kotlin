@@ -222,7 +222,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                     "color" -> {
                         optionsConfig.getString(key)?.uppercase(Locale.getDefault())?.let {
                             // 判断你这颜色保不保熟
-                            if (ItemColor.colors.containsKey(it)) {
+                            if (ItemColor.getColors().containsKey(it)) {
                                 neigeItems.putString("color", it)
                             }
                         }

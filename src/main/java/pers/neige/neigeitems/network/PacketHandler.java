@@ -17,7 +17,6 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPl
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.PacketUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 import pers.neige.neigeitems.utils.ItemUtils;
-import pers.neige.neigeitems.utils.PlayerUtils;
 import pers.neige.neigeitems.utils.SchedulerUtils;
 
 import java.util.List;

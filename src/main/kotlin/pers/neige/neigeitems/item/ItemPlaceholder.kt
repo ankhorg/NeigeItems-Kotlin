@@ -1,7 +1,5 @@
 package pers.neige.neigeitems.item
 
-import org.bukkit.Bukkit
-import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Awake
@@ -11,7 +9,6 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtNumeric
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtString
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.PacketUtils
 import pers.neige.neigeitems.manager.ConfigManager.config
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ListenerUtils

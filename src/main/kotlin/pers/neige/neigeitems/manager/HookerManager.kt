@@ -315,7 +315,7 @@ object HookerManager {
      */
     @JvmStatic
     fun parseItemPlaceholder(itemStack: ItemStack, text: String): String {
-        return itemPlaceholder?.parse(itemStack, text) ?: text
+        return itemPlaceholder.parse(itemStack, text)
     }
 
     /**
@@ -326,7 +326,7 @@ object HookerManager {
     @JvmStatic
     fun ItemStack.getParsedName(): String {
         TranslationUtils.getDisplayName(this)?.let { displayName ->
-            return itemPlaceholder?.parse(this, displayName) ?: displayName
+            return itemPlaceholder.parse(this, displayName)
         }
         return TranslationUtils.getTranslationName(this)
     }
@@ -339,7 +339,7 @@ object HookerManager {
     @JvmStatic
     fun ItemStack.getParsedComponent(): BaseComponent {
         TranslationUtils.getDisplayName(this)?.let { displayName ->
-            return TextComponent(itemPlaceholder?.parse(this, displayName) ?: displayName)
+            return TextComponent(itemPlaceholder.parse(this, displayName))
         }
         return TranslationUtils.getTranslationComponent(this)
     }
@@ -351,7 +351,7 @@ object HookerManager {
      */
     @JvmStatic
     fun parseItemPlaceholders(itemStack: ItemStack) {
-        itemPlaceholder?.itemParse(itemStack)
+        itemPlaceholder.itemParse(itemStack)
     }
 
     /**
@@ -362,7 +362,7 @@ object HookerManager {
      */
     @JvmStatic
     fun addItemPlaceholderExpansion(id: String, function: BiFunction<ItemStack, String, String?>) {
-        itemPlaceholder?.addExpansion(id, function)
+        itemPlaceholder.addExpansion(id, function)
     }
 
     /**
