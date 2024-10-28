@@ -8,7 +8,6 @@ $dokka.location:pers.neige.neigeitems.event/MythicDropEvent.Drop///PointingToDec
 $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Post///PointingToDeclaration/pers/neige/neigeitems/event/PluginReloadEvent.Post.html
 $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Pre///PointingToDeclaration/pers/neige/neigeitems/event/PluginReloadEvent.Pre.html
 $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Type///PointingToDeclaration/pers/neige/neigeitems/event/PluginReloadEvent.Type.html
-$dokka.location:pers.neige.neigeitems.item.color/ItemColor.Companion///PointingToDeclaration/pers/neige/neigeitems/item/color/ItemColor.Companion.html
 $dokka.location:pers.neige.neigeitems.item/ItemDurability.DamageResult///PointingToDeclaration/pers/neige/neigeitems/item/ItemDurability.DamageResult.html
 $dokka.location:pers.neige.neigeitems.item/ItemPack.ItemInfo///PointingToDeclaration/pers/neige/neigeitems/item/ItemPack.ItemInfo.html
 $dokka.location:pers.neige.neigeitems.lang/LocaleI18n.TranslationProvider///PointingToDeclaration/pers/neige/neigeitems/lang/LocaleI18n.TranslationProvider.html
@@ -52,8 +51,6 @@ pers.neige.neigeitems.hook.vault.impl
 pers.neige.neigeitems.item
 pers.neige.neigeitems.item.action
 pers.neige.neigeitems.item.builder
-pers.neige.neigeitems.item.color
-pers.neige.neigeitems.item.color.impl
 pers.neige.neigeitems.item.lore
 pers.neige.neigeitems.item.lore.impl
 pers.neige.neigeitems.lang
@@ -71,6 +68,7 @@ pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils
 pers.neige.neigeitems.listener
 pers.neige.neigeitems.manager
 pers.neige.neigeitems.maven
+pers.neige.neigeitems.network
 pers.neige.neigeitems.papi
 pers.neige.neigeitems.ref
 pers.neige.neigeitems.ref.argument
@@ -91,6 +89,8 @@ pers.neige.neigeitems.ref.nbt
 pers.neige.neigeitems.ref.network
 pers.neige.neigeitems.ref.network.syncher
 pers.neige.neigeitems.ref.registry
+pers.neige.neigeitems.ref.scores
+pers.neige.neigeitems.ref.server
 pers.neige.neigeitems.ref.server.level
 pers.neige.neigeitems.ref.server.players
 pers.neige.neigeitems.ref.sounds
