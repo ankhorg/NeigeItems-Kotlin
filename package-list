@@ -51,8 +51,6 @@ pers.neige.neigeitems.hook.vault.impl
 pers.neige.neigeitems.item
 pers.neige.neigeitems.item.action
 pers.neige.neigeitems.item.builder
-pers.neige.neigeitems.item.lore
-pers.neige.neigeitems.item.lore.impl
 pers.neige.neigeitems.lang
 pers.neige.neigeitems.libs.asahi.util.calculate
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt
@@ -106,6 +104,8 @@ pers.neige.neigeitems.script.tool
 pers.neige.neigeitems.section
 pers.neige.neigeitems.section.impl
 pers.neige.neigeitems.task
+pers.neige.neigeitems.text
+pers.neige.neigeitems.text.impl
 pers.neige.neigeitems.user
 pers.neige.neigeitems.utils
 pers.neige.neigeitems.utils.function
