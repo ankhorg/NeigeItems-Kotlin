@@ -24,6 +24,7 @@ import pers.neige.neigeitems.ref.world.RefCraftWorld;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -561,7 +562,7 @@ public class WorldUtils {
     ) {
         RefServerEntity serverEntity = null;
         if (REMOVED_TRACKER) {
-            RefTrackedEntity trackedEntity = ((RefInt2ObjectMap<RefTrackedEntity>) world.getChunkSource().chunkMap.entityMap).get(id);
+            RefTrackedEntity trackedEntity = ((Map<Integer, RefTrackedEntity>) world.getChunkSource().chunkMap.entityMap).get(id);
             if (trackedEntity != null) {
                 serverEntity = trackedEntity.serverEntity;
             }
