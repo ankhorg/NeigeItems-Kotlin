@@ -3,10 +3,14 @@ package pers.neige.neigeitems.hook.nms.impl;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ChunkMap;
 import net.minecraft.world.item.component.CustomData;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +20,7 @@ import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.item.builder.NewItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 
 import java.lang.reflect.Field;
 
@@ -66,6 +71,7 @@ public class NMSHookerItemStack extends NMSHooker {
         return new NewItemBuilder(config);
     }
 
+    @Override
     @Nullable
     public NbtCompound getCustomNbt(@Nullable ItemStack itemStack) {
         if (itemStack != null && itemStack.getType() != Material.AIR) {
@@ -85,6 +91,7 @@ public class NMSHookerItemStack extends NMSHooker {
         return null;
     }
 
+    @Override
     @Nullable
     public NbtCompound getOrCreateCustomNbt(@Nullable ItemStack itemStack) {
         if (itemStack != null && itemStack.getType() != Material.AIR) {
@@ -113,6 +120,7 @@ public class NMSHookerItemStack extends NMSHooker {
         return null;
     }
 
+    @Override
     @Nullable
     public String getDisplayNameFromCraftItemStack(@Nullable ItemStack itemStack) {
         if (itemStack instanceof CraftItemStack) {
@@ -120,6 +128,21 @@ public class NMSHookerItemStack extends NMSHooker {
                 net.minecraft.world.item.ItemStack handle = ((CraftItemStack) itemStack).handle;
                 Component name = handle.get(DataComponents.CUSTOM_NAME);
                 return name == null ? null : name.getString();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    @Nullable
+    public Entity getEntityFromID(
+            @NotNull World world,
+            int id
+    ) {
+        if (world instanceof CraftWorld) {
+            ChunkMap.TrackedEntity trackedEntity = ((CraftWorld) world).getHandle().getChunkSource().chunkMap.entityMap.get(id);
+            if (trackedEntity != null) {
+                return WorldUtils.getEntityFromServerEntity(trackedEntity.serverEntity);
             }
         }
         return null;

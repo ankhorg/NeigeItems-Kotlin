@@ -16,6 +16,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.PacketUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
+import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.ItemUtils;
 import pers.neige.neigeitems.utils.SchedulerUtils;
 
@@ -75,7 +76,7 @@ public class PacketHandler {
         if (player == null) return true;
         int id = PacketUtils.getEntityIdFromPacketPlayOutEntityMetadata(packet);
         if (id < 0) return true;
-        Entity entity = WorldUtils.getEntityFromID(player.getWorld(), id);
+        Entity entity = HookerManager.INSTANCE.getNmsHooker().getEntityFromID(player.getWorld(), id);
         if (!(entity instanceof Item)) return true;
         boolean result = true;
         // 因为某种未知的原因, 高版本拦完EntityMetadata没用

@@ -27,7 +27,6 @@ dependencies {
     implementation(project(":hooker:nms:v1_12_R1"))
     implementation(project(":hooker:nms:v1_14_R1"))
     implementation(project(":hooker:nms:v1_16_R2"))
-    compileOnly(project(":hooker:nms:v1_21+"))
 }
 
 tasks {
@@ -62,14 +61,10 @@ fun final() {
         rootProject.layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.property("version")}-shaded.jar")
             .get().asFile
     val newMainFile =
-        rootProject.layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.property("version")}.jar")
+        rootProject.layout.buildDirectory.file("libs/${rootProject.name}-${rootProject.property("version")}-temp.jar")
             .get().asFile
     val currentFile =
         project.layout.buildDirectory.file("libs/${project.name}-${project.property("version")}.jar").get().asFile
-    val j21Project = rootProject.project("hooker").project("nms").project("v1_21+")
-    val j21File =
-        j21Project.layout.buildDirectory.file("libs/${j21Project.name}-${j21Project.property("version")}-dev.jar")
-            .get().asFile
 
     if (!mainFile.exists()) return
     if (!currentFile.exists()) return
@@ -85,18 +80,6 @@ fun final() {
             }
         }
         JarFile(currentFile).use { jarFile ->
-            val entries = jarFile.entries()
-            while (entries.hasMoreElements()) {
-                val entry = entries.nextElement()
-                val entryName = entry.name
-                if (entryName.endsWith(".class")) {
-                    jarOutputStream.putNextEntry(entry)
-                    jarFile.getInputStream(entry).copyTo(jarOutputStream)
-                    jarOutputStream.closeEntry()
-                }
-            }
-        }
-        JarFile(j21File).use { jarFile ->
             val entries = jarFile.entries()
             while (entries.hasMoreElements()) {
                 val entry = entries.nextElement()

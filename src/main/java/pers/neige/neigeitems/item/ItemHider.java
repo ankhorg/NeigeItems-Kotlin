@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.PacketUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
+import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.PlayerUtils;
 
 public class ItemHider {
@@ -28,7 +29,7 @@ public class ItemHider {
                 Object packet = event.getPacket().getHandle();
                 int id = PacketUtils.getEntityIdFromPacketPlayOutEntityMetadata(packet);
                 if (id < 0) return;
-                Entity entity = WorldUtils.getEntityFromID(player.getWorld(), id);
+                Entity entity = HookerManager.INSTANCE.getNmsHooker().getEntityFromID(player.getWorld(), id);
                 if (entity == null) return;
                 if (!(entity instanceof Item) || !entity.hasMetadata("NI-Owner")) return;
                 // 获取归属者

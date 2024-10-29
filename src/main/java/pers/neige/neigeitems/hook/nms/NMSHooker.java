@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -223,5 +224,13 @@ public class NMSHooker {
             }
         }
         return null;
+    }
+
+    @Nullable
+    public Entity getEntityFromID(
+            @NotNull World world,
+            int id
+    ) {
+        return WorldUtils.getEntityFromID(world, id);
     }
 }

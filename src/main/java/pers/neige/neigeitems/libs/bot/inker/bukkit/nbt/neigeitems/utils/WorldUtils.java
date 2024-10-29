@@ -615,4 +615,13 @@ public class WorldUtils {
         }
         return entity;
     }
+
+    public static Entity getEntityFromServerEntity(
+            @NotNull Object serverEntity
+    ) {
+        if (serverEntity instanceof RefServerEntity) {
+            return ((RefServerEntity) serverEntity).entity.getBukkitEntity();
+        }
+        return null;
+    }
 }
