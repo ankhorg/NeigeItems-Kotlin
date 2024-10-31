@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 import pers.neige.neigeitems.ref.chat.RefChatFormatting;
@@ -196,6 +197,14 @@ public class NMSHooker {
     public NbtCompound getOrCreateCustomNbt(@Nullable ItemStack itemStack) {
         if (itemStack != null && itemStack.getType() != Material.AIR) {
             return new NbtItemStack(itemStack).getOrCreateTag();
+        }
+        return null;
+    }
+
+    @Nullable
+    public NbtComponentLike getDirectTag(@Nullable ItemStack itemStack) {
+        if (itemStack != null && itemStack.getType() != Material.AIR) {
+            return new NbtItemStack(itemStack).getDirectTag();
         }
         return null;
     }

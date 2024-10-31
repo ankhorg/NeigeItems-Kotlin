@@ -19,7 +19,9 @@ import pers.neige.neigeitems.hook.nms.NMSHooker;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.item.builder.NewItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 
 import java.lang.reflect.Field;
@@ -118,6 +120,11 @@ public class NMSHookerItemStack extends NMSHooker {
             }
         }
         return null;
+    }
+
+    @Nullable
+    public NbtComponentLike getDirectTag(@Nullable ItemStack itemStack) {
+        return getCustomNbt(itemStack);
     }
 
     @Override
