@@ -331,7 +331,7 @@ public abstract class BaseActionManager {
                 plugin.getLogger().warning((i + 1) + ". " + contentLine);
             }
             error.printStackTrace();
-            return CompletableFuture.completedFuture(Results.SUCCESS);
+            return CompletableFuture.completedFuture(Results.STOP);
         }
         if (result instanceof ActionResult) {
             return CompletableFuture.completedFuture((ActionResult) result);

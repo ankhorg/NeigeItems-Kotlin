@@ -5,6 +5,7 @@ import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
+import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
 import java.util.Locale;
@@ -59,7 +60,8 @@ public class StringAction extends Action {
             for (String actionLine : action.split("\n")) {
                 manager.getPlugin().getLogger().warning(actionLine);
             }
-            throw throwable;
+            throwable.printStackTrace();
+            return CompletableFuture.completedFuture(Results.STOP);
         }
     }
 
