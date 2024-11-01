@@ -8,9 +8,11 @@ import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.placeholderapi.PlaceholderExpansion
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
+import pers.neige.neigeitems.utils.ItemUtils.getItemId
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
+import pers.neige.neigeitems.utils.StringUtils.split
 import java.io.InputStreamReader
 import java.util.concurrent.ConcurrentHashMap
 import javax.script.CompiledScript
@@ -130,12 +132,44 @@ object PapiExpansion {
                     var result = 0
                     val contents = player.inventory.contents
                     for (itemStack in contents) {
-                        val itemInfo = itemStack.isNiItem()
-                        if (itemInfo != null && itemInfo.id == itemId) {
+                        val currentItemId = itemStack.getItemId()
+                        if (currentItemId == itemId) {
                             result += itemStack.amount
                         }
                     }
                     return@newPlaceholderExpansion result.toString()
+                }
+
+                "count" -> {
+                    if (player !is Player) return@newPlaceholderExpansion "false"
+                    val argsString = params.getOrNull(1) ?: return@newPlaceholderExpansion "false"
+                    val args = argsString.split("_", "\\")
+                    val items = HashMap<String, Int>()
+                    var isId = true
+                    var id: String? = null
+                    for (arg in args) {
+                        if (isId) {
+                            id = arg
+                        } else {
+                            val amount = arg.toIntOrNull()
+                            if (amount != null && amount > 0 && id != null) {
+                                items[id] = amount
+                            }
+                        }
+                        isId = !isId
+                    }
+                    if (items.isEmpty()) return@newPlaceholderExpansion "true"
+                    val contents = player.inventory.contents
+                    for (itemStack in contents) {
+                        val currentItemId = itemStack.getItemId() ?: continue
+                        val pre = items[currentItemId] ?: continue
+                        if (pre > itemStack.amount) {
+                            items[currentItemId] = pre - itemStack.amount
+                        } else {
+                            items.remove(currentItemId)
+                        }
+                    }
+                    return@newPlaceholderExpansion items.isEmpty().toString()
                 }
 
                 else -> return@newPlaceholderExpansion ""
