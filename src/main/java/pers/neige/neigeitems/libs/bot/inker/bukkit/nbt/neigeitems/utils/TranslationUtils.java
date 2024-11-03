@@ -105,6 +105,31 @@ public class TranslationUtils {
     }
 
     /**
+     * 根据CraftItemStack获取显示名, 无显示名或物品为org.bukkit.inventory.ItemStack则返回 null, 仅适用于1.20.4及以下版本.
+     *
+     * @param itemStack 待获取物品.
+     * @return 显示名.
+     */
+    @Nullable
+    public static String getDisplayNameFromCraftItemStack(@Nullable ItemStack itemStack) {
+        if (!(itemStack instanceof RefCraftItemStack) || itemStack.getType() == Material.AIR) return null;
+        RefNbtTagCompound tag = ((RefCraftItemStack) itemStack).handle.getTag();
+        if (tag == null) return null;
+        RefNbtBase display = tag.get("display");
+        if (!(display instanceof RefNbtTagCompound)) return null;
+        RefNbtBase tagName = ((RefNbtTagCompound) display).get("Name");
+        if (!(tagName instanceof RefNbtTagString)) return null;
+        String rawName = tagName.asString();
+        if (CbVersion.current() == CbVersion.v1_12_R1) {
+            return rawName;
+        } else if (CbVersion.v1_15_R1.isSupport()) {
+            return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName));
+        } else {
+            return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName), RefChatFormatting.WHITE);
+        }
+    }
+
+    /**
      * 将高版本json文本转化为传统文本(1.12.2不进行转换).
      *
      * @param json 待转换json.

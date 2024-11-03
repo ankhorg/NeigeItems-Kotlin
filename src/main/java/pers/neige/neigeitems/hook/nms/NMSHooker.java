@@ -17,15 +17,8 @@ import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
-import pers.neige.neigeitems.ref.chat.RefChatFormatting;
-import pers.neige.neigeitems.ref.chat.RefChatSerializer;
-import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
-import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
-import pers.neige.neigeitems.ref.nbt.RefNbtBase;
-import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
-import pers.neige.neigeitems.ref.nbt.RefNbtTagString;
 import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.util.HashMap;
@@ -211,28 +204,7 @@ public class NMSHooker {
 
     @Nullable
     public String getDisplayNameFromCraftItemStack(@Nullable ItemStack itemStack) {
-        if (itemStack instanceof RefCraftItemStack) {
-            if (itemStack.getType() != Material.AIR) {
-                RefNbtTagCompound tag = ((RefCraftItemStack) itemStack).handle.getTag();
-                if (tag != null) {
-                    RefNbtBase display = tag.get("display");
-                    if (display instanceof RefNbtTagCompound) {
-                        RefNbtBase tagName = ((RefNbtTagCompound) display).get("Name");
-                        if (tagName instanceof RefNbtTagString) {
-                            String rawName = tagName.asString();
-                            if (CbVersion.current() == CbVersion.v1_12_R1) {
-                                return rawName;
-                            } else if (CbVersion.v1_15_R1.isSupport()) {
-                                return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName));
-                            } else {
-                                return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName), RefChatFormatting.WHITE);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
+        return TranslationUtils.getDisplayNameFromCraftItemStack(itemStack);
     }
 
     @Nullable
