@@ -1,25 +1,25 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>DamageEventUtils 1.20.13 API </title>
+    <title>AbstractConfigManager 1.20.13 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../stylesheet.css" title="Style">
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../dokka-javadoc-stylesheet.css" title="Style">
-    <link rel="stylesheet" type="text/css" href="../../../../../../../../../../jquery/jquery-ui.css" title="Style">
-    <script type="text/javascript" src="../../../../../../../../../../jquery/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../jquery/jquery-migrate-3.4.0.min.js"></script>
-    <script type="text/javascript" src="../../../../../../../../../../jquery/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+    <link rel="stylesheet" type="text/css" href="../../../../dokka-javadoc-stylesheet.css" title="Style">
+    <link rel="stylesheet" type="text/css" href="../../../../jquery/jquery-ui.css" title="Style">
+    <script type="text/javascript" src="../../../../jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="../../../../jquery/jquery-migrate-3.4.0.min.js"></script>
+    <script type="text/javascript" src="../../../../jquery/jquery-ui.js"></script>
 
-    <script type="text/javascript" src="../../../../../../../../../../search.js"></script>
-    <script async type="text/javascript" src="../../../../../../../../../../module-search-index.js"></script>
-    <script async type="text/javascript" src="../../../../../../../../../../package-search-index.js"></script>
-    <script async type="text/javascript" src="../../../../../../../../../../type-search-index.js"></script>
-    <script async type="text/javascript" src="../../../../../../../../../../member-search-index.js"></script>
-    <script async type="text/javascript" src="../../../../../../../../../../tag-search-index.js"></script>
+    <script type="text/javascript" src="../../../../search.js"></script>
+    <script async type="text/javascript" src="../../../../module-search-index.js"></script>
+    <script async type="text/javascript" src="../../../../package-search-index.js"></script>
+    <script async type="text/javascript" src="../../../../type-search-index.js"></script>
+    <script async type="text/javascript" src="../../../../member-search-index.js"></script>
+    <script async type="text/javascript" src="../../../../tag-search-index.js"></script>
 </head><body>
 <script type="text/javascript">
-var pathtoroot = "../../../../../../../../../../";
+var pathtoroot = "../../../../";
 </script>
 <noscript>
     <div>JavaScript is disabled on your browser.</div>
@@ -36,7 +36,7 @@ var pathtoroot = "../../../../../../../../../../";
                     <!--   -->
                 </a>
                 <ul class="navList" title="Navigation">
-    <li><a href="../../../../../../../../../../index.html">Overview</a></li>
+    <li><a href="../../../../index.html">Overview</a></li>
     
     <li><a href="package-summary.html">Package</a></li>
     
@@ -44,13 +44,13 @@ var pathtoroot = "../../../../../../../../../../";
     
     <li><a href="package-tree.html">Tree</a></li>
     
-    <li><a href="../../../../../../../../../../deprecated.html">Deprecated</a></li>
-    <li><a href="../../../../../../../../../../index-files/index-1.html">Index</a></li>
+    <li><a href="../../../../deprecated.html">Deprecated</a></li>
+    <li><a href="../../../../index-files/index-1.html">Index</a></li>
     <li>Help</li>
 </ul></div>
             <div class="subNav">
 <ul class="navList" id="allclasses_navbar_top" style="display: block;">
-    <li><a href="../../../../../../../../../../allclasses.html">All&nbsp;Classes</a></li>
+    <li><a href="../../../../allclasses.html">All&nbsp;Classes</a></li>
 </ul>
 
 <ul class="navListSearch">
@@ -88,8 +88,8 @@ var pathtoroot = "../../../../../../../../../../";
 
 <main role="main">
     <div class="header">
-        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils</a></div>
-        <h2 title="Class DamageEventUtils" class="title">Class DamageEventUtils</h2>
+        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems.manager</a></div>
+        <h2 title="Class AbstractConfigManager" class="title">Class AbstractConfigManager</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -108,14 +108,27 @@ var pathtoroot = "../../../../../../../../../../";
                         <dt>All Implemented Interfaces:</dt>
                         <dd>
                             
+                            <code>java.io.Serializable</code>
+                            
+                            ,
+                            
+                            
+                            <code>java.util.Map</code>
+                            
+                            ,
+                            
+                            
+                            <code>java.util.concurrent.ConcurrentMap</code>
+                            
+                            
                         </dd>
                     </dl>
                     
                     <hr>
                     <pre class="wrap-overflow">
 
-public class <span class="typeNameLabel"><a href=DamageEventUtils.html>DamageEventUtils</a></span>
-
+public abstract class <span class="typeNameLabel"><a href=AbstractConfigManager.html>AbstractConfigManager</a>&lt;T, R&gt;</span>
+extends <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html>ConcurrentHashMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html>K</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html>V</a>&gt;
                     </pre>
                     <div class="block"></div>
 
@@ -198,7 +211,13 @@ public class <span class="typeNameLabel"><a href=DamageEventUtils.html>DamageEve
                                         
                                             <tr class="altColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#DamageEventUtils()">DamageEventUtils</a></span>()</code></th>
+                                                        href="#AbstractConfigManager(org.bukkit.plugin.java.JavaPlugin,java.lang.String,java.lang.String,java.util.function.BiFunction,java.util.function.BiFunction)">AbstractConfigManager</a></span>(JavaPlugin plugin, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> elementName, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> directory, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;ConfigurationSection, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=AbstractConfigManager.html>R</a>&gt; configGetter, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=AbstractConfigManager.html>R</a>, <a href=AbstractConfigManager.html>T</a>&gt; converter)</code></th>
+                                                <td class="colLast"></td>
+                                            </tr>
+                                        
+                                            <tr class="rowColor">
+                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
+                                                        href="#AbstractConfigManager(java.lang.String,java.util.logging.Logger,java.lang.String,java.lang.String,java.util.function.BiFunction,java.util.function.BiFunction)">AbstractConfigManager</a></span>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> pluginName, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/logging/Logger.html>Logger</a> logger, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> elementName, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> directory, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;ConfigurationSection, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=AbstractConfigManager.html>R</a>&gt; configGetter, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=AbstractConfigManager.html>R</a>, <a href=AbstractConfigManager.html>T</a>&gt; converter)</code></th>
                                                 <td class="colLast"></td>
                                             </tr>
                                         
@@ -252,19 +271,11 @@ public class <span class="typeNameLabel"><a href=DamageEventUtils.html>DamageEve
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code>static boolean</code>
+                                            <td class="colFirst"><code>void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=DamageEventUtils.html#isCritical(org.bukkit.event.entity.EntityDamageByEntityEvent)>isCritical</a>(@NotNull() EntityDamageByEntityEvent event) </code>
+                                            <th class="colSecond" scope="row"><code><a href=AbstractConfigManager.html#reload()>reload</a>() </code>
                                             </th>
-                                            <td class="colLast">获取事件是否造成暴击伤害.</td>
-                                        </tr>
-                                        
-                                        <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>static boolean</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=DamageEventUtils.html#isBlocking(org.bukkit.event.entity.EntityDamageEvent)>isBlocking</a>(@NotNull() EntityDamageEvent event) </code>
-                                            </th>
-                                            <td class="colLast">获取事件是否通过盾牌格挡伤害.</td>
+                                            <td class="colLast"></td>
                                         </tr>
                                         
                                         </tbody>
@@ -272,6 +283,24 @@ public class <span class="typeNameLabel"><a href=DamageEventUtils.html>DamageEve
                                 </div>
                                 <ul class="blockList">
                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.java.util.concurrent.ConcurrentHashMap">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;java.util.concurrent.ConcurrentHashMap</h3>
+                                            <code>clear, compute, computeIfAbsent, computeIfPresent, contains, containsKey, containsValue, elements, entrySet, equals, forEach, forEachEntry, forEachKey, forEachValue, get, getOrDefault, hashCode, isEmpty, keySet, keys, mappingCount, merge, newKeySet, put, putAll, putIfAbsent, reduce, reduceEntries, reduceEntries, reduceEntriesToDouble, reduceEntriesToInt, reduceEntriesToLong, reduceKeys, reduceKeys, reduceKeysToDouble, reduceKeysToInt, reduceKeysToLong, reduceToDouble, reduceToInt, reduceToLong, reduceValues, reduceValues, reduceValuesToDouble, reduceValuesToInt, reduceValuesToLong, remove, remove, replace, replace, replaceAll, search, searchEntries, searchKeys, searchValues, size, toString, values</code></li>
+                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.java.util.AbstractMap">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;java.util.AbstractMap</h3>
+                                            <code>keySet</code></li>
+                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.java.util.Map">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;java.util.Map</h3>
+                                            <code>copyOf, entry, of, ofEntries</code></li>
+                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
                                     </a>
@@ -298,11 +327,21 @@ public class <span class="typeNameLabel"><a href=DamageEventUtils.html>DamageEve
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="DamageEventUtils()"></a>
+                                <a name="AbstractConfigManager(org.bukkit.plugin.java.JavaPlugin,java.lang.String,java.lang.String,java.util.function.BiFunction,java.util.function.BiFunction)"></a>
                                 <ul class="blockList">
                                     <li class="blockList">
-                                        <h4>DamageEventUtils</h4>
-                                        <pre>DamageEventUtils()</pre>
+                                        <h4>AbstractConfigManager</h4>
+                                        <pre>AbstractConfigManager(JavaPlugin plugin, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> elementName, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> directory, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;ConfigurationSection, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=AbstractConfigManager.html>R</a>&gt; configGetter, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=AbstractConfigManager.html>R</a>, <a href=AbstractConfigManager.html>T</a>&gt; converter)</pre>
+                                        <div class="block"></div>
+                                        
+                                    </li>
+                                </ul>
+                                
+                                <a name="AbstractConfigManager(java.lang.String,java.util.logging.Logger,java.lang.String,java.lang.String,java.util.function.BiFunction,java.util.function.BiFunction)"></a>
+                                <ul class="blockList">
+                                    <li class="blockList">
+                                        <h4>AbstractConfigManager</h4>
+                                        <pre>AbstractConfigManager(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> pluginName, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/logging/Logger.html>Logger</a> logger, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> elementName, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> directory, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;ConfigurationSection, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=AbstractConfigManager.html>R</a>&gt; configGetter, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=AbstractConfigManager.html>R</a>, <a href=AbstractConfigManager.html>T</a>&gt; converter)</pre>
                                         <div class="block"></div>
                                         
                                     </li>
@@ -321,56 +360,19 @@ public class <span class="typeNameLabel"><a href=DamageEventUtils.html>DamageEve
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="isCritical(org.bukkit.event.entity.EntityDamageByEntityEvent)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>isCritical</h4>
-                                        <pre class="methodSignature"> static boolean <a href=DamageEventUtils.html#isCritical(org.bukkit.event.entity.EntityDamageByEntityEvent)>isCritical</a>(@NotNull() EntityDamageByEntityEvent event)</pre>
-                                        <div class="block"><p>获取事件是否造成暴击伤害.</p></div>
-
-                                        <dl>
-
-                                        
-                                            <dt><span class="paramLabel">Parameters:</span></dt>
-                                            
-                                            
-                                            <dd><code>event</code> - 待检测事件.</dd>
-                                            
-                                            
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="isBlocking(org.bukkit.event.entity.EntityDamageEvent)">
+                                <a id="reload()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>isBlocking</h4>
-                                        <pre class="methodSignature"> static boolean <a href=DamageEventUtils.html#isBlocking(org.bukkit.event.entity.EntityDamageEvent)>isBlocking</a>(@NotNull() EntityDamageEvent event)</pre>
-                                        <div class="block"><p>获取事件是否通过盾牌格挡伤害.</p></div>
+                                        <h4>reload</h4>
+                                        <pre class="methodSignature"> void <a href=AbstractConfigManager.html#reload()>reload</a>()</pre>
+                                        <div class="block"></div>
 
                                         <dl>
 
-                                        
-                                            <dt><span class="paramLabel">Parameters:</span></dt>
-                                            
-                                            
-                                            <dd><code>event</code> - 待检测事件.</dd>
-                                            
-                                            
                                         
 
                                         
@@ -402,7 +404,7 @@ public class <span class="typeNameLabel"><a href=DamageEventUtils.html>DamageEve
                 <!--   -->
             </a>
             <ul class="navList" title="Navigation">
-    <li><a href="../../../../../../../../../../index.html">Overview</a></li>
+    <li><a href="../../../../index.html">Overview</a></li>
     
     <li><a href="package-summary.html">Package</a></li>
     
@@ -410,8 +412,8 @@ public class <span class="typeNameLabel"><a href=DamageEventUtils.html>DamageEve
     
     <li><a href="package-tree.html">Tree</a></li>
     
-    <li><a href="../../../../../../../../../../deprecated.html">Deprecated</a></li>
-    <li><a href="../../../../../../../../../../index-files/index-1.html">Index</a></li>
+    <li><a href="../../../../deprecated.html">Deprecated</a></li>
+    <li><a href="../../../../index-files/index-1.html">Index</a></li>
     <li>Help</li>
 </ul></div>
         <a id="skip.navbar.bottom">
@@ -419,7 +421,7 @@ public class <span class="typeNameLabel"><a href=DamageEventUtils.html>DamageEve
         </a>
         <div class="subNav">
 <ul class="navList" id="allclasses_navbar_top" style="display: block;">
-    <li><a href="../../../../../../../../../../allclasses.html">All&nbsp;Classes</a></li>
+    <li><a href="../../../../allclasses.html">All&nbsp;Classes</a></li>
 </ul>
 <div>
 <script type="text/javascript"><!--
