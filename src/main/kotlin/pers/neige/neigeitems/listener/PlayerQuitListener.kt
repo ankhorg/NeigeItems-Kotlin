@@ -8,6 +8,6 @@ object PlayerQuitListener {
     @JvmStatic
     @Listener
     private fun listener(event: PlayerQuitEvent) {
-        NeigeItems.getUserManager().getOrMake(event.player.uniqueId)
+        NeigeItems.getUserManager().remove(event.player.uniqueId)
     }
 }

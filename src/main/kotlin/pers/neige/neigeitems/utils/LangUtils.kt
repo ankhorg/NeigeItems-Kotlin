@@ -32,14 +32,13 @@ object LangUtils {
     fun CommandSender.sendLang(key: String, param: Map<String, String>) {
         config.getString(key)?.let {
             // 将消息设置为""即代表不发送消息
-            if (it != "") {
-                var message = it
-                // 消息一般长度较短，且占位符数量不多，故不用担心遍历替换造成性能问题
-                param.forEach { (key, value) ->
-                    message = message.replace(key, value)
-                }
-                this.sendMessage(message)
+            if (it == "") return
+            var message = it
+            // 消息一般长度较短，且占位符数量不多，故不用担心遍历替换造成性能问题
+            param.forEach { (key, value) ->
+                message = message.replace(key, value)
             }
+            this.sendMessage(message)
         }
     }
 

@@ -37,14 +37,14 @@ public class User {
     }
 
     public void addChatCatcher(ChatCatcher catcher) {
-        synchronized (this) {
+        synchronized (chatCatchers) {
             chatCatchers.add(catcher);
         }
     }
 
     @Nullable
     public ChatCatcher pollChatCatcher() {
-        synchronized (this) {
+        synchronized (chatCatchers) {
             return chatCatchers.poll();
         }
     }
@@ -55,14 +55,14 @@ public class User {
     }
 
     public void addSignCatcher(SignCatcher catcher) {
-        synchronized (this) {
+        synchronized (signCatchers) {
             signCatchers.add(catcher);
         }
     }
 
     @Nullable
     public SignCatcher pollSignCatcher() {
-        synchronized (this) {
+        synchronized (signCatchers) {
             return signCatchers.poll();
         }
     }

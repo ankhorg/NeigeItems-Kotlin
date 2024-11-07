@@ -13,15 +13,17 @@ object PlayerJoinListener {
     @JvmStatic
     @Listener
     private fun listener(event: PlayerJoinEvent) {
+        // 数据包监听
         val channel = EntityPlayerUtils.getChannel(event.player)!!
         val handler = ChannelHandler(event.player.uniqueId)
         channel.eventLoop().submit {
             channel.pipeline().addBefore("packet_handler", "neigeitems_packet_handler", handler)
         }
-
+        // 初始化掉落物颜色Team
         ItemColor.initTeam(event.player)
-
-        NeigeItems.getUserManager().getOrMake(event.player.uniqueId)
+        // 初始化User
+        NeigeItems.getUserManager().create(event.player.uniqueId)
+        // 为op发送更新检测信息
         if (!event.player.isOp) return
         if (Updater.latestVersion == null || Updater.latestVersion == Updater.currentVersion) return
         event.player.sendLang(

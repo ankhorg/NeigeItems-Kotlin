@@ -53,7 +53,7 @@ public class SignCatcher {
                         @Override
                         public void onPacketReceiving(PacketEvent event) {
                             Player player = event.getPlayer();
-                            User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
+                            User user = NeigeItems.getUserManager().get(player.getUniqueId());
                             if (user == null) return;
                             SignCatcher catcher = user.pollSignCatcher();
                             if (catcher == null) return;

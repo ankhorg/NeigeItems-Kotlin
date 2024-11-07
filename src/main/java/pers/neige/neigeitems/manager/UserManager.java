@@ -8,30 +8,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class UserManager {
+public class UserManager extends ConcurrentHashMap<UUID, User> {
     @NotNull
-    private final Map<UUID, User> users = new ConcurrentHashMap<>();
-
-    @NotNull
-    public Map<UUID, User> getUsers() {
-        return users;
-    }
-
-    @NotNull
-    public User getOrMake(UUID uuid) {
-        return users.computeIfAbsent(uuid, (key) -> new User(uuid));
-    }
-
-    @Nullable
-    public User getIfLoaded(UUID uuid) {
-        return users.get(uuid);
-    }
-
-    public boolean contains(UUID uuid) {
-        return users.containsKey(uuid);
-    }
-
-    public void remove(UUID uuid) {
-        users.remove(uuid);
+    public User create(UUID uuid) {
+        User user = new User(uuid);
+        put(uuid, user);
+        return user;
     }
 }

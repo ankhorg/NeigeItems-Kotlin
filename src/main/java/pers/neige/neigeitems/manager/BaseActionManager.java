@@ -1257,7 +1257,7 @@ public abstract class BaseActionManager {
             ArrayList<String> args = StringUtils.split(content, ' ', '\\');
             String messageKey = getOrDefault(args, 0, "catchChat");
             boolean cancel = getAndApply(args, 1, true, StringsKt::toBooleanStrictOrNull);
-            User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
+            User user = NeigeItems.getUserManager().get(player.getUniqueId());
             if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             user.addChatCatcher(new ChatCatcher(this, messageKey, cancel, context, result));
@@ -1267,7 +1267,7 @@ public abstract class BaseActionManager {
         addFunction("catchSign", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
+            User user = NeigeItems.getUserManager().get(player.getUniqueId());
             if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             user.addSignCatcher(new SignCatcher(this, content, context, result));
