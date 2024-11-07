@@ -5,7 +5,9 @@ import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.plugin.Plugin
 import pers.neige.neigeitems.annotation.Awake
+import pers.neige.neigeitems.annotation.Awake.LifeCycle
 import pers.neige.neigeitems.annotation.Awake.LifeCycle.*
+import pers.neige.neigeitems.annotation.CustomTask
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.utils.ListenerUtils
@@ -14,6 +16,7 @@ import pers.neige.neigeitems.utils.SchedulerUtils.syncTimer
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.jar.JarFile
 
 /**
@@ -28,21 +31,15 @@ class ClassScanner(
      * 所有插件类
      */
     val classes = mutableListOf<Class<*>>()
-    private val listenerMethods = mutableListOf<Method>()
-    private val initMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
-    private val loadMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
-    private val enableMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
-    private val activeMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
-    private val disableMethods = EnumMap<EventPriority, MutableList<Method>>(EventPriority::class.java)
-    private val scheduleMethods = mutableListOf<Method>()
+    private val listenerMethods = ArrayList<PackedMethod>()
+    private val scheduleMethods = ArrayList<PackedMethod>()
+    private val awakeMethods = ConcurrentHashMap<LifeCycle, EnumMap<EventPriority, MutableList<PackedMethod>>>()
+    private val customTaskMethods =
+        ConcurrentHashMap<String, EnumMap<EventPriority, MutableList<PackedMethod>>>()
 
     init {
         scan()
-        initMethods.values.forEach { methods ->
-            methods.forEach { method ->
-                method.invokeSafe()
-            }
-        }
+        runAwakeTask(INIT)
     }
 
     private fun scan() {
@@ -54,56 +51,35 @@ class ClassScanner(
      * load阶段调用
      */
     fun onLoad() {
-        loadMethods.values.forEach { methods ->
-            methods.forEach { method ->
-                method.invokeSafe()
-            }
-        }
+        runAwakeTask(LOAD)
     }
 
     /**
      * enable阶段调用
      */
     fun onEnable() {
-        listenerMethods.forEach { method ->
+        listenerMethods.forEach { packedMethod ->
+            val method = packedMethod.method
+            val instance = packedMethod.instance
             val annotation = method.getAnnotation(Listener::class.java)
             val eventClass = method.parameterTypes[0].asSubclass(Event::class.java)
             val eventPriority = annotation.eventPriority
             val ignoreCancelled = annotation.ignoreCancelled
-            val instance = if (Modifier.isStatic(method.modifiers)) {
-                null
-            } else {
-                method.declaringClass.getDeclaredField("INSTANCE").get(null)
-            }
             ListenerUtils.registerListener(
                 eventClass, eventPriority, plugin, ignoreCancelled
             ) {
                 method.invoke(instance, it)
             }
         }
-
-        enableMethods.values.forEach { methods ->
-            methods.forEach { method ->
-                method.invokeSafe()
-            }
-        }
-
+        runAwakeTask(ENABLE)
         Bukkit.getScheduler().runTask(plugin, Runnable {
-            activeMethods.values.forEach { methods ->
-                methods.forEach { method ->
-                    method.invokeSafe()
-                }
-            }
+            runAwakeTask(ACTIVE)
         })
-
-        scheduleMethods.forEach { method ->
+        scheduleMethods.forEach { packedMethod ->
             try {
+                val method = packedMethod.method
+                val instance = packedMethod.instance
                 val annotation = method.getAnnotation(Schedule::class.java)
-                val instance = if (Modifier.isStatic(method.modifiers)) {
-                    null
-                } else {
-                    method.declaringClass.getDeclaredField("INSTANCE").get(null)
-                }
                 if (annotation.async) {
                     asyncTimer(plugin, 0, annotation.period) {
                         method.invoke(instance)
@@ -123,20 +99,19 @@ class ClassScanner(
      * disable阶段调用
      */
     fun onDisable() {
-        disableMethods.values.forEach { methods ->
-            methods.forEach { method ->
-                try {
-                    val instance = if (Modifier.isStatic(method.modifiers)) {
-                        null
-                    } else {
-                        method.declaringClass.getDeclaredField("INSTANCE").get(null)
-                    }
-                    method.invoke(instance)
-                } catch (error: Throwable) {
-                    error.printStackTrace()
-                }
-            }
-        }
+        runAwakeTask(DISABLE)
+    }
+
+    private fun runAwakeTask(lifeCycle: LifeCycle) {
+        awakeMethods[lifeCycle]?.values?.runMethods()
+    }
+
+    fun runCustomTask(taskId: String) {
+        customTaskMethods[taskId]?.values?.runMethods()
+    }
+
+    private fun Collection<List<PackedMethod>>.runMethods() {
+        forEach { it -> it.forEach { it.invoke() } }
     }
 
     private fun loadMethods() {
@@ -149,30 +124,40 @@ class ClassScanner(
             }
             methods?.forEach { method ->
                 // 监听器方法
-                if (method.isAnnotationPresent(Listener::class.java) && method.parameterCount == 1 && Event::class.java.isAssignableFrom(
-                        method.parameterTypes[0]
-                    ) && method.check("错误的监听器注解")
+                if (
+                    method.isAnnotationPresent(Listener::class.java)
+                    && method.parameterCount == 1
+                    && Event::class.java.isAssignableFrom(method.parameterTypes[0])
                 ) {
-                    listenerMethods.add(method)
+                    val finalMethod = method.check("错误的监听器注解")
+                    if (finalMethod != null) {
+                        listenerMethods.add(finalMethod)
+                    }
                 }
                 // 生命周期方法
-                if (method.isAnnotationPresent(Awake::class.java) && method.parameterCount == 0 && method.check("错误的生命周期注解")) {
-                    val annotation = method.getAnnotation(Awake::class.java)
-                    when (annotation.lifeCycle) {
-                        INIT -> initMethods.getOrPut(annotation.priority) { mutableListOf() }.add(method)
-
-                        LOAD -> loadMethods.getOrPut(annotation.priority) { mutableListOf() }.add(method)
-
-                        ENABLE -> enableMethods.getOrPut(annotation.priority) { mutableListOf() }.add(method)
-
-                        ACTIVE -> activeMethods.getOrPut(annotation.priority) { mutableListOf() }.add(method)
-
-                        DISABLE -> disableMethods.getOrPut(annotation.priority) { mutableListOf() }.add(method)
+                if (method.isAnnotationPresent(Awake::class.java) && method.parameterCount == 0) {
+                    val finalMethod = method.check("错误的生命周期注解")
+                    if (finalMethod != null) {
+                        val annotation = method.getAnnotation(Awake::class.java)
+                        awakeMethods.computeIfAbsent(annotation.lifeCycle) { EnumMap(EventPriority::class.java) }
+                            .computeIfAbsent(annotation.priority) { ArrayList() }.add(finalMethod)
+                    }
+                }
+                // 自定义任务方法
+                if (method.isAnnotationPresent(CustomTask::class.java) && method.parameterCount == 0) {
+                    val finalMethod = method.check("错误的自定义任务注解")
+                    if (finalMethod != null) {
+                        val annotation = method.getAnnotation(CustomTask::class.java)
+                        customTaskMethods.computeIfAbsent(annotation.taskId) { EnumMap(EventPriority::class.java) }
+                            .computeIfAbsent(annotation.priority) { ArrayList() }.add(finalMethod)
                     }
                 }
                 // 周期触发方法
-                if (method.isAnnotationPresent(Schedule::class.java) && method.parameterCount == 0 && method.check("错误的周期触发注解")) {
-                    scheduleMethods.add(method)
+                if (method.isAnnotationPresent(Schedule::class.java) && method.parameterCount == 0) {
+                    val finalMethod = method.check("错误的周期触发注解")
+                    if (finalMethod != null) {
+                        scheduleMethods.add(finalMethod)
+                    }
                 }
             }
         }
@@ -215,33 +200,36 @@ class ClassScanner(
         }
     }
 
-    private fun Method.check(msg: String): Boolean {
+    private fun Method.check(msg: String): PackedMethod? {
         if (!isAccessible) {
             isAccessible = true
         }
-        return if (!Modifier.isStatic(modifiers)) {
-            try {
-                declaringClass.getDeclaredField("INSTANCE").type == declaringClass
-            } catch (error: Throwable) {
-                plugin.logger.warning(msg + "${declaringClass.canonicalName}#${name}")
-                error.printStackTrace()
-                false
-            }
-        } else {
-            true
+        return try {
+            PackedMethod(this)
+        } catch (error: Throwable) {
+            plugin.logger.warning(msg + "${declaringClass.canonicalName}#${name}")
+            error.printStackTrace()
+            null
         }
     }
 
-    private fun Method.invokeSafe() {
-        try {
-            val instance = if (Modifier.isStatic(modifiers)) {
-                null
-            } else {
-                declaringClass.getDeclaredField("INSTANCE").get(null)
+    private class PackedMethod(val method: Method) {
+        val instance = if (Modifier.isStatic(method.modifiers)) {
+            null
+        } else {
+            method.declaringClass.getDeclaredField("INSTANCE").get(null).also {
+                if (it == null || it.javaClass != method.declaringClass) {
+                    throw UnsupportedOperationException()
+                }
             }
-            invoke(instance)
-        } catch (error: Throwable) {
-            error.printStackTrace()
+        }
+
+        fun invoke() {
+            try {
+                method.invoke(instance)
+            } catch (error: Throwable) {
+                error.printStackTrace()
+            }
         }
     }
 }

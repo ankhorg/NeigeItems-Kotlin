@@ -8,6 +8,7 @@ import pers.neige.neigeitems.utils.ConfigUtils;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
@@ -16,16 +17,18 @@ import java.util.logging.Logger;
 
 public abstract class AbstractConfigManager<T, R> extends ConcurrentHashMap<String, T> {
     @NotNull
-    private final String pluginName;
-    private final Logger logger;
+    protected final String pluginName;
     @NotNull
-    private final BiFunction<ConfigurationSection, String, R> configGetter;
+    protected final Logger logger;
     @NotNull
-    private final BiFunction<String, R, T> converter;
+    protected final BiFunction<ConfigurationSection, String, R> configGetter;
     @NotNull
-    private final String elementName;
+    protected final BiFunction<String, R, T> converter;
     @NotNull
-    private final String directory;
+    protected final String elementName;
+    @NotNull
+    protected final String directory;
+    protected boolean notNullConfig = true;
 
     public AbstractConfigManager(
             @NotNull JavaPlugin plugin,
@@ -59,23 +62,40 @@ public abstract class AbstractConfigManager<T, R> extends ConcurrentHashMap<Stri
     }
 
     @NotNull
+    protected List<File> getFiles() {
+        return ConfigUtils.getAllFiles(pluginName, directory);
+    }
+
+    @NotNull
     protected Map<String, R> getConfigs() {
-        Map<String, R> result = new HashMap<>();
-        for (File file : ConfigUtils.getAllFiles(pluginName, directory)) {
-            if (!file.getName().endsWith(".yml")) continue;
-            try {
-                YamlConfiguration config = new YamlConfiguration();
-                config.load(file);
-                for (String key : config.getKeys(false)) {
-                    R value = configGetter.apply(config, key);
-                    if (value == null) continue;
-                    result.put(key, value);
-                }
-            } catch (Throwable throwable) {
-                logger.log(Level.WARNING, throwable, () -> "error occurred while loading file: " + file.getName());
-            }
-        }
+        final Map<String, R> result = new HashMap<>();
+        getFiles().forEach((file) -> loadFile(result, file));
         return result;
+    }
+
+    protected void loadFile(@NotNull Map<String, R> result, @NotNull File file) {
+        if (!file.getName().endsWith(".yml")) return;
+        try {
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+            loadConfig(result, config);
+        } catch (Throwable throwable) {
+            logger.log(Level.WARNING, throwable, () -> "error occurred while loading file: " + file.getName());
+        }
+    }
+
+    protected void loadConfig(@NotNull Map<String, R> result, @NotNull YamlConfiguration config) {
+        String currentKey = "";
+        try {
+            for (String key : config.getKeys(false)) {
+                currentKey = key;
+                R value = configGetter.apply(config, key);
+                if (value == null && notNullConfig) return;
+                result.put(key, value);
+            }
+        } catch (Throwable throwable) {
+            final String finalCurrentKey = currentKey;
+            logger.log(Level.WARNING, throwable, () -> "error occurred while loading config, current key: " + finalCurrentKey + ", config content: \n" + config.saveToString());
+        }
     }
 
     public void reload() {
@@ -84,14 +104,14 @@ public abstract class AbstractConfigManager<T, R> extends ConcurrentHashMap<Stri
     }
 
     protected void load() {
-        for (Entry<String, R> entry : getConfigs().entrySet()) {
-            String id = entry.getKey();
-            R list = entry.getValue();
+        getConfigs().forEach((id, content) -> {
             try {
-                put(id, converter.apply(id, list));
+                T result = converter.apply(id, content);
+                if (result == null) return;
+                put(id, result);
             } catch (Throwable throwable) {
                 logger.log(Level.WARNING, throwable, () -> "error occurred while loading " + elementName + ": " + id);
             }
-        }
+        });
     }
 }

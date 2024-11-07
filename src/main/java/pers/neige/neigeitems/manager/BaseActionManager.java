@@ -1080,14 +1080,14 @@ public abstract class BaseActionManager {
             String comboGroup = info[0];
             // 连击类型
             String comboType = getOrDefault(info, 1, "");
+            // 为空则填入
             if (!PlayerUtils.hasMetadataEZ(player, "Combo-" + comboGroup)) {
                 PlayerUtils.setMetadataEZ(player, "Combo-" + comboGroup, new ArrayList<ComboInfo>());
             }
             // 当前时间
             long time = System.currentTimeMillis();
             // 记录列表
-            ArrayList<ComboInfo> comboInfos = (ArrayList<ComboInfo>) PlayerUtils.getMetadataEZ(player, "Combo-" + comboGroup, null);
-            // 为空则填入
+            ArrayList<ComboInfo> comboInfos = (ArrayList<ComboInfo>) PlayerUtils.getMetadataEZ(player, "Combo-" + comboGroup, "");
             assert comboInfos != null;
             if (!comboInfos.isEmpty()) {
                 // 连击中断

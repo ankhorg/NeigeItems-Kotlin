@@ -199,10 +199,10 @@ const chance = function (value, limit) {
  * @return Boolean 是否达成连击
  */
 const combo = function (group, types) {
-    if (!PlayerUtils.hasMetadata(player, "Combo-" + group)) {
+    if (!PlayerUtils.hasMetadataEZ(player, "Combo-" + group)) {
         PlayerUtils.setMetadataEZ(player, "Combo-" + group, new java.util.ArrayList())
     }
-    const comboInfos = player.getMetadata("Combo-" + group)[0].value()
+    const comboInfos = PlayerUtils.getMetadataEZ(player, "Combo-" + group, "")
     if (comboInfos.size() < types.length) return false
 
     const difference = comboInfos.size() - types.length
@@ -221,10 +221,10 @@ const combo = function (group, types) {
  * @return Boolean 是否达成连击
  */
 const comboSize = function (group) {
-    if (!PlayerUtils.hasMetadata(player, "Combo-" + group)) {
+    if (!PlayerUtils.hasMetadataEZ(player, "Combo-" + group)) {
         PlayerUtils.setMetadataEZ(player, "Combo-" + group, new java.util.ArrayList())
     }
-    const comboInfos = player.getMetadata("Combo-" + group)[0].value()
+    const comboInfos = PlayerUtils.getMetadataEZ(player, "Combo-" + group, "")
 
     return comboInfos.size()
 }
