@@ -11,6 +11,36 @@ import java.util.concurrent.ExecutionException;
 
 public class SchedulerUtils {
     /**
+     * 在指定线程执行一段代码.
+     *
+     * @param task 执行的代码.
+     */
+    public static void run(
+            boolean inPrimaryThread,
+            @NotNull Runnable task
+    ) {
+        run(NeigeItems.getInstance(), inPrimaryThread, task);
+    }
+
+    /**
+     * 在指定线程执行一段代码.
+     *
+     * @param plugin 注册任务的插件.
+     * @param task   执行的代码.
+     */
+    public static void run(
+            @NotNull Plugin plugin,
+            boolean inPrimaryThread,
+            @NotNull Runnable task
+    ) {
+        if (inPrimaryThread) {
+            sync(plugin, task);
+        } else {
+            async(plugin, task);
+        }
+    }
+
+    /**
      * 在主线程执行一段代码, 如果当前正处于主线程则直接执行, 如果不处在主线程则调用 runTask.
      *
      * @param task 执行的代码.

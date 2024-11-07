@@ -6,6 +6,7 @@ import kotlin.Pair;
 import kotlin.text.StringsKt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -740,9 +741,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.chat(HookerManager.papi(player, content));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -751,9 +753,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.chat(HookerManager.papiColor(player, content));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -762,9 +765,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 Bukkit.dispatchCommand(player, HookerManager.papiColor(player, content));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -775,9 +779,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 Bukkit.dispatchCommand(player, HookerManager.papi(player, content));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -785,15 +790,16 @@ public abstract class BaseActionManager {
         addFunction("console", (context, content) -> {
             Player player = context.getPlayer();
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             if (player != null) {
                 SchedulerUtils.sync(plugin, () -> {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papiColor(player, content));
-                    result.complete(Results.SUCCESS);
+                    SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
                 });
             } else {
                 SchedulerUtils.sync(plugin, () -> {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', content));
-                    result.complete(Results.SUCCESS);
+                    SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
                 });
             }
             return result;
@@ -802,15 +808,16 @@ public abstract class BaseActionManager {
         addFunction("consoleNoColor", (context, content) -> {
             Player player = context.getPlayer();
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             if (player != null) {
                 SchedulerUtils.sync(plugin, () -> {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papi(player, content));
-                    result.complete(Results.SUCCESS);
+                    SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
                 });
             } else {
                 SchedulerUtils.sync(plugin, () -> {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content);
-                    result.complete(Results.SUCCESS);
+                    SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
                 });
             }
             return result;
@@ -902,9 +909,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.giveExp(StringUtils.toInt(HookerManager.papi(player, content), 0));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -913,9 +921,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.giveExp(StringUtils.toInt(HookerManager.papi(player, content), 0) * -1);
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -924,9 +933,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.setTotalExperience(StringUtils.toInt(HookerManager.papi(player, content), 0));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -935,9 +945,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.giveExpLevels(StringUtils.toInt(HookerManager.papi(player, content), 0));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -946,9 +957,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.giveExpLevels(StringUtils.toInt(HookerManager.papi(player, content), 0) * -1);
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -957,9 +969,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.setLevel(StringUtils.toInt(HookerManager.papi(player, content), 0));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -968,9 +981,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0))));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -979,9 +993,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0))));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -990,9 +1005,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0))));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -1001,9 +1017,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.toFloat(HookerManager.papi(player, content), 0))));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -1012,9 +1029,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.toFloat(HookerManager.papi(player, content), 0))));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -1023,9 +1041,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.toFloat(HookerManager.papi(player, content), 0))));
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -1034,9 +1053,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setHealth(Math.max(0, Math.min(player.getMaxHealth(), player.getHealth() + StringUtils.toDouble(HookerManager.papi(player, content), 0))));
-                result.complete(Results.SUCCESS);
+                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() + StringUtils.toDouble(HookerManager.papi(player, content), 0))));
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -1045,9 +1065,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setHealth(Math.max(0, Math.min(player.getMaxHealth(), player.getHealth() - StringUtils.toDouble(HookerManager.papi(player, content), 0))));
-                result.complete(Results.SUCCESS);
+                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() - StringUtils.toDouble(HookerManager.papi(player, content), 0))));
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -1056,9 +1077,10 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setHealth(Math.max(0, Math.min(player.getMaxHealth(), StringUtils.toDouble(HookerManager.papi(player, content), 0))));
-                result.complete(Results.SUCCESS);
+                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), StringUtils.toDouble(HookerManager.papi(player, content), 0))));
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -1115,9 +1137,10 @@ public abstract class BaseActionManager {
                 Integer duration = StringUtils.toIntOrNull(args[2]);
                 if (type != null && duration != null && amplifier != null) {
                     CompletableFuture<ActionResult> result = new CompletableFuture<>();
+                    boolean isPrimaryThread = Bukkit.isPrimaryThread();
                     SchedulerUtils.sync(plugin, () -> {
                         player.addPotionEffect(new PotionEffect(type, duration * 20, amplifier - 1), true);
-                        result.complete(Results.SUCCESS);
+                        SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
                     });
                     return result;
                 }
@@ -1131,9 +1154,10 @@ public abstract class BaseActionManager {
             PotionEffectType type = PotionEffectType.getByName(content.toUpperCase(Locale.ROOT));
             if (type != null) {
                 CompletableFuture<ActionResult> result = new CompletableFuture<>();
+                boolean isPrimaryThread = Bukkit.isPrimaryThread();
                 SchedulerUtils.sync(plugin, () -> {
                     player.removePotionEffect(type);
-                    result.complete(Results.SUCCESS);
+                    SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
                 });
             }
             return CompletableFuture.completedFuture(Results.SUCCESS);
@@ -1179,6 +1203,7 @@ public abstract class BaseActionManager {
             if (args.length < 2) return CompletableFuture.completedFuture(Results.SUCCESS);
             String itemId = args[0];
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
                 int amount = StringUtils.toInt(args[1], 0);
                 ItemStack[] contents = player.getInventory().getContents();
@@ -1194,7 +1219,7 @@ public abstract class BaseActionManager {
                         break;
                     }
                 }
-                result.complete(Results.SUCCESS);
+                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
@@ -1235,7 +1260,7 @@ public abstract class BaseActionManager {
             User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
             if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            user.addChatCatcher(new ChatCatcher(messageKey, cancel, context, result));
+            user.addChatCatcher(new ChatCatcher(this, messageKey, cancel, context, result));
             return result;
         });
         // 告示牌捕获器
@@ -1245,7 +1270,7 @@ public abstract class BaseActionManager {
             User user = NeigeItems.getUserManager().getIfLoaded(player.getUniqueId());
             if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            user.addSignCatcher(new SignCatcher(content, context, result));
+            user.addSignCatcher(new SignCatcher(this, content, context, result));
             EntityPlayerUtils.openSign(player);
             return result;
         });
