@@ -22,6 +22,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUti
 import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -213,5 +214,11 @@ public class NMSHooker {
             int id
     ) {
         return WorldUtils.getEntityFromID(world, id);
+    }
+
+    @Nullable
+    public Material getMaterial(@Nullable String material) {
+        if (material == null) return null;
+        return Material.getMaterial(material.toUpperCase(Locale.ENGLISH));
     }
 }

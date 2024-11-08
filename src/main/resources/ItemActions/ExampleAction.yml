@@ -52,7 +52,7 @@ ExampleItem3:
       deny:
         - "tell: 你没有&e item.ExampleItem3 &f权限"
     # 动作内容
-    actions:
+    sync:
       # 这条动作没有condition, 所以必定执行
       - "tell: 你正尝试触发&e ExampleItem3 &f物品"
 ExampleItem4:
@@ -75,25 +75,25 @@ ActionTest:
 EatTest1:
   eat:
     sync:
-      - 'giveFood: 5'
-      - 'giveHealth: 5'
+      - 'give-food: 5'
+      - 'give-health: 5'
 EatTest2:
   eat:
     consume:
       amount: 1
     sync:
-      - 'giveFood: 5'
-      - 'giveHealth: 5'
+      - 'give-food: 5'
+      - 'give-health: 5'
 DropTest1:
   drop:
-    actions:
-      - 'castSkill: SkillTest'
+    sync:
+      - 'cast-skill: SkillTest'
 DropTest2:
   drop:
     consume:
       amount: 1
-    actions:
-      - 'castSkill: SkillTest'
+    sync:
+      - 'cast-skill: SkillTest'
 CustomAction:
   all:
     sync:
@@ -110,7 +110,7 @@ ComboTest:
           # 进行对应操作
           - 'tell: &e连击 &bL &f+ &bR &f+ &bL'
           # 已达成最终需要的连击, 清空ComboTest组的连击记录
-          - 'comboClear: ComboTest'
+          - 'combo-clear: ComboTest'
         deny:
           # 检测ComboTest组是否完成了left连击
           condition: combo("ComboTest", ["left"])

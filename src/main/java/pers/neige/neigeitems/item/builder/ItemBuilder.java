@@ -13,6 +13,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EnchantmentUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils;
+import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.lang.reflect.Field;
@@ -103,7 +104,7 @@ public class ItemBuilder {
                 case "material": {
                     String materialString = config.getString(key);
                     if (materialString != null) {
-                        this.material = Material.matchMaterial(materialString.toUpperCase());
+                        this.material = HookerManager.getMaterial(materialString);
                     }
                     break;
                 }

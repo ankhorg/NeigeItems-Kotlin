@@ -2,7 +2,6 @@ package pers.neige.neigeitems.command.subcommand
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.md_5.bungee.api.chat.ComponentBuilder
-import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -22,7 +21,6 @@ import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.PlayerUtils.sendMessage
 import pers.neige.neigeitems.utils.SchedulerUtils.async
-import java.util.*
 import kotlin.math.ceil
 
 /**
@@ -110,9 +108,7 @@ object List {
                     val itemKeySection = ItemManager.getOriginConfig(id)
                     val itemName = when {
                         itemKeySection?.contains("name") == true -> itemKeySection.getString("name")
-                        else -> Material.matchMaterial(
-                            (itemKeySection?.getString("material") ?: "").uppercase(Locale.getDefault())
-                        )
+                        else -> HookerManager.getMaterial(itemKeySection?.getString("material"))
                             ?.let { ItemStack(it).getName() }
                     }
                     listItemMessage = itemName?.let { listItemMessage.replace("{name}", it) }.toString()

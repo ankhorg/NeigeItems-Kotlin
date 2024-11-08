@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
 import pers.neige.neigeitems.utils.ItemUtils.getDamage
@@ -343,6 +344,10 @@ object SectionUtils {
                     itemStack.type.toString()
                 }
 
+                "name" -> {
+                    TranslationUtils.getDisplayOrTranslationName(itemStack)
+                }
+
                 "damage" -> {
                     itemStack.getDamage().toString()
                 }
@@ -426,6 +431,10 @@ object SectionUtils {
 
                 "type" -> {
                     itemStack.type.toString()
+                }
+
+                "name" -> {
+                    TranslationUtils.getDisplayOrTranslationName(itemStack)
                 }
 
                 "damage" -> {

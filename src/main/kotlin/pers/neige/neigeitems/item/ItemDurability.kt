@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerItemDamageEvent
 import org.bukkit.event.player.PlayerItemMendEvent
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
+import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getDamage
@@ -28,7 +29,7 @@ import java.util.concurrent.ThreadLocalRandom
  * 物品自定义耐久实现类
  */
 object ItemDurability {
-    private val FIRE_CHARGE_MATERIAL = (Material.matchMaterial("FIRE_CHARGE") ?: Material.matchMaterial("FIREBALL"))!!
+    private val FIRE_CHARGE_MATERIAL = (HookerManager.getMaterial("FIRE_CHARGE") ?: HookerManager.getMaterial("FIREBALL"))!!
 
     /**
      * 方块交互

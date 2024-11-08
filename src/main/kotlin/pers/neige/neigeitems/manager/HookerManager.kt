@@ -641,7 +641,7 @@ object HookerManager {
                 }
 
                 "vn", "vanilla" -> {
-                    val material = Material.matchMaterial(nameSpaceToItemId[1].uppercase())
+                    val material = getMaterial(nameSpaceToItemId[1])
                     if (material != null) {
                         return ItemStack(material)
                     }
@@ -674,11 +674,16 @@ object HookerManager {
             if (itemStack != null) return itemStack
         }
 
-        val material = Material.matchMaterial(id.uppercase())
+        val material = getMaterial(id.uppercase())
         if (material != null) {
             return ItemStack(material)
         }
 
         return null
+    }
+
+    @JvmStatic
+    fun getMaterial(material: String?): Material? {
+        return nmsHooker.getMaterial(material)
     }
 }

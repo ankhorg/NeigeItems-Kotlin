@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
+import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class NewItemBuilder extends ItemBuilder {
                 case "material": {
                     String materialString = config.getString(key);
                     if (materialString != null) {
-                        this.material = Material.matchMaterial(materialString.toUpperCase());
+                        this.material = HookerManager.getMaterial(materialString);
                     }
                     break;
                 }

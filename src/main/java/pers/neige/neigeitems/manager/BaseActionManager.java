@@ -794,7 +794,7 @@ public abstract class BaseActionManager {
             return result;
         });
         // 强制玩家执行指令
-        addFunction("command", (context, content) -> {
+        addFunction(Arrays.asList("command", "player"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
@@ -805,8 +805,6 @@ public abstract class BaseActionManager {
             });
             return result;
         });
-        // 强制玩家执行指令
-        addFunction("player", actions.get("command"));
         // 强制玩家执行指令(不将&解析为颜色符号)
         addFunction(Arrays.asList("command-no-color", "commandNoColor"), (context, content) -> {
             Player player = context.getPlayer();

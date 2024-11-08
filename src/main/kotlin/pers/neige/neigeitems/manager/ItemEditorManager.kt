@@ -119,7 +119,7 @@ object ItemEditorManager {
             // 判断是不是空气
             if (itemStack.type != Material.AIR) {
                 // 获取对应材质
-                Material.matchMaterial(content.uppercase(Locale.getDefault()))?.let { material ->
+                HookerManager.getMaterial(content)?.let { material ->
                     // 设置物品材质
                     itemStack.type = material
                     return@addBasicItemEditor true

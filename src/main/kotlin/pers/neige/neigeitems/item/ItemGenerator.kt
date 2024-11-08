@@ -10,7 +10,10 @@ import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
 import org.slf4j.LoggerFactory
+import pers.neige.neigeitems.action.ActionContext
+import pers.neige.neigeitems.action.container.ActionContainer
 import pers.neige.neigeitems.event.ItemGenerateEvent
+import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager
@@ -22,6 +25,7 @@ import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ConfigUtils.toStringMap
 import pers.neige.neigeitems.utils.ItemUtils.asCraftCopy
 import pers.neige.neigeitems.utils.ItemUtils.copy
+import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ItemUtils.isCraftItem
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -50,14 +54,14 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     val file = itemConfig.file
 
     /**
-     * 获取物品原配置
-     */
-    val originConfigSection = itemConfig.configSection ?: YamlConfiguration() as ConfigurationSection
-
-    /**
      * 获取物品解析后配置(经过继承和全局节点调用)
      */
-    val configSection = loadGlobalSections(inherit(YamlConfiguration() as ConfigurationSection, originConfigSection))
+    val configSection = loadGlobalSections(
+        inherit(
+            YamlConfiguration() as ConfigurationSection,
+            itemConfig.configSection ?: YamlConfiguration() as ConfigurationSection
+        )
+    )
 
     /**
      * 获取物品节点配置
@@ -67,42 +71,30 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     /**
      * 获取物品是否需要更新
      */
-    val update = configSection.getBoolean(
-        "options.update.enable", configSection.getBoolean("static.options.update.enable", false)
-    )
+    val update = configSection.getBoolean("options.update.enable", false)
 
     /**
      * 获取更新时保护的NBT
      */
     val protectNBT = if (update) {
-        if (configSection.contains("options.update.protect")) {
-            configSection.getStringList("options.update.protect")
-        } else {
-            configSection.getStringList("static.options.update.protect")
-        }
+        configSection.getStringList("options.update.protect")
     } else listOf()
 
     /**
      * 获取更新时刷新的节点
      */
     val refreshData = if (update) {
-        if (configSection.contains("options.update.refresh")) {
-            configSection.getStringList("options.update.refresh")
-        } else {
-            configSection.getStringList("static.options.update.refresh")
-        }
+        configSection.getStringList("options.update.refresh")
     } else listOf()
 
     /**
      * 获取更新时重构的节点
      */
     val rebuildData = if (update) {
-        if (configSection.contains("options.update.rebuild")) {
-            configSection.getConfigurationSection("options.update.rebuild")?.toStringMap()
-        } else {
-            configSection.getConfigurationSection("static.options.update.rebuild")?.toStringMap()
-        }
+        configSection.getConfigurationSection("options.update.rebuild")?.toStringMap()
     } else null
+
+    val eventActions: ActionContainer = ActionContainer(ActionManager, "event", configSection.getConfigurationSection("event"))
 
     /**
      * 获取物品静态配置
@@ -110,37 +102,28 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     val static = configSection.getConfigurationSection("static")
 
     /**
-     * 获取去除节点&静态配置的物品配置
+     * 获取去除静态配置的物品配置文本
      */
-    val configNoSection = (YamlConfiguration() as ConfigurationSection).also {
+    private val configStringNoSection = (YamlConfiguration() as ConfigurationSection).also {
         this.configSection.getKeys(false).forEach { key ->
-            if (key != "sections" && key != "static") {
-                it.set(key, this.configSection.get(key))
-            }
+            it.set(key, this.configSection.get(key))
         }
+        it.set("sections", null)
+        it.set("static", null)
         it.set("options.update", null)
-    }
-
-    /**
-     * 获取解析后物品配置文本
-     */
-    val configString = configSection.saveToString(id)
-
-    /**
-     * 获取去除节点&静态配置的物品配置文本
-     */
-    val configStringNoSection = configNoSection.saveToString(id)
+        it.set("event", null)
+    }.saveToString(id)
 
     /**
      * 获取解析后物品配置文本哈希值
      */
-    val hashCode = configString.hashCode()
+    val hashCode = configSection.saveToString(id).hashCode()
 
     /**
      * 获取是否存在静态材质
      */
-    val hasStaticMaterial =
-        static?.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) } != null
+    private val hasStaticMaterial =
+        static?.getString("material")?.let { HookerManager.getMaterial(it) } != null
 
     private val originStaticItemStack = load(static) ?: ItemStack(Material.STONE).asCraftCopy()
 
@@ -353,33 +336,36 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         val configSection = configString.loadFromString(id) ?: YamlConfiguration()
 
         // 构建物品
-        if (configSection.contains("material") || hasStaticMaterial) {
-            // 获取材质
-            val material =
-                configSection.getString("material")?.let { Material.matchMaterial(it.uppercase(Locale.getDefault())) }
-            if (material != null || hasStaticMaterial) {
-                // 预处理中已将ItemStack转为CraftItemStack, 可提升NBT操作效率
-                val itemStack = staticItemStack
-                // 空物品检测
-                if (itemStack.type == Material.AIR) {
-                    // 触发一下物品生成事件
-                    val event = ItemGenerateEvent(id, player, itemStack, cache, configSection, sections)
-                    event.call()
-                    return event.itemStack
-                }
-                // 加载物品配置
-                load(configSection, itemStack, material, cache)
+        // 获取材质
+        val material = HookerManager.getMaterial(configSection.getString("material"))
+        if (material != null || hasStaticMaterial) {
+            // 预处理中已将ItemStack转为CraftItemStack, 可提升NBT操作效率
+            val itemStack = staticItemStack
+            // 空物品检测
+            if (itemStack.type == Material.AIR) {
                 // 触发一下物品生成事件
                 val event = ItemGenerateEvent(id, player, itemStack, cache, configSection, sections)
                 event.call()
                 return event.itemStack
-            } else {
-                Bukkit.getConsoleSender().sendLang(
-                    "Messages.invalidMaterial", mapOf(
-                        Pair("{itemID}", id), Pair("{material}", configSection.getString("material") ?: "")
-                    )
-                )
             }
+            // 加载物品配置
+            load(configSection, itemStack, material, cache)
+            // 触发一下物品生成事件
+            val event = ItemGenerateEvent(id, player, itemStack, cache, configSection, sections)
+            event.call()
+            val params = hashMapOf(
+                "id" to id,
+                "item" to this
+            )
+            val context = ActionContext(player?.player, params, params, event.itemStack, event.itemStack.getNbtOrNull(), event.cache)
+            eventActions.run("post-generate", context)
+            return event.itemStack
+        } else {
+            Bukkit.getConsoleSender().sendLang(
+                "Messages.invalidMaterial", mapOf(
+                    Pair("{itemID}", id), Pair("{material}", configSection.getString("material") ?: "")
+                )
+            )
         }
         return null
     }
