@@ -21,6 +21,7 @@ $dokka.location:pers.neige.neigeitems.utils/SamplingUtils.SamplingResult///Point
 pers.neige.neigeitems
 pers.neige.neigeitems.action
 pers.neige.neigeitems.action.catcher
+pers.neige.neigeitems.action.container
 pers.neige.neigeitems.action.impl
 pers.neige.neigeitems.action.result
 pers.neige.neigeitems.annotation
