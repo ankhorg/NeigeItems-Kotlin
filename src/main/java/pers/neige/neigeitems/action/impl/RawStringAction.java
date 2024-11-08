@@ -56,7 +56,6 @@ public class RawStringAction extends Action {
             return manager.runAction(this, context);
         } catch (Throwable throwable) {
             manager.getPlugin().getLogger().warning("动作执行异常, 动作原始内容如下:");
-            manager.getPlugin().getLogger().warning(action);
             for (String actionLine : action.split("\n")) {
                 manager.getPlugin().getLogger().warning(actionLine);
             }

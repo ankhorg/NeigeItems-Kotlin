@@ -25,7 +25,18 @@ abstract class PapiHooker {
      * @param text 待转换文本
      * @return 转换后文本
      */
-    abstract fun toSection(text: String): String
+    fun toSection(text: String): String {
+        return toSection(text, true)
+    }
+
+    /**
+     * 将文本中的所有papi变量改写为papi节点
+     *
+     * @param text 待转换文本
+     * @param onlyValid 仅转换已注册的papi变量
+     * @return 转换后文本
+     */
+    abstract fun toSection(text: String, onlyValid: Boolean): String
 
     /**
      * 判断文本中是否存在有效papi变量

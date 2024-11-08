@@ -26,6 +26,7 @@ import pers.neige.neigeitems.action.impl.*;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.action.result.StopResult;
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker;
+import pers.neige.neigeitems.hook.placeholderapi.PapiHooker;
 import pers.neige.neigeitems.hook.vault.VaultHooker;
 import pers.neige.neigeitems.item.action.ComboInfo;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils;
@@ -117,7 +118,7 @@ public abstract class BaseActionManager {
             String string = (String) action;
             String[] info = string.split(": ", 2);
             String key = info[0].toLowerCase(Locale.ROOT);
-            String content = info.length > 1 ? info[1] : "";
+            String content = HookerManager.toSection(info.length > 1 ? info[1] : "", false);
             if (key.equals("js")) {
                 return new JsAction(this, content);
             } else {
@@ -641,6 +642,22 @@ public abstract class BaseActionManager {
     /**
      * 添加物品动作
      *
+     * @param ids      动作ID
+     * @param function 动作执行函数
+     */
+    public void addFunction(
+            @NotNull Collection<String> ids,
+            @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
+    ) {
+        if (function == null) return;
+        for (String id : ids) {
+            addFunction(id, function);
+        }
+    }
+
+    /**
+     * 添加物品动作
+     *
      * @param id       动作ID
      * @param function 动作执行函数
      */
@@ -654,6 +671,22 @@ public abstract class BaseActionManager {
             if (result == null) result = CompletableFuture.completedFuture(Results.SUCCESS);
             return result;
         });
+    }
+
+    /**
+     * 添加物品动作
+     *
+     * @param ids      动作ID
+     * @param consumer 动作执行函数
+     */
+    public void addConsumer(
+            @NotNull Collection<String> ids,
+            @Nullable BiConsumer<ActionContext, String> consumer
+    ) {
+        if (consumer == null) return;
+        for (String id : ids) {
+            addConsumer(id, consumer);
+        }
     }
 
     /**
@@ -728,13 +761,13 @@ public abstract class BaseActionManager {
         addConsumer("tell", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.sendMessage(HookerManager.papiColor(player, content));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', content));
         });
         // 向玩家发送消息(不将&解析为颜色符号)
-        addConsumer("tellNoColor", (context, content) -> {
+        addConsumer(Arrays.asList("tell-no-color", "tellNoColor"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.sendMessage(HookerManager.papi(player, content));
+            player.sendMessage(content);
         });
         // 强制玩家发送消息
         addFunction("chat", (context, content) -> {
@@ -743,19 +776,19 @@ public abstract class BaseActionManager {
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.chat(HookerManager.papi(player, content));
+                player.chat(content);
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 强制玩家发送消息(将&解析为颜色符号)
-        addFunction("chatWithColor", (context, content) -> {
+        addFunction(Arrays.asList("chat-with-color", "chatWithColor"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.chat(HookerManager.papiColor(player, content));
+                player.chat(ChatColor.translateAlternateColorCodes('&', content));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
@@ -767,7 +800,7 @@ public abstract class BaseActionManager {
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                Bukkit.dispatchCommand(player, HookerManager.papiColor(player, content));
+                Bukkit.dispatchCommand(player, ChatColor.translateAlternateColorCodes('&', content));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
@@ -775,13 +808,13 @@ public abstract class BaseActionManager {
         // 强制玩家执行指令
         addFunction("player", actions.get("command"));
         // 强制玩家执行指令(不将&解析为颜色符号)
-        addFunction("commandNoColor", (context, content) -> {
+        addFunction(Arrays.asList("command-no-color", "commandNoColor"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                Bukkit.dispatchCommand(player, HookerManager.papi(player, content));
+                Bukkit.dispatchCommand(player, content);
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
@@ -793,7 +826,7 @@ public abstract class BaseActionManager {
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             if (player != null) {
                 SchedulerUtils.sync(plugin, () -> {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papiColor(player, content));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', content));
                     SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
                 });
             } else {
@@ -805,13 +838,13 @@ public abstract class BaseActionManager {
             return result;
         });
         // 后台执行指令(不将&解析为颜色符号)
-        addFunction("consoleNoColor", (context, content) -> {
+        addFunction(Arrays.asList("console-no-color", "consoleNoColor"), (context, content) -> {
             Player player = context.getPlayer();
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             if (player != null) {
                 SchedulerUtils.sync(plugin, () -> {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), HookerManager.papi(player, content));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content);
                     SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
                 });
             } else {
@@ -826,16 +859,16 @@ public abstract class BaseActionManager {
         addConsumer("broadcast", (context, content) -> {
             Player player = context.getPlayer();
             if (player != null) {
-                Bukkit.broadcastMessage(HookerManager.papiColor(player, content));
+                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', content));
             } else {
                 Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', content));
             }
         });
         // 公告(不将&解析为颜色符号)
-        addConsumer("broadcastNoColor", (context, content) -> {
+        addConsumer(Arrays.asList("broadcast-no-color", "broadcastNoColor"), (context, content) -> {
             Player player = context.getPlayer();
             if (player != null) {
-                Bukkit.broadcastMessage(HookerManager.papi(player, content));
+                Bukkit.broadcastMessage(content);
             } else {
                 Bukkit.broadcastMessage(content);
             }
@@ -844,7 +877,7 @@ public abstract class BaseActionManager {
         addConsumer("title", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            ArrayList<String> args = StringUtils.split(HookerManager.papiColor(player, content), ' ', '\\');
+            ArrayList<String> args = StringUtils.split(ChatColor.translateAlternateColorCodes('&', content), ' ', '\\');
             String title = getOrNull(args, 0);
             String subtitle = getOrDefault(args, 1, "");
             int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
@@ -853,10 +886,10 @@ public abstract class BaseActionManager {
             player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         });
         // 发送Title(不将&解析为颜色符号)
-        addConsumer("titleNoColor", (context, content) -> {
+        addConsumer(Arrays.asList("title-no-color", "titleNoColor"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            ArrayList<String> args = StringUtils.split(HookerManager.papi(player, content), ' ', '\\');
+            ArrayList<String> args = StringUtils.split(content, ' ', '\\');
             String title = getOrNull(args, 0);
             String subtitle = getOrDefault(args, 1, "");
             int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
@@ -865,16 +898,16 @@ public abstract class BaseActionManager {
             player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         });
         // 发送ActionBar
-        addConsumer("actionBar", (context, content) -> {
+        addConsumer("actionbar", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            PlayerUtils.sendActionBar(player, HookerManager.papiColor(player, content));
+            PlayerUtils.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', content));
         });
         // 发送ActionBar(不将&解析为颜色符号)
-        addConsumer("actionBarNoColor", (context, content) -> {
+        addConsumer(Arrays.asList("actionbar-no-color", "actionbarNoColor"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            PlayerUtils.sendActionBar(player, HookerManager.papi(player, content));
+            PlayerUtils.sendActionBar(player, content);
         });
         // 播放音乐
         addConsumer("sound", (context, content) -> {
@@ -887,205 +920,205 @@ public abstract class BaseActionManager {
             player.playSound(player.getLocation(), sound, volume, pitch);
         });
         // 给予玩家金钱
-        addConsumer("giveMoney", (context, content) -> {
+        addConsumer(Arrays.asList("give-money", "giveMoney"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
             VaultHooker hooker = HookerManager.INSTANCE.getVaultHooker();
             if (hooker != null) {
-                hooker.giveMoney(player, StringUtils.toDouble(HookerManager.papi(player, content), 0.0));
+                hooker.giveMoney(player, StringUtils.toDouble(content, 0.0));
             }
         });
         // 扣除玩家金钱
-        addConsumer("takeMoney", (context, content) -> {
+        addConsumer(Arrays.asList("take-money", "takeMoney"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
             VaultHooker hooker = HookerManager.INSTANCE.getVaultHooker();
             if (hooker != null) {
-                hooker.takeMoney(player, StringUtils.toDouble(HookerManager.papi(player, content), 0.0));
+                hooker.takeMoney(player, StringUtils.toDouble(content, 0.0));
             }
         });
         // 给予玩家经验
-        addFunction("giveExp", (context, content) -> {
+        addFunction(Arrays.asList("give-exp", "giveExp"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.giveExp(StringUtils.toInt(HookerManager.papi(player, content), 0));
+                player.giveExp(StringUtils.toInt(content, 0));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 扣除玩家经验
-        addFunction("takeExp", (context, content) -> {
+        addFunction(Arrays.asList("take-exp", "takeExp"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.giveExp(StringUtils.toInt(HookerManager.papi(player, content), 0) * -1);
+                player.giveExp(StringUtils.toInt(content, 0) * -1);
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 设置玩家经验
-        addFunction("setExp", (context, content) -> {
+        addFunction(Arrays.asList("set-exp", "setExp"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setTotalExperience(StringUtils.toInt(HookerManager.papi(player, content), 0));
+                player.setTotalExperience(StringUtils.toInt(content, 0));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 给予玩家经验等级
-        addFunction("giveLevel", (context, content) -> {
+        addFunction(Arrays.asList("give-level", "giveLevel"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.giveExpLevels(StringUtils.toInt(HookerManager.papi(player, content), 0));
+                player.giveExpLevels(StringUtils.toInt(content, 0));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 扣除玩家经验等级
-        addFunction("takeLevel", (context, content) -> {
+        addFunction(Arrays.asList("take-level", "takeLevel"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.giveExpLevels(StringUtils.toInt(HookerManager.papi(player, content), 0) * -1);
+                player.giveExpLevels(StringUtils.toInt(content, 0) * -1);
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 设置玩家经验等级
-        addFunction("setLevel", (context, content) -> {
+        addFunction(Arrays.asList("set-level", "setLevel"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setLevel(StringUtils.toInt(HookerManager.papi(player, content), 0));
+                player.setLevel(StringUtils.toInt(content, 0));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 给予玩家饱食度
-        addFunction("giveFood", (context, content) -> {
+        addFunction(Arrays.asList("give-food", "giveFood"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0))));
+                player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 扣除玩家饱食度
-        addFunction("takeFood", (context, content) -> {
+        addFunction(Arrays.asList("take-food", "takeFood"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0))));
+                player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 设置玩家饱食度
-        addFunction("setFood", (context, content) -> {
+        addFunction(Arrays.asList("set-food", "setFood"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.toInt(HookerManager.papi(player, content), 0))));
+                player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 给予玩家饱和度
-        addFunction("giveSaturation", (context, content) -> {
+        addFunction(Arrays.asList("give-saturation", "giveSaturation"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.toFloat(HookerManager.papi(player, content), 0))));
+                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.toFloat(content, 0))));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 扣除玩家饱和度
-        addFunction("takeSaturation", (context, content) -> {
+        addFunction(Arrays.asList("take-saturation", "takeSaturation"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.toFloat(HookerManager.papi(player, content), 0))));
+                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.toFloat(content, 0))));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 设置玩家饱和度
-        addFunction("setSaturation", (context, content) -> {
+        addFunction(Arrays.asList("set-saturation", "setSaturation"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.toFloat(HookerManager.papi(player, content), 0))));
+                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.toFloat(content, 0))));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 给予玩家生命
-        addFunction("giveHealth", (context, content) -> {
+        addFunction(Arrays.asList("give-health", "giveHealth"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() + StringUtils.toDouble(HookerManager.papi(player, content), 0))));
+                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() + StringUtils.toDouble(content, 0))));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 扣除玩家生命
-        addFunction("takeHealth", (context, content) -> {
+        addFunction(Arrays.asList("take-health", "takeHealth"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() - StringUtils.toDouble(HookerManager.papi(player, content), 0))));
+                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() - StringUtils.toDouble(content, 0))));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 设置玩家生命
-        addFunction("setHealth", (context, content) -> {
+        addFunction(Arrays.asList("set-health", "setHealth"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), StringUtils.toDouble(HookerManager.papi(player, content), 0))));
+                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), StringUtils.toDouble(content, 0))));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
         });
         // 释放MM技能
-        addConsumer("castSkill", (context, content) -> {
+        addConsumer(Arrays.asList("cast-skill", "castSkill"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
             MythicMobsHooker hooker = HookerManager.INSTANCE.getMythicMobsHooker();
@@ -1097,7 +1130,7 @@ public abstract class BaseActionManager {
         addConsumer("combo", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            String[] info = HookerManager.papi(player, content).split(" ", 2);
+            String[] info = content.split(" ", 2);
             // 连击组
             String comboGroup = info[0];
             // 连击类型
@@ -1121,13 +1154,13 @@ public abstract class BaseActionManager {
             comboInfos.add(new ComboInfo(comboType, time));
         });
         // 连击清空
-        addConsumer("comboClear", (context, content) -> {
+        addConsumer(Arrays.asList("combo-clear", "comboClear"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            PlayerUtils.setMetadataEZ(player, "Combo-" + HookerManager.papi(player, content), new ArrayList<ComboInfo>());
+            PlayerUtils.setMetadataEZ(player, "Combo-" + content, new ArrayList<ComboInfo>());
         });
         // 设置药水效果
-        addFunction("setPotionEffect", (context, content) -> {
+        addFunction(Arrays.asList("set-potion", "setPotion", "set-potion-effect", "setPotionEffect"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             String[] args = content.split(" ", 3);
@@ -1148,7 +1181,7 @@ public abstract class BaseActionManager {
             return CompletableFuture.completedFuture(Results.SUCCESS);
         });
         // 移除药水效果
-        addFunction("removePotionEffect", (context, content) -> {
+        addFunction(Arrays.asList("remove-potion", "removePotion", "remove-potion-effect", "removePotionEffect"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             PotionEffectType type = PotionEffectType.getByName(content.toUpperCase(Locale.ROOT));
@@ -1179,26 +1212,26 @@ public abstract class BaseActionManager {
             }
         });
         // 终止
-        addFunction("returnWeight", (context, content) -> {
+        addFunction(Arrays.asList("return-weight", "returnWeight"), (context, content) -> {
             String[] args = content.split(" ", 2);
             int priority = getAndApply(args, 0, 1, StringsKt::toIntOrNull);
             String label = getOrNull(args, 1);
             return CompletableFuture.completedFuture(new StopResult(label, priority));
         });
         // 向global中设置内容
-        addConsumer("setGlobal", (context, content) -> {
+        addConsumer(Arrays.asList("set-global", "setGlobal"), (context, content) -> {
             String[] info = content.split(" ", 2);
             if (info.length > 1) {
                 context.getGlobal().put(info[0], info[1]);
             }
         });
         // 从global中删除内容
-        addConsumer("delGlobal", (context, content) -> context.getGlobal().remove(content));
+        addConsumer(Arrays.asList("del-global", "delGlobal"), (context, content) -> context.getGlobal().remove(content));
         // 扣除NI物品
-        addFunction("takeNiItem", (context, content) -> {
+        addFunction(Arrays.asList("take-ni-item", "takeNiItem"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            String parsedContent = HookerManager.papi(player, content);
+            String parsedContent = content;
             String[] args = parsedContent.split(" ", 2);
             if (args.length < 2) return CompletableFuture.completedFuture(Results.SUCCESS);
             String itemId = args[0];
@@ -1251,7 +1284,7 @@ public abstract class BaseActionManager {
             return result;
         });
         // 聊天捕获器
-        addFunction("catchChat", (context, content) -> {
+        addFunction(Arrays.asList("catch-chat", "catchChat"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             ArrayList<String> args = StringUtils.split(content, ' ', '\\');
@@ -1264,7 +1297,7 @@ public abstract class BaseActionManager {
             return result;
         });
         // 告示牌捕获器
-        addFunction("catchSign", (context, content) -> {
+        addFunction(Arrays.asList("catch-sign", "catchSign"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             User user = NeigeItems.getUserManager().get(player.getUniqueId());

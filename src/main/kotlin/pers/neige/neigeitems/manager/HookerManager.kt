@@ -294,6 +294,18 @@ object HookerManager {
     }
 
     /**
+     * 将文本中的所有papi变量改写为papi节点
+     *
+     * @param text 待转换文本
+     * @param onlyValid 仅转换已注册的papi变量
+     * @return 转换后文本
+     */
+    @JvmStatic
+    fun toSection(text: String, onlyValid: Boolean): String {
+        return papiHooker?.toSection(text, onlyValid) ?: text
+    }
+
+    /**
      * 获取papi解析值
      *
      * @param player 用于解析PAPI变量的玩家对象

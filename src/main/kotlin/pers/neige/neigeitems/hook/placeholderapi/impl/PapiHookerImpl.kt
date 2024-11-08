@@ -119,7 +119,7 @@ class PapiHookerImpl : PapiHooker() {
         return builder.toString()
     }
 
-    override fun toSection(text: String): String {
+    override fun toSection(text: String, onlyValid: Boolean): String {
         val chars = text.toCharArray()
         val builder = StringBuilder(text.length)
 
@@ -185,17 +185,19 @@ class PapiHookerImpl : PapiHooker() {
                 continue
             }
 
-            val placeholder = localExpansionManager.getExpansion(lowercaseIdentifierString)
-            if (placeholder == null) {
-                builder.append('%').append(identifierString)
+            if (onlyValid) {
+                val placeholder = localExpansionManager.getExpansion(lowercaseIdentifierString)
+                if (placeholder == null) {
+                    builder.append('%').append(identifierString)
 
-                if (identified) {
-                    builder.append('_')
+                    if (identified) {
+                        builder.append('_')
+                    }
+
+                    builder.append(parametersString).append('%')
+                    i++
+                    continue
                 }
-
-                builder.append(parametersString).append('%')
-                i++
-                continue
             }
 
             val replacement = "<papi::${identifierString}_$parametersString>"
