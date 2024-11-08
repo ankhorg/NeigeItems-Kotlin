@@ -115,7 +115,7 @@ public abstract class BaseActionManager {
     ) {
         if (action instanceof String) {
             String string = (String) action;
-            String[] info = string.split(": ", 2);
+            String[] info = StringUtils.splitOnce(string, ": ");
             String key = info[0].toLowerCase(Locale.ROOT);
             String content = HookerManager.toSection(info.length > 1 ? info[1] : "", false);
             if (key.equals("js")) {
@@ -910,7 +910,7 @@ public abstract class BaseActionManager {
         addConsumer("sound", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            String[] args = content.split(" ", 3);
+            List<String> args = StringUtils.split(content, ' ', '\\');
             String sound = getOrDefault(args, 0, "");
             float volume = getAndApply(args, 1, 1F, StringsKt::toFloatOrNull);
             float pitch = getAndApply(args, 2, 1F, StringsKt::toFloatOrNull);
@@ -1127,7 +1127,7 @@ public abstract class BaseActionManager {
         addConsumer("combo", (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            String[] info = content.split(" ", 2);
+            String[] info = StringUtils.splitOnce(content, " ");
             // 连击组
             String comboGroup = info[0];
             // 连击类型
@@ -1160,11 +1160,11 @@ public abstract class BaseActionManager {
         addFunction(Arrays.asList("set-potion", "setPotion", "set-potion-effect", "setPotionEffect"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            String[] args = content.split(" ", 3);
-            if (args.length == 3) {
-                PotionEffectType type = PotionEffectType.getByName(args[0].toUpperCase(Locale.ROOT));
-                Integer amplifier = StringUtils.toIntOrNull(args[1]);
-                Integer duration = StringUtils.toIntOrNull(args[2]);
+            List<String> args = StringUtils.split(content, ' ', '\\');
+            if (args.size() >= 3) {
+                PotionEffectType type = PotionEffectType.getByName(args.get(0).toUpperCase(Locale.ROOT));
+                Integer amplifier = StringUtils.toIntOrNull(args.get(1));
+                Integer duration = StringUtils.toIntOrNull(args.get(2));
                 if (type != null && duration != null && amplifier != null) {
                     CompletableFuture<ActionResult> result = new CompletableFuture<>();
                     boolean isPrimaryThread = Bukkit.isPrimaryThread();
@@ -1210,14 +1210,14 @@ public abstract class BaseActionManager {
         });
         // 终止
         addFunction(Arrays.asList("return-weight", "returnWeight"), (context, content) -> {
-            String[] args = content.split(" ", 2);
+            String[] args = StringUtils.splitOnce(content, " ");
             int priority = getAndApply(args, 0, 1, StringsKt::toIntOrNull);
             String label = getOrNull(args, 1);
             return CompletableFuture.completedFuture(new StopResult(label, priority));
         });
         // 向global中设置内容
         addConsumer(Arrays.asList("set-global", "setGlobal"), (context, content) -> {
-            String[] info = content.split(" ", 2);
+            String[] info = StringUtils.splitOnce(content, " ");
             if (info.length > 1) {
                 context.getGlobal().put(info[0], info[1]);
             }
@@ -1228,8 +1228,7 @@ public abstract class BaseActionManager {
         addFunction(Arrays.asList("take-ni-item", "takeNiItem"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            String parsedContent = content;
-            String[] args = parsedContent.split(" ", 2);
+            String[] args = StringUtils.splitOnce(content, " ");
             if (args.length < 2) return CompletableFuture.completedFuture(Results.SUCCESS);
             String itemId = args[0];
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
