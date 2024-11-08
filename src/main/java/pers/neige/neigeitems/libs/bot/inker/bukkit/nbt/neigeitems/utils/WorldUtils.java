@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -18,9 +19,9 @@ import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
 import pers.neige.neigeitems.ref.server.level.RefServerEntity;
 import pers.neige.neigeitems.ref.server.level.RefTrackedEntity;
 import pers.neige.neigeitems.ref.server.level.RefWorldServer;
-import pers.neige.neigeitems.ref.util.RefInt2ObjectMap;
 import pers.neige.neigeitems.ref.world.RefAABB;
 import pers.neige.neigeitems.ref.world.RefCraftWorld;
+import pers.neige.neigeitems.utils.SchedulerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -537,17 +538,59 @@ public class WorldUtils {
     /**
      * 通过实体ID获取对应的实体.
      *
-     * @param world 实体所在世界.
-     * @param id    实体ID.
+     * @param world    实体所在世界.
+     * @param entityId 实体ID.
      * @return 对应的实体.
      */
     @Nullable
     public static Entity getEntityFromID(
             @NotNull World world,
-            int id
+            int entityId
     ) {
         if ((Object) world instanceof RefCraftWorld) {
-            RefEntity entity = getEntityFromIDByNms(((RefCraftWorld) (Object) world).getHandle(), id);
+            RefEntity entity = ((RefCraftWorld) (Object) world).getHandle().getEntity(entityId);
+            if (entity != null) {
+                return entity.getBukkitEntity();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 通过实体ID获取对应的实体(允许异步操作).
+     *
+     * @param world    实体所在世界.
+     * @param entityId 实体ID.
+     * @return 对应的实体.
+     */
+    @Nullable
+    public static Entity getEntityFromIDAsync(
+            @NotNull World world,
+            int entityId
+    ) {
+        if (Bukkit.isPrimaryThread()) {
+            return getEntityFromID(world, entityId);
+        } else {
+            return SchedulerUtils.syncAndGet(() -> {
+                return getEntityFromID(world, entityId);
+            });
+        }
+    }
+
+    /**
+     * 通过实体ID获取对应的实体.
+     *
+     * @param world    实体所在世界.
+     * @param entityId 实体ID.
+     * @return 对应的实体.
+     */
+    @Nullable
+    public static Entity getEntityFromID1(
+            @NotNull World world,
+            int entityId
+    ) {
+        if ((Object) world instanceof RefCraftWorld) {
+            RefEntity entity = getEntityFromIDByNms1(((RefCraftWorld) (Object) world).getHandle(), entityId);
             if (entity != null) {
                 return entity.getBukkitEntity();
             }
@@ -556,18 +599,18 @@ public class WorldUtils {
     }
 
     @Nullable
-    protected static RefEntity getEntityFromIDByNms(
+    protected static RefEntity getEntityFromIDByNms1(
             @NotNull RefWorldServer world,
-            int id
+            int entityId
     ) {
         RefServerEntity serverEntity = null;
         if (REMOVED_TRACKER) {
-            RefTrackedEntity trackedEntity = ((Map<Integer, RefTrackedEntity>) world.getChunkSource().chunkMap.entityMap).get(id);
+            RefTrackedEntity trackedEntity = ((Map<Integer, RefTrackedEntity>) world.getChunkSource().chunkMap.entityMap).get(entityId);
             if (trackedEntity != null) {
                 serverEntity = trackedEntity.serverEntity;
             }
         } else {
-            serverEntity = world.tracker.trackedEntities.get(id);
+            serverEntity = world.tracker.trackedEntities.get(entityId);
         }
         if (serverEntity != null) {
             return serverEntity.entity;

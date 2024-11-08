@@ -25,4 +25,8 @@ public abstract class RefWorld {
     @HandleBy(reference = "Lnet/minecraft/world/level/Level;getChunkIfLoaded(II)Lnet/minecraft/world/level/chunk/LevelChunk;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/World;getChunkIfLoaded(II)Lnet/minecraft/server/v1_12_R1/Chunk;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native RefChunk getChunkIfLoaded(int x, int z);
+
+    @HandleBy(reference = "Lnet/minecraft/world/level/Level;getEntity(I)Lnet/minecraft/world/entity/Entity;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/World;getEntity(I)Lnet/minecraft/server/v1_12_R1/Entity;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
+    public native RefEntity getEntity(int entityId);
 }

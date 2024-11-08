@@ -2,11 +2,13 @@ package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.ref.entity.RefCraftEntity;
 import pers.neige.neigeitems.ref.entity.RefEntity;
 import pers.neige.neigeitems.ref.entity.RefEntityItem;
 import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
@@ -16,8 +18,6 @@ import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataItem;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataValue;
 import pers.neige.neigeitems.ref.scores.RefCraftTeam;
-import pers.neige.neigeitems.ref.server.level.RefWorldServer;
-import pers.neige.neigeitems.ref.world.RefCraftWorld;
 
 import java.util.Collections;
 import java.util.List;
@@ -87,9 +87,10 @@ public class PacketUtils {
         if (packetObject instanceof RefPacketPlayOutEntityMetadata) {
             RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
 
-            RefWorldServer worldServer = ((RefCraftWorld) (Object) world).getHandle();
             int entityId = packet.id;
-            RefEntity entity = WorldUtils.getEntityFromIDByNms(worldServer, entityId);
+            Entity bukkitEntity = WorldUtils.getEntityFromIDAsync(world, entityId);
+            if (!(bukkitEntity instanceof RefCraftEntity)) return;
+            RefEntity entity = ((RefCraftEntity) bukkitEntity).getHandle();
 
             RefSynchedEntityData entityData = new RefSynchedEntityData(entity);
             if (EntityPlayerUtils.COMPONENT_NAME_SUPPORT) {
@@ -174,11 +175,11 @@ public class PacketUtils {
         if (packetObject instanceof RefPacketPlayOutEntityMetadata) {
             RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
 
-            RefWorldServer worldServer = ((RefCraftWorld) (Object) world).getHandle();
             int entityId = packet.id;
-            RefEntity entity = WorldUtils.getEntityFromIDByNms(worldServer, entityId);
+            Entity bukkitEntity = WorldUtils.getEntityFromIDAsync(world, entityId);
+            if (!(bukkitEntity instanceof RefCraftEntity)) return;
+            RefEntity entity = ((RefCraftEntity) bukkitEntity).getHandle();
             if (!(entity instanceof RefEntityItem)) return;
-            RefEntityItem item = (RefEntityItem) entity;
 
             RefSynchedEntityData entityData = new RefSynchedEntityData(entity);
             EntityPlayerUtils.defineAndForceSet(entityData, RefEntityItem.DATA_ITEM, nmsItemStack);

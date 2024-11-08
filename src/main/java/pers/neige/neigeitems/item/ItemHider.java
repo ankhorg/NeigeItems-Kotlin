@@ -29,7 +29,7 @@ public class ItemHider {
                 Object packet = event.getPacket().getHandle();
                 int id = PacketUtils.getEntityIdFromPacketPlayOutEntityMetadata(packet);
                 if (id < 0) return;
-                Entity entity = HookerManager.INSTANCE.getNmsHooker().getEntityFromID(player.getWorld(), id);
+                Entity entity = WorldUtils.getEntityFromIDAsync(player.getWorld(), id);
                 if (entity == null) return;
                 if (!(entity instanceof Item) || !entity.hasMetadata("NI-Owner")) return;
                 // 获取归属者

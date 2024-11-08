@@ -3,6 +3,7 @@ package pers.neige.neigeitems.hook.nms;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.ItemTag;
 import net.md_5.bungee.api.chat.hover.content.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -20,6 +21,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 import pers.neige.neigeitems.utils.ItemUtils;
+import pers.neige.neigeitems.utils.SchedulerUtils;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -208,13 +210,19 @@ public class NMSHooker {
         return TranslationUtils.getDisplayNameFromCraftItemStack(itemStack);
     }
 
-    @Nullable
-    public Entity getEntityFromID(
-            @NotNull World world,
-            int id
-    ) {
-        return WorldUtils.getEntityFromID(world, id);
-    }
+//    @Nullable
+//    public Entity getEntityFromIDAsync(
+//            @NotNull World world,
+//            int entityId
+//    ) {
+//        if (Bukkit.isPrimaryThread()) {
+//            return WorldUtils.getEntityFromID(world, entityId);
+//        } else {
+//            return SchedulerUtils.syncAndGet(() -> {
+//                return WorldUtils.getEntityFromID(world, entityId);
+//            });
+//        }
+//    }
 
     @Nullable
     public Material getMaterial(@Nullable String material) {

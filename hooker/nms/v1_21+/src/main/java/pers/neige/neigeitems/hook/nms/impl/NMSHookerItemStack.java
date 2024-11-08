@@ -19,7 +19,6 @@ import pers.neige.neigeitems.hook.nms.NMSHooker;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.item.builder.NewItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
@@ -140,18 +139,18 @@ public class NMSHookerItemStack extends NMSHooker {
         return null;
     }
 
-    @Override
-    @Nullable
-    public Entity getEntityFromID(
-            @NotNull World world,
-            int id
-    ) {
-        if (world instanceof CraftWorld) {
-            ChunkMap.TrackedEntity trackedEntity = ((CraftWorld) world).getHandle().getChunkSource().chunkMap.entityMap.get(id);
-            if (trackedEntity != null) {
-                return WorldUtils.getEntityFromServerEntity(trackedEntity.serverEntity);
-            }
-        }
-        return null;
-    }
+//    @Override
+//    @Nullable
+//    public Entity getEntityFromIDAsync(
+//            @NotNull World world,
+//            int entityId
+//    ) {
+//        if (world instanceof CraftWorld) {
+//            ChunkMap.TrackedEntity trackedEntity = ((CraftWorld) world).getHandle().getChunkSource().chunkMap.entityMap.get(entityId);
+//            if (trackedEntity != null) {
+//                return WorldUtils.getEntityFromServerEntity(trackedEntity.serverEntity);
+//            }
+//        }
+//        return null;
+//    }
 }
