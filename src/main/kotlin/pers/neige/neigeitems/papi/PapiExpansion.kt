@@ -12,7 +12,6 @@ import pers.neige.neigeitems.utils.ItemUtils.getItemId
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
-import pers.neige.neigeitems.utils.StringUtils.split
 import java.io.InputStreamReader
 import java.util.concurrent.ConcurrentHashMap
 import javax.script.CompiledScript

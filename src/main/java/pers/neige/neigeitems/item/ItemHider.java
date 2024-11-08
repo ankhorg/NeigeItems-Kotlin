@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.PacketUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
-import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.PlayerUtils;
 
 public class ItemHider {

@@ -2,8 +2,8 @@ package pers.neige.neigeitems.text.impl;
 
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.ActionContext;
-import pers.neige.neigeitems.text.Text;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;

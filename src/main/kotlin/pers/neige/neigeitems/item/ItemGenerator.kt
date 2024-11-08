@@ -94,7 +94,8 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         configSection.getConfigurationSection("options.update.rebuild")?.toStringMap()
     } else null
 
-    val eventActions: ActionContainer = ActionContainer(ActionManager, "event", configSection.getConfigurationSection("event"))
+    val eventActions: ActionContainer =
+        ActionContainer(ActionManager, "event", configSection.getConfigurationSection("event"))
 
     /**
      * 获取物品静态配置
@@ -357,7 +358,14 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                 "id" to id,
                 "item" to this
             )
-            val context = ActionContext(player?.player, params, params, event.itemStack, event.itemStack.getNbtOrNull(), event.cache)
+            val context = ActionContext(
+                player?.player,
+                params,
+                params,
+                event.itemStack,
+                event.itemStack.getNbtOrNull(),
+                event.cache
+            )
             eventActions.run("post-generate", context)
             return event.itemStack
         } else {

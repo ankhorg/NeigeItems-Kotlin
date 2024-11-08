@@ -5,8 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ResultType;
-import pers.neige.neigeitems.text.Text;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.text.Text;
 
 import javax.script.Compilable;
 import javax.script.CompiledScript;

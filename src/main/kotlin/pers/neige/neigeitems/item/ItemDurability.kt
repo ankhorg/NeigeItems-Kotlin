@@ -29,7 +29,8 @@ import java.util.concurrent.ThreadLocalRandom
  * 物品自定义耐久实现类
  */
 object ItemDurability {
-    private val FIRE_CHARGE_MATERIAL = (HookerManager.getMaterial("FIRE_CHARGE") ?: HookerManager.getMaterial("FIREBALL"))!!
+    private val FIRE_CHARGE_MATERIAL =
+        (HookerManager.getMaterial("FIRE_CHARGE") ?: HookerManager.getMaterial("FIREBALL"))!!
 
     /**
      * 方块交互
