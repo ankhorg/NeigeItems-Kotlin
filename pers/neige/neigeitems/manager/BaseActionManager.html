@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>BaseActionManager 1.20.16 API </title>
+    <title>BaseActionManager 1.20.17 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -468,7 +468,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                         <tr id="i23" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addFunction(java.lang.String,java.util.function.BiFunction)>addFunction</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;&gt; function) </code>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addFunction(java.util.Collection,java.util.function.BiFunction)>addFunction</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html>Collection</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; ids, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;&gt; function) </code>
                                             </th>
                                             <td class="colLast">添加物品动作</td>
                                         </tr>
@@ -476,7 +476,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                         <tr id="i24" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addConsumer(java.lang.String,java.util.function.BiConsumer)>addConsumer</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiConsumer.html>BiConsumer</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; consumer) </code>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addFunction(java.lang.String,java.util.function.BiFunction)>addFunction</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;&gt; function) </code>
                                             </th>
                                             <td class="colLast">添加物品动作</td>
                                         </tr>
@@ -484,12 +484,28 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                         <tr id="i25" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addConsumer(java.util.Collection,java.util.function.BiConsumer)>addConsumer</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html>Collection</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; ids, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiConsumer.html>BiConsumer</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; consumer) </code>
+                                            </th>
+                                            <td class="colLast">添加物品动作</td>
+                                        </tr>
+                                        
+                                        <tr id="i26" class="altColor">
+                                            <td class="colFirst"><code>void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addConsumer(java.lang.String,java.util.function.BiConsumer)>addConsumer</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiConsumer.html>BiConsumer</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; consumer) </code>
+                                            </th>
+                                            <td class="colLast">添加物品动作</td>
+                                        </tr>
+                                        
+                                        <tr id="i27" class="rowColor">
+                                            <td class="colFirst"><code>void</code>
+                                            </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#loadJSLib()>loadJSLib</a>() </code>
                                             </th>
                                             <td class="colLast">将当前BaseActionManager所属插件的&quot;JavaScriptLib/lib.</td>
                                         </tr>
                                         
-                                        <tr id="i26" class="altColor">
+                                        <tr id="i28" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#loadJSLib(java.lang.String,java.lang.String)>loadJSLib</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> pluginName, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> resourceName) </code>
@@ -497,7 +513,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">将其他插件的资源文件加载至JS引擎</td>
                                         </tr>
                                         
-                                        <tr id="i27" class="rowColor">
+                                        <tr id="i29" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#loadJSLib(org.bukkit.plugin.Plugin,java.lang.String)>loadJSLib</a>(@NotNull() Plugin plugin, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> resourceName) </code>
@@ -1312,6 +1328,40 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                     </li>
                                 </ul>
                                 
+                                <a id="addFunction(java.util.Collection,java.util.function.BiFunction)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>addFunction</h4>
+                                        <pre class="methodSignature"> void <a href=BaseActionManager.html#addFunction(java.util.Collection,java.util.function.BiFunction)>addFunction</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html>Collection</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; ids, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;&gt; function)</pre>
+                                        <div class="block"><p>添加物品动作</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>ids</code> - 动作ID</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>function</code> - 动作执行函数</dd>
+                                            
+                                            
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
                                 <a id="addFunction(java.lang.String,java.util.function.BiFunction)">
                                     <!--   -->
                                 </a>
@@ -1334,6 +1384,40 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             
                                             
                                             <dd><code>function</code> - 动作执行函数</dd>
+                                            
+                                            
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="addConsumer(java.util.Collection,java.util.function.BiConsumer)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>addConsumer</h4>
+                                        <pre class="methodSignature"> void <a href=BaseActionManager.html#addConsumer(java.util.Collection,java.util.function.BiConsumer)>addConsumer</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html>Collection</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; ids, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiConsumer.html>BiConsumer</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; consumer)</pre>
+                                        <div class="block"><p>添加物品动作</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>ids</code> - 动作ID</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>consumer</code> - 动作执行函数</dd>
                                             
                                             
                                         
