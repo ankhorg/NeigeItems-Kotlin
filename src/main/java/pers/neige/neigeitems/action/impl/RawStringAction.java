@@ -7,7 +7,6 @@ import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.manager.BaseActionManager;
-import pers.neige.neigeitems.utils.StringUtils;
 
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -24,7 +23,7 @@ public class RawStringAction extends Action {
             @NotNull String action
     ) {
         this.action = action;
-        String[] info = StringUtils.splitOnce(action, ": ");
+        String[] info = action.split(": ", 2);
         key = info[0].toLowerCase(Locale.ROOT);
         content = info.length > 1 ? info[1] : "";
     }

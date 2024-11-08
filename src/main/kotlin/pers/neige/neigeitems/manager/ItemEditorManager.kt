@@ -34,7 +34,6 @@ import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.StringUtils.split
-import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import pers.neige.neigeitems.utils.function.TriFunction
 import java.util.*
 
@@ -1710,7 +1709,7 @@ object ItemEditorManager {
         addBasicItemEditor("rebuildAmount") { player, itemStack, content ->
             // 判断是不是空气
             if (itemStack.type != Material.AIR) {
-                val info = content.splitOnce(" ")
+                val info = content.split(" ", limit = 2)
                 // 刷新数量
                 val amount = info[0].toIntOrNull()?.coerceAtLeast(1) ?: 1
                 // 获取待刷新节点信息
