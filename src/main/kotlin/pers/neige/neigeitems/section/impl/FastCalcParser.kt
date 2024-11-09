@@ -2,7 +2,7 @@ package pers.neige.neigeitems.section.impl
 
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
-import pers.neige.neigeitems.libs.asahi.util.calculate.FormulaParser.calculate
+import pers.neige.neigeitems.calculate.FormulaParser
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.ScriptUtils.toRoundingMode
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -78,7 +78,7 @@ object FastCalcParser : SectionParser() {
             // 加载公式
             formulaString?.parseSection(parse, cache, player, sections)?.let {
                 // 计算结果
-                var result = it.calculate()
+                var result = FormulaParser.calculate(it)
                 // 获取大小范围
                 minString?.parseSection(parse, cache, player, sections)?.toDoubleOrNull()?.let { min ->
                     result = min.coerceAtLeast(result)
