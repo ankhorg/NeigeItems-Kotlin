@@ -56,7 +56,7 @@ public abstract class NbtNumeric<NMS extends RefNbtNumber> extends Nbt<NMS> impl
         } else if (this instanceof NbtLong) {
             return delegate.asLong();
         } else if (this instanceof NbtShort) {
-            return delegate.asLong();
+            return delegate.asShort();
         } else {
             throw new IllegalStateException("Unknown implementation for numeric found: " + this.getClass());
         }

@@ -7,8 +7,8 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.DelegateAbstractMap;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.LazyLoadEntrySet;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.StringUtils;
 import pers.neige.neigeitems.ref.nbt.*;
-import pers.neige.neigeitems.utils.StringUtils;
 
 import java.util.*;
 

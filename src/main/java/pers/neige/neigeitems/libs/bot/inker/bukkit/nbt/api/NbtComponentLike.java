@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.ArrayUtils;
-import pers.neige.neigeitems.utils.StringUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.StringUtils;
 
 import java.util.List;
 import java.util.Map;
