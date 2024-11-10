@@ -36,7 +36,7 @@ public final class NbtItemStack {
         if (craftItemStack == null) {
             RefCraftMetaItem meta = (RefCraftMetaItem) (Object) bukkitItemStack.meta;
             if (meta == null) {
-                return new NbtCompound();
+                return null;
             } else {
                 NbtCompound compound = new NbtCompound();
                 meta.applyToItem(compound.delegate);
@@ -50,11 +50,11 @@ public final class NbtItemStack {
                         tags.put(key, value.rClone());
                     }
                 }
-                return compound;
+                return compound.isEmpty() ? null : compound;
             }
         } else {
             RefNbtTagCompound tag = craftItemStack.handle.getTag();
-            return tag == null ? null : new NbtCompound(craftItemStack.handle.getTag());
+            return tag == null ? null : new NbtCompound(tag);
         }
     }
 
@@ -77,6 +77,16 @@ public final class NbtItemStack {
             } else {
                 NbtCompound compound = new NbtCompound();
                 meta.applyToItem(compound.delegate);
+                Map<String, RefNbtBase> tags = compound.delegate.tags;
+                for (Map.Entry<String, RefNbtBase> entry : tags.entrySet()) {
+                    String key = entry.getKey();
+                    RefNbtBase value = entry.getValue();
+                    // applyToItem 直接把 unhandledTags 丢进去了, 这样是不行的, 必须 clone 一下
+                    if (!RefCraftMetaItem.HANDLED_TAGS.contains(key)
+                            && (value instanceof RefNbtTagCompound || value instanceof RefNbtTagList)) {
+                        tags.put(key, value.rClone());
+                    }
+                }
                 return compound;
             }
         } else {
