@@ -7,6 +7,89 @@ import java.util.function.BiFunction
  * PlaceholderAPI挂钩
  */
 abstract class PapiHooker {
+    companion object {
+        /**
+         * 将文本中的所有papi变量改写为papi节点, 不管注没注册, 长得像papi节点就转换
+         *
+         * @param text 待转换文本
+         * @return 转换后文本
+         */
+        @JvmStatic
+        fun toAllSection(text: String): String {
+            val chars = text.toCharArray()
+            val builder = StringBuilder(text.length)
+
+            val identifier = StringBuilder()
+            val parameters = StringBuilder()
+
+            var i = 0
+            while (i < chars.size) {
+                val l = chars[i]
+
+                if ((l != '%') || ((i + 1) >= chars.size)) {
+                    builder.append(l)
+                    i++
+                    continue
+                }
+
+                var identified = false
+                var invalid = true
+                var hadSpace = false
+
+                while (++i < chars.size) {
+                    val p = chars[i]
+
+                    if (p == ' ' && !identified) {
+                        hadSpace = true
+                        break
+                    }
+                    if (p == '%') {
+                        invalid = false
+                        break
+                    }
+
+                    if (p == '_' && !identified) {
+                        identified = true
+                        continue
+                    }
+
+                    if (identified) {
+                        parameters.append(p)
+                    } else {
+                        identifier.append(p)
+                    }
+                }
+
+                val identifierString = identifier.toString()
+                val parametersString = parameters.toString()
+
+                identifier.setLength(0)
+                parameters.setLength(0)
+
+                if (invalid) {
+                    builder.append('%').append(identifierString)
+
+                    if (identified) {
+                        builder.append('_').append(parametersString)
+                    }
+
+                    if (hadSpace) {
+                        builder.append(' ')
+                    }
+                    i++
+                    continue
+                }
+
+                val replacement = "<papi::${identifierString}_$parametersString>"
+
+                builder.append(replacement)
+                i++
+            }
+
+            return builder.toString()
+        }
+    }
+
     /**
      * 解析一段文本中的papi变量, 不解析其中的颜色代码
      * 在以往的众多版本中, papi都会强制解析文本中的代码
@@ -20,14 +103,12 @@ abstract class PapiHooker {
     abstract fun papi(player: OfflinePlayer?, text: String): String
 
     /**
-     * 将文本中的所有papi变量改写为papi节点
+     * 将文本中的所有papi变量改写为papi节点, 仅转换已注册的papi变量
      *
      * @param text 待转换文本
      * @return 转换后文本
      */
-    fun toSection(text: String): String {
-        return toSection(text, true)
-    }
+    abstract fun toSection(text: String): String
 
     /**
      * 将文本中的所有papi变量改写为papi节点
@@ -36,7 +117,13 @@ abstract class PapiHooker {
      * @param onlyValid 仅转换已注册的papi变量
      * @return 转换后文本
      */
-    abstract fun toSection(text: String, onlyValid: Boolean): String
+    fun toSection(text: String, onlyValid: Boolean): String {
+        return if (onlyValid) {
+            toSection(text)
+        } else {
+            toAllSection(text)
+        }
+    }
 
     /**
      * 判断文本中是否存在有效papi变量
