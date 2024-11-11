@@ -117,10 +117,11 @@ public abstract class BaseActionManager {
             String string = (String) action;
             String[] info = string.split(": ", 2);
             String key = info[0].toLowerCase(Locale.ROOT);
-            String content = HookerManager.toSection(info.length > 1 ? info[1] : "", false);
+            String content = info.length > 1 ? info[1] : "";
             if (key.equals("js")) {
                 return new JsAction(this, content);
             } else {
+                content = HookerManager.toSection(content, false);
                 return new StringAction(string, key, content);
             }
         } else if (action instanceof List<?>) {
