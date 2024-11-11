@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>PapiHooker 1.20.26 API </title>
+    <title>PapiHooker 1.20.27 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
@@ -260,17 +260,17 @@ public abstract class <span class="typeNameLabel"><a href=PapiHooker.html>PapiHo
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=impl/PapiHookerImpl.html#toSection(java.lang.String)>toSection</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text) </code>
+                                            <th class="colSecond" scope="row"><code><a href=PapiHooker.html#toSection(java.lang.String)>toSection</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text) </code>
                                             </th>
-                                            <td class="colLast">将文本中的所有papi变量改写为papi节点</td>
+                                            <td class="colLast">将文本中的所有papi变量改写为papi节点, 仅转换已注册的papi变量</td>
                                         </tr>
                                         
                                         <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code>abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=PapiHooker.html#toSection(java.lang.String,java.lang.Boolean)>toSection</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> onlyValid) </code>
+                                            <th class="colSecond" scope="row"><code><a href=impl/PapiHookerImpl.html#toSection(java.lang.String,java.lang.Boolean)>toSection</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> onlyValid) </code>
                                             </th>
                                             <td class="colLast">将文本中的所有papi变量改写为papi节点</td>
                                         </tr>
@@ -305,6 +305,14 @@ public abstract class <span class="typeNameLabel"><a href=PapiHooker.html>PapiHo
                                             <th class="colSecond" scope="row"><code><a href=impl/PapiHookerImpl.html#newPlaceholderExpansion(java.lang.String,java.lang.String,java.lang.String,java.util.function.BiFunction)>newPlaceholderExpansion</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> identifier, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> author, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> version, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;OfflinePlayer, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; executor) </code>
                                             </th>
                                             <td class="colLast">新建一个papi扩展</td>
+                                        </tr>
+                                        
+                                        <tr id="i7" class="rowColor">
+                                            <td class="colFirst"><code>final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=PapiHooker.html#toAllSection(java.lang.String)>toAllSection</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text) </code>
+                                            </th>
+                                            <td class="colLast">将文本中的所有papi变量改写为papi节点, 不管注没注册, 长得像papi节点就转换</td>
                                         </tr>
                                         
                                         </tbody>
@@ -406,8 +414,8 @@ public abstract class <span class="typeNameLabel"><a href=PapiHooker.html>PapiHo
                                           >
                                     <li class="blockList">
                                         <h4>toSection</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=impl/PapiHookerImpl.html#toSection(java.lang.String)>toSection</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text)</pre>
-                                        <div class="block"><p>将文本中的所有papi变量改写为papi节点</p></div>
+                                        <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PapiHooker.html#toSection(java.lang.String)>toSection</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text)</pre>
+                                        <div class="block"><p>将文本中的所有papi变量改写为papi节点, 仅转换已注册的papi变量</p></div>
 
                                         <dl>
 
@@ -439,7 +447,7 @@ public abstract class <span class="typeNameLabel"><a href=PapiHooker.html>PapiHo
                                           >
                                     <li class="blockList">
                                         <h4>toSection</h4>
-                                        <pre class="methodSignature"> abstract <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PapiHooker.html#toSection(java.lang.String,java.lang.Boolean)>toSection</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> onlyValid)</pre>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=impl/PapiHookerImpl.html#toSection(java.lang.String,java.lang.Boolean)>toSection</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> onlyValid)</pre>
                                         <div class="block"><p>将文本中的所有papi变量改写为papi节点</p></div>
 
                                         <dl>
@@ -576,7 +584,7 @@ public abstract class <span class="typeNameLabel"><a href=PapiHooker.html>PapiHo
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>newPlaceholderExpansion</h4>
@@ -609,6 +617,39 @@ public abstract class <span class="typeNameLabel"><a href=PapiHooker.html>PapiHo
                                         
                                             <dt><span class="returnLabel">Returns:</span></dt>
                                             <dd><p>papi扩展</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="toAllSection(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>toAllSection</h4>
+                                        <pre class="methodSignature"> final static <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=PapiHooker.html#toAllSection(java.lang.String)>toAllSection</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text)</pre>
+                                        <div class="block"><p>将文本中的所有papi变量改写为papi节点, 不管注没注册, 长得像papi节点就转换</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>text</code> - 待转换文本</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>转换后文本</p></dd>
                                         
 
                                         
