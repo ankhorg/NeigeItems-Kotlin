@@ -257,15 +257,6 @@ const hand = function () {
 }
 
 /**
- * 执行一段物品动作
- *
- * @param action String 物品动作
- */
-const runAction = function (action) {
-    ActionManager.runAction(player, action)
-}
-
-/**
  * 获取玩家背包中指定ID的NI物品的数量
  *
  * @param itemId String NI物品ID

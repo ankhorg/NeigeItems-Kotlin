@@ -39,6 +39,11 @@ public class CommandUtils {
     }
 
     @Nullable
+    public static Long readLong(StringReader reader) {
+        return StringsKt.toLongOrNull(readUnquotedString(reader));
+    }
+
+    @Nullable
     public static Double readDouble(StringReader reader) {
         return StringsKt.toDoubleOrNull(readUnquotedString(reader));
     }
