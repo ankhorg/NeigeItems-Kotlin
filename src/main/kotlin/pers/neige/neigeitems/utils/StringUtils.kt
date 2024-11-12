@@ -124,6 +124,17 @@ object StringUtils {
     }
 
     /**
+     * 转Long
+     *
+     * @param string 分隔符
+     * @return Long?
+     */
+    @JvmStatic
+    fun toLongOrNull(string: String): Long? {
+        return string.toLongOrNull()
+    }
+
+    /**
      * 转Byte
      *
      * @param string 分隔符
@@ -171,7 +182,7 @@ object StringUtils {
      * 转Int
      *
      * @param string 分隔符
-     * @return Int?
+     * @return Int
      */
     @JvmStatic
     fun toInt(string: String, default: Int): Int {
@@ -179,10 +190,21 @@ object StringUtils {
     }
 
     /**
+     * 转Long
+     *
+     * @param string 分隔符
+     * @return Long
+     */
+    @JvmStatic
+    fun toLong(string: String, default: Long): Long {
+        return string.toLongOrNull() ?: default
+    }
+
+    /**
      * 转Byte
      *
      * @param string 分隔符
-     * @return Byte?
+     * @return Byte
      */
     @JvmStatic
     fun toByte(string: String, default: Byte): Byte {
@@ -190,10 +212,10 @@ object StringUtils {
     }
 
     /**
-     * 转Double
+     * 转Float
      *
      * @param string 分隔符
-     * @return Double?
+     * @return Float
      */
     @JvmStatic
     fun toFloat(string: String, default: Float): Float {
@@ -204,7 +226,7 @@ object StringUtils {
      * 转Double
      *
      * @param string 分隔符
-     * @return Double?
+     * @return Double
      */
     @JvmStatic
     fun toDouble(string: String, default: Double): Double {
@@ -215,7 +237,7 @@ object StringUtils {
      * 转BigDecimal
      *
      * @param string 分隔符
-     * @return BigDecimal?
+     * @return BigDecimal
      */
     @JvmStatic
     fun toBigDecimal(string: String, default: BigDecimal): BigDecimal {

@@ -10,7 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.command.CommandUtils;
 import pers.neige.neigeitems.command.selector.PlayerSelector;
 
 import java.util.Arrays;
@@ -36,7 +35,7 @@ public class PlayerArgumentType implements ArgumentType<PlayerSelector> {
             @NotNull CommandContext<CommandSender> context,
             @NotNull String name
     ) {
-        return getPlayerSelector(context, name).getPlayer(context);
+        return getPlayerSelector(context, name).select(context);
     }
 
     @NotNull
@@ -52,7 +51,7 @@ public class PlayerArgumentType implements ArgumentType<PlayerSelector> {
     public PlayerSelector parse(
             @NotNull StringReader reader
     ) {
-        return new PlayerSelector(CommandUtils.readUnquotedString(reader));
+        return new PlayerSelector(reader);
     }
 
     @NotNull
@@ -61,10 +60,13 @@ public class PlayerArgumentType implements ArgumentType<PlayerSelector> {
             @NotNull CommandContext<S> context,
             @NotNull SuggestionsBuilder builder
     ) {
-        builder.suggest("me");
+        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
+        if ("me".startsWith(lowerCaseRemaining)) {
+            builder.suggest("me");
+        }
         Bukkit.getOnlinePlayers().forEach((player) -> {
             String name = player.getName();
-            if (name.toLowerCase().startsWith(builder.getRemaining().toLowerCase())) {
+            if (name.toLowerCase().startsWith(lowerCaseRemaining)) {
                 builder.suggest(name);
             }
         });

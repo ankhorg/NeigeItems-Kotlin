@@ -52,8 +52,9 @@ public class ActionArgumentType implements ArgumentType<Action> {
             @NotNull CommandContext<S> context,
             @NotNull SuggestionsBuilder builder
     ) {
+        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ActionManager.INSTANCE.getActions().keySet().forEach((key) -> {
-            if (key.startsWith(builder.getRemaining().toLowerCase())) {
+            if (key.startsWith(lowerCaseRemaining)) {
                 builder.suggest(key + ": ");
             }
         });

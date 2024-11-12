@@ -92,8 +92,8 @@ object Give {
                     sender as Player
                 } else {
                     val playerSelector = getPlayerSelector(context, "player")
-                    playerSelector.getPlayer(context) ?: let {
-                        sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", playerSelector.name)))
+                    playerSelector.select(context) ?: let {
+                        sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", playerSelector.text)))
                         return@async
                     }
                 }

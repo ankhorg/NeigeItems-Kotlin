@@ -53,8 +53,9 @@ public class MMItemIDArgumentType implements ArgumentType<String> {
     ) {
         MythicMobsHooker hooker = HookerManager.INSTANCE.getMythicMobsHooker();
         if (hooker != null) {
+            String lowerCaseRemaining = builder.getRemaining().toLowerCase();
             hooker.getItemIds().forEach((id) -> {
-                if (id.toLowerCase().startsWith(builder.getRemaining().toLowerCase())) {
+                if (id.toLowerCase().startsWith(lowerCaseRemaining)) {
                     builder.suggest(id);
                 }
             });

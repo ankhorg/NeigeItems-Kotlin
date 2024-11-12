@@ -86,16 +86,16 @@ object DropPack {
             val sender = context.source
 
             val itemPackSelector = getItemPackSelector(context, "pack")
-            val pack = itemPackSelector.getPack(context) ?: let {
-                sender.sendLang("Messages.unknownItemPack", mapOf(Pair("{packID}", itemPackSelector.id)))
+            val pack = itemPackSelector.select(context) ?: let {
+                sender.sendLang("Messages.unknownItemPack", mapOf(Pair("{packID}", itemPackSelector.text)))
                 return@async
             }
 
             val amount = getInteger(context, "amount")
 
             val worldSelector = getWorldSelector(context, "world")
-            val world = worldSelector.getWorld(context) ?: let {
-                sender.sendLang("Messages.invalidWorld", mapOf(Pair("{world}", worldSelector.name)))
+            val world = worldSelector.select(context) ?: let {
+                sender.sendLang("Messages.invalidWorld", mapOf(Pair("{world}", worldSelector.text)))
                 return@async
             }
 
@@ -107,8 +107,8 @@ object DropPack {
             val parser = if (parserSelector == null) {
                 null
             } else {
-                parserSelector.getPlayer(context) ?: let {
-                    sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", parserSelector.name)))
+                parserSelector.select(context) ?: let {
+                    sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", parserSelector.text)))
                     return@async
                 }
             }

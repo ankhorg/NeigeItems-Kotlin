@@ -72,13 +72,13 @@ object GivePack {
             val tip = !context.nodes[0].node.name.endsWith("Silent")
             val sender = context.source
             val itemPackSelector = getItemPackSelector(context, "pack")
-            val itemPack = itemPackSelector.getPack(context) ?: let {
-                sender.sendLang("Messages.unknownItemPack", mapOf(Pair("{packID}", itemPackSelector.id)))
+            val itemPack = itemPackSelector.select(context) ?: let {
+                sender.sendLang("Messages.unknownItemPack", mapOf(Pair("{packID}", itemPackSelector.text)))
                 return@async
             }
             val playerSelector = getPlayerSelector(context, "player")
-            val player = playerSelector.getPlayer(context) ?: let {
-                sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", playerSelector.name)))
+            val player = playerSelector.select(context) ?: let {
+                sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", playerSelector.text)))
                 return@async
             }
             givePackCommand(

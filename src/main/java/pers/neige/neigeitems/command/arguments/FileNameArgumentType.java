@@ -82,9 +82,10 @@ public class FileNameArgumentType implements ArgumentType<String> {
             @NotNull SuggestionsBuilder builder
     ) {
         List<File> files = ConfigUtils.getAllFiles(directory);
+        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
         for (File file : files) {
             String fileName = file.getPath().replace(this.filePrefix, "");
-            if (fileName.toLowerCase().startsWith(builder.getRemaining().toLowerCase())) {
+            if (fileName.toLowerCase().startsWith(lowerCaseRemaining)) {
                 builder.suggest(fileName);
             }
         }

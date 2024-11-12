@@ -43,13 +43,13 @@ object Test {
                 return@async
             }
             val itemSelector = getItemSelector(context, "item")
-            val item = itemSelector.getItem(context) ?: let {
-                sender.sendLang("Messages.unknownItem", mapOf(Pair("{itemID}", itemSelector.id)))
+            val item = itemSelector.select(context) ?: let {
+                sender.sendLang("Messages.unknownItem", mapOf(Pair("{itemID}", itemSelector.text)))
                 return@async
             }
             val time = System.currentTimeMillis()
             repeat(amount) {
-                item.getItemStack(sender, HashMap<String, String>())
+                item.getItemStack(sender, HashMap())
             }
             sender.sendMessage("耗时: ${System.currentTimeMillis() - time}ms")
         }

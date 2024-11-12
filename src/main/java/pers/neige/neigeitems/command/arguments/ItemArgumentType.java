@@ -8,7 +8,6 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.command.CommandUtils;
 import pers.neige.neigeitems.command.selector.ItemSelector;
 import pers.neige.neigeitems.item.ItemGenerator;
 import pers.neige.neigeitems.manager.ItemManager;
@@ -36,7 +35,7 @@ public class ItemArgumentType implements ArgumentType<ItemSelector> {
             @NotNull CommandContext<CommandSender> context,
             @NotNull String name
     ) {
-        return getItemSelector(context, name).getItem(context);
+        return getItemSelector(context, name).select(context);
     }
 
     @NotNull
@@ -52,7 +51,7 @@ public class ItemArgumentType implements ArgumentType<ItemSelector> {
     public ItemSelector parse(
             @NotNull StringReader reader
     ) {
-        return new ItemSelector(CommandUtils.readUnquotedString(reader));
+        return new ItemSelector(reader);
     }
 
     @NotNull
@@ -61,8 +60,9 @@ public class ItemArgumentType implements ArgumentType<ItemSelector> {
             @NotNull CommandContext<S> context,
             @NotNull SuggestionsBuilder builder
     ) {
+        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ItemManager.INSTANCE.getItems().keySet().forEach((id) -> {
-            if (id.toLowerCase().startsWith(builder.getRemaining().toLowerCase())) {
+            if (id.toLowerCase().startsWith(lowerCaseRemaining)) {
                 builder.suggest(id);
             }
         });

@@ -35,7 +35,6 @@ public final class ItemPacketEvent extends BasicEvent {
         return handlers;
     }
 
-
     /**
      * 获取接收数据包的玩家
      */
@@ -43,7 +42,6 @@ public final class ItemPacketEvent extends BasicEvent {
     public Player getPlayer() {
         return player;
     }
-
 
     /**
      * 获取发送的物品

@@ -50,8 +50,9 @@ public class EditorIDArgumentType implements ArgumentType<String> {
             @NotNull CommandContext<S> context,
             @NotNull SuggestionsBuilder builder
     ) {
+        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ItemEditorManager.INSTANCE.getItemEditors().keySet().forEach((key) -> {
-            if (key.startsWith(builder.getRemaining().toLowerCase())) {
+            if (key.startsWith(lowerCaseRemaining)) {
                 builder.suggest(key);
             }
         });

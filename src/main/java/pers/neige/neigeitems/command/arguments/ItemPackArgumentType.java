@@ -8,7 +8,6 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.command.CommandUtils;
 import pers.neige.neigeitems.command.selector.ItemPackSelector;
 import pers.neige.neigeitems.item.ItemPack;
 import pers.neige.neigeitems.manager.ItemPackManager;
@@ -36,7 +35,7 @@ public class ItemPackArgumentType implements ArgumentType<ItemPackSelector> {
             @NotNull CommandContext<CommandSender> context,
             @NotNull String name
     ) {
-        return getItemPackSelector(context, name).getPack(context);
+        return getItemPackSelector(context, name).select(context);
     }
 
     @NotNull
@@ -52,7 +51,7 @@ public class ItemPackArgumentType implements ArgumentType<ItemPackSelector> {
     public ItemPackSelector parse(
             @NotNull StringReader reader
     ) {
-        return new ItemPackSelector(CommandUtils.readUnquotedString(reader));
+        return new ItemPackSelector(reader);
     }
 
     @NotNull
@@ -61,8 +60,9 @@ public class ItemPackArgumentType implements ArgumentType<ItemPackSelector> {
             @NotNull CommandContext<S> context,
             @NotNull SuggestionsBuilder builder
     ) {
+        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ItemPackManager.INSTANCE.getItemPacks().keySet().forEach((id) -> {
-            if (id.toLowerCase().startsWith(builder.getRemaining().toLowerCase())) {
+            if (id.toLowerCase().startsWith(lowerCaseRemaining)) {
                 builder.suggest(id);
             }
         });

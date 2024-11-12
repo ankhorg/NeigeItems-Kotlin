@@ -101,8 +101,8 @@ object Give {
                 return@async
             }
             val itemSelector = getItemSelector(context, "item")
-            val item = itemSelector.getItem(context) ?: let {
-                sender.sendLang("Messages.unknownItem", mapOf(Pair("{itemID}", itemSelector.id)))
+            val item = itemSelector.select(context) ?: let {
+                sender.sendLang("Messages.unknownItem", mapOf(Pair("{itemID}", itemSelector.text)))
                 return@async
             }
             if (all) {
@@ -116,8 +116,8 @@ object Give {
                     sender as Player
                 } else {
                     val playerSelector = getPlayerSelector(context, "player")
-                    playerSelector.getPlayer(context) ?: let {
-                        sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", playerSelector.name)))
+                    playerSelector.select(context) ?: let {
+                        sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", playerSelector.text)))
                         return@async
                     }
                 }

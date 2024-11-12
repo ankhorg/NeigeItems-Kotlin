@@ -91,16 +91,16 @@ object Drop {
             val sender = context.source
 
             val itemSelector = getItemSelector(context, "item")
-            val item = itemSelector.getItem(context) ?: let {
-                sender.sendLang("Messages.unknownItem", mapOf(Pair("{itemID}", itemSelector.id)))
+            val item = itemSelector.select(context) ?: let {
+                sender.sendLang("Messages.unknownItem", mapOf(Pair("{itemID}", itemSelector.text)))
                 return@async
             }
 
             val amount = getInteger(context, "amount")
 
             val worldSelector = getWorldSelector(context, "world")
-            val world = worldSelector.getWorld(context) ?: let {
-                sender.sendLang("Messages.invalidWorld", mapOf(Pair("{world}", worldSelector.name)))
+            val world = worldSelector.select(context) ?: let {
+                sender.sendLang("Messages.invalidWorld", mapOf(Pair("{world}", worldSelector.text)))
                 return@async
             }
 
@@ -112,8 +112,8 @@ object Drop {
             val parser = if (parserSelector == null) {
                 null
             } else {
-                parserSelector.getPlayer(context) ?: let {
-                    sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", parserSelector.name)))
+                parserSelector.select(context) ?: let {
+                    sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", parserSelector.text)))
                     return@async
                 }
             }

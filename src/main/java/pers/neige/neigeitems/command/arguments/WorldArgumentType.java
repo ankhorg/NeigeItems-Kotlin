@@ -10,7 +10,6 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.command.CommandUtils;
 import pers.neige.neigeitems.command.selector.WorldSelector;
 
 import java.util.Collection;
@@ -36,7 +35,7 @@ public class WorldArgumentType implements ArgumentType<WorldSelector> {
             @NotNull CommandContext<CommandSender> context,
             @NotNull String name
     ) {
-        return getWorldSelector(context, name).getWorld(context);
+        return getWorldSelector(context, name).select(context);
     }
 
     @NotNull
@@ -52,7 +51,7 @@ public class WorldArgumentType implements ArgumentType<WorldSelector> {
     public WorldSelector parse(
             @NotNull StringReader reader
     ) {
-        return new WorldSelector(CommandUtils.readUnquotedString(reader));
+        return new WorldSelector(reader);
     }
 
     @NotNull
@@ -61,9 +60,10 @@ public class WorldArgumentType implements ArgumentType<WorldSelector> {
             @NotNull CommandContext<S> context,
             @NotNull SuggestionsBuilder builder
     ) {
+        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
         Bukkit.getWorlds().forEach((world) -> {
             String name = world.getName();
-            if (name.toLowerCase().startsWith(builder.getRemaining().toLowerCase())) {
+            if (name.toLowerCase().startsWith(lowerCaseRemaining)) {
                 builder.suggest(name);
             }
         });
