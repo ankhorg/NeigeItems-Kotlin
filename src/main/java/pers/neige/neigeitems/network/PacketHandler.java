@@ -75,7 +75,7 @@ public class PacketHandler {
         if (player == null) return true;
         int id = PacketUtils.getEntityIdFromPacketPlayOutEntityMetadata(packet);
         if (id < 0) return true;
-        Entity entity = WorldUtils.getEntityFromIDAsync(player.getWorld(), id);
+        Entity entity = WorldUtils.getEntityFromID1(player.getWorld(), id);
         if (!(entity instanceof Item)) return true;
         boolean result = true;
         // 因为某种未知的原因, 高版本拦完EntityMetadata没用
