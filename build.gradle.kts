@@ -105,7 +105,7 @@ dependencies {
     // maven-model
     implementation("org.apache.maven:maven-model:3.9.1")
     // brigadier
-    implementation("com.mojang:brigadier:1.1.8")
+    implementation("com.mojang:brigadier:1.3.10")
 }
 
 tasks {

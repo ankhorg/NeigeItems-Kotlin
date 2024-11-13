@@ -4,6 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.plugin.Plugin
+import pers.neige.neigeitems.JvmHacker
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.annotation.Awake.LifeCycle
 import pers.neige.neigeitems.annotation.Awake.LifeCycle.*
@@ -13,6 +14,9 @@ import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.utils.ListenerUtils
 import pers.neige.neigeitems.utils.SchedulerUtils.asyncTimer
 import pers.neige.neigeitems.utils.SchedulerUtils.syncTimer
+import java.lang.invoke.ConstantCallSite
+import java.lang.invoke.MethodHandle
+import java.lang.invoke.MethodType
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.util.*
@@ -213,7 +217,7 @@ class ClassScanner(
         }
     }
 
-    private class PackedMethod(val method: Method) {
+    class PackedMethod(val method: Method) {
         val instance = if (Modifier.isStatic(method.modifiers)) {
             null
         } else {
@@ -229,6 +233,73 @@ class ClassScanner(
                 method.invoke(instance)
             } catch (error: Throwable) {
                 error.printStackTrace()
+            }
+        }
+    }
+
+    interface CallSite {
+
+        fun invoke(): Any?
+
+        fun invoke(arg: Any?): Any?
+
+        companion object {
+            @JvmStatic
+            fun of(method: Method): CallSite {
+                val instance = if (Modifier.isStatic(method.modifiers)) null
+                else method.declaringClass.getDeclaredField("INSTANCE")[null]
+                return if (instance == null) StaticCallSite(method) else SingletonCallSite(instance, method)
+            }
+        }
+    }
+
+    class StaticCallSite(method: Method) : ConstantCallSite(findTarget(method)), CallSite {
+        override fun invoke(): Any? {
+            return target.invoke()
+        }
+
+        override fun invoke(arg: Any?): Any? {
+            return target.invoke(arg)
+        }
+
+        companion object {
+            @JvmStatic
+            private fun findTarget(method: Method): MethodHandle {
+                try {
+                    val t: MethodType = MethodType.methodType(method.returnType, method.parameterTypes)
+                    return JvmHacker.lookup().findStatic(method.declaringClass, method.name, t)
+                } catch (e: Throwable) {
+                    throw RuntimeException(e)
+                }
+            }
+        }
+    }
+
+    private class SingletonCallSite(val instance: Any?, method: Method) : ConstantCallSite(findTarget(method)),
+        CallSite {
+        init {
+            if (instance == null || instance.javaClass != method.declaringClass) {
+                throw UnsupportedOperationException()
+            }
+        }
+
+        override fun invoke(): Any? {
+            return target.invoke(instance)
+        }
+
+        override fun invoke(arg: Any?): Any? {
+            return target.invoke(instance, arg)
+        }
+
+        companion object {
+            @JvmStatic
+            private fun findTarget(method: Method): MethodHandle {
+                try {
+                    val t: MethodType = MethodType.methodType(method.returnType, method.parameterTypes)
+                    return JvmHacker.lookup().findVirtual(method.declaringClass, method.name, t)
+                } catch (e: Throwable) {
+                    throw RuntimeException(e)
+                }
             }
         }
     }

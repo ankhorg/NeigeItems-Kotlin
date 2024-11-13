@@ -2,6 +2,7 @@ package pers.neige.neigeitems.command
 
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.ParseResults
+import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.command.CommandSender
 import org.bukkit.command.PluginCommand
@@ -78,6 +79,9 @@ object Command {
                     return@setExecutor true
                 }
                 val parse: ParseResults<CommandSender> = dispatcher.parse(args.joinToString(" "), sender)
+                if (parse.reader.canRead()) {
+                    (parse.reader as StringReader).cursor = parse.reader.totalLength
+                }
                 return@setExecutor dispatcher.execute(parse) > 0
             }
             setTabCompleter { sender, _, _, args ->
