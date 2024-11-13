@@ -20,9 +20,12 @@ import pers.neige.neigeitems.manager.HookerManager.getHookedItem
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
+import pers.neige.neigeitems.utils.SchedulerUtils.callSyncMethod
 import pers.neige.neigeitems.utils.SchedulerUtils.syncAndGet
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Future
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.cos
 import kotlin.math.sin
@@ -486,7 +489,7 @@ object ItemUtils {
         entity: Entity? = null,
         itemTag: NbtCompound = itemStack.getNbt(),
         neigeItems: NbtCompound? = itemTag.getCompound("NeigeItems")
-    ): Item? {
+    ): CompletableFuture<Item?> {
         // 记录掉落物拥有者
         val owner = neigeItems?.getString("owner")
         // 移除相关nbt, 防止物品无法堆叠
@@ -496,7 +499,7 @@ object ItemUtils {
         }
         // 记录掉落物拥有者
         val hide = neigeItems?.getBoolean("hide", false)
-        return syncAndGet {
+        return callSyncMethod {
             this.world?.let { world ->
                 WorldUtils.dropItem(
                     world, this, itemStack
@@ -747,11 +750,6 @@ object ItemUtils {
             val probability = args[2].toDoubleOrNull()
             if (probability != null && ThreadLocalRandom.current().nextDouble() > probability) return
         }
-        // 如果NI和MM都不存在对应物品就跳过去
-        if (!ItemManager.hasItem(args[0]) && mythicMobsHooker?.getItemStackSync(args[0]) == null && easyItemHooker?.hasItem(
-                args[0]
-            ) != true
-        ) return
 
         // 获取掉落数量
         var amount = 1
@@ -849,21 +847,22 @@ object ItemUtils {
             }
             // 开始掉落
             dropItems.forEachIndexed { index, itemStack ->
-                location.dropNiItem(itemStack, entity, itemStack.getNbt())?.let { item ->
-                    val vector = Vector(offsetX, offsetY, 0.0)
-                    if (angleType == "random") {
-                        val angleCos = cos(Math.PI * 2 * ThreadLocalRandom.current().nextDouble())
-                        val angleSin = sin(Math.PI * 2 * ThreadLocalRandom.current().nextDouble())
-                        val x = angleCos * vector.x + angleSin * vector.z
-                        val z = -angleSin * vector.x + angleCos * vector.z
-                        vector.setX(x).z = z
-                    } else if (angleType == "round") {
-                        val angleCos = cos(Math.PI * 2 * index / dropItems.size)
-                        val angleSin = sin(Math.PI * 2 * index / dropItems.size)
-                        val x = angleCos * vector.x + angleSin * vector.z
-                        val z = -angleSin * vector.x + angleCos * vector.z
-                        vector.setX(x).z = z
-                    }
+                val vector = Vector(offsetX, offsetY, 0.0)
+                if (angleType == "random") {
+                    val angleCos = cos(Math.PI * 2 * ThreadLocalRandom.current().nextDouble())
+                    val angleSin = sin(Math.PI * 2 * ThreadLocalRandom.current().nextDouble())
+                    val x = angleCos * vector.x + angleSin * vector.z
+                    val z = -angleSin * vector.x + angleCos * vector.z
+                    vector.setX(x).z = z
+                } else if (angleType == "round") {
+                    val angleCos = cos(Math.PI * 2 * index / dropItems.size)
+                    val angleSin = sin(Math.PI * 2 * index / dropItems.size)
+                    val x = angleCos * vector.x + angleSin * vector.z
+                    val z = -angleSin * vector.x + angleCos * vector.z
+                    vector.setX(x).z = z
+                }
+                location.dropNiItem(itemStack, entity, itemStack.getNbt()).thenAccept { item ->
+                    item ?: return@thenAccept
                     item.velocity = vector
                 }
             }

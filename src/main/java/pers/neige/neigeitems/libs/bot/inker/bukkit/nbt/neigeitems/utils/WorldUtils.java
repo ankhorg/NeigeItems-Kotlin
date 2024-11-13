@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.entity.RefCraftEntity;
 import pers.neige.neigeitems.ref.entity.RefEntity;
@@ -21,11 +22,11 @@ import pers.neige.neigeitems.ref.server.level.RefTrackedEntity;
 import pers.neige.neigeitems.ref.server.level.RefWorldServer;
 import pers.neige.neigeitems.ref.world.RefAABB;
 import pers.neige.neigeitems.ref.world.RefCraftWorld;
-import pers.neige.neigeitems.utils.SchedulerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -563,17 +564,19 @@ public class WorldUtils {
      * @param entityId 实体ID.
      * @return 对应的实体.
      */
-    @Nullable
-    public static Entity getEntityFromIDAsync(
+    @NotNull
+    public static CompletableFuture<Entity> getEntityFromIDAsync(
             @NotNull World world,
             int entityId
     ) {
         if (Bukkit.isPrimaryThread()) {
-            return getEntityFromID(world, entityId);
+            return CompletableFuture.completedFuture(getEntityFromID(world, entityId));
         } else {
-            return SchedulerUtils.syncAndGet(() -> {
-                return getEntityFromID(world, entityId);
+            CompletableFuture<Entity> result = new CompletableFuture<>();
+            Bukkit.getScheduler().runTask(NeigeItems.getInstance(), () -> {
+                result.complete(getEntityFromID(world, entityId));
             });
+            return result;
         }
     }
 

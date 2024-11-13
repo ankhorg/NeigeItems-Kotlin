@@ -7,7 +7,9 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class SchedulerUtils {
     /**
@@ -163,6 +165,50 @@ public class SchedulerUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * 在主线程执行一段代码, 返回这段代码的返回值, 如果当前正处于主线程则直接执行, 如果不处在主线程则调用 callSyncMethod.
+     *
+     * @param task 执行的代码.
+     */
+    @NotNull
+    public static <T> CompletableFuture<T> callSyncMethod(
+            @NotNull Callable<T> task
+    ) {
+        return callSyncMethod(NeigeItems.getInstance(), task);
+    }
+
+    /**
+     * 在主线程执行一段代码, 返回这段代码的返回值, 如果当前正处于主线程则直接执行, 如果不处在主线程则调用 callSyncMethod.
+     *
+     * @param plugin 注册任务的插件.
+     * @param task   执行的代码.
+     */
+    @NotNull
+    public static <T> CompletableFuture<T> callSyncMethod(
+            @NotNull Plugin plugin,
+            @NotNull Callable<T> task
+    ) {
+        if (Bukkit.isPrimaryThread()) {
+            try {
+                return CompletableFuture.completedFuture(task.call());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            CompletableFuture<T> future = new CompletableFuture<>();
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                try {
+                    future.complete(task.call());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    future.complete(null);
+                }
+            });
+            return future;
+        }
+        return CompletableFuture.completedFuture(null);
     }
 
     /**
