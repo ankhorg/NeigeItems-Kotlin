@@ -82,7 +82,7 @@ object PlayerUtils {
      */
     @JvmStatic
     fun Player.hasMetadataEZ(key: String): Boolean {
-        val user = NeigeItems.getUserManager().get(uniqueId) ?: return false
+        val user = NeigeItems.getUserManager()[uniqueId] ?: return false
         return user.metadata.containsKey(key)
     }
 
@@ -95,7 +95,7 @@ object PlayerUtils {
      */
     @JvmStatic
     fun Player.getMetadataEZ(key: String, def: Any): Any? {
-        val user = NeigeItems.getUserManager().get(uniqueId) ?: return def
+        val user = NeigeItems.getUserManager()[uniqueId] ?: return def
         return user.metadata.getOrDefault(key, def)
     }
 
@@ -107,7 +107,7 @@ object PlayerUtils {
      */
     @JvmStatic
     fun Player.setMetadataEZ(key: String, value: Any) {
-        val user = NeigeItems.getUserManager().get(uniqueId) ?: return
+        val user = NeigeItems.getUserManager()[uniqueId] ?: return
         user.metadata[key] = value
     }
 

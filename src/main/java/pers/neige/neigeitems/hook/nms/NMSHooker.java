@@ -27,11 +27,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class NMSHooker {
-    protected Map<Material, NamespacedKey> materialNamespacedKeys;
-
-    public NMSHooker() {
-        materialNamespacedKeys = loadNamespacedKeys();
-    }
+    protected final Map<Material, NamespacedKey> materialNamespacedKeys = loadNamespacedKeys();
 
     protected Map<Material, NamespacedKey> loadNamespacedKeys() {
         Map<Material, NamespacedKey> result = new HashMap<>();

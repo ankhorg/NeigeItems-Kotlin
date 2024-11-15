@@ -9,7 +9,6 @@ import pers.neige.neigeitems.NeigeItems;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class SchedulerUtils {
     /**

@@ -38,7 +38,7 @@ object ExpansionManager {
     /**
      * 所有脚本扩展注册的监听器
      */
-    val listeners = ConcurrentHashMap.newKeySet<ScriptListener>()
+    val listeners: ConcurrentHashMap.KeySetView<ScriptListener, Boolean> = ConcurrentHashMap.newKeySet()
 
     /**
      * 所有脚本扩展注册的papi变量
@@ -48,7 +48,7 @@ object ExpansionManager {
     /**
      * 所有脚本扩展注册的Bukkit任务
      */
-    val tasks = ConcurrentHashMap.newKeySet<ScriptTask>()
+    val tasks: ConcurrentHashMap.KeySetView<ScriptTask, Boolean> = ConcurrentHashMap.newKeySet()
 
     /**
      * 重载管理器

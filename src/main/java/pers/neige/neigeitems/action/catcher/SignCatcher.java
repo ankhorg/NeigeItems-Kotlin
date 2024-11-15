@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class SignCatcher {
     @NotNull
-    public CompletableFuture<String[]> future = new CompletableFuture<>();
+    public final CompletableFuture<String[]> future = new CompletableFuture<>();
 
     public SignCatcher(
             @NotNull BaseActionManager actionManager,

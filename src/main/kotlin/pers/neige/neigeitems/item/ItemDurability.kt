@@ -233,7 +233,7 @@ object ItemDurability {
             // 获取物品克隆
             val itemClone = itemStack.copy()
             // 将克隆的数量-1
-            itemClone.amount = itemClone.amount - 1
+            itemClone.amount -= 1
             // 将本体的数量设置为1
             itemStack.amount = 1
             // 给予物品克隆, 即拆分出的物品

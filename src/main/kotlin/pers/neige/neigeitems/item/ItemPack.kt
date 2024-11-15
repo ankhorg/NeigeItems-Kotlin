@@ -111,7 +111,7 @@ class ItemPack(
     fun getSection(player: OfflinePlayer?, data: String?): ConfigurationSection {
         return getSection(
             player, when (data) {
-                null -> HashMap<String, String>()
+                null -> HashMap()
                 else -> data.parseObject<HashMap<String, String>>()
             }
         )
@@ -168,7 +168,7 @@ class ItemPack(
     fun getItemStacks(player: OfflinePlayer?, data: String?): List<ItemStack> {
         return getItemStacks(
             player, when (data) {
-                null -> HashMap<String, String>()
+                null -> HashMap()
                 else -> data.parseObject<HashMap<String, String>>()
             }
         )

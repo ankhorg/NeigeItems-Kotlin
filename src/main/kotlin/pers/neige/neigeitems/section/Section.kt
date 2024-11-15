@@ -10,7 +10,7 @@ import pers.neige.neigeitems.manager.SectionManager
  * configSection.name只能获得末级ID, 难以解决形似a.b.c的多级调用
  * 因此需要特别指定ID
  *
- * @property configSection 节点配置
+ * @param configSection 节点配置
  * @property id 节点ID
  * @constructor 编译js脚本并进行包装
  */

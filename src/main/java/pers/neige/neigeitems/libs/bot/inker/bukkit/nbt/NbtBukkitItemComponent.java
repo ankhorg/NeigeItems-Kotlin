@@ -21,7 +21,6 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
 
     private final Map<String, Nbt<?>> delegateMap;
     private final ItemStack itemStack;
-    private final ItemMeta itemMeta;
     private final RefCraftMetaItem refItemMeta;
     private Set<Entry<String, Nbt<?>>> entrySet;
 
@@ -34,7 +33,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
             meta = itemStack.getItemMeta();
             refItemStack.meta = meta;
         }
-        itemMeta = meta;
+        ItemMeta itemMeta = meta;
         refItemMeta = (RefCraftMetaItem) (Object) meta;
     }
 

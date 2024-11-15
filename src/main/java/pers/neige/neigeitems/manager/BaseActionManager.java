@@ -48,6 +48,7 @@ import java.util.logging.Level;
 
 import static pers.neige.neigeitems.utils.ListUtils.*;
 
+@SuppressWarnings("unchecked")
 public abstract class BaseActionManager {
     @NotNull
     private final Plugin plugin;
@@ -1246,7 +1247,6 @@ public abstract class BaseActionManager {
                         itemStack.setAmount(0);
                     } else {
                         itemStack.setAmount(itemStack.getAmount() - amount);
-                        amount = 0;
                         break;
                     }
                 }

@@ -416,7 +416,7 @@ abstract class MythicMobsHooker {
             } else {
                 configLoadedEvent.fishDrops?.let {
                     loadItems(
-                        dropItems, it, player as? OfflinePlayer, params, null, true
+                        dropItems, it, null, params, null, true
                     )
                 }
                 null

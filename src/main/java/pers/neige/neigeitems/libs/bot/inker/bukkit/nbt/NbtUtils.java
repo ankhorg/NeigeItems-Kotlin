@@ -104,6 +104,8 @@ public class NbtUtils {
      * @param itemStack 待操作物品.
      * @return 物品克隆.
      */
+    @NotNull
+    @SuppressWarnings("unchecked")
     public static ItemStack bukkitCopy(@NotNull ItemStack itemStack) {
         ItemStack result = itemStack.clone();
         RefCraftMetaItem refItemMeta = (RefCraftMetaItem) (Object) ((RefBukkitItemStack) (Object) result).meta;
@@ -127,6 +129,7 @@ public class NbtUtils {
      * @param itemStack 待操作物品.
      * @return 物品克隆.
      */
+    @NotNull
     public static ItemStack asCopy(@NotNull ItemStack itemStack) {
         if (itemStack instanceof RefCraftItemStack) {
             return itemStack.clone();
@@ -142,6 +145,7 @@ public class NbtUtils {
      * @param itemStack 待操作物品.
      * @return org.bukkit.inventory.ItemStack 形式的物品克隆.
      */
+    @NotNull
     public static ItemStack asBukkitCopy(@NotNull ItemStack itemStack) {
         if (itemStack instanceof RefCraftItemStack) {
             return RefCraftItemStack.asBukkitCopy(((RefCraftItemStack) itemStack).handle);
@@ -157,6 +161,7 @@ public class NbtUtils {
      * @param itemStack 待操作物品.
      * @return CraftItemStack 形式的物品克隆.
      */
+    @NotNull
     public static ItemStack asCraftCopy(@NotNull ItemStack itemStack) {
         if (itemStack instanceof RefCraftItemStack) {
             return itemStack.clone();

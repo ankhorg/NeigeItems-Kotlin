@@ -46,7 +46,7 @@ object RepeatParser : SectionParser() {
      * @param prefix 前缀
      * @param postfix 后缀
      * @param repeat 长度限制
-     * @param transform 操作函数
+     * @param transformString 操作函数
      * @return 解析值
      */
     private fun handler(

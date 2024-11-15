@@ -1653,7 +1653,7 @@ object ItemEditorManager {
                 val sections = info.drop(1)
                 if (amount < itemStack.amount) {
                     val itemClone = itemStack.copy()
-                    itemClone.amount = itemClone.amount - amount
+                    itemClone.amount -= amount
                     itemStack.amount = amount
                     syncLater(1) {
                         player.giveItem(itemClone)
@@ -1716,7 +1716,7 @@ object ItemEditorManager {
                 val sections = (info.getOrNull(1) ?: "").parseObject<HashMap<String, String?>>()
                 if (amount < itemStack.amount) {
                     val itemClone: ItemStack = itemStack.copy()
-                    itemClone.amount = itemClone.amount - amount
+                    itemClone.amount -= amount
                     itemStack.amount = amount
                     syncLater(1) {
                         player.giveItem(itemClone)

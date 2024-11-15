@@ -602,6 +602,7 @@ public class WorldUtils {
     }
 
     @Nullable
+    @SuppressWarnings("unchecked")
     protected static RefEntity getEntityFromIDByNms1(
             @NotNull RefWorldServer world,
             int entityId

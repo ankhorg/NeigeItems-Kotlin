@@ -12,8 +12,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class ChatCatcher {
     @NotNull
-    public CompletableFuture<String> future = new CompletableFuture<>();
-    public boolean cancel;
+    public final CompletableFuture<String> future = new CompletableFuture<>();
+    public final boolean cancel;
 
     public ChatCatcher(
             @NotNull BaseActionManager actionManager,

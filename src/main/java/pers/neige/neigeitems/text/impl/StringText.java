@@ -22,6 +22,7 @@ public class StringText implements Text {
 
     @NotNull
     @Override
+    @SuppressWarnings("unchecked")
     public <T, R extends List<T>> R getText(
             @NotNull R result,
             @NotNull BaseActionManager manager,

@@ -18,7 +18,7 @@ public final class RefEntityPlayer extends RefEntityHuman {
 
     @HandleBy(reference = "Lnet/minecraft/server/level/ServerPlayer;connection:Lnet/minecraft/server/network/ServerGamePacketListenerImpl;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityPlayer;playerConnection:Lnet/minecraft/server/v1_12_R1/PlayerConnection;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
-    public RefPlayerConnection playerConnection = null;
+    public RefPlayerConnection playerConnection;
 
     @HandleBy(reference = "Lnet/minecraft/server/level/ServerPlayer;containerCounter:I", predicates = "craftbukkit_version:[v1_17_R1,)", useAccessor = true)
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityPlayer;containerCounter:I", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)", useAccessor = true)

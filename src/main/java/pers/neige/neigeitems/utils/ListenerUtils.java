@@ -120,6 +120,7 @@ public class ListenerUtils {
      * @return 对应的 Listener 对象.
      */
     @NotNull
+    @SuppressWarnings("unchecked")
     public static <T extends Event> Listener registerListener(
             @NotNull Class<T> eventClass,
             @NotNull EventPriority eventPriority,

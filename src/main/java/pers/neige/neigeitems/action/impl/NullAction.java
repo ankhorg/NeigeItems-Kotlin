@@ -11,7 +11,7 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 import java.util.concurrent.CompletableFuture;
 
 public class NullAction extends Action {
-    public static Action INSTANCE = new NullAction();
+    public static final Action INSTANCE = new NullAction();
 
     private NullAction() {
     }
