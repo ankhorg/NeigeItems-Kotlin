@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -225,5 +226,9 @@ public class NMSHooker {
     public Material getMaterial(@Nullable String material) {
         if (material == null) return null;
         return Material.getMaterial(material.toUpperCase(Locale.ENGLISH));
+    }
+
+    public void giveExp(@NotNull Player player, int exp) {
+        player.giveExp(exp);
     }
 }

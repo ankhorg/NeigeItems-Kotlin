@@ -943,7 +943,7 @@ public abstract class BaseActionManager {
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.giveExp(StringUtils.toInt(content, 0));
+                HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0));
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
@@ -955,7 +955,7 @@ public abstract class BaseActionManager {
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.giveExp(StringUtils.toInt(content, 0) * -1);
+                HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0) * -1);
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
@@ -967,7 +967,7 @@ public abstract class BaseActionManager {
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
             boolean isPrimaryThread = Bukkit.isPrimaryThread();
             SchedulerUtils.sync(plugin, () -> {
-                player.setTotalExperience(StringUtils.toInt(content, 0));
+                HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0) - player.getTotalExperience());
                 SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
             });
             return result;
