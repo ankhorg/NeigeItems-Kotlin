@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>NbtUtils 1.20.33 API </title>
+    <title>NbtUtils 1.20.34 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../../../stylesheet.css" title="Style">
@@ -841,7 +841,7 @@ public class <span class="typeNameLabel"><a href=NbtUtils.html>NbtUtils</a></spa
                                           >
                                     <li class="blockList">
                                         <h4>bukkitCopy</h4>
-                                        <pre class="methodSignature"> static ItemStack <a href=NbtUtils.html#bukkitCopy(org.bukkit.inventory.ItemStack)>bukkitCopy</a>(@NotNull() ItemStack itemStack)</pre>
+                                        <pre class="methodSignature">@NotNull() static ItemStack <a href=NbtUtils.html#bukkitCopy(org.bukkit.inventory.ItemStack)>bukkitCopy</a>(@NotNull() ItemStack itemStack)</pre>
                                         <div class="block"><p>仅可用于 org.bukkit.inventory.ItemStack, 不可用于 CraftItemStack. 获取给定物品的克隆, 返回值为 ItemStack. 修复了 org.bukkit.inventory.ItemStack#clone 在克隆 CraftMetaItem 时对 unhandledTags 浅复制的问题.</p></div>
 
                                         <dl>
@@ -874,7 +874,7 @@ public class <span class="typeNameLabel"><a href=NbtUtils.html>NbtUtils</a></spa
                                           >
                                     <li class="blockList">
                                         <h4>asCopy</h4>
-                                        <pre class="methodSignature"> static ItemStack <a href=NbtUtils.html#asCopy(org.bukkit.inventory.ItemStack)>asCopy</a>(@NotNull() ItemStack itemStack)</pre>
+                                        <pre class="methodSignature">@NotNull() static ItemStack <a href=NbtUtils.html#asCopy(org.bukkit.inventory.ItemStack)>asCopy</a>(@NotNull() ItemStack itemStack)</pre>
                                         <div class="block"><p>获取给定物品的克隆, 返回值有可能为 ItemStack 或 CraftItemStack. 修复了 org.bukkit.inventory.ItemStack#clone 在克隆 CraftMetaItem 时对 unhandledTags 浅复制的问题.</p></div>
 
                                         <dl>
@@ -907,7 +907,7 @@ public class <span class="typeNameLabel"><a href=NbtUtils.html>NbtUtils</a></spa
                                           >
                                     <li class="blockList">
                                         <h4>asBukkitCopy</h4>
-                                        <pre class="methodSignature"> static ItemStack <a href=NbtUtils.html#asBukkitCopy(org.bukkit.inventory.ItemStack)>asBukkitCopy</a>(@NotNull() ItemStack itemStack)</pre>
+                                        <pre class="methodSignature">@NotNull() static ItemStack <a href=NbtUtils.html#asBukkitCopy(org.bukkit.inventory.ItemStack)>asBukkitCopy</a>(@NotNull() ItemStack itemStack)</pre>
                                         <div class="block"><p>将给定的物品转换为 org.bukkit.inventory.ItemStack 形式的克隆. 给定物品可能属于 ItemStack, 也可能属于 ItemStack 在 OBC 的子类 CraftItemStack.</p></div>
 
                                         <dl>
@@ -940,7 +940,7 @@ public class <span class="typeNameLabel"><a href=NbtUtils.html>NbtUtils</a></spa
                                           >
                                     <li class="blockList">
                                         <h4>asCraftCopy</h4>
-                                        <pre class="methodSignature"> static ItemStack <a href=NbtUtils.html#asCraftCopy(org.bukkit.inventory.ItemStack)>asCraftCopy</a>(@NotNull() ItemStack itemStack)</pre>
+                                        <pre class="methodSignature">@NotNull() static ItemStack <a href=NbtUtils.html#asCraftCopy(org.bukkit.inventory.ItemStack)>asCraftCopy</a>(@NotNull() ItemStack itemStack)</pre>
                                         <div class="block"><p>将给定的物品转换为 CraftItemStack 形式的克隆. 给定物品可能属于 ItemStack, 也可能属于 ItemStack 在 OBC 的子类 CraftItemStack.</p></div>
 
                                         <dl>
