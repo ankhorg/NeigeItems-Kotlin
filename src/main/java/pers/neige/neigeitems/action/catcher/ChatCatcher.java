@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.action.catcher;
 
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -23,10 +22,9 @@ public class ChatCatcher {
             @NotNull CompletableFuture<ActionResult> result
     ) {
         this.cancel = cancel;
-        final boolean isPrimaryThread = Bukkit.isPrimaryThread();
         future.thenAccept((message) -> {
             context.getGlobal().put(messageKey, message);
-            SchedulerUtils.run(actionManager.getPlugin(), isPrimaryThread, () -> result.complete(Results.SUCCESS));
+            SchedulerUtils.run(actionManager.getPlugin(), context.isSync(), () -> result.complete(Results.SUCCESS));
         });
     }
 

@@ -6,6 +6,7 @@ import org.inksnow.ankhinvoke.comments.HandleBy;
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/PlayerChunkMap", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public class RefChunkMap {
     @HandleBy(reference = "Lnet/minecraft/server/level/ChunkMap;entityMap:Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;", predicates = "craftbukkit_version:[v1_18_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_16_R3/PlayerChunkMap;trackedEntities:Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;", predicates = "is_paper:[v1_16_R3,)")
     @HandleBy(reference = "Lnet/minecraft/server/level/PlayerChunkMap;G:Lorg/bukkit/craftbukkit/libs/it/unimi/dsi/fastutil/ints/Int2ObjectMap;", predicates = "craftbukkit_version:[v1_17_R1,v1_18_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/PlayerChunkMap;trackedEntities:Lorg/bukkit/craftbukkit/libs/it/unimi/dsi/fastutil/ints/Int2ObjectMap;", predicates = "craftbukkit_version:[v1_14_R1,v1_17_R1)")
     public final Object entityMap = null;

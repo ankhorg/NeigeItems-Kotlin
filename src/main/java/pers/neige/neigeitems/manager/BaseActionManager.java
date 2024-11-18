@@ -22,6 +22,7 @@ import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ResultType;
 import pers.neige.neigeitems.action.catcher.ChatCatcher;
 import pers.neige.neigeitems.action.catcher.SignCatcher;
+import pers.neige.neigeitems.action.handler.SyncActionHandler;
 import pers.neige.neigeitems.action.impl.*;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.action.result.StopResult;
@@ -124,7 +125,7 @@ public abstract class BaseActionManager {
                 return new JsAction(this, content);
             } else {
                 content = PapiHooker.toAllSection(content);
-                return new StringAction(string, key, content);
+                return new StringAction(this, string, key, content);
             }
         } else if (action instanceof List<?>) {
             return new ListAction(this, (List<?>) action);
@@ -235,7 +236,7 @@ public abstract class BaseActionManager {
             @NotNull Action action,
             @NotNull ActionContext context
     ) {
-        action.eval(this, context);
+        runActionWithResult(action, context);
         return Results.SUCCESS;
     }
 
@@ -251,7 +252,7 @@ public abstract class BaseActionManager {
             @NotNull Action action,
             @NotNull ActionContext context
     ) {
-        return action.eval(this, context);
+        return action.evalAsyncSafe(this, context);
     }
 
     /**
@@ -266,11 +267,9 @@ public abstract class BaseActionManager {
             @NotNull RawStringAction action,
             @NotNull ActionContext context
     ) {
-        BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler = actions.get(action.getKey());
-        if (handler != null) {
-            return handler.apply(context, action.getContent());
-        }
-        return CompletableFuture.completedFuture(Results.SUCCESS);
+        BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler = action.getHandler();
+        if (handler == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+        return handler.apply(context, action.getContent());
     }
 
     /**
@@ -285,17 +284,16 @@ public abstract class BaseActionManager {
             @NotNull StringAction action,
             @NotNull ActionContext context
     ) {
-        BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler = actions.get(action.getKey());
-        if (handler != null) {
-            String content = SectionUtils.parseSection(
-                    action.getContent(),
-                    (Map<String, String>) (Object) context.getGlobal(),
-                    context.getPlayer(),
-                    getSectionConfig(context)
-            );
-            return handler.apply(context, content);
-        }
-        return CompletableFuture.completedFuture(Results.SUCCESS);
+        BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler = action.getHandler();
+        if (handler == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+        // 对动作内容进行节点解析
+        String content = SectionUtils.parseSection(
+                action.getContent(),
+                (Map<String, String>) (Object) context.getGlobal(),
+                context.getPlayer(),
+                getSectionConfig(context)
+        );
+        return handler.apply(context, content);
     }
 
     /**
@@ -379,7 +377,7 @@ public abstract class BaseActionManager {
     ) {
         List<Action> actions = action.getActions();
         if (fromIndex >= actions.size()) return CompletableFuture.completedFuture(Results.SUCCESS);
-        return actions.get(fromIndex).eval(this, context).thenCompose((result) -> {
+        return actions.get(fromIndex).evalAsyncSafe(this, context).thenCompose((result) -> {
             if (result.getType() == ResultType.STOP) {
                 return CompletableFuture.completedFuture(result);
             }
@@ -402,13 +400,13 @@ public abstract class BaseActionManager {
         // 如果条件通过
         if (parseCondition(action.getConditionString(), action.getCondition(), context).getType() == ResultType.SUCCESS) {
             // 执行动作
-            SchedulerUtils.sync(plugin, () -> action.getSync().eval(this, context));
-            SchedulerUtils.async(plugin, () -> action.getAsync().eval(this, context));
-            return action.getActions().eval(this, context);
+            SchedulerUtils.sync(plugin, () -> action.getSync().evalAsyncSafe(this, context));
+            SchedulerUtils.async(plugin, () -> action.getAsync().evalAsyncSafe(this, context));
+            return action.getActions().evalAsyncSafe(this, context);
             // 条件未通过
         } else {
             // 执行deny动作
-            return action.getDeny().eval(this, context);
+            return action.getDeny().evalAsyncSafe(this, context);
         }
     }
 
@@ -424,7 +422,7 @@ public abstract class BaseActionManager {
             @NotNull LabelAction action,
             @NotNull ActionContext context
     ) {
-        return action.getActions().eval(this, context).thenApply((result) -> {
+        return action.getActions().evalAsyncSafe(this, context).thenApply((result) -> {
             if (result instanceof StopResult && action.getLabel().equals(((StopResult) result).getLabel())) {
                 return Results.SUCCESS;
             }
@@ -450,7 +448,7 @@ public abstract class BaseActionManager {
         if (amount >= action.getActions().size()) {
             CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
             for (Pair<Action, Double> currentAction : action.getActions()) {
-                result = result.thenCombine(currentAction.getFirst().eval(this, context), (r1, r2) -> {
+                result = result.thenCombine(currentAction.getFirst().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
                         return r2;
                     } else {
@@ -468,7 +466,7 @@ public abstract class BaseActionManager {
                 result = SamplingUtils.weight(action.getActions(), action.getTotalWeight());
             }
             if (result != null) {
-                return result.eval(this, context);
+                return result.evalAsyncSafe(this, context);
             }
         } else if (amount > 1) {
             List<SamplingUtils.SamplingResult<Action>> actions = SamplingUtils.weightWithIndex(action.getActions(), amount);
@@ -477,7 +475,7 @@ public abstract class BaseActionManager {
             }
             CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
             for (SamplingUtils.SamplingResult<Action> currentAction : actions) {
-                result = result.thenCombine(currentAction.getValue().eval(this, context), (r1, r2) -> {
+                result = result.thenCombine(currentAction.getValue().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
                         return r2;
                     } else {
@@ -508,7 +506,7 @@ public abstract class BaseActionManager {
         if (amount >= actions.size()) {
             CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
             for (Pair<Action, Double> currentAction : actions) {
-                result = result.thenCombine(currentAction.getFirst().eval(this, context), (r1, r2) -> {
+                result = result.thenCombine(currentAction.getFirst().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
                         return r2;
                     } else {
@@ -521,7 +519,7 @@ public abstract class BaseActionManager {
         if (amount == 1) {
             Action result = SamplingUtils.weight(actions);
             if (result != null) {
-                return result.eval(this, context);
+                return result.evalAsyncSafe(this, context);
             }
         } else if (amount > 1) {
             List<SamplingUtils.SamplingResult<Action>> finalActions = SamplingUtils.weightWithIndex(actions, amount);
@@ -530,7 +528,7 @@ public abstract class BaseActionManager {
             }
             CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
             for (SamplingUtils.SamplingResult<Action> currentAction : finalActions) {
-                result = result.thenCombine(currentAction.getValue().eval(this, context), (r1, r2) -> {
+                result = result.thenCombine(currentAction.getValue().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
                         return r2;
                     } else {
@@ -557,11 +555,11 @@ public abstract class BaseActionManager {
     ) {
         // while循环判断条件
         if (parseCondition(action.getConditionString(), action.getCondition(), context).getType() == ResultType.SUCCESS) {
-            return action.getActions().eval(this, context).thenCompose((result) -> {
+            return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
                 // 执行中止
                 if (result.getType() == ResultType.STOP) {
                     // 执行finally块
-                    return action.getFinally().eval(this, context);
+                    return action.getFinally().evalAsyncSafe(this, context);
                 } else {
                     // 继续执行
                     return runAction(action, context);
@@ -569,7 +567,7 @@ public abstract class BaseActionManager {
             });
         } else {
             // 执行finally块
-            return action.getFinally().eval(this, context);
+            return action.getFinally().evalAsyncSafe(this, context);
         }
     }
 
@@ -660,6 +658,24 @@ public abstract class BaseActionManager {
     /**
      * 添加物品动作
      *
+     * @param ids       动作ID
+     * @param asyncSafe 动作是否可以异步执行
+     * @param function  动作执行函数
+     */
+    public void addFunction(
+            @NotNull Collection<String> ids,
+            boolean asyncSafe,
+            @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
+    ) {
+        if (function == null) return;
+        for (String id : ids) {
+            addFunction(id, asyncSafe, function);
+        }
+    }
+
+    /**
+     * 添加物品动作
+     *
      * @param id       动作ID
      * @param function 动作执行函数
      */
@@ -667,12 +683,37 @@ public abstract class BaseActionManager {
             @NotNull String id,
             @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
+        addFunction(id, true, function);
+    }
+
+    /**
+     * 添加物品动作
+     *
+     * @param id        动作ID
+     * @param asyncSafe 动作是否可以异步执行
+     * @param function  动作执行函数
+     */
+    public void addFunction(
+            @NotNull String id,
+            boolean asyncSafe,
+            @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
+    ) {
         if (function == null) return;
-        actions.put(id.toLowerCase(Locale.ROOT), (context, content) -> {
-            CompletableFuture<ActionResult> result = function.apply(context, content);
-            if (result == null) result = CompletableFuture.completedFuture(Results.SUCCESS);
-            return result;
-        });
+        BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler;
+        if (asyncSafe) {
+            handler = (context, content) -> {
+                CompletableFuture<ActionResult> result = function.apply(context, content);
+                if (result == null) result = CompletableFuture.completedFuture(Results.SUCCESS);
+                return result;
+            };
+        } else {
+            handler = (SyncActionHandler) (context, content) -> {
+                CompletableFuture<ActionResult> result = function.apply(context, content);
+                if (result == null) result = CompletableFuture.completedFuture(Results.SUCCESS);
+                return result;
+            };
+        }
+        actions.put(id.toLowerCase(Locale.ROOT), handler);
     }
 
     /**
@@ -694,6 +735,24 @@ public abstract class BaseActionManager {
     /**
      * 添加物品动作
      *
+     * @param ids       动作ID
+     * @param asyncSafe 动作是否可以异步执行
+     * @param consumer  动作执行函数
+     */
+    public void addConsumer(
+            @NotNull Collection<String> ids,
+            boolean asyncSafe,
+            @Nullable BiConsumer<ActionContext, String> consumer
+    ) {
+        if (consumer == null) return;
+        for (String id : ids) {
+            addConsumer(id, asyncSafe, consumer);
+        }
+    }
+
+    /**
+     * 添加物品动作
+     *
      * @param id       动作ID
      * @param consumer 动作执行函数
      */
@@ -701,11 +760,35 @@ public abstract class BaseActionManager {
             @NotNull String id,
             @Nullable BiConsumer<ActionContext, String> consumer
     ) {
+        addConsumer(id, true, consumer);
+    }
+
+    /**
+     * 添加物品动作
+     *
+     * @param id        动作ID
+     * @param asyncSafe 动作是否可以异步执行
+     * @param consumer  动作执行函数
+     */
+    public void addConsumer(
+            @NotNull String id,
+            boolean asyncSafe,
+            @Nullable BiConsumer<ActionContext, String> consumer
+    ) {
         if (consumer == null) return;
-        actions.put(id.toLowerCase(Locale.ROOT), (context, content) -> {
-            consumer.accept(context, content);
-            return CompletableFuture.completedFuture(Results.SUCCESS);
-        });
+        BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler;
+        if (asyncSafe) {
+            handler = (context, content) -> {
+                consumer.accept(context, content);
+                return CompletableFuture.completedFuture(Results.SUCCESS);
+            };
+        } else {
+            handler = (SyncActionHandler) (context, content) -> {
+                consumer.accept(context, content);
+                return CompletableFuture.completedFuture(Results.SUCCESS);
+            };
+        }
+        actions.put(id.toLowerCase(Locale.ROOT), handler);
     }
 
     /**
@@ -772,106 +855,44 @@ public abstract class BaseActionManager {
             player.sendMessage(content);
         });
         // 强制玩家发送消息
-        addFunction("chat", (context, content) -> {
+        addConsumer("chat", false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.chat(content);
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.chat(content);
         });
         // 强制玩家发送消息(将&解析为颜色符号)
-        addFunction(Arrays.asList("chat-with-color", "chatWithColor"), (context, content) -> {
+        addConsumer(Arrays.asList("chat-with-color", "chatWithColor"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.chat(ChatColor.translateAlternateColorCodes('&', content));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.chat(ChatColor.translateAlternateColorCodes('&', content));
         });
         // 强制玩家执行指令
-        addFunction(Arrays.asList("command", "player"), (context, content) -> {
+        addConsumer(Arrays.asList("command", "player"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                Bukkit.dispatchCommand(player, ChatColor.translateAlternateColorCodes('&', content));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            Bukkit.dispatchCommand(player, ChatColor.translateAlternateColorCodes('&', content));
         });
         // 强制玩家执行指令(不将&解析为颜色符号)
-        addFunction(Arrays.asList("command-no-color", "commandNoColor"), (context, content) -> {
+        addConsumer(Arrays.asList("command-no-color", "commandNoColor"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                Bukkit.dispatchCommand(player, content);
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            Bukkit.dispatchCommand(player, content);
         });
         // 后台执行指令
-        addFunction("console", (context, content) -> {
-            Player player = context.getPlayer();
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            if (player != null) {
-                SchedulerUtils.sync(plugin, () -> {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', content));
-                    SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-                });
-            } else {
-                SchedulerUtils.sync(plugin, () -> {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', content));
-                    SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-                });
-            }
-            return result;
+        addConsumer("console", false, (context, content) -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', content));
         });
         // 后台执行指令(不将&解析为颜色符号)
-        addFunction(Arrays.asList("console-no-color", "consoleNoColor"), (context, content) -> {
-            Player player = context.getPlayer();
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            if (player != null) {
-                SchedulerUtils.sync(plugin, () -> {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content);
-                    SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-                });
-            } else {
-                SchedulerUtils.sync(plugin, () -> {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content);
-                    SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-                });
-            }
-            return result;
+        addConsumer(Arrays.asList("console-no-color", "consoleNoColor"), false, (context, content) -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content);
         });
         // 公告
         addConsumer("broadcast", (context, content) -> {
-            Player player = context.getPlayer();
-            if (player != null) {
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', content));
-            } else {
-                Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', content));
-            }
+            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', content));
         });
         // 公告(不将&解析为颜色符号)
         addConsumer(Arrays.asList("broadcast-no-color", "broadcastNoColor"), (context, content) -> {
-            Player player = context.getPlayer();
-            if (player != null) {
-                Bukkit.broadcastMessage(content);
-            } else {
-                Bukkit.broadcastMessage(content);
-            }
+            Bukkit.broadcastMessage(content);
         });
         // 发送Title
         addConsumer("title", (context, content) -> {
@@ -924,198 +945,106 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return;
             VaultHooker hooker = HookerManager.INSTANCE.getVaultHooker();
-            if (hooker != null) {
-                hooker.giveMoney(player, StringUtils.toDouble(content, 0.0));
-            }
+            if (hooker == null) return;
+            hooker.giveMoney(player, StringUtils.toDouble(content, 0.0));
         });
         // 扣除玩家金钱
         addConsumer(Arrays.asList("take-money", "takeMoney"), (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
             VaultHooker hooker = HookerManager.INSTANCE.getVaultHooker();
-            if (hooker != null) {
-                hooker.takeMoney(player, StringUtils.toDouble(content, 0.0));
-            }
+            if (hooker == null) return;
+            hooker.takeMoney(player, StringUtils.toDouble(content, 0.0));
         });
         // 给予玩家经验
-        addFunction(Arrays.asList("give-exp", "giveExp"), (context, content) -> {
+        addConsumer(Arrays.asList("give-exp", "giveExp"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0));
         });
         // 扣除玩家经验
-        addFunction(Arrays.asList("take-exp", "takeExp"), (context, content) -> {
+        addConsumer(Arrays.asList("take-exp", "takeExp"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0) * -1);
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0) * -1);
         });
         // 设置玩家经验
-        addFunction(Arrays.asList("set-exp", "setExp"), (context, content) -> {
+        addConsumer(Arrays.asList("set-exp", "setExp"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0) - player.getTotalExperience());
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0) - player.getTotalExperience());
         });
         // 给予玩家经验等级
-        addFunction(Arrays.asList("give-level", "giveLevel"), (context, content) -> {
+        addConsumer(Arrays.asList("give-level", "giveLevel"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.giveExpLevels(StringUtils.toInt(content, 0));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.giveExpLevels(StringUtils.toInt(content, 0));
         });
         // 扣除玩家经验等级
-        addFunction(Arrays.asList("take-level", "takeLevel"), (context, content) -> {
+        addConsumer(Arrays.asList("take-level", "takeLevel"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.giveExpLevels(StringUtils.toInt(content, 0) * -1);
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.giveExpLevels(StringUtils.toInt(content, 0) * -1);
         });
         // 设置玩家经验等级
-        addFunction(Arrays.asList("set-level", "setLevel"), (context, content) -> {
+        addConsumer(Arrays.asList("set-level", "setLevel"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.setLevel(StringUtils.toInt(content, 0));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.setLevel(StringUtils.toInt(content, 0));
         });
         // 给予玩家饱食度
-        addFunction(Arrays.asList("give-food", "giveFood"), (context, content) -> {
+        addConsumer(Arrays.asList("give-food", "giveFood"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
         });
         // 扣除玩家饱食度
-        addFunction(Arrays.asList("take-food", "takeFood"), (context, content) -> {
+        addConsumer(Arrays.asList("take-food", "takeFood"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
         });
         // 设置玩家饱食度
-        addFunction(Arrays.asList("set-food", "setFood"), (context, content) -> {
+        addConsumer(Arrays.asList("set-food", "setFood"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
         });
         // 给予玩家饱和度
-        addFunction(Arrays.asList("give-saturation", "giveSaturation"), (context, content) -> {
+        addConsumer(Arrays.asList("give-saturation", "giveSaturation"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.toFloat(content, 0))));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.toFloat(content, 0))));
         });
         // 扣除玩家饱和度
-        addFunction(Arrays.asList("take-saturation", "takeSaturation"), (context, content) -> {
+        addConsumer(Arrays.asList("take-saturation", "takeSaturation"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.toFloat(content, 0))));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.toFloat(content, 0))));
         });
         // 设置玩家饱和度
-        addFunction(Arrays.asList("set-saturation", "setSaturation"), (context, content) -> {
+        addConsumer(Arrays.asList("set-saturation", "setSaturation"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.toFloat(content, 0))));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.toFloat(content, 0))));
         });
         // 给予玩家生命
-        addFunction(Arrays.asList("give-health", "giveHealth"), (context, content) -> {
+        addConsumer(Arrays.asList("give-health", "giveHealth"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() + StringUtils.toDouble(content, 0))));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() + StringUtils.toDouble(content, 0))));
         });
         // 扣除玩家生命
-        addFunction(Arrays.asList("take-health", "takeHealth"), (context, content) -> {
+        addConsumer(Arrays.asList("take-health", "takeHealth"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() - StringUtils.toDouble(content, 0))));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() - StringUtils.toDouble(content, 0))));
         });
         // 设置玩家生命
-        addFunction(Arrays.asList("set-health", "setHealth"), (context, content) -> {
+        addConsumer(Arrays.asList("set-health", "setHealth"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), StringUtils.toDouble(content, 0))));
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            if (player == null) return;
+            player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), StringUtils.toDouble(content, 0))));
         });
         // 释放MM技能
         addConsumer(Arrays.asList("cast-skill", "castSkill"), (context, content) -> {
@@ -1160,40 +1089,24 @@ public abstract class BaseActionManager {
             PlayerUtils.setMetadataEZ(player, "Combo-" + content, new ArrayList<ComboInfo>());
         });
         // 设置药水效果
-        addFunction(Arrays.asList("set-potion", "setPotion", "set-potion-effect", "setPotionEffect"), (context, content) -> {
+        addConsumer(Arrays.asList("set-potion", "setPotion", "set-potion-effect", "setPotionEffect"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            if (player == null) return;
             String[] args = content.split(" ", 3);
-            if (args.length >= 3) {
-                PotionEffectType type = PotionEffectType.getByName(args[0].toUpperCase(Locale.ROOT));
-                Integer amplifier = StringUtils.toIntOrNull(args[1]);
-                Integer duration = StringUtils.toIntOrNull(args[2]);
-                if (type != null && duration != null && amplifier != null) {
-                    CompletableFuture<ActionResult> result = new CompletableFuture<>();
-                    boolean isPrimaryThread = Bukkit.isPrimaryThread();
-                    SchedulerUtils.sync(plugin, () -> {
-                        player.addPotionEffect(new PotionEffect(type, duration * 20, amplifier - 1), true);
-                        SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-                    });
-                    return result;
-                }
-            }
-            return CompletableFuture.completedFuture(Results.SUCCESS);
+            if (args.length < 3) return;
+            PotionEffectType type = PotionEffectType.getByName(args[0].toUpperCase(Locale.ROOT));
+            Integer amplifier = StringUtils.toIntOrNull(args[1]);
+            Integer duration = StringUtils.toIntOrNull(args[2]);
+            if (type == null || duration == null || amplifier == null) return;
+            player.addPotionEffect(new PotionEffect(type, duration * 20, amplifier - 1), true);
         });
         // 移除药水效果
-        addFunction(Arrays.asList("remove-potion", "removePotion", "remove-potion-effect", "removePotionEffect"), (context, content) -> {
+        addConsumer(Arrays.asList("remove-potion", "removePotion", "remove-potion-effect", "removePotionEffect"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            if (player == null) return;
             PotionEffectType type = PotionEffectType.getByName(content.toUpperCase(Locale.ROOT));
-            if (type != null) {
-                CompletableFuture<ActionResult> result = new CompletableFuture<>();
-                boolean isPrimaryThread = Bukkit.isPrimaryThread();
-                SchedulerUtils.sync(plugin, () -> {
-                    player.removePotionEffect(type);
-                    SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-                });
-            }
-            return CompletableFuture.completedFuture(Results.SUCCESS);
+            if (type != null) return;
+            player.removePotionEffect(type);
         });
         // 延迟(单位是tick)
         addFunction("delay", (context, content) -> {
@@ -1228,31 +1141,25 @@ public abstract class BaseActionManager {
         // 从global中删除内容
         addConsumer(Arrays.asList("del-global", "delGlobal"), (context, content) -> context.getGlobal().remove(content));
         // 扣除NI物品
-        addFunction(Arrays.asList("take-ni-item", "takeNiItem"), (context, content) -> {
+        addConsumer(Arrays.asList("take-ni-item", "takeNiItem"), false, (context, content) -> {
             Player player = context.getPlayer();
-            if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            if (player == null) return;
             String[] args = content.split(" ", 2);
-            if (args.length < 2) return CompletableFuture.completedFuture(Results.SUCCESS);
+            if (args.length < 2) return;
             String itemId = args[0];
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            boolean isPrimaryThread = Bukkit.isPrimaryThread();
-            SchedulerUtils.sync(plugin, () -> {
-                int amount = StringUtils.toInt(args[1], 0);
-                ItemStack[] contents = player.getInventory().getContents();
-                for (ItemStack itemStack : contents) {
-                    String currentItemId = ItemUtils.getItemId(itemStack);
-                    if (!itemId.equals(currentItemId)) continue;
-                    if (amount > itemStack.getAmount()) {
-                        amount -= itemStack.getAmount();
-                        itemStack.setAmount(0);
-                    } else {
-                        itemStack.setAmount(itemStack.getAmount() - amount);
-                        break;
-                    }
+            int amount = StringUtils.toInt(args[1], 0);
+            ItemStack[] contents = player.getInventory().getContents();
+            for (ItemStack itemStack : contents) {
+                String currentItemId = ItemUtils.getItemId(itemStack);
+                if (!itemId.equals(currentItemId)) continue;
+                if (amount > itemStack.getAmount()) {
+                    amount -= itemStack.getAmount();
+                    itemStack.setAmount(0);
+                } else {
+                    itemStack.setAmount(itemStack.getAmount() - amount);
+                    break;
                 }
-                SchedulerUtils.run(plugin, isPrimaryThread, () -> result.complete(Results.SUCCESS));
-            });
-            return result;
+            }
         });
         // 跨服
         addConsumer("server", (context, content) -> {
@@ -1265,6 +1172,7 @@ public abstract class BaseActionManager {
         });
         // 切换至主线程
         addFunction("sync", (context, content) -> {
+            context.setSync(true);
             if (Bukkit.isPrimaryThread()) {
                 return CompletableFuture.completedFuture(Results.SUCCESS);
             }
@@ -1274,6 +1182,7 @@ public abstract class BaseActionManager {
         });
         // 切换至异步线程
         addFunction("async", (context, content) -> {
+            context.setSync(false);
             if (!Bukkit.isPrimaryThread()) {
                 return CompletableFuture.completedFuture(Results.SUCCESS);
             }

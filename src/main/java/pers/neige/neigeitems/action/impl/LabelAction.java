@@ -27,6 +27,7 @@ public class LabelAction extends Action {
             label = "label";
         }
         actions = manager.compile(action.get("actions"));
+        this.asyncSafe = actions.isAsyncSafe();
     }
 
     public LabelAction(
@@ -44,6 +45,7 @@ public class LabelAction extends Action {
             label = "label";
         }
         actions = manager.compile(action.get("actions"));
+        this.asyncSafe = actions.isAsyncSafe();
     }
 
     @Override

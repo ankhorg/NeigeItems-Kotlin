@@ -1,15 +1,18 @@
 package pers.neige.neigeitems.action.impl;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
+import pers.neige.neigeitems.action.handler.SyncActionHandler;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiFunction;
 
 public class RawStringAction extends Action {
     @NotNull
@@ -18,17 +21,23 @@ public class RawStringAction extends Action {
     private final String key;
     @NotNull
     private final String content;
+    @Nullable
+    private BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler;
 
     public RawStringAction(
+            @NotNull BaseActionManager manager,
             @NotNull String action
     ) {
         this.action = action;
         String[] info = action.split(": ", 2);
         key = info[0].toLowerCase(Locale.ROOT);
         content = info.length > 1 ? info[1] : "";
+        this.handler = manager.getActions().get(this.key);
+        checkAsyncSafe();
     }
 
     public RawStringAction(
+            @NotNull BaseActionManager manager,
             @NotNull String action,
             @NotNull String key,
             @NotNull String content
@@ -36,6 +45,14 @@ public class RawStringAction extends Action {
         this.action = action;
         this.key = key;
         this.content = content;
+        this.handler = manager.getActions().get(this.key);
+        checkAsyncSafe();
+    }
+
+    private void checkAsyncSafe() {
+        if (this.handler != null && this.handler instanceof SyncActionHandler) {
+            this.asyncSafe = false;
+        }
     }
 
     @Override
@@ -64,6 +81,15 @@ public class RawStringAction extends Action {
         }
     }
 
+    @Override
+    public @NotNull CompletableFuture<ActionResult> evalAsyncSafe(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
+        if (handler == null) {
+            this.handler = manager.getActions().get(this.key);
+            checkAsyncSafe();
+        }
+        return super.evalAsyncSafe(manager, context);
+    }
+
     @NotNull
     public String getAction() {
         return action;
@@ -77,5 +103,10 @@ public class RawStringAction extends Action {
     @NotNull
     public String getContent() {
         return content;
+    }
+
+    @Nullable
+    public BiFunction<ActionContext, String, CompletableFuture<ActionResult>> getHandler() {
+        return handler;
     }
 }

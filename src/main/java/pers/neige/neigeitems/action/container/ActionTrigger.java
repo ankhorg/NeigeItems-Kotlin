@@ -64,12 +64,24 @@ public class ActionTrigger {
     public void async(
             @NotNull ActionContext context
     ) {
-        SchedulerUtils.async(actionManager.getPlugin(), () -> actionManager.runAction(async, context));
+        SchedulerUtils.async(actionManager.getPlugin(), () -> {
+            try {
+                actionManager.runAction(async, context.clone());
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public void sync(
             @NotNull ActionContext context
     ) {
-        SchedulerUtils.sync(actionManager.getPlugin(), () -> actionManager.runAction(sync, context));
+        SchedulerUtils.sync(actionManager.getPlugin(), () -> {
+            try {
+                actionManager.runAction(sync, context.clone());
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }

@@ -41,6 +41,7 @@ public class WhileAction extends Action {
         }
         actions = manager.compile(action.get("actions"));
         _finally = manager.compile(action.get("finally"));
+        checkAsyncSafe();
     }
 
     public WhileAction(
@@ -61,6 +62,13 @@ public class WhileAction extends Action {
         }
         actions = manager.compile(action.get("actions"));
         _finally = manager.compile(action.get("finally"));
+        checkAsyncSafe();
+    }
+
+    private void checkAsyncSafe() {
+        if (!this.actions.isAsyncSafe() && !this._finally.isAsyncSafe()) {
+            this.asyncSafe = false;
+        }
     }
 
     @Override

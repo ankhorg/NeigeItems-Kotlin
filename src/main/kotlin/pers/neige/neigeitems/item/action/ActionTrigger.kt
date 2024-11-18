@@ -70,8 +70,8 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         context: ActionContext
     ) {
         SchedulerUtils.async {
-            actions.eval(ActionManager, context)
-            async.eval(ActionManager, context)
+            ActionManager.runAction(actions, context)
+            ActionManager.runAction(async, context.clone())
         }
     }
 
@@ -84,7 +84,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
         context: ActionContext
     ) {
         SchedulerUtils.sync {
-            sync.eval(ActionManager, context)
+            ActionManager.runAction(sync, context.clone())
         }
     }
 }

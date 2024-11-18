@@ -18,7 +18,6 @@ import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
 import pers.neige.neigeitems.utils.ConfigUtils.loadFromString

@@ -47,6 +47,7 @@ public class ConditionAction extends Action {
         async = manager.compile(action.get("async"));
         sync = manager.compile(action.get("sync"));
         deny = manager.compile(action.get("deny"));
+        checkAsyncSafe();
     }
 
     public ConditionAction(
@@ -69,6 +70,13 @@ public class ConditionAction extends Action {
         async = manager.compile(action.get("async"));
         sync = manager.compile(action.get("sync"));
         deny = manager.compile(action.get("deny"));
+        checkAsyncSafe();
+    }
+
+    private void checkAsyncSafe() {
+        if (!this.actions.isAsyncSafe() && !this.deny.isAsyncSafe()) {
+            this.asyncSafe = false;
+        }
     }
 
     @Override

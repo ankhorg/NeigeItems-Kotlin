@@ -45,6 +45,7 @@ public class ConditionWeightAction extends Action {
         }
         this.order = action.getBoolean("order", false);
         initActions(manager, action.get("actions"));
+        checkAsyncSafe();
     }
 
     public ConditionWeightAction(
@@ -73,6 +74,14 @@ public class ConditionWeightAction extends Action {
             this.order = temp != null && temp;
         }
         initActions(manager, action.get("actions"));
+        checkAsyncSafe();
+    }
+
+    private void checkAsyncSafe() {
+        for (Pair<Triple<String, CompiledScript, Action>, Double> action : actions) {
+            if (action.getFirst().getThird().isAsyncSafe()) return;
+        }
+        this.asyncSafe = false;
     }
 
     public void initActions(
@@ -81,7 +90,6 @@ public class ConditionWeightAction extends Action {
     ) {
         if (!(actions instanceof List<?>)) return;
         List<?> list = (List<?>) actions;
-        double total = 0;
         for (Object rawAction : list) {
             if (!(rawAction instanceof Map<?, ?>)) continue;
             Map<?, ?> mapAction = (Map<?, ?>) rawAction;
@@ -106,7 +114,6 @@ public class ConditionWeightAction extends Action {
             }
             Action action = manager.compile(mapAction.get("actions"));
             this.actions.add(new Pair<>(new Triple<>(conditionString, condition, action), weight));
-            total += weight;
         }
     }
 

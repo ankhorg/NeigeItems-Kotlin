@@ -20,6 +20,14 @@ public class JavaAction extends Action {
         this.function = function;
     }
 
+    public JavaAction(
+            boolean asyncSafe,
+            @NotNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function
+    ) {
+        this.asyncSafe = asyncSafe;
+        this.function = function;
+    }
+
     @Override
     public @NotNull ActionType getType() {
         return ActionType.JAVA;

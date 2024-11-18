@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.action;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -12,7 +13,7 @@ import javax.script.SimpleBindings;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ActionContext {
+public class ActionContext implements Cloneable {
     @NotNull
     private final Bindings basicBindings;
     @Nullable
@@ -29,6 +30,7 @@ public class ActionContext {
     private final Map<String, String> data;
     @Nullable
     private final Event event;
+    private boolean sync = Bukkit.isPrimaryThread();
 
     public ActionContext() {
         this(null);
@@ -95,6 +97,13 @@ public class ActionContext {
     @NotNull
     public static ActionContext empty() {
         return new ActionContext();
+    }
+
+    @Override
+    public ActionContext clone() throws CloneNotSupportedException {
+        ActionContext result = (ActionContext) super.clone();
+        result.setSync(Bukkit.isPrimaryThread());
+        return result;
     }
 
     /**
@@ -212,5 +221,19 @@ public class ActionContext {
     @Nullable
     public Event getEvent() {
         return event;
+    }
+
+    /**
+     * 获取动作是否应该在主线程运行.
+     */
+    public boolean isSync() {
+        return sync;
+    }
+
+    /**
+     * 设置动作是否应该在主线程运行.
+     */
+    public void setSync(boolean sync) {
+        this.sync = sync;
     }
 }

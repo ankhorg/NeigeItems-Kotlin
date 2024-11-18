@@ -6,7 +6,6 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.NeigeItems;
@@ -30,14 +29,13 @@ public class SignCatcher {
             @NotNull ActionContext context,
             @NotNull CompletableFuture<ActionResult> result
     ) {
-        final boolean isPrimaryThread = Bukkit.isPrimaryThread();
         future.thenAccept((texts) -> {
             context.getGlobal().put(messageKey, texts);
             for (int index = 0; index < texts.length; index++) {
                 String text = texts[index];
                 context.getGlobal().put(messageKey + "." + index, text);
             }
-            SchedulerUtils.run(actionManager.getPlugin(), isPrimaryThread, () -> result.complete(Results.SUCCESS));
+            SchedulerUtils.run(actionManager.getPlugin(), context.isSync(), () -> result.complete(Results.SUCCESS));
         });
     }
 

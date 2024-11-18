@@ -50,6 +50,7 @@ public class WeightAction extends Action {
         }
         this.order = action.getBoolean("order", false);
         initActions(manager, action.get("actions"));
+        checkAsyncSafe();
     }
 
     public WeightAction(
@@ -78,6 +79,14 @@ public class WeightAction extends Action {
             this.order = temp != null && temp;
         }
         initActions(manager, action.get("actions"));
+        checkAsyncSafe();
+    }
+
+    private void checkAsyncSafe() {
+        for (Pair<Action, Double> action : actions) {
+            if (action.getFirst().isAsyncSafe()) return;
+        }
+        this.asyncSafe = false;
     }
 
     public void initActions(

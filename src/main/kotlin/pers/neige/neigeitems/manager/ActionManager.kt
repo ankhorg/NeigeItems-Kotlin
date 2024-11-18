@@ -77,7 +77,6 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     ): CompletableFuture<ActionResult> {
         // 解析物品变量
         val itemStack = context.itemStack
-        val type = action.key
         val content = let {
             val nbt = context.nbt
             val cache = (context.params?.get("cache") ?: context.global) as? MutableMap<String, String>
@@ -93,11 +92,13 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             }
         }
         // 尝试加载物品动作, 返回执行结果
-        actions[type]?.apply(context, content)?.also { return it }
+        action.handler?.let { handler ->
+            return handler.apply(context, content)
+        }
         // 尝试加载物品编辑函数, 返回执行结果
         val player = context.player
         if (itemStack != null && player != null) {
-            ItemEditorManager.runEditorWithResult(type, content, itemStack, player)
+            ItemEditorManager.runEditorWithResult(action.key, content, itemStack, player)
         }
         return CompletableFuture.completedFuture(Results.SUCCESS)
     }

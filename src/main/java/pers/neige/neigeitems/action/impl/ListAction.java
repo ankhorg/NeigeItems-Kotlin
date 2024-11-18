@@ -23,6 +23,7 @@ public class ListAction extends Action {
         for (Object it : action) {
             actions.add(manager.compile(it));
         }
+        checkAsyncSafe();
     }
 
     private ListAction(
@@ -31,6 +32,14 @@ public class ListAction extends Action {
             int toIndex
     ) {
         actions = action.actions.subList(fromIndex, toIndex);
+        checkAsyncSafe();
+    }
+
+    private void checkAsyncSafe() {
+        for (Action action : actions) {
+            if (action.isAsyncSafe()) return;
+        }
+        this.asyncSafe = false;
     }
 
     @Override
