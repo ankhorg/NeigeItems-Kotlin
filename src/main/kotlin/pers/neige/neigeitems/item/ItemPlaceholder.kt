@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.item
 
-import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.event.ItemPacketEvent
@@ -40,7 +39,7 @@ object ItemPlaceholder {
      * @param itemStack 待解析物品
      */
     fun itemParse(itemStack: ItemStack) {
-        if (itemStack.type != Material.AIR && NbtUtils.isCraftItemStack(itemStack)) {
+        if (NbtUtils.isCraftItemStack(itemStack)) {
             val nbt = itemStack.getNbtOrNull() ?: return
             val display = nbt.getCompound("display") ?: return
             display.getString("Name")?.let { name ->

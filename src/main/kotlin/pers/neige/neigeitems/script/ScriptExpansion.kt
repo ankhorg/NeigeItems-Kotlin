@@ -92,6 +92,8 @@ class ScriptExpansion : CompiledScript {
                 const scheduler = Bukkit.getScheduler()
                 const plugin = pluginManager.getPlugin("NeigeItems")
                 
+                const NeigeItems = Packages.pers.neige.neigeitems.NeigeItems
+                
                 let sync = SchedulerUtils.sync
                 let async = SchedulerUtils.async
             """.trimIndent()

@@ -49,6 +49,36 @@ public class FormulaParser {
         return infix;
     }
 
+    @NotNull
+    private static ArrayList<Object> toCalcInfix(@NotNull String formula, @NotNull Map<String, Double> args) {
+        ArrayList<Object> infix = new ArrayList<>();
+        StringBuilder num = new StringBuilder();
+        for (int index = 0; index < formula.length(); index++) {
+            char c = formula.charAt(index);
+            if (!isCalcOperator(c)) {
+                if (c != ' ') {
+                    num.append(c);
+                }
+                continue;
+            }
+            if (c == '+' || c == '-') {
+                if (index == 0 || isCalcOperatorExceptRightBracket(formula.charAt(index - 1))) {
+                    num.append(c);
+                    continue;
+                }
+            }
+            if (num.length() != 0) {
+                infix.add(args.computeIfAbsent(num.toString(), Double::parseDouble));
+            }
+            num.setLength(0);
+            infix.add(toCalcOperator(c));
+        }
+        if (num.length() != 0) {
+            infix.add(args.computeIfAbsent(num.toString(), Double::parseDouble));
+        }
+        return infix;
+    }
+
     private static boolean nextNotLessThan(@NotNull Stack<CalcOperator> stack, @NotNull CalcOperator calcOperator) {
         if (stack.isEmpty()) return false;
         CalcOperator peek = stack.peek();
@@ -110,6 +140,17 @@ public class FormulaParser {
     public static double calculate(@NotNull String formula) {
         try {
             return calc(toCalcSuffix(toCalcInfix(formula)));
+        } catch (Throwable throwable) {
+            Map<String, String> params = new HashMap<>();
+            params.put("{formula}", formula);
+            LangUtils.sendLang(Bukkit.getConsoleSender(), "Messages.invalidFormula", params);
+            return 0.0;
+        }
+    }
+
+    public static double calculate(@NotNull String formula, @NotNull Map<String, Double> args) {
+        try {
+            return calc(toCalcSuffix(toCalcInfix(formula, args)));
         } catch (Throwable throwable) {
             Map<String, String> params = new HashMap<>();
             params.put("{formula}", formula);

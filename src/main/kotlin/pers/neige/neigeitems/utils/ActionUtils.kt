@@ -2,16 +2,15 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.item.action.ActionTrigger
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
-import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
-import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -59,22 +58,15 @@ object ActionUtils {
      */
     @JvmStatic
     fun ActionTrigger.isCoolDown(player: Player, cd: Long): Boolean {
-        // 如果冷却小于等于0
-        if (cd <= 0) return false
-        // 获取当前时间
-        val time = System.currentTimeMillis()
-        // 获取上次使用时间
-        val lastTime = player.getMetadataEZ("CD-$group", 0.toLong()) as Long
-        // 如果仍处于冷却时间
-        if (lastTime > time) {
+        val user = NeigeItems.getUserManager()[player.uniqueId] ?: return true
+        val leftTime = user.checkCooldown("CD-$group", cd)
+        if (leftTime > 0) {
             ConfigManager.config.getString("Messages.itemCooldown")?.let {
-                val message = it.replace("{time}", "%.1f".format((lastTime - time).toDouble() / 1000))
+                val message = it.replace("{time}", "%.1f".format(leftTime.toDouble() / 1000))
                 player.sendActionBar(message)
             }
-            // 冷却中
             return true
         }
-        player.setMetadataEZ("CD-$group", time + cd)
         return false
     }
 
