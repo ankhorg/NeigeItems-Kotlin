@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
+import pers.neige.neigeitems.utils.ConfigUtils.loadConfiguration
 import pers.neige.neigeitems.utils.ConfigUtils.saveResourceNotWarn
 import java.io.File
 import java.io.InputStreamReader
@@ -30,6 +31,7 @@ object ConfigManager {
      * 获取配置文件
      */
     val config get() = NeigeItems.getInstance().config
+    val configFile = File(NeigeItems.getInstance().dataFolder, File.separator + "config.yml")
 
     var debug = config.getBoolean("Main.Debug", false)
     var updateCheck = config.getBoolean("Main.UpdateCheck", true)
@@ -77,29 +79,35 @@ object ConfigManager {
         // 加载bstats
         val metrics = Metrics(NeigeItems.getInstance(), 15750)
         metrics.addCustomChart(SingleLineChart("items") { ItemManager.itemIds.size })
-        // 对当前Config查缺补漏
-        loadConfig()
+        // 加载配置
+        reload()
+    }
+
+    private fun checkConfigStatus() {
+        // JavaPlugin中提供的config已经将原始config设为默认状态, 因此无法通过其检测config完整度
+        val currentConfig = configFile.loadConfiguration()
+        var changed = false
+        originConfig.getKeys(true).forEach { key ->
+            if (!currentConfig.contains(key)) {
+                currentConfig.set(key, originConfig.get(key))
+                changed = true
+            } else {
+                val completeValue = originConfig.get(key)
+                if (completeValue is ConfigurationSection && currentConfig.get(key) !is ConfigurationSection) {
+                    currentConfig.set(key, completeValue)
+                    changed = true
+                }
+            }
+        }
+        if (changed) {
+            currentConfig.save(configFile)
+        }
     }
 
     /**
      * 对当前Config查缺补漏
      */
     fun loadConfig() {
-        originConfig.getKeys(true).forEach { key ->
-            if (!NeigeItems.getInstance().config.contains(key)) {
-                NeigeItems.getInstance().config.set(key, originConfig.get(key))
-            } else {
-                val completeValue = originConfig.get(key)
-                val value = NeigeItems.getInstance().config.get(key)
-                if (completeValue is ConfigurationSection && value !is ConfigurationSection) {
-                    NeigeItems.getInstance().config.set(key, completeValue)
-                } else {
-                    NeigeItems.getInstance().config.set(key, value)
-                }
-            }
-        }
-        NeigeItems.getInstance().saveConfig()
-
         debug = config.getBoolean("Main.Debug", false)
         updateCheck = config.getBoolean("Main.UpdateCheck", true)
         newDataFormat = config.getBoolean("Main.NewDataFormat", false)
@@ -115,7 +123,11 @@ object ConfigManager {
      * 重载配置管理器
      */
     fun reload() {
+        // 对当前Config查缺补漏
+        checkConfigStatus()
+        // 重新加载config
         NeigeItems.getInstance().reloadConfig()
+        // 重新加载配置项
         loadConfig()
     }
 
