@@ -63,10 +63,12 @@ pers.neige.neigeitems.libs.asahi.util.calculate
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.enchantment
+pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.entity
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.level
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils
