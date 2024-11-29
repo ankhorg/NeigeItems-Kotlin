@@ -7,4 +7,7 @@ public class RefCraftHumanEntity extends RefCraftLivingEntity {
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/entity/CraftHumanEntity;getHandle()Lnet/minecraft/world/entity/player/Player;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftHumanEntity;getHandle()Lnet/minecraft/server/v1_12_R1/EntityHuman;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native RefEntityHuman getHandle();
+
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftHumanEntity;hasPermission(Ljava/lang/String;)Z", predicates = "craftbukkit_version:[v1_12_R1,)")
+    public native boolean hasPermission(String name);
 }

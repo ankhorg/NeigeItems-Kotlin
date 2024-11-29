@@ -6,6 +6,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
 import pers.neige.neigeitems.ref.nbt.*;
 
 import java.io.*;
@@ -92,7 +93,7 @@ public class NbtUtils {
         if (itemStack instanceof RefCraftItemStack) {
             return itemStack.getItemMeta();
         } else {
-            return ((RefBukkitItemStack) (Object) itemStack).meta;
+            return InvokeUtil.getItemMeta(itemStack);
         }
     }
 
@@ -108,7 +109,7 @@ public class NbtUtils {
     @SuppressWarnings("unchecked")
     public static ItemStack bukkitCopy(@NotNull ItemStack itemStack) {
         ItemStack result = itemStack.clone();
-        RefCraftMetaItem refItemMeta = (RefCraftMetaItem) (Object) ((RefBukkitItemStack) (Object) result).meta;
+        RefCraftMetaItem refItemMeta = (RefCraftMetaItem) (Object) InvokeUtil.getItemMeta(itemStack);
         if (refItemMeta != null) {
             try {
                 // paper用的TreeMap, spigot用的HashMap

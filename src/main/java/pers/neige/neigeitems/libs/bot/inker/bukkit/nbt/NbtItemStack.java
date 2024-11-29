@@ -4,18 +4,17 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
 import pers.neige.neigeitems.ref.nbt.*;
 
 import java.util.Map;
 
 public final class NbtItemStack {
     private final ItemStack itemStack;
-    private final RefBukkitItemStack bukkitItemStack;
     private final RefCraftItemStack craftItemStack;
 
     public NbtItemStack(@NotNull ItemStack itemStack) {
         this.itemStack = itemStack;
-        this.bukkitItemStack = (RefBukkitItemStack) (Object) itemStack;
         if (itemStack instanceof RefCraftItemStack) {
             this.craftItemStack = (RefCraftItemStack) itemStack;
         } else {
@@ -34,7 +33,7 @@ public final class NbtItemStack {
     @Nullable
     public NbtCompound getTag() {
         if (craftItemStack == null) {
-            RefCraftMetaItem meta = (RefCraftMetaItem) (Object) bukkitItemStack.meta;
+            RefCraftMetaItem meta = (RefCraftMetaItem) (Object) InvokeUtil.getItemMeta(itemStack);
             if (meta == null) {
                 return null;
             } else {
@@ -60,10 +59,10 @@ public final class NbtItemStack {
 
     public void setTag(@NotNull NbtCompound compound) {
         if (craftItemStack == null) {
-            bukkitItemStack.meta = null;
+            InvokeUtil.setItemMeta(itemStack, null);
             RefCraftItemStack craftItemStack = RefCraftItemStack.asCraftCopy(itemStack);
             craftItemStack.handle.setTag(compound.delegate);
-            bukkitItemStack.meta = craftItemStack.getItemMeta();
+            InvokeUtil.setItemMeta(itemStack, craftItemStack.getItemMeta());
         } else {
             craftItemStack.handle.setTag(compound.delegate);
         }
@@ -71,7 +70,7 @@ public final class NbtItemStack {
 
     public @NotNull NbtCompound getOrCreateTag() {
         if (craftItemStack == null) {
-            RefCraftMetaItem meta = (RefCraftMetaItem) (Object) bukkitItemStack.meta;
+            RefCraftMetaItem meta = (RefCraftMetaItem) (Object) InvokeUtil.getItemMeta(itemStack);
             if (meta == null) {
                 return new NbtCompound();
             } else {

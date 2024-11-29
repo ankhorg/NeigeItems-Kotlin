@@ -8,7 +8,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "2.0.20"
     id("org.jetbrains.dokka") version "1.9.20"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.16-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.17-SNAPSHOT"
 }
 
 val realVersion = version
@@ -219,8 +219,8 @@ tasks.create<BuildMappingsTask>("build-mappings") {
     outputDirectory = layout.buildDirectory.file("cache/build-mappings").get().asFile
     ankhInvokePackage = "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke"
 
-    mapping("nms", "1.21.1") {
-        predicates = arrayOf("craftbukkit_version:{v1_21_R1}")
+    mapping("nms", "1.21.3") {
+        predicates = arrayOf("craftbukkit_version:{v1_21_R2}")
     }
     mapping("nms", "1.20.4") {
         predicates = arrayOf("craftbukkit_version:{v1_20_R3}")

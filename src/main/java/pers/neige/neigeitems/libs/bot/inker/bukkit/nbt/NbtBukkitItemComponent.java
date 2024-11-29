@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.DelegateAbstractMap;
-import pers.neige.neigeitems.ref.nbt.RefBukkitItemStack;
 import pers.neige.neigeitems.ref.nbt.RefCraftMetaItem;
 import pers.neige.neigeitems.ref.nbt.RefNbtBase;
 
@@ -27,11 +27,10 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     NbtBukkitItemComponent(ItemStack itemStack) {
         this.itemStack = itemStack;
         this.delegateMap = new DelegateAbstractMap<>(this);
-        RefBukkitItemStack refItemStack = (RefBukkitItemStack) (Object) itemStack;
-        ItemMeta meta = refItemStack.meta;
+        ItemMeta meta = InvokeUtil.getItemMeta(itemStack);
         if (meta == null) {
             meta = itemStack.getItemMeta();
-            refItemStack.meta = meta;
+            InvokeUtil.setItemMeta(itemStack, meta);
         }
         ItemMeta itemMeta = meta;
         refItemMeta = (RefCraftMetaItem) (Object) meta;

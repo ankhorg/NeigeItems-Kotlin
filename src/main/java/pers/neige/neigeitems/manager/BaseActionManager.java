@@ -1051,9 +1051,8 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return;
             MythicMobsHooker hooker = HookerManager.INSTANCE.getMythicMobsHooker();
-            if (hooker != null) {
-                hooker.castSkill(player, content, player);
-            }
+            if (hooker == null) return;
+            hooker.castSkill(player, content, player);
         });
         // 连击记录
         addConsumer("combo", (context, content) -> {
