@@ -9,6 +9,7 @@ import org.bukkit.command.PluginCommand
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.command.subcommand.*
+import pers.neige.neigeitems.command.subcommand.Function
 import pers.neige.neigeitems.command.subcommand.Help.help
 import pers.neige.neigeitems.command.subcommand.List
 import pers.neige.neigeitems.utils.CommandUtils
@@ -41,6 +42,7 @@ object Command {
             .registerAndRecord(Editor.editOffHand)
             .registerAndRecord(Editor.editSlot)
             .registerAndRecord(Expansion.expansion)
+            .registerAndRecord(Function.function)
             .registerAndRecord(Give.get)
             .registerAndRecord(Give.getSilent)
             .registerAndRecord(Give.give)

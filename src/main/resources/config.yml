@@ -94,6 +94,8 @@ Messages:
   findNewVersion: '§bNeige§3Items §7> §f发现新版本: {version}'
   # 更新链接提示
   updateLink: '§bNeige§3Items §7> §f链接: {link}'
+  # 输入无效function提示
+  invalidFunction: §bNeige§3Items §7> §7找不到名为 {function} §7的function
 Help:
   prefix: |-
     §6====================§eNeigeItems§6====================
@@ -107,6 +109,9 @@ Help:
     action:
       command: §e/ni §faction [玩家ID] [动作内容]
       description: 执行NI物品动作
+    function:
+      command: §e/ni §ffunction [玩家ID] [function id] (指向数据)
+      description: 执行function
     parse:
       command: §e/ni §fparse [玩家ID] [节点内容]
       description: 解析即时声明节点内容, 将解析值发送给命令执行者

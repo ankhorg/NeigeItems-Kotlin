@@ -102,7 +102,7 @@ public abstract class RefEntity {
     public native Entity getRootVehicle();
 
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;absMoveTo(DDDFF)V", predicates = "craftbukkit_version:[v1_17_R1,)")
-    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;setPositionRotation(DDDFF)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;setLocation(DDDFF)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native void absMoveTo(double x, double y, double z, float yaw, float pitch);
 
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;moveTo(DDDFF)V", predicates = "craftbukkit_version:[v1_17_R1,)")
