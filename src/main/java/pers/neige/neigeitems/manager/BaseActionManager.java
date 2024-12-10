@@ -114,6 +114,24 @@ public abstract class BaseActionManager {
 
     @NotNull
     public Action compile(
+            @Nullable Object action,
+            @NotNull Action def
+    ) {
+        if (action == null) return def;
+        return compile(action);
+    }
+
+    @NotNull
+    public Action compile(
+            @Nullable Object action,
+            @Nullable Object def
+    ) {
+        if (action == null) return compile(def);
+        return compile(action);
+    }
+
+    @NotNull
+    public Action compile(
             @Nullable Object action
     ) {
         if (action instanceof String) {
