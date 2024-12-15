@@ -1231,5 +1231,11 @@ public abstract class BaseActionManager {
             EntityPlayerUtils.openSign(player);
             return result;
         });
+        // 触发动作组
+        addFunction("func", (context, content) -> {
+            Action function = ActionManager.INSTANCE.getFunctions().get(content);
+            if (function == null) return CompletableFuture.completedFuture(Results.SUCCESS);
+            return runActionWithResult(function, context);
+        });
     }
 }

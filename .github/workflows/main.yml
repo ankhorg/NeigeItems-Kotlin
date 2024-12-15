@@ -12,7 +12,7 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v2
       - name: cache gradle packages
-        uses: actions/cache@v2
+        uses: actions/cache@v4.2.0
         with:
           key: ${{ runner.os }}-build-${{ env.cache-name }}
           path: |
@@ -44,7 +44,7 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v2
       - name: cache gradle packages
-        uses: actions/cache@v2
+        uses: actions/cache@v4.2.0
         with:
           key: ${{ runner.os }}-build-${{ env.cache-name }}
           path: |

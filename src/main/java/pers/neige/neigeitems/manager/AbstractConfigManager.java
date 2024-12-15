@@ -7,15 +7,17 @@ import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.utils.ConfigUtils;
 
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class AbstractConfigManager<T, R> extends ConcurrentHashMap<String, T> {
+public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K, V> {
     @NotNull
     protected final String pluginName;
     @NotNull
@@ -23,7 +25,9 @@ public abstract class AbstractConfigManager<T, R> extends ConcurrentHashMap<Stri
     @NotNull
     protected final BiFunction<ConfigurationSection, String, R> configGetter;
     @NotNull
-    protected final BiFunction<String, R, T> converter;
+    protected final Function<String, K> keyConverter;
+    @NotNull
+    protected final BiFunction<K, R, V> converter;
     @NotNull
     protected final String elementName;
     @NotNull
@@ -35,13 +39,15 @@ public abstract class AbstractConfigManager<T, R> extends ConcurrentHashMap<Stri
             @NotNull String elementName,
             @NotNull String directory,
             @NotNull BiFunction<ConfigurationSection, String, R> configGetter,
-            @NotNull BiFunction<String, R, T> converter
+            @NotNull Function<String, K> keyConverter,
+            @NotNull BiFunction<K, R, V> converter
     ) {
         this.pluginName = plugin.getName();
         this.logger = plugin.getLogger();
         this.elementName = elementName;
         this.directory = directory;
         this.configGetter = configGetter;
+        this.keyConverter = keyConverter;
         this.converter = converter;
     }
 
@@ -51,13 +57,15 @@ public abstract class AbstractConfigManager<T, R> extends ConcurrentHashMap<Stri
             @NotNull String elementName,
             @NotNull String directory,
             @NotNull BiFunction<ConfigurationSection, String, R> configGetter,
-            @NotNull BiFunction<String, R, T> converter
+            @NotNull Function<String, K> keyConverter,
+            @NotNull BiFunction<K, R, V> converter
     ) {
         this.pluginName = pluginName;
         this.logger = logger;
         this.elementName = elementName;
         this.directory = directory;
         this.configGetter = configGetter;
+        this.keyConverter = keyConverter;
         this.converter = converter;
     }
 
@@ -67,13 +75,13 @@ public abstract class AbstractConfigManager<T, R> extends ConcurrentHashMap<Stri
     }
 
     @NotNull
-    protected Map<String, R> getConfigs() {
-        final Map<String, R> result = new HashMap<>();
+    protected Map<K, R> getConfigs() {
+        final Map<K, R> result = new HashMap<>();
         getFiles().forEach((file) -> loadFile(result, file));
         return result;
     }
 
-    protected void loadFile(@NotNull Map<String, R> result, @NotNull File file) {
+    protected void loadFile(@NotNull Map<K, R> result, @NotNull File file) {
         if (!file.getName().endsWith(".yml")) return;
         try {
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
@@ -83,13 +91,17 @@ public abstract class AbstractConfigManager<T, R> extends ConcurrentHashMap<Stri
         }
     }
 
-    protected void loadConfig(@NotNull Map<String, R> result, @NotNull YamlConfiguration config) {
+    protected void loadConfig(@NotNull Map<K, R> result, @NotNull YamlConfiguration config) {
         String currentKey = "";
         try {
-            for (String key : config.getKeys(false)) {
-                currentKey = key;
-                R value = configGetter.apply(config, key);
+            for (String rawKey : config.getKeys(false)) {
+                currentKey = rawKey;
+                R value = configGetter.apply(config, rawKey);
                 if (value == null && notNullConfig) return;
+                K key = keyConverter.apply(rawKey);
+                if (key == null) {
+                    throw new InvalidParameterException("convert result of current key is null! current key: " + rawKey);
+                }
                 result.put(key, value);
             }
         } catch (Throwable throwable) {
@@ -106,7 +118,7 @@ public abstract class AbstractConfigManager<T, R> extends ConcurrentHashMap<Stri
     protected void load() {
         getConfigs().forEach((id, content) -> {
             try {
-                T result = converter.apply(id, content);
+                V result = converter.apply(id, content);
                 if (result == null) return;
                 put(id, result);
             } catch (Throwable throwable) {

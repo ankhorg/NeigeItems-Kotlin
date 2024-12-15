@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.logging.Logger;
 
-public class ConfigStringListManager<T> extends AbstractConfigManager<T, List<String>> {
+public class ConfigStringListManager<T> extends AbstractConfigManager<String, T, List<String>> {
     public ConfigStringListManager(
             @NotNull JavaPlugin plugin,
             @NotNull String elementName,
             @NotNull String directory,
             @NotNull BiFunction<String, List<String>, T> converter
     ) {
-        super(plugin, elementName, directory, ConfigurationSection::getStringList, converter);
+        super(plugin, elementName, directory, ConfigurationSection::getStringList, String::toString, converter);
     }
 
     public ConfigStringListManager(
@@ -25,6 +25,6 @@ public class ConfigStringListManager<T> extends AbstractConfigManager<T, List<St
             @NotNull String directory,
             @NotNull BiFunction<String, List<String>, T> converter
     ) {
-        super(pluginName, logger, elementName, directory, ConfigurationSection::getStringList, converter);
+        super(pluginName, logger, elementName, directory, ConfigurationSection::getStringList, String::toString, converter);
     }
 }

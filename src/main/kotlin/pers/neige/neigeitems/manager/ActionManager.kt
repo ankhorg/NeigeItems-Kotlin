@@ -200,16 +200,6 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         }
     }
 
-    override fun loadBasicActions() {
-        super.loadBasicActions()
-        // 触发动作组
-        addFunction("func") { context, content ->
-            content ?: return@addFunction CompletableFuture.completedFuture(Results.SUCCESS)
-            val function = functions[content] ?: return@addFunction CompletableFuture.completedFuture(Results.SUCCESS)
-            return@addFunction runActionWithResult(function, context)
-        }
-    }
-
     /**
      * 物品左右键交互
      */
