@@ -4,6 +4,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import pers.neige.neigeitems.manager.logger.ILogger;
+import pers.neige.neigeitems.manager.logger.JavaLogger;
+import pers.neige.neigeitems.manager.logger.Slf4jLogger;
 import pers.neige.neigeitems.utils.ConfigUtils;
 
 import java.io.File;
@@ -14,14 +17,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K, V> {
     @NotNull
     protected final String pluginName;
     @NotNull
-    protected final Logger logger;
+    protected final ILogger logger;
     @NotNull
     protected final BiFunction<ConfigurationSection, String, R> configGetter;
     @NotNull
@@ -43,7 +45,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
             @NotNull BiFunction<K, R, V> converter
     ) {
         this.pluginName = plugin.getName();
-        this.logger = plugin.getLogger();
+        this.logger = new JavaLogger(plugin.getLogger());
         this.elementName = elementName;
         this.directory = directory;
         this.configGetter = configGetter;
@@ -61,7 +63,25 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
             @NotNull BiFunction<K, R, V> converter
     ) {
         this.pluginName = pluginName;
-        this.logger = logger;
+        this.logger = new JavaLogger(logger);
+        this.elementName = elementName;
+        this.directory = directory;
+        this.configGetter = configGetter;
+        this.keyConverter = keyConverter;
+        this.converter = converter;
+    }
+
+    public AbstractConfigManager(
+            @NotNull String pluginName,
+            @NotNull org.slf4j.Logger logger,
+            @NotNull String elementName,
+            @NotNull String directory,
+            @NotNull BiFunction<ConfigurationSection, String, R> configGetter,
+            @NotNull Function<String, K> keyConverter,
+            @NotNull BiFunction<K, R, V> converter
+    ) {
+        this.pluginName = pluginName;
+        this.logger = new Slf4jLogger(logger);
         this.elementName = elementName;
         this.directory = directory;
         this.configGetter = configGetter;
@@ -87,7 +107,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
             YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
             loadConfig(result, config);
         } catch (Throwable throwable) {
-            logger.log(Level.WARNING, throwable, () -> "error occurred while loading file: " + file.getName());
+            logger.warn("error occurred while loading file: " + file.getName(), throwable);
         }
     }
 
@@ -105,8 +125,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
                 result.put(key, value);
             }
         } catch (Throwable throwable) {
-            final String finalCurrentKey = currentKey;
-            logger.log(Level.WARNING, throwable, () -> "error occurred while loading config, current key: " + finalCurrentKey + ", config content: \n" + config.saveToString());
+            logger.warn("error occurred while loading config, current key: " + currentKey + ", config content: \n" + config.saveToString(), throwable);
         }
     }
 
@@ -122,7 +141,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
                 if (result == null) return;
                 put(id, result);
             } catch (Throwable throwable) {
-                logger.log(Level.WARNING, throwable, () -> "error occurred while loading " + elementName + ": " + id);
+                logger.warn("error occurred while loading " + elementName + ": " + id, throwable);
             }
         });
     }

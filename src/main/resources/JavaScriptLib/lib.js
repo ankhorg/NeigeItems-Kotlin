@@ -36,6 +36,7 @@ const CommandUtils = Packages.pers.neige.neigeitems.utils.CommandUtils
 const ListenerUtils = Packages.pers.neige.neigeitems.utils.ListenerUtils
 const ListUtils = Packages.pers.neige.neigeitems.utils.ListUtils
 const SchedulerUtils = Packages.pers.neige.neigeitems.utils.SchedulerUtils
+const UUIDUtils = Packages.pers.neige.neigeitems.utils.UUIDUtils
 
 const EnumHand = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.EnumHand
 const SpawnerBuilder = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner.SpawnerBuilder
