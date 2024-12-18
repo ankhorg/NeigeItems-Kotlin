@@ -74,6 +74,7 @@ pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner
 pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils
 pers.neige.neigeitems.listener
 pers.neige.neigeitems.manager
+pers.neige.neigeitems.manager.logger
 pers.neige.neigeitems.maven
 pers.neige.neigeitems.network
 pers.neige.neigeitems.papi
