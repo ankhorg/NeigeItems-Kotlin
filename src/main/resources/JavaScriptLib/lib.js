@@ -6,6 +6,7 @@ const ChatColor = Packages.org.bukkit.ChatColor
 const EquipmentSlot = Packages.org.bukkit.inventory.EquipmentSlot
 const GameMode = Packages.org.bukkit.GameMode
 const Material = Packages.org.bukkit.Material
+const ItemStack = Packages.org.bukkit.inventory.ItemStack
 
 const ActionUtils = Packages.pers.neige.neigeitems.utils.ActionUtils
 const ConfigUtils = Packages.pers.neige.neigeitems.utils.ConfigUtils
@@ -38,6 +39,8 @@ const ListUtils = Packages.pers.neige.neigeitems.utils.ListUtils
 const SchedulerUtils = Packages.pers.neige.neigeitems.utils.SchedulerUtils
 const UUIDUtils = Packages.pers.neige.neigeitems.utils.UUIDUtils
 
+const ActionContext = Packages.pers.neige.neigeitems.action.ActionContext
+const AnimationType = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation.AnimationType
 const EnumHand = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.EnumHand
 const SpawnerBuilder = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner.SpawnerBuilder
 const SuccessResult = Packages.pers.neige.neigeitems.action.result.SuccessResult
@@ -58,6 +61,7 @@ const NeigeItems = Packages.pers.neige.neigeitems.NeigeItems
 const bukkitServer = Bukkit.getServer()
 const consoleSender = bukkitServer.getConsoleSender()
 const pluginManager = Bukkit.getPluginManager()
+const scheduler = Bukkit.getScheduler()
 const plugin = pluginManager.getPlugin("NeigeItems")
 
 /**
@@ -916,4 +920,18 @@ const swimming = function (value) {
  */
 const world = function () {
     return player.getWorld().getName()
+}
+
+/**
+ * 获取玩家主手物品
+ */
+const mainHandItem = function () {
+    return player.getInventory().getItemInMainHand()
+}
+
+/**
+ * 获取玩家副手物品
+ */
+const offHandItem = function () {
+    return player.getInventory().getItemInOffHand()
 }

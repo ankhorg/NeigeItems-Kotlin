@@ -38,6 +38,8 @@ class ScriptExpansion : CompiledScript {
         scriptEngine.eval(
             """
                 const Bukkit = Packages.org.bukkit.Bukkit
+                const Material = Packages.org.bukkit.Material
+                const ItemStack = Packages.org.bukkit.inventory.ItemStack
                 const Command = Packages.pers.neige.neigeitems.script.tool.ScriptCommand
                 const EventPriority = Packages.org.bukkit.event.EventPriority
                 const Listener = Packages.pers.neige.neigeitems.script.tool.ScriptListener
@@ -77,9 +79,14 @@ class ScriptExpansion : CompiledScript {
                 const SchedulerUtils = Packages.pers.neige.neigeitems.utils.SchedulerUtils
                 const UUIDUtils = Packages.pers.neige.neigeitems.utils.UUIDUtils
                 
+                const ActionContext = Packages.pers.neige.neigeitems.action.ActionContext
                 const AnimationType = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation.AnimationType
                 const EnumHand = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.EnumHand
                 const SpawnerBuilder = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner.SpawnerBuilder
+                const SuccessResult = Packages.pers.neige.neigeitems.action.result.SuccessResult
+                const StopResult = Packages.pers.neige.neigeitems.action.result.StopResult
+                const DelayResult = Packages.pers.neige.neigeitems.action.result.DelayResult
+                const Results = Packages.pers.neige.neigeitems.action.result.Results
                 
                 const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
                 const ConfigManager = Packages.pers.neige.neigeitems.manager.ConfigManager.INSTANCE
@@ -89,11 +96,11 @@ class ScriptExpansion : CompiledScript {
                 const ItemManager = Packages.pers.neige.neigeitems.manager.ItemManager.INSTANCE
                 const ItemPackManager = Packages.pers.neige.neigeitems.manager.ItemPackManager.INSTANCE
                 
+                const NeigeItems = Packages.pers.neige.neigeitems.NeigeItems
+
                 const pluginManager = Bukkit.getPluginManager()
                 const scheduler = Bukkit.getScheduler()
                 const plugin = pluginManager.getPlugin("NeigeItems")
-                
-                const NeigeItems = Packages.pers.neige.neigeitems.NeigeItems
                 
                 let sync = SchedulerUtils.sync
                 let async = SchedulerUtils.async
