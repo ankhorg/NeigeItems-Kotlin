@@ -10,7 +10,24 @@ import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 object PlayerItemDamageListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.LOWEST)
-    private fun listener(event: PlayerItemDamageEvent) {
+    private fun listener0(event: PlayerItemDamageEvent) {
+        // 获取玩家
+        val player = event.player
+        // 获取消耗耐久物品
+        val itemStack = event.item
+        // 获取NI物品信息(不是NI物品就停止操作)
+        val itemInfo = itemStack.isNiItem() ?: return
+        // NI物品数据
+        val neigeItems: NbtCompound = itemInfo.neigeItems
+
+        // 检测已损坏物品
+        ItemDurability.durabilityChecker(player, neigeItems, event)
+        if (event.isCancelled) return
+    }
+
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOW)
+    private fun listener1(event: PlayerItemDamageEvent) {
         // 获取玩家
         val player = event.player
         // 获取消耗耐久物品
