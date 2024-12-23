@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -113,7 +114,7 @@ public class NewItemBuilder extends ItemBuilder {
                     List<Component> finalLore = new ArrayList<>();
                     for (String rawLore : originLore) {
                         for (String loreText : ChatColor.translateAlternateColorCodes('&', rawLore).split("\n")) {
-                            finalLore.add(Component.literal(loreText));
+                            finalLore.add(CraftChatMessage.fromStringOrNull(loreText));
                         }
                     }
                     if (!finalLore.isEmpty()) {

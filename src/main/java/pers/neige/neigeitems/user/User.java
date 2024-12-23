@@ -33,11 +33,6 @@ public class User {
         return uuid;
     }
 
-    @NotNull
-    public ArrayDeque<ChatCatcher> getChatCatchers() {
-        return chatCatchers;
-    }
-
     public void addChatCatcher(ChatCatcher catcher) {
         synchronized (chatCatchers) {
             chatCatchers.add(catcher);
@@ -49,11 +44,6 @@ public class User {
         synchronized (chatCatchers) {
             return chatCatchers.poll();
         }
-    }
-
-    @NotNull
-    public ArrayDeque<SignCatcher> getSignCatchers() {
-        return signCatchers;
     }
 
     public void addSignCatcher(SignCatcher catcher) {
