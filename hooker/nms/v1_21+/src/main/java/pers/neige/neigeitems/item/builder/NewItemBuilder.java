@@ -3,6 +3,7 @@ package pers.neige.neigeitems.item.builder;
 import kotlin.text.StringsKt;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemLore;
@@ -38,6 +39,8 @@ public class NewItemBuilder extends ItemBuilder {
     private Component name = null;
     @Nullable
     private List<Component> lore = null;
+    @Nullable
+    private ResourceLocation tooltipStyle = null;
 
     public NewItemBuilder() {
     }
@@ -148,6 +151,13 @@ public class NewItemBuilder extends ItemBuilder {
                     }
                     break;
                 }
+                case "tooltip-style": {
+                    String rawTooltipStyle = config.getString(key);
+                    if (rawTooltipStyle != null) {
+                        this.tooltipStyle = ResourceLocation.parse(rawTooltipStyle);
+                    }
+                    break;
+                }
                 case "nbt": {
                     ConfigurationSection nbtConfig = config.getConfigurationSection(key);
                     if (nbtConfig != null) {
@@ -231,6 +241,9 @@ public class NewItemBuilder extends ItemBuilder {
         }
         if (Boolean.TRUE.equals(unbreakable)) {
             handle.set(DataComponents.UNBREAKABLE, new Unbreakable(!this.hideFlag.contains(ItemFlag.HIDE_UNBREAKABLE)));
+        }
+        if (tooltipStyle != null) {
+            handle.set(DataComponents.TOOLTIP_STYLE, tooltipStyle);
         }
         NbtCompound nbt = ItemUtils.getNbt(result);
         if (preCoverNbt != null) {
