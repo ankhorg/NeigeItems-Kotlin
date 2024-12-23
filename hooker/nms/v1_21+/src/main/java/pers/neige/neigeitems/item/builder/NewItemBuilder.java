@@ -108,7 +108,7 @@ public class NewItemBuilder extends ItemBuilder {
                 case "name": {
                     String rawName = config.getString(key);
                     if (rawName != null) {
-                        this.name = Component.literal(ChatColor.translateAlternateColorCodes('&', rawName));
+                        this.name = CraftChatMessage.fromStringOrNull(ChatColor.translateAlternateColorCodes('&', rawName));
                     }
                     break;
                 }
