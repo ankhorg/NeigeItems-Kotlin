@@ -25,6 +25,10 @@ public class NbtUtils {
      * 1.16.2+ 版本起, NbtIo#read 方法参数由 DataInputStream 改为 DataInput.
      */
     private static final boolean READ_FROM_DATA_INPUT_SUPPORT = CbVersion.v1_17_R1.isSupport();
+    /**
+     * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
+     */
+    private final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
 
     /**
      * 获取物品NBT, 如果物品没有NBT就创建一个空NBT, 设置并返回.
@@ -505,5 +509,12 @@ public class NbtUtils {
         } else {
             throw new UnsupportedOperationException("invalid version");
         }
+    }
+
+    public static void setComponents(@NotNull ItemStack receiver, @NotNull ItemStack provider) {
+        if (!MOJANG_MOTHER_DEAD) return;
+        if (!(receiver instanceof RefCraftItemStack)) return;
+        if (!(provider instanceof RefCraftItemStack)) return;
+        ((RefCraftItemStack) receiver).handle.components = ((RefCraftItemStack) provider).handle.components;
     }
 }

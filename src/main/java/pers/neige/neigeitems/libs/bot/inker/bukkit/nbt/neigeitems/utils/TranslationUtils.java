@@ -13,10 +13,14 @@ import pers.neige.neigeitems.lang.LocaleI18n;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtType;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
 import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.ref.chat.RefChatFormatting;
 import pers.neige.neigeitems.ref.chat.RefChatSerializer;
+import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
+import pers.neige.neigeitems.ref.core.component.RefDataComponentHolder;
+import pers.neige.neigeitems.ref.core.component.RefDataComponents;
 import pers.neige.neigeitems.ref.entity.RefCraftEntity;
 import pers.neige.neigeitems.ref.entity.RefEntity;
 import pers.neige.neigeitems.ref.entity.RefEntityTypes;
@@ -35,6 +39,10 @@ public class TranslationUtils {
      * 1.13+ 版本起, EntityTypes 类发生了一些巨大的变化.
      */
     private static final boolean NEW_ENTITY_TYPE_SUPPORT = CbVersion.v1_13_R1.isSupport();
+    /**
+     * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
+     */
+    private final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
 
     static {
         CHAT_COLORS.put("BLACK", RefChatFormatting.BLACK);
@@ -94,9 +102,9 @@ public class TranslationUtils {
             @NotNull ItemStack itemStack
     ) {
         if (itemStack instanceof RefCraftItemStack) {
-            return HookerManager.INSTANCE.getNmsHooker().getDisplayNameFromCraftItemStack(itemStack);
+            return getDisplayNameFromCraftItemStack(itemStack);
         } else {
-            ItemMeta itemMeta = NbtUtils.getItemMeta(itemStack);
+            ItemMeta itemMeta = InvokeUtil.getItemMeta(itemStack);
             if (itemMeta != null && itemMeta.hasDisplayName()) {
                 return itemMeta.getDisplayName();
             }
@@ -113,19 +121,24 @@ public class TranslationUtils {
     @Nullable
     public static String getDisplayNameFromCraftItemStack(@Nullable ItemStack itemStack) {
         if (!(itemStack instanceof RefCraftItemStack) || itemStack.getType() == Material.AIR) return null;
-        RefNbtTagCompound tag = ((RefCraftItemStack) itemStack).handle.getTag();
-        if (tag == null) return null;
-        RefNbtBase display = tag.get("display");
-        if (!(display instanceof RefNbtTagCompound)) return null;
-        RefNbtBase tagName = ((RefNbtTagCompound) display).get("Name");
-        if (!(tagName instanceof RefNbtTagString)) return null;
-        String rawName = tagName.asString();
-        if (CbVersion.current() == CbVersion.v1_12_R1) {
-            return rawName;
-        } else if (CbVersion.v1_15_R1.isSupport()) {
-            return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName));
+        if (MOJANG_MOTHER_DEAD) {
+            RefComponent name = ((RefDataComponentHolder) (Object) ((RefCraftItemStack) itemStack).handle).get(RefDataComponents.CUSTOM_NAME);
+            return name == null ? null : name.getString();
         } else {
-            return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName), RefChatFormatting.WHITE);
+            RefNbtTagCompound tag = ((RefCraftItemStack) itemStack).handle.getTag();
+            if (tag == null) return null;
+            RefNbtBase display = tag.get("display");
+            if (!(display instanceof RefNbtTagCompound)) return null;
+            RefNbtBase tagName = ((RefNbtTagCompound) display).get("Name");
+            if (!(tagName instanceof RefNbtTagString)) return null;
+            String rawName = tagName.asString();
+            if (CbVersion.current() == CbVersion.v1_12_R1) {
+                return rawName;
+            } else if (CbVersion.v1_15_R1.isSupport()) {
+                return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName));
+            } else {
+                return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName), RefChatFormatting.WHITE);
+            }
         }
     }
 

@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
@@ -365,7 +366,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun ItemStack.getNbt(): NbtCompound {
-        return HookerManager.nmsHooker.getOrCreateCustomNbt(this)!!
+        return NbtItemStack(this).getOrCreateTag()
     }
 
     /**
@@ -375,7 +376,23 @@ object ItemUtils {
      */
     @JvmStatic
     fun ItemStack?.getNbtOrNull(): NbtCompound? {
-        return HookerManager.nmsHooker.getCustomNbt(this)
+        if (this != null && this.type != Material.AIR) {
+            return NbtItemStack(this).tag
+        }
+        return null
+    }
+
+    /**
+     * 获取物品NBT(无nbt则返回null)
+     *
+     * @return 物品NBT
+     */
+    @JvmStatic
+    fun ItemStack?.getDirectTag(): NbtComponentLike? {
+        if (this != null && this.type != Material.AIR) {
+            return NbtItemStack(this).directTag
+        }
+        return null
     }
 
     /**
@@ -557,7 +574,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun ItemStack?.getItemId(): String? {
-        val directTag = HookerManager.nmsHooker.getDirectTag(this)
+        val directTag = this.getDirectTag()
         return directTag?.getDeepString("NeigeItems.id")
     }
 
@@ -1165,7 +1182,7 @@ object ItemUtils {
      */
     @JvmStatic
     fun ItemStack?.removeOwnerNbt() {
-        val nbt = HookerManager.nmsHooker.getDirectTag(this)
+        val nbt = this.getDirectTag()
         nbt?.getCompound("NeigeItems")?.remove("owner")
     }
 

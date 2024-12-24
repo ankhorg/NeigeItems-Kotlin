@@ -14,10 +14,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 import pers.neige.neigeitems.utils.ItemUtils;
 
@@ -174,49 +170,6 @@ public class NMSHooker {
     ) {
         return new ItemBuilder(config);
     }
-
-    @Nullable
-    public NbtCompound getCustomNbt(@Nullable ItemStack itemStack) {
-        if (itemStack != null && itemStack.getType() != Material.AIR) {
-            return new NbtItemStack(itemStack).getTag();
-        }
-        return null;
-    }
-
-    @Nullable
-    public NbtCompound getOrCreateCustomNbt(@Nullable ItemStack itemStack) {
-        if (itemStack != null && itemStack.getType() != Material.AIR) {
-            return new NbtItemStack(itemStack).getOrCreateTag();
-        }
-        return null;
-    }
-
-    @Nullable
-    public NbtComponentLike getDirectTag(@Nullable ItemStack itemStack) {
-        if (itemStack != null && itemStack.getType() != Material.AIR) {
-            return new NbtItemStack(itemStack).getDirectTag();
-        }
-        return null;
-    }
-
-    @Nullable
-    public String getDisplayNameFromCraftItemStack(@Nullable ItemStack itemStack) {
-        return TranslationUtils.getDisplayNameFromCraftItemStack(itemStack);
-    }
-
-//    @Nullable
-//    public Entity getEntityFromIDAsync(
-//            @NotNull World world,
-//            int entityId
-//    ) {
-//        if (Bukkit.isPrimaryThread()) {
-//            return WorldUtils.getEntityFromID(world, entityId);
-//        } else {
-//            return SchedulerUtils.syncAndGet(() -> {
-//                return WorldUtils.getEntityFromID(world, entityId);
-//            });
-//        }
-//    }
 
     @Nullable
     public Material getMaterial(@Nullable String material) {

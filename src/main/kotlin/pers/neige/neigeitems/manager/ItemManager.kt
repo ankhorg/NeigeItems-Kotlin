@@ -11,12 +11,14 @@ import pers.neige.neigeitems.event.ItemUpdateEvent
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
 import pers.neige.neigeitems.utils.ItemUtils.getDamage
+import pers.neige.neigeitems.utils.ItemUtils.getDirectTag
 import pers.neige.neigeitems.utils.ItemUtils.getItemId
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
@@ -334,7 +336,7 @@ object ItemManager : ItemConfigManager() {
     @JvmStatic
     fun ItemStack.setCharge(amount: Int) {
         // 直掏NBT
-        val directTag = nmsHooker.getDirectTag(this) ?: return
+        val directTag = this.getDirectTag() ?: return
         // 不是NI物品还加个屁的使用次数
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
         // 获取物品最大使用次数
@@ -353,7 +355,7 @@ object ItemManager : ItemConfigManager() {
     @JvmStatic
     fun ItemStack.addCharge(amount: Int) {
         // 直掏NBT
-        val directTag = nmsHooker.getDirectTag(this) ?: return
+        val directTag = this.getDirectTag() ?: return
         // 不是NI物品还加个屁的使用次数
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
         // 获取物品使用次数
@@ -381,7 +383,7 @@ object ItemManager : ItemConfigManager() {
     @JvmStatic
     fun ItemStack.setMaxCharge(amount: Int) {
         // 直掏NBT
-        val directTag = nmsHooker.getDirectTag(this) ?: return
+        val directTag = this.getDirectTag() ?: return
         // 不是NI物品还加个屁的使用次数
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
         // 计算物品使用次数
@@ -400,7 +402,7 @@ object ItemManager : ItemConfigManager() {
     @JvmStatic
     fun ItemStack.addMaxCharge(amount: Int) {
         // 直掏NBT
-        val directTag = nmsHooker.getDirectTag(this) ?: return
+        val directTag = this.getDirectTag() ?: return
         // 不是NI物品还加个屁的使用次数
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
         // 计算物品最大使用次数
@@ -421,7 +423,7 @@ object ItemManager : ItemConfigManager() {
     @JvmStatic
     fun ItemStack.setCustomDurability(amount: Int) {
         // 直掏NBT
-        val directTag = nmsHooker.getDirectTag(this) ?: return
+        val directTag = this.getDirectTag() ?: return
         // 不是NI物品还加个屁的自定义耐久
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
         // 获取物品最大耐久值
@@ -449,7 +451,7 @@ object ItemManager : ItemConfigManager() {
     @JvmStatic
     fun ItemStack.addCustomDurability(amount: Int) {
         // 直掏NBT
-        val directTag = nmsHooker.getDirectTag(this) ?: return
+        val directTag = this.getDirectTag() ?: return
         // 不是NI物品还加个屁的自定义耐久
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
         // 获取物品耐久值
@@ -481,7 +483,7 @@ object ItemManager : ItemConfigManager() {
         // 限制下限
         val realAmount = amount.coerceAtLeast(1)
         // 直掏NBT
-        val directTag = nmsHooker.getDirectTag(this) ?: return
+        val directTag = this.getDirectTag() ?: return
         // 不是NI物品还加个屁的自定义耐久
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
         // 获取物品耐久值
@@ -501,7 +503,7 @@ object ItemManager : ItemConfigManager() {
     @JvmStatic
     fun ItemStack.addMaxCustomDurability(amount: Int) {
         // 直掏NBT
-        val directTag = nmsHooker.getDirectTag(this) ?: return
+        val directTag = this.getDirectTag() ?: return
         // 不是NI物品还加个屁的自定义耐久
         val neigeItems = directTag.getCompound("NeigeItems") ?: return
         // 修改后的最大耐久值
@@ -700,6 +702,8 @@ object ItemManager : ItemConfigManager() {
             val pre = itemInfo.itemTag.getDeep(key) ?: return@forEach
             newItemTag.putDeep(key, pre)
         }
+        // 将新物品的组件覆盖至原物品
+        NbtUtils.setComponents(itemStack, newItemStack)
         // 将新物品的NBT覆盖至原物品
         itemInfo.nbtItemStack.setTag(newItemTag)
     }
