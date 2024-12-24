@@ -84,6 +84,7 @@ pers.neige.neigeitems.ref.block
 pers.neige.neigeitems.ref.block.sign
 pers.neige.neigeitems.ref.block.spawner
 pers.neige.neigeitems.ref.chat
+pers.neige.neigeitems.ref.core.component
 pers.neige.neigeitems.ref.damagesource
 pers.neige.neigeitems.ref.enchantment
 pers.neige.neigeitems.ref.entity
@@ -106,6 +107,7 @@ pers.neige.neigeitems.ref.tags
 pers.neige.neigeitems.ref.util
 pers.neige.neigeitems.ref.world
 pers.neige.neigeitems.ref.world.inventory
+pers.neige.neigeitems.ref.world.item.component
 pers.neige.neigeitems.ref.world.level
 pers.neige.neigeitems.ref.world.level.chunk.storage
 pers.neige.neigeitems.scanner
