@@ -4,6 +4,7 @@ import kotlin.text.StringsKt;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemLore;
@@ -41,6 +42,8 @@ public class NewItemBuilder extends ItemBuilder {
     private List<Component> lore = null;
     @Nullable
     private ResourceLocation tooltipStyle = null;
+    private boolean hideTooltip = false;
+    private boolean hideAdditionalTooltip = false;
 
     public NewItemBuilder() {
     }
@@ -158,6 +161,14 @@ public class NewItemBuilder extends ItemBuilder {
                     }
                     break;
                 }
+                case "hide-tooltip": {
+                    this.hideTooltip = config.getBoolean(key);
+                    break;
+                }
+                case "hide-additional-tooltip": {
+                    this.hideAdditionalTooltip = config.getBoolean(key);
+                    break;
+                }
                 case "nbt": {
                     ConfigurationSection nbtConfig = config.getConfigurationSection(key);
                     if (nbtConfig != null) {
@@ -244,6 +255,12 @@ public class NewItemBuilder extends ItemBuilder {
         }
         if (tooltipStyle != null) {
             handle.set(DataComponents.TOOLTIP_STYLE, tooltipStyle);
+        }
+        if (hideTooltip) {
+            handle.set(DataComponents.HIDE_TOOLTIP, Unit.INSTANCE);
+        }
+        if (hideAdditionalTooltip) {
+            handle.set(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
         }
         NbtCompound nbt = ItemUtils.getNbt(result);
         if (preCoverNbt != null) {
