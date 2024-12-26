@@ -222,6 +222,9 @@ tasks.create<BuildMappingsTask>("build-mappings") {
     mapping("nms", "1.21.3") {
         predicates = arrayOf("craftbukkit_version:{v1_21_R2}")
     }
+    mapping("nms", "1.21.1") {
+        predicates = arrayOf("craftbukkit_version:{v1_21_R1}")
+    }
     mapping("nms", "1.20.4") {
         predicates = arrayOf("craftbukkit_version:{v1_20_R3}")
     }
