@@ -12,8 +12,6 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.event.EventPriority
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.annotation.Awake
-import pers.neige.neigeitems.hook.easyitem.EasyItemHooker
-import pers.neige.neigeitems.hook.easyitem.impl.EasyItemHookerImpl
 import pers.neige.neigeitems.hook.itemsadder.ItemsAdderHooker
 import pers.neige.neigeitems.hook.itemsadder.impl.ItemsAdderHookerImpl
 import pers.neige.neigeitems.hook.magicgem.MagicGemHooker
@@ -86,8 +84,6 @@ object HookerManager {
     var papiHooker: PapiHooker? = null
 
     var vaultHooker: VaultHooker? = null
-
-    var easyItemHooker: EasyItemHooker? = null
 
     var oraxenHooker: OraxenHooker? = null
 
@@ -234,15 +230,6 @@ object HookerManager {
                     .newInstance() as MythicMobsHooker
             }.getOrNull() ?: null.also {
                 Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "MythicMobs"))
-            }
-
-        easyItemHooker =
-            try {
-                Class.forName("pers.neige.easyitem.manager.ItemManager")
-                EasyItemHookerImpl()
-            } catch (error: Throwable) {
-                Bukkit.getLogger().info(config.getString("Messages.invalidPlugin")?.replace("{plugin}", "EasyItem"))
-                null
             }
     }
 
@@ -623,11 +610,6 @@ object HookerManager {
                     if (itemStack != null) return itemStack
                 }
 
-                "ei", "easyitem" -> {
-                    val itemStack = easyItemHooker?.getItemStack(nameSpaceToItemId[1])
-                    if (itemStack != null) return itemStack
-                }
-
                 "vn", "vanilla" -> {
                     val material = getMaterial(nameSpaceToItemId[1])
                     if (material != null) {
@@ -654,11 +636,6 @@ object HookerManager {
 
         if (oraxenHooker?.hasItem(id) == true) {
             val itemStack = oraxenHooker?.getItemStack(id)
-            if (itemStack != null) return itemStack
-        }
-
-        if (easyItemHooker?.hasItem(id) == true) {
-            val itemStack = easyItemHooker?.getItemStack(id)
             if (itemStack != null) return itemStack
         }
 
