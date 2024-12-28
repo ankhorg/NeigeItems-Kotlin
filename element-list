@@ -39,8 +39,6 @@ pers.neige.neigeitems.command.subcommand
 pers.neige.neigeitems.command.subcommand.expansion
 pers.neige.neigeitems.command.subcommand.mm
 pers.neige.neigeitems.event
-pers.neige.neigeitems.hook.easyitem
-pers.neige.neigeitems.hook.easyitem.impl
 pers.neige.neigeitems.hook.itemsadder
 pers.neige.neigeitems.hook.itemsadder.impl
 pers.neige.neigeitems.hook.magicgem
