@@ -28,6 +28,7 @@ public class RawStringAction extends Action {
             @NotNull BaseActionManager manager,
             @NotNull String action
     ) {
+        super(manager);
         this.action = action;
         String[] info = action.split(": ", 2);
         key = info[0].toLowerCase(Locale.ROOT);
@@ -42,6 +43,7 @@ public class RawStringAction extends Action {
             @NotNull String key,
             @NotNull String content
     ) {
+        super(manager);
         this.action = action;
         this.key = key;
         this.content = content;
@@ -65,7 +67,7 @@ public class RawStringAction extends Action {
      */
     @Override
     @NotNull
-    public CompletableFuture<ActionResult> eval(
+    protected CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {

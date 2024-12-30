@@ -32,6 +32,7 @@ public class ConditionWeightAction extends Action {
             @NotNull BaseActionManager manager,
             @NotNull ConfigurationSection action
     ) {
+        super(manager);
         this.amountScriptString = action.getString("amount");
         if (this.amountScriptString != null) {
             this.amount = StringsKt.toIntOrNull(this.amountScriptString);
@@ -52,6 +53,7 @@ public class ConditionWeightAction extends Action {
             @NotNull BaseActionManager manager,
             @NotNull Map<?, ?> action
     ) {
+        super(manager);
         Object value = action.get("amount");
         if (value != null) {
             this.amountScriptString = value.toString();
@@ -190,7 +192,7 @@ public class ConditionWeightAction extends Action {
      */
     @Override
     @NotNull
-    public CompletableFuture<ActionResult> eval(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
+    protected CompletableFuture<ActionResult> eval(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
         return manager.runAction(this, context);
     }
 }

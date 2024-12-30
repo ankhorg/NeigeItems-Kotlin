@@ -400,7 +400,6 @@ object HookerManager {
      * "mg", "MagicGem" -> MagicGem
      * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
-     * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
      * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
      * MM > MagicGem > Oraxen > EI > 原版物品.
@@ -427,7 +426,6 @@ object HookerManager {
      * "mg", "MagicGem" -> MagicGem
      * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
-     * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
      * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
      * MM > MagicGem > Oraxen > EI > 原版物品.
@@ -456,7 +454,6 @@ object HookerManager {
      * "mg", "MagicGem" -> MagicGem
      * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
-     * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
      * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
      * MM > MagicGem > Oraxen > EI > 原版物品.
@@ -487,7 +484,6 @@ object HookerManager {
      * "mg", "MagicGem" -> MagicGem
      * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
-     * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
      * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
      * MM > MagicGem > Oraxen > EI > 原版物品.
@@ -516,7 +512,6 @@ object HookerManager {
      * "mg", "MagicGem" -> MagicGem
      * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
-     * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
      * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
      * MM > MagicGem > Oraxen > EI > 原版物品.
@@ -545,7 +540,6 @@ object HookerManager {
      * "mg", "MagicGem" -> MagicGem
      * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
-     * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
      * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
      * MM > MagicGem > Oraxen > EI > 原版物品.
@@ -575,7 +569,6 @@ object HookerManager {
      * "mg", "MagicGem" -> MagicGem
      * "ia", "ItemsAdder" -> ItemsAdder
      * "or", "Oraxen" -> Oraxen
-     * "ei", "EasyItem" -> EasyItem
      * "vn", "Vanilla" -> 原版物品
      * 当id不包含英文冒号:时, 以如下顺序逐个尝试进行物品获取:
      * MM > MagicGem > Oraxen > EI > 原版物品.

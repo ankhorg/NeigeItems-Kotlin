@@ -15,15 +15,19 @@ public class JavaAction extends Action {
     private final BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function;
 
     public JavaAction(
+            @NotNull BaseActionManager manager,
             @NotNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function
     ) {
+        super(manager);
         this.function = function;
     }
 
     public JavaAction(
+            @NotNull BaseActionManager manager,
             boolean asyncSafe,
             @NotNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function
     ) {
+        super(manager);
         this.asyncSafe = asyncSafe;
         this.function = function;
     }
@@ -35,7 +39,7 @@ public class JavaAction extends Action {
 
     @Override
     @NotNull
-    public CompletableFuture<ActionResult> eval(
+    protected CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {

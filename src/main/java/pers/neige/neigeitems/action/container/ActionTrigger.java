@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
-import pers.neige.neigeitems.action.impl.NullAction;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SchedulerUtils;
 
@@ -43,8 +42,8 @@ public class ActionTrigger {
         this.actionManager = actionManager;
         this.type = type;
         this.actions = actions;
-        this.async = NullAction.INSTANCE;
-        this.sync = NullAction.INSTANCE;
+        this.async = actionManager.NULL_ACTION;
+        this.sync = actionManager.NULL_ACTION;
     }
 
     @NotNull

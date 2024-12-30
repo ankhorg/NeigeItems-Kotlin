@@ -15,6 +15,7 @@ import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ItemUtils.getItems
 import pers.neige.neigeitems.utils.SamplingUtils.weight
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
+import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import java.util.concurrent.ThreadLocalRandom
 
 /**
@@ -312,20 +313,16 @@ class ItemPack(
          * 获取物品数量
          */
         var amount = args.getOrNull(1)?.let {
-            when {
-                it.contains("-") -> {
-                    val index = args[1].indexOf("-")
-                    val min = args[1].substring(0, index).toIntOrNull()
-                    val max = args[1].substring(index + 1, args[1].length).toIntOrNull()
-                    if (min != null && max != null) {
-                        ThreadLocalRandom.current().nextInt(min, max + 1)
-                    } else {
-                        null
-                    }
-                }
-
-                else -> {
-                    it.toIntOrNull()
+            val array = it.splitOnce("-")
+            if (array.size == 1) {
+                array[0].toIntOrNull()
+            } else {
+                val min = array[0].toIntOrNull()
+                val max = array[1].toIntOrNull()
+                if (min != null && max != null) {
+                    ThreadLocalRandom.current().nextInt(min, max + 1)
+                } else {
+                    null
                 }
             }
         } ?: 1

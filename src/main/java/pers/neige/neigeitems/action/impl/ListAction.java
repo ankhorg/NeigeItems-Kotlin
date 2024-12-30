@@ -19,6 +19,7 @@ public class ListAction extends Action {
             @NotNull BaseActionManager manager,
             @NotNull List<?> action
     ) {
+        super(manager);
         actions = new ArrayList<>();
         for (Object it : action) {
             actions.add(manager.compile(it));
@@ -31,6 +32,7 @@ public class ListAction extends Action {
             int fromIndex,
             int toIndex
     ) {
+        super(action.manager);
         actions = action.actions.subList(fromIndex, toIndex);
         checkAsyncSafe();
     }
@@ -65,7 +67,7 @@ public class ListAction extends Action {
      * @param fromIndex 从这个索引对应的位置开始执行
      */
     @NotNull
-    public CompletableFuture<ActionResult> eval(
+    protected CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context,
             int fromIndex

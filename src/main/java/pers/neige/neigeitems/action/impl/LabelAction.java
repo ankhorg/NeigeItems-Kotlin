@@ -21,6 +21,7 @@ public class LabelAction extends Action {
             @NotNull BaseActionManager manager,
             @NotNull ConfigurationSection action
     ) {
+        super(manager);
         if (action.contains("label")) {
             label = action.getString("label", "label");
         } else {
@@ -34,6 +35,7 @@ public class LabelAction extends Action {
             @NotNull BaseActionManager manager,
             @NotNull Map<?, ?> action
     ) {
+        super(manager);
         if (action.containsKey("label")) {
             Object value = action.get("label");
             if (value instanceof String) {
@@ -58,7 +60,7 @@ public class LabelAction extends Action {
      */
     @Override
     @NotNull
-    public CompletableFuture<ActionResult> eval(
+    protected CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {

@@ -11,9 +11,8 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 import java.util.concurrent.CompletableFuture;
 
 public class NullAction extends Action {
-    public static final Action INSTANCE = new NullAction();
-
-    private NullAction() {
+    public NullAction(@NotNull BaseActionManager manager) {
+        super(manager);
     }
 
     @Override
@@ -26,7 +25,7 @@ public class NullAction extends Action {
      */
     @Override
     @NotNull
-    public CompletableFuture<ActionResult> eval(
+    protected CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {

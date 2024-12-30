@@ -51,6 +51,7 @@ import static pers.neige.neigeitems.utils.ListUtils.*;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseActionManager {
+    public final Action NULL_ACTION = new NullAction(this);
     @NotNull
     private final Plugin plugin;
     /**
@@ -212,7 +213,7 @@ public abstract class BaseActionManager {
                 return new LabelAction(this, current);
             }
         }
-        return NullAction.INSTANCE;
+        return NULL_ACTION;
     }
 
     /**

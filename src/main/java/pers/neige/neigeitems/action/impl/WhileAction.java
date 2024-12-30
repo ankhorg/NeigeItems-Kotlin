@@ -29,6 +29,7 @@ public class WhileAction extends Action {
             @NotNull BaseActionManager manager,
             @NotNull ConfigurationSection action
     ) {
+        super(manager);
         conditionString = action.getString("while");
         if (conditionString != null) {
             try {
@@ -48,6 +49,7 @@ public class WhileAction extends Action {
             @NotNull BaseActionManager manager,
             @NotNull Map<?, ?> action
     ) {
+        super(manager);
         Object value = action.get("while");
         if (value != null) {
             conditionString = value.toString();
@@ -81,7 +83,7 @@ public class WhileAction extends Action {
      */
     @Override
     @NotNull
-    public CompletableFuture<ActionResult> eval(
+    protected CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {

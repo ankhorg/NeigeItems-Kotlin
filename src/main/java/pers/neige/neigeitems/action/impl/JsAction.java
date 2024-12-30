@@ -22,6 +22,7 @@ public class JsAction extends Action {
             @NotNull BaseActionManager manager,
             @NotNull String scriptString
     ) {
+        super(manager);
         this.scriptString = scriptString;
         try {
             this.script = ((Compilable) manager.getEngine()).compile(scriptString);
@@ -40,7 +41,7 @@ public class JsAction extends Action {
      */
     @Override
     @NotNull
-    public CompletableFuture<ActionResult> eval(
+    protected CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     ) {

@@ -8,7 +8,13 @@ import pers.neige.neigeitems.utils.SchedulerUtils;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class Action {
+    @NotNull
+    protected final BaseActionManager manager;
     protected boolean asyncSafe = true;
+
+    public Action(@NotNull BaseActionManager manager) {
+        this.manager = manager;
+    }
 
     @NotNull
     public ActionType getType() {
@@ -16,7 +22,7 @@ public abstract class Action {
     }
 
     @NotNull
-    public abstract CompletableFuture<ActionResult> eval(
+    protected abstract CompletableFuture<ActionResult> eval(
             @NotNull BaseActionManager manager,
             @NotNull ActionContext context
     );
@@ -51,5 +57,12 @@ public abstract class Action {
 
     public boolean isAsyncSafe() {
         return asyncSafe;
+    }
+
+    @NotNull
+    public CompletableFuture<ActionResult> eval(
+            @NotNull ActionContext context
+    ) {
+        return evalAsyncSafe(manager, context);
     }
 }
