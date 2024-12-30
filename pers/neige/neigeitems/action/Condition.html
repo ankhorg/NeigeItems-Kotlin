@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>ItemConfig 1.20.57 API </title>
+    <title>Condition 1.20.57 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -88,8 +88,8 @@ var pathtoroot = "../../../../";
 
 <main role="main">
     <div class="header">
-        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems.item</a></div>
-        <h2 title="Class ItemConfig" class="title">Class ItemConfig</h2>
+        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems.action</a></div>
+        <h2 title="Class Condition" class="title">Class Condition</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -114,10 +114,10 @@ var pathtoroot = "../../../../";
                     <hr>
                     <pre class="wrap-overflow">
 
-public final class <span class="typeNameLabel"><a href=ItemConfig.html>ItemConfig</a></span>
+public class <span class="typeNameLabel"><a href=Condition.html>Condition</a></span>
 
                     </pre>
-                    <div class="block"><p>物品基础配置</p></div>
+                    <div class="block"></div>
 
                     <dl>
 
@@ -172,24 +172,6 @@ public final class <span class="typeNameLabel"><a href=ItemConfig.html>ItemConfi
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
                                         
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>private final ConfigurationSection</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemConfig.html#configSection>configSection</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="rowColor">
-                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemConfig.html#id>id</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/io/File.html>File</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemConfig.html#file>file</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
                                     </table>
                                 </div>
                             </li>
@@ -216,8 +198,8 @@ public final class <span class="typeNameLabel"><a href=ItemConfig.html>ItemConfi
                                         
                                             <tr class="altColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#ItemConfig(java.lang.String,java.io.File,org.bukkit.configuration.ConfigurationSection)">ItemConfig</a></span>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/io/File.html>File</a> file, ConfigurationSection config)</code></th>
-                                                <td class="colLast">根据ID及文件获取物品配置节点</td>
+                                                        href="#Condition(pers.neige.neigeitems.manager.BaseActionManager,java.lang.String)">Condition</a></span>(<a href=../manager/BaseActionManager.html>BaseActionManager</a> manager, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> conditionString)</code></th>
+                                                <td class="colLast"></td>
                                             </tr>
                                         
 
@@ -270,27 +252,11 @@ public final class <span class="typeNameLabel"><a href=ItemConfig.html>ItemConfi
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code>final ConfigurationSection</code>
+                                            <td class="colFirst"><code><a href=ActionResult.html>ActionResult</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemConfig.html#getConfigSection()>getConfigSection</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=Condition.html#check(pers.neige.neigeitems.action.ActionContext)>check</a>(@NotNull() <a href=ActionContext.html>ActionContext</a> context) </code>
                                             </th>
-                                            <td class="colLast">获取物品原始配置</td>
-                                        </tr>
-                                        
-                                        <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemConfig.html#getId()>getId</a>() </code>
-                                            </th>
-                                            <td class="colLast">物品ID</td>
-                                        </tr>
-                                        
-                                        <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/io/File.html>File</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=ItemConfig.html#getFile()>getFile</a>() </code>
-                                            </th>
-                                            <td class="colLast">物品所在文件</td>
+                                            <td class="colLast"></td>
                                         </tr>
                                         
                                         </tbody>
@@ -324,25 +290,12 @@ public final class <span class="typeNameLabel"><a href=ItemConfig.html>ItemConfi
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="ItemConfig(java.lang.String,java.io.File,org.bukkit.configuration.ConfigurationSection)"></a>
+                                <a name="Condition(pers.neige.neigeitems.manager.BaseActionManager,java.lang.String)"></a>
                                 <ul class="blockList">
                                     <li class="blockList">
-                                        <h4>ItemConfig</h4>
-                                        <pre>ItemConfig(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, <a href=https://docs.oracle.com/javase/8/docs/api/java/io/File.html>File</a> file, ConfigurationSection config)</pre>
-                                        <div class="block">根据ID及文件获取物品配置节点</div>
-                                        
-                                        <dl>
-                                            <dt><span class="paramLabel">Parameters:</span></dt>
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            <dd><code>config</code> - 文件转换来的YamlConfiguration</dd>
-                                            
-                                            
-                                        </dl>
+                                        <h4>Condition</h4>
+                                        <pre>Condition(<a href=../manager/BaseActionManager.html>BaseActionManager</a> manager, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> conditionString)</pre>
+                                        <div class="block"></div>
                                         
                                     </li>
                                 </ul>
@@ -360,62 +313,16 @@ public final class <span class="typeNameLabel"><a href=ItemConfig.html>ItemConfi
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="getConfigSection()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getConfigSection</h4>
-                                        <pre class="methodSignature"> final ConfigurationSection <a href=ItemConfig.html#getConfigSection()>getConfigSection</a>()</pre>
-                                        <div class="block"><p>获取物品原始配置</p></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getId()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getId</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=ItemConfig.html#getId()>getId</a>()</pre>
-                                        <div class="block"><p>物品ID</p></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getFile()">
+                                <a id="check(pers.neige.neigeitems.action.ActionContext)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>getFile</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/io/File.html>File</a> <a href=ItemConfig.html#getFile()>getFile</a>()</pre>
-                                        <div class="block"><p>物品所在文件</p></div>
+                                        <h4>check</h4>
+                                        <pre class="methodSignature"> <a href=ActionResult.html>ActionResult</a> <a href=Condition.html#check(pers.neige.neigeitems.action.ActionContext)>check</a>(@NotNull() <a href=ActionContext.html>ActionContext</a> context)</pre>
+                                        <div class="block"></div>
 
                                         <dl>
 
