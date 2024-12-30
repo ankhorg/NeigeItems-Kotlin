@@ -15,7 +15,6 @@ import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayerSelec
 import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
 import pers.neige.neigeitems.command.selector.FunctionSelector
 import pers.neige.neigeitems.command.selector.PlayerSelector
-import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 
 /**
@@ -58,7 +57,7 @@ object Function {
             null -> HashMap()
             else -> data.parseObject<HashMap<String, Any>>()
         }
-        ActionManager.runAction(function, ActionContext(player, params, params))
+        function.eval(ActionContext(player, params, params))
         return 1
     }
 }

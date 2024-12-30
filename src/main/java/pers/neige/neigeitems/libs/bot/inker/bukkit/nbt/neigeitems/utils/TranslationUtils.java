@@ -14,7 +14,6 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtType;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
-import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.ref.chat.RefChatFormatting;
 import pers.neige.neigeitems.ref.chat.RefChatSerializer;
 import pers.neige.neigeitems.ref.chat.RefComponent;

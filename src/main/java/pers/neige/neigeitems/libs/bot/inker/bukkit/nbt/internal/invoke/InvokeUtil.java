@@ -11,15 +11,14 @@ import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
 import java.lang.invoke.MethodHandle;
 
 public class InvokeUtil {
-    /**
-     * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
-     */
-    private final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
-
     public static final MethodHandle getMetaFromItemStack;
     public static final MethodHandle setMetaToItemStack;
     public static final MethodHandle getCustomTagFromCraftMetaItem;
     public static final MethodHandle setCustomTagToCraftMetaItem;
+    /**
+     * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
+     */
+    private final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
 
     static {
         try {

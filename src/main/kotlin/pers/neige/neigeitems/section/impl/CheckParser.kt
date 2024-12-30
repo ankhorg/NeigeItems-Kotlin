@@ -21,11 +21,7 @@ object CheckParser : SectionParser() {
         sections: ConfigurationSection?
     ): String? {
         return handler(
-            cache,
-            player,
-            sections,
-            data.getString("value")?.parseSection(cache, player, sections),
-            data.get("actions")
+            cache, player, sections, data.getString("value")?.parseSection(cache, player, sections), data.get("actions")
         )
     }
 
@@ -47,18 +43,9 @@ object CheckParser : SectionParser() {
         player?.player?.let {
             async {
                 mutableMapOf(
-                    Pair("value", value),
-                    Pair("cache", cache),
-                    Pair("sections", sections)
+                    Pair("value", value), Pair("cache", cache), Pair("sections", sections)
                 ).let { params ->
-                    ActionManager.runAction(
-                        ActionManager.compile(actions),
-                        ActionContext(
-                            it,
-                            params,
-                            params
-                        )
-                    )
+                    ActionManager.compile(actions).eval(ActionContext(it, params, params))
                 }
             }
         }

@@ -10,7 +10,6 @@ import pers.neige.neigeitems.command.arguments.ActionArgumentType.getAction
 import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayer
 import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
 import pers.neige.neigeitems.command.selector.PlayerSelector
-import pers.neige.neigeitems.manager.ActionManager
 
 /**
  * ni action指令
@@ -23,9 +22,7 @@ object Action {
             argument<CommandSender, PlayerSelector>("player", player()).then(
                 // ni action [player] [actions]
                 argument<CommandSender, pers.neige.neigeitems.action.Action>("actions", action()).executes { context ->
-                    ActionManager.runAction(
-                        getAction(context, "actions"), ActionContext(getPlayer(context, "player"))
-                    )
+                    getAction(context, "actions").eval(ActionContext(getPlayer(context, "player")))
                     1
                 }
             )

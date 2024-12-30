@@ -24,9 +24,9 @@ public class DamageEventUtils {
         // 获取攻击者
         Entity attacker = event.getDamager();
         // 检测攻击者是否是玩家
-        if (!((Object) attacker instanceof RefCraftPlayer)) return false;
+        if (!(attacker instanceof RefCraftPlayer)) return false;
         Player player = (Player) attacker;
-        RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) attacker).getHandle();
+        RefEntityPlayer entityPlayer = ((RefCraftPlayer) attacker).getHandle();
         // 蓄力大于90%
         return EntityPlayerUtils.getAttackCooldown(player) > 0.9f
                 // 正在下落

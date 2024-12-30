@@ -118,8 +118,8 @@ public class EntityPlayerUtils {
             @NotNull Player player,
             @NotNull Entity entity
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer attacker = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer) {
+            RefEntityPlayer attacker = ((RefCraftPlayer) player).getHandle();
             if (entity instanceof RefCraftEntity) {
                 RefEntity defender = ((RefCraftEntity) entity).getHandle();
                 attacker.attack(defender);
@@ -230,8 +230,8 @@ public class EntityPlayerUtils {
             @NotNull Player player,
             @NotNull EnumHand hand
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer) {
+            RefEntityPlayer entityPlayer = ((RefCraftPlayer) player).getHandle();
             RefEnumHand enumHand = toRefEnumHand(hand);
             RefWorldServer world = ((RefCraftWorld) (Object) player.getWorld()).getHandle();
             RefNmsItemStack itemStack = entityPlayer.getItemInHand(enumHand);
@@ -264,8 +264,8 @@ public class EntityPlayerUtils {
             @NotNull EnumHand hand,
             boolean fromServerPlayer
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer) {
+            RefEntityPlayer entityPlayer = ((RefCraftPlayer) player).getHandle();
             RefEnumHand enumHand = toRefEnumHand(hand);
             swingByNms(entityPlayer, enumHand, fromServerPlayer);
         }
@@ -281,8 +281,8 @@ public class EntityPlayerUtils {
             @NotNull Player player,
             @NotNull AnimationType type
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer) {
+            RefEntityPlayer entityPlayer = ((RefCraftPlayer) player).getHandle();
             entityPlayer.playerConnection.sendPacket(new RefPacketPlayOutAnimation(entityPlayer, type.getValue()));
         }
     }
@@ -318,8 +318,8 @@ public class EntityPlayerUtils {
             int y,
             int z
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer entityPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer) {
+            RefEntityPlayer entityPlayer = ((RefCraftPlayer) player).getHandle();
             return entityPlayer.playerInteractManager.breakBlock(new RefBlockPos(x, y, z));
         }
         return false;
@@ -333,8 +333,8 @@ public class EntityPlayerUtils {
     public static float getAbsorptionAmount(
             @NotNull Player player
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            return ((RefCraftPlayer) (Object) player).getHandle().getAbsorptionAmount();
+        if (player instanceof RefCraftPlayer) {
+            return ((RefCraftPlayer) player).getHandle().getAbsorptionAmount();
         }
         return 0;
     }
@@ -349,8 +349,8 @@ public class EntityPlayerUtils {
             @NotNull Player player,
             float amount
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            ((RefCraftPlayer) (Object) player).getHandle().setAbsorptionAmount(amount);
+        if (player instanceof RefCraftPlayer) {
+            ((RefCraftPlayer) player).getHandle().setAbsorptionAmount(amount);
         }
     }
 
@@ -395,7 +395,7 @@ public class EntityPlayerUtils {
         if (SET_ROTATION_SUPPORT) {
             player.setRotation(yaw, pitch);
         } else {
-            if ((Object) player instanceof RefCraftPlayer) {
+            if (player instanceof RefCraftPlayer) {
                 Location targetLocation = player.getEyeLocation();
                 targetLocation.setYaw(yaw);
                 targetLocation.setPitch(pitch);
@@ -434,9 +434,9 @@ public class EntityPlayerUtils {
             double y,
             double z
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
+        if (player instanceof RefCraftPlayer) {
             if (LOOK_AT_SUPPORT) {
-                ((RefCraftPlayer) (Object) player).getHandle().lookAt(RefAnchor.EYES, new RefVec3(x, y, z));
+                ((RefCraftPlayer) player).getHandle().lookAt(RefAnchor.EYES, new RefVec3(x, y, z));
             } else {
                 lookAtByNms(player, x, y, z);
             }
@@ -453,8 +453,8 @@ public class EntityPlayerUtils {
     public static Channel getChannel(
             @NotNull Player player
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            return ((RefCraftPlayer) (Object) player).getHandle().playerConnection.networkManager.channel;
+        if (player instanceof RefCraftPlayer) {
+            return ((RefCraftPlayer) player).getHandle().playerConnection.networkManager.channel;
         }
         return null;
     }
@@ -467,8 +467,8 @@ public class EntityPlayerUtils {
     public static void openSign(
             @NotNull Player player
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
             RefSignBlockEntity sign;
             if (NEW_SIGN_ENTITY_CONSTRUCTOR) {
                 Location location = player.getLocation();
@@ -553,7 +553,7 @@ public class EntityPlayerUtils {
             int stay,
             int fadeOut
     ) {
-        RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
         if (TITLE_PACKET_CHANGED) {
             RefClientboundSetTitlesAnimationPacket times = new RefClientboundSetTitlesAnimationPacket(fadeIn, stay, fadeOut);
             nmsPlayer.playerConnection.sendPacket(times);
@@ -634,8 +634,8 @@ public class EntityPlayerUtils {
         if (entity == null) return null;
         Entity bukkitEntity = entity.getBukkitEntity();
 
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             if (ADD_ENTITY_PACKET_SUPPORT) {
                 nmsPlayer.playerConnection.sendPacket(entity.getAddEntityPacket());
@@ -663,9 +663,9 @@ public class EntityPlayerUtils {
             @NotNull Entity entity,
             @NotNull Player player
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             if (ADD_ENTITY_PACKET_SUPPORT) {
                 nmsPlayer.playerConnection.sendPacket(nmsEntity.getAddEntityPacket());
@@ -687,9 +687,9 @@ public class EntityPlayerUtils {
             @NotNull Entity entity,
             @NotNull Player player
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntityMetadata packet;
             if (METADATA_NEED_VALUE_LIST) {
@@ -716,9 +716,9 @@ public class EntityPlayerUtils {
             @NotNull Entity entity,
             @NotNull Player player
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntityDestroy packet = new RefPacketPlayOutEntityDestroy(nmsEntity.getId());
             nmsPlayer.playerConnection.sendPacket(packet);
@@ -761,9 +761,9 @@ public class EntityPlayerUtils {
             byte xRot,
             boolean onGround
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntity.RefPacketPlayOutEntityLook packet = new RefPacketPlayOutEntity.RefPacketPlayOutEntityLook(nmsEntity.getId(), yRot, xRot, onGround);
             nmsPlayer.playerConnection.sendPacket(packet);
@@ -818,9 +818,9 @@ public class EntityPlayerUtils {
             long za,
             boolean onGround
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove packet = new RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove(nmsEntity.getId(), xa, ya, za, onGround);
             nmsPlayer.playerConnection.sendPacket(packet);
@@ -885,9 +885,9 @@ public class EntityPlayerUtils {
             byte xRot,
             boolean onGround
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook packet = new RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook(nmsEntity.getId(), xa, ya, za, yRot, xRot, onGround);
             nmsPlayer.playerConnection.sendPacket(packet);
@@ -943,9 +943,9 @@ public class EntityPlayerUtils {
             byte xRot,
             boolean onGround
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntityTeleport packet = new RefPacketPlayOutEntityTeleport();
             packet.entityId = nmsEntity.getId();
@@ -986,9 +986,9 @@ public class EntityPlayerUtils {
             @NotNull Player player,
             byte yHeadRot
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntityHeadRotation packet = new RefPacketPlayOutEntityHeadRotation(nmsEntity, yHeadRot);
             nmsPlayer.playerConnection.sendPacket(packet);
@@ -1005,9 +1005,9 @@ public class EntityPlayerUtils {
             @NotNull Entity entity,
             @NotNull Player player
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntityHeadRotation packet = new RefPacketPlayOutEntityHeadRotation(nmsEntity, (byte) Math.floor((nmsEntity.getHeadRotation() * 256.0f) / 360.0f));
             nmsPlayer.playerConnection.sendPacket(packet);
@@ -1024,9 +1024,9 @@ public class EntityPlayerUtils {
             @NotNull Entity entity,
             @NotNull Player player
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntityMetadata packet;
             RefSynchedEntityData entityData = new RefSynchedEntityData(nmsEntity);
@@ -1062,9 +1062,9 @@ public class EntityPlayerUtils {
             @NotNull Player player,
             @NotNull String name
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntityMetadata packet;
             RefSynchedEntityData entityData = new RefSynchedEntityData(nmsEntity);
@@ -1100,9 +1100,9 @@ public class EntityPlayerUtils {
             @NotNull Player player,
             @NotNull BaseComponent name
     ) {
-        if (entity instanceof RefCraftEntity && (Object) player instanceof RefCraftPlayer) {
+        if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
             RefPacketPlayOutEntityMetadata packet;
             RefSynchedEntityData entityData = new RefSynchedEntityData(nmsEntity);
@@ -1136,8 +1136,8 @@ public class EntityPlayerUtils {
             @NotNull Player player,
             @NotNull Object packetObject
     ) {
-        if ((Object) player instanceof RefCraftPlayer && packetObject instanceof RefPacket<?>) {
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer && packetObject instanceof RefPacket<?>) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
             nmsPlayer.playerConnection.sendPacket((RefPacket<?>) packetObject);
         }
     }
@@ -1190,8 +1190,8 @@ public class EntityPlayerUtils {
     public static Entity getCamera(
             @NotNull Player player
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
             return nmsPlayer.getCamera().getBukkitEntity();
         }
         return player;
@@ -1207,8 +1207,8 @@ public class EntityPlayerUtils {
             @NotNull Player player,
             @NotNull Entity entity
     ) {
-        if ((Object) player instanceof RefCraftPlayer && entity instanceof RefCraftEntity) {
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer && entity instanceof RefCraftEntity) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
             nmsPlayer.setCamera(nmsEntity);
         }
@@ -1224,8 +1224,8 @@ public class EntityPlayerUtils {
             @NotNull Player player,
             @NotNull RefComponent title
     ) {
-        if ((Object) player instanceof RefCraftPlayer) {
-            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        if (player instanceof RefCraftPlayer) {
+            RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
             RefEntityHuman nmsHuman = nmsPlayer;
             if (nmsHuman.containerMenu != nmsHuman.inventoryMenu) {
                 RefPacketPlayOutOpenWindow packet;
@@ -1265,7 +1265,7 @@ public class EntityPlayerUtils {
             double y,
             double z
     ) {
-        RefEntityPlayer nmsPlayer = ((RefCraftPlayer) (Object) player).getHandle();
+        RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
         if (PACKET_LOOK_AT_SUPPORT) {
             EntityUtils.lookAtByNms(player, x, y, z);
             nmsPlayer.playerConnection.sendPacket(new RefPacketPlayOutLookAt(RefAnchor.EYES, x, y, z));

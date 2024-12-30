@@ -2,24 +2,15 @@ package pers.neige.neigeitems.action.impl;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.action.Action;
-import pers.neige.neigeitems.action.ActionContext;
-import pers.neige.neigeitems.action.ActionResult;
-import pers.neige.neigeitems.action.ActionType;
+import pers.neige.neigeitems.action.*;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptException;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class WhileAction extends Action {
-    @Nullable
-    private final String conditionString;
-    @Nullable
-    private final CompiledScript condition;
+    @NotNull
+    private final Condition condition;
     @NotNull
     private final Action actions;
     @NotNull
@@ -30,16 +21,7 @@ public class WhileAction extends Action {
             @NotNull ConfigurationSection action
     ) {
         super(manager);
-        conditionString = action.getString("while");
-        if (conditionString != null) {
-            try {
-                condition = ((Compilable) manager.getEngine()).compile(conditionString);
-            } catch (ScriptException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            condition = null;
-        }
+        condition = new Condition(manager, action.getString("while"));
         actions = manager.compile(action.get("actions"));
         _finally = manager.compile(action.get("finally"));
         checkAsyncSafe();
@@ -50,18 +32,8 @@ public class WhileAction extends Action {
             @NotNull Map<?, ?> action
     ) {
         super(manager);
-        Object value = action.get("while");
-        if (value != null) {
-            conditionString = value.toString();
-            try {
-                condition = ((Compilable) manager.getEngine()).compile(conditionString);
-            } catch (ScriptException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            conditionString = null;
-            condition = null;
-        }
+        Object conditionString = action.get("while");
+        condition = new Condition(manager, conditionString == null ? null : conditionString.toString());
         actions = manager.compile(action.get("actions"));
         _finally = manager.compile(action.get("finally"));
         checkAsyncSafe();
@@ -90,13 +62,8 @@ public class WhileAction extends Action {
         return manager.runAction(this, context);
     }
 
-    @Nullable
-    public String getConditionString() {
-        return conditionString;
-    }
-
-    @Nullable
-    public CompiledScript getCondition() {
+    @NotNull
+    public Condition getCondition() {
         return condition;
     }
 

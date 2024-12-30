@@ -122,8 +122,8 @@ ActionContext context = new ActionContext();
 // 条件示例 condition: 'global.test == "测试参数"'
 // 动作示例 'tell: 参数测试<test>'
 
-// 动作执行
-MyPlugin.getActionManager().runAction(action, context);
+// 动作执行(动作只能运行于编译它的BaseActionManager)
+action.eval(context);
 ```
 
 ### 我想通过NI获取MM的怪物配置

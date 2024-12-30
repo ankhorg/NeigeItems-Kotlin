@@ -7,7 +7,7 @@ import pers.neige.neigeitems.ref.world.RefCraftServer;
 
 public class OpPlayer extends RefCraftPlayer {
     public OpPlayer(Player player) {
-        super((RefCraftServer) (Object) Bukkit.getServer(), ((RefCraftPlayer) (Object) player).getHandle());
+        super((RefCraftServer) (Object) Bukkit.getServer(), ((RefCraftPlayer) player).getHandle());
     }
 
     @Override

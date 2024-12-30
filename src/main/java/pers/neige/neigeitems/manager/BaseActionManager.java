@@ -223,10 +223,12 @@ public abstract class BaseActionManager {
      * @return 永远返回 Results.SUCCESS, 这是历史遗留问题, 要获取真实结果请调用 runActionWithResult 方法.
      */
     @NotNull
+    @Deprecated
+    @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
     public ActionResult runAction(
             @NotNull Action action
     ) {
-        runAction(action, ActionContext.empty());
+        action.eval(ActionContext.empty());
         return Results.SUCCESS;
     }
 
@@ -237,10 +239,12 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     @NotNull
+    @Deprecated
+    @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
     public CompletableFuture<ActionResult> runActionWithResult(
             @NotNull Action action
     ) {
-        return runActionWithResult(action, ActionContext.empty());
+        return action.eval(ActionContext.empty());
     }
 
     /**
@@ -251,11 +255,13 @@ public abstract class BaseActionManager {
      * @return 永远返回 Results.SUCCESS, 这是历史遗留问题, 要获取真实结果请调用 runActionWithResult 方法.
      */
     @NotNull
+    @Deprecated
+    @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
     public ActionResult runAction(
             @NotNull Action action,
             @NotNull ActionContext context
     ) {
-        runActionWithResult(action, context);
+        action.eval(context);
         return Results.SUCCESS;
     }
 
@@ -267,11 +273,13 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     @NotNull
+    @Deprecated
+    @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
     public CompletableFuture<ActionResult> runActionWithResult(
             @NotNull Action action,
             @NotNull ActionContext context
     ) {
-        return action.evalAsyncSafe(this, context);
+        return action.eval(context);
     }
 
     /**
@@ -417,7 +425,7 @@ public abstract class BaseActionManager {
             @NotNull ActionContext context
     ) {
         // 如果条件通过
-        if (parseCondition(action.getConditionString(), action.getCondition(), context).getType() == ResultType.SUCCESS) {
+        if (action.getCondition().check(context).getType() == ResultType.SUCCESS) {
             // 执行动作
             SchedulerUtils.sync(plugin, () -> action.getSync().evalAsyncSafe(this, context));
             SchedulerUtils.async(plugin, () -> action.getAsync().evalAsyncSafe(this, context));
@@ -573,7 +581,7 @@ public abstract class BaseActionManager {
             @NotNull ActionContext context
     ) {
         // while循环判断条件
-        if (parseCondition(action.getConditionString(), action.getCondition(), context).getType() == ResultType.SUCCESS) {
+        if (action.getCondition().check(context).getType() == ResultType.SUCCESS) {
             return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
                 // 执行中止
                 if (result.getType() == ResultType.STOP) {
@@ -1236,7 +1244,7 @@ public abstract class BaseActionManager {
         addFunction("func", (context, content) -> {
             Action function = ActionManager.INSTANCE.getFunctions().get(content);
             if (function == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            return runActionWithResult(function, context);
+            return function.eval(context);
         });
     }
 }

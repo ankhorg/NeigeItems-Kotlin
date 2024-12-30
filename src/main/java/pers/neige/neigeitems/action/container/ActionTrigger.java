@@ -57,7 +57,7 @@ public class ActionTrigger {
     ) {
         async(context);
         sync(context);
-        return actionManager.runActionWithResult(actions, context);
+        return actions.eval(context);
     }
 
     public void async(
@@ -65,7 +65,7 @@ public class ActionTrigger {
     ) {
         SchedulerUtils.async(actionManager.getPlugin(), () -> {
             try {
-                actionManager.runAction(async, context.clone());
+                async.eval(context.clone());
             } catch (CloneNotSupportedException e) {
                 throw new RuntimeException(e);
             }
@@ -77,7 +77,7 @@ public class ActionTrigger {
     ) {
         SchedulerUtils.sync(actionManager.getPlugin(), () -> {
             try {
-                actionManager.runAction(sync, context.clone());
+                sync.eval(context.clone());
             } catch (CloneNotSupportedException e) {
                 throw new RuntimeException(e);
             }

@@ -286,13 +286,13 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         // 如果物品需要消耗
         if (consume != null) {
             // 预执行动作
-            runAction(consume.pre, context)
+            consume.pre.eval(context)
             // 检测条件
             consume.condition?.let {
                 // 不满足条件就爬
                 if (parseCondition(it, context).type == ResultType.STOP) {
                     // 跑一下deny动作
-                    runAction(consume.deny, context)
+                    consume.deny.eval(context)
                     // 爬
                     return
                 }
@@ -304,7 +304,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             // 消耗物品
             if (!itemStack.consume(player, amount, itemTag, neigeItems)) {
                 // 跑一下deny动作
-                runAction(consume.deny, context)
+                consume.deny.eval(context)
                 // 数量不足
                 return
             }
@@ -513,13 +513,13 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             // 如果该物品需要被消耗
             if (consume != null) {
                 // 预执行动作
-                runAction(consume.pre, context)
+                consume.pre.eval(context)
                 // 检测条件
                 consume.condition?.let {
                     // 不满足条件就爬
                     if (parseCondition(it, context).type == ResultType.STOP) {
                         // 跑一下deny动作
-                        runAction(consume.deny, context)
+                        consume.deny.eval(context)
                         // 爬
                         return
                     }
@@ -531,7 +531,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
                 // 消耗物品
                 if (!itemStack.consume(player, amount, itemTag, neigeItems, giveLater)) {
                     // 跑一下deny动作
-                    runAction(consume.deny, context)
+                    consume.deny.eval(context)
                     // 数量不足
                     return
                 }

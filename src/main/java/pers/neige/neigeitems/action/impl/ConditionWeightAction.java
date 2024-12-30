@@ -1,7 +1,6 @@
 package pers.neige.neigeitems.action.impl;
 
 import kotlin.Pair;
-import kotlin.Triple;
 import kotlin.text.StringsKt;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 public class ConditionWeightAction extends Action {
     private final boolean order;
     @NotNull
-    private final List<Pair<Triple<String, CompiledScript, Action>, Double>> actions = new ArrayList<>();
+    private final List<Pair<Pair<Condition, Action>, Double>> actions = new ArrayList<>();
     @Nullable
     private String amountScriptString = null;
     @Nullable
@@ -80,8 +79,8 @@ public class ConditionWeightAction extends Action {
     }
 
     private void checkAsyncSafe() {
-        for (Pair<Triple<String, CompiledScript, Action>, Double> action : actions) {
-            if (action.getFirst().getThird().isAsyncSafe()) return;
+        for (Pair<Pair<Condition, Action>, Double> action : actions) {
+            if (action.getFirst().getSecond().isAsyncSafe()) return;
         }
         this.asyncSafe = false;
     }
@@ -103,19 +102,10 @@ public class ConditionWeightAction extends Action {
                 weight = 1;
             }
             if (weight <= 0) continue;
-            String conditionString = null;
-            CompiledScript condition = null;
-            Object value = mapAction.get("condition");
-            if (value != null) {
-                conditionString = value.toString();
-                try {
-                    condition = ((Compilable) manager.getEngine()).compile(conditionString);
-                } catch (ScriptException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            Object conditionString = mapAction.get("condition");
+            Condition condition = new Condition(manager, conditionString == null ? null : conditionString.toString());
             Action action = manager.compile(mapAction.get("actions"));
-            this.actions.add(new Pair<>(new Triple<>(conditionString, condition, action), weight));
+            this.actions.add(new Pair<>(new Pair<>(condition, action), weight));
         }
     }
 
@@ -139,17 +129,17 @@ public class ConditionWeightAction extends Action {
     }
 
     @NotNull
-    public List<Pair<Triple<String, CompiledScript, Action>, Double>> getActions() {
+    public List<Pair<Pair<Condition, Action>, Double>> getActions() {
         return actions;
     }
 
     @NotNull
     public List<Pair<Action, Double>> getActions(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
         List<Pair<Action, Double>> result = new ArrayList<>();
-        for (Pair<Triple<String, CompiledScript, Action>, Double> action : this.actions) {
-            Triple<String, CompiledScript, Action> info = action.getFirst();
-            if (manager.parseCondition(info.getFirst(), info.getSecond(), context).getType() != ResultType.STOP) {
-                result.add(new Pair<>(info.getThird(), action.getSecond()));
+        for (Pair<Pair<Condition, Action>, Double> action : this.actions) {
+            Pair<Condition, Action> info = action.getFirst();
+            if (info.getFirst().check(context).getType() != ResultType.STOP) {
+                result.add(new Pair<>(info.getSecond(), action.getSecond()));
             }
         }
         return result;
