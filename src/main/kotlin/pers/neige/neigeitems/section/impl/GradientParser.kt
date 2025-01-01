@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
+import pers.neige.neigeitems.utils.ColorUtils
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.joinToString
 import java.awt.Color
@@ -72,16 +73,14 @@ object GradientParser : SectionParser() {
         rawText: String?
     ): String? {
         if (colorStartString == null || colorEndString == null || rawText == null) return null
-        val colorStart = Color(
+        val colorStart =
             (colorStartString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
                 .coerceAtLeast(0)
                 .coerceAtMost(0xFFFFFF)
-        )
-        val colorEnd = Color(
+        val colorEnd =
             (colorEndString.parseSection(parse, cache, player, sections).toIntOrNull(16) ?: 0)
                 .coerceAtLeast(0)
                 .coerceAtMost(0xFFFFFF)
-        )
 
         val step = (stepString?.parseSection(parse, cache, player, sections)?.toIntOrNull() ?: 1)
             .coerceAtLeast(1)
@@ -89,38 +88,39 @@ object GradientParser : SectionParser() {
         val text = rawText.parseSection(parse, cache, player, sections)
 
         if (text.length <= step) {
-            return ChatColor.of(colorStart).toString() + text
+
+            return ColorUtils.toHexColorPrefix(colorStart) + text
         }
 
         val chars = text.toCharArray()
         val result = StringBuilder()
 
-        var redCurrent = colorStart.red
-        var greenCurrent = colorStart.green
-        var blueCurrent = colorStart.blue
+        var redCurrent = ColorUtils.getRed(colorStart)
+        var greenCurrent = ColorUtils.getGreen(colorStart)
+        var blueCurrent = ColorUtils.getBlue(colorStart)
 
         if (step == 1) {
-            val redStep = (colorEnd.red - colorStart.red) / chars.lastIndex
-            val greenStep = (colorEnd.green - colorStart.green) / chars.lastIndex
-            val blueStep = (colorEnd.blue - colorStart.blue) / chars.lastIndex
+            val redStep = (ColorUtils.getRed(colorEnd) - redCurrent) / chars.lastIndex
+            val greenStep = (ColorUtils.getGreen(colorEnd) - greenCurrent) / chars.lastIndex
+            val blueStep = (ColorUtils.getBlue(colorEnd) - blueCurrent) / chars.lastIndex
 
             for (char in chars) {
-                result.append(ChatColor.of(Color(redCurrent, greenCurrent, blueCurrent)).toString())
+                result.append(ColorUtils.toHexColorPrefix(redCurrent, greenCurrent, blueCurrent))
                 result.append(char)
                 redCurrent += redStep
                 greenCurrent += greenStep
                 blueCurrent += blueStep
             }
         } else {
-            val redStep = (colorEnd.red - colorStart.red) * step / chars.lastIndex
-            val greenStep = (colorEnd.green - colorStart.green) * step / chars.lastIndex
-            val blueStep = (colorEnd.blue - colorStart.blue) * step / chars.lastIndex
+            val redStep = (ColorUtils.getRed(colorEnd) - redCurrent) * step / chars.lastIndex
+            val greenStep = (ColorUtils.getGreen(colorEnd) - greenCurrent) * step / chars.lastIndex
+            val blueStep = (ColorUtils.getBlue(colorEnd) - blueCurrent) * step / chars.lastIndex
 
             var current = 1
 
             for (char in chars) {
                 if (current == 1) {
-                    result.append(ChatColor.of(Color(redCurrent, greenCurrent, blueCurrent)).toString())
+                    result.append(ColorUtils.toHexColorPrefix(redCurrent, greenCurrent, blueCurrent))
                     redCurrent += redStep
                     greenCurrent += greenStep
                     blueCurrent += blueStep

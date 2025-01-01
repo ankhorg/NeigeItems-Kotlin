@@ -2,5 +2,3 @@
 .idea
 build
 out
-.github/*
-!.github/workflows/

@@ -12,6 +12,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.Translat
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
 import pers.neige.neigeitems.utils.ItemUtils.getDamage
+import pers.neige.neigeitems.utils.SectionUtils.getSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import java.awt.Color
 import java.util.*
@@ -146,15 +147,9 @@ object SectionUtils {
                     return Section(section, this).load(cache, player, sections) ?: "<$this>"
                 }
                 if (this.startsWith("#")) {
-                    try {
-                        try {
-                            val hex = (this.substring(1).toIntOrNull(16) ?: 0).coerceAtLeast(0).coerceAtMost(0xFFFFFF)
-                            val color = Color(hex)
-                            return ChatColor.of(color).toString()
-                        } catch (_: NumberFormatException) {
-                        }
-                    } catch (error: NoSuchMethodError) {
-                        Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
+                    val rgb = this.substring(1).toIntOrNull(16)
+                    if (rgb != null) {
+                        return ColorUtils.toHexColorPrefix(rgb)
                     }
                 }
             }
@@ -308,15 +303,9 @@ object SectionUtils {
                     return Section(section, this).load(cache, player, sections) ?: "<$this>"
                 }
                 if (this.startsWith("#")) {
-                    try {
-                        try {
-                            val hex = (this.substring(1).toIntOrNull(16) ?: 0).coerceAtLeast(0).coerceAtMost(0xFFFFFF)
-                            val color = Color(hex)
-                            return ChatColor.of(color).toString()
-                        } catch (_: NumberFormatException) {
-                        }
-                    } catch (error: NoSuchMethodError) {
-                        Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
+                    val rgb = this.substring(1).toIntOrNull(16)
+                    if (rgb != null) {
+                        return ColorUtils.toHexColorPrefix(rgb)
                     }
                 }
             }
@@ -399,15 +388,9 @@ object SectionUtils {
                     return Section(section, this).load(cache, player, sections) ?: "<$this>"
                 }
                 if (this.startsWith("#")) {
-                    try {
-                        try {
-                            val hex = (this.substring(1).toIntOrNull(16) ?: 0).coerceAtLeast(0).coerceAtMost(0xFFFFFF)
-                            val color = Color(hex)
-                            return ChatColor.of(color).toString()
-                        } catch (_: NumberFormatException) {
-                        }
-                    } catch (error: NoSuchMethodError) {
-                        Bukkit.getLogger().info("§e[NI] §6低于1.16的版本不能使用16进制颜色哦")
+                    val rgb = this.substring(1).toIntOrNull(16)
+                    if (rgb != null) {
+                        return ColorUtils.toHexColorPrefix(rgb)
                     }
                 }
             }

@@ -4,6 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
+import pers.neige.neigeitems.action.Condition;
 import pers.neige.neigeitems.action.ResultType;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.text.Text;
@@ -16,10 +17,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class ConditionText implements Text {
-    @Nullable
-    private final String conditionString;
-    @Nullable
-    private final CompiledScript condition;
+    @NotNull
+    private final Condition condition;
     @NotNull
     private final Text text;
     @NotNull
@@ -29,16 +28,7 @@ public class ConditionText implements Text {
             @NotNull BaseActionManager manager,
             @NotNull ConfigurationSection lore
     ) {
-        conditionString = lore.getString("condition");
-        if (conditionString != null) {
-            try {
-                condition = ((Compilable) manager.getEngine()).compile(conditionString);
-            } catch (ScriptException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            condition = null;
-        }
+        condition = new Condition(manager, lore.getString("condition"));
         this.text = Text.compile(manager, lore.get("text"));
         deny = Text.compile(manager, lore.get("deny"));
     }
@@ -48,26 +38,13 @@ public class ConditionText implements Text {
             @NotNull Map<?, ?> lore
     ) {
         Object value = lore.get("condition");
-        if (value instanceof String) {
-            conditionString = (String) value;
-            try {
-                condition = ((Compilable) manager.getEngine()).compile(conditionString);
-            } catch (ScriptException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            conditionString = null;
-            condition = null;
-        }
+        condition = new Condition(manager, value == null ? null : value.toString());
         this.text = Text.compile(manager, lore.get("text"));
         deny = Text.compile(manager, lore.get("deny"));
     }
 
-    public @Nullable String getConditionString() {
-        return conditionString;
-    }
-
-    public @Nullable CompiledScript getCondition() {
+    @NotNull
+    public Condition getCondition() {
         return condition;
     }
 
@@ -89,7 +66,7 @@ public class ConditionText implements Text {
             @NotNull ActionContext context,
             Function<String, T> converter
     ) {
-        if (manager.parseCondition(conditionString, condition, context).getType() == ResultType.SUCCESS) {
+        if (condition.check(context).getType() == ResultType.SUCCESS) {
             return text.getText(result, manager, context, converter);
         } else {
             return deny.getText(result, manager, context, converter);
