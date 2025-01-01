@@ -20,6 +20,7 @@ import pers.neige.neigeitems.utils.ItemUtils;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public class NMSHooker {
@@ -179,5 +180,8 @@ public class NMSHooker {
 
     public void giveExp(@NotNull Player player, int exp) {
         player.giveExp(exp);
+    }
+
+    public void editNameAndLoreAfterMojangMotherDead(@NotNull ItemStack itemStack, BiFunction<ItemStack, String, String> handler) {
     }
 }

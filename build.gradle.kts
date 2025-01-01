@@ -22,6 +22,8 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "maven-publish")
 
+    val projectName = this.name
+
     repositories {
         mavenLocal()
         maven("https://maven.aliyun.com/nexus/content/groups/public/")
@@ -30,6 +32,7 @@ subprojects {
     }
     dependencies {
         compileOnly(kotlin("stdlib"))
+        if (projectName.contains("v1_21")) return@dependencies
         compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
         compileOnly("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
     }

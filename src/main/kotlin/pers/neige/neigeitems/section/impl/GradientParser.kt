@@ -1,13 +1,11 @@
 package pers.neige.neigeitems.section.impl
 
-import net.md_5.bungee.api.ChatColor
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.ColorUtils
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.joinToString
-import java.awt.Color
 
 /**
  * 渐变色节点解析器

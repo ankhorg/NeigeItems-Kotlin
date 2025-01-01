@@ -8,7 +8,9 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtNumeric
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtString
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.manager.ConfigManager.config
+import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ListenerUtils
 import java.util.*
@@ -18,6 +20,12 @@ import java.util.function.BiFunction
  * 用于实现物品变量功能
  */
 object ItemPlaceholder {
+    /**
+     * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
+     */
+    @JvmStatic
+    private val MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport
+
     /**
      * 获取物品变量附属
      */
@@ -40,14 +48,18 @@ object ItemPlaceholder {
      */
     fun itemParse(itemStack: ItemStack) {
         if (NbtUtils.isCraftItemStack(itemStack)) {
-            val nbt = itemStack.getNbtOrNull() ?: return
-            val display = nbt.getCompound("display") ?: return
-            display.getString("Name")?.let { name ->
-                display.putString("Name", parse(itemStack, name))
-            }
-            display.getList("Lore")?.let { lore ->
-                lore.forEachIndexed { index, nbt ->
-                    lore[index] = NbtString.valueOf(parse(itemStack, nbt.asString))
+            if (MOJANG_MOTHER_DEAD) {
+                HookerManager.nmsHooker.editNameAndLoreAfterMojangMotherDead(itemStack, this::parse)
+            } else {
+                val nbt = itemStack.getNbtOrNull() ?: return
+                val display = nbt.getCompound("display") ?: return
+                display.getString("Name")?.let { name ->
+                    display.putString("Name", parse(itemStack, name))
+                }
+                display.getList("Lore")?.let { lore ->
+                    lore.forEachIndexed { index, nbt ->
+                        lore[index] = NbtString.valueOf(parse(itemStack, nbt.asString))
+                    }
                 }
             }
         }

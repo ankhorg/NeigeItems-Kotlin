@@ -1,8 +1,6 @@
 package pers.neige.neigeitems.utils
 
 import com.alibaba.fastjson2.parseObject
-import net.md_5.bungee.api.ChatColor
-import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.inventory.ItemStack
@@ -12,9 +10,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.Translat
 import pers.neige.neigeitems.manager.SectionManager
 import pers.neige.neigeitems.section.Section
 import pers.neige.neigeitems.utils.ItemUtils.getDamage
-import pers.neige.neigeitems.utils.SectionUtils.getSection
 import pers.neige.neigeitems.utils.StringUtils.split
-import java.awt.Color
 import java.util.*
 import java.util.function.Function
 

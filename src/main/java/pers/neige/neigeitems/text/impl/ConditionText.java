@@ -2,16 +2,12 @@ package pers.neige.neigeitems.text.impl;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.Condition;
 import pers.neige.neigeitems.action.ResultType;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.text.Text;
 
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
