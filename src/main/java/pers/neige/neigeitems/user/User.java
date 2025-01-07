@@ -33,7 +33,7 @@ public class User {
         return uuid;
     }
 
-    public void addChatCatcher(ChatCatcher catcher) {
+    public void addChatCatcher(@NotNull ChatCatcher catcher) {
         synchronized (chatCatchers) {
             chatCatchers.add(catcher);
         }
@@ -48,11 +48,14 @@ public class User {
 
     public void clearChatCatcher() {
         synchronized (chatCatchers) {
-            chatCatchers.clear();
+            ChatCatcher catcher;
+            while((catcher = chatCatchers.poll()) != null) {
+                catcher.future.complete(null);
+            }
         }
     }
 
-    public void addSignCatcher(SignCatcher catcher) {
+    public void addSignCatcher(@NotNull SignCatcher catcher) {
         synchronized (signCatchers) {
             signCatchers.add(catcher);
         }
@@ -67,7 +70,10 @@ public class User {
 
     public void clearSignCatcher() {
         synchronized (signCatchers) {
-            signCatchers.clear();
+            SignCatcher catcher;
+            while((catcher = signCatchers.poll()) != null) {
+                catcher.future.complete(null);
+            }
         }
     }
 

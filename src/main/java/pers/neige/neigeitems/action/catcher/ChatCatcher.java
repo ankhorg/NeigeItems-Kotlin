@@ -23,7 +23,9 @@ public class ChatCatcher {
     ) {
         this.cancel = cancel;
         future.thenAccept((message) -> {
-            context.getGlobal().put(messageKey, message);
+            if (message != null) {
+                context.getGlobal().put(messageKey, message);
+            }
             SchedulerUtils.run(actionManager.getPlugin(), context.isSync(), () -> result.complete(Results.SUCCESS));
         });
     }

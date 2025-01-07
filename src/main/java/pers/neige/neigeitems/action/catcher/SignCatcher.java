@@ -30,10 +30,12 @@ public class SignCatcher {
             @NotNull CompletableFuture<ActionResult> result
     ) {
         future.thenAccept((texts) -> {
-            context.getGlobal().put(messageKey, texts);
-            for (int index = 0; index < texts.length; index++) {
-                String text = texts[index];
-                context.getGlobal().put(messageKey + "." + index, text);
+            if (texts != null) {
+                context.getGlobal().put(messageKey, texts);
+                for (int index = 0; index < texts.length; index++) {
+                    String text = texts[index];
+                    context.getGlobal().put(messageKey + "." + index, text);
+                }
             }
             SchedulerUtils.run(actionManager.getPlugin(), context.isSync(), () -> result.complete(Results.SUCCESS));
         });
