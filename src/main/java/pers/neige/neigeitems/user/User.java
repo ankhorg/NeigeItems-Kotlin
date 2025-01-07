@@ -46,6 +46,12 @@ public class User {
         }
     }
 
+    public void clearChatCatcher() {
+        synchronized (chatCatchers) {
+            chatCatchers.clear();
+        }
+    }
+
     public void addSignCatcher(SignCatcher catcher) {
         synchronized (signCatchers) {
             signCatchers.add(catcher);
@@ -56,6 +62,12 @@ public class User {
     public SignCatcher pollSignCatcher() {
         synchronized (signCatchers) {
             return signCatchers.poll();
+        }
+    }
+
+    public void clearSignCatcher() {
+        synchronized (signCatchers) {
+            signCatchers.clear();
         }
     }
 

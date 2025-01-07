@@ -1240,6 +1240,22 @@ public abstract class BaseActionManager {
             EntityPlayerUtils.openSign(player);
             return result;
         });
+        // 清除聊天捕获器
+        addConsumer("clear-catch-chat", (context, content) -> {
+            Player player = context.getPlayer();
+            if (player == null) return;
+            User user = NeigeItems.getUserManager().get(player.getUniqueId());
+            if (user == null) return;
+            user.clearChatCatcher();
+        });
+        // 清除告示牌捕获器
+        addConsumer("clear-catch-sign", (context, content) -> {
+            Player player = context.getPlayer();
+            if (player == null) return;
+            User user = NeigeItems.getUserManager().get(player.getUniqueId());
+            if (user == null) return;
+            user.clearSignCatcher();
+        });
         // 触发动作组
         addFunction("func", (context, content) -> {
             Action function = ActionManager.INSTANCE.getFunctions().get(content);
