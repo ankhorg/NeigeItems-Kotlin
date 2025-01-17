@@ -208,14 +208,15 @@ publishing {
     }
 }
 
-// 将plugin.yml中的"${version}"替换为插件版本
-tasks.processResources {
-    val props = mapOf(
-        "version" to realVersion.toString()
+tasks.withType<ProcessResources> {
+    val properties = mapOf(
+        "version" to realVersion.toString(),
+        "group" to rootProject.group,
+        "name" to rootProject.name,
     )
-    inputs.properties(props)
-    filesMatching("plugin.yml") {
-        expand(props)
+    inputs.properties(properties)
+    filesMatching(listOf("plugin.yml")) {
+        expand(properties)
     }
 }
 

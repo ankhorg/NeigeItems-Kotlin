@@ -75,10 +75,6 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
         loadMobInfos()
     }
 
-    init {
-        loadMobInfos()
-    }
-
     override fun hasItem(id: String): Boolean {
         return itemManager.itemNames.contains(id)
     }

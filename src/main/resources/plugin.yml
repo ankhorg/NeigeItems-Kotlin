@@ -1,5 +1,5 @@
-name: NeigeItems
-main: pers.neige.neigeitems.NeigeItems
+name: ${name}
+main: ${group}.${name}
 version: ${version}
 
 authors:

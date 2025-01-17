@@ -487,6 +487,7 @@ abstract class MythicMobsHooker {
         async {
             mobInfos.clear()
             ConfigUtils.getAllFiles("MythicMobs", "Mobs").forEach(this::loadMobInfosFromMobFile)
+            ConfigUtils.getAllFiles("MythicMobs", "mobs").forEach(this::loadMobInfosFromMobFile)
             loadMobInfosFromPackDir(
                 File(
                     File(
@@ -519,8 +520,8 @@ abstract class MythicMobsHooker {
         val packs = packDir.listFiles() ?: arrayOf<File>()
         for (packFile: File in packs) {
             if (!packFile.isDirectory) continue
-            val mobDir = File(packFile, "Mobs")
-            ConfigUtils.getAllFiles(mobDir).forEach(this::loadMobInfosFromMobFile)
+            ConfigUtils.getAllFiles(File(packFile, "Mobs")).forEach(this::loadMobInfosFromMobFile)
+            ConfigUtils.getAllFiles(File(packFile, "mobs")).forEach(this::loadMobInfosFromMobFile)
         }
     }
 
