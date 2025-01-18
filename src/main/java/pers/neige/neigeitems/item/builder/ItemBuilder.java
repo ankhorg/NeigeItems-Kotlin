@@ -62,6 +62,8 @@ public class ItemBuilder {
     @Nullable
     protected Integer color = null;
     @Nullable
+    protected Integer potionColor = null;
+    @Nullable
     protected Boolean unbreakable = null;
     @Nullable
     protected Integer hideFlag = null;
@@ -165,6 +167,15 @@ public class ItemBuilder {
                         color = StringsKt.toIntOrNull((String) value, 16);
                     } else if (value instanceof Integer) {
                         color = Math.min(0xFFFFFF, Math.max(0, (int) value));
+                    }
+                    break;
+                }
+                case "potion-color": {
+                    Object value = config.get(key);
+                    if (value instanceof String) {
+                        potionColor = StringsKt.toIntOrNull((String) value, 16);
+                    } else if (value instanceof Integer) {
+                        potionColor = Math.min(0xFFFFFF, Math.max(0, (int) value));
                     }
                     break;
                 }
@@ -319,6 +330,9 @@ public class ItemBuilder {
                 if (color != null) {
                     display.putInt("color", color);
                 }
+            }
+            if (potionColor != null) {
+                nbt.putInt("CustomPotionColor", potionColor);
             }
             if (unbreakable != null) {
                 nbt.putBoolean(NbtUtils.getUnbreakableNbtKey(), unbreakable);
