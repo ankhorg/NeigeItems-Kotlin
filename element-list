@@ -10,6 +10,7 @@ $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Pre///PointingToDe
 $dokka.location:pers.neige.neigeitems.event/PluginReloadEvent.Type///PointingToDeclaration/pers/neige/neigeitems/event/PluginReloadEvent.Type.html
 $dokka.location:pers.neige.neigeitems.item/ItemDurability.DamageResult///PointingToDeclaration/pers/neige/neigeitems/item/ItemDurability.DamageResult.html
 $dokka.location:pers.neige.neigeitems.item/ItemPack.ItemInfo///PointingToDeclaration/pers/neige/neigeitems/item/ItemPack.ItemInfo.html
+$dokka.location:pers.neige.neigeitems.item/ItemPlaceholder.ParseResult///PointingToDeclaration/pers/neige/neigeitems/item/ItemPlaceholder.ParseResult.html
 $dokka.location:pers.neige.neigeitems.lang/LocaleI18n.TranslationProvider///PointingToDeclaration/pers/neige/neigeitems/lang/LocaleI18n.TranslationProvider.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.Pos///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.Pos.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.PosRot///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.PosRot.html
