@@ -24,11 +24,18 @@ public final class NbtItemStack {
     private final RefCraftItemStack craftItemStack;
 
     public NbtItemStack(@NotNull ItemStack itemStack) {
-        this.itemStack = itemStack;
         if (itemStack instanceof RefCraftItemStack) {
+            this.itemStack = itemStack;
             this.craftItemStack = (RefCraftItemStack) itemStack;
         } else {
-            this.craftItemStack = null;
+            if (MOJANG_MOTHER_DEAD) {
+                itemStack = ((RefBukkitItemStack) (Object) itemStack).craftDelegate;
+                this.itemStack = itemStack;
+                this.craftItemStack = (RefCraftItemStack) itemStack;
+            } else {
+                this.itemStack = itemStack;
+                this.craftItemStack = null;
+            }
         }
     }
 

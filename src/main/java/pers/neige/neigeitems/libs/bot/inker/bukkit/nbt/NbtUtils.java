@@ -86,14 +86,16 @@ public class NbtUtils {
 
     /**
      * 通过给定的 ItemStack 实例获取 ItemStack.
-     * org.bukkit.inventory.ItemStack 将返回 ItemMeta 原本
-     * org.bukkit.craftbukkit.xxx.inventory.CraftItemStack 将返回 ItemMeta 副本
+     * org.bukkit.inventory.ItemStack 将返回 ItemMeta 原本.
+     * org.bukkit.craftbukkit.xxx.inventory.CraftItemStack 将返回 ItemMeta 副本.
+     * 1.21+无论什么都返回副本.
      *
      * @param itemStack 待获取物品.
      * @return ItemMeta.
      */
     @Nullable
     public static ItemMeta getItemMeta(@NotNull ItemStack itemStack) {
+        if (MOJANG_MOTHER_DEAD) return itemStack.getItemMeta();
         if (itemStack instanceof RefCraftItemStack) {
             return itemStack.getItemMeta();
         } else {
@@ -112,6 +114,7 @@ public class NbtUtils {
     @NotNull
     @SuppressWarnings("unchecked")
     public static ItemStack bukkitCopy(@NotNull ItemStack itemStack) {
+        if (MOJANG_MOTHER_DEAD) return itemStack.clone();
         ItemStack result = itemStack.clone();
         RefCraftMetaItem refItemMeta = (RefCraftMetaItem) (Object) InvokeUtil.getItemMeta(itemStack);
         if (refItemMeta != null) {

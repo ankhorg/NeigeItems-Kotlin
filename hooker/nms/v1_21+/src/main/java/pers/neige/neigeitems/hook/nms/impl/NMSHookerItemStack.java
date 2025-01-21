@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.hook.nms.impl;
 
+import kotlin.Pair;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.component.ItemLore;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.hook.nms.NMSHooker;
+import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.item.builder.NewItemBuilder;
 
@@ -54,12 +56,16 @@ public class NMSHookerItemStack extends NMSHooker {
     }
 
     @Override
-    public void editNameAndLoreAfterMojangMotherDead(@NotNull ItemStack itemStack, BiFunction<ItemStack, String, String> handler) {
+    public void editNameAndLoreAfterMojangMotherDead(@NotNull ItemStack itemStack, BiFunction<ItemStack, String, ItemPlaceholder.ParseResult> handler) {
         if (!(itemStack instanceof CraftItemStack)) return;
         net.minecraft.world.item.ItemStack nmsItemStack = ((CraftItemStack) itemStack).handle;
         Component name = nmsItemStack.get(DataComponents.CUSTOM_NAME);
         if (name != null) {
-            nmsItemStack.set(DataComponents.CUSTOM_NAME, CraftChatMessage.fromStringOrNull(handler.apply(itemStack, CraftChatMessage.fromComponent(name))));
+            String json = CraftChatMessage.toJSON(name);
+            ItemPlaceholder.ParseResult parsed = handler.apply(itemStack, json);
+            if (parsed.getChanged()) {
+                nmsItemStack.set(DataComponents.CUSTOM_NAME, CraftChatMessage.fromJSON(parsed.getText()));
+            }
         }
         ItemLore lore = nmsItemStack.get(DataComponents.LORE);
         if (lore != null) {
@@ -68,19 +74,27 @@ public class NMSHookerItemStack extends NMSHooker {
             if (!lines.isEmpty()) {
                 List<Component> newLines = new ArrayList<>();
                 for (Component line : lines) {
-                    newLines.add(CraftChatMessage.fromStringOrNull(handler.apply(itemStack, CraftChatMessage.fromComponent(line))));
+                    String json = CraftChatMessage.toJSON(line);
+                    ItemPlaceholder.ParseResult parsed = handler.apply(itemStack, json);
+                    if (parsed.getChanged()) {
+                        newLines.add(CraftChatMessage.fromJSON(parsed.getText()));
+                        edited = true;
+                    }
                 }
                 lines = newLines;
-                edited = true;
             }
             List<Component> styledLines = lore.styledLines();
             if (!styledLines.isEmpty()) {
                 List<Component> newStyledLines = new ArrayList<>();
                 for (Component styledLine : styledLines) {
-                    newStyledLines.add(CraftChatMessage.fromStringOrNull(handler.apply(itemStack, CraftChatMessage.fromComponent(styledLine))));
+                    String json = CraftChatMessage.toJSON(styledLine);
+                    ItemPlaceholder.ParseResult parsed = handler.apply(itemStack, json);
+                    if (parsed.getChanged()) {
+                        newStyledLines.add(CraftChatMessage.fromJSON(parsed.getText()));
+                        edited = true;
+                    }
                 }
                 styledLines = newStyledLines;
-                edited = true;
             }
             if (edited) {
                 nmsItemStack.set(DataComponents.LORE, new ItemLore(lines, styledLines));

@@ -302,7 +302,7 @@ object HookerManager {
      */
     @JvmStatic
     fun parseItemPlaceholder(itemStack: ItemStack, text: String): String {
-        return itemPlaceholder.parse(itemStack, text)
+        return itemPlaceholder.parse(itemStack, text).text
     }
 
     /**
@@ -313,7 +313,7 @@ object HookerManager {
     @JvmStatic
     fun ItemStack.getParsedName(): String {
         TranslationUtils.getDisplayName(this)?.let { displayName ->
-            return itemPlaceholder.parse(this, displayName)
+            return itemPlaceholder.parse(this, displayName).text
         }
         return TranslationUtils.getTranslationName(this)
     }
@@ -326,7 +326,7 @@ object HookerManager {
     @JvmStatic
     fun ItemStack.getParsedComponent(): BaseComponent {
         TranslationUtils.getDisplayName(this)?.let { displayName ->
-            return TextComponent(itemPlaceholder.parse(this, displayName))
+            return TextComponent(itemPlaceholder.parse(this, displayName).text)
         }
         return TranslationUtils.getTranslationComponent(this)
     }

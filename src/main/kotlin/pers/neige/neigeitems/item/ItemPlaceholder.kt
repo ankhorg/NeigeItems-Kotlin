@@ -54,11 +54,17 @@ object ItemPlaceholder {
                 val nbt = itemStack.getNbtOrNull() ?: return
                 val display = nbt.getCompound("display") ?: return
                 display.getString("Name")?.let { name ->
-                    display.putString("Name", parse(itemStack, name))
+                    val parsed = parse(itemStack, name)
+                    if (parsed.changed) {
+                        display.putString("Name", parsed.text)
+                    }
                 }
                 display.getList("Lore")?.let { lore ->
                     lore.forEachIndexed { index, nbt ->
-                        lore[index] = NbtString.valueOf(parse(itemStack, nbt.asString))
+                        val parsed = parse(itemStack, nbt.asString)
+                        if (parsed.changed) {
+                            lore[index] = NbtString.valueOf(parsed.text)
+                        }
                     }
                 }
             }
@@ -139,6 +145,8 @@ object ItemPlaceholder {
         } else null
     }
 
+    class ParseResult(val text: String, val changed: Boolean)
+
     /**
      * 根据物品解析物品变量
      *
@@ -146,12 +154,13 @@ object ItemPlaceholder {
      * @param text 待解析文本
      * @return 解析后文本
      */
-    fun parse(itemStack: ItemStack, text: String): String {
+    fun parse(itemStack: ItemStack, text: String): ParseResult {
         val chars = text.toCharArray()
         val builder = StringBuilder(text.length)
 
         val identifier = StringBuilder()
         val parameters = StringBuilder()
+        var changed = false
 
         var i = 0
         while (i < chars.size) {
@@ -239,9 +248,10 @@ object ItemPlaceholder {
             }
 
             builder.append(replacement)
+            changed = true
             i++
         }
 
-        return builder.toString()
+        return ParseResult((if (changed) builder.toString() else text),  changed)
     }
 }

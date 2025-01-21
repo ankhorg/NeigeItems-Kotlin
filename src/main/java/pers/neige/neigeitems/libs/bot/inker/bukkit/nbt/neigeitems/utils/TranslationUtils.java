@@ -103,6 +103,9 @@ public class TranslationUtils {
         if (itemStack instanceof RefCraftItemStack) {
             return getDisplayNameFromCraftItemStack(itemStack);
         } else {
+            if (MOJANG_MOTHER_DEAD) {
+                return getDisplayNameFromCraftItemStack(((RefBukkitItemStack) (Object) itemStack).craftDelegate);
+            }
             ItemMeta itemMeta = InvokeUtil.getItemMeta(itemStack);
             if (itemMeta != null && itemMeta.hasDisplayName()) {
                 return itemMeta.getDisplayName();
