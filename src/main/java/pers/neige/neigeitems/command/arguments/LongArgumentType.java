@@ -107,9 +107,6 @@ public class LongArgumentType implements ArgumentType<Long> {
             @NotNull StringReader reader
     ) throws CommandSyntaxException {
         Long result = CommandUtils.readLong(reader);
-        if (result == null) {
-            return minimum;
-        }
         return Math.min(Math.max(result, minimum), maximum);
     }
 

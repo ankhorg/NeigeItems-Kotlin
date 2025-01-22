@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.command.coordinates;
 
 import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -32,7 +33,7 @@ public class Coordinates {
         }
     }
 
-    public static Coordinates parse(StringReader reader) {
+    public static Coordinates parse(StringReader reader) throws CommandSyntaxException {
         int i = reader.getCursor();
         Coordinate x = readCoordinate(reader);
         if (reader.canRead() && reader.peek() == ' ') reader.skip();
@@ -42,7 +43,7 @@ public class Coordinates {
         return new Coordinates(x, y, z);
     }
 
-    private static Coordinate readCoordinate(StringReader reader) {
+    private static Coordinate readCoordinate(StringReader reader) throws CommandSyntaxException {
         if (!reader.canRead()) {
             return new Coordinate(LocationType.ABSOLUTE, 0.0);
         }
@@ -57,7 +58,6 @@ public class Coordinates {
             type = LocationType.ABSOLUTE;
         }
         Double value = (!reader.canRead() || reader.peek() == ' ') ? Double.valueOf(0.0) : CommandUtils.readDouble(reader);
-        if (value == null) return null;
         return new Coordinate(type, value);
     }
 

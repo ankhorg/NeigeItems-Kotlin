@@ -83,6 +83,10 @@ object Command {
                 val parse: ParseResults<CommandSender> = dispatcher.parse(args.joinToString(" "), sender)
                 if (parse.reader.canRead()) {
                     (parse.reader as StringReader).cursor = parse.reader.totalLength
+                    if (parse.exceptions.isNotEmpty()) {
+                        sender.sendMessage(parse.exceptions.values.first().rawMessage.string)
+                        return@setExecutor true
+                    }
                 }
                 return@setExecutor dispatcher.execute(parse) > 0
             }

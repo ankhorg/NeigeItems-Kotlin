@@ -1,10 +1,13 @@
 package pers.neige.neigeitems.command;
 
+import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import kotlin.text.StringsKt;
 import org.bukkit.command.CommandSender;
@@ -17,6 +20,10 @@ import java.math.BigInteger;
 import java.util.function.Consumer;
 
 public class CommandUtils {
+    private static final DynamicCommandExceptionType READER_INVALID_INT = new DynamicCommandExceptionType(value -> new LiteralMessage("'" + value + "' 不是一个有效的整数"));
+    private static final DynamicCommandExceptionType READER_INVALID_LONG = new DynamicCommandExceptionType(value -> new LiteralMessage("'" + value + "' 不是一个有效的长整数"));
+    private static final DynamicCommandExceptionType READER_INVALID_DOUBLE = new DynamicCommandExceptionType(value -> new LiteralMessage("'" + value + "' 不是一个有效的双精度浮点数"));
+
     @NotNull
     public static String readUnquotedString(StringReader reader) {
         int start = reader.getCursor();
@@ -33,19 +40,40 @@ public class CommandUtils {
         return text;
     }
 
-    @Nullable
-    public static Integer readInteger(StringReader reader) {
-        return StringsKt.toIntOrNull(readUnquotedString(reader));
+    @NotNull
+    public static Integer readInteger(StringReader reader) throws CommandSyntaxException {
+        final int start = reader.getCursor();
+        String number = readUnquotedString(reader);
+        Integer result = StringsKt.toIntOrNull(number);
+        if (result == null) {
+            reader.setCursor(start);
+            throw READER_INVALID_INT.createWithContext(reader, number);
+        }
+        return result;
     }
 
-    @Nullable
-    public static Long readLong(StringReader reader) {
-        return StringsKt.toLongOrNull(readUnquotedString(reader));
+    @NotNull
+    public static Long readLong(StringReader reader) throws CommandSyntaxException {
+        final int start = reader.getCursor();
+        String number = readUnquotedString(reader);
+        Long result = StringsKt.toLongOrNull(number);
+        if (result == null) {
+            reader.setCursor(start);
+            throw READER_INVALID_LONG.createWithContext(reader, number);
+        }
+        return result;
     }
 
-    @Nullable
-    public static Double readDouble(StringReader reader) {
-        return StringsKt.toDoubleOrNull(readUnquotedString(reader));
+    @NotNull
+    public static Double readDouble(StringReader reader) throws CommandSyntaxException {
+        final int start = reader.getCursor();
+        String number = readUnquotedString(reader);
+        Double result = StringsKt.toDoubleOrNull(number);
+        if (result == null) {
+            reader.setCursor(start);
+            throw READER_INVALID_DOUBLE.createWithContext(reader, number);
+        }
+        return result;
     }
 
     @Nullable

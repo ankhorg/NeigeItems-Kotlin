@@ -3,6 +3,7 @@ package pers.neige.neigeitems.command.arguments;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import org.bukkit.Location;
@@ -59,7 +60,7 @@ public class LocationArgumentType implements ArgumentType<Coordinates> {
     @Override
     public Coordinates parse(
             @NotNull StringReader reader
-    ) {
+    ) throws CommandSyntaxException {
         return Coordinates.parse(reader);
     }
 

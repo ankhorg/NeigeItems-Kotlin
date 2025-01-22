@@ -1,13 +1,14 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.inksnow.ankhinvoke.gradle.ApplyReferenceTask
 import org.inksnow.ankhinvoke.gradle.BuildMappingsTask
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `java-library`
     `maven-publish`
     id("org.jetbrains.kotlin.jvm") version "2.0.20"
     id("org.jetbrains.dokka") version "1.9.20"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.gradleup.shadow") version "8.3.5"
     id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.18-SNAPSHOT"
 }
 
@@ -42,9 +43,8 @@ subprojects {
     }
 
     tasks.compileKotlin {
-        kotlinOptions {
-            jvmTarget = "1.8"
-            freeCompilerArgs = listOf("-Xextended-compiler-checks")
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
         }
     }
 

@@ -107,9 +107,6 @@ public class IntegerArgumentType implements ArgumentType<Integer> {
             @NotNull StringReader reader
     ) throws CommandSyntaxException {
         Integer result = CommandUtils.readInteger(reader);
-        if (result == null) {
-            return minimum;
-        }
         return Math.min(Math.max(result, minimum), maximum);
     }
 
