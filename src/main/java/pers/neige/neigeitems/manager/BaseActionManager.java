@@ -945,6 +945,30 @@ public abstract class BaseActionManager {
             int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
             player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         });
+        // 发送全体Title
+        addConsumer("broadcast-title", false, (context, content) -> {
+            ArrayList<String> args = StringUtils.split(ChatColor.translateAlternateColorCodes('&', content), ' ', '\\');
+            String title = getOrNull(args, 0);
+            String subtitle = getOrDefault(args, 1, "");
+            int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
+            int stay = getAndApply(args, 3, 70, StringsKt::toIntOrNull);
+            int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+            }
+        });
+        // 发送全体Title(不将&解析为颜色符号)
+        addConsumer("broadcast-title-no-color", false, (context, content) -> {
+            ArrayList<String> args = StringUtils.split(content, ' ', '\\');
+            String title = getOrNull(args, 0);
+            String subtitle = getOrDefault(args, 1, "");
+            int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
+            int stay = getAndApply(args, 3, 70, StringsKt::toIntOrNull);
+            int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
+            }
+        });
         // 发送ActionBar
         addConsumer("actionbar", (context, content) -> {
             Player player = context.getPlayer();
