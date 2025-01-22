@@ -252,6 +252,6 @@ object ItemPlaceholder {
             i++
         }
 
-        return ParseResult((if (changed) builder.toString() else text),  changed)
+        return ParseResult((if (changed) builder.toString() else text), changed)
     }
 }

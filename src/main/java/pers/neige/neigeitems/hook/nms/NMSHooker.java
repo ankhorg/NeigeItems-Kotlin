@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.hook.nms;
 
-import kotlin.Pair;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.ItemTag;
 import net.md_5.bungee.api.chat.hover.content.Text;

@@ -425,7 +425,7 @@ public abstract class BaseActionManager {
             @NotNull ActionContext context
     ) {
         // 如果条件通过
-        if (action.getCondition().check(context).getType() == ResultType.SUCCESS) {
+        if (action.getCondition().easyCheck(context)) {
             // 执行动作
             SchedulerUtils.sync(plugin, () -> action.getSync().evalAsyncSafe(this, context));
             SchedulerUtils.async(plugin, () -> action.getAsync().evalAsyncSafe(this, context));
@@ -527,7 +527,7 @@ public abstract class BaseActionManager {
             @NotNull ConditionWeightAction action,
             @NotNull ActionContext context
     ) {
-        List<Pair<Action, Double>> actions = action.getActions(this, context);
+        List<Pair<Action, Double>> actions = action.getActions(context);
         if (actions.isEmpty()) return CompletableFuture.completedFuture(Results.SUCCESS);
         int amount = action.getAmount(this, context);
         if (amount >= actions.size()) {
@@ -581,7 +581,7 @@ public abstract class BaseActionManager {
             @NotNull ActionContext context
     ) {
         // while循环判断条件
-        if (action.getCondition().check(context).getType() == ResultType.SUCCESS) {
+        if (action.getCondition().easyCheck(context)) {
             return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
                 // 执行中止
                 if (result.getType() == ResultType.STOP) {

@@ -49,7 +49,7 @@ public class User {
     public void clearChatCatcher() {
         synchronized (chatCatchers) {
             ChatCatcher catcher;
-            while((catcher = chatCatchers.poll()) != null) {
+            while ((catcher = chatCatchers.poll()) != null) {
                 catcher.future.complete(null);
             }
         }
@@ -71,7 +71,7 @@ public class User {
     public void clearSignCatcher() {
         synchronized (signCatchers) {
             SignCatcher catcher;
-            while((catcher = signCatchers.poll()) != null) {
+            while ((catcher = signCatchers.poll()) != null) {
                 catcher.future.complete(null);
             }
         }

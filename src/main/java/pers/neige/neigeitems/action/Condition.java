@@ -30,7 +30,12 @@ public class Condition {
         }
     }
 
+    @NotNull
     public ActionResult check(@NotNull ActionContext context) {
         return manager.parseCondition(conditionString, condition, context);
+    }
+
+    public boolean easyCheck(@NotNull ActionContext context) {
+        return manager.parseCondition(conditionString, condition, context).getType() == ResultType.SUCCESS;
     }
 }

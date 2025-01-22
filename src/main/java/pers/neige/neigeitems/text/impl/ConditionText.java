@@ -62,7 +62,7 @@ public class ConditionText implements Text {
             @NotNull ActionContext context,
             Function<String, T> converter
     ) {
-        if (condition.check(context).getType() == ResultType.SUCCESS) {
+        if (condition.easyCheck(context)) {
             return text.getText(result, manager, context, converter);
         } else {
             return deny.getText(result, manager, context, converter);

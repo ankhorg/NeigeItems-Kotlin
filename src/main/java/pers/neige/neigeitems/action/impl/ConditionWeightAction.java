@@ -134,11 +134,11 @@ public class ConditionWeightAction extends Action {
     }
 
     @NotNull
-    public List<Pair<Action, Double>> getActions(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
+    public List<Pair<Action, Double>> getActions(@NotNull ActionContext context) {
         List<Pair<Action, Double>> result = new ArrayList<>();
         for (Pair<Pair<Condition, Action>, Double> action : this.actions) {
             Pair<Condition, Action> info = action.getFirst();
-            if (info.getFirst().check(context).getType() != ResultType.STOP) {
+            if (info.getFirst().easyCheck(context)) {
                 result.add(new Pair<>(info.getSecond(), action.getSecond()));
             }
         }
