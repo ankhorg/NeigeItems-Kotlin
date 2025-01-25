@@ -20,9 +20,9 @@ tasks {
             io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
     }
 
-    build {
-        dependsOn(reobfJar)
-    }
+//    build {
+//        dependsOn(reobfJar)
+//    }
 
     compileJava {
         options.release.set(21)

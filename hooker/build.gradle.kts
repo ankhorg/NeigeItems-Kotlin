@@ -27,7 +27,8 @@ dependencies {
     implementation(project(":hooker:nms:v1_12_R1"))
     implementation(project(":hooker:nms:v1_14_R1"))
     implementation(project(":hooker:nms:v1_16_R2"))
-    implementation(project(path = ":hooker:nms:v1_21+", configuration = "reobf"))
+    implementation(project(":hooker:nms:v1_21+"))
+//     implementation(project(path = ":hooker:nms:v1_21+", configuration = "reobf"))
 }
 
 tasks {
