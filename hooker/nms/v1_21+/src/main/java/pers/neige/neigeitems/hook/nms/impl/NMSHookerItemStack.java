@@ -79,6 +79,8 @@ public class NMSHookerItemStack extends NMSHooker {
                     if (parsed.getChanged()) {
                         newLines.add(CraftChatMessage.fromJSON(parsed.getText()));
                         edited = true;
+                    } else {
+                        newLines.add(line);
                     }
                 }
                 lines = newLines;
@@ -92,6 +94,8 @@ public class NMSHookerItemStack extends NMSHooker {
                     if (parsed.getChanged()) {
                         newStyledLines.add(CraftChatMessage.fromJSON(parsed.getText()));
                         edited = true;
+                    } else {
+                        newStyledLines.add(styledLine);
                     }
                 }
                 styledLines = newStyledLines;
