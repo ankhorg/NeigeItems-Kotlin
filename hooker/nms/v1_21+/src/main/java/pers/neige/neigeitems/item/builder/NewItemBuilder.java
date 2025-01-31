@@ -1,8 +1,21 @@
 package pers.neige.neigeitems.item.builder;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.DataResult;
 import kotlin.text.StringsKt;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.component.CustomModelData;
@@ -13,6 +26,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.craftbukkit.CraftRegistry;
 import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
@@ -21,8 +35,10 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
 import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.ItemUtils;
 
@@ -30,8 +46,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 public class NewItemBuilder extends ItemBuilder {
+    private static final CommandBuildContext registries = Commands.createValidationContext(CraftRegistry.getMinecraftRegistry());
+    private static final RegistryOps<Tag> registryOps = registries.createSerializationContext(NbtOps.INSTANCE);
+
     @NotNull
     private final Set<ItemFlag> hideFlag = new HashSet<>();
     @NotNull
@@ -44,6 +64,7 @@ public class NewItemBuilder extends ItemBuilder {
     private ResourceLocation tooltipStyle = null;
     private boolean hideTooltip = false;
     private boolean hideAdditionalTooltip = false;
+    private DataComponentPatch components = null;
 
     public NewItemBuilder() {
     }
@@ -176,8 +197,40 @@ public class NewItemBuilder extends ItemBuilder {
                     }
                     break;
                 }
+                case "components": {
+                    ConfigurationSection componentsConfig = config.getConfigurationSection(key);
+                    if (componentsConfig != null) {
+                        DataComponentPatch.Builder builder = DataComponentPatch.builder();
+                        for (String componentKey : componentsConfig.getKeys(false)) {
+                            String componentValue = componentsConfig.getString(componentKey);
+                            if (componentValue == null) continue;
+                            DataComponentType<?> type = (DataComponentType<?>) InvokeUtil.getDataComponentType(componentKey);
+                            if (type == null) {
+                                NeigeItems.getInstance().getLogger().warning("Unknown component type: " + componentKey);
+                                continue;
+                            }
+                            try {
+                                loadComponent(builder, type, componentValue);
+                            } catch (CommandSyntaxException e) {
+                                NeigeItems.getInstance().getLogger().log(Level.WARNING, "Invalid component value: " + componentValue, e);
+                            }
+                        }
+                        components = builder.build();
+                    }
+                    break;
+                }
             }
         }
+    }
+
+    public <T> void loadComponent(
+            @NotNull DataComponentPatch.Builder builder,
+            @NotNull DataComponentType<T> type,
+            @NotNull String value
+    ) throws CommandSyntaxException {
+        Tag tag = new TagParser(new StringReader(value)).readValue();
+        DataResult<T> result = type.codecOrThrow().parse(registryOps, tag);
+        builder.set(type, result.getOrThrow());
     }
 
     /**
@@ -261,6 +314,9 @@ public class NewItemBuilder extends ItemBuilder {
         }
         if (hideAdditionalTooltip) {
             handle.set(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
+        }
+        if (components != null) {
+            handle.applyComponents(components);
         }
         NbtCompound nbt = ItemUtils.getNbt(result);
         if (preCoverNbt != null) {
