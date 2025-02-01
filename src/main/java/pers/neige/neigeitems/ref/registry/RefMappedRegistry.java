@@ -21,4 +21,7 @@ public class RefMappedRegistry<T> implements RefWritableRegistry<T> {
 
     @Override
     public native T getValue(@Nullable RefMinecraftKey id);
+
+    @Override
+    public native T get(@Nullable RefMinecraftKey id);
 }

@@ -79,6 +79,7 @@ public class InvokeUtil {
     }
 
     public static Object getDataComponentType(String id) {
+        if (CbVersion.current() == CbVersion.v1_21_R1) return RefBuiltInRegistries.DATA_COMPONENT_TYPE.get(RefMinecraftKey.parse(id));
         return RefBuiltInRegistries.DATA_COMPONENT_TYPE.getValue(RefMinecraftKey.parse(id));
     }
 }

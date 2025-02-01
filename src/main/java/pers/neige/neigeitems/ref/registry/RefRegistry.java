@@ -9,4 +9,7 @@ import javax.annotation.Nullable;
 public interface RefRegistry<T> {
     @HandleBy(reference = "Lnet/minecraft/core/Registry;getValue(Lnet/minecraft/resources/ResourceLocation;)Ljava/lang/Object;", isInterface = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     T getValue(@Nullable RefMinecraftKey id);
+
+    @HandleBy(reference = "Lnet/minecraft/core/Registry;get(Lnet/minecraft/resources/ResourceLocation;)Ljava/lang/Object;", isInterface = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    T get(@Nullable RefMinecraftKey id);
 }
