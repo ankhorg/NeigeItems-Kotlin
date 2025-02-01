@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.ref.nbt;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.ref.item.RefItem;
 
 @HandleBy(reference = "net/minecraft/world/level/ItemLike", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_13_R1/IMaterial", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")

@@ -1,8 +1,10 @@
 package pers.neige.neigeitems.ref.nbt;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.core.component.RefDataComponentType;
 import pers.neige.neigeitems.ref.core.component.RefPatchedDataComponentMap;
+import pers.neige.neigeitems.ref.item.RefItem;
 
 import javax.annotation.Nullable;
 
@@ -60,4 +62,7 @@ public final class RefNmsItemStack {
     @Nullable
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;set(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public native <T> T set(RefDataComponentType<? super T> type, @Nullable T value);
+
+    @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;getDisplayName()Lnet/minecraft/network/chat/Component;", predicates = "craftbukkit_version:[v1_20_R4,)")
+    public native RefComponent getDisplayName();
 }

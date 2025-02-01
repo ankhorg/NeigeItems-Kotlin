@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("io.papermc.paperweight.userdev") version "1.7.3"
+    id("io.papermc.paperweight.userdev") version "1.7.7"
 }
 
 repositories {

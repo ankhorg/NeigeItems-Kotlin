@@ -20,6 +20,7 @@ import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
 import pers.neige.neigeitems.ref.core.component.RefDataComponentHolder;
 import pers.neige.neigeitems.ref.core.component.RefDataComponents;
+import pers.neige.neigeitems.ref.core.component.RefResolvableProfile;
 import pers.neige.neigeitems.ref.entity.RefCraftEntity;
 import pers.neige.neigeitems.ref.entity.RefEntity;
 import pers.neige.neigeitems.ref.entity.RefEntityTypes;
@@ -267,14 +268,23 @@ public class TranslationUtils {
         if (itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
             nmsItemStack = ((RefCraftItemStack) itemStack).handle;
         } else {
-            nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
+            if (MOJANG_MOTHER_DEAD) {
+                nmsItemStack = ((RefCraftItemStack) ((RefBukkitItemStack) (Object) itemStack).craftDelegate).handle;
+            } else {
+                nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
+            }
         }
         RefItem item = nmsItemStack.getItem();
         String result = null;
         // 玩家头颅和成书的翻译键, 全版本都需要特殊处理
         // 玩家头颅
         if (item instanceof RefItemSkull) {
-            if (
+            if (MOJANG_MOTHER_DEAD) {
+                RefResolvableProfile resolvableProfile = nmsItemStack.components.get(RefDataComponents.PROFILE);
+                if (resolvableProfile != null && resolvableProfile.name().isPresent()) {
+                    result = LocaleI18n.translate(item.getDescriptionId() + ".named").replaceFirst("%s", resolvableProfile.name().get());
+                }
+            } else if (
                 // 1.13+ 肯定是玩家头颅, 1.12.2 需要检测损伤值
                     (CbVersion.v1_13_R1.isSupport() || itemStack.getDurability() == 3)
                             // NBT 检测
@@ -313,7 +323,17 @@ public class TranslationUtils {
                 }
             }
         }
-        if (CbVersion.v1_13_R1.isSupport()) {
+        if (MOJANG_MOTHER_DEAD) {
+            if (item instanceof RefItemCompass) {
+                if (nmsItemStack.components.has(RefDataComponents.LODESTONE_TRACKER)) {
+                    result =  LocaleI18n.translate("item.minecraft.lodestone_compass");
+                }
+            }
+            if (result == null) {
+                String translationKey = item.getDescriptionId();
+                result = LocaleI18n.translate(translationKey);
+            }
+        } else if (CbVersion.v1_13_R1.isSupport()) {
             if (result == null) {
                 String translationKey = item.getDescriptionId(nmsItemStack);
                 result = LocaleI18n.translate(translationKey);

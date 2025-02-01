@@ -9,6 +9,6 @@ import org.jetbrains.annotations.Nullable;
 public final class RefBukkitItemStack {
     @HandleBy(reference = "Lorg/bukkit/inventory/ItemStack;meta:Lorg/bukkit/inventory/meta/ItemMeta;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,)")
     public @Nullable ItemMeta meta;
-    @HandleBy(reference = "Lorg/bukkit/inventory/ItemStack;craftDelegate:Lorg/bukkit/inventory/ItemStack;", useAccessor = true, predicates = "craftbukkit_version:[v1_21_R1,)")
+    @HandleBy(reference = "Lorg/bukkit/inventory/ItemStack;craftDelegate:Lorg/bukkit/inventory/ItemStack;", useAccessor = true, predicates = "craftbukkit_version:[v1_20_R4,)")
     public ItemStack craftDelegate;
 }

@@ -2,7 +2,6 @@ package pers.neige.neigeitems.ref.item;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
 import pers.neige.neigeitems.ref.RefMinecraftKey;
-import pers.neige.neigeitems.ref.nbt.RefItem;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
 
 @HandleBy(reference = "net/minecraft/world/item/SpawnEggItem", predicates = "craftbukkit_version:[v1_17_R1,)")
