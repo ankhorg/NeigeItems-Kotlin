@@ -65,4 +65,7 @@ public final class RefNmsItemStack {
 
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;getDisplayName()Lnet/minecraft/network/chat/Component;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public native RefComponent getDisplayName();
+
+//    @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;applyComponents(Lnet/minecraft/core/component/DataComponentPatch;)V", predicates = "craftbukkit_version:[v1_20_R4,)")
+//    public native void applyComponents(DataComponentPatch changes);
 }

@@ -326,7 +326,7 @@ public class TranslationUtils {
         if (MOJANG_MOTHER_DEAD) {
             if (item instanceof RefItemCompass) {
                 if (nmsItemStack.components.has(RefDataComponents.LODESTONE_TRACKER)) {
-                    result =  LocaleI18n.translate("item.minecraft.lodestone_compass");
+                    result = LocaleI18n.translate("item.minecraft.lodestone_compass");
                 }
             }
             if (result == null) {

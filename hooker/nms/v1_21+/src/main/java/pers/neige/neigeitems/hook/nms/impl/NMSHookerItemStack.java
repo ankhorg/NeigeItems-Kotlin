@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.hook.nms.impl;
 
-import kotlin.Pair;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.component.ItemLore;

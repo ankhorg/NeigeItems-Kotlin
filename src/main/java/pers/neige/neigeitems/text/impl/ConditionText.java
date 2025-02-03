@@ -4,7 +4,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.Condition;
-import pers.neige.neigeitems.action.ResultType;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.text.Text;
 

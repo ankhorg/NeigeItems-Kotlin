@@ -4,11 +4,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import pers.neige.neigeitems.JvmHacker;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import pers.neige.neigeitems.ref.RefMinecraftKey;
 import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
 import pers.neige.neigeitems.ref.nbt.RefCraftMetaItem;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
-import pers.neige.neigeitems.ref.registry.RefBuiltInRegistries;
 
 import java.lang.invoke.MethodHandle;
 
@@ -72,13 +70,5 @@ public class InvokeUtil {
         } catch (Throwable e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static Object getDATA_COMPONENT_TYPE() {
-        return RefBuiltInRegistries.DATA_COMPONENT_TYPE;
-    }
-
-    public static Object getDataComponentType(String id) {
-        return RefBuiltInRegistries.DATA_COMPONENT_TYPE.getValue(RefMinecraftKey.parse(id));
     }
 }

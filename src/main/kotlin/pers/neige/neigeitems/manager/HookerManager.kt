@@ -290,7 +290,8 @@ object HookerManager {
      */
     @JvmStatic
     fun requestPapi(player: OfflinePlayer, identifier: String, parameters: String): String {
-        return papiHooker?.request(player, identifier, parameters) ?: "%${identifier}${if (parameters.isEmpty()) "" else "_"}$parameters%"
+        return papiHooker?.request(player, identifier, parameters)
+            ?: "%${identifier}${if (parameters.isEmpty()) "" else "_"}$parameters%"
     }
 
     /**

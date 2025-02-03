@@ -617,6 +617,8 @@ object ItemManager : ItemConfigManager() {
             val pre = itemInfo.itemTag.getDeep(key) ?: return@forEach
             newItemTag.putDeep(key, pre)
         }
+        // 将新物品的组件覆盖至原物品
+        NbtUtils.setComponents(this, newItemStack)
         // 将新物品的NBT覆盖至原物品
         itemInfo.nbtItemStack.setTag(newItemTag)
     }

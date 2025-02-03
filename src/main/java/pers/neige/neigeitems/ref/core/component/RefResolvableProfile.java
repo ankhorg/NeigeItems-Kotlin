@@ -1,8 +1,6 @@
 package pers.neige.neigeitems.ref.core.component;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
-import pers.neige.neigeitems.ref.chat.RefComponent;
-import pers.neige.neigeitems.ref.world.item.component.RefCustomData;
 
 import java.util.Optional;
 

@@ -6,11 +6,9 @@ import com.mojang.serialization.DataResult;
 import kotlin.text.StringsKt;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.Commands;
-import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.TagParser;
@@ -38,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
 import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.ItemUtils;
 
@@ -204,7 +202,7 @@ public class NewItemBuilder extends ItemBuilder {
                         for (String componentKey : componentsConfig.getKeys(false)) {
                             String componentValue = componentsConfig.getString(componentKey);
                             if (componentValue == null) continue;
-                            DataComponentType<?> type = (DataComponentType<?>) InvokeUtil.getDataComponentType(componentKey);
+                            DataComponentType<?> type = (DataComponentType<?>) ComponentUtils.getDataComponentType(componentKey);
                             if (type == null) {
                                 NeigeItems.getInstance().getLogger().warning("Unknown component type: " + componentKey);
                                 continue;
