@@ -6,6 +6,7 @@ import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.item.ItemCheck
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.neigeitems.manager.ItemManager.checkDurability
 import pers.neige.neigeitems.utils.ItemUtils.getDamage
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.setDamage
@@ -32,9 +33,7 @@ object TickInventory {
                     if (ConfigManager.forceSync && itemInfo.neigeItems.containsKey("durability")) {
                         val durability = itemInfo.neigeItems.getInt("durability")
                         val maxDurability = itemInfo.neigeItems.getInt("maxDurability")
-                        val theoreticalDamage =
-                            (itemStack.type.maxDurability * (1 - (durability.toDouble() / maxDurability))).toInt()
-                                .toShort()
+                        val theoreticalDamage = itemStack.checkDurability(durability, maxDurability)
                         if (itemStack.getDamage() != theoreticalDamage) {
                             itemStack.setDamage(theoreticalDamage)
                         }

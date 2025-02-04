@@ -14,9 +14,10 @@ import org.bukkit.event.player.PlayerItemMendEvent
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.HookerManager
-import pers.neige.neigeitems.manager.ItemManager.addCustomDurability
+import pers.neige.neigeitems.manager.ItemManager.refreshDurability
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getDamage
+import pers.neige.neigeitems.utils.ItemUtils.getDirectTag
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.LangUtils.getLang
@@ -139,7 +140,30 @@ object ItemDurability {
      * 经验修补
      */
     fun itemMend(event: PlayerItemMendEvent) {
-        event.item.addCustomDurability(event.repairAmount)
+        val itemStack = event.item
+        // 直掏NBT
+        val directTag = itemStack.getDirectTag() ?: return
+        // 不是NI物品还加个屁的自定义耐久
+        val neigeItems = directTag.getCompound("NeigeItems") ?: return
+        // 获取物品耐久值
+        val durability = neigeItems.getIntOrNull("durability") ?: return
+        event.isCancelled = true
+        event.experienceOrb.experience -= event.repairAmount / 2
+        // 获取物品最大耐久值
+        val maxDurability = neigeItems.getInt("maxDurability")
+        // 计算新耐久值
+        val newDurability = (durability + event.repairAmount).coerceAtMost(maxDurability).coerceAtLeast(0)
+        // 获取物品是否破坏(默认破坏)
+        val itemBreak = neigeItems.getBoolean("itemBreak", true)
+        // 破坏
+        if (newDurability == 0 && itemBreak) {
+            itemStack.amount = 0
+            // 不破坏
+        } else {
+            // 修改耐久值
+            neigeItems.putInt("durability", newDurability)
+            itemStack.refreshDurability(newDurability, maxDurability)
+        }
     }
 
     /**

@@ -439,7 +439,7 @@ object ItemManager : ItemConfigManager() {
         } else {
             // 修改耐久值
             neigeItems.putInt("durability", newDurability)
-            this.setDamage((type.maxDurability * (1 - (newDurability.toDouble() / maxDurability))).toInt().toShort())
+            this.refreshDurability(newDurability, maxDurability)
         }
     }
 
@@ -469,7 +469,7 @@ object ItemManager : ItemConfigManager() {
         } else {
             // 修改耐久值
             neigeItems.putInt("durability", newDurability)
-            this.setDamage((type.maxDurability * (1 - (newDurability.toDouble() / maxDurability))).toInt().toShort())
+            this.refreshDurability(newDurability, maxDurability)
         }
     }
 
@@ -492,7 +492,7 @@ object ItemManager : ItemConfigManager() {
         neigeItems.putInt("durability", durability)
         // 修改最大耐久值
         neigeItems.putInt("maxDurability", realAmount)
-        this.setDamage((type.maxDurability * (1 - (durability.toDouble() / realAmount))).toInt().toShort())
+        this.refreshDurability(durability, realAmount)
     }
 
     /**
@@ -514,7 +514,44 @@ object ItemManager : ItemConfigManager() {
         neigeItems.putInt("durability", durability)
         // 修改最大耐久值
         neigeItems.putInt("maxDurability", maxDurability)
-        this.setDamage((type.maxDurability * (1 - (durability.toDouble() / maxDurability))).toInt().toShort())
+        this.refreshDurability(durability, maxDurability)
+    }
+
+    /**
+     * 根据自定义耐久计算原版损伤值
+     *
+     * @param current 当前自定义耐久
+     * @param max 当前最大自定义耐久
+     * @return 对应的原版损伤值
+     */
+    @JvmStatic
+    fun ItemStack.checkDurability(current: Int, max: Int): Short {
+        // 耐久百分比
+        val p = current.toDouble() / max
+        // 损伤值百分比
+        val dp = 1 - p
+        // 损伤值
+        var d = (type.maxDurability * dp).toInt().toShort()
+        // 没满就是没满
+        if (d <= 0 && current < max) {
+            d = 1
+        }
+        // 没碎就是没碎
+        if (d >= type.maxDurability && current > 0) {
+            d = (d - 1).toShort()
+        }
+        return d
+    }
+
+    /**
+     * 根据自定义耐久设置原版损伤值
+     *
+     * @param current 当前自定义耐久
+     * @param max 当前最大自定义耐久
+     */
+    @JvmStatic
+    fun ItemStack.refreshDurability(current: Int, max: Int) {
+        this.setDamage(this.checkDurability(current, max))
     }
 
     /**
