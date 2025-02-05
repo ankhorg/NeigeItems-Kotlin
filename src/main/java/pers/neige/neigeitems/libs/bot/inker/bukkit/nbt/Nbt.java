@@ -78,4 +78,10 @@ public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike {
     public String getAsString() {
         return delegate.asString();
     }
+
+    public static class Unsafe {
+        public static Object getDelegate(Nbt<?> nbt) {
+            return nbt.delegate;
+        }
+    }
 }

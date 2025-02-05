@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.item.builder;
 
-import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.DataResult;
 import kotlin.text.StringsKt;
@@ -11,7 +10,6 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.TagParser;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
@@ -34,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
@@ -200,7 +199,7 @@ public class NewItemBuilder extends ItemBuilder {
                     if (componentsConfig != null) {
                         DataComponentPatch.Builder builder = DataComponentPatch.builder();
                         for (String componentKey : componentsConfig.getKeys(false)) {
-                            String componentValue = componentsConfig.getString(componentKey);
+                            Object componentValue = componentsConfig.get(componentKey);
                             if (componentValue == null) continue;
                             DataComponentType<?> type = (DataComponentType<?>) ComponentUtils.getDataComponentType(componentKey);
                             if (type == null) {
@@ -224,9 +223,9 @@ public class NewItemBuilder extends ItemBuilder {
     public <T> void loadComponent(
             @NotNull DataComponentPatch.Builder builder,
             @NotNull DataComponentType<T> type,
-            @NotNull String value
+            @NotNull Object value
     ) throws CommandSyntaxException {
-        Tag tag = new TagParser(new StringReader(value)).readValue();
+        Tag tag = (Tag) Nbt.Unsafe.getDelegate(ItemUtils.toNbt(value));
         DataResult<T> result = type.codecOrThrow().parse(registryOps, tag);
         builder.set(type, result.getOrThrow());
     }
