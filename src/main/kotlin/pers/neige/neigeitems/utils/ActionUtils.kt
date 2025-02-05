@@ -2,11 +2,11 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.item.action.ActionTrigger
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.neigeitems.manager.UserManager
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
@@ -58,7 +58,7 @@ object ActionUtils {
      */
     @JvmStatic
     fun ActionTrigger.isCoolDown(player: Player, cd: Long): Boolean {
-        val user = NeigeItems.getUserManager()[player.uniqueId] ?: return true
+        val user = UserManager.INSTANCE[player.uniqueId] ?: return true
         val leftTime = user.checkCooldown("CD-$group", cd)
         if (leftTime > 0) {
             ConfigManager.config.getString("Messages.itemCooldown")?.let {

@@ -165,9 +165,8 @@ tasks.compileJava {
 }
 
 tasks.compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = listOf("-Xextended-compiler-checks")
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_1_8)
     }
 }
 

@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.metadata.Metadatable
 import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.manager.UserManager
 
 /**
  * 玩家相关工具类
@@ -82,7 +83,7 @@ object PlayerUtils {
      */
     @JvmStatic
     fun Player.hasMetadataEZ(key: String): Boolean {
-        val user = NeigeItems.getUserManager()[uniqueId] ?: return false
+        val user = UserManager.INSTANCE[uniqueId] ?: return false
         return user.metadata.containsKey(key)
     }
 
@@ -95,7 +96,7 @@ object PlayerUtils {
      */
     @JvmStatic
     fun Player.getMetadataEZ(key: String, def: Any): Any? {
-        val user = NeigeItems.getUserManager()[uniqueId] ?: return def
+        val user = UserManager.INSTANCE[uniqueId] ?: return def
         return user.metadata.getOrDefault(key, def)
     }
 
@@ -107,7 +108,7 @@ object PlayerUtils {
      */
     @JvmStatic
     fun Player.setMetadataEZ(key: String, value: Any) {
-        val user = NeigeItems.getUserManager()[uniqueId] ?: return
+        val user = UserManager.INSTANCE[uniqueId] ?: return
         user.metadata[key] = value
     }
 

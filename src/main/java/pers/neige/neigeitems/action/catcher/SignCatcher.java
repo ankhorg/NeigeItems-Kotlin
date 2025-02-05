@@ -14,6 +14,7 @@ import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.annotation.Awake;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.manager.UserManager;
 import pers.neige.neigeitems.user.User;
 import pers.neige.neigeitems.utils.SchedulerUtils;
 
@@ -53,7 +54,7 @@ public class SignCatcher {
                         @Override
                         public void onPacketReceiving(PacketEvent event) {
                             Player player = event.getPlayer();
-                            User user = NeigeItems.getUserManager().get(player.getUniqueId());
+                            User user = UserManager.INSTANCE.get(player.getUniqueId());
                             if (user == null) return;
                             SignCatcher catcher = user.pollSignCatcher();
                             if (catcher == null) return;

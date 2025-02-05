@@ -1,10 +1,10 @@
 package pers.neige.neigeitems.listener
 
 import org.bukkit.event.player.PlayerJoinEvent
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Listener
 import pers.neige.neigeitems.item.ItemColor
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils
+import pers.neige.neigeitems.manager.UserManager
 import pers.neige.neigeitems.network.ChannelHandler
 import pers.neige.neigeitems.task.Updater
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -22,7 +22,7 @@ object PlayerJoinListener {
         // 初始化掉落物颜色Team
         ItemColor.initTeam(event.player)
         // 初始化User
-        NeigeItems.getUserManager().create(event.player.uniqueId)
+        UserManager.INSTANCE.create(event.player.uniqueId)
         // 为op发送更新检测信息
         if (!event.player.isOp) return
         if (Updater.latestVersion == null || Updater.latestVersion == Updater.currentVersion) return

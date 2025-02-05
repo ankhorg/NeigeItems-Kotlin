@@ -13,7 +13,6 @@ dependencies {
     compileOnly(project(":"))
 }
 
-
 tasks {
     assemble {
         paperweight.reobfArtifactConfiguration =

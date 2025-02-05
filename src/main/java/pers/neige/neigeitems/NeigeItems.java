@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import pers.neige.neigeitems.manager.UserManager;
 import pers.neige.neigeitems.scanner.ClassScanner;
 
 import java.io.File;
@@ -25,7 +24,6 @@ import java.util.HashSet;
 
 public class NeigeItems extends JavaPlugin {
     private static final Logger logger;
-    private static final UserManager userManager = new UserManager();
     private static NeigeItems INSTANCE;
 
     static {
@@ -74,10 +72,6 @@ public class NeigeItems extends JavaPlugin {
 
     public static NeigeItems getInstance() {
         return INSTANCE;
-    }
-
-    public static UserManager getUserManager() {
-        return userManager;
     }
 
     public void onInit() {

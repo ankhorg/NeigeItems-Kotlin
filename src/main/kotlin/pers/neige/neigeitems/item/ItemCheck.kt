@@ -2,10 +2,10 @@ package pers.neige.neigeitems.item
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.event.ItemExpirationEvent
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.manager.UserManager
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 
@@ -47,7 +47,7 @@ object ItemCheck {
      */
     fun Player.couldCheckInventory(): Boolean {
         if (!ConfigManager.checkInventory) return false
-        val user = NeigeItems.getUserManager()[uniqueId] ?: return false
+        val user = UserManager.INSTANCE[uniqueId] ?: return false
         return user.checkCooldown("CheckInvCD", 1000) <= 0
     }
 }
