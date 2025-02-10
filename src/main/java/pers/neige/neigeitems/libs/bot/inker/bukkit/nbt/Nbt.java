@@ -83,5 +83,9 @@ public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike {
         public static Object getDelegate(Nbt<?> nbt) {
             return nbt.delegate;
         }
+
+        public static @Nullable Nbt<?> fromNms(@Nullable Object source) {
+            return Nbt.fromNms((RefNbtBase) source);
+        }
     }
 }

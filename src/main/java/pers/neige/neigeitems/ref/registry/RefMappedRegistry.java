@@ -20,5 +20,8 @@ public class RefMappedRegistry<T> implements RefWritableRegistry<T> {
     public native RefRegistryLookup<T> asLookup();
 
     @Override
+    public native RefMinecraftKey getKey(T value);
+
+    @Override
     public native T getValue(@Nullable RefMinecraftKey id);
 }

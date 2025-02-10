@@ -22,7 +22,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     private Set<String> oldKeySet;
     private Set<Entry<String, Nbt<?>>> oldEntrySet;
 
-    public NbtCompound(RefNbtTagCompound delegate) {
+    NbtCompound(RefNbtTagCompound delegate) {
         super(delegate);
         this.delegateMap = new DelegateAbstractMap<>(this);
     }
@@ -812,5 +812,11 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public @NotNull NbtCompound coverWith(@NotNull NbtCompound overlayCompound) {
         NbtUtils.coverWith(this.delegate, overlayCompound.delegate);
         return this;
+    }
+
+    public static class Unsafe {
+        public static NbtCompound of(Object nms) {
+            return new NbtCompound((RefNbtTagCompound) nms);
+        }
     }
 }

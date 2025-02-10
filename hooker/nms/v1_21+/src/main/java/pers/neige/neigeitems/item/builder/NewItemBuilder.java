@@ -220,7 +220,7 @@ public class NewItemBuilder extends ItemBuilder {
         }
     }
 
-    public <T> void loadComponent(
+    public static <T> void loadComponent(
             @NotNull DataComponentPatch.Builder builder,
             @NotNull DataComponentType<T> type,
             @NotNull Object value

@@ -22,7 +22,7 @@ public class RegionFileStorage {
 
     public NbtCompound read(int x, int z) throws IOException {
         RefNbtTagCompound nbt = delegate.read(new RefChunkPos(x << 5, z << 5));
-        return nbt == null ? null : new NbtCompound(nbt);
+        return nbt == null ? null : NbtCompound.Unsafe.of(nbt);
     }
 
     public RegionFile getRegionFile(Path path) throws IOException {

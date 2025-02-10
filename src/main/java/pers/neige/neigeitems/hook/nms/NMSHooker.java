@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 import pers.neige.neigeitems.utils.ItemUtils;
 
@@ -173,16 +174,35 @@ public class NMSHooker {
         return new ItemBuilder(config);
     }
 
+    /**
+     * 等效于Material#getMaterial, 但为1.12.2版本添加了数字ID处理.
+     */
     @Nullable
     public Material getMaterial(@Nullable String material) {
         if (material == null) return null;
         return Material.getMaterial(material.toUpperCase(Locale.ENGLISH));
     }
 
+    /**
+     * 给予玩家经验, 修复了1.12.2的逻辑谬误.
+     *
+     * @param player 接收经验的玩家.
+     * @param exp    经验数量.
+     */
     public void giveExp(@NotNull Player player, int exp) {
         player.giveExp(exp);
     }
 
     public void editNameAndLoreAfterMojangMotherDead(@NotNull ItemStack itemStack, BiFunction<ItemStack, String, ItemPlaceholder.ParseResult> handler) {
+    }
+
+    /**
+     * 获取用于/ni itemnbt 指令的展示用NBT.
+     *
+     * @param itemStack 待获取物品.
+     * @return 展示用NBT
+     */
+    public NbtCompound getDisplayNbt(@NotNull ItemStack itemStack) {
+        return ItemUtils.getNbt(itemStack);
     }
 }

@@ -113,11 +113,7 @@ public class NeigeItems extends JavaPlugin {
             return;
         }
         INSTANCE = this;
-        scanner = new ClassScanner(
-                this,
-                NeigeItems.class.getPackage().getName(),
-                new HashSet<>(Collections.singletonList(NeigeItems.class.getPackage().getName() + ".libs"))
-        );
+        scanner = new ClassScanner(this);
     }
 
     @Override

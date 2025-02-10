@@ -26,11 +26,33 @@ import java.util.jar.JarFile
 /**
  * 类扫描器
  */
-class ClassScanner(
-    private val plugin: Plugin,
-    private val packageName: String = plugin.javaClass.`package`.name,
-    private val except: MutableSet<String>,
-) {
+class ClassScanner {
+    private val plugin: Plugin
+    private val packageName: String
+    private val except: MutableSet<String>
+
+    constructor(
+        plugin: Plugin
+    ) : this(plugin, plugin.javaClass.`package`.name, hashSetOf(plugin.javaClass.getPackage().name + ".libs"))
+
+    constructor(
+        plugin: Plugin, packageName: String
+    ) : this(plugin, packageName, hashSetOf(plugin.javaClass.getPackage().name + ".libs"))
+
+    constructor(
+        plugin: Plugin, except: MutableSet<String>
+    ) : this(plugin, plugin.javaClass.`package`.name, except)
+
+    constructor(
+        plugin: Plugin, packageName: String, except: MutableSet<String>
+    ) {
+        this.plugin = plugin
+        this.packageName = packageName
+        this.except = except
+        scan()
+        runAwakeTask(INIT)
+    }
+
     /**
      * 所有插件类
      */
@@ -38,13 +60,7 @@ class ClassScanner(
     private val listenerMethods = ArrayList<PackedMethod>()
     private val scheduleMethods = ArrayList<PackedMethod>()
     private val awakeMethods = ConcurrentHashMap<LifeCycle, EnumMap<EventPriority, MutableList<PackedMethod>>>()
-    private val customTaskMethods =
-        ConcurrentHashMap<String, EnumMap<EventPriority, MutableList<PackedMethod>>>()
-
-    init {
-        scan()
-        runAwakeTask(INIT)
-    }
+    private val customTaskMethods = ConcurrentHashMap<String, EnumMap<EventPriority, MutableList<PackedMethod>>>()
 
     private fun scan() {
         loadClasses(plugin, packageName, except)
@@ -128,10 +144,9 @@ class ClassScanner(
             }
             methods?.forEach { method ->
                 // 监听器方法
-                if (
-                    method.isAnnotationPresent(Listener::class.java)
-                    && method.parameterCount == 1
-                    && Event::class.java.isAssignableFrom(method.parameterTypes[0])
+                if (method.isAnnotationPresent(Listener::class.java) && method.parameterCount == 1 && Event::class.java.isAssignableFrom(
+                        method.parameterTypes[0]
+                    )
                 ) {
                     val finalMethod = method.check("错误的监听器注解")
                     if (finalMethod != null) {
