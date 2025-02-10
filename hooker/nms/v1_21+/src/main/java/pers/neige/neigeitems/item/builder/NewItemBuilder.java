@@ -3,8 +3,6 @@ package pers.neige.neigeitems.item.builder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.DataResult;
 import kotlin.text.StringsKt;
-import net.minecraft.commands.CommandBuildContext;
-import net.minecraft.commands.Commands;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -13,6 +11,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.DyedItemColor;
@@ -22,7 +21,6 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.craftbukkit.CraftRegistry;
 import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
@@ -46,8 +44,7 @@ import java.util.Set;
 import java.util.logging.Level;
 
 public class NewItemBuilder extends ItemBuilder {
-    public static final CommandBuildContext registries = Commands.createValidationContext(CraftRegistry.getMinecraftRegistry());
-    public static final RegistryOps<Tag> registryOps = registries.createSerializationContext(NbtOps.INSTANCE);
+    public static final RegistryOps<Tag> registryOps = MinecraftServer.getServer().registryAccess().createSerializationContext(NbtOps.INSTANCE);
 
     @NotNull
     private final Set<ItemFlag> hideFlag = new HashSet<>();
