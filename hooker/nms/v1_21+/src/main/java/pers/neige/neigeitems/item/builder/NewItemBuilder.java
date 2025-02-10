@@ -46,8 +46,8 @@ import java.util.Set;
 import java.util.logging.Level;
 
 public class NewItemBuilder extends ItemBuilder {
-    private static final CommandBuildContext registries = Commands.createValidationContext(CraftRegistry.getMinecraftRegistry());
-    private static final RegistryOps<Tag> registryOps = registries.createSerializationContext(NbtOps.INSTANCE);
+    public static final CommandBuildContext registries = Commands.createValidationContext(CraftRegistry.getMinecraftRegistry());
+    public static final RegistryOps<Tag> registryOps = registries.createSerializationContext(NbtOps.INSTANCE);
 
     @NotNull
     private final Set<ItemFlag> hideFlag = new HashSet<>();

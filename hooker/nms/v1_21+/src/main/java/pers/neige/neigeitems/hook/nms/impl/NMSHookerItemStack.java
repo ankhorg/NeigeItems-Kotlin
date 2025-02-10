@@ -15,6 +15,7 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.hook.nms.NMSHooker;
 import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
@@ -114,7 +115,12 @@ public class NMSHookerItemStack extends NMSHooker {
         CompoundTag compound = new CompoundTag();
         for (Map.Entry<DataComponentType<?>, Optional<?>> entry : nmsItemStack.getComponentsPatch().entrySet()) {
             TypedDataComponent<?> component = TypedDataComponent.createUnchecked(entry.getKey(), entry.getValue().get());
-            compound.put(((ResourceLocation) ComponentUtils.getKeyByType(component.type())).toString(), component.encodeValue(NbtOps.INSTANCE).getOrThrow());
+            ResourceLocation key = (ResourceLocation) ComponentUtils.getKeyByType(component.type());
+            try {
+                compound.put(key.toString(), component.encodeValue(NewItemBuilder.registryOps).getOrThrow());
+            } catch (Throwable throwable) {
+                NeigeItems.getInstance().getLogger().warning(key + " 无法在 /ni itemnbt 指令中展示");
+            }
         }
         return NbtCompound.Unsafe.of(compound);
     }
