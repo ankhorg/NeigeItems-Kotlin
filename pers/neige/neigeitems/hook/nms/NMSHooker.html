@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>NMSHooker 1.21.8 API </title>
+    <title>NMSHooker 1.21.9 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
@@ -369,6 +369,14 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                             <th class="colSecond" scope="row"><code><a href=NMSHooker.html#getDisplayNbt(org.bukkit.inventory.ItemStack)>getDisplayNbt</a>(@NotNull() ItemStack itemStack) </code>
                                             </th>
                                             <td class="colLast">获取用于/ni itemnbt 指令的展示用NBT.</td>
+                                        </tr>
+                                        
+                                        <tr id="i15" class="rowColor">
+                                            <td class="colFirst"><code>ConfigurationSection</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#save(org.bukkit.inventory.ItemStack)>save</a>(@Nullable() ItemStack itemStack) </code>
+                                            </th>
+                                            <td class="colLast">将物品保存为NI可识别的配置文件, 性能较差, 不建议于性能敏感处使用.</td>
                                         </tr>
                                         
                                         </tbody>
@@ -840,11 +848,11 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>getDisplayNbt</h4>
-                                        <pre class="methodSignature"> <a href=../../libs/bot/inker/bukkit/nbt/NbtCompound.html>NbtCompound</a> <a href=NMSHooker.html#getDisplayNbt(org.bukkit.inventory.ItemStack)>getDisplayNbt</a>(@NotNull() ItemStack itemStack)</pre>
+                                        <pre class="methodSignature">@NotNull() <a href=../../libs/bot/inker/bukkit/nbt/NbtCompound.html>NbtCompound</a> <a href=NMSHooker.html#getDisplayNbt(org.bukkit.inventory.ItemStack)>getDisplayNbt</a>(@NotNull() ItemStack itemStack)</pre>
                                         <div class="block"><p>获取用于/ni itemnbt 指令的展示用NBT.</p></div>
 
                                         <dl>
@@ -861,6 +869,39 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                         
                                             <dt><span class="returnLabel">Returns:</span></dt>
                                             <dd><p>展示用NBT</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="save(org.bukkit.inventory.ItemStack)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>save</h4>
+                                        <pre class="methodSignature">@Nullable() ConfigurationSection <a href=NMSHooker.html#save(org.bukkit.inventory.ItemStack)>save</a>(@Nullable() ItemStack itemStack)</pre>
+                                        <div class="block"><p>将物品保存为NI可识别的配置文件, 性能较差, 不建议于性能敏感处使用.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>itemStack</code> - 待转换物品.</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>NI可识别的配置文件</p></dd>
                                         
 
                                         

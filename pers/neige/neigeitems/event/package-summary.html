@@ -115,39 +115,7 @@ var pathtoroot = "../../../../";
 </tr>
 <tbody>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=CancellableEvent.html>CancellableEvent</a></th><td class="colLast"></td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=PacketReceiveEvent.html>PacketReceiveEvent</a></th><td class="colLast">数据包接收事件.</td></tr>
-
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=PacketSendEvent.html>PacketSendEvent</a></th><td class="colLast">数据包发送事件.</td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ItemPacketEvent.html>ItemPacketEvent</a></th><td class="colLast">服务端向客户端发送物品数据包时触发.</td></tr>
-
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=MythicEquipEvent.html>MythicEquipEvent</a></th><td class="colLast">MM怪物通过NI设置穿戴装备事件, MM怪物生成时触发</td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ItemUpdateEvent.PreGenerate.html>PreGenerate</a></th><td class="colLast">物品更新事件(生成新物品前触发).</td></tr>
-
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemUpdateEvent.PostGenerate.html>PostGenerate</a></th><td class="colLast">物品更新事件(生成新物品后触发).</td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ItemUpdateEvent.html>ItemUpdateEvent</a></th><td class="colLast">物品更新事件</td></tr>
-
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemExpirationEvent.html>ItemExpirationEvent</a></th><td class="colLast">物品到期事件.</td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=PluginReloadEvent.Pre.html>Pre</a></th><td class="colLast">插件重载前触发</td></tr>
-
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=PluginReloadEvent.Post.html>Post</a></th><td class="colLast">插件重载后触发, 不可取消</td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=PluginReloadEvent.html>PluginReloadEvent</a></th><td class="colLast">插件重载事件, /ni reload指令触发</td></tr>
-
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemDropEvent.html>ItemDropEvent</a></th><td class="colLast">物品掉落事件, /ni drop指令触发.</td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=MobInfoReloadedEvent.html>MobInfoReloadedEvent</a></th><td class="colLast">MM怪物信息重载完毕事件, /mm reload后一段时间触发.</td></tr>
-
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=BasicEvent.html>BasicEvent</a></th><td class="colLast"></td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ItemActionEvent.html>ItemActionEvent</a></th><td class="colLast">物品动作触发事件, 将在确定不在冷却时间后, 准备检测物品消耗前触发.</td></tr>
-
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemPackGiveEvent.html>ItemPackGiveEvent</a></th><td class="colLast">物品包给予事件, /ni givePack指令触发.</td></tr>
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemPacketEvent.html>ItemPacketEvent</a></th><td class="colLast">服务端向客户端发送物品数据包时触发.</td></tr>
 
     <tr class="rowColor"><th class="colFirst" scope="row"><a href=MythicDropEvent.ConfigLoaded.html>ConfigLoaded</a></th><td class="colLast">MM怪物掉落NI装备事件, MM怪物死亡时异步触发.</td></tr>
 
@@ -155,11 +123,43 @@ var pathtoroot = "../../../../";
 
     <tr class="rowColor"><th class="colFirst" scope="row"><a href=MythicDropEvent.html>MythicDropEvent</a></th><td class="colLast">MM怪物掉落NI装备事件, MM怪物死亡时异步触发.</td></tr>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemPackDropEvent.html>ItemPackDropEvent</a></th><td class="colLast">物品包掉落事件, /ni dropPack指令触发.</td></tr>
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemUpdateEvent.PreGenerate.html>PreGenerate</a></th><td class="colLast">物品更新事件(生成新物品前触发).</td></tr>
 
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ItemGenerateEvent.html>ItemGenerateEvent</a></th><td class="colLast">物品生成事件.</td></tr>
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ItemUpdateEvent.PostGenerate.html>PostGenerate</a></th><td class="colLast">物品更新事件(生成新物品后触发).</td></tr>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemGiveEvent.html>ItemGiveEvent</a></th><td class="colLast">物品给予事件, /ni give指令触发.</td></tr>
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemUpdateEvent.html>ItemUpdateEvent</a></th><td class="colLast">物品更新事件</td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ItemPackDropEvent.html>ItemPackDropEvent</a></th><td class="colLast">物品包掉落事件, /ni dropPack指令触发.</td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=PluginReloadEvent.Pre.html>Pre</a></th><td class="colLast">插件重载前触发</td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=PluginReloadEvent.Post.html>Post</a></th><td class="colLast">插件重载后触发, 不可取消</td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=PluginReloadEvent.html>PluginReloadEvent</a></th><td class="colLast">插件重载事件, /ni reload指令触发</td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=MythicEquipEvent.html>MythicEquipEvent</a></th><td class="colLast">MM怪物通过NI设置穿戴装备事件, MM怪物生成时触发</td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemGenerateEvent.html>ItemGenerateEvent</a></th><td class="colLast">物品生成事件.</td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ItemGiveEvent.html>ItemGiveEvent</a></th><td class="colLast">物品给予事件, /ni give指令触发.</td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemDropEvent.html>ItemDropEvent</a></th><td class="colLast">物品掉落事件, /ni drop指令触发.</td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=BasicEvent.html>BasicEvent</a></th><td class="colLast"></td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ItemPackGiveEvent.html>ItemPackGiveEvent</a></th><td class="colLast">物品包给予事件, /ni givePack指令触发.</td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ItemActionEvent.html>ItemActionEvent</a></th><td class="colLast">物品动作触发事件, 将在确定不在冷却时间后, 准备检测物品消耗前触发.</td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=PacketReceiveEvent.html>PacketReceiveEvent</a></th><td class="colLast">数据包接收事件.</td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=CancellableEvent.html>CancellableEvent</a></th><td class="colLast"></td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=PacketSendEvent.html>PacketSendEvent</a></th><td class="colLast">数据包发送事件.</td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ItemExpirationEvent.html>ItemExpirationEvent</a></th><td class="colLast">物品到期事件.</td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=MobInfoReloadedEvent.html>MobInfoReloadedEvent</a></th><td class="colLast">MM怪物信息重载完毕事件, /mm reload后一段时间触发.</td></tr>
 </tbody>
 </table>
 
