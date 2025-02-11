@@ -81,6 +81,16 @@ public class NewItemBuilder extends ItemBuilder {
         load(config);
     }
 
+    public static <T> void loadComponent(
+            @NotNull DataComponentPatch.Builder builder,
+            @NotNull DataComponentType<T> type,
+            @NotNull Object value
+    ) throws CommandSyntaxException {
+        Tag tag = (Tag) Nbt.Unsafe.getDelegate(ItemUtils.toNbt(value));
+        DataResult<T> result = type.codecOrThrow().parse(registryOps, tag);
+        builder.set(type, result.getOrThrow());
+    }
+
     @Override
     public void load(
             @Nullable ConfigurationSection config
@@ -215,16 +225,6 @@ public class NewItemBuilder extends ItemBuilder {
                 }
             }
         }
-    }
-
-    public static <T> void loadComponent(
-            @NotNull DataComponentPatch.Builder builder,
-            @NotNull DataComponentType<T> type,
-            @NotNull Object value
-    ) throws CommandSyntaxException {
-        Tag tag = (Tag) Nbt.Unsafe.getDelegate(ItemUtils.toNbt(value));
-        DataResult<T> result = type.codecOrThrow().parse(registryOps, tag);
-        builder.set(type, result.getOrThrow());
     }
 
     /**

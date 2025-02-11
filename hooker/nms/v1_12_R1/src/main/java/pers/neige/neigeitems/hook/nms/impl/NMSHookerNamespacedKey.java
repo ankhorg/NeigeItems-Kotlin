@@ -8,21 +8,25 @@ import net.minecraft.server.v1_12_R1.RegistryMaterials;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.hook.nms.NamespacedKey;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EnchantmentUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 1.12.2 版本, NamespacedKey 特殊兼容
  */
 public class NMSHookerNamespacedKey extends NMSHookerCustomModelData {
     private Material[] byId = new Material[383];
+    private final Map<Integer, Enchantment> enchantmentsById = new HashMap<>();
 
     public NMSHookerNamespacedKey() {
         for (Material material : Material.values()) {
@@ -32,6 +36,9 @@ public class NMSHookerNamespacedKey extends NMSHookerCustomModelData {
                 byId = Arrays.copyOfRange(byId, 0, material.getId() + 2);
                 byId[material.getId()] = material;
             }
+        }
+        for (Enchantment enchantment : Enchantment.values()) {
+            enchantmentsById.put(EnchantmentUtils.getId(enchantment), enchantment);
         }
     }
 
@@ -86,5 +93,22 @@ public class NMSHookerNamespacedKey extends NMSHookerCustomModelData {
             realPlayer.levelDown(1);
             realPlayer.exp /= (float) realPlayer.getExpToLevel();
         }
+    }
+
+    @Override
+    @NotNull
+    protected Map<Enchantment, Integer> buildEnchantments(@NotNull NbtList ench) {
+        Map<Enchantment, Integer> enchantments = new LinkedHashMap<>(ench.size());
+
+        for (Nbt<?> nbt : ench) {
+            int id = ((NbtCompound) nbt).getShort(NbtUtils.getEnchantmentIdNbtKey());
+            int level = ((NbtCompound) nbt).getShort(NbtUtils.getEnchantmentLvlNbtKey());
+            Enchantment enchant = enchantmentsById.get(id);
+            if (enchant != null) {
+                enchantments.put(enchant, level);
+            }
+        }
+
+        return enchantments;
     }
 }

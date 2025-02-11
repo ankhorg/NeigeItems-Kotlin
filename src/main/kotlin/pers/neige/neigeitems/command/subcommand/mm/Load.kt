@@ -101,7 +101,7 @@ object Load {
         async {
             when (ItemManager.saveItem(itemStack, id, file, config, cover)) {
                 // 保存成功
-                1 -> {
+                ItemManager.SaveResult.SUCCESS -> {
                     sender.sendLang(
                         "Messages.successSaveInfo", mapOf(
                             Pair("{name}", itemStack.getName()),
@@ -111,7 +111,7 @@ object Load {
                     )
                 }
                 // 已存在对应ID物品
-                0 -> {
+                ItemManager.SaveResult.CONFLICT -> {
                     if (cover) return@async
                     sender.sendLang(
                         "Messages.existedKey", mapOf(
@@ -120,7 +120,7 @@ object Load {
                     )
                 }
                 // 你保存了个空气
-                else -> sender.sendLang("Messages.airItem")
+                ItemManager.SaveResult.AIR -> sender.sendLang("Messages.airItem")
             }
         }
     }

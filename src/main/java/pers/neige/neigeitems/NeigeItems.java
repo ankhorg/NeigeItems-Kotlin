@@ -19,8 +19,6 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVer
 import pers.neige.neigeitems.scanner.ClassScanner;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashSet;
 
 public class NeigeItems extends JavaPlugin {
     private static final Logger logger;

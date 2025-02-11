@@ -22,15 +22,11 @@ import pers.neige.neigeitems.utils.ItemUtils.getDirectTag
 import pers.neige.neigeitems.utils.ItemUtils.getItemId
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
-import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
-import pers.neige.neigeitems.utils.ItemUtils.invalidNBT
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.setDamage
-import pers.neige.neigeitems.utils.ItemUtils.toStringMap
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.io.File
-import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -203,6 +199,12 @@ object ItemManager : ItemConfigManager() {
         return items.containsKey(id)
     }
 
+    enum class SaveResult {
+        SUCCESS,
+        AIR,
+        CONFLICT
+    }
+
     /**
      * 保存物品
      *
@@ -211,78 +213,20 @@ object ItemManager : ItemConfigManager() {
      * @param file 保存文件
      * @param config 文件转换来的YamlConfiguration
      * @param cover 是否覆盖
-     * @return 1 保存成功; 0 ID冲突; 2 你保存了个空气
+     * @return 保存结果
      */
-    fun saveItem(itemStack: ItemStack, id: String, file: File, config: YamlConfiguration, cover: Boolean): Int {
+    fun saveItem(itemStack: ItemStack?, id: String, file: File, config: YamlConfiguration, cover: Boolean): SaveResult {
         // 检测是否为空气
-        if (itemStack.type != Material.AIR) {
-            // 检测节点是否存在
-            if (!hasItem(id) || cover) {
-                // 创建物品节点
-                val configSection = config.createSection(id)
-                // 设置物品材质
-                configSection.set("material", itemStack.type.toString())
-                // 设置子ID/损伤值
-                if (itemStack.getDamage() > 0) {
-                    configSection.set("damage", itemStack.getDamage())
-                }
-                // 如果物品有ItemMeta
-                if (itemStack.hasItemMeta()) {
-                    // 获取ItemMeta
-                    val itemMeta = itemStack.itemMeta
-                    // 设置CustomModelData
-                    nmsHooker.getCustomModelData(itemMeta)?.let {
-                        configSection.set("custommodeldata", it)
-                    }
-                    // 设置物品名
-                    if (itemMeta?.hasDisplayName() == true) {
-                        configSection.set("name", itemMeta.displayName)
-                    }
-                    // 设置Lore
-                    if (itemMeta?.hasLore() == true) {
-                        configSection.set("lore", itemMeta.lore)
-                    }
-                    // 设置是否无法破坏
-                    if (itemMeta?.isUnbreakable == true) {
-                        configSection.set("unbreakable", itemMeta.isUnbreakable)
-                    }
-                    // 设置物品附魔
-                    if (itemMeta?.hasEnchants() == true) {
-                        val enchantSection = configSection.createSection("enchantments")
-                        for ((enchant, level) in itemMeta.enchants) {
-                            enchantSection.set(enchant.name, level)
-                        }
-                    }
-                    // 设置ItemFlags
-                    itemMeta?.itemFlags?.let {
-                        if (it.isNotEmpty()) {
-                            configSection.set("hideflags", it.map { flag -> flag.name })
-                        }
-                    }
-                    // 获取物品NBT
-                    val itemNBT = itemStack.getNbtOrNull()
-                    if (itemNBT != null) {
-                        // 设置物品颜色
-                        val color = itemNBT.getDeepInt("display.color", -1)
-                        if (color != -1) {
-                            configSection.set("color", color.toString(16).uppercase(Locale.getDefault()))
-                        }
-                        // 设置物品NBT
-                        if (!itemNBT.isEmpty()) {
-                            configSection.set("nbt", itemNBT.toStringMap(invalidNBT))
-                        }
-                    }
-                }
-                // 保存文件
-                config.save(file)
-                // 物品保存好了, 信息加进ItemManager里
-                addItem(ItemGenerator(ItemConfig(id, file, config)))
-                if (cover) return 0
-                return 1
-            }
-            return 0
-        }
-        return 2
+        if (itemStack == null || itemStack.type == Material.AIR) return SaveResult.AIR
+        // 检测节点是否存在
+        if (hasItem(id) && !cover) return SaveResult.CONFLICT
+        // 创建物品节点
+        config.set(id, nmsHooker.save(itemStack))
+        // 保存文件
+        config.save(file)
+        // 物品保存好了, 信息加进ItemManager里
+        addItem(ItemGenerator(ItemConfig(id, file, config)))
+        return SaveResult.SUCCESS
     }
 
     /**
@@ -292,9 +236,9 @@ object ItemManager : ItemConfigManager() {
      * @param id 物品ID
      * @param path 保存路径
      * @param cover 是否覆盖
-     * @return 1 保存成功; 0 ID冲突; 2 你保存了个空气
+     * @return 保存结果
      */
-    fun saveItem(itemStack: ItemStack, id: String, path: String = "$id.yml", cover: Boolean): Int {
+    fun saveItem(itemStack: ItemStack, id: String, path: String = "$id.yml", cover: Boolean): SaveResult {
         val file = getFileOrCreate("Items${File.separator}$path")
         val config = YamlConfiguration.loadConfiguration(file)
         return saveItem(itemStack, id, file, config, cover)

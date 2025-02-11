@@ -7,21 +7,26 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 import pers.neige.neigeitems.utils.ItemUtils;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -97,12 +102,7 @@ public class NMSHooker {
      */
     @Deprecated
     @NotNull
-    public Item dropItem(
-            @NotNull World world,
-            @NotNull Location location,
-            @NotNull ItemStack itemStack,
-            @NotNull Consumer<Item> function
-    ) {
+    public Item dropItem(@NotNull World world, @NotNull Location location, @NotNull ItemStack itemStack, @NotNull Consumer<Item> function) {
         return WorldUtils.dropItem(world, location, itemStack, function);
     }
 
@@ -113,13 +113,8 @@ public class NMSHooker {
      * @return 生成的 HoverEvent.
      */
     @NotNull
-    public HoverEvent hoverText(
-            @NotNull String text
-    ) {
-        return new HoverEvent(
-                HoverEvent.Action.SHOW_TEXT,
-                new Text(text)
-        );
+    public HoverEvent hoverText(@NotNull String text) {
+        return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(text));
     }
 
     /**
@@ -129,23 +124,14 @@ public class NMSHooker {
      * @return 生成的 HoverEvent.
      */
     @NotNull
-    public HoverEvent hoverItem(
-            @NotNull ItemStack itemStack
-    ) {
+    public HoverEvent hoverItem(@NotNull ItemStack itemStack) {
         String nbtString;
         if (itemStack.getType() == Material.AIR) {
             nbtString = "{}";
         } else {
             nbtString = ItemUtils.getNbt(itemStack).toString();
         }
-        return new HoverEvent(
-                HoverEvent.Action.SHOW_ITEM,
-                new net.md_5.bungee.api.chat.hover.content.Item(
-                        getNamespacedKey(itemStack.getType()).getKey(),
-                        itemStack.getAmount(),
-                        ItemTag.ofNbt(nbtString)
-                )
-        );
+        return new HoverEvent(HoverEvent.Action.SHOW_ITEM, new net.md_5.bungee.api.chat.hover.content.Item(getNamespacedKey(itemStack.getType()).getKey(), itemStack.getAmount(), ItemTag.ofNbt(nbtString)));
     }
 
     @NotNull
@@ -154,23 +140,17 @@ public class NMSHooker {
     }
 
     @NotNull
-    public ItemBuilder newItemBuilder(
-            @Nullable Material material
-    ) {
+    public ItemBuilder newItemBuilder(@Nullable Material material) {
         return new ItemBuilder(material);
     }
 
     @NotNull
-    public ItemBuilder newItemBuilder(
-            @Nullable ItemStack itemStack
-    ) {
+    public ItemBuilder newItemBuilder(@Nullable ItemStack itemStack) {
         return new ItemBuilder(itemStack);
     }
 
     @NotNull
-    public ItemBuilder newItemBuilder(
-            @Nullable ConfigurationSection config
-    ) {
+    public ItemBuilder newItemBuilder(@Nullable ConfigurationSection config) {
         return new ItemBuilder(config);
     }
 
@@ -202,7 +182,133 @@ public class NMSHooker {
      * @param itemStack 待获取物品.
      * @return 展示用NBT
      */
+    @NotNull
     public NbtCompound getDisplayNbt(@NotNull ItemStack itemStack) {
         return ItemUtils.getNbt(itemStack);
+    }
+
+    protected org.bukkit.NamespacedKey parseToNamespacedKey(String id) {
+        String[] args = new String[]{"minecraft", id};
+        int index = id.indexOf(":");
+        if (index >= 0) {
+            args[1] = id.substring(index + 1);
+            if (index >= 1) {
+                args[0] = id.substring(0, index);
+            }
+        }
+        return new org.bukkit.NamespacedKey(args[0], args[1]);
+    }
+
+    @NotNull
+    protected Map<Enchantment, Integer> buildEnchantments(@NotNull NbtList ench) {
+        Map<Enchantment, Integer> enchantments = new LinkedHashMap<>(ench.size());
+
+        for (Nbt<?> nbt : ench) {
+            String id = ((NbtCompound) nbt).getString(NbtUtils.getEnchantmentIdNbtKey());
+            int level = ((NbtCompound) nbt).getShort(NbtUtils.getEnchantmentLvlNbtKey());
+            Enchantment enchant = Enchantment.getByKey(parseToNamespacedKey(id));
+            if (enchant != null) {
+                enchantments.put(enchant, level);
+            }
+        }
+
+        return enchantments;
+    }
+
+    /**
+     * 将物品保存为NI可识别的配置文件, 性能较差, 不建议于性能敏感处使用.
+     *
+     * @param itemStack 待转换物品.
+     * @return NI可识别的配置文件
+     */
+    @Nullable
+    public ConfigurationSection save(@Nullable ItemStack itemStack) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) return null;
+        ConfigurationSection result = new YamlConfiguration();
+        result.set("material", itemStack.getType().toString());
+        short damage = ItemUtils.getDamage(itemStack);
+        if (damage > 0) {
+            result.set("damage", damage);
+        }
+
+        NbtCompound nbt = ItemUtils.getNbtOrNull(itemStack);
+        if (nbt != null) {
+            nbt = nbt.clone();
+
+            NbtCompound display = nbt.getCompound(NbtUtils.getDisplayNbtKey());
+            if (display != null) {
+                int color = display.getInt("color", -1);
+                if (color != -1) {
+                    result.set("color", Integer.toString(color, 16).toUpperCase(Locale.getDefault()));
+                    display.remove("color");
+                }
+                String rawName = display.getString(NbtUtils.getNameNbtKey());
+                if (rawName != null) {
+                    String name = TranslationUtils.toLegacyText(rawName);
+                    result.set("name", name);
+                    display.remove(NbtUtils.getNameNbtKey());
+                }
+                NbtList rawLore = display.getList(NbtUtils.getLoreNbtKey());
+                if (rawLore != null && !rawLore.isEmpty()) {
+                    List<String> lore = new ArrayList<>();
+                    for (Nbt<?> loreNbt : rawLore) {
+                        lore.add(TranslationUtils.toLegacyText(loreNbt.getAsString()));
+                    }
+                    result.set("lore", lore);
+                    display.remove(NbtUtils.getLoreNbtKey());
+                }
+                if (display.isEmpty()) {
+                    nbt.remove(NbtUtils.getDisplayNbtKey());
+                }
+            }
+
+            String cmdKey = NbtUtils.getCustomModelDataNbtKeyOrNull();
+            if (cmdKey != null) {
+                int customModelData = nbt.getInt(cmdKey, -1);
+                if (customModelData != -1) {
+                    result.set("custom-model-data", customModelData);
+                    nbt.remove(cmdKey);
+                }
+            }
+
+            boolean unbreakable = nbt.getBoolean(NbtUtils.getUnbreakableNbtKey());
+            if (unbreakable) {
+                result.set("unbreakable", true);
+                nbt.remove(NbtUtils.getUnbreakableNbtKey());
+            }
+
+            int hideFlags = nbt.getInt("HideFlags");
+            if (hideFlags > 0) {
+                List<String> flags = new ArrayList<>();
+                for (ItemFlag flag : ItemFlag.values()) {
+                    int bitModifier = (byte) (1 << flag.ordinal());
+                    if ((hideFlags & bitModifier) == bitModifier) {
+                        flags.add(flag.name());
+                    }
+                }
+                if (!flags.isEmpty()) {
+                    result.set("item-flags", flags);
+                }
+                nbt.remove("HideFlags");
+            }
+
+            NbtList enchantmentNbt = nbt.getList(NbtUtils.getEnchantmentsNbtKey());
+            if (enchantmentNbt != null) {
+                Map<Enchantment, Integer> enchantments = buildEnchantments(enchantmentNbt);
+                if (!enchantments.isEmpty()) {
+                    ConfigurationSection enchantSection = result.createSection("enchantments");
+                    enchantments.forEach((enchant, level) -> {
+                        enchantSection.set(enchant.getName(), level);
+                    });
+                }
+                nbt.remove(NbtUtils.getEnchantmentsNbtKey());
+            }
+
+            // 设置物品NBT
+            if (!nbt.isEmpty()) {
+                result.set("nbt", ItemUtils.toStringMap(nbt));
+            }
+        }
+        return result;
     }
 }

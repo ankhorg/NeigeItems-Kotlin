@@ -9,18 +9,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.component.ItemLore;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.hook.nms.NMSHooker;
 import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.item.builder.NewItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
+import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,18 +110,36 @@ public class NMSHookerItemStack extends NMSHooker {
     }
 
     @Override
+    @NotNull
     public NbtCompound getDisplayNbt(@NotNull ItemStack itemStack) {
         net.minecraft.world.item.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemStack);
         CompoundTag compound = new CompoundTag();
         for (Map.Entry<DataComponentType<?>, Optional<?>> entry : nmsItemStack.getComponentsPatch().entrySet()) {
             TypedDataComponent<?> component = TypedDataComponent.createUnchecked(entry.getKey(), entry.getValue().get());
             ResourceLocation key = (ResourceLocation) ComponentUtils.getKeyByType(component.type());
-            try {
-                compound.put(key.toString(), component.encodeValue(NewItemBuilder.registryOps).getOrThrow());
-            } catch (Throwable throwable) {
-                NeigeItems.getInstance().getLogger().warning(key + " 无法在 /ni itemnbt 指令中展示");
-            }
+            compound.put(key.toString(), component.encodeValue(NewItemBuilder.registryOps).getOrThrow());
         }
         return NbtCompound.Unsafe.of(compound);
+    }
+
+    @Override
+    @Nullable
+    public ConfigurationSection save(@Nullable ItemStack itemStack) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) return null;
+        ConfigurationSection result = new YamlConfiguration();
+        result.set("material", itemStack.getType().toString());
+
+        NbtCompound nbt = ItemUtils.getNbtOrNull(itemStack);
+        if (nbt != null && !nbt.isEmpty()) {
+            result.set("nbt", ItemUtils.toStringMap(nbt));
+        }
+
+        NbtCompound components = getDisplayNbt(itemStack);
+        components.remove("minecraft:custom_data");
+        if (!components.isEmpty()) {
+            result.set("components", ItemUtils.toStringMap(components));
+        }
+
+        return result;
     }
 }

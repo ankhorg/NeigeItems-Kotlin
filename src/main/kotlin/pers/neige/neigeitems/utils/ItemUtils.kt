@@ -33,11 +33,8 @@ import kotlin.math.sqrt
  * 物品相关工具类
  */
 object ItemUtils {
-    val invalidNBT by lazy {
-        arrayListOf(
-            "display", "Enchantments", "VARIABLES_DATA", "ench", "Damage", "HideFlags", "Unbreakable", "CustomModelData"
-        )
-    }
+    @JvmStatic
+    private val GET_DAMAGE_FROM_ITEM_STACK = CbVersion.current() == CbVersion.v1_12_R1 || CbVersion.v1_20_R4.isSupport
 
     /**
      * 根据物品获取显示名, 无显示名则返回翻译名.
@@ -231,23 +228,6 @@ object ItemUtils {
             is ConfigurationSection -> this.toNbtCompound()
             else -> NbtString.valueOf("nm的你塞了个什么东西进来，我给你一拖鞋")
         }
-    }
-
-    /**
-     * 将 NbtCompound 转换为 Map, 其中所有值都被转换为 String 的形式, 形似 (Int) 1
-     *
-     * @param invalidNBT 不进行转换的顶层 NBT
-     * @return 转换结果
-     */
-    @JvmStatic
-    fun NbtCompound.toStringMap(invalidNBT: List<String>): HashMap<String, Any> {
-        val hashMap = HashMap<String, Any>()
-        forEach { (key, value) ->
-            if (!invalidNBT.contains(key)) {
-                hashMap[key] = value.toStringValue()
-            }
-        }
-        return hashMap
     }
 
     /**
@@ -1193,7 +1173,7 @@ object ItemUtils {
     @JvmStatic
     fun ItemStack?.setDamage(damage: Short) {
         if (this == null || this.type == Material.AIR) return
-        if (CbVersion.current() == CbVersion.v1_12_R1 || CbVersion.v1_20_R4.isSupport) {
+        if (GET_DAMAGE_FROM_ITEM_STACK) {
             this.durability = damage
         } else {
             val nbt = NbtItemStack(this).orCreateTag
@@ -1210,7 +1190,7 @@ object ItemUtils {
     @JvmStatic
     fun ItemStack?.getDamage(): Short {
         if (this == null || this.type == Material.AIR) return -1
-        if (CbVersion.current() == CbVersion.v1_12_R1 || CbVersion.v1_20_R4.isSupport) {
+        if (GET_DAMAGE_FROM_ITEM_STACK) {
             return this.durability
         } else {
             val nbt = NbtItemStack(this).tag ?: return -1
