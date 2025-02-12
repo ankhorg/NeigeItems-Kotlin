@@ -6,6 +6,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.config.ConfigReader;
 
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public final class ItemGenerateEvent extends BasicEvent {
     @NotNull
     private final Map<String, String> cache;
     @NotNull
-    private final ConfigurationSection configSection;
+    private final ConfigReader configSection;
     @Nullable
     private final ConfigurationSection sections;
     @NotNull
@@ -47,7 +48,7 @@ public final class ItemGenerateEvent extends BasicEvent {
             @Nullable OfflinePlayer player,
             @NotNull ItemStack itemStack,
             @NotNull Map<String, String> cache,
-            @NotNull ConfigurationSection configSection,
+            @NotNull ConfigReader configSection,
             @Nullable ConfigurationSection sections
     ) {
         this.id = id;
@@ -110,7 +111,7 @@ public final class ItemGenerateEvent extends BasicEvent {
      * 获取物品配置(经过了节点解析, 不包含节点配置)
      */
     @NotNull
-    public ConfigurationSection getConfigSection() {
+    public ConfigReader getConfigSection() {
         return configSection;
     }
 

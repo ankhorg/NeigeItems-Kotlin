@@ -1,11 +1,10 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.*;
+import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class WhileAction extends Action {
@@ -18,22 +17,10 @@ public class WhileAction extends Action {
 
     public WhileAction(
             @NotNull BaseActionManager manager,
-            @NotNull ConfigurationSection action
+            @NotNull ConfigReader action
     ) {
         super(manager);
         condition = new Condition(manager, action.getString("while"));
-        actions = manager.compile(action.get("actions"));
-        _finally = manager.compile(action.get("finally"));
-        checkAsyncSafe();
-    }
-
-    public WhileAction(
-            @NotNull BaseActionManager manager,
-            @NotNull Map<?, ?> action
-    ) {
-        super(manager);
-        Object conditionString = action.get("while");
-        condition = new Condition(manager, conditionString == null ? null : conditionString.toString());
         actions = manager.compile(action.get("actions"));
         _finally = manager.compile(action.get("finally"));
         checkAsyncSafe();

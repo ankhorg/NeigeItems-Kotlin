@@ -20,7 +20,6 @@ import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
@@ -30,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
+import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
@@ -76,7 +76,7 @@ public class NewItemBuilder extends ItemBuilder {
     }
 
     public NewItemBuilder(
-            @Nullable ConfigurationSection config
+            @Nullable ConfigReader config
     ) {
         load(config);
     }
@@ -93,10 +93,10 @@ public class NewItemBuilder extends ItemBuilder {
 
     @Override
     public void load(
-            @Nullable ConfigurationSection config
+            @Nullable ConfigReader config
     ) {
         if (config == null) return;
-        for (String key : config.getKeys(false)) {
+        for (String key : config.keySet()) {
             switch (key.toLowerCase()) {
                 case "type":
                 case "material": {
@@ -111,9 +111,9 @@ public class NewItemBuilder extends ItemBuilder {
                     break;
                 }
                 case "enchantments": {
-                    ConfigurationSection enchantSection = config.getConfigurationSection(key);
+                    ConfigReader enchantSection = config.getConfig(key);
                     if (enchantSection != null) {
-                        for (String enchantId : enchantSection.getKeys(false)) {
+                        for (String enchantId : enchantSection.keySet()) {
                             String uppercaseEnchantId = enchantId.toUpperCase();
                             short level = (short) enchantSection.getInt(enchantId);
                             Enchantment enchant = Enchantment.getByName(uppercaseEnchantId);
@@ -195,17 +195,17 @@ public class NewItemBuilder extends ItemBuilder {
                     break;
                 }
                 case "nbt": {
-                    ConfigurationSection nbtConfig = config.getConfigurationSection(key);
+                    ConfigReader nbtConfig = config.getConfig(key);
                     if (nbtConfig != null) {
                         this.coverNbt = ItemUtils.toNbtCompound(nbtConfig);
                     }
                     break;
                 }
                 case "components": {
-                    ConfigurationSection componentsConfig = config.getConfigurationSection(key);
+                    ConfigReader componentsConfig = config.getConfig(key);
                     if (componentsConfig != null) {
                         DataComponentPatch.Builder builder = DataComponentPatch.builder();
-                        for (String componentKey : componentsConfig.getKeys(false)) {
+                        for (String componentKey : componentsConfig.keySet()) {
                             Object componentValue = componentsConfig.get(componentKey);
                             if (componentValue == null) continue;
                             DataComponentType<?> type = (DataComponentType<?>) ComponentUtils.getDataComponentType(componentKey);

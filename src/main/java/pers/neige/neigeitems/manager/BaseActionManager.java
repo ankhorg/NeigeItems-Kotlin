@@ -26,6 +26,7 @@ import pers.neige.neigeitems.action.handler.SyncActionHandler;
 import pers.neige.neigeitems.action.impl.*;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.action.result.StopResult;
+import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker;
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker;
 import pers.neige.neigeitems.hook.vault.VaultHooker;
@@ -148,70 +149,38 @@ public abstract class BaseActionManager {
             }
         } else if (action instanceof List<?>) {
             return new ListAction(this, (List<?>) action);
-        } else if (action instanceof Map<?, ?>) {
-            Map<?, ?> current = (Map<?, ?>) action;
-            if (current.containsKey("type")) {
-                Object rawType = current.get("type");
-                if (rawType instanceof String) {
-                    String type = ((String) rawType).toLowerCase();
-                    switch (type) {
-                        case "condition": {
-                            return new ConditionAction(this, current);
-                        }
-                        case "condition-weight": {
-                            return new ConditionWeightAction(this, current);
-                        }
-                        case "label": {
-                            return new LabelAction(this, current);
-                        }
-                        case "weight": {
-                            return new WeightAction(this, current);
-                        }
-                        case "while": {
-                            return new WhileAction(this, current);
-                        }
+        }
+        ConfigReader config = ConfigReader.parse(action);
+        if (config == null) return NULL_ACTION;
+        if (config.containsKey("type")) {
+            String type = config.getString("type");
+            if (type != null) {
+                type = type.toLowerCase();
+                switch (type) {
+                    case "condition": {
+                        return new ConditionAction(this, config);
+                    }
+                    case "condition-weight": {
+                        return new ConditionWeightAction(this, config);
+                    }
+                    case "label": {
+                        return new LabelAction(this, config);
+                    }
+                    case "weight": {
+                        return new WeightAction(this, config);
+                    }
+                    case "while": {
+                        return new WhileAction(this, config);
                     }
                 }
             }
-            if (current.containsKey("condition")) {
-                return new ConditionAction(this, current);
-            } else if (current.containsKey("while")) {
-                return new WhileAction(this, current);
-            } else if (current.containsKey("label")) {
-                return new LabelAction(this, current);
-            }
-        } else if (action instanceof ConfigurationSection) {
-            ConfigurationSection current = (ConfigurationSection) action;
-            if (current.contains("type")) {
-                String type = current.getString("type");
-                if (type != null) {
-                    type = type.toLowerCase();
-                    switch (type) {
-                        case "condition": {
-                            return new ConditionAction(this, current);
-                        }
-                        case "condition-weight": {
-                            return new ConditionWeightAction(this, current);
-                        }
-                        case "label": {
-                            return new LabelAction(this, current);
-                        }
-                        case "weight": {
-                            return new WeightAction(this, current);
-                        }
-                        case "while": {
-                            return new WhileAction(this, current);
-                        }
-                    }
-                }
-            }
-            if (current.contains("condition")) {
-                return new ConditionAction(this, current);
-            } else if (current.contains("while")) {
-                return new WhileAction(this, current);
-            } else if (current.contains("label")) {
-                return new LabelAction(this, current);
-            }
+        }
+        if (config.containsKey("condition")) {
+            return new ConditionAction(this, config);
+        } else if (config.containsKey("while")) {
+            return new WhileAction(this, config);
+        } else if (config.containsKey("label")) {
+            return new LabelAction(this, config);
         }
         return NULL_ACTION;
     }

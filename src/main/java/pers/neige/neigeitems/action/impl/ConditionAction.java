@@ -1,11 +1,10 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.*;
+import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ConditionAction extends Action {
@@ -22,24 +21,10 @@ public class ConditionAction extends Action {
 
     public ConditionAction(
             @NotNull BaseActionManager manager,
-            @NotNull ConfigurationSection action
+            @NotNull ConfigReader action
     ) {
         super(manager);
         condition = new Condition(manager, action.getString("condition"));
-        actions = manager.compile(action.get("actions"));
-        async = manager.compile(action.get("async"));
-        sync = manager.compile(action.get("sync"));
-        deny = manager.compile(action.get("deny"));
-        checkAsyncSafe();
-    }
-
-    public ConditionAction(
-            @NotNull BaseActionManager manager,
-            @NotNull Map<?, ?> action
-    ) {
-        super(manager);
-        Object conditionString = action.get("condition");
-        condition = new Condition(manager, conditionString == null ? null : conditionString.toString());
         actions = manager.compile(action.get("actions"));
         async = manager.compile(action.get("async"));
         sync = manager.compile(action.get("sync"));

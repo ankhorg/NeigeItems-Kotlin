@@ -2,13 +2,13 @@ package pers.neige.neigeitems.action.impl;
 
 import kotlin.Pair;
 import kotlin.text.StringsKt;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
+import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.StringUtils;
 
@@ -35,7 +35,7 @@ public class WeightAction extends Action {
 
     public WeightAction(
             @NotNull BaseActionManager manager,
-            @NotNull ConfigurationSection action
+            @NotNull ConfigReader action
     ) {
         super(manager);
         this.amountScriptString = action.getString("amount");
@@ -50,36 +50,6 @@ public class WeightAction extends Action {
             }
         }
         this.order = action.getBoolean("order", false);
-        initActions(manager, action.get("actions"));
-        checkAsyncSafe();
-    }
-
-    public WeightAction(
-            @NotNull BaseActionManager manager,
-            @NotNull Map<?, ?> action
-    ) {
-        super(manager);
-        Object value = action.get("amount");
-        if (value != null) {
-            this.amountScriptString = value.toString();
-            this.amount = StringsKt.toIntOrNull(this.amountScriptString);
-            if (this.amount == null) {
-                try {
-                    this.amountScript = ((Compilable) manager.getEngine()).compile(this.amountScriptString);
-                } catch (ScriptException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        Object order = action.get("order");
-        if (order instanceof Boolean) {
-            this.order = (Boolean) order;
-        } else if (order == null) {
-            this.order = false;
-        } else {
-            Boolean temp = StringsKt.toBooleanStrictOrNull(order.toString());
-            this.order = temp != null && temp;
-        }
         initActions(manager, action.get("actions"));
         checkAsyncSafe();
     }

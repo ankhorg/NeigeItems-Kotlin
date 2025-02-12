@@ -506,6 +506,17 @@ object ConfigUtils {
 
     /**
      * String 转 ConfigurationSection
+     * @return 转换结果
+     */
+    @JvmStatic
+    fun String.loadFromString(): ConfigurationSection? {
+        val result = YamlConfiguration()
+        result.loadFromString(this)
+        return result
+    }
+
+    /**
+     * String 转 ConfigurationSection
      * @param id 转换前使用的节点ID
      * @return 转换结果
      */

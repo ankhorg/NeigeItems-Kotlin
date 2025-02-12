@@ -9,6 +9,7 @@ import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
+import pers.neige.neigeitems.config.ConfigReader
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
@@ -71,6 +72,22 @@ object ItemUtils {
     fun ConfigurationSection.toNbtCompound(): NbtCompound {
         val itemTag = NbtCompound()
         this.getKeys(false).forEach { key ->
+            this.get(key)?.let { value ->
+                itemTag[key as String] = value.toNbt()
+            }
+        }
+        return itemTag
+    }
+
+    /**
+     * ConfigReader 转 NbtCompound
+     *
+     * @return 转换结果
+     */
+    @JvmStatic
+    fun ConfigReader.toNbtCompound(): NbtCompound {
+        val itemTag = NbtCompound()
+        this.keySet().forEach { key ->
             this.get(key)?.let { value ->
                 itemTag[key as String] = value.toNbt()
             }

@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
@@ -150,7 +151,7 @@ public class NMSHooker {
     }
 
     @NotNull
-    public ItemBuilder newItemBuilder(@Nullable ConfigurationSection config) {
+    public ItemBuilder newItemBuilder(@Nullable ConfigReader config) {
         return new ItemBuilder(config);
     }
 

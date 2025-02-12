@@ -15,6 +15,7 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.hook.nms.NMSHooker;
 import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
@@ -54,7 +55,7 @@ public class NMSHookerItemStack extends NMSHooker {
 
     @Override
     @NotNull
-    public ItemBuilder newItemBuilder(@Nullable ConfigurationSection config) {
+    public ItemBuilder newItemBuilder(@Nullable ConfigReader config) {
         return new NewItemBuilder(config);
     }
 

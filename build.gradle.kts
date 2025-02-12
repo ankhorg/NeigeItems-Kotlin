@@ -109,6 +109,8 @@ dependencies {
     implementation("org.apache.maven:maven-model:3.9.1")
     // brigadier
     implementation("com.mojang:brigadier:1.3.10")
+    // snakeyaml
+    implementation("org.yaml:snakeyaml:2.3")
 }
 
 tasks {
@@ -145,6 +147,8 @@ tasks {
         relocate("org.slf4j", "pers.neige.neigeitems.libs.slf4j")
         // brigadier
         relocate("com.mojang.", "pers.neige.neigeitems.libs.com.mojang.")
+        // snakeyaml
+        relocate("org.yaml.snakeyaml", "pers.neige.neigeitems.libs.snakeyaml")
     }
     kotlinSourcesJar {
         // include subprojects

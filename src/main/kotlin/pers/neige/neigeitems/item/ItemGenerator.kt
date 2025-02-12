@@ -10,8 +10,11 @@ import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
 import org.slf4j.LoggerFactory
+import org.yaml.snakeyaml.Yaml
 import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.action.container.ActionContainer
+import pers.neige.neigeitems.config.ConfigReader
+import pers.neige.neigeitems.config.MapConfigReader
 import pers.neige.neigeitems.event.ItemGenerateEvent
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.manager.ConfigManager
@@ -20,7 +23,6 @@ import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ConfigUtils.clone
 import pers.neige.neigeitems.utils.ConfigUtils.coverWith
-import pers.neige.neigeitems.utils.ConfigUtils.loadFromString
 import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ConfigUtils.toStringMap
@@ -101,12 +103,12 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     /**
      * 获取物品静态配置
      */
-    val static = configSection.getConfigurationSection("static")
+    val static = ConfigReader.parse(configSection.getConfigurationSection("static"))
 
     /**
      * 获取去除静态配置的物品配置文本
      */
-    private val configStringNoSection = (YamlConfiguration() as ConfigurationSection).also {
+    private val configStringNoSection = YamlConfiguration().also {
         this.configSection.getKeys(false).forEach { key ->
             it.set(key, this.configSection.get(key))
         }
@@ -114,7 +116,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         it.set("static", null)
         it.set("options.update", null)
         it.set("event", null)
-    }.saveToString(id)
+    }.saveToString()
 
     /**
      * 获取解析后物品配置文本哈希值
@@ -130,7 +132,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     private val originStaticItemStack = load(static) ?: ItemStack(Material.STONE).asCraftCopy()
 
     private fun load(
-        config: ConfigurationSection?,
+        config: ConfigReader?,
         base: ItemStack? = null,
         baseMaterial: Material? = null,
         cache: Map<String, String>? = null
@@ -160,8 +162,8 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                 }
                 neigeItems.putInt("hashCode", hashCode)
             }
-            val optionsConfig = config.getConfigurationSection("options") ?: return@runPreCoverNbt
-            for (key in optionsConfig.getKeys(false)) {
+            val optionsConfig = config.getConfig("options") ?: return@runPreCoverNbt
+            for (key in optionsConfig.keySet()) {
                 when (key.lowercase()) {
                     // 设置物品使用次数
                     "charge" -> {
@@ -333,9 +335,9 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         // Debug信息
         if (debug) {
             logger.info(configString)
-            sections?.let { logger.info(sections.saveToString("$id-sections")) }
+            sections?.let { logger.info(sections.saveToString("sections")) }
         }
-        val configSection = configString.loadFromString(id) ?: YamlConfiguration()
+        val configSection = ConfigReader.parse(configString)
 
         // 构建物品
         // 获取材质
@@ -372,7 +374,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         } else {
             Bukkit.getConsoleSender().sendLang(
                 "Messages.invalidMaterial", mapOf(
-                    Pair("{itemID}", id), Pair("{material}", configSection.getString("material") ?: "")
+                    Pair("{itemID}", id), Pair("{material}", configSection.getString("material", "")!!)
                 )
             )
         }
