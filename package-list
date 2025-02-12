@@ -42,6 +42,7 @@ pers.neige.neigeitems.command.selector
 pers.neige.neigeitems.command.subcommand
 pers.neige.neigeitems.command.subcommand.expansion
 pers.neige.neigeitems.command.subcommand.mm
+pers.neige.neigeitems.config
 pers.neige.neigeitems.event
 pers.neige.neigeitems.hook.itemsadder
 pers.neige.neigeitems.hook.itemsadder.impl
