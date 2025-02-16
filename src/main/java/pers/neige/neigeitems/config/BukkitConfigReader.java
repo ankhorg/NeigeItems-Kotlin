@@ -15,6 +15,11 @@ public class BukkitConfigReader implements ConfigReader {
         this.handle = config;
     }
 
+    @NotNull
+    public ConfigurationSection getHandle() {
+        return handle;
+    }
+
     @Override
     @NotNull
     public Set<String> keySet() {

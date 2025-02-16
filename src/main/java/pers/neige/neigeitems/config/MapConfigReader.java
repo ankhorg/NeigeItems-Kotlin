@@ -2,6 +2,7 @@ package pers.neige.neigeitems.config;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,11 @@ public class MapConfigReader implements ConfigReader {
 
     public MapConfigReader(@NotNull Map<?, ?> map) {
         this.handle = map;
+    }
+
+    @NotNull
+    public Map<?, ?> getHandle() {
+        return handle;
     }
 
     @Override
@@ -30,7 +36,29 @@ public class MapConfigReader implements ConfigReader {
     @Override
     @Nullable
     public Object get(@NotNull String key) {
-        return handle.get(key);
+        List<String> keys = StringUtils.split(key, '.', '\\');
+
+        Map<?, ?> currentMap = this.handle;
+        Object value = null;
+
+        for (String k : keys) {
+            if (currentMap == null) {
+                return null;
+            }
+            if (currentMap.containsKey(k)) {
+                Object obj = currentMap.get(k);
+                value = obj;
+                if (obj instanceof Map<?, ?>) {
+                    currentMap = (Map<?, ?>) obj;
+                } else {
+                    currentMap = null;
+                }
+            } else {
+                return null;
+            }
+        }
+
+        return value;
     }
 
     @Override
@@ -41,14 +69,14 @@ public class MapConfigReader implements ConfigReader {
     @Override
     @Nullable
     public String getString(@NotNull String key, @Nullable String def) {
-        Object value = handle.get(key);
+        Object value = get(key);
         return value == null ? def : value.toString();
     }
 
     @Override
     @NotNull
     public String getNotNullString(@NotNull String key, @NotNull String def) {
-        Object value = handle.get(key);
+        Object value = get(key);
         return value == null ? def : value.toString();
     }
 
@@ -59,7 +87,7 @@ public class MapConfigReader implements ConfigReader {
 
     @Override
     public int getInt(@NotNull String key, int def) {
-        Object value = handle.get(key);
+        Object value = get(key);
         if (value instanceof Number) {
             return ((Number) value).intValue();
         } else if (value == null) {
@@ -76,7 +104,7 @@ public class MapConfigReader implements ConfigReader {
 
     @Override
     public long getLong(@NotNull String key, long def) {
-        Object value = handle.get(key);
+        Object value = get(key);
         if (value instanceof Number) {
             return ((Number) value).longValue();
         } else if (value == null) {
@@ -93,7 +121,7 @@ public class MapConfigReader implements ConfigReader {
 
     @Override
     public boolean getBoolean(@NotNull String key, boolean def) {
-        Object value = handle.get(key);
+        Object value = get(key);
         if (value instanceof Boolean) {
             return (Boolean) value;
         } else if (value == null) {
@@ -105,7 +133,7 @@ public class MapConfigReader implements ConfigReader {
 
     @Override
     public List<String> getStringList(@NotNull String key) {
-        Object value = handle.get(key);
+        Object value = get(key);
         if (value instanceof List<?>) {
             List<String> result = new ArrayList<>();
             for (Object object : ((List<?>) value)) {
@@ -120,7 +148,7 @@ public class MapConfigReader implements ConfigReader {
 
     @Override
     public ConfigReader getConfig(@NotNull String key) {
-        Object value = handle.get(key);
+        Object value = get(key);
         return value instanceof Map<?, ?> ? new MapConfigReader((Map<?, ?>) value) : null;
     }
 }
