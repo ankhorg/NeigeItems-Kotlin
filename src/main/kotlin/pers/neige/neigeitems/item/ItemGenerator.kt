@@ -10,11 +10,9 @@ import org.bukkit.configuration.MemorySection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
 import org.slf4j.LoggerFactory
-import org.yaml.snakeyaml.Yaml
 import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.action.container.ActionContainer
 import pers.neige.neigeitems.config.ConfigReader
-import pers.neige.neigeitems.config.MapConfigReader
 import pers.neige.neigeitems.event.ItemGenerateEvent
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.manager.ConfigManager

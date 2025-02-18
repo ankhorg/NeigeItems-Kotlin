@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.utils
 
 import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
@@ -10,7 +11,9 @@ import pers.neige.neigeitems.utils.FileUtils.createDirectory
 import pers.neige.neigeitems.utils.FileUtils.createFile
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStreamReader
 import java.io.OutputStream
+import java.nio.charset.StandardCharsets
 
 
 /**
@@ -146,8 +149,7 @@ object ConfigUtils {
     fun getAllFiles(plugin: String, dir: String): ArrayList<File> {
         return getAllFiles(
             File(
-                File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin),
-                File.separator + dir
+                File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin), File.separator + dir
             )
         )
     }
@@ -174,8 +176,7 @@ object ConfigUtils {
     @JvmStatic
     fun getFileOrNull(plugin: String, file: String): File? {
         return File(
-            File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin),
-            File.separator + file
+            File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin), File.separator + file
         ).let {
             if (!it.exists()) null
             else it
@@ -192,8 +193,7 @@ object ConfigUtils {
     @JvmStatic
     fun getFileOrCreate(plugin: String, file: String): File {
         return File(
-            File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin),
-            File.separator + file
+            File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin), File.separator + file
         ).createFile()
     }
 
@@ -509,7 +509,7 @@ object ConfigUtils {
      * @return 转换结果
      */
     @JvmStatic
-    fun String.loadFromString(): ConfigurationSection? {
+    fun String.loadFromString(): ConfigurationSection {
         val result = YamlConfiguration()
         result.loadFromString(this)
         return result
@@ -545,7 +545,7 @@ object ConfigUtils {
     @JvmStatic
     fun ConfigurationSection.coverWith(configSection: ConfigurationSection): ConfigurationSection {
         // 遍历所有键
-        configSection.getKeys(false).forEach { key ->
+        for (key in configSection.getKeys(false)) {
             // 用于覆盖的值
             val coverValue = configSection.get(key)
             // 原有值
@@ -553,9 +553,7 @@ object ConfigUtils {
             // 如果二者包含相同键
             if (value != null) {
                 // 如果二者均为ConfigurationSection
-                if (value is ConfigurationSection
-                    && coverValue is ConfigurationSection
-                ) {
+                if (value is ConfigurationSection && coverValue is ConfigurationSection) {
                     // 合并
                     this.set(key, value.coverWith(coverValue))
                 } else {
@@ -568,6 +566,57 @@ object ConfigUtils {
             }
         }
         return this
+    }
+
+    /**
+     * 用于补全config, 前者为当前config, 后者为默认config.
+     * 当默认config中的某个key不存在于当前config时, 将默认值补入当前config.
+     *
+     * @param config 当前config
+     * @param origin 默认config
+     * @return 是否存在补全行为
+     */
+    @JvmStatic
+    fun mergeIfAbsent(config: ConfigurationSection, origin: ConfigurationSection): Boolean {
+        var changed = false
+        for (key in origin.getKeys(true)) {
+            if (!config.contains(key)) {
+                config.set(key, origin.get(key))
+                changed = true
+            } else {
+                val completeValue = origin.get(key)
+                if (completeValue is ConfigurationSection && config.get(key) !is ConfigurationSection) {
+                    config.set(key, completeValue)
+                    changed = true
+                }
+            }
+        }
+        return changed
+    }
+
+    /**
+     * 用于生成或补全插件config.
+     * 当不存在config文件时, 将生成默认config文件.
+     * 当存在config文件且默认config中的某个key不存在于当前config时, 默认值将补入当前config, 并重载config.
+     */
+    @JvmStatic
+    fun JavaPlugin.loadConfig() {
+        val origin: FileConfiguration = getResource("config.yml")?.use { input ->
+            InputStreamReader(input, StandardCharsets.UTF_8).use { reader ->
+                YamlConfiguration.loadConfiguration(reader)
+            }
+        } ?: YamlConfiguration()
+        val configFile = getFileOrNull(this, "config.yml")
+        if (configFile == null) {
+            saveDefaultConfig()
+            reloadConfig()
+        } else {
+            val config = configFile.loadConfiguration()
+            if (mergeIfAbsent(config, origin)) {
+                config.save(configFile)
+                reloadConfig()
+            }
+        }
     }
 
     /**

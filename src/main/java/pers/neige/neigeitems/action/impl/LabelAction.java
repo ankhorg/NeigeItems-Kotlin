@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
@@ -9,7 +8,6 @@ import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class LabelAction extends Action {
