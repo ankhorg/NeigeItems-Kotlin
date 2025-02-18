@@ -157,4 +157,29 @@ object PlayerUtils {
     fun Player.sendActionBar(message: String) {
         this.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))
     }
+
+    /**
+     * 检测冷却状态.
+     * 冷却完成则重新设置冷却并返回0.
+     * 冷却未完成则返回剩余时间.
+     *
+     * @param key      冷却组ID
+     * @param cooldown 冷却刷新时间
+     * @return 剩余冷却时间
+     */
+    fun Player.checkCooldown(key: String, cooldown: Long): Long {
+        val user = UserManager.INSTANCE[uniqueId] ?: return Long.MAX_VALUE
+        return user.checkCooldown(key, cooldown)
+    }
+
+    /**
+     * 设置进入冷却状态.
+     *
+     * @param key      冷却组ID
+     * @param cooldown 冷却刷新时间
+     */
+    fun Player.setCooldown(key: String, cooldown: Long) {
+        val user = UserManager.INSTANCE[uniqueId] ?: return
+        user.setCooldown(key, cooldown)
+    }
 }

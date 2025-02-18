@@ -5,9 +5,9 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.event.ItemExpirationEvent
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.manager.UserManager
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.LangUtils.sendLang
+import pers.neige.neigeitems.utils.PlayerUtils.checkCooldown
 
 /**
  * 物品检测器, 用于回收过期物品并更新旧版物品
@@ -47,7 +47,6 @@ object ItemCheck {
      */
     fun Player.couldCheckInventory(): Boolean {
         if (!ConfigManager.checkInventory) return false
-        val user = UserManager.INSTANCE[uniqueId] ?: return false
-        return user.checkCooldown("CheckInvCD", 1000) <= 0
+        return checkCooldown("ni:check_inv", 1000) <= 0
     }
 }

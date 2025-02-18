@@ -27,7 +27,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
     /**
      * 获取物品冷却组ID
      */
-    val group: String = config.getString("group") ?: "$type-$id"
+    val group: String = config.getString("group") ?: "${type}_$id"
 
     /**
      * 获取物品消耗信息

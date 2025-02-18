@@ -6,9 +6,9 @@ import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.item.action.ActionTrigger
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
 import pers.neige.neigeitems.manager.ConfigManager
-import pers.neige.neigeitems.manager.UserManager
 import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
+import pers.neige.neigeitems.utils.PlayerUtils.checkCooldown
 import pers.neige.neigeitems.utils.PlayerUtils.giveItem
 import pers.neige.neigeitems.utils.PlayerUtils.sendActionBar
 import pers.neige.neigeitems.utils.SchedulerUtils.syncLater
@@ -58,8 +58,7 @@ object ActionUtils {
      */
     @JvmStatic
     fun ActionTrigger.isCoolDown(player: Player, cd: Long): Boolean {
-        val user = UserManager.INSTANCE[player.uniqueId] ?: return true
-        val leftTime = user.checkCooldown("CD-$group", cd)
+        val leftTime = player.checkCooldown("ni:$group", cd)
         if (leftTime > 0) {
             ConfigManager.config.getString("Messages.itemCooldown")?.let {
                 val message = it.replace("{time}", "%.1f".format(leftTime.toDouble() / 1000))
