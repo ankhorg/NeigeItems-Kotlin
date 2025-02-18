@@ -25,14 +25,6 @@ public class DoubleArgumentType implements ArgumentType<Double> {
     }
 
     /**
-     * 正小数类型
-     */
-    @NotNull
-    public static DoubleArgumentType positiveDouble() {
-        return doubleValue(1);
-    }
-
-    /**
      * 非负小数类型
      */
     @NotNull
@@ -41,19 +33,11 @@ public class DoubleArgumentType implements ArgumentType<Double> {
     }
 
     /**
-     * 负小数类型
-     */
-    @NotNull
-    public static DoubleArgumentType negativeDouble() {
-        return doubleValue(Double.MIN_VALUE, -1);
-    }
-
-    /**
      * 非正小数类型
      */
     @NotNull
     public static DoubleArgumentType nonPositiveDouble() {
-        return doubleValue(Double.MIN_VALUE, 0);
+        return doubleValue(-Double.MAX_VALUE, 0);
     }
 
     /**
@@ -61,7 +45,7 @@ public class DoubleArgumentType implements ArgumentType<Double> {
      */
     @NotNull
     public static DoubleArgumentType doubleValue() {
-        return doubleValue(Double.MIN_VALUE);
+        return doubleValue(-Double.MAX_VALUE);
     }
 
     /**
