@@ -91,7 +91,7 @@ public class User {
      * @param cooldown 冷却刷新时间
      * @return 剩余冷却时间
      */
-    public long checkCooldown(String key, Long cooldown) {
+    public long checkCooldown(@NotNull String key, long cooldown) {
         if (cooldown <= 0) return 0;
         long time = System.currentTimeMillis();
         long lastTime = this.cooldown.getOrDefault(key, 0L);
@@ -104,12 +104,30 @@ public class User {
     }
 
     /**
-     * 设置进入冷却状态.<br>
+     * 返回剩余冷却时间.
+     *
+     * @param key      冷却组ID
+     * @param cooldown 冷却刷新时间
+     * @return 剩余冷却时间
+     */
+    public long getCooldown(@NotNull String key, long cooldown) {
+        if (cooldown <= 0) return 0;
+        long time = System.currentTimeMillis();
+        long lastTime = this.cooldown.getOrDefault(key, 0L);
+        if (lastTime > time) {
+            return lastTime - time;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * 设置进入冷却状态.
      *
      * @param key      冷却组ID
      * @param cooldown 冷却刷新时间
      */
-    public void setCooldown(String key, Long cooldown) {
+    public void setCooldown(@NotNull String key, long cooldown) {
         long time = System.currentTimeMillis();
         this.cooldown.put(key, time + cooldown);
     }
