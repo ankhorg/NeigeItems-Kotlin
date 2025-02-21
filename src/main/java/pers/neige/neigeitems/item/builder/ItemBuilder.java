@@ -3,6 +3,7 @@ package pers.neige.neigeitems.item.builder;
 import kotlin.text.StringsKt;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -94,6 +95,13 @@ public class ItemBuilder {
             @Nullable ConfigReader config
     ) {
         load(config);
+    }
+
+    public void load(
+            @Nullable ConfigurationSection config
+    ) {
+        if (config == null) return;
+        load(ConfigReader.parse(config));
     }
 
     public void load(
