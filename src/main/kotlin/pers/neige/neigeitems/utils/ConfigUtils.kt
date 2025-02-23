@@ -609,14 +609,13 @@ object ConfigUtils {
         val configFile = getFileOrNull(this, "config.yml")
         if (configFile == null) {
             saveDefaultConfig()
-            reloadConfig()
         } else {
             val config = configFile.loadConfiguration()
             if (mergeIfAbsent(config, origin)) {
                 config.save(configFile)
-                reloadConfig()
             }
         }
+        reloadConfig()
     }
 
     /**
