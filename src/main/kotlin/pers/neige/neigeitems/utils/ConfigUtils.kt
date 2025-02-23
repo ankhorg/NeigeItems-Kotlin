@@ -597,10 +597,23 @@ object ConfigUtils {
     /**
      * 用于生成或补全插件config.
      * 当不存在config文件时, 将生成默认config文件.
-     * 当存在config文件且默认config中的某个key不存在于当前config时, 默认值将补入当前config, 并重载config.
+     * 当存在config文件且默认config中的某个key不存在于当前config时, 默认值将补入当前config.
      */
     @JvmStatic
     fun JavaPlugin.loadConfig() {
+        this.loadConfig(true)
+    }
+
+    /**
+     * 用于生成或加载插件config.
+     * 当不存在config文件时, 将生成默认config文件.
+     * 当 fixConfig 为 true 时, 如果存在config文件且默认config中的某个key不存在于当前config, 默认值将补入当前config.
+     * 当 fixConfig 为 false 时, 将直接加载config.
+     *
+     * @param fixConfig 是否根据默认config进行补全
+     */
+    @JvmStatic
+    fun JavaPlugin.loadConfig(fixConfig: Boolean) {
         val origin: FileConfiguration = getResource("config.yml")?.use { input ->
             InputStreamReader(input, StandardCharsets.UTF_8).use { reader ->
                 YamlConfiguration.loadConfiguration(reader)
@@ -609,7 +622,7 @@ object ConfigUtils {
         val configFile = getFileOrNull(this, "config.yml")
         if (configFile == null) {
             saveDefaultConfig()
-        } else {
+        } else if (fixConfig) {
             val config = configFile.loadConfiguration()
             if (mergeIfAbsent(config, origin)) {
                 config.save(configFile)
