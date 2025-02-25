@@ -50,7 +50,7 @@ public class ListUtils {
 
     @Nullable
     public static <T> T getOrNull(
-            @NotNull T[] list,
+            T @NotNull [] list,
             int index
     ) {
         return index >= 0 && index <= (list.length - 1) ? list[index] : null;
@@ -58,7 +58,7 @@ public class ListUtils {
 
     @NotNull
     public static <T> T getOrDefault(
-            @NotNull T[] list,
+            T @NotNull [] list,
             int index,
             @NotNull T def
     ) {
@@ -71,7 +71,7 @@ public class ListUtils {
 
     @NotNull
     public static <T, V> V getAndApply(
-            @NotNull T[] list,
+            T @NotNull [] list,
             int index,
             @NotNull V def,
             @NotNull Function<T, V> handler

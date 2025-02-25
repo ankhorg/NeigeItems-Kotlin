@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.config;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.StringUtils;
@@ -69,13 +70,6 @@ public class MapConfigReader implements ConfigReader {
     @Override
     @Nullable
     public String getString(@NotNull String key, @Nullable String def) {
-        Object value = get(key);
-        return value == null ? def : value.toString();
-    }
-
-    @Override
-    @NotNull
-    public String getNotNullString(@NotNull String key, @NotNull String def) {
         Object value = get(key);
         return value == null ? def : value.toString();
     }

@@ -22,7 +22,7 @@ public class LabelAction extends Action {
     ) {
         super(manager);
         if (action.containsKey("label")) {
-            label = action.getNotNullString("label", "label");
+            label = action.getString("label", "label");
         } else {
             label = "label";
         }

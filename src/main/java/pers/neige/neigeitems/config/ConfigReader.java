@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.config;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
@@ -50,10 +51,8 @@ public interface ConfigReader {
     String getString(@NotNull String key);
 
     @Nullable
+    @Contract("_, !null -> !null")
     String getString(@NotNull String key, @Nullable String def);
-
-    @NotNull
-    String getNotNullString(@NotNull String key, @NotNull String def);
 
     int getInt(@NotNull String key);
 

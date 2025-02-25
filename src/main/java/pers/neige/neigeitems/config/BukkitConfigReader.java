@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.config;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,12 +46,6 @@ public class BukkitConfigReader implements ConfigReader {
     @Override
     @Nullable
     public String getString(@NotNull String key, @Nullable String def) {
-        return handle.getString(key, def);
-    }
-
-    @Override
-    @NotNull
-    public String getNotNullString(@NotNull String key, @NotNull String def) {
         return handle.getString(key, def);
     }
 

@@ -388,7 +388,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable byte[] getByteArray(@NotNull String key, @Nullable byte[] def) {
+    public byte @Nullable [] getByteArray(@NotNull String key, byte @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagByteArray)
                 ? ((RefNbtTagByteArray) value).getBytes()
@@ -396,7 +396,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable int[] getIntArray(@NotNull String key, @Nullable int[] def) {
+    public int @Nullable [] getIntArray(@NotNull String key, int @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagIntArray)
                 ? ((RefNbtTagIntArray) value).getInts()
@@ -404,7 +404,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable long[] getLongArray(@NotNull String key, @Nullable long[] def) {
+    public long @Nullable [] getLongArray(@NotNull String key, long @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagLongArray)
                 ? (LONG_ARRAY_SUPPORT ? ((RefNbtTagLongArray) value).getLongs() : ((RefNbtTagLongArray) value).longs)
@@ -644,7 +644,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable byte[] getDeepByteArray(@NotNull String key, @Nullable byte[] def) {
+    public byte @Nullable [] getDeepByteArray(@NotNull String key, byte @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagByteArray
                 ? ((RefNbtTagByteArray) value).getBytes()
@@ -652,7 +652,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable int[] getDeepIntArray(@NotNull String key, @Nullable int[] def) {
+    public int @Nullable [] getDeepIntArray(@NotNull String key, int @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagIntArray
                 ? ((RefNbtTagIntArray) value).getInts()
@@ -660,7 +660,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable long[] getDeepLongArray(@NotNull String key, @Nullable long[] def) {
+    public long @Nullable [] getDeepLongArray(@NotNull String key, long @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return (value instanceof RefNbtTagLongArray)
                 ? (LONG_ARRAY_SUPPORT ? ((RefNbtTagLongArray) value).getLongs() : ((RefNbtTagLongArray) value).longs)
