@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtStringLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagString;
@@ -33,5 +34,13 @@ public final class NbtString extends Nbt<RefNbtTagString> implements NbtStringLi
     @Override
     public NbtString clone() {
         return this;
+    }
+
+    @Override
+    public int compareTo(@NotNull Nbt<?> o) {
+        if (o instanceof NbtString) {
+            return getAsString().compareTo(o.getAsString());
+        }
+        return super.compareTo(o);
     }
 }

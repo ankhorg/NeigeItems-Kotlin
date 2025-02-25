@@ -83,6 +83,7 @@ class ScriptExpansion : CompiledScript {
                 const ActionContext = Packages.pers.neige.neigeitems.action.ActionContext
                 const AnimationType = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation.AnimationType
                 const EnumHand = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.EnumHand
+                const NbtItemStack = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack
                 const SpawnerBuilder = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner.SpawnerBuilder
                 const SuccessResult = Packages.pers.neige.neigeitems.action.result.SuccessResult
                 const StopResult = Packages.pers.neige.neigeitems.action.result.StopResult

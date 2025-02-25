@@ -102,6 +102,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @NotNull
     public Set<String> keySet() {
         return delegate.getKeys();
     }
@@ -113,6 +114,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @NotNull
     public Set<Entry<String, Nbt<?>>> entrySet() {
         Set<String> newKeySet = delegate.getKeys();
         if (oldKeySet == newKeySet) {
@@ -812,6 +814,40 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public @NotNull NbtCompound coverWith(@NotNull NbtCompound overlayCompound) {
         NbtUtils.coverWith(this.delegate, overlayCompound.delegate);
         return this;
+    }
+
+    @Override
+    public int compareTo(@NotNull Nbt<?> o) {
+        if (delegate == o.delegate) return 0;
+        if (o instanceof NbtCompound) {
+            NbtCompound anotherCompound = (NbtCompound) o;
+            int len1 = size();
+            int len2 = anotherCompound.size();
+            if (len1 != len2) return Integer.compare(len1, len2);
+
+            int k = 0;
+            Iterator<Map.Entry<String, Nbt<?>>> i1 = entrySet().iterator();
+            Iterator<Map.Entry<String, Nbt<?>>> i2 = anotherCompound.entrySet().iterator();
+            while (k < len1) {
+                Map.Entry<String, Nbt<?>> e1 = i1.next();
+                Map.Entry<String, Nbt<?>> e2 = i2.next();
+                String k1 = e1.getKey();
+                String k2 = e2.getKey();
+                int result1 = k1.compareTo(k2);
+                if (result1 != 0) {
+                    return result1;
+                }
+                Nbt<?> v1 = e1.getValue();
+                Nbt<?> v2 = e2.getValue();
+                int result2 = v1.compareTo(v2);
+                if (result2 != 0) {
+                    return result2;
+                }
+                k++;
+            }
+            return 0;
+        }
+        return super.compareTo(o);
     }
 
     public static class Unsafe {

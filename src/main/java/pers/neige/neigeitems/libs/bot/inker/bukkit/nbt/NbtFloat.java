@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtFloatLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagFloat;
@@ -33,5 +34,13 @@ public final class NbtFloat extends NbtNumeric<RefNbtTagFloat> implements NbtFlo
     @Override
     public NbtFloat clone() {
         return this;
+    }
+
+    @Override
+    public int compareTo(@NotNull Nbt<?> o) {
+        if (o instanceof NbtFloat) {
+            return Float.compare(getAsFloat(), ((NbtFloat) o).getAsFloat());
+        }
+        return super.compareTo(o);
     }
 }

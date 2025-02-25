@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtShortLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagShort;
@@ -43,5 +44,13 @@ public final class NbtShort extends NbtNumeric<RefNbtTagShort> implements NbtSho
     @Override
     public NbtShort clone() {
         return this;
+    }
+
+    @Override
+    public int compareTo(@NotNull Nbt<?> o) {
+        if (o instanceof NbtShort) {
+            return Short.compare(getAsShort(), ((NbtShort) o).getAsShort());
+        }
+        return super.compareTo(o);
     }
 }

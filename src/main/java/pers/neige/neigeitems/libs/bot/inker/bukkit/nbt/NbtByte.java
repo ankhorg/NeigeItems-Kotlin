@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtByteLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagByte;
@@ -48,5 +49,13 @@ public final class NbtByte extends NbtNumeric<RefNbtTagByte> implements NbtByteL
     @Override
     public NbtByte clone() {
         return this;
+    }
+
+    @Override
+    public int compareTo(@NotNull Nbt<?> o) {
+        if (o instanceof NbtByte) {
+            return Byte.compare(getAsByte(), ((NbtByte) o).getAsByte());
+        }
+        return super.compareTo(o);
     }
 }

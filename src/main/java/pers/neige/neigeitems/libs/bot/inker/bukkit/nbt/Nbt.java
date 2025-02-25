@@ -1,10 +1,11 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike;
 import pers.neige.neigeitems.ref.nbt.*;
 
-public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike {
+public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike, Comparable<Nbt<?>> {
     final NMS delegate;
 
     Nbt(NMS delegate) {
@@ -77,6 +78,10 @@ public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike {
     @Override
     public String getAsString() {
         return delegate.asString();
+    }
+
+    public int compareTo(@NotNull Nbt<?> o) {
+        return Integer.compare(getId(), o.getId());
     }
 
     public static class Unsafe {

@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagIntArray;
 
 import java.util.Arrays;
@@ -59,5 +60,29 @@ public final class NbtIntArray extends NbtCollection<RefNbtTagIntArray, Integer>
     @Override
     public NbtIntArray clone() {
         return new NbtIntArray(cloneNms());
+    }
+
+    @Override
+    public int compareTo(@NotNull Nbt<?> o) {
+        if (delegate == o.delegate) return 0;
+        if (o instanceof NbtIntArray) {
+            int[] v1 = getAsIntArray();
+            int[] v2 = ((NbtIntArray) o).getAsIntArray();
+            int len1 = v1.length;
+            int len2 = v2.length;
+            if (len1 != len2) return Integer.compare(len1, len2);
+
+            int k = 0;
+            while (k < len1) {
+                int c1 = v1[k];
+                int c2 = v2[k];
+                if (c1 != c2) {
+                    return Integer.compare(c1, c2);
+                }
+                k++;
+            }
+            return 0;
+        }
+        return super.compareTo(o);
     }
 }

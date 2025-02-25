@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtDoubleLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagDouble;
@@ -32,5 +33,13 @@ public final class NbtDouble extends NbtNumeric<RefNbtTagDouble> implements NbtD
     @Override
     public NbtDouble clone() {
         return this;
+    }
+
+    @Override
+    public int compareTo(@NotNull Nbt<?> o) {
+        if (o instanceof NbtDouble) {
+            return Double.compare(getAsDouble(), ((NbtDouble) o).getAsDouble());
+        }
+        return super.compareTo(o);
     }
 }

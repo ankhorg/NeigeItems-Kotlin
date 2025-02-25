@@ -13,8 +13,13 @@ import pers.neige.neigeitems.ref.nbt.*;
 import pers.neige.neigeitems.ref.world.item.component.RefCustomData;
 
 import java.util.Map;
+import java.util.Objects;
 
-public final class NbtItemStack {
+public final class NbtItemStack implements Comparable<NbtItemStack> {
+    /**
+     * 1.13+ 版本起, damage字段存储于nbt当中.
+     */
+    private final static boolean NBT_DAMAGE = CbVersion.v1_13_R1.isSupport();
     /**
      * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
      */
@@ -190,5 +195,35 @@ public final class NbtItemStack {
     @Override
     public NbtItemStack clone() throws CloneNotSupportedException {
         return new NbtItemStack(NbtUtils.asCopy(itemStack));
+    }
+
+    @Override
+    public int compareTo(@NotNull NbtItemStack o) {
+        int materialResult = Integer.compare(itemStack.getType().ordinal(), o.itemStack.getType().ordinal());
+        if (materialResult != 0) return materialResult;
+        int amountResult = Integer.compare(itemStack.getAmount(), o.itemStack.getAmount());
+        if (amountResult != 0) return amountResult;
+        if (NBT_DAMAGE) {
+            int damageResult = Short.compare(itemStack.getDurability(), o.itemStack.getDurability());
+            if (damageResult != 0) return damageResult;
+        }
+        NbtCompound nbt0 = getTag();
+        NbtCompound nbt1 = o.getTag();
+        if (nbt0 == null) {
+            return nbt1 == null ? 0 : -1;
+        } else if (nbt1 == null) return 1;
+        return nbt0.compareTo(nbt1);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof NbtItemStack)) return false;
+        NbtItemStack that = (NbtItemStack) o;
+        return Objects.equals(itemStack, that.itemStack);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(itemStack);
     }
 }
