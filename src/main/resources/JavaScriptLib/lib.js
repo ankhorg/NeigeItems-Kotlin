@@ -939,9 +939,18 @@ const offHandItem = function () {
 }
 
 /**
- * 在kill相关动作中获取MM怪物ID, 不是MM怪物则返回null
+ * 在damage,block,kill相关动作中获取MM怪物ID, 不是MM怪物则返回null
  */
-const getMobId = function () {
+const getAttackerMobId = function () {
+    const hooker = HookerManager.INSTANCE.mythicMobsHooker
+    if (hooker == null) return null
+    return hooker.getMythicId(event.getDamager())
+}
+
+/**
+ * 在damage,block,kill相关动作中获取MM怪物ID, 不是MM怪物则返回null
+ */
+const getDefenderMobId = function () {
     const hooker = HookerManager.INSTANCE.mythicMobsHooker
     if (hooker == null) return null
     return hooker.getMythicId(event.getEntity())
