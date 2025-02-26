@@ -45,6 +45,7 @@ public class BukkitConfigReader implements ConfigReader {
 
     @Override
     @Nullable
+    @Contract("_, !null -> !null")
     public String getString(@NotNull String key, @Nullable String def) {
         return handle.getString(key, def);
     }

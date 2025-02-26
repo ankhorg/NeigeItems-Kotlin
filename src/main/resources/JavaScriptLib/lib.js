@@ -937,3 +937,12 @@ const mainHandItem = function () {
 const offHandItem = function () {
     return player.getInventory().getItemInOffHand()
 }
+
+/**
+ * 在kill相关动作中获取MM怪物ID, 不是MM怪物则返回null
+ */
+const getMobId = function () {
+    const hooker = HookerManager.INSTANCE.mythicMobsHooker
+    if (hooker == null) return null
+    return hooker.getMythicId(event.getEntity())
+}

@@ -69,6 +69,7 @@ public class MapConfigReader implements ConfigReader {
 
     @Override
     @Nullable
+    @Contract("_, !null -> !null")
     public String getString(@NotNull String key, @Nullable String def) {
         Object value = get(key);
         return value == null ? def : value.toString();

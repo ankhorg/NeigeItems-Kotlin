@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
@@ -327,6 +328,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public @Nullable UUID getUUID(@NotNull String key, @Nullable UUID def) {
         RefNbtBase value = delegate.get(key);
         if (value instanceof RefNbtTagIntArray) {
@@ -380,6 +382,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public @Nullable String getString(@NotNull String key, @Nullable String def) {
         RefNbtBase value = delegate.get(key);
         return (value != null)
@@ -388,6 +391,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public byte @Nullable [] getByteArray(@NotNull String key, byte @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagByteArray)
@@ -396,6 +400,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public int @Nullable [] getIntArray(@NotNull String key, int @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagIntArray)
@@ -404,6 +409,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public long @Nullable [] getLongArray(@NotNull String key, long @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagLongArray)
@@ -412,6 +418,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public @Nullable NbtCompound getCompound(@NotNull String key, @Nullable NbtCompound def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagCompound)
@@ -435,6 +442,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public @Nullable NbtList getList(@NotNull String key, @Nullable NbtList def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagList)
@@ -583,6 +591,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public @Nullable UUID getDeepUUID(@NotNull String key, @Nullable UUID def) {
         RefNbtBase value = getDeepRefNbt(key);
         if (value instanceof RefNbtTagIntArray) {
@@ -636,6 +645,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public @Nullable String getDeepString(@NotNull String key, @Nullable String def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value != null
@@ -644,6 +654,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public byte @Nullable [] getDeepByteArray(@NotNull String key, byte @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagByteArray
@@ -652,6 +663,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public int @Nullable [] getDeepIntArray(@NotNull String key, int @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagIntArray
@@ -660,6 +672,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public long @Nullable [] getDeepLongArray(@NotNull String key, long @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return (value instanceof RefNbtTagLongArray)
@@ -668,6 +681,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public @Nullable NbtCompound getDeepCompound(@NotNull String key, @Nullable NbtCompound def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagCompound
@@ -676,6 +690,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
+    @Contract("_, !null -> !null")
     public @Nullable NbtList getDeepList(@NotNull String key, @Nullable NbtList def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagList

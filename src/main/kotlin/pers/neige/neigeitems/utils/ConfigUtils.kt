@@ -48,7 +48,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getAllFiles(dir: String): ArrayList<File> {
-        return getAllFiles(File(NeigeItems.getInstance().dataFolder, File.separator + dir))
+        return getAllFiles(File(NeigeItems.getInstance().dataFolder, dir))
     }
 
     /**
@@ -59,7 +59,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFile(file: String): File {
-        return File(NeigeItems.getInstance().dataFolder, File.separator + file)
+        return File(NeigeItems.getInstance().dataFolder, file)
     }
 
     /**
@@ -70,7 +70,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrNull(file: String): File? {
-        return File(NeigeItems.getInstance().dataFolder, File.separator + file).let {
+        return File(NeigeItems.getInstance().dataFolder, file).let {
             if (!it.exists()) null
             else it
         }
@@ -84,7 +84,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrCreate(file: String): File {
-        return File(NeigeItems.getInstance().dataFolder, File.separator + file).createFile()
+        return File(NeigeItems.getInstance().dataFolder, file).createFile()
     }
 
     /**
@@ -96,7 +96,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFile(plugin: Plugin, file: String): File {
-        return File(plugin.dataFolder, File.separator + file)
+        return File(plugin.dataFolder, file)
     }
 
     /**
@@ -108,7 +108,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrNull(plugin: Plugin, file: String): File? {
-        return File(plugin.dataFolder, File.separator + file).let {
+        return File(plugin.dataFolder, file).let {
             if (!it.exists()) null
             else it
         }
@@ -123,7 +123,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrCreate(plugin: Plugin, file: String): File {
-        return File(plugin.dataFolder, File.separator + file).createFile()
+        return File(plugin.dataFolder, file).createFile()
     }
 
     /**
@@ -135,7 +135,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getAllFiles(plugin: Plugin, dir: String): ArrayList<File> {
-        return getAllFiles(File(plugin.dataFolder, File.separator + dir))
+        return getAllFiles(File(plugin.dataFolder, dir))
     }
 
     /**
@@ -147,11 +147,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getAllFiles(plugin: String, dir: String): ArrayList<File> {
-        return getAllFiles(
-            File(
-                File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin), File.separator + dir
-            )
-        )
+        return getAllFiles(File(File(NeigeItems.getInstance().dataFolder.parent, plugin), dir))
     }
 
     /**
@@ -163,7 +159,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFile(plugin: String, file: String): File {
-        return File(File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin), File.separator + file)
+        return File(File(NeigeItems.getInstance().dataFolder.parent, plugin), file)
     }
 
     /**
@@ -175,9 +171,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrNull(plugin: String, file: String): File? {
-        return File(
-            File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin), File.separator + file
-        ).let {
+        return File(File(NeigeItems.getInstance().dataFolder.parent, plugin), file).let {
             if (!it.exists()) null
             else it
         }
@@ -192,9 +186,7 @@ object ConfigUtils {
      */
     @JvmStatic
     fun getFileOrCreate(plugin: String, file: String): File {
-        return File(
-            File(NeigeItems.getInstance().dataFolder.parent, File.separator + plugin), File.separator + file
-        ).createFile()
+        return File(File(NeigeItems.getInstance().dataFolder.parent, plugin), file).createFile()
     }
 
     /**

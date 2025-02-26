@@ -4,6 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.manager.logger.ILogger;
 import pers.neige.neigeitems.manager.logger.JavaLogger;
 import pers.neige.neigeitems.manager.logger.Slf4jLogger;
@@ -11,6 +12,7 @@ import pers.neige.neigeitems.utils.ConfigUtils;
 
 import java.io.File;
 import java.security.InvalidParameterException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +93,12 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
 
     @NotNull
     protected List<File> getFiles() {
-        return ConfigUtils.getAllFiles(pluginName, directory);
+        File file = new File(new File(NeigeItems.getInstance().getDataFolder().getParentFile(), pluginName), directory);
+        if (file.isDirectory()) {
+            return ConfigUtils.getAllFiles(file);
+        } else {
+            return Collections.singletonList(file);
+        }
     }
 
     @NotNull
