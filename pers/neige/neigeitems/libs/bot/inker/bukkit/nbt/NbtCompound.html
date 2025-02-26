@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>NbtCompound 1.21.22 API </title>
+    <title>NbtCompound 1.21.23 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../../../stylesheet.css" title="Style">
@@ -2198,7 +2198,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getUUID</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> <a href=NbtCraftItemComponent.html#getUUID(java.lang.String,java.util.UUID)>getUUID</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;)@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> <a href=NbtCraftItemComponent.html#getUUID(java.lang.String,java.util.UUID)>getUUID</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 UUID, 如果没有找到对应的 UUID 则返回默认值.</p></div>
 
                                         <dl>
@@ -2375,7 +2375,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getString</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=NbtCraftItemComponent.html#getString(java.lang.String,java.lang.String)>getString</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;)@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=NbtCraftItemComponent.html#getString(java.lang.String,java.lang.String)>getString</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 String, 如果没有找到对应的 String 则返回默认值.</p></div>
 
                                         <dl>
@@ -2412,7 +2412,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getByteArray</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; <a href=NbtCraftItemComponent.html#getByteArray(java.lang.String,kotlin.Array)>getByteArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;) <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; <a href=NbtCraftItemComponent.html#getByteArray(java.lang.String,kotlin.Array)>getByteArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 byte[], 如果没有找到对应的 byte[] 则返回默认值.</p></div>
 
                                         <dl>
@@ -2449,7 +2449,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getIntArray</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt; <a href=NbtCraftItemComponent.html#getIntArray(java.lang.String,kotlin.Array)>getIntArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt; def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;) <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt; <a href=NbtCraftItemComponent.html#getIntArray(java.lang.String,kotlin.Array)>getIntArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt; def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 int[], 如果没有找到对应的 int[] 则返回默认值.</p></div>
 
                                         <dl>
@@ -2486,7 +2486,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getLongArray</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt; <a href=NbtCraftItemComponent.html#getLongArray(java.lang.String,kotlin.Array)>getLongArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt; def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;) <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt; <a href=NbtCraftItemComponent.html#getLongArray(java.lang.String,kotlin.Array)>getLongArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt; def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 long[], 如果没有找到对应的 long[] 则返回默认值.</p></div>
 
                                         <dl>
@@ -2523,7 +2523,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getCompound</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=NbtCompound.html>NbtCompound</a> <a href=NbtCraftItemComponent.html#getCompound(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound)>getCompound</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=NbtCompound.html>NbtCompound</a> def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;)@Nullable() <a href=NbtCompound.html>NbtCompound</a> <a href=NbtCraftItemComponent.html#getCompound(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound)>getCompound</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=NbtCompound.html>NbtCompound</a> def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 NbtCompound, 如果没有找到对应的 NbtCompound 则返回默认值.</p></div>
 
                                         <dl>
@@ -2630,7 +2630,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getList</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=NbtList.html>NbtList</a> <a href=NbtCraftItemComponent.html#getList(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList)>getList</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=NbtList.html>NbtList</a> def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;)@Nullable() <a href=NbtList.html>NbtList</a> <a href=NbtCraftItemComponent.html#getList(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList)>getList</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=NbtList.html>NbtList</a> def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 NbtList, 如果没有找到对应的 NbtList 则返回默认值.</p></div>
 
                                         <dl>
@@ -3170,7 +3170,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getDeepUUID</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> <a href=NbtCraftItemComponent.html#getDeepUUID(java.lang.String,java.util.UUID)>getDeepUUID</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;)@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> <a href=NbtCraftItemComponent.html#getDeepUUID(java.lang.String,java.util.UUID)>getDeepUUID</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/UUID.html>UUID</a> def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 UUID, 如果没有找到对应的 UUID 则返回默认值. NBT键 以 . 做分隔符.</p></div>
 
                                         <dl>
@@ -3347,7 +3347,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getDeepString</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=NbtCraftItemComponent.html#getDeepString(java.lang.String,java.lang.String)>getDeepString</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;)@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=NbtCraftItemComponent.html#getDeepString(java.lang.String,java.lang.String)>getDeepString</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 String, 如果没有找到对应的 String 则返回默认值. NBT键 以 . 做分隔符.</p></div>
 
                                         <dl>
@@ -3384,7 +3384,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getDeepByteArray</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; <a href=NbtCraftItemComponent.html#getDeepByteArray(java.lang.String,kotlin.Array)>getDeepByteArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;) <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; <a href=NbtCraftItemComponent.html#getDeepByteArray(java.lang.String,kotlin.Array)>getDeepByteArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 byte[], 如果没有找到对应的 byte[] 则返回默认值. NBT键 以 . 做分隔符.</p></div>
 
                                         <dl>
@@ -3421,7 +3421,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getDeepIntArray</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt; <a href=NbtCraftItemComponent.html#getDeepIntArray(java.lang.String,kotlin.Array)>getDeepIntArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt; def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;) <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt; <a href=NbtCraftItemComponent.html#getDeepIntArray(java.lang.String,kotlin.Array)>getDeepIntArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;int&gt; def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 int[], 如果没有找到对应的 int[] 则返回默认值. NBT键 以 . 做分隔符.</p></div>
 
                                         <dl>
@@ -3458,7 +3458,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getDeepLongArray</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt; <a href=NbtCraftItemComponent.html#getDeepLongArray(java.lang.String,kotlin.Array)>getDeepLongArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt; def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;) <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt; <a href=NbtCraftItemComponent.html#getDeepLongArray(java.lang.String,kotlin.Array)>getDeepLongArray</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;long&gt; def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 long[], 如果没有找到对应的 long[] 则返回默认值. NBT键 以 . 做分隔符.</p></div>
 
                                         <dl>
@@ -3495,7 +3495,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getDeepCompound</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=NbtCompound.html>NbtCompound</a> <a href=NbtCraftItemComponent.html#getDeepCompound(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound)>getDeepCompound</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=NbtCompound.html>NbtCompound</a> def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;)@Nullable() <a href=NbtCompound.html>NbtCompound</a> <a href=NbtCraftItemComponent.html#getDeepCompound(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound)>getDeepCompound</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=NbtCompound.html>NbtCompound</a> def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 NbtCompound, 如果没有找到对应的 NbtCompound 则返回默认值. NBT键 以 . 做分隔符.</p></div>
 
                                         <dl>
@@ -3532,7 +3532,7 @@ extends <a href=Nbt.html>Nbt</a>&lt;<a href=Nbt.html>NMS</a>&gt; implements <a h
                                           >
                                     <li class="blockList">
                                         <h4>getDeepList</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=NbtList.html>NbtList</a> <a href=NbtCraftItemComponent.html#getDeepList(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList)>getDeepList</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=NbtList.html>NbtList</a> def)</pre>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;)@Nullable() <a href=NbtList.html>NbtList</a> <a href=NbtCraftItemComponent.html#getDeepList(java.lang.String,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList)>getDeepList</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=NbtList.html>NbtList</a> def)</pre>
                                         <div class="block"><p>根据 NBT键 获取对应的 NbtList, 如果没有找到对应的 NbtList 则返回默认值. NBT键 以 . 做分隔符.</p></div>
 
                                         <dl>
