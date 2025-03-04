@@ -2,9 +2,11 @@ package pers.neige.neigeitems.action;
 
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SchedulerUtils;
 
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class Action {
@@ -64,5 +66,27 @@ public abstract class Action {
             @NotNull ActionContext context
     ) {
         return evalAsyncSafe(manager, context);
+    }
+
+    /**
+     * 向当前动作前插入一个动作, 并返回合并后的新动作.
+     *
+     * @param action 插入的动作
+     * @return 新动作
+     */
+    @NotNull
+    public Action insertBefore(@Nullable Object action) {
+        return manager.compile(Arrays.asList(action, this));
+    }
+
+    /**
+     * 向当前动作后插入一个动作, 并返回合并后的新动作.
+     *
+     * @param action 插入的动作
+     * @return 新动作
+     */
+    @NotNull
+    public Action insertAfter(@Nullable Object action) {
+        return manager.compile(Arrays.asList(this, action));
     }
 }

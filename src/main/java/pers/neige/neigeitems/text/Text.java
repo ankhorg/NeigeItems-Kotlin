@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.text;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
+import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtString;
@@ -17,7 +17,6 @@ import pers.neige.neigeitems.text.impl.StringText;
 
 import java.security.InvalidParameterException;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 public interface Text {
@@ -33,12 +32,10 @@ public interface Text {
             return new StringText((String) action);
         } else if (action instanceof List<?>) {
             return new ListText(manager, (List<?>) action);
-        } else if (action instanceof Map<?, ?>) {
-            return new ConditionText(manager, (Map<?, ?>) action);
-        } else if (action instanceof ConfigurationSection) {
-            return new ConditionText(manager, (ConfigurationSection) action);
         }
-        return NullText.INSTANCE;
+        ConfigReader config = ConfigReader.parse(action);
+        if (config == null) return NullText.INSTANCE;
+        return new ConditionText(manager, config);
     }
 
     @NotNull

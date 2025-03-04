@@ -1,14 +1,13 @@
 package pers.neige.neigeitems.text.impl;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.Condition;
+import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.text.Text;
 
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 public class ConditionText implements Text {
@@ -21,19 +20,9 @@ public class ConditionText implements Text {
 
     public ConditionText(
             @NotNull BaseActionManager manager,
-            @NotNull ConfigurationSection lore
+            @NotNull ConfigReader lore
     ) {
         condition = new Condition(manager, lore.getString("condition"));
-        this.text = Text.compile(manager, lore.get("text"));
-        deny = Text.compile(manager, lore.get("deny"));
-    }
-
-    public ConditionText(
-            @NotNull BaseActionManager manager,
-            @NotNull Map<?, ?> lore
-    ) {
-        Object value = lore.get("condition");
-        condition = new Condition(manager, value == null ? null : value.toString());
         this.text = Text.compile(manager, lore.get("text"));
         deny = Text.compile(manager, lore.get("deny"));
     }

@@ -136,6 +136,8 @@ public abstract class BaseActionManager {
     public Action compile(
             @Nullable Object action
     ) {
+        if (action == null) return NULL_ACTION;
+        if (action instanceof Action) return (Action) action;
         if (action instanceof String) {
             String string = (String) action;
             String[] info = string.split(": ", 2);

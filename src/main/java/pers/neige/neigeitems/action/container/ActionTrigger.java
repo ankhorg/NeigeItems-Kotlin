@@ -16,11 +16,11 @@ public class ActionTrigger {
     @NotNull
     private final String type;
     @NotNull
-    private final Action actions;
+    private Action actions;
     @NotNull
-    private final Action async;
+    private Action async;
     @NotNull
-    private final Action sync;
+    private Action sync;
 
     public ActionTrigger(
             @NotNull BaseActionManager actionManager,
@@ -47,8 +47,40 @@ public class ActionTrigger {
     }
 
     @NotNull
+    public BaseActionManager getActionManager() {
+        return actionManager;
+    }
+
+    @NotNull
     public String getType() {
         return type;
+    }
+
+    @NotNull
+    public Action getActions() {
+        return actions;
+    }
+
+    public void setActions(@NotNull Action actions) {
+        this.actions = actions;
+    }
+
+    @NotNull
+    public Action getAsync() {
+        return async;
+    }
+
+    public void setAsync(@NotNull Action async) {
+        this.async = async;
+    }
+
+    @NotNull
+    public Action getSync() {
+        return sync;
+    }
+
+    public void setSync(@NotNull Action sync) {
+        this.sync = sync;
     }
 
     @NotNull

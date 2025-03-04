@@ -28,7 +28,9 @@ public interface ConfigReader {
 
     @Nullable
     static ConfigReader parse(@Nullable Object config) {
-        if (config instanceof ConfigurationSection) {
+        if (config instanceof ConfigReader) {
+            return (ConfigReader) config;
+        } else if (config instanceof ConfigurationSection) {
             return new BukkitConfigReader((ConfigurationSection) config);
         } else if (config instanceof Map<?, ?>) {
             return new MapConfigReader((Map<?, ?>) config);
