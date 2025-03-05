@@ -10,7 +10,7 @@ import pers.neige.neigeitems.text.Text;
 import java.util.List;
 import java.util.function.Function;
 
-public class ConditionText implements Text {
+public class ConditionText extends Text {
     @NotNull
     private final Condition condition;
     @NotNull
@@ -22,6 +22,7 @@ public class ConditionText implements Text {
             @NotNull BaseActionManager manager,
             @NotNull ConfigReader lore
     ) {
+        super(manager);
         condition = new Condition(manager, lore.getString("condition"));
         this.text = Text.compile(manager, lore.get("text"));
         deny = Text.compile(manager, lore.get("deny"));

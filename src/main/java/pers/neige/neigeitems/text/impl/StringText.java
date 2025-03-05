@@ -10,13 +10,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class StringText implements Text {
+public class StringText extends Text {
     @NotNull
     private final String lore;
 
     public StringText(
+            @NotNull BaseActionManager manager,
             @NotNull String lore
     ) {
+        super(manager);
         this.lore = lore;
     }
 

@@ -81,7 +81,7 @@ public class ConditionWeightAction extends Action {
 
     @Override
     public @NotNull ActionType getType() {
-        return ActionType.WEIGHT;
+        return ActionType.CONDITION_WEIGHT;
     }
 
     @Nullable

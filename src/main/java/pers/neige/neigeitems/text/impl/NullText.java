@@ -1,10 +1,11 @@
 package pers.neige.neigeitems.text.impl;
 
+import org.jetbrains.annotations.NotNull;
+import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.text.Text;
 
-public class NullText implements Text {
-    public static final Text INSTANCE = new NullText();
-
-    private NullText() {
+public class NullText extends Text {
+    public NullText(@NotNull BaseActionManager manager) {
+        super(manager);
     }
 }

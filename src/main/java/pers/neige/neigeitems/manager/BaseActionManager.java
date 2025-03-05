@@ -32,6 +32,8 @@ import pers.neige.neigeitems.hook.placeholderapi.PapiHooker;
 import pers.neige.neigeitems.hook.vault.VaultHooker;
 import pers.neige.neigeitems.item.action.ComboInfo;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils;
+import pers.neige.neigeitems.text.Text;
+import pers.neige.neigeitems.text.impl.NullText;
 import pers.neige.neigeitems.user.User;
 import pers.neige.neigeitems.utils.*;
 
@@ -53,6 +55,7 @@ import static pers.neige.neigeitems.utils.ListUtils.*;
 @SuppressWarnings("unchecked")
 public abstract class BaseActionManager {
     public final Action NULL_ACTION = new NullAction(this);
+    public final Text NULL_TEXT = new NullText(this);
     @NotNull
     private final Plugin plugin;
     /**
@@ -154,27 +157,25 @@ public abstract class BaseActionManager {
         }
         ConfigReader config = ConfigReader.parse(action);
         if (config == null) return NULL_ACTION;
-        if (config.containsKey("type")) {
-            String type = config.getString("type");
-            if (type != null) {
-                type = type.toLowerCase();
-                switch (type) {
-                    case "condition": {
-                        return new ConditionAction(this, config);
-                    }
-                    case "condition-weight": {
-                        return new ConditionWeightAction(this, config);
-                    }
-                    case "label": {
-                        return new LabelAction(this, config);
-                    }
-                    case "weight": {
-                        return new WeightAction(this, config);
-                    }
-                    case "while": {
-                        return new WhileAction(this, config);
-                    }
-                }
+        String type = config.getString("type", "").toLowerCase();
+        switch (type) {
+            case "condition": {
+                return new ConditionAction(this, config);
+            }
+            case "condition-weight": {
+                return new ConditionWeightAction(this, config);
+            }
+            case "key": {
+                return new KeyAction(this, config);
+            }
+            case "label": {
+                return new LabelAction(this, config);
+            }
+            case "weight": {
+                return new WeightAction(this, config);
+            }
+            case "while": {
+                return new WhileAction(this, config);
             }
         }
         if (config.containsKey("condition")) {
@@ -183,6 +184,8 @@ public abstract class BaseActionManager {
             return new WhileAction(this, config);
         } else if (config.containsKey("label")) {
             return new LabelAction(this, config);
+        } else if (config.containsKey("key")) {
+            return new KeyAction(this, config);
         }
         return NULL_ACTION;
     }
@@ -301,7 +304,7 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     @Nullable
-    protected ConfigurationSection getSectionConfig(@NotNull ActionContext context) {
+    public ConfigurationSection getSectionConfig(@NotNull ActionContext context) {
         return null;
     }
 
@@ -567,6 +570,24 @@ public abstract class BaseActionManager {
             // 执行finally块
             return action.getFinally().evalAsyncSafe(this, context);
         }
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
+            @NotNull KeyAction action,
+            @NotNull ActionContext context
+    ) {
+        String key = action.getKey().get(context);
+        context.getGlobal().put(action.getGlobalId(), key);
+        Action targetAction = action.getActions().getOrDefault(key, action.getDefaultAction());
+        return targetAction.evalAsyncSafe(this, context);
     }
 
     /**

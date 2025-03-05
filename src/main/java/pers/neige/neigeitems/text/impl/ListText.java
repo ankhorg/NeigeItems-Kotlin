@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class ListText implements Text {
+public class ListText extends Text {
     @NotNull
     private final List<Text> text;
 
@@ -17,6 +17,7 @@ public class ListText implements Text {
             @NotNull BaseActionManager manager,
             @NotNull List<?> lore
     ) {
+        super(manager);
         this.text = new ArrayList<>();
         for (Object it : lore) {
             this.text.add(Text.compile(manager, it));

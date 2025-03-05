@@ -5,6 +5,7 @@ public enum ActionType {
     CONDITION_WEIGHT,
     JAVA,
     JS,
+    KEY,
     LABEL,
     LIST,
     NULL,
@@ -12,5 +13,5 @@ public enum ActionType {
     STRING,
     UNKNOWN,
     WEIGHT,
-    WHILE
+    WHILE,
 }
