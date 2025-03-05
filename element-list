@@ -33,6 +33,8 @@ pers.neige.neigeitems.action.container
 pers.neige.neigeitems.action.handler
 pers.neige.neigeitems.action.impl
 pers.neige.neigeitems.action.result
+pers.neige.neigeitems.action.string
+pers.neige.neigeitems.action.string.impl
 pers.neige.neigeitems.annotation
 pers.neige.neigeitems.calculate
 pers.neige.neigeitems.command
