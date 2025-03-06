@@ -16,10 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
-import pers.neige.neigeitems.action.Action;
-import pers.neige.neigeitems.action.ActionContext;
-import pers.neige.neigeitems.action.ActionResult;
-import pers.neige.neigeitems.action.ResultType;
+import pers.neige.neigeitems.action.*;
 import pers.neige.neigeitems.action.catcher.ChatCatcher;
 import pers.neige.neigeitems.action.catcher.SignCatcher;
 import pers.neige.neigeitems.action.handler.SyncActionHandler;
@@ -608,6 +605,28 @@ public abstract class BaseActionManager {
         return parseCondition(
                 condition,
                 conditionScripts.computeIfAbsent(condition, (key) -> HookerManager.INSTANCE.getNashornHooker().compile(engine, key)),
+                context
+        );
+    }
+
+    /**
+     * 解析条件
+     *
+     * @param condition 条件内容
+     * @param context   动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public ActionResult parseCondition(
+            @Nullable ScriptWithSource condition,
+            @NotNull ActionContext context
+    ) {
+        if (condition == null) {
+            return Results.SUCCESS;
+        }
+        return parseCondition(
+                condition.getSource(),
+                condition,
                 context
         );
     }

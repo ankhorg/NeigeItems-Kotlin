@@ -233,13 +233,21 @@ class ClassScanner {
         }
     }
 
-    class PackedMethod(val method: Method) {
-        val instance = if (Modifier.isStatic(method.modifiers)) {
-            null
-        } else {
-            method.declaringClass.getDeclaredField("INSTANCE").get(null).also {
-                if (it == null || it.javaClass != method.declaringClass) {
-                    throw UnsupportedOperationException()
+    class PackedMethod(var method: Method) {
+        val instance: Any?
+
+        init {
+            if (method.declaringClass.canonicalName.endsWith(".Companion")) {
+                method = Class.forName(method.declaringClass.canonicalName.removeSuffix(".Companion"))
+                    .getDeclaredMethod(method.name) as Method
+            }
+            instance = if (Modifier.isStatic(method.modifiers)) {
+                null
+            } else {
+                method.declaringClass.getDeclaredField("INSTANCE").get(null).also {
+                    if (it == null || it.javaClass != method.declaringClass) {
+                        throw UnsupportedOperationException()
+                    }
                 }
             }
         }

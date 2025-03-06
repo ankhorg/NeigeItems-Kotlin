@@ -5,7 +5,7 @@ import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
-import pers.neige.neigeitems.action.string.StringEvaluator;
+import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
@@ -17,7 +17,7 @@ public class KeyAction extends Action {
     @NotNull
     private final String globalId;
     @NotNull
-    private final StringEvaluator key;
+    private final Evaluator<String> key;
     @NotNull
     private final Action defaultAction;
     @NotNull
@@ -29,7 +29,7 @@ public class KeyAction extends Action {
     ) {
         super(manager);
         this.globalId = config.getString("global-id", "key");
-        this.key = StringEvaluator.compile(manager, config.getString("key", ""));
+        this.key = Evaluator.createStringEvaluator(manager, config.getString("key", ""));
         this.defaultAction = manager.compile(config.get("default-action"));
         ConfigReader actionsConfig = config.getConfig("actions");
         if (actionsConfig != null) {
@@ -71,7 +71,7 @@ public class KeyAction extends Action {
     }
 
     @NotNull
-    public StringEvaluator getKey() {
+    public Evaluator<String> getKey() {
         return key;
     }
 
