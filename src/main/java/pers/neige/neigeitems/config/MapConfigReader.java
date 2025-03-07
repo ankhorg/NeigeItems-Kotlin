@@ -5,17 +5,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MapConfigReader implements ConfigReader {
     @NotNull
-    private final Map<?, ?> handle;
+    private final Map<String, Object> handle = new HashMap<>();
 
     public MapConfigReader(@NotNull Map<?, ?> map) {
-        this.handle = map;
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            handle.put(entry.getKey().toString(), entry.getValue());
+        }
     }
 
     @NotNull
@@ -26,7 +25,7 @@ public class MapConfigReader implements ConfigReader {
     @Override
     @NotNull
     public Set<String> keySet() {
-        return (Set<String>) handle.keySet();
+        return handle.keySet();
     }
 
     @Override

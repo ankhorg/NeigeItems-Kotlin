@@ -7,11 +7,11 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 
 public class JsDoubleEvaluator extends JsEvaluator<Double> {
     public JsDoubleEvaluator(@NotNull BaseActionManager manager, @Nullable String script) {
-        super(manager, script);
+        super(manager, Double.class, script);
     }
 
     @Override
-    protected @Nullable Double cast(@NotNull Object result) {
+    public @Nullable Double cast(@NotNull Object result) {
         return result instanceof Number ? ((Number) result).doubleValue() : null;
     }
 }

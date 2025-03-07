@@ -4,7 +4,6 @@ import org.bukkit.Bukkit
 import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.plugin.Plugin
-import pers.neige.neigeitems.JvmHacker
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.annotation.Awake.LifeCycle
 import pers.neige.neigeitems.annotation.Awake.LifeCycle.*
@@ -14,9 +13,6 @@ import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.utils.ListenerUtils
 import pers.neige.neigeitems.utils.SchedulerUtils.asyncTimer
 import pers.neige.neigeitems.utils.SchedulerUtils.syncTimer
-import java.lang.invoke.ConstantCallSite
-import java.lang.invoke.MethodHandle
-import java.lang.invoke.MethodType
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.util.*
@@ -57,10 +53,10 @@ class ClassScanner {
      * 所有插件类
      */
     val classes = mutableListOf<Class<*>>()
-    private val listenerMethods = ArrayList<PackedMethod>()
-    private val scheduleMethods = ArrayList<PackedMethod>()
-    private val awakeMethods = ConcurrentHashMap<LifeCycle, EnumMap<EventPriority, MutableList<PackedMethod>>>()
-    private val customTaskMethods = ConcurrentHashMap<String, EnumMap<EventPriority, MutableList<PackedMethod>>>()
+    private val listenerMethods = ArrayList<EasyMethod>()
+    private val scheduleMethods = ArrayList<EasyMethod>()
+    private val awakeMethods = ConcurrentHashMap<LifeCycle, EnumMap<EventPriority, MutableList<EasyMethod>>>()
+    private val customTaskMethods = ConcurrentHashMap<String, EnumMap<EventPriority, MutableList<EasyMethod>>>()
 
     private fun scan() {
         loadClasses(plugin, packageName, except)
@@ -78,35 +74,32 @@ class ClassScanner {
      * enable阶段调用
      */
     fun onEnable() {
-        listenerMethods.forEach { packedMethod ->
-            val method = packedMethod.method
-            val instance = packedMethod.instance
+        listenerMethods.forEach { easyMethod ->
+            val method = easyMethod.method
             val annotation = method.getAnnotation(Listener::class.java)
-            val eventClass = method.parameterTypes[0].asSubclass(Event::class.java)
-            val eventPriority = annotation.eventPriority
-            val ignoreCancelled = annotation.ignoreCancelled
             ListenerUtils.registerListener(
-                eventClass, eventPriority, plugin, ignoreCancelled
+                method.parameterTypes[0].asSubclass(Event::class.java),
+                annotation.eventPriority,
+                plugin,
+                annotation.ignoreCancelled
             ) {
-                method.invoke(instance, it)
+                easyMethod.invoke(it)
             }
         }
         runAwakeTask(ENABLE)
         Bukkit.getScheduler().runTask(plugin, Runnable {
             runAwakeTask(ACTIVE)
         })
-        scheduleMethods.forEach { packedMethod ->
+        scheduleMethods.forEach { easyMethod ->
             try {
-                val method = packedMethod.method
-                val instance = packedMethod.instance
-                val annotation = method.getAnnotation(Schedule::class.java)
+                val annotation = easyMethod.method.getAnnotation(Schedule::class.java)
                 if (annotation.async) {
                     asyncTimer(plugin, 0, annotation.period) {
-                        method.invoke(instance)
+                        easyMethod.invoke()
                     }
                 } else {
                     syncTimer(plugin, 0, annotation.period) {
-                        method.invoke(instance)
+                        easyMethod.invoke()
                     }
                 }
             } catch (error: Throwable) {
@@ -130,7 +123,7 @@ class ClassScanner {
         customTaskMethods[taskId]?.values?.runMethods()
     }
 
-    private fun Collection<List<PackedMethod>>.runMethods() {
+    private fun Collection<List<EasyMethod>>.runMethods() {
         forEach { it -> it.forEach { it.invoke() } }
     }
 
@@ -220,12 +213,12 @@ class ClassScanner {
         }
     }
 
-    private fun Method.check(msg: String): PackedMethod? {
+    private fun Method.check(msg: String): EasyMethod? {
         if (!isAccessible) {
             isAccessible = true
         }
         return try {
-            PackedMethod(this)
+            EasyMethod.parse(this)
         } catch (error: Throwable) {
             plugin.logger.warning(msg + "${declaringClass.canonicalName}#${name}")
             error.printStackTrace()
@@ -233,20 +226,35 @@ class ClassScanner {
         }
     }
 
-    class PackedMethod(var method: Method) {
-        val instance: Any?
-
-        init {
-            if (method.declaringClass.canonicalName.endsWith(".Companion")) {
-                method = Class.forName(method.declaringClass.canonicalName.removeSuffix(".Companion"))
-                    .getDeclaredMethod(method.name) as Method
-            }
-            instance = if (Modifier.isStatic(method.modifiers)) {
-                null
-            } else {
-                method.declaringClass.getDeclaredField("INSTANCE").get(null).also {
-                    if (it == null || it.javaClass != method.declaringClass) {
-                        throw UnsupportedOperationException()
+    class EasyMethod(val method: Method, val instance: Any?) {
+        companion object {
+            @JvmStatic
+            fun parse(method: Method): EasyMethod? {
+                // kotlin伴生类
+                if (method.declaringClass.canonicalName.endsWith(".Companion")) {
+                    // 伴生类静态方法, 将被复制只主类, 伴生类方法可忽略, 不进行操作
+                    if (method.isAnnotationPresent(JvmStatic::class.java)) {
+                        return null
+                    } else {
+                        // 伴生类非静态方法, 单例为主类的静态Companion字段
+                        val instance = Class.forName(method.declaringClass.canonicalName.removeSuffix(".Companion"))
+                            .getDeclaredField("Companion").get(null)
+                        if (instance == null || instance.javaClass != method.declaringClass) {
+                            throw UnsupportedOperationException()
+                        }
+                        return EasyMethod(method, instance)
+                    }
+                } else {
+                    // 普通静态方法
+                    if (Modifier.isStatic(method.modifiers)) {
+                        return EasyMethod(method, null)
+                    } else {
+                        // 普通的kotlin单例方法, 单例为当前类的静态INSTANCE字段
+                        val instance = method.declaringClass.getDeclaredField("INSTANCE").get(null)
+                        if (instance == null || instance.javaClass != method.declaringClass) {
+                            throw UnsupportedOperationException()
+                        }
+                        return EasyMethod(method, instance)
                     }
                 }
             }
@@ -259,71 +267,12 @@ class ClassScanner {
                 error.printStackTrace()
             }
         }
-    }
 
-    interface CallSite {
-
-        fun invoke(): Any?
-
-        fun invoke(arg: Any?): Any?
-
-        companion object {
-            @JvmStatic
-            fun of(method: Method): CallSite {
-                val instance = if (Modifier.isStatic(method.modifiers)) null
-                else method.declaringClass.getDeclaredField("INSTANCE")[null]
-                return if (instance == null) StaticCallSite(method) else SingletonCallSite(instance, method)
-            }
-        }
-    }
-
-    class StaticCallSite(method: Method) : ConstantCallSite(findTarget(method)), CallSite {
-        override fun invoke(): Any? {
-            return target.invoke()
-        }
-
-        override fun invoke(arg: Any?): Any? {
-            return target.invoke(arg)
-        }
-
-        companion object {
-            @JvmStatic
-            private fun findTarget(method: Method): MethodHandle {
-                try {
-                    val t: MethodType = MethodType.methodType(method.returnType, method.parameterTypes)
-                    return JvmHacker.lookup().findStatic(method.declaringClass, method.name, t)
-                } catch (e: Throwable) {
-                    throw RuntimeException(e)
-                }
-            }
-        }
-    }
-
-    private class SingletonCallSite(val instance: Any?, method: Method) : ConstantCallSite(findTarget(method)),
-        CallSite {
-        init {
-            if (instance == null || instance.javaClass != method.declaringClass) {
-                throw UnsupportedOperationException()
-            }
-        }
-
-        override fun invoke(): Any? {
-            return target.invoke(instance)
-        }
-
-        override fun invoke(arg: Any?): Any? {
-            return target.invoke(instance, arg)
-        }
-
-        companion object {
-            @JvmStatic
-            private fun findTarget(method: Method): MethodHandle {
-                try {
-                    val t: MethodType = MethodType.methodType(method.returnType, method.parameterTypes)
-                    return JvmHacker.lookup().findVirtual(method.declaringClass, method.name, t)
-                } catch (e: Throwable) {
-                    throw RuntimeException(e)
-                }
+        fun invoke(vararg args: Any?) {
+            try {
+                method.invoke(instance, *args)
+            } catch (error: Throwable) {
+                error.printStackTrace()
             }
         }
     }

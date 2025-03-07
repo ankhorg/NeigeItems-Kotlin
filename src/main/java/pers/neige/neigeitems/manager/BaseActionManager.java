@@ -162,6 +162,12 @@ public abstract class BaseActionManager {
             case "condition-weight": {
                 return new ConditionWeightAction(this, config);
             }
+            case "double-tree": {
+                return new DoubleTreeAction(this, config);
+            }
+            case "int-tree": {
+                return new IntTreeAction(this, config);
+            }
             case "key": {
                 return new KeyAction(this, config);
             }
@@ -181,8 +187,6 @@ public abstract class BaseActionManager {
             return new WhileAction(this, config);
         } else if (config.containsKey("label")) {
             return new LabelAction(this, config);
-        } else if (config.containsKey("key")) {
-            return new KeyAction(this, config);
         }
         return NULL_ACTION;
     }
@@ -583,7 +587,46 @@ public abstract class BaseActionManager {
     ) {
         String key = action.getKey().get(context);
         context.getGlobal().put(action.getGlobalId(), key);
+        if (key == null) {
+            return action.getDefaultAction().evalAsyncSafe(this, context);
+        }
         Action targetAction = action.getActions().getOrDefault(key, action.getDefaultAction());
+        return targetAction.evalAsyncSafe(this, context);
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public <T extends Comparable<?>> CompletableFuture<ActionResult> runAction(
+            @NotNull TreeAction<T> action,
+            @NotNull ActionContext context
+    ) {
+        T key = action.getKey().get(context);
+        context.getGlobal().put(action.getGlobalId(), key);
+        if (key == null) {
+            return action.getDefaultAction().evalAsyncSafe(this, context);
+        }
+        Map.Entry<T, Action> entry = null;
+        switch (action.getActionType()) {
+            case LOWER:
+                entry = action.getActions().lowerEntry(key);
+                break;
+            case FLOOR:
+                entry = action.getActions().floorEntry(key);
+                break;
+            case HIGHER:
+                entry = action.getActions().higherEntry(key);
+                break;
+            case CEILING:
+                entry = action.getActions().ceilingEntry(key);
+                break;
+        }
+        Action targetAction = entry == null ? action.getDefaultAction() : entry.getValue();
         return targetAction.evalAsyncSafe(this, context);
     }
 

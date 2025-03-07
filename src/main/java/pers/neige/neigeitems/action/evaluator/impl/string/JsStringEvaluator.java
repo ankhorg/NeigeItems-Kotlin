@@ -7,11 +7,11 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 
 public class JsStringEvaluator extends JsEvaluator<String> {
     public JsStringEvaluator(@NotNull BaseActionManager manager, @Nullable String script) {
-        super(manager, script);
+        super(manager, String.class, script);
     }
 
     @Override
-    protected @Nullable String cast(@NotNull Object result) {
+    public @Nullable String cast(@NotNull Object result) {
         return result.toString();
     }
 }

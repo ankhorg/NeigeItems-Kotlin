@@ -119,9 +119,7 @@ public class ActionContext implements Cloneable {
                 }
             });
         }
-        if (player != null) {
-            bindings.put("player", player);
-        }
+        bindings.put("player", player);
         if (itemStack != null) {
             bindings.put("itemStack", itemStack);
         }

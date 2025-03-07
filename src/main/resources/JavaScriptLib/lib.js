@@ -130,11 +130,9 @@ const papi = function (text) {
  * @return String 解析后文本
  */
 const parse = function (text) {
-    if (typeof cache == "undefined" && typeof sections == "undefined") {
-        return SectionUtils.parseSection(text, player)
-    } else {
-        return SectionUtils.parseSection(text, cache, player, sections)
-    }
+    const c = typeof cache === "undefined" ? null : cache
+    const s = typeof sections === "undefined" ? null : sections
+    return SectionUtils.parseSection(text, c, player, s)
 }
 
 /**

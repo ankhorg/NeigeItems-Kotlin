@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.action.evaluator;
 
+import kotlin.text.StringsKt;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,9 +20,11 @@ import java.util.Locale;
 
 public abstract class Evaluator<T> {
     protected final @NotNull BaseActionManager manager;
+    protected final @NotNull Class<T> type;
 
-    public Evaluator(@NotNull BaseActionManager manager) {
+    public Evaluator(@NotNull BaseActionManager manager, @NotNull Class<T> type) {
         this.manager = manager;
+        this.type = type;
     }
 
     public static Evaluator<String> createStringEvaluator(@NotNull BaseActionManager manager, @NotNull String input) {
@@ -48,7 +51,12 @@ public abstract class Evaluator<T> {
             case "raw":
                 return new RawIntegerEvaluator(manager, content);
             default:
-                return new ParseIntegerEvaluator(manager, input);
+                Integer maybe = StringsKt.toIntOrNull(input);
+                if (maybe == null) {
+                    return new ParseIntegerEvaluator(manager, input);
+                } else {
+                    return new RawIntegerEvaluator(manager, maybe);
+                }
         }
     }
 
@@ -62,7 +70,12 @@ public abstract class Evaluator<T> {
             case "raw":
                 return new RawDoubleEvaluator(manager, content);
             default:
-                return new ParseDoubleEvaluator(manager, input);
+                Double maybe = StringsKt.toDoubleOrNull(input);
+                if (maybe == null) {
+                    return new ParseDoubleEvaluator(manager, input);
+                } else {
+                    return new RawDoubleEvaluator(manager, maybe);
+                }
         }
     }
 
@@ -71,5 +84,13 @@ public abstract class Evaluator<T> {
 
     public @Nullable T get(@NotNull ActionContext context) {
         return getOrDefault(context, null);
+    }
+
+    public @NotNull BaseActionManager getManager() {
+        return manager;
+    }
+
+    public @NotNull Class<T> getType() {
+        return type;
     }
 }

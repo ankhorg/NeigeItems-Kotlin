@@ -1,32 +1,22 @@
 package pers.neige.neigeitems.action.evaluator.impl.dbl;
 
 import kotlin.text.StringsKt;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.action.ActionContext;
-import pers.neige.neigeitems.action.evaluator.Evaluator;
+import pers.neige.neigeitems.action.evaluator.impl.RawEvaluator;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
-public class RawDoubleEvaluator extends Evaluator<Double> {
-    protected final @Nullable Double value;
-
-    public RawDoubleEvaluator(@NotNull BaseActionManager manager, @Nullable String value) {
-        super(manager);
-        if (value == null) {
-            this.value = null;
-        } else {
-            this.value = StringsKt.toDoubleOrNull(value);
-        }
+public class RawDoubleEvaluator extends RawEvaluator<Double> {
+    public RawDoubleEvaluator(@NotNull BaseActionManager manager, @Nullable Double value) {
+        super(manager, Double.class, value);
     }
 
-    public @Nullable Double getValue() {
-        return value;
+    public RawDoubleEvaluator(@NotNull BaseActionManager manager, @Nullable String text) {
+        super(manager, Double.class, text);
     }
 
     @Override
-    @Contract("_, !null -> !null")
-    public @Nullable Double getOrDefault(@NotNull ActionContext context, @Nullable Double def) {
-        return value == null ? def : value;
+    public @Nullable Double cast(@NotNull String result) {
+        return StringsKt.toDoubleOrNull(result);
     }
 }

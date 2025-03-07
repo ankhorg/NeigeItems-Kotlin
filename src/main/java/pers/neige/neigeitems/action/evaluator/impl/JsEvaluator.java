@@ -13,11 +13,11 @@ import javax.script.Compilable;
 import javax.script.ScriptException;
 import java.util.logging.Level;
 
-public abstract class JsEvaluator<T> extends Evaluator<T> {
+public class JsEvaluator<T> extends Evaluator<T> {
     protected final @Nullable ScriptWithSource script;
 
-    public JsEvaluator(@NotNull BaseActionManager manager, @Nullable String script) {
-        super(manager);
+    public JsEvaluator(@NotNull BaseActionManager manager, @NotNull Class<T> type, @Nullable String script) {
+        super(manager, type);
         try {
             this.script = ScriptWithSource.compile((Compilable) manager.getEngine(), script);
         } catch (ScriptException e) {
@@ -29,7 +29,9 @@ public abstract class JsEvaluator<T> extends Evaluator<T> {
         return script;
     }
 
-    protected abstract @Nullable T cast(@NotNull Object result);
+    public @Nullable T cast(@NotNull Object result) {
+        return type.isInstance(result) ? type.cast(result) : null;
+    }
 
     @Override
     @Contract("_, !null -> !null")

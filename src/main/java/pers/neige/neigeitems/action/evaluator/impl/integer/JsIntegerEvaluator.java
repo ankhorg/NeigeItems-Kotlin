@@ -7,11 +7,11 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 
 public class JsIntegerEvaluator extends JsEvaluator<Integer> {
     public JsIntegerEvaluator(@NotNull BaseActionManager manager, @Nullable String script) {
-        super(manager, script);
+        super(manager, Integer.class, script);
     }
 
     @Override
-    protected @Nullable Integer cast(@NotNull Object result) {
+    public @Nullable Integer cast(@NotNull Object result) {
         return result instanceof Number ? ((Number) result).intValue() : null;
     }
 }

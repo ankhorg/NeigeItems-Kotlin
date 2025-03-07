@@ -11,7 +11,7 @@ public class RawStringEvaluator extends Evaluator<String> {
     protected final @Nullable String value;
 
     public RawStringEvaluator(@NotNull BaseActionManager manager, @Nullable String value) {
-        super(manager);
+        super(manager, String.class);
         this.value = value;
     }
 
