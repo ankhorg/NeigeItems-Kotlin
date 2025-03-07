@@ -1,5 +1,6 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
+$dokka.location:pers.neige.neigeitems.action.impl/TreeAction.TreeActionType///PointingToDeclaration/pers/neige/neigeitems/action/impl/TreeAction.TreeActionType.html
 $dokka.location:pers.neige.neigeitems.annotation/Awake.LifeCycle///PointingToDeclaration/pers/neige/neigeitems/annotation/Awake.LifeCycle.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PostGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PostGenerate.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PreGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PreGenerate.html
@@ -21,10 +22,7 @@ $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.Rot///Po
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutEntityLook///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutEntityLook.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook.html
-$dokka.location:pers.neige.neigeitems.scanner/ClassScanner.CallSite.Companion///PointingToDeclaration/pers/neige/neigeitems/scanner/ClassScanner.CallSite.Companion.html
-$dokka.location:pers.neige.neigeitems.scanner/ClassScanner.CallSite///PointingToDeclaration/pers/neige/neigeitems/scanner/ClassScanner.CallSite.html
-$dokka.location:pers.neige.neigeitems.scanner/ClassScanner.PackedMethod///PointingToDeclaration/pers/neige/neigeitems/scanner/ClassScanner.PackedMethod.html
-$dokka.location:pers.neige.neigeitems.scanner/ClassScanner.StaticCallSite///PointingToDeclaration/pers/neige/neigeitems/scanner/ClassScanner.StaticCallSite.html
+$dokka.location:pers.neige.neigeitems.scanner/ClassScanner.EasyMethod///PointingToDeclaration/pers/neige/neigeitems/scanner/ClassScanner.EasyMethod.html
 $dokka.location:pers.neige.neigeitems.utils/SamplingUtils.SamplingResult///PointingToDeclaration/pers/neige/neigeitems/utils/SamplingUtils.SamplingResult.html
 pers.neige.neigeitems
 pers.neige.neigeitems.action

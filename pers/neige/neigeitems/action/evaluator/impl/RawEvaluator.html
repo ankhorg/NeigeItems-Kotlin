@@ -1,25 +1,25 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>Companion 1.21.28 API </title>
+    <title>RawEvaluator 1.21.29 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
-    <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
-    <link rel="stylesheet" type="text/css" href="../../../../dokka-javadoc-stylesheet.css" title="Style">
-    <link rel="stylesheet" type="text/css" href="../../../../jquery/jquery-ui.css" title="Style">
-    <script type="text/javascript" src="../../../../jquery/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="../../../../jquery/jquery-migrate-3.4.0.min.js"></script>
-    <script type="text/javascript" src="../../../../jquery/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+    <link rel="stylesheet" type="text/css" href="../../../../../../dokka-javadoc-stylesheet.css" title="Style">
+    <link rel="stylesheet" type="text/css" href="../../../../../../jquery/jquery-ui.css" title="Style">
+    <script type="text/javascript" src="../../../../../../jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="../../../../../../jquery/jquery-migrate-3.4.0.min.js"></script>
+    <script type="text/javascript" src="../../../../../../jquery/jquery-ui.js"></script>
 
-    <script type="text/javascript" src="../../../../search.js"></script>
-    <script async type="text/javascript" src="../../../../module-search-index.js"></script>
-    <script async type="text/javascript" src="../../../../package-search-index.js"></script>
-    <script async type="text/javascript" src="../../../../type-search-index.js"></script>
-    <script async type="text/javascript" src="../../../../member-search-index.js"></script>
-    <script async type="text/javascript" src="../../../../tag-search-index.js"></script>
+    <script type="text/javascript" src="../../../../../../search.js"></script>
+    <script async type="text/javascript" src="../../../../../../module-search-index.js"></script>
+    <script async type="text/javascript" src="../../../../../../package-search-index.js"></script>
+    <script async type="text/javascript" src="../../../../../../type-search-index.js"></script>
+    <script async type="text/javascript" src="../../../../../../member-search-index.js"></script>
+    <script async type="text/javascript" src="../../../../../../tag-search-index.js"></script>
 </head><body>
 <script type="text/javascript">
-var pathtoroot = "../../../../";
+var pathtoroot = "../../../../../../";
 </script>
 <noscript>
     <div>JavaScript is disabled on your browser.</div>
@@ -36,21 +36,21 @@ var pathtoroot = "../../../../";
                     <!--   -->
                 </a>
                 <ul class="navList" title="Navigation">
-    <li><a href="../../../../index.html">Overview</a></li>
+    <li><a href="../../../../../../index.html">Overview</a></li>
     
     <li><a href="package-summary.html">Package</a></li>
     
-    <li>Class</li>
+    <li class="navBarCell1Rev">Class</li>
     
     <li><a href="package-tree.html">Tree</a></li>
     
-    <li><a href="../../../../deprecated.html">Deprecated</a></li>
-    <li><a href="../../../../index-files/index-1.html">Index</a></li>
+    <li><a href="../../../../../../deprecated.html">Deprecated</a></li>
+    <li><a href="../../../../../../index-files/index-1.html">Index</a></li>
     <li>Help</li>
 </ul></div>
             <div class="subNav">
 <ul class="navList" id="allclasses_navbar_top" style="display: block;">
-    <li><a href="../../../../allclasses.html">All&nbsp;Classes</a></li>
+    <li><a href="../../../../../../allclasses.html">All&nbsp;Classes</a></li>
 </ul>
 
 <ul class="navListSearch">
@@ -88,8 +88,8 @@ var pathtoroot = "../../../../";
 
 <main role="main">
     <div class="header">
-        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems.scanner</a></div>
-        <h2 title="Object ClassScanner.CallSite.Companion" class="title">Object ClassScanner.CallSite.Companion</h2>
+        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems.action.evaluator.impl</a></div>
+        <h2 title="Class RawEvaluator" class="title">Class RawEvaluator</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -114,8 +114,8 @@ var pathtoroot = "../../../../";
                     <hr>
                     <pre class="wrap-overflow">
 
-public class <span class="typeNameLabel"><a href=ClassScanner.CallSite.Companion.html>ClassScanner.CallSite.Companion</a></span>
-
+public abstract class <span class="typeNameLabel"><a href=RawEvaluator.html>RawEvaluator</a>&lt;T&gt;</span>
+extends <a href=../Evaluator.html>Evaluator</a>&lt;<a href=../Evaluator.html>T</a>&gt;
                     </pre>
                     <div class="block"></div>
 
@@ -172,12 +172,6 @@ public class <span class="typeNameLabel"><a href=ClassScanner.CallSite.Companion
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
                                         
-                                        <tr class="altColor">
-                                            <td class="colFirst"><code>public final static <a href=ClassScanner.CallSite.Companion.html>ClassScanner.CallSite.Companion</a></code></td>
-                                            <th class="colSecond" scope="row"><code><a href=ClassScanner.CallSite.Companion.html#INSTANCE>INSTANCE</a></code></th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
                                     </table>
                                 </div>
                             </li>
@@ -201,6 +195,18 @@ public class <span class="typeNameLabel"><a href=ClassScanner.CallSite.Companion
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
 
+                                        
+                                            <tr class="altColor">
+                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
+                                                        href="#RawEvaluator(pers.neige.neigeitems.manager.BaseActionManager,java.lang.Class,T)">RawEvaluator</a></span>(<a href=../../../manager/BaseActionManager.html>BaseActionManager</a> manager, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=RawEvaluator.html>T</a>&gt; type, <a href=RawEvaluator.html>T</a> value)</code></th>
+                                                <td class="colLast"></td>
+                                            </tr>
+                                        
+                                            <tr class="rowColor">
+                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
+                                                        href="#RawEvaluator(pers.neige.neigeitems.manager.BaseActionManager,java.lang.Class,java.lang.String)">RawEvaluator</a></span>(<a href=../../../manager/BaseActionManager.html>BaseActionManager</a> manager, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=RawEvaluator.html>T</a>&gt; type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text)</code></th>
+                                                <td class="colLast"></td>
+                                            </tr>
                                         
 
                                         </tbody>
@@ -252,9 +258,25 @@ public class <span class="typeNameLabel"><a href=ClassScanner.CallSite.Companion
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code>final static <a href=ClassScanner.CallSite.html>ClassScanner.CallSite</a></code>
+                                            <td class="colFirst"><code><a href=RawEvaluator.html>T</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=ClassScanner.CallSite.Companion.html#of(java.lang.reflect.Method)>of</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Method.html>Method</a> method) </code>
+                                            <th class="colSecond" scope="row"><code><a href=dbl/RawDoubleEvaluator.html#getValue()>getValue</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i1" class="rowColor">
+                                            <td class="colFirst"><code>abstract <a href=RawEvaluator.html>T</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RawEvaluator.html#cast(java.lang.String)>cast</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> result) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i2" class="altColor">
+                                            <td class="colFirst"><code><a href=RawEvaluator.html>T</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=dbl/RawDoubleEvaluator.html#getOrDefault(pers.neige.neigeitems.action.ActionContext,T)>getOrDefault</a>(@NotNull() <a href=../../ActionContext.html>ActionContext</a> context, @Nullable() <a href=RawEvaluator.html>T</a> def) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -264,6 +286,12 @@ public class <span class="typeNameLabel"><a href=ClassScanner.CallSite.Companion
                                 </div>
                                 <ul class="blockList">
                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.pers.neige.neigeitems.action.evaluator.Evaluator">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;pers.neige.neigeitems.action.evaluator.Evaluator</h3>
+                                            <code>createDoubleEvaluator, createIntegerEvaluator, createStringEvaluator, get, getManager, getType</code></li>
+                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
                                     </a>
@@ -290,6 +318,26 @@ public class <span class="typeNameLabel"><a href=ClassScanner.CallSite.Companion
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
+                                <a name="RawEvaluator(pers.neige.neigeitems.manager.BaseActionManager,java.lang.Class,T)"></a>
+                                <ul class="blockList">
+                                    <li class="blockList">
+                                        <h4>RawEvaluator</h4>
+                                        <pre>RawEvaluator(<a href=../../../manager/BaseActionManager.html>BaseActionManager</a> manager, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=RawEvaluator.html>T</a>&gt; type, <a href=RawEvaluator.html>T</a> value)</pre>
+                                        <div class="block"></div>
+                                        
+                                    </li>
+                                </ul>
+                                
+                                <a name="RawEvaluator(pers.neige.neigeitems.manager.BaseActionManager,java.lang.Class,java.lang.String)"></a>
+                                <ul class="blockList">
+                                    <li class="blockList">
+                                        <h4>RawEvaluator</h4>
+                                        <pre>RawEvaluator(<a href=../../../manager/BaseActionManager.html>BaseActionManager</a> manager, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=RawEvaluator.html>T</a>&gt; type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text)</pre>
+                                        <div class="block"></div>
+                                        
+                                    </li>
+                                </ul>
+                                
                             </li>
                         </ul>
                     </section>
@@ -303,15 +351,61 @@ public class <span class="typeNameLabel"><a href=ClassScanner.CallSite.Companion
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="of(java.lang.reflect.Method)">
+                                <a id="getValue()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getValue</h4>
+                                        <pre class="methodSignature">@Nullable() <a href=RawEvaluator.html>T</a> <a href=dbl/RawDoubleEvaluator.html#getValue()>getValue</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="cast(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>cast</h4>
+                                        <pre class="methodSignature">@Nullable() abstract <a href=RawEvaluator.html>T</a> <a href=RawEvaluator.html#cast(java.lang.String)>cast</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> result)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getOrDefault(pers.neige.neigeitems.action.ActionContext,T)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>of</h4>
-                                        <pre class="methodSignature"> final static <a href=ClassScanner.CallSite.html>ClassScanner.CallSite</a> <a href=ClassScanner.CallSite.Companion.html#of(java.lang.reflect.Method)>of</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/reflect/Method.html>Method</a> method)</pre>
+                                        <h4>getOrDefault</h4>
+                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;)@Nullable() <a href=RawEvaluator.html>T</a> <a href=dbl/RawDoubleEvaluator.html#getOrDefault(pers.neige.neigeitems.action.ActionContext,T)>getOrDefault</a>(@NotNull() <a href=../../ActionContext.html>ActionContext</a> context, @Nullable() <a href=RawEvaluator.html>T</a> def)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -347,16 +441,16 @@ public class <span class="typeNameLabel"><a href=ClassScanner.CallSite.Companion
                 <!--   -->
             </a>
             <ul class="navList" title="Navigation">
-    <li><a href="../../../../index.html">Overview</a></li>
+    <li><a href="../../../../../../index.html">Overview</a></li>
     
     <li><a href="package-summary.html">Package</a></li>
     
-    <li>Class</li>
+    <li class="navBarCell1Rev">Class</li>
     
     <li><a href="package-tree.html">Tree</a></li>
     
-    <li><a href="../../../../deprecated.html">Deprecated</a></li>
-    <li><a href="../../../../index-files/index-1.html">Index</a></li>
+    <li><a href="../../../../../../deprecated.html">Deprecated</a></li>
+    <li><a href="../../../../../../index-files/index-1.html">Index</a></li>
     <li>Help</li>
 </ul></div>
         <a id="skip.navbar.bottom">
@@ -364,7 +458,7 @@ public class <span class="typeNameLabel"><a href=ClassScanner.CallSite.Companion
         </a>
         <div class="subNav">
 <ul class="navList" id="allclasses_navbar_top" style="display: block;">
-    <li><a href="../../../../allclasses.html">All&nbsp;Classes</a></li>
+    <li><a href="../../../../../../allclasses.html">All&nbsp;Classes</a></li>
 </ul>
 <div>
 <script type="text/javascript"><!--
