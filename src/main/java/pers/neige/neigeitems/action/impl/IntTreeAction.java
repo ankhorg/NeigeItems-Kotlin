@@ -9,11 +9,11 @@ import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
 public class IntTreeAction extends TreeAction<Integer> {
-    private final Evaluator<Integer> key;
+    private final @NotNull Evaluator<Integer> key;
 
     public IntTreeAction(@NotNull BaseActionManager manager, @NotNull ConfigReader config) {
         super(manager, config, Integer.class);
-        this.key = Evaluator.createIntegerEvaluator(manager, config.getString("key", ""));
+        this.key = Evaluator.createIntegerEvaluator(manager, config.getString("key"));
     }
 
     @Override

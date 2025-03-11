@@ -9,11 +9,11 @@ import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
 public class DoubleTreeAction extends TreeAction<Double> {
-    private final Evaluator<Double> key;
+    private final @NotNull Evaluator<Double> key;
 
     public DoubleTreeAction(@NotNull BaseActionManager manager, @NotNull ConfigReader config) {
         super(manager, config, Double.class);
-        this.key = Evaluator.createDoubleEvaluator(manager, config.getString("key", ""));
+        this.key = Evaluator.createDoubleEvaluator(manager, config.getString("key"));
     }
 
     @Override

@@ -19,6 +19,7 @@ import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.action.*;
 import pers.neige.neigeitems.action.catcher.ChatCatcher;
 import pers.neige.neigeitems.action.catcher.SignCatcher;
+import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.action.handler.SyncActionHandler;
 import pers.neige.neigeitems.action.impl.*;
 import pers.neige.neigeitems.action.result.Results;
@@ -51,10 +52,12 @@ import static pers.neige.neigeitems.utils.ListUtils.*;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseActionManager {
-    public final Action NULL_ACTION = new NullAction(this);
-    public final Text NULL_TEXT = new NullText(this);
-    @NotNull
-    private final Plugin plugin;
+    public final @NotNull Action NULL_ACTION = new NullAction(this);
+    public final @NotNull Text NULL_TEXT = new NullText(this);
+    public final @NotNull Evaluator<String> NULL_STRING_EVALUATOR = new Evaluator<>(this, String.class);
+    public final @NotNull Evaluator<Integer> NULL_INTEGER_EVALUATOR = new Evaluator<>(this, Integer.class);
+    public final @NotNull Evaluator<Double> NULL_DOUBLE_EVALUATOR = new Evaluator<>(this, Double.class);
+    private final @NotNull Plugin plugin;
     /**
      * 物品动作实现函数
      */
@@ -180,9 +183,14 @@ public abstract class BaseActionManager {
             case "while": {
                 return new WhileAction(this, config);
             }
+            case "repeat": {
+                return new RepeatAction(this, config);
+            }
         }
         if (config.containsKey("condition")) {
             return new ConditionAction(this, config);
+        } else if (config.containsKey("repeat")) {
+            return new RepeatAction(this, config);
         } else if (config.containsKey("while")) {
             return new WhileAction(this, config);
         } else if (config.containsKey("label")) {
@@ -628,6 +636,50 @@ public abstract class BaseActionManager {
         }
         Action targetAction = entry == null ? action.getDefaultAction() : entry.getValue();
         return targetAction.evalAsyncSafe(this, context);
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
+            @NotNull RepeatAction action,
+            @NotNull ActionContext context
+    ) {
+        final int repeat = action.getRepeat().getOrDefault(context, 0);
+        return runAction(action, context, repeat, 0);
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
+            @NotNull RepeatAction action,
+            @NotNull ActionContext context,
+            int repeat,
+            int count
+    ) {
+        if (count < repeat) {
+            context.getGlobal().put(action.getGlobalId(), count);
+            return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
+                if (result.getType() == ResultType.STOP) {
+                    return CompletableFuture.completedFuture(result);
+                } else {
+                    return runAction(action, context, repeat, count + 1);
+                }
+            });
+        } else {
+            return CompletableFuture.completedFuture(Results.SUCCESS);
+        }
     }
 
     /**

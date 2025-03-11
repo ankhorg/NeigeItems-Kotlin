@@ -18,7 +18,7 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 
 import java.util.Locale;
 
-public abstract class Evaluator<T> {
+public class Evaluator<T> {
     protected final @NotNull BaseActionManager manager;
     protected final @NotNull Class<T> type;
 
@@ -27,7 +27,8 @@ public abstract class Evaluator<T> {
         this.type = type;
     }
 
-    public static Evaluator<String> createStringEvaluator(@NotNull BaseActionManager manager, @NotNull String input) {
+    public static @NotNull Evaluator<String> createStringEvaluator(@NotNull BaseActionManager manager, @Nullable String input) {
+        if (input == null) return manager.NULL_STRING_EVALUATOR;
         String[] info = input.split(": ", 2);
         String key = info[0].toLowerCase(Locale.ROOT);
         String content = info.length > 1 ? info[1] : null;
@@ -41,7 +42,8 @@ public abstract class Evaluator<T> {
         }
     }
 
-    public static Evaluator<Integer> createIntegerEvaluator(@NotNull BaseActionManager manager, @NotNull String input) {
+    public static @NotNull Evaluator<Integer> createIntegerEvaluator(@NotNull BaseActionManager manager, @Nullable String input) {
+        if (input == null) return manager.NULL_INTEGER_EVALUATOR;
         String[] info = input.split(": ", 2);
         String key = info[0].toLowerCase(Locale.ROOT);
         String content = info.length > 1 ? info[1] : null;
@@ -60,7 +62,8 @@ public abstract class Evaluator<T> {
         }
     }
 
-    public static Evaluator<Double> createDoubleEvaluator(@NotNull BaseActionManager manager, @NotNull String input) {
+    public static @NotNull Evaluator<Double> createDoubleEvaluator(@NotNull BaseActionManager manager, @Nullable String input) {
+        if (input == null) return manager.NULL_DOUBLE_EVALUATOR;
         String[] info = input.split(": ", 2);
         String key = info[0].toLowerCase(Locale.ROOT);
         String content = info.length > 1 ? info[1] : null;
@@ -80,7 +83,9 @@ public abstract class Evaluator<T> {
     }
 
     @Contract("_, !null -> !null")
-    public abstract @Nullable T getOrDefault(@NotNull ActionContext context, @Nullable T def);
+    public @Nullable T getOrDefault(@NotNull ActionContext context, @Nullable T def) {
+        return def;
+    }
 
     public @Nullable T get(@NotNull ActionContext context) {
         return getOrDefault(context, null);

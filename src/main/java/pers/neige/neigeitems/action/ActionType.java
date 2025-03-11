@@ -12,6 +12,7 @@ public enum ActionType {
     LIST,
     NULL,
     RAW_STRING,
+    REPEAT,
     STRING,
     TREE,
     UNKNOWN,

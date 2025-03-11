@@ -5,6 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 
 public class InventoryUtils {
+    private final static boolean USE_PAPER = CbVersion.v1_16_R3.isSupport() && ServerUtils.isSupportAdventure() && ServerUtils.isPaper();
+
     /**
      * 为自定义容器设置标题.
      * 1.12.2 版本中, 对开启或正在开启的容器使用本方法将发生意想不到的错误, 现在没时间查了, 以后会尝试修复.
@@ -16,7 +18,7 @@ public class InventoryUtils {
             @NotNull Inventory inventory,
             @NotNull String title
     ) throws IllegalAccessException {
-        if (CbVersion.v1_16_R3.isSupport() && ServerUtils.isSupportAdventure() && ServerUtils.isPaper()) {
+        if (USE_PAPER) {
             PaperInventoryUtils.setTitle(inventory, title);
         } else {
             SpigotInventoryUtils.setTitle(inventory, title);
@@ -34,7 +36,7 @@ public class InventoryUtils {
             @NotNull Inventory inventory,
             @NotNull String title
     ) throws IllegalAccessException {
-        if (CbVersion.v1_16_R3.isSupport() && ServerUtils.isSupportAdventure() && ServerUtils.isPaper()) {
+        if (USE_PAPER) {
             PaperInventoryUtils.setJsonTitle(inventory, title);
         } else {
             SpigotInventoryUtils.setJsonTitle(inventory, title);
