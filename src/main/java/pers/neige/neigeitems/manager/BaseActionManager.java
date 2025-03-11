@@ -651,6 +651,7 @@ public abstract class BaseActionManager {
             @NotNull ActionContext context
     ) {
         final int repeat = action.getRepeat().getOrDefault(context, 0);
+        if (repeat <= 0) return CompletableFuture.completedFuture(Results.SUCCESS);
         return runAction(action, context, repeat, 0);
     }
 
@@ -663,23 +664,24 @@ public abstract class BaseActionManager {
      */
     @NotNull
     public CompletableFuture<ActionResult> runAction(
-            @NotNull RepeatAction action,
-            @NotNull ActionContext context,
-            int repeat,
-            int count
+            final @NotNull RepeatAction action,
+            final @NotNull ActionContext context,
+            final int repeat,
+            final int count
     ) {
-        if (count < repeat) {
-            context.getGlobal().put(action.getGlobalId(), count);
-            return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
-                if (result.getType() == ResultType.STOP) {
-                    return CompletableFuture.completedFuture(result);
+        context.getGlobal().put(action.getGlobalId(), count);
+        return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
+            if (result.getType() == ResultType.STOP) {
+                return CompletableFuture.completedFuture(result);
+            } else {
+                int newCount = count + 1;
+                if (newCount < repeat) {
+                    return runAction(action, context, repeat, newCount);
                 } else {
-                    return runAction(action, context, repeat, count + 1);
+                    return CompletableFuture.completedFuture(result);
                 }
-            });
-        } else {
-            return CompletableFuture.completedFuture(Results.SUCCESS);
-        }
+            }
+        });
     }
 
     /**
