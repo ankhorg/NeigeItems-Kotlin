@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 public class SectionUtilsJ {
     @NotNull
-    public static String parse(
+    static String parse(
             @NotNull String text,
             char head,
             char tail,
