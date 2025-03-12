@@ -23,6 +23,10 @@ $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPack
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook.html
 $dokka.location:pers.neige.neigeitems.scanner/ClassScanner.EasyMethod///PointingToDeclaration/pers/neige/neigeitems/scanner/ClassScanner.EasyMethod.html
+$dokka.location:pers.neige.neigeitems.utils.pagination.impl/ArrayPaginationTool.Unsafe///PointingToDeclaration/pers/neige/neigeitems/utils/pagination/impl/ArrayPaginationTool.Unsafe.html
+$dokka.location:pers.neige.neigeitems.utils.pagination.impl/ListPaginationTool.Unsafe///PointingToDeclaration/pers/neige/neigeitems/utils/pagination/impl/ListPaginationTool.Unsafe.html
+$dokka.location:pers.neige.neigeitems.utils.pagination.impl/NavigableMapPaginationTool.Unsafe///PointingToDeclaration/pers/neige/neigeitems/utils/pagination/impl/NavigableMapPaginationTool.Unsafe.html
+$dokka.location:pers.neige.neigeitems.utils.pagination.impl/NavigableSetPaginationTool.Unsafe///PointingToDeclaration/pers/neige/neigeitems/utils/pagination/impl/NavigableSetPaginationTool.Unsafe.html
 $dokka.location:pers.neige.neigeitems.utils/SamplingUtils.SamplingResult///PointingToDeclaration/pers/neige/neigeitems/utils/SamplingUtils.SamplingResult.html
 pers.neige.neigeitems
 pers.neige.neigeitems.action
@@ -127,4 +131,6 @@ pers.neige.neigeitems.text.impl
 pers.neige.neigeitems.user
 pers.neige.neigeitems.utils
 pers.neige.neigeitems.utils.function
+pers.neige.neigeitems.utils.pagination
+pers.neige.neigeitems.utils.pagination.impl
 
