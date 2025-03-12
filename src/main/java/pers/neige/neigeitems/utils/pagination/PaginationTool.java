@@ -1,8 +1,15 @@
 package pers.neige.neigeitems.utils.pagination;
 
 import org.jetbrains.annotations.NotNull;
+import pers.neige.neigeitems.utils.pagination.impl.ArrayPaginationTool;
+import pers.neige.neigeitems.utils.pagination.impl.ListPaginationTool;
+import pers.neige.neigeitems.utils.pagination.impl.NavigableMapPaginationTool;
+import pers.neige.neigeitems.utils.pagination.impl.NavigableSetPaginationTool;
 
 import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 
 public abstract class PaginationTool<T> {
     /**
@@ -12,9 +19,25 @@ public abstract class PaginationTool<T> {
 
     public PaginationTool(int pageSize) {
         if (pageSize <= 0) {
-            throw new IllegalArgumentException("页大小必须大于0");
+            throw new IllegalArgumentException("pageSize must bigger than 0");
         }
         this.pageSize = pageSize;
+    }
+
+    public static <T> @NotNull PaginationTool<T> fromArray(T @NotNull [] handle, int pageSize) {
+        return new ArrayPaginationTool<>(handle, pageSize);
+    }
+
+    public static <T> @NotNull PaginationTool<T> fromList(@NotNull List<T> handle, int pageSize) {
+        return new ListPaginationTool<>(handle, pageSize);
+    }
+
+    public static <T> @NotNull PaginationTool<T> fromNavigableSet(@NotNull NavigableSet<T> handle, int pageSize) {
+        return new NavigableSetPaginationTool<>(handle, pageSize);
+    }
+
+    public static <K, V> @NotNull PaginationTool<Map.Entry<K, V>> fromNavigableMap(@NotNull NavigableMap<K, V> handle, int pageSize) {
+        return new NavigableMapPaginationTool<>(handle, pageSize);
     }
 
     /**
