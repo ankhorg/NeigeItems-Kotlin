@@ -83,7 +83,9 @@ public abstract class BaseActionManager {
             @NotNull Plugin plugin
     ) {
         this.plugin = plugin;
-        // 加载基础物品动作
+        engine.put("plugin", plugin);
+        engine.put("manager", this);
+        // 加载基础动作
         loadBasicActions();
     }
 
@@ -1392,7 +1394,7 @@ public abstract class BaseActionManager {
         addFunction("func", (context, content) -> {
             Action function = ActionManager.INSTANCE.getFunctions().get(content);
             if (function == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            return function.eval(context);
+            return function.evalAsyncSafe(context);
         });
     }
 }

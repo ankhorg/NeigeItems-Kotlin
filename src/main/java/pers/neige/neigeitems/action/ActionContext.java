@@ -100,10 +100,14 @@ public class ActionContext implements Cloneable {
     }
 
     @Override
-    public ActionContext clone() throws CloneNotSupportedException {
-        ActionContext result = (ActionContext) super.clone();
-        result.setSync(Bukkit.isPrimaryThread());
-        return result;
+    public ActionContext clone() {
+        try {
+            ActionContext result = (ActionContext) super.clone();
+            result.setSync(Bukkit.isPrimaryThread());
+            return result;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

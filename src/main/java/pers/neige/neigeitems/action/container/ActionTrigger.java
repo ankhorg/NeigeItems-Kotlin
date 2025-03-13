@@ -96,11 +96,7 @@ public class ActionTrigger {
             @NotNull ActionContext context
     ) {
         SchedulerUtils.async(actionManager.getPlugin(), () -> {
-            try {
-                async.eval(context.clone());
-            } catch (CloneNotSupportedException e) {
-                throw new RuntimeException(e);
-            }
+            async.eval(context.clone());
         });
     }
 
@@ -108,11 +104,7 @@ public class ActionTrigger {
             @NotNull ActionContext context
     ) {
         SchedulerUtils.sync(actionManager.getPlugin(), () -> {
-            try {
-                sync.eval(context.clone());
-            } catch (CloneNotSupportedException e) {
-                throw new RuntimeException(e);
-            }
+            sync.eval(context.clone());
         });
     }
 }

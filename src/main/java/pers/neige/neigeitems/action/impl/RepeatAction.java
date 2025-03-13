@@ -1,7 +1,10 @@
 package pers.neige.neigeitems.action.impl;
 
 import org.jetbrains.annotations.NotNull;
-import pers.neige.neigeitems.action.*;
+import pers.neige.neigeitems.action.Action;
+import pers.neige.neigeitems.action.ActionContext;
+import pers.neige.neigeitems.action.ActionResult;
+import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;

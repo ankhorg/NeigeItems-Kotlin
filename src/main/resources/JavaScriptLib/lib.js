@@ -65,7 +65,6 @@ const bukkitServer = Bukkit.getServer()
 const consoleSender = bukkitServer.getConsoleSender()
 const pluginManager = Bukkit.getPluginManager()
 const scheduler = Bukkit.getScheduler()
-const plugin = pluginManager.getPlugin("NeigeItems")
 
 /**
  * 判断玩家是否拥有某个权限节点

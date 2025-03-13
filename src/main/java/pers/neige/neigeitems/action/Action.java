@@ -62,10 +62,17 @@ public abstract class Action {
     }
 
     @NotNull
-    public CompletableFuture<ActionResult> eval(
+    public CompletableFuture<ActionResult> evalAsyncSafe(
             @NotNull ActionContext context
     ) {
         return evalAsyncSafe(manager, context);
+    }
+
+    @NotNull
+    public CompletableFuture<ActionResult> eval(
+            @NotNull ActionContext context
+    ) {
+        return evalAsyncSafe(manager, context.clone());
     }
 
     /**
