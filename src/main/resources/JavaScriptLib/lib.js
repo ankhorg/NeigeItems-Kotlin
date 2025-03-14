@@ -19,7 +19,8 @@ const SamplingUtils = Packages.pers.neige.neigeitems.utils.SamplingUtils
 const ScriptUtils = Packages.pers.neige.neigeitems.utils.ScriptUtils
 const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
 const StringUtils = Packages.pers.neige.neigeitems.utils.StringUtils
-const PaginationTool = Packages.pers.neige.neigeitems.utils.pagination.PaginationTool
+const CircularPager = Packages.pers.neige.neigeitems.utils.pagination.CircularPager
+const Pager = Packages.pers.neige.neigeitems.utils.pagination.Pager
 
 const NbtUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils
 const ComponentUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils
@@ -952,4 +953,38 @@ const getDefenderMobId = function () {
     const hooker = HookerManager.INSTANCE.mythicMobsHooker
     if (hooker == null) return null
     return hooker.getMythicId(event.getEntity())
+}
+
+/**
+ * 检测玩家冷却状态.
+ * 冷却完成则重新设置冷却并返回0.
+ * 冷却未完成则返回剩余时间.
+ *
+ * @param key      冷却组ID
+ * @param cooldown 冷却刷新时间
+ * @return long 剩余冷却时间
+ */
+const checkCooldown = function(key, cooldown) {
+    return PlayerUtils.checkCooldown(player, key, cooldown)
+}
+
+/**
+ * 返回玩家剩余冷却时间.
+ *
+ * @param key      冷却组ID
+ * @param cooldown 冷却刷新时间
+ * @return long 剩余冷却时间
+ */
+const getCooldown = function(key, cooldown) {
+    return PlayerUtils.getCooldown(player, key, cooldown)
+}
+
+/**
+ * 设置玩家进入冷却状态.
+ *
+ * @param key      冷却组ID
+ * @param cooldown 冷却刷新时间
+ */
+const setCooldown = function(key, cooldown) {
+    PlayerUtils.setCooldown(player, key, cooldown)
 }

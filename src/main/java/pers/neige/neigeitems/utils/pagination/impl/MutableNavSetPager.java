@@ -3,48 +3,47 @@ package pers.neige.neigeitems.utils.pagination.impl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.pagination.PageCursor;
-import pers.neige.neigeitems.utils.pagination.PaginationTool;
+import pers.neige.neigeitems.utils.pagination.Pager;
 
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MutableNavMapPaginationTool<K, V> extends PaginationTool<Entry<K, V>> {
+public class MutableNavSetPager<T> extends Pager<T> {
     /**
      * 可变数据
      */
-    private final @NotNull NavigableMap<K, V> handle;
+    private final @NotNull NavigableSet<T> handle;
     /**
      * 当前页游标
      */
-    private final @NotNull AtomicReference<PageCursor<K>> cursorRef;
+    private final @NotNull AtomicReference<PageCursor<T>> cursorRef;
 
-    public MutableNavMapPaginationTool(@NotNull NavigableMap<K, V> set, int pageSize) {
+    public MutableNavSetPager(@NotNull NavigableSet<T> set, int pageSize) {
         super(pageSize);
         this.handle = set;
         this.cursorRef = new AtomicReference<>(initCursor());
     }
 
-    public @NotNull NavigableMap<K, V> getHandle() {
+    public @NotNull NavigableSet<T> getHandle() {
         return handle;
     }
 
     /**
      * 初始化游标位置（第一页起始键）
      */
-    private @NotNull PageCursor<K> initCursor() {
+    private @NotNull PageCursor<T> initCursor() {
         if (handle.isEmpty()) return PageCursor.empty();
-        return new PageCursor<>(handle.firstKey(), 1);
+        return new PageCursor<>(handle.first(), 1);
     }
 
     public boolean nextPage() {
-        PageCursor<K> prev;
-        PageCursor<K> next;
+        PageCursor<T> prev;
+        PageCursor<T> next;
         do {
             prev = getCursor();
             if (prev.getCurrentPage() >= getTotalPages()) return false;
 
-            K nextStart = findNextStart(prev.getStartElement());
+            T nextStart = findNextStart(prev.getStartElement());
             if (nextStart == null) return false;
 
             int newPage = prev.getCurrentPage() + 1;
@@ -54,13 +53,13 @@ public class MutableNavMapPaginationTool<K, V> extends PaginationTool<Entry<K, V
     }
 
     public boolean prevPage() {
-        PageCursor<K> prev;
-        PageCursor<K> next;
+        PageCursor<T> prev;
+        PageCursor<T> next;
         do {
             prev = getCursor();
             if (prev.getCurrentPage() <= 1) return false;
 
-            K prevStart = findPrevStart(prev.getStartElement());
+            T prevStart = findPrevStart(prev.getStartElement());
             if (prevStart == null) return false;
 
             int newPage = prev.getCurrentPage() - 1;
@@ -72,7 +71,7 @@ public class MutableNavMapPaginationTool<K, V> extends PaginationTool<Entry<K, V
     public boolean goToPage(int page) {
         if (page < 1 || page > getTotalPages()) return false;
 
-        PageCursor<K> target = calculatePageStart(page);
+        PageCursor<T> target = calculatePageStart(page);
         if (target == null) return false;
 
         cursorRef.set(target);
@@ -82,9 +81,9 @@ public class MutableNavMapPaginationTool<K, V> extends PaginationTool<Entry<K, V
     /**
      * 获取当前游标
      */
-    public PageCursor<K> getCursor() {
-        PageCursor<K> cursor;
-        PageCursor<K> maybeReplacement;
+    public PageCursor<T> getCursor() {
+        PageCursor<T> cursor;
+        PageCursor<T> maybeReplacement;
         do {
             // 当前游标
             cursor = cursorRef.get();
@@ -101,7 +100,7 @@ public class MutableNavMapPaginationTool<K, V> extends PaginationTool<Entry<K, V
             if (handle.isEmpty()) {
                 maybeReplacement = PageCursor.empty();
                 // 元素移除
-            } else if (!handle.containsKey(cursor.getStartElement())) {
+            } else if (!handle.contains(cursor.getStartElement())) {
                 // 刷新页
                 goToPage(Math.min(getTotalPages(), cursor.getCurrentPage()));
                 cursor = cursorRef.get();
@@ -114,13 +113,13 @@ public class MutableNavMapPaginationTool<K, V> extends PaginationTool<Entry<K, V
         return getCursor().getCurrentPage();
     }
 
-    public @NotNull List<Entry<K, V>> getCurrentPageElements() {
+    public @NotNull List<T> getCurrentPageElements() {
         if (handle.isEmpty()) return Collections.emptyList();
-        PageCursor<K> cursor = getCursor();
+        PageCursor<T> cursor = getCursor();
         if (cursor.isEmpty()) return Collections.emptyList();
 
-        List<Entry<K, V>> pageElements = new ArrayList<>(getPageSize());
-        Iterator<Entry<K, V>> it = handle.tailMap(cursor.getStartElement(), true).entrySet().iterator();
+        List<T> pageElements = new ArrayList<>(getPageSize());
+        Iterator<T> it = handle.tailSet(cursor.getStartElement(), true).iterator();
 
         int count = 0;
         while (it.hasNext() && count < getPageSize()) {
@@ -142,28 +141,28 @@ public class MutableNavMapPaginationTool<K, V> extends PaginationTool<Entry<K, V
         return handle.size();
     }
 
-    private K findNextStart(K currentStart) {
-        Iterator<K> it = handle.tailMap(currentStart, false).navigableKeySet().iterator();
+    private T findNextStart(T currentStart) {
+        Iterator<T> it = handle.tailSet(currentStart, false).iterator();
         for (int i = 0; i < getPageSize() - 1 && it.hasNext(); i++) {
             it.next();
         }
         return it.hasNext() ? it.next() : null;
     }
 
-    private K findPrevStart(K currentStart) {
+    private T findPrevStart(T currentStart) {
         if (handle.isEmpty()) return null;
-        NavigableSet<K> headSet = handle.headMap(currentStart, false).navigableKeySet();
+        NavigableSet<T> headSet = handle.headSet(currentStart, false);
         if (headSet.isEmpty()) return null;
 
-        Iterator<K> it = headSet.descendingIterator();
+        Iterator<T> it = headSet.descendingIterator();
         int steps = (getPageSize() - 1) % getPageSize(); // 计算上一页起始偏移
         for (int i = 0; i < steps && it.hasNext(); i++) {
             it.next();
         }
-        return it.hasNext() ? it.next() : handle.firstKey();
+        return it.hasNext() ? it.next() : handle.first();
     }
 
-    private @Nullable PageCursor<K> calculatePageStart(int targetPage) {
+    private @Nullable PageCursor<T> calculatePageStart(int targetPage) {
         // 范围检测
         if (targetPage < 1 || targetPage > getTotalPages()) return null;
 
@@ -176,7 +175,7 @@ public class MutableNavMapPaginationTool<K, V> extends PaginationTool<Entry<K, V
             final int reverseSkip = totalSize - skip - 1; // 计算反向跳过的位置
             if (reverseSkip < 0) return null;
 
-            Iterator<K> it = handle.navigableKeySet().descendingIterator();
+            Iterator<T> it = handle.descendingIterator();
             for (int i = 0; i < reverseSkip && it.hasNext(); i++) {
                 it.next();
             }
@@ -184,7 +183,7 @@ public class MutableNavMapPaginationTool<K, V> extends PaginationTool<Entry<K, V
             return it.hasNext() ? new PageCursor<>(it.next(), targetPage) : null;
         } else {
             // 正向遍历逻辑
-            Iterator<K> it = handle.navigableKeySet().iterator();
+            Iterator<T> it = handle.iterator();
             for (int i = 0; i < skip && it.hasNext(); i++) {
                 it.next();
             }

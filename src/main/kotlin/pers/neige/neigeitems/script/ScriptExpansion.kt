@@ -59,7 +59,8 @@ class ScriptExpansion : CompiledScript {
                 const ScriptUtils = Packages.pers.neige.neigeitems.utils.ScriptUtils
                 const SectionUtils = Packages.pers.neige.neigeitems.utils.SectionUtils
                 const StringUtils = Packages.pers.neige.neigeitems.utils.StringUtils
-                const PaginationTool = Packages.pers.neige.neigeitems.utils.pagination.PaginationTool
+                const CircularPager = Packages.pers.neige.neigeitems.utils.pagination.CircularPager
+                const Pager = Packages.pers.neige.neigeitems.utils.pagination.Pager
                 
                 const NbtUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils
                 const ComponentUtils = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils

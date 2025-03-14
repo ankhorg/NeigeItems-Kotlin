@@ -1,27 +1,32 @@
 package pers.neige.neigeitems.utils.pagination.impl;
 
 import org.jetbrains.annotations.NotNull;
-import pers.neige.neigeitems.utils.pagination.PaginationTool;
+import pers.neige.neigeitems.utils.pagination.Pager;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MutableListPaginationTool<T> extends PaginationTool<T> {
+public class ImmutableListPager<T> extends Pager<T> {
     /**
-     * 可变数据
+     * 数据副本，初始化后不变
      */
     private final @NotNull List<T> handle;
+    /**
+     * 总页数，初始化后不变
+     */
+    private final int totalPages;
     /**
      * 当前页码（从1开始）
      */
     private final @NotNull AtomicInteger currentPage;
 
-    public MutableListPaginationTool(@NotNull List<T> handle, int pageSize) {
+    public ImmutableListPager(@NotNull List<T> handle, int pageSize) {
         super(pageSize);
         this.handle = handle;
+        this.totalPages = super.getTotalPages();
         // 初始化当前页（总页数为0时设为0，否则从1开始）
-        this.currentPage = new AtomicInteger(getTotalPages() == 0 ? 0 : 1);
+        this.currentPage = new AtomicInteger(totalPages == 0 ? 0 : 1);
     }
 
     public @NotNull List<T> getHandle() {
@@ -29,11 +34,11 @@ public class MutableListPaginationTool<T> extends PaginationTool<T> {
     }
 
     public boolean nextPage() {
-        if (getTotalPages() <= 1) return false;
+        if (totalPages <= 1) return false;
         int current;
         do {
-            current = getCurrentPage();
-            if (current >= getTotalPages()) {
+            current = currentPage.get();
+            if (current >= totalPages) {
                 return false;
             }
         } while (!currentPage.compareAndSet(current, current + 1));
@@ -41,10 +46,10 @@ public class MutableListPaginationTool<T> extends PaginationTool<T> {
     }
 
     public boolean prevPage() {
-        if (getTotalPages() <= 1) return false;
+        if (totalPages <= 1) return false;
         int current;
         do {
-            current = getCurrentPage();
+            current = currentPage.get();
             if (current <= 1) {
                 return false;
             }
@@ -61,21 +66,11 @@ public class MutableListPaginationTool<T> extends PaginationTool<T> {
     }
 
     public int getCurrentPage() {
-        int page;
-        int maybeReplacement;
-        do {
-            page = currentPage.get();
-            if (page == 0 && !handle.isEmpty()) {
-                maybeReplacement = 1;
-            } else {
-                maybeReplacement = Math.min(getTotalPages(), page);
-            }
-        } while (page != maybeReplacement && !currentPage.compareAndSet(page, maybeReplacement));
-        return maybeReplacement;
+        return currentPage.get();
     }
 
     public @NotNull List<T> getCurrentPageElements() {
-        int current = getCurrentPage();
+        int current = currentPage.get();
         if (current == 0) {
             return Collections.emptyList();
         }
@@ -88,11 +83,15 @@ public class MutableListPaginationTool<T> extends PaginationTool<T> {
     }
 
     public boolean hasNextPage() {
-        return getCurrentPage() < getTotalPages();
+        return currentPage.get() < totalPages;
     }
 
     public boolean hasPrevPage() {
-        return getCurrentPage() > 1;
+        return currentPage.get() > 1;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
     }
 
     public int getTotalElements() {
