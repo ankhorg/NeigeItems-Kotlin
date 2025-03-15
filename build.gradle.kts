@@ -194,7 +194,7 @@ publishing {
         if (!System.getenv("CI").toBoolean()) {
             maven(layout.buildDirectory.file("repo").get().asFile)
         } else if (!version.toString().endsWith("-SNAPSHOT")) {
-            maven("https://s0.blobs.inksnow.org/maven/") {
+            maven("https://s0.blobs.irepo.space/maven/") {
                 credentials {
                     username = System.getenv("IREPO_USERNAME")
                     password = System.getenv("IREPO_PASSWORD")
