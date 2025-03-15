@@ -11,8 +11,7 @@ import pers.neige.neigeitems.command.CommandUtils.argument
 import pers.neige.neigeitems.command.CommandUtils.literal
 import pers.neige.neigeitems.command.arguments.FunctionArgumentType.function
 import pers.neige.neigeitems.command.arguments.FunctionArgumentType.getFunctionSelector
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayerSelector
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
+import pers.neige.neigeitems.command.arguments.PlayerArgumentType.*
 import pers.neige.neigeitems.command.selector.FunctionSelector
 import pers.neige.neigeitems.command.selector.PlayerSelector
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -43,11 +42,6 @@ object Function {
         data: String? = null
     ): Int {
         val sender = context.source
-        val playerSelector = getPlayerSelector(context, "player")
-        val player = playerSelector.select(context) ?: let {
-            sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", playerSelector.text)))
-            return 1
-        }
         val functionSelector = getFunctionSelector(context, "function")
         val function = functionSelector.select(context) ?: let {
             sender.sendLang("Messages.invalidFunction", mapOf(Pair("{function}", functionSelector.text)))
@@ -57,7 +51,7 @@ object Function {
             null -> HashMap()
             else -> data.parseObject<HashMap<String, Any>>()
         }
-        function.eval(ActionContext(player, params, params))
+        function.eval(ActionContext(getPlayer(context, "player"), params, params))
         return 1
     }
 }
