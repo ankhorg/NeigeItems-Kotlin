@@ -8,6 +8,9 @@ import pers.neige.neigeitems.utils.pagination.impl.circular.MutableNavSetCircula
 
 import java.util.*;
 
+/**
+ * 循环分页工具
+ */
 public abstract class CircularPager<T> {
     protected final int pageSize;
 

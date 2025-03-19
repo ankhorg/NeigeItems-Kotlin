@@ -73,6 +73,20 @@ public class NeigeItems extends JavaPlugin {
     }
 
     public void onInit() {
+        if (CbVersion.current() == CbVersion.v1_20_R4) {
+            logger.warn("1.20.5/1.20.6 是 mojang 拍脑门子更新出来的沟槽的中间版本, NeigeItems 拒绝支持这两个版本。");
+            logger.warn("1.20.5/1.20.6 are problematic intermediate versions hastily released by Mojang, which NeigeItems refuses to support.");
+
+            PluginManager pluginManager = Bukkit.getPluginManager();
+            pluginManager.disablePlugin(this);
+        }
+        if (CbVersion.v1_13_R1.isSupport() && CbVersion.v1_17_R1.isUpTo()) {
+            logger.warn("NeigeItems 已经放弃支持 1.13-1.17 的所有版本。");
+            logger.warn("NeigeItems has discontinued support for all Minecraft versions from 1.13 to 1.17.");
+
+            PluginManager pluginManager = Bukkit.getPluginManager();
+            pluginManager.disablePlugin(this);
+        }
         try {
             if (!CbVersion.v1_20_R4.isSupport()) {
                 ItemStack itemStack = new ItemStack(Material.STONE);

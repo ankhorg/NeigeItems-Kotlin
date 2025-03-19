@@ -8,6 +8,9 @@ import pers.neige.neigeitems.utils.pagination.impl.MutableNavSetPager;
 
 import java.util.*;
 
+/**
+ * 分页工具
+ */
 public abstract class Pager<T> {
     /**
      * 页面信息
