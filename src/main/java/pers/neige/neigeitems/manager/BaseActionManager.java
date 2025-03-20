@@ -1265,7 +1265,7 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return;
             PotionEffectType type = PotionEffectType.getByName(content.toUpperCase(Locale.ROOT));
-            if (type != null) return;
+            if (type == null) return;
             player.removePotionEffect(type);
         });
         // 延迟(单位是tick)

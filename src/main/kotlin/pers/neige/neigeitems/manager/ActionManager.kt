@@ -426,7 +426,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent
     ) {
         basicHandler(
-            player, itemStack, itemInfo, event, ItemActionType.BLOCKING.type, cancel = false, cancelIfCooldown = true
+            player, itemStack, itemInfo, event, ItemActionType.BLOCKING.type, cancel = false
         )
     }
 
@@ -437,7 +437,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent
     ) {
         basicHandler(
-            player, itemStack, itemInfo, event, ItemActionType.DAMAGE.type, cancel = false, cancelIfCooldown = true
+            player, itemStack, itemInfo, event, ItemActionType.DAMAGE.type, cancel = false
         )
     }
 

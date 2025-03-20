@@ -11,10 +11,10 @@ import pers.neige.neigeitems.hook.itemsadder.ItemsAdderHooker
  */
 class ItemsAdderHookerImpl : ItemsAdderHooker() {
     override fun getItemStack(id: String): ItemStack? {
-        return CustomStack.getInstance("your_item")?.itemStack
+        return CustomStack.getInstance(id)?.itemStack
     }
 
     override fun hasItem(id: String): Boolean {
-        return CustomStack.isInRegistry("your_item")
+        return CustomStack.isInRegistry(id)
     }
 }
