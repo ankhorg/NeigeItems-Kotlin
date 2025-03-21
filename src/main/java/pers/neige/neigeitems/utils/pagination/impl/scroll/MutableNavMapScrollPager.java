@@ -120,14 +120,14 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
 
     private <C extends Comparable<C>> boolean isLast() {
         if (handle.isEmpty()) return true;
-        C current = (C) cursorKey.get();
+        C current = (C) getCursor();
         C last = (C) handle.lastKey();
         return current.compareTo(last) >= 0;
     }
 
     private <C extends Comparable<C>> boolean isFirst() {
         if (handle.isEmpty()) return true;
-        C current = (C) cursorKey.get();
+        C current = (C) getCursor();
         C first = (C) handle.firstKey();
         return current.compareTo(first) <= 0;
     }

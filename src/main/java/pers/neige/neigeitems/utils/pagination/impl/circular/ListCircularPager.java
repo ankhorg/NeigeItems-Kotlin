@@ -36,7 +36,7 @@ public class ListCircularPager<T> extends CircularPager<T> {
         offset.updateAndGet(current -> {
             int size = handle.size();
             if (size == 0) return 0;
-            return Math.floorMod(current + delta, size);
+            return current + delta % size;
         });
     }
 

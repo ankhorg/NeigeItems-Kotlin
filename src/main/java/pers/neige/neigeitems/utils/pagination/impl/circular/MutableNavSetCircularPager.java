@@ -71,6 +71,8 @@ public class MutableNavSetCircularPager<T> extends CircularPager<T> {
             current = handle.first();
         }
 
+        delta = delta % getTotalElements();
+
         boolean reverse = delta < 0;
         int absDelta = Math.abs(delta);
 

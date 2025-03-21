@@ -71,6 +71,8 @@ public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K,
             current = handle.firstKey();
         }
 
+        delta = delta % getTotalElements();
+
         boolean reverse = delta < 0;
         int absDelta = Math.abs(delta);
 

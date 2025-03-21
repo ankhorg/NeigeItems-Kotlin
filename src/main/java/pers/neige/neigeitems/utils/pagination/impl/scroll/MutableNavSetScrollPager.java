@@ -120,14 +120,14 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
 
     private <C extends Comparable<C>> boolean isLast() {
         if (handle.isEmpty()) return true;
-        C current = (C) cursor.get();
+        C current = (C) getCursor();
         C last = (C) handle.last();
         return current.compareTo(last) >= 0;
     }
 
     private <C extends Comparable<C>> boolean isFirst() {
         if (handle.isEmpty()) return true;
-        C current = (C) cursor.get();
+        C current = (C) getCursor();
         C first = (C) handle.first();
         return current.compareTo(first) <= 0;
     }
