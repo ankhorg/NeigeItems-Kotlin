@@ -130,4 +130,5 @@ pers.neige.neigeitems.utils.function
 pers.neige.neigeitems.utils.pagination
 pers.neige.neigeitems.utils.pagination.impl
 pers.neige.neigeitems.utils.pagination.impl.circular
+pers.neige.neigeitems.utils.pagination.impl.scroll
 
