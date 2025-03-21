@@ -1,12 +1,13 @@
 package pers.neige.neigeitems.utils.pagination;
 
 import org.jetbrains.annotations.NotNull;
-import pers.neige.neigeitems.utils.pagination.impl.circular.ImmutableListCircularPager;
-import pers.neige.neigeitems.utils.pagination.impl.circular.MutableListCircularPager;
+import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.utils.pagination.impl.circular.ListCircularPager;
 import pers.neige.neigeitems.utils.pagination.impl.circular.MutableNavMapCircularPager;
 import pers.neige.neigeitems.utils.pagination.impl.circular.MutableNavSetCircularPager;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * 循环分页工具
@@ -28,10 +29,11 @@ public abstract class CircularPager<T> {
      * @param handle   待分页 List
      * @param pageSize 页大小
      * @param clone    是否对传入的 List 进行复制
+     * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <T> @NotNull CircularPager<T> fromImmutableList(@NotNull List<T> handle, int pageSize, boolean clone) {
-        return new ImmutableListCircularPager<>(clone ? Collections.unmodifiableList(new ArrayList<>(handle)) : handle, pageSize);
+    public static <T> @NotNull CircularPager<T> fromImmutableList(@NotNull List<T> handle, int pageSize, boolean clone, @Nullable Predicate<T> filter) {
+        return new ListCircularPager<>(clone ? Collections.unmodifiableList(new ArrayList<>(handle)) : handle, pageSize, filter);
     }
 
     /**
@@ -42,10 +44,11 @@ public abstract class CircularPager<T> {
      *
      * @param handle   待分页数组
      * @param pageSize 页大小
+     * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <T> @NotNull CircularPager<T> fromImmutableArray(T @NotNull [] handle, int pageSize) {
-        return fromImmutableList(Arrays.asList(handle), pageSize, true);
+    public static <T> @NotNull CircularPager<T> fromImmutableArray(T @NotNull [] handle, int pageSize, @Nullable Predicate<T> filter) {
+        return fromImmutableList(Arrays.asList(handle), pageSize, true, filter);
     }
 
     /**
@@ -56,10 +59,11 @@ public abstract class CircularPager<T> {
      *
      * @param handle   待分页 Set
      * @param pageSize 页大小
+     * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <T> @NotNull CircularPager<T> fromImmutableSet(@NotNull Set<T> handle, int pageSize) {
-        return fromImmutableList(Collections.unmodifiableList(new ArrayList<>(handle)), pageSize, false);
+    public static <T> @NotNull CircularPager<T> fromImmutableSet(@NotNull Set<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+        return fromImmutableList(Collections.unmodifiableList(new ArrayList<>(handle)), pageSize, false, filter);
     }
 
     /**
@@ -70,10 +74,11 @@ public abstract class CircularPager<T> {
      *
      * @param handle   待分页 Map
      * @param pageSize 页大小
+     * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <K, V> @NotNull CircularPager<Map.Entry<K, V>> fromImmutableMap(@NotNull Map<K, V> handle, int pageSize) {
-        return fromImmutableList(Collections.unmodifiableList(new ArrayList<>(handle.entrySet())), pageSize, false);
+    public static <K, V> @NotNull CircularPager<Map.Entry<K, V>> fromImmutableMap(@NotNull Map<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
+        return fromImmutableList(Collections.unmodifiableList(new ArrayList<>(handle.entrySet())), pageSize, false, filter);
     }
 
     /**
@@ -84,10 +89,11 @@ public abstract class CircularPager<T> {
      *
      * @param handle   待分页 List
      * @param pageSize 页大小
+     * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <T> @NotNull CircularPager<T> fromMutableList(@NotNull List<T> handle, int pageSize) {
-        return new MutableListCircularPager<>(handle, pageSize);
+    public static <T> @NotNull CircularPager<T> fromMutableList(@NotNull List<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+        return new ListCircularPager<>(handle, pageSize, filter);
     }
 
     /**
@@ -98,10 +104,11 @@ public abstract class CircularPager<T> {
      *
      * @param handle   待分页 Set
      * @param pageSize 页大小
+     * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <T> @NotNull CircularPager<T> fromMutableNavSet(@NotNull NavigableSet<T> handle, int pageSize) {
-        return new MutableNavSetCircularPager<>(handle, pageSize);
+    public static <T> @NotNull CircularPager<T> fromMutableNavSet(@NotNull NavigableSet<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+        return new MutableNavSetCircularPager<>(handle, pageSize, filter);
     }
 
     /**
@@ -112,10 +119,11 @@ public abstract class CircularPager<T> {
      *
      * @param handle   待分页 Map
      * @param pageSize 页大小
+     * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <K, V> @NotNull CircularPager<Map.Entry<K, V>> fromMutableNavMap(@NotNull NavigableMap<K, V> handle, int pageSize) {
-        return new MutableNavMapCircularPager<>(handle, pageSize);
+    public static <K, V> @NotNull CircularPager<Map.Entry<K, V>> fromMutableNavMap(@NotNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
+        return new MutableNavMapCircularPager<>(handle, pageSize, filter);
     }
 
     /**

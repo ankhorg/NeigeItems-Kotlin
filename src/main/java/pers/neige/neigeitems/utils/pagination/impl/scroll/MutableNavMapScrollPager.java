@@ -1,19 +1,19 @@
-package pers.neige.neigeitems.utils.pagination.impl.circular;
+package pers.neige.neigeitems.utils.pagination.impl.scroll;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.utils.pagination.CircularPager;
+import pers.neige.neigeitems.utils.pagination.ScrollPager;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
-public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K, V>> {
+public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>> {
     private final @NotNull NavigableMap<K, V> handle;
     private final @NotNull AtomicReference<K> cursorKey = new AtomicReference<>();
     private final @Nullable Predicate<Map.Entry<K, V>> filter;
 
-    public MutableNavMapCircularPager(@NotNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
+    public MutableNavMapScrollPager(@NotNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
         super(pageSize);
         this.handle = handle;
         this.filter = filter;
@@ -80,9 +80,7 @@ public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K,
 
         // 原子更新游标
         for (int i = 0; i < absDelta; i++) {
-            if (!it.hasNext()) it = reverse ?
-                    handle.navigableKeySet().descendingIterator() :
-                    handle.navigableKeySet().iterator();
+            if (!it.hasNext()) break;
             current = it.next();
         }
         cursorKey.set(current);
@@ -97,32 +95,19 @@ public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K,
         NavigableMap<K, V> tail = handle.tailMap(current, true);
         Iterator<Map.Entry<K, V>> it = tail.entrySet().iterator();
 
-        boolean newRound = false;
-        boolean anyMatch = false;
-        List<Map.Entry<K, V>> newRoundElements = null;
-        while (page.size() < pageSize) {
-            if (!it.hasNext()) {
-                if (newRound) {
-                    if (anyMatch) {
-                        Iterator<Map.Entry<K, V>> roundIterator = newRoundElements.iterator();
-                        while (page.size() < pageSize) {
-                            if (!roundIterator.hasNext()) roundIterator = newRoundElements.iterator();
-                            page.add(roundIterator.next());
-                        }
-                    }
-                    return page;
-                }
-                newRound = true;
-                newRoundElements = new ArrayList<>();
-                it = handle.entrySet().iterator();
-            }
+        while (it.hasNext() && page.size() < pageSize) {
             Map.Entry<K, V> element = it.next();
-            if (filter == null || filter.test(element)) {
-                if (newRound) {
-                    anyMatch = true;
-                    newRoundElements.add(element);
-                }
-                page.add(element);
+            if (filter == null || filter.test(element)) page.add(element);
+        }
+        if (current == handle.firstKey()) return page;
+
+        if (page.size() < pageSize) {
+            NavigableMap<K, V> head = handle.headMap(current, false);
+            it = head.descendingMap().entrySet().iterator();
+
+            while (it.hasNext() && page.size() < pageSize) {
+                Map.Entry<K, V> element = it.next();
+                if (filter == null || filter.test(element)) page.add(0, element);
             }
         }
         return page;
@@ -131,5 +116,49 @@ public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K,
     @Override
     public int getTotalElements() {
         return handle.size();
+    }
+
+    private <C extends Comparable<C>> boolean isLast() {
+        if (handle.isEmpty()) return true;
+        C current = (C) cursorKey.get();
+        C last = (C) handle.lastKey();
+        return current.compareTo(last) >= 0;
+    }
+
+    private <C extends Comparable<C>> boolean isFirst() {
+        if (handle.isEmpty()) return true;
+        C current = (C) cursorKey.get();
+        C first = (C) handle.firstKey();
+        return current.compareTo(first) <= 0;
+    }
+
+    @Override
+    public boolean nextPage() {
+        if (isLast()) return false;
+        moveOffset(getPageSize());
+        return true;
+    }
+
+    @Override
+    public boolean prevPage() {
+        if (isFirst()) return false;
+        moveOffset(-getPageSize());
+        return true;
+    }
+
+    @Override
+    public boolean hasNextPage() {
+        return !isLast();
+    }
+
+    @Override
+    public boolean hasPrevPage() {
+        return !isFirst();
+    }
+
+    @Override
+    public void toFinalOffset() {
+        if (handle.isEmpty()) cursorKey.set(null);
+        cursorKey.set(handle.firstKey());
     }
 }
