@@ -57,7 +57,14 @@ public class MutableNavSetPager<T> extends Pager<T> {
         PageCursor<T> next;
         do {
             prev = getCursor();
-            if (prev.getCurrentPage() <= 1) return false;
+            if (prev.getCurrentPage() <= 1) {
+                if (!handle.isEmpty() && prev.getCurrentPage() == 1 && prev.getStartElement() != handle.first()) {
+                    goToPage(1);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
             T prevStart = findPrevStart(prev.getStartElement());
             if (prevStart == null) return false;

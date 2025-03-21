@@ -58,7 +58,14 @@ public class MutableNavMapPager<K, V> extends Pager<Entry<K, V>> {
         PageCursor<K> next;
         do {
             prev = getCursor();
-            if (prev.getCurrentPage() <= 1) return false;
+            if (prev.getCurrentPage() <= 1) {
+                if (!handle.isEmpty() && prev.getCurrentPage() == 1 && prev.getStartElement() != handle.firstKey()) {
+                    goToPage(1);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
             K prevStart = findPrevStart(prev.getStartElement());
             if (prevStart == null) return false;
