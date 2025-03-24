@@ -15,6 +15,8 @@ $dokka.location:pers.neige.neigeitems.item/ItemPlaceholder.ParseResult///Pointin
 $dokka.location:pers.neige.neigeitems.lang/LocaleI18n.TranslationProvider///PointingToDeclaration/pers/neige/neigeitems/lang/LocaleI18n.TranslationProvider.html
 $dokka.location:pers.neige.neigeitems.libs.bot.inker.bukkit.nbt/Nbt.Unsafe///PointingToDeclaration/pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/Nbt.Unsafe.html
 $dokka.location:pers.neige.neigeitems.libs.bot.inker.bukkit.nbt/NbtCompound.Unsafe///PointingToDeclaration/pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtCompound.Unsafe.html
+$dokka.location:pers.neige.neigeitems.manager/AbstractConfigManager.FileConfig///PointingToDeclaration/pers/neige/neigeitems/manager/AbstractConfigManager.FileConfig.html
+$dokka.location:pers.neige.neigeitems.manager/AbstractConfigManager.RawConfig///PointingToDeclaration/pers/neige/neigeitems/manager/AbstractConfigManager.RawConfig.html
 $dokka.location:pers.neige.neigeitems.manager/ItemManager.SaveResult///PointingToDeclaration/pers/neige/neigeitems/manager/ItemManager.SaveResult.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.Pos///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.Pos.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.PosRot///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayInFlying.PosRot.html
