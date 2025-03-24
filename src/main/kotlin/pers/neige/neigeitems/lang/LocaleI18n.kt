@@ -191,14 +191,7 @@ object LocaleI18n {
             .filter { it.key.startsWith("minecraft/lang/") }.mapValues { it.value as JSONObject }
     }
 
-    /**
-     * 下载文件.
-     *
-     * @this 版本信息
-     */
-    private fun downloadFile(fileName: String, fileInfo: JSONObject, version: String): File? {
-        // 当前语言文件的hash
-        val hash = fileInfo.getString("hash")
+    private fun shouldDownload(fileName: String, version: String): Boolean {
         // 当前文件名
         val simpleFileName = fileName.removePrefix("minecraft/lang/")
         // 服务端根目录目标文件
@@ -214,7 +207,28 @@ object LocaleI18n {
             // sha1校验不通过
             || file.sha1() != sha1File.readText()
         ) {
+            return true
+        }
+        return false
+    }
+
+    /**
+     * 下载文件.
+     *
+     * @this 版本信息
+     */
+    private fun downloadFile(fileName: String, fileInfo: JSONObject, version: String): File? {
+        // 当前文件名
+        val simpleFileName = fileName.removePrefix("minecraft/lang/")
+        // 服务端根目录目标文件
+        val file = File("lang/$version/$simpleFileName")
+        // 服务端根目录目标校验文件
+        val sha1File = File("lang/$version/$simpleFileName.sha1")
+        // 检测是否需要下载语言文件
+        if (shouldDownload(fileName, version)) {
             try {
+                // 当前语言文件的hash
+                val hash = fileInfo.getString("hash")
                 file.createFile()
                 sha1File.createFile()
                 logger.info("Downloading {} {}", version, simpleFileName)
@@ -264,8 +278,12 @@ object LocaleI18n {
      * 下载当前版本对应的语言文件.
      */
     private fun downloadLangFile(version: String, language: String): File? {
-        val versionInfo = getVersionInfo(version) ?: return null
         val fileName = "minecraft/lang/$language$langFileSuffix"
+        if (!shouldDownload(fileName, version)) {
+            val simpleFileName = fileName.removePrefix("minecraft/lang/")
+            return File("lang/$version/$simpleFileName")
+        }
+        val versionInfo = getVersionInfo(version) ?: return null
         val fileInfo = versionInfo.getLangInfo()[fileName] ?: return null
         return downloadFile(fileName, fileInfo, version)
     }
