@@ -169,6 +169,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
      */
     public void reload() {
         clear();
+        load();
     }
 
     /**
