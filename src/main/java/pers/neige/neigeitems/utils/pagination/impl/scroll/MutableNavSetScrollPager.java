@@ -11,12 +11,10 @@ import java.util.function.Predicate;
 public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
     private final @NotNull NavigableSet<T> handle;
     private final @NotNull AtomicReference<T> cursor = new AtomicReference<>();
-    private final @Nullable Predicate<T> filter;
 
     public MutableNavSetScrollPager(@NotNull NavigableSet<T> handle, int pageSize, @Nullable Predicate<T> filter) {
-        super(pageSize);
+        super(pageSize, filter);
         this.handle = handle;
-        this.filter = filter;
         resetOffset();
     }
 
@@ -84,6 +82,24 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
             current = it.next();
         }
         cursor.set(current);
+    }
+
+    @Override
+    public void moveOffsetByFilter() {
+        if (filter == null || handle.isEmpty()) return;
+        T current = getCursor();
+        if (current == null) {
+            current = handle.first();
+        }
+        if (filter.test(current)) return;
+        T next = null;
+        for (T element : handle.tailSet(current, false)) {
+            if (filter.test(element)) {
+                next = element;
+                break;
+            }
+        }
+        if (next != null) cursor.set(next);
     }
 
     @Override

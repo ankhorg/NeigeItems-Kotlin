@@ -14,9 +14,11 @@ import java.util.function.Predicate;
  */
 public abstract class ScrollPager<T> {
     protected final int pageSize;
+    protected final @Nullable Predicate<T> filter;
 
-    protected ScrollPager(int pageSize) {
+    protected ScrollPager(int pageSize, @Nullable Predicate<T> filter) {
         this.pageSize = Math.max(pageSize, 1);
+        this.filter = filter;
     }
 
     /**
@@ -151,6 +153,11 @@ public abstract class ScrollPager<T> {
      * @param delta 偏移移动量
      */
     public abstract void moveOffset(int delta);
+
+    /**
+     * 根据过滤器移动偏移, 从当前偏移开始向前推进, 直至满足过滤器条件
+     */
+    public abstract void moveOffsetByFilter();
 
     /**
      * 获取当前页的元素列表

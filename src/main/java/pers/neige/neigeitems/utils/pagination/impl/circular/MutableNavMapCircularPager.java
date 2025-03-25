@@ -11,12 +11,10 @@ import java.util.function.Predicate;
 public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K, V>> {
     private final @NotNull NavigableMap<K, V> handle;
     private final @NotNull AtomicReference<K> cursorKey = new AtomicReference<>();
-    private final @Nullable Predicate<Map.Entry<K, V>> filter;
 
     public MutableNavMapCircularPager(@NotNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
-        super(pageSize);
+        super(pageSize, filter);
         this.handle = handle;
-        this.filter = filter;
         resetOffset();
     }
 

@@ -14,12 +14,10 @@ import java.util.function.Predicate;
 public class ListScrollPager<T> extends ScrollPager<T> {
     private final @NotNull List<T> handle;
     private final @NotNull AtomicInteger offset = new AtomicInteger(0);
-    private final @Nullable Predicate<T> filter;
 
     public ListScrollPager(@NotNull List<T> handle, int pageSize, @Nullable Predicate<T> filter) {
-        super(pageSize);
+        super(pageSize, filter);
         this.handle = handle;
-        this.filter = filter;
     }
 
     public @NotNull List<T> getHandle() {
@@ -38,6 +36,25 @@ public class ListScrollPager<T> extends ScrollPager<T> {
             if (size == 0) return 0;
             return Math.max(0, Math.min(current + delta, size));
         });
+    }
+
+    @Override
+    public void moveOffsetByFilter() {
+        if (filter == null) return;
+        final int size = handle.size();
+        if (size == 0) return;
+        final int start = Math.min(offset.get(), size - 1);
+        final int end = size - 1;
+        int delta = 0;
+        boolean anyMatch = false;
+        for (T element : handle.subList(start, end)) {
+            if (filter.test(element)) {
+                anyMatch = true;
+                break;
+            }
+            delta++;
+        }
+        if (anyMatch && delta > 0) moveOffset(delta);
     }
 
     @Override

@@ -14,12 +14,10 @@ import java.util.function.Predicate;
 public class ListCircularPager<T> extends CircularPager<T> {
     private final @NotNull List<T> handle;
     private final @NotNull AtomicInteger offset = new AtomicInteger(0);
-    private final @Nullable Predicate<T> filter;
 
     public ListCircularPager(@NotNull List<T> handle, int pageSize, @Nullable Predicate<T> filter) {
-        super(pageSize);
+        super(pageSize, filter);
         this.handle = handle;
-        this.filter = filter;
     }
 
     public @NotNull List<T> getHandle() {

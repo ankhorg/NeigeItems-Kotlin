@@ -14,9 +14,11 @@ import java.util.function.Predicate;
  */
 public abstract class CircularPager<T> {
     protected final int pageSize;
+    protected final @Nullable Predicate<T> filter;
 
-    protected CircularPager(int pageSize) {
+    protected CircularPager(int pageSize, @Nullable Predicate<T> filter) {
         this.pageSize = Math.max(pageSize, 1);
+        this.filter = filter;
     }
 
     /**

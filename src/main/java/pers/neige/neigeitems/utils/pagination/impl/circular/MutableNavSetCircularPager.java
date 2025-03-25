@@ -11,12 +11,10 @@ import java.util.function.Predicate;
 public class MutableNavSetCircularPager<T> extends CircularPager<T> {
     private final @NotNull NavigableSet<T> handle;
     private final @NotNull AtomicReference<T> cursor = new AtomicReference<>();
-    private final @Nullable Predicate<T> filter;
 
     public MutableNavSetCircularPager(@NotNull NavigableSet<T> handle, int pageSize, @Nullable Predicate<T> filter) {
-        super(pageSize);
+        super(pageSize, filter);
         this.handle = handle;
-        this.filter = filter;
         resetOffset();
     }
 

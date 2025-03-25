@@ -11,12 +11,10 @@ import java.util.function.Predicate;
 public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>> {
     private final @NotNull NavigableMap<K, V> handle;
     private final @NotNull AtomicReference<K> cursorKey = new AtomicReference<>();
-    private final @Nullable Predicate<Map.Entry<K, V>> filter;
 
     public MutableNavMapScrollPager(@NotNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
-        super(pageSize);
+        super(pageSize, filter);
         this.handle = handle;
-        this.filter = filter;
         resetOffset();
     }
 
@@ -84,6 +82,28 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
             current = it.next();
         }
         cursorKey.set(current);
+    }
+
+    @Override
+    public void moveOffsetByFilter() {
+        if (filter == null || handle.isEmpty()) return;
+        K current = getCursor();
+        if (current == null) {
+            current = handle.firstKey();
+        }
+        Iterator<Map.Entry<K, V>> it = handle.tailMap(current, true).entrySet().iterator();
+        if (!it.hasNext()) return;
+        Map.Entry<K, V> currentEntry = it.next();
+        if (filter.test(currentEntry)) return;
+        K nextKey = null;
+        while (it.hasNext()) {
+            Map.Entry<K, V> entry = it.next();
+            if (filter.test(entry)) {
+                nextKey = entry.getKey();
+                break;
+            }
+        }
+        if (nextKey != null) cursorKey.set(nextKey);
     }
 
     @Override
