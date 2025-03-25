@@ -8,6 +8,8 @@ import pers.neige.neigeitems.utils.pagination.impl.circular.MutableNavSetCircula
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * 循环分页工具
@@ -22,20 +24,21 @@ public abstract class CircularPager<T> {
     }
 
     /**
-     * 根据一个不可变 List 创建循环分页工具.<br>
+     * 根据一个不可变 Iterable 创建循环分页工具.<br>
      * 元素顺序为迭代器遍历顺序.<br>
-     * 如果 clone 项为 true, 此后对该 List 的任何修改将无法反应到已创建的循环分页工具中.<br>
-     * 如果 clone 项为 false, 此后对该 List 的任何修改将导致不可预知的错误.<br>
+     * 此后对该 Iterable 的任何修改将无法反应到已创建的循环分页工具中.<br>
      * pageSize 小于等于 0 时将自动变为 1.
      *
-     * @param handle   待分页 List
+     * @param handle   待分页 Iterable
      * @param pageSize 页大小
-     * @param clone    是否对传入的 List 进行复制
      * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <T> @NotNull CircularPager<T> fromImmutableList(@NotNull List<T> handle, int pageSize, boolean clone, @Nullable Predicate<T> filter) {
-        return new ListCircularPager<>(clone ? Collections.unmodifiableList(new ArrayList<>(handle)) : handle, pageSize, filter);
+    public static <T> @NotNull CircularPager<T> fromImmutableIterable(@NotNull Iterable<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+        List<T> handleClone = StreamSupport.stream(handle.spliterator(), false)
+                .filter(t -> filter == null || filter.test(t))
+                .collect(Collectors.toList());
+        return new ListCircularPager<>(Collections.unmodifiableList(handleClone), pageSize, null);
     }
 
     /**
@@ -50,37 +53,7 @@ public abstract class CircularPager<T> {
      * @return 分页工具
      */
     public static <T> @NotNull CircularPager<T> fromImmutableArray(T @NotNull [] handle, int pageSize, @Nullable Predicate<T> filter) {
-        return fromImmutableList(Arrays.asList(handle), pageSize, true, filter);
-    }
-
-    /**
-     * 根据一个不可变 Set 创建循环分页工具.<br>
-     * 元素顺序为迭代器遍历顺序.<br>
-     * 此后对该 Set 的任何修改将无法反应到已创建的循环分页工具中.<br>
-     * pageSize 小于等于 0 时将自动变为 1.
-     *
-     * @param handle   待分页 Set
-     * @param pageSize 页大小
-     * @param filter   元素过滤器
-     * @return 分页工具
-     */
-    public static <T> @NotNull CircularPager<T> fromImmutableSet(@NotNull Set<T> handle, int pageSize, @Nullable Predicate<T> filter) {
-        return fromImmutableList(Collections.unmodifiableList(new ArrayList<>(handle)), pageSize, false, filter);
-    }
-
-    /**
-     * 根据一个不可变 Map 创建循环分页工具.<br>
-     * 元素顺序为迭代器遍历顺序.<br>
-     * 此后对该 Map 的任何修改将无法反应到已创建的循环分页工具中.<br>
-     * pageSize 小于等于 0 时将自动变为 1.
-     *
-     * @param handle   待分页 Map
-     * @param pageSize 页大小
-     * @param filter   元素过滤器
-     * @return 分页工具
-     */
-    public static <K, V> @NotNull CircularPager<Map.Entry<K, V>> fromImmutableMap(@NotNull Map<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
-        return fromImmutableList(Collections.unmodifiableList(new ArrayList<>(handle.entrySet())), pageSize, false, filter);
+        return fromImmutableIterable(Arrays.asList(handle), pageSize, filter);
     }
 
     /**
