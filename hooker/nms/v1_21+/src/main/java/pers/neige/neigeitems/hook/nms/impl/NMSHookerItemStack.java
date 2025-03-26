@@ -78,6 +78,10 @@ public class NMSHookerItemStack extends NMSHooker {
             if (!lines.isEmpty()) {
                 List<Component> newLines = new ArrayList<>();
                 for (Component line : lines) {
+                    if (line == null) {
+                        newLines.add(null);
+                        continue;
+                    }
                     String json = CraftChatMessage.toJSON(line);
                     ItemPlaceholder.ParseResult parsed = handler.apply(itemStack, json);
                     if (parsed.getChanged()) {
@@ -93,6 +97,10 @@ public class NMSHookerItemStack extends NMSHooker {
             if (!styledLines.isEmpty()) {
                 List<Component> newStyledLines = new ArrayList<>();
                 for (Component styledLine : styledLines) {
+                    if (styledLine == null) {
+                        newStyledLines.add(null);
+                        continue;
+                    }
                     String json = CraftChatMessage.toJSON(styledLine);
                     ItemPlaceholder.ParseResult parsed = handler.apply(itemStack, json);
                     if (parsed.getChanged()) {
