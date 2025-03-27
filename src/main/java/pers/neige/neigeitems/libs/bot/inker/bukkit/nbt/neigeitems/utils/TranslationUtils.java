@@ -43,6 +43,8 @@ public class TranslationUtils {
      * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
      */
     private final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
+    private final static boolean V13_OR_ABOVE = CbVersion.v1_13_R1.isSupport();
+    private final static boolean V12 = CbVersion.current() == CbVersion.v1_12_R1;
 
     static {
         CHAT_COLORS.put("BLACK", RefChatFormatting.BLACK);
@@ -135,7 +137,7 @@ public class TranslationUtils {
             RefNbtBase tagName = ((RefNbtTagCompound) display).get("Name");
             if (!(tagName instanceof RefNbtTagString)) return null;
             String rawName = tagName.asString();
-            if (CbVersion.current() == CbVersion.v1_12_R1) {
+            if (V12) {
                 return rawName;
             } else if (CbVersion.v1_15_R1.isSupport()) {
                 return RefCraftChatMessage.fromComponent(RefChatSerializer.fromJson(rawName));
@@ -155,7 +157,7 @@ public class TranslationUtils {
     public static String toLegacyText(
             @NotNull String json
     ) {
-        if (CbVersion.current() == CbVersion.v1_12_R1) {
+        if (V12) {
             return json;
         } else if (CbVersion.v1_17_R1.isSupport()) {
             return RefCraftChatMessage.fromJSONComponent(json);
@@ -286,7 +288,7 @@ public class TranslationUtils {
                 }
             } else if (
                 // 1.13+ 肯定是玩家头颅, 1.12.2 需要检测损伤值
-                    (CbVersion.v1_13_R1.isSupport() || itemStack.getDurability() == 3)
+                    (V13_OR_ABOVE || itemStack.getDurability() == 3)
                             // NBT 检测
                             && nmsItemStack.hasTag()
             ) {
@@ -304,7 +306,7 @@ public class TranslationUtils {
                 if (ownerName != null) {
                     String temp;
                     // 1.13+ 具名玩家头颅的翻译键
-                    if (CbVersion.v1_13_R1.isSupport()) {
+                    if (V13_OR_ABOVE) {
                         temp = LocaleI18n.translate(item.getDescriptionId() + ".named");
                         // 1.12.2 具名玩家头颅的翻译键
                     } else {
@@ -333,7 +335,7 @@ public class TranslationUtils {
                 String translationKey = item.getDescriptionId();
                 result = LocaleI18n.translate(translationKey);
             }
-        } else if (CbVersion.v1_13_R1.isSupport()) {
+        } else if (V13_OR_ABOVE) {
             if (result == null) {
                 String translationKey = item.getDescriptionId(nmsItemStack);
                 result = LocaleI18n.translate(translationKey);
@@ -401,16 +403,25 @@ public class TranslationUtils {
         if (itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
             nmsItemStack = ((RefCraftItemStack) itemStack).handle;
         } else {
-            nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
+            if (MOJANG_MOTHER_DEAD) {
+                nmsItemStack = ((RefCraftItemStack) ((RefBukkitItemStack) (Object) itemStack).craftDelegate).handle;
+            } else {
+                nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
+            }
         }
         RefItem item = nmsItemStack.getItem();
         BaseComponent result = null;
         // 玩家头颅和成书的翻译键, 全版本都需要特殊处理
         // 玩家头颅
         if (item instanceof RefItemSkull) {
-            if (
+            if (MOJANG_MOTHER_DEAD) {
+                RefResolvableProfile resolvableProfile = nmsItemStack.components.get(RefDataComponents.PROFILE);
+                if (resolvableProfile != null && resolvableProfile.name().isPresent()) {
+                    result = new TranslatableComponent(item.getDescriptionId() + ".named", resolvableProfile.name().get());
+                }
+            } else if (
                 // 1.13+ 肯定是玩家头颅, 1.12.2 需要检测损伤值
-                    (CbVersion.v1_13_R1.isSupport() || itemStack.getDurability() == 3)
+                    (V13_OR_ABOVE || itemStack.getDurability() == 3)
                             // NBT 检测
                             && nmsItemStack.hasTag()
             ) {
@@ -427,7 +438,7 @@ public class TranslationUtils {
                 }
                 if (ownerName != null) {
                     // 1.13+ 具名玩家头颅的翻译键
-                    if (CbVersion.v1_13_R1.isSupport()) {
+                    if (V13_OR_ABOVE) {
                         result = new TranslatableComponent(item.getDescriptionId() + ".named", ownerName);
                         // 1.12.2 具名玩家头颅的翻译键
                     } else {
@@ -445,7 +456,17 @@ public class TranslationUtils {
                 }
             }
         }
-        if (CbVersion.v1_13_R1.isSupport()) {
+        if (MOJANG_MOTHER_DEAD) {
+            if (item instanceof RefItemCompass) {
+                if (nmsItemStack.components.has(RefDataComponents.LODESTONE_TRACKER)) {
+                    result = new TranslatableComponent("item.minecraft.lodestone_compass");
+                }
+            }
+            if (result == null) {
+                String translationKey = item.getDescriptionId();
+                result = new TranslatableComponent(translationKey);
+            }
+        } else if (V13_OR_ABOVE) {
             if (result == null) {
                 String translationKey = item.getDescriptionId(nmsItemStack);
                 result = new TranslatableComponent(translationKey);
