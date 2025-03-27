@@ -8,6 +8,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
@@ -136,7 +137,8 @@ public class NewItemBuilder extends ItemBuilder {
                 case "name": {
                     String rawName = config.getString(key);
                     if (rawName != null) {
-                        this.name = CraftChatMessage.fromStringOrNull(ChatColor.translateAlternateColorCodes('&', rawName));
+                        Component component = CraftChatMessage.fromStringOrNull(ChatColor.translateAlternateColorCodes('&', rawName));
+                        this.name = component == null ? CommonComponents.EMPTY : component;
                     }
                     break;
                 }
@@ -145,7 +147,8 @@ public class NewItemBuilder extends ItemBuilder {
                     List<Component> finalLore = new ArrayList<>();
                     for (String rawLore : originLore) {
                         for (String loreText : ChatColor.translateAlternateColorCodes('&', rawLore).split("\n")) {
-                            finalLore.add(CraftChatMessage.fromStringOrNull(loreText));
+                            Component component = CraftChatMessage.fromStringOrNull(loreText);
+                            finalLore.add(component == null ? CommonComponents.EMPTY : component);
                         }
                     }
                     if (!finalLore.isEmpty()) {
