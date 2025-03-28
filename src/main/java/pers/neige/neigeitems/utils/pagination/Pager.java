@@ -9,7 +9,7 @@ import pers.neige.neigeitems.utils.pagination.impl.MutableNavSetPager;
 import java.util.*;
 
 /**
- * 分页工具
+ * 分页工具, 非并发安全(曾尝试进行并发安全处理, 但失败了)
  */
 public abstract class Pager<T> {
     /**

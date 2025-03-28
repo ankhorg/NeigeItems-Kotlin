@@ -44,20 +44,20 @@ public class ListCircularPager<T> extends CircularPager<T> {
         if (size == 0) return Collections.emptyList();
 
         final int start = Math.min(offset.get(), size - 1);
-        final int end = Math.min(start + pageSize, size);
+        final int end = Math.min(start + getPageSize(), size);
 
-        List<T> page = new ArrayList<>(pageSize);
+        List<T> page = new ArrayList<>(getPageSize());
         Iterator<T> it = handle.subList(start, end).iterator();
 
         boolean newRound = false;
         boolean anyMatch = false;
         List<T> newRoundElements = null;
-        while (page.size() < pageSize) {
+        while (page.size() < getPageSize()) {
             if (!it.hasNext()) {
                 if (newRound) {
                     if (anyMatch) {
                         Iterator<T> roundIterator = newRoundElements.iterator();
-                        while (page.size() < pageSize) {
+                        while (page.size() < getPageSize()) {
                             if (!roundIterator.hasNext()) roundIterator = newRoundElements.iterator();
                             page.add(roundIterator.next());
                         }

@@ -63,23 +63,23 @@ public class ListScrollPager<T> extends ScrollPager<T> {
         if (size == 0) return Collections.emptyList();
 
         final int start = Math.min(offset.get(), size - 1);
-        final int end = Math.min(start + pageSize, size);
+        final int end = Math.min(start + getPageSize(), size);
 
-        List<T> page = new ArrayList<>(pageSize);
+        List<T> page = new ArrayList<>(getPageSize());
         Iterator<T> it = handle.subList(start, end).iterator();
 
-        while (it.hasNext() && page.size() < pageSize) {
+        while (it.hasNext() && page.size() < getPageSize()) {
             T element = it.next();
             if (filter == null || filter.test(element)) page.add(element);
         }
         if (offset.get() == 0) return page;
 
-        if (page.size() < pageSize) {
-            int delta = pageSize - page.size();
+        if (page.size() < getPageSize()) {
+            int delta = getPageSize() - page.size();
             List<T> list = handle.subList(Math.max(0, start - delta), start);
 
             for (int i = list.size() - 1; i >= 0; i--) {
-                if (page.size() >= pageSize) break;
+                if (page.size() >= getPageSize()) break;
                 T element = list.get(i);
                 if (filter == null || filter.test(element)) page.add(0, element);
             }

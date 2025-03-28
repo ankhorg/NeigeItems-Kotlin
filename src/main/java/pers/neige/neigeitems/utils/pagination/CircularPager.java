@@ -12,14 +12,14 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * 循环分页工具
+ * 循环分页工具, 非并发安全(曾尝试进行并发安全处理, 但失败了)
  */
 public abstract class CircularPager<T> {
-    protected final int pageSize;
+    protected final PagerInfo pagerInfo;
     protected final @Nullable Predicate<T> filter;
 
     protected CircularPager(int pageSize, @Nullable Predicate<T> filter) {
-        this.pageSize = Math.max(pageSize, 1);
+        this.pagerInfo = new PagerInfo(Math.max(1, pageSize));
         this.filter = filter;
     }
 
@@ -107,7 +107,7 @@ public abstract class CircularPager<T> {
      * @return 分页大小
      */
     public final int getPageSize() {
-        return pageSize;
+        return pagerInfo.getPageSize();
     }
 
     /**
@@ -126,6 +126,13 @@ public abstract class CircularPager<T> {
      * 获取当前页的元素列表
      */
     public abstract @NotNull List<T> getCurrentPageElements();
+
+    /**
+     * 获取总页数
+     */
+    public int getTotalPages() {
+        return this.pagerInfo.getTotalPages(getTotalElements());
+    }
 
     /**
      * 获取总元素数

@@ -93,19 +93,19 @@ public class MutableNavSetCircularPager<T> extends CircularPager<T> {
         T current = getCursor();
         if (current == null || handle.isEmpty()) return Collections.emptyList();
 
-        List<T> page = new ArrayList<>(pageSize);
+        List<T> page = new ArrayList<>(getPageSize());
         NavigableSet<T> tail = handle.tailSet(current, true);
         Iterator<T> it = tail.iterator();
 
         boolean newRound = false;
         boolean anyMatch = false;
         List<T> newRoundElements = null;
-        while (page.size() < pageSize) {
+        while (page.size() < getPageSize()) {
             if (!it.hasNext()) {
                 if (newRound) {
                     if (anyMatch) {
                         Iterator<T> roundIterator = newRoundElements.iterator();
-                        while (page.size() < pageSize) {
+                        while (page.size() < getPageSize()) {
                             if (!roundIterator.hasNext()) roundIterator = newRoundElements.iterator();
                             page.add(roundIterator.next());
                         }

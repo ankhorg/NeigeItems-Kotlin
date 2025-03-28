@@ -93,19 +93,19 @@ public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K,
         K current = getCursor();
         if (current == null || handle.isEmpty()) return Collections.emptyList();
 
-        List<Map.Entry<K, V>> page = new ArrayList<>(pageSize);
+        List<Map.Entry<K, V>> page = new ArrayList<>(getPageSize());
         NavigableMap<K, V> tail = handle.tailMap(current, true);
         Iterator<Map.Entry<K, V>> it = tail.entrySet().iterator();
 
         boolean newRound = false;
         boolean anyMatch = false;
         List<Map.Entry<K, V>> newRoundElements = null;
-        while (page.size() < pageSize) {
+        while (page.size() < getPageSize()) {
             if (!it.hasNext()) {
                 if (newRound) {
                     if (anyMatch) {
                         Iterator<Map.Entry<K, V>> roundIterator = newRoundElements.iterator();
-                        while (page.size() < pageSize) {
+                        while (page.size() < getPageSize()) {
                             if (!roundIterator.hasNext()) roundIterator = newRoundElements.iterator();
                             page.add(roundIterator.next());
                         }

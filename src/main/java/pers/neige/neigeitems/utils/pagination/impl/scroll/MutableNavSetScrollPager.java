@@ -107,21 +107,21 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
         T current = getCursor();
         if (current == null || handle.isEmpty()) return Collections.emptyList();
 
-        List<T> page = new ArrayList<>(pageSize);
+        List<T> page = new ArrayList<>(getPageSize());
         NavigableSet<T> tail = handle.tailSet(current, true);
         Iterator<T> it = tail.iterator();
 
-        while (it.hasNext() && page.size() < pageSize) {
+        while (it.hasNext() && page.size() < getPageSize()) {
             T element = it.next();
             if (filter == null || filter.test(element)) page.add(element);
         }
         if (current == handle.first()) return page;
 
-        if (page.size() < pageSize) {
+        if (page.size() < getPageSize()) {
             NavigableSet<T> head = handle.headSet(current, false);
             it = head.descendingIterator();
 
-            while (it.hasNext() && page.size() < pageSize) {
+            while (it.hasNext() && page.size() < getPageSize()) {
                 T element = it.next();
                 if (filter == null || filter.test(element)) page.add(0, element);
             }

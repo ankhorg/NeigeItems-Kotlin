@@ -111,21 +111,21 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
         K current = getCursor();
         if (current == null || handle.isEmpty()) return Collections.emptyList();
 
-        List<Map.Entry<K, V>> page = new ArrayList<>(pageSize);
+        List<Map.Entry<K, V>> page = new ArrayList<>(getPageSize());
         NavigableMap<K, V> tail = handle.tailMap(current, true);
         Iterator<Map.Entry<K, V>> it = tail.entrySet().iterator();
 
-        while (it.hasNext() && page.size() < pageSize) {
+        while (it.hasNext() && page.size() < getPageSize()) {
             Map.Entry<K, V> element = it.next();
             if (filter == null || filter.test(element)) page.add(element);
         }
         if (current == handle.firstKey()) return page;
 
-        if (page.size() < pageSize) {
+        if (page.size() < getPageSize()) {
             NavigableMap<K, V> head = handle.headMap(current, false);
             it = head.descendingMap().entrySet().iterator();
 
-            while (it.hasNext() && page.size() < pageSize) {
+            while (it.hasNext() && page.size() < getPageSize()) {
                 Map.Entry<K, V> element = it.next();
                 if (filter == null || filter.test(element)) page.add(0, element);
             }
