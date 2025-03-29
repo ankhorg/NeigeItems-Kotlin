@@ -7,6 +7,7 @@ import kotlin.text.StringsKt;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -990,6 +991,18 @@ public abstract class BaseActionManager {
             Player player = context.getPlayer();
             if (player == null) return;
             player.sendMessage(content);
+        });
+        // 向玩家发送消息, 未指定玩家则向后台发送消息
+        addConsumer("tell-or-print", (context, content) -> {
+            CommandSender sender = context.getPlayer();
+            sender = sender == null ? Bukkit.getConsoleSender() : sender;
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', content));
+        });
+        // 向玩家发送消息(不将&解析为颜色符号), 未指定玩家则向后台发送消息
+        addConsumer("tell-or-print-no-color", (context, content) -> {
+            CommandSender sender = context.getPlayer();
+            sender = sender == null ? Bukkit.getConsoleSender() : sender;
+            sender.sendMessage(content);
         });
         // 强制玩家发送消息
         addConsumer("chat", false, (context, content) -> {
