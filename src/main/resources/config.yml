@@ -214,3 +214,6 @@ ItemDurability:
 ItemCheck:
   # 玩家打开容器界面时是否检测其中的物品是否过期及是否需要更新
   checkInventory: true
+Papi:
+  # 是否开启papi变量中有关js解析的部分
+  enableJs: false

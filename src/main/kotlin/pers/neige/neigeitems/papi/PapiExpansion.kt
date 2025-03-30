@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.placeholderapi.PlaceholderExpansion
+import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.utils.ItemUtils.getItemId
@@ -78,6 +79,7 @@ object PapiExpansion {
                                         }
 
                                         "eval" -> {
+                                            if (!ConfigManager.enableJsPapi) return@newPlaceholderExpansion ""
                                             val bindings = SimpleBindings()
                                             bindings["player"] = player
                                             bindings["itemStack"] = itemStack
@@ -109,6 +111,7 @@ object PapiExpansion {
                                         }
 
                                         "eval" -> {
+                                            if (!ConfigManager.enableJsPapi) return@newPlaceholderExpansion ""
                                             val bindings = SimpleBindings()
                                             bindings["player"] = player
                                             bindings["itemStack"] = itemStack

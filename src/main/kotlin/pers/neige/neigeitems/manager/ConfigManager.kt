@@ -28,6 +28,7 @@ object ConfigManager {
     var language = config.getString("Language", "zh_cn")!!
     var forceSync = config.getBoolean("ItemDurability.forceSync", false)
     var checkInventory = config.getBoolean("ItemCheck.checkInventory", true)
+    var enableJsPapi = config.getBoolean("Papi.enableJs", false)
 
     /**
      * 加载默认配置文件
@@ -69,8 +70,15 @@ object ConfigManager {
     }
 
     /**
-     * 对当前Config查缺补漏
+     * 重载配置管理器
      */
+    fun reload() {
+        // 加载config
+        NeigeItems.getInstance().loadConfig()
+        // 重新加载配置项
+        loadConfig()
+    }
+
     fun loadConfig() {
         debug = config.getBoolean("Main.Debug", false)
         updateCheck = config.getBoolean("Main.UpdateCheck", true)
@@ -80,16 +88,7 @@ object ConfigManager {
         language = config.getString("Language", "zh_cn")!!
         forceSync = config.getBoolean("ItemDurability.forceSync", false)
         checkInventory = config.getBoolean("ItemCheck.checkInventory", true)
-    }
-
-    /**
-     * 重载配置管理器
-     */
-    fun reload() {
-        // 加载config
-        NeigeItems.getInstance().loadConfig()
-        // 重新加载配置项
-        loadConfig()
+        enableJsPapi = config.getBoolean("Papi.enableJs", false)
     }
 
     /**
