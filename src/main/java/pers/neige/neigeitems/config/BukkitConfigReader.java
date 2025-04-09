@@ -22,6 +22,11 @@ public class BukkitConfigReader implements ConfigReader {
     }
 
     @Override
+    public int size() {
+        return handle.getKeys(false).size();
+    }
+
+    @Override
     @NotNull
     public Set<String> keySet() {
         return handle.getKeys(false);

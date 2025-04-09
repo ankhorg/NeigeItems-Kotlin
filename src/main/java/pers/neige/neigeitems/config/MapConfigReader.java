@@ -23,6 +23,11 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
+    public int size() {
+        return handle.size();
+    }
+
+    @Override
     @NotNull
     public Set<String> keySet() {
         return handle.keySet();

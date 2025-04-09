@@ -10,6 +10,7 @@ import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.metadata.Metadatable
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.UserManager
+import pers.neige.neigeitems.utils.ItemUtils.getItemId
 
 /**
  * 玩家相关工具类
@@ -196,5 +197,19 @@ object PlayerUtils {
     fun Player.setCooldown(key: String, cooldown: Long) {
         val user = UserManager.INSTANCE[uniqueId] ?: return
         user.setCooldown(key, cooldown)
+    }
+
+    /**
+     * 获取玩家背包内的所有NI物品数量.
+     */
+    @JvmStatic
+    fun Player.countInventoryNiItems(): MutableMap<String, Int> {
+        val result = HashMap<String, Int>()
+        repeat(36) { index ->
+            val itemStack = inventory.getItem(index)
+            val itemId = itemStack.getItemId() ?: return@repeat
+            result.merge(itemId, itemStack!!.amount, Integer::sum)
+        }
+        return result
     }
 }

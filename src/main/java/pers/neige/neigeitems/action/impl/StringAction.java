@@ -51,6 +51,19 @@ public class StringAction extends Action {
         checkAsyncSafe();
     }
 
+    public StringAction(
+            @NotNull BaseActionManager manager,
+            @NotNull String key,
+            @NotNull String content
+    ) {
+        super(manager);
+        this.action = key + ": " + content;
+        this.key = key;
+        this.content = content;
+        this.handler = manager.getActions().get(this.key);
+        checkAsyncSafe();
+    }
+
     private void checkAsyncSafe() {
         if (this.handler != null && this.handler instanceof SyncActionHandler) {
             this.asyncSafe = false;

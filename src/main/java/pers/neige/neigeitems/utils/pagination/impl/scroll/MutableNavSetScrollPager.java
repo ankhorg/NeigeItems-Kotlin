@@ -85,7 +85,7 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
     }
 
     @Override
-    public void moveOffsetByFilter() {
+    public void moveOffsetByFilter(int delta) {
         if (filter == null || handle.isEmpty()) return;
         T current = getCursor();
         if (current == null) {
@@ -93,10 +93,12 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
         }
         if (filter.test(current)) return;
         T next = null;
+        int match = 0;
         for (T element : handle.tailSet(current, false)) {
+            next = element;
             if (filter.test(element)) {
-                next = element;
-                break;
+                match++;
+                if (match >= delta) break;
             }
         }
         if (next != null) cursor.set(next);

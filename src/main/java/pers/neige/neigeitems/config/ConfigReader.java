@@ -41,6 +41,8 @@ public interface ConfigReader {
         return null;
     }
 
+    int size();
+
     @NotNull
     Set<String> keySet();
 

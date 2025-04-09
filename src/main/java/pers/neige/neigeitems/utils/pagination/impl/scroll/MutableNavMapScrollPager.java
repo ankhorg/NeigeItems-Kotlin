@@ -85,7 +85,7 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
     }
 
     @Override
-    public void moveOffsetByFilter() {
+    public void moveOffsetByFilter(int delta) {
         if (filter == null || handle.isEmpty()) return;
         K current = getCursor();
         if (current == null) {
@@ -96,11 +96,13 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
         Map.Entry<K, V> currentEntry = it.next();
         if (filter.test(currentEntry)) return;
         K nextKey = null;
+        int match = 0;
         while (it.hasNext()) {
             Map.Entry<K, V> entry = it.next();
+            nextKey = entry.getKey();
             if (filter.test(entry)) {
-                nextKey = entry.getKey();
-                break;
+                match++;
+                if (match >= delta) break;
             }
         }
         if (nextKey != null) cursorKey.set(nextKey);

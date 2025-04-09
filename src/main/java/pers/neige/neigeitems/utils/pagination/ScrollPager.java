@@ -129,8 +129,10 @@ public abstract class ScrollPager<T> {
 
     /**
      * 根据过滤器移动偏移, 从当前偏移开始向前推进, 直至满足过滤器条件
+     *
+     * @param delta 偏移移动量
      */
-    public abstract void moveOffsetByFilter();
+    public abstract void moveOffsetByFilter(int delta);
 
     /**
      * 获取当前页的元素列表

@@ -39,22 +39,22 @@ public class ListScrollPager<T> extends ScrollPager<T> {
     }
 
     @Override
-    public void moveOffsetByFilter() {
+    public void moveOffsetByFilter(int delta) {
         if (filter == null) return;
         final int size = handle.size();
         if (size == 0) return;
         final int start = Math.min(offset.get(), size - 1);
         final int end = size - 1;
-        int delta = 0;
-        boolean anyMatch = false;
+        int move = 0;
+        int match = 0;
         for (T element : handle.subList(start, end)) {
             if (filter.test(element)) {
-                anyMatch = true;
-                break;
+                match++;
+                if (match >= delta) break;
             }
-            delta++;
+            move++;
         }
-        if (anyMatch && delta > 0) moveOffset(delta);
+        if (move > 0) moveOffset(move);
     }
 
     @Override
