@@ -5,6 +5,7 @@ import kotlin.text.StringsKt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.*;
+import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.StringUtils;
@@ -20,17 +21,14 @@ import java.util.concurrent.CompletableFuture;
 public class ConditionWeightAction extends Action {
     private final boolean order;
     @NotNull
-    private final List<Pair<Pair<Condition, Action>, Double>> actions = new ArrayList<>();
+    private final List<Pair<Pair<Condition, Action>, Evaluator<Double>>> actions = new ArrayList<>();
     @Nullable
     private String amountScriptString = null;
     @Nullable
     private CompiledScript amountScript = null;
     private Integer amount = null;
 
-    public ConditionWeightAction(
-            @NotNull BaseActionManager manager,
-            @NotNull ConfigReader action
-    ) {
+    public ConditionWeightAction(@NotNull BaseActionManager manager, @NotNull ConfigReader action) {
         super(manager);
         this.amountScriptString = action.getString("amount");
         if (this.amountScriptString != null) {
@@ -49,33 +47,24 @@ public class ConditionWeightAction extends Action {
     }
 
     private void checkAsyncSafe() {
-        for (Pair<Pair<Condition, Action>, Double> action : actions) {
+        for (Pair<Pair<Condition, Action>, Evaluator<Double>> action : actions) {
             if (action.getFirst().getSecond().isAsyncSafe()) return;
         }
         this.asyncSafe = false;
     }
 
-    public void initActions(
-            @NotNull BaseActionManager manager,
-            @Nullable Object actions
-    ) {
+    public void initActions(@NotNull BaseActionManager manager, @Nullable Object actions) {
         if (!(actions instanceof List<?>)) return;
         List<?> list = (List<?>) actions;
         for (Object rawAction : list) {
             if (!(rawAction instanceof Map<?, ?>)) continue;
             Map<?, ?> mapAction = (Map<?, ?>) rawAction;
             Object rawWeight = mapAction.get("weight");
-            double weight;
-            if (rawWeight instanceof Number) {
-                weight = ((Number) rawWeight).doubleValue();
-            } else {
-                weight = 1;
-            }
-            if (weight <= 0) continue;
+            if (rawWeight == null) rawWeight = "1";
             Object conditionString = mapAction.get("condition");
             Condition condition = new Condition(manager, conditionString == null ? null : conditionString.toString());
             Action action = manager.compile(mapAction.get("actions"));
-            this.actions.add(new Pair<>(new Pair<>(condition, action), weight));
+            this.actions.add(new Pair<>(new Pair<>(condition, action), Evaluator.createDoubleEvaluator(manager, rawWeight.toString())));
         }
     }
 
@@ -99,17 +88,19 @@ public class ConditionWeightAction extends Action {
     }
 
     @NotNull
-    public List<Pair<Pair<Condition, Action>, Double>> getActions() {
+    public List<Pair<Pair<Condition, Action>, Evaluator<Double>>> getActions() {
         return actions;
     }
 
     @NotNull
     public List<Pair<Action, Double>> getActions(@NotNull ActionContext context) {
         List<Pair<Action, Double>> result = new ArrayList<>();
-        for (Pair<Pair<Condition, Action>, Double> action : this.actions) {
+        for (Pair<Pair<Condition, Action>, Evaluator<Double>> action : this.actions) {
             Pair<Condition, Action> info = action.getFirst();
             if (info.getFirst().easyCheck(context)) {
-                result.add(new Pair<>(info.getSecond(), action.getSecond()));
+                double weight = action.getSecond().getOrDefault(context, 0D);
+                if (weight <= 0) continue;
+                result.add(new Pair<>(info.getSecond(), weight));
             }
         }
         return result;
