@@ -144,6 +144,16 @@ object StringUtils {
     }
 
     @JvmStatic
+    fun String.toIntOrNull(): Int? {
+        return NumberParser.parseInteger(this)
+    }
+
+    @JvmStatic
+    fun String.toInt(def: Int): Int {
+        return NumberParser.parseInteger(this, def)
+    }
+
+    @JvmStatic
     fun String.parseLong(): Long? {
         return NumberParser.parseLong(this)
     }
@@ -180,6 +190,16 @@ object StringUtils {
 
     @JvmStatic
     fun String.parseDouble(def: Double): Double {
+        return NumberParser.parseDouble(this, def)
+    }
+
+    @JvmStatic
+    fun String.toDoubleOrNull(): Double? {
+        return NumberParser.parseDouble(this)
+    }
+
+    @JvmStatic
+    fun String.toDouble(def: Double): Double {
         return NumberParser.parseDouble(this, def)
     }
 
