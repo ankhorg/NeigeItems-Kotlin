@@ -76,6 +76,16 @@ public class BukkitConfigReader implements ConfigReader {
     }
 
     @Override
+    public double getDouble(@NotNull String key) {
+        return handle.getDouble(key);
+    }
+
+    @Override
+    public double getDouble(@NotNull String key, double def) {
+        return handle.getDouble(key, def);
+    }
+
+    @Override
     public boolean getBoolean(@NotNull String key) {
         return handle.getBoolean(key);
     }

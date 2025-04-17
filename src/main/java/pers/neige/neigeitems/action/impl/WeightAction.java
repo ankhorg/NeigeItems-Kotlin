@@ -151,7 +151,7 @@ public class WeightAction extends Action {
         if (result instanceof Number) {
             return ((Number) result).intValue();
         } else {
-            return StringUtils.toInt(result.toString(), 1);
+            return StringUtils.parseInteger(result.toString(), 1);
         }
     }
 

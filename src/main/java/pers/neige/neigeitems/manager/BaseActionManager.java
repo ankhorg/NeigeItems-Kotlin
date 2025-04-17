@@ -1136,7 +1136,7 @@ public abstract class BaseActionManager {
             if (player == null) return;
             VaultHooker hooker = HookerManager.INSTANCE.getVaultHooker();
             if (hooker == null) return;
-            hooker.giveMoney(player, StringUtils.toDouble(content, 0.0));
+            hooker.giveMoney(player, StringUtils.parseDouble(content, 0.0));
         });
         // 扣除玩家金钱
         addConsumer(Arrays.asList("take-money", "takeMoney"), (context, content) -> {
@@ -1144,97 +1144,97 @@ public abstract class BaseActionManager {
             if (player == null) return;
             VaultHooker hooker = HookerManager.INSTANCE.getVaultHooker();
             if (hooker == null) return;
-            hooker.takeMoney(player, StringUtils.toDouble(content, 0.0));
+            hooker.takeMoney(player, StringUtils.parseDouble(content, 0.0));
         });
         // 给予玩家经验
         addConsumer(Arrays.asList("give-exp", "giveExp"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0));
+            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.parseInteger(content, 0));
         });
         // 扣除玩家经验
         addConsumer(Arrays.asList("take-exp", "takeExp"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0) * -1);
+            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.parseInteger(content, 0) * -1);
         });
         // 设置玩家经验
         addConsumer(Arrays.asList("set-exp", "setExp"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.toInt(content, 0) - player.getTotalExperience());
+            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.parseInteger(content, 0) - player.getTotalExperience());
         });
         // 给予玩家经验等级
         addConsumer(Arrays.asList("give-level", "giveLevel"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.giveExpLevels(StringUtils.toInt(content, 0));
+            player.giveExpLevels(StringUtils.parseInteger(content, 0));
         });
         // 扣除玩家经验等级
         addConsumer(Arrays.asList("take-level", "takeLevel"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.giveExpLevels(StringUtils.toInt(content, 0) * -1);
+            player.giveExpLevels(StringUtils.parseInteger(content, 0) * -1);
         });
         // 设置玩家经验等级
         addConsumer(Arrays.asList("set-level", "setLevel"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.setLevel(StringUtils.toInt(content, 0));
+            player.setLevel(StringUtils.parseInteger(content, 0));
         });
         // 给予玩家饱食度
         addConsumer(Arrays.asList("give-food", "giveFood"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
+            player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.parseInteger(content, 0))));
         });
         // 扣除玩家饱食度
         addConsumer(Arrays.asList("take-food", "takeFood"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
+            player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.parseInteger(content, 0))));
         });
         // 设置玩家饱食度
         addConsumer(Arrays.asList("set-food", "setFood"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.toInt(content, 0))));
+            player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.parseInteger(content, 0))));
         });
         // 给予玩家饱和度
         addConsumer(Arrays.asList("give-saturation", "giveSaturation"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.toFloat(content, 0))));
+            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.parseFloat(content, 0))));
         });
         // 扣除玩家饱和度
         addConsumer(Arrays.asList("take-saturation", "takeSaturation"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.toFloat(content, 0))));
+            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.parseFloat(content, 0))));
         });
         // 设置玩家饱和度
         addConsumer(Arrays.asList("set-saturation", "setSaturation"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.toFloat(content, 0))));
+            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.parseFloat(content, 0))));
         });
         // 给予玩家生命
         addConsumer(Arrays.asList("give-health", "giveHealth"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() + StringUtils.toDouble(content, 0))));
+            player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() + StringUtils.parseDouble(content, 0))));
         });
         // 扣除玩家生命
         addConsumer(Arrays.asList("take-health", "takeHealth"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() - StringUtils.toDouble(content, 0))));
+            player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() - StringUtils.parseDouble(content, 0))));
         });
         // 设置玩家生命
         addConsumer(Arrays.asList("set-health", "setHealth"), false, (context, content) -> {
             Player player = context.getPlayer();
             if (player == null) return;
-            player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), StringUtils.toDouble(content, 0))));
+            player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), StringUtils.parseDouble(content, 0))));
         });
         // 释放MM技能
         addConsumer(Arrays.asList("cast-skill", "castSkill"), (context, content) -> {
@@ -1284,8 +1284,8 @@ public abstract class BaseActionManager {
             String[] args = content.split(" ", 3);
             if (args.length < 3) return;
             PotionEffectType type = PotionEffectType.getByName(args[0].toUpperCase(Locale.ROOT));
-            Integer amplifier = StringUtils.toIntOrNull(args[1]);
-            Integer duration = StringUtils.toIntOrNull(args[2]);
+            Integer amplifier = StringUtils.parseInteger(args[1]);
+            Integer duration = StringUtils.parseInteger(args[2]);
             if (type == null || duration == null || amplifier == null) return;
             player.addPotionEffect(new PotionEffect(type, duration * 20, amplifier - 1), true);
         });
@@ -1300,7 +1300,7 @@ public abstract class BaseActionManager {
         // 延迟(单位是tick)
         addFunction("delay", (context, content) -> {
             CompletableFuture<ActionResult> result = new CompletableFuture<>();
-            SchedulerUtils.runLater(plugin, StringUtils.toInt(content, 0), () -> {
+            SchedulerUtils.runLater(plugin, StringUtils.parseInteger(content, 0), () -> {
                 result.complete(Results.SUCCESS);
             });
             return result;
@@ -1336,7 +1336,7 @@ public abstract class BaseActionManager {
             String[] args = content.split(" ", 2);
             if (args.length < 2) return;
             String itemId = args[0];
-            int amount = StringUtils.toInt(args[1], 0);
+            int amount = StringUtils.parseInteger(args[1], 0);
             ItemStack[] contents = player.getInventory().getContents();
             for (ItemStack itemStack : contents) {
                 String currentItemId = ItemUtils.getItemId(itemStack);

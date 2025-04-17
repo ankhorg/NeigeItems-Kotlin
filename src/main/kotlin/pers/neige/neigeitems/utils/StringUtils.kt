@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.utils
 
 import java.math.BigDecimal
+import java.math.BigInteger
 
 /**
  * 字符串相关工具类
@@ -112,135 +113,83 @@ object StringUtils {
         }
     }
 
-    /**
-     * 转Int
-     *
-     * @param string 分隔符
-     * @return Int?
-     */
     @JvmStatic
-    fun toIntOrNull(string: String): Int? {
-        return string.toIntOrNull()
+    fun String.parseByte(): Byte? {
+        return NumberParser.parseByte(this)
     }
 
-    /**
-     * 转Long
-     *
-     * @param string 分隔符
-     * @return Long?
-     */
     @JvmStatic
-    fun toLongOrNull(string: String): Long? {
-        return string.toLongOrNull()
+    fun String.parseByte(def: Byte): Byte {
+        return NumberParser.parseByte(this, def)
     }
 
-    /**
-     * 转Byte
-     *
-     * @param string 分隔符
-     * @return Byte?
-     */
     @JvmStatic
-    fun toByteOrNull(string: String): Byte? {
-        return string.toByteOrNull()
+    fun String.parseShort(): Short? {
+        return NumberParser.parseShort(this)
     }
 
-    /**
-     * 转Double
-     *
-     * @param string 分隔符
-     * @return Double?
-     */
     @JvmStatic
-    fun toFloatOrNull(string: String): Float? {
-        return string.toFloatOrNull()
+    fun String.parseShort(def: Short): Short {
+        return NumberParser.parseShort(this, def)
     }
 
-    /**
-     * 转Double
-     *
-     * @param string 分隔符
-     * @return Double?
-     */
     @JvmStatic
-    fun toDoubleOrNull(string: String): Double? {
-        return string.toDoubleOrNull()
+    fun String.parseInteger(): Int? {
+        return NumberParser.parseInteger(this)
     }
 
-    /**
-     * 转BigDecimal
-     *
-     * @param string 分隔符
-     * @return BigDecimal?
-     */
     @JvmStatic
-    fun toBigDecimalOrNull(string: String): BigDecimal? {
-        return string.toBigDecimalOrNull()
+    fun String.parseInteger(def: Int): Int {
+        return NumberParser.parseInteger(this, def)
     }
 
-    /**
-     * 转Int
-     *
-     * @param string 分隔符
-     * @return Int
-     */
     @JvmStatic
-    fun toInt(string: String, default: Int): Int {
-        return string.toIntOrNull() ?: default
+    fun String.parseLong(): Long? {
+        return NumberParser.parseLong(this)
     }
 
-    /**
-     * 转Long
-     *
-     * @param string 分隔符
-     * @return Long
-     */
     @JvmStatic
-    fun toLong(string: String, default: Long): Long {
-        return string.toLongOrNull() ?: default
+    fun String.parseLong(def: Long): Long {
+        return NumberParser.parseLong(this, def)
     }
 
-    /**
-     * 转Byte
-     *
-     * @param string 分隔符
-     * @return Byte
-     */
     @JvmStatic
-    fun toByte(string: String, default: Byte): Byte {
-        return string.toByteOrNull() ?: default
+    fun String.parseBigInteger(): BigInteger? {
+        return NumberParser.parseBigInteger(this)
     }
 
-    /**
-     * 转Float
-     *
-     * @param string 分隔符
-     * @return Float
-     */
     @JvmStatic
-    fun toFloat(string: String, default: Float): Float {
-        return string.toFloatOrNull() ?: default
+    fun String.parseBigInteger(def: BigInteger): BigInteger {
+        return NumberParser.parseBigInteger(this, def)
     }
 
-    /**
-     * 转Double
-     *
-     * @param string 分隔符
-     * @return Double
-     */
     @JvmStatic
-    fun toDouble(string: String, default: Double): Double {
-        return string.toDoubleOrNull() ?: default
+    fun String.parseFloat(): Float? {
+        return NumberParser.parseFloat(this)
     }
 
-    /**
-     * 转BigDecimal
-     *
-     * @param string 分隔符
-     * @return BigDecimal
-     */
     @JvmStatic
-    fun toBigDecimal(string: String, default: BigDecimal): BigDecimal {
-        return string.toBigDecimalOrNull() ?: default
+    fun String.parseFloat(def: Float): Float {
+        return NumberParser.parseFloat(this, def)
+    }
+
+    @JvmStatic
+    fun String.parseDouble(): Double? {
+        return NumberParser.parseDouble(this)
+    }
+
+    @JvmStatic
+    fun String.parseDouble(def: Double): Double {
+        return NumberParser.parseDouble(this, def)
+    }
+
+    @JvmStatic
+    fun String.parseBigDecimal(): BigDecimal? {
+        return NumberParser.parseBigDecimal(this)
+    }
+
+    @JvmStatic
+    fun String.parseBigDecimal(def: BigDecimal): BigDecimal {
+        return NumberParser.parseBigDecimal(this, def)
     }
 }

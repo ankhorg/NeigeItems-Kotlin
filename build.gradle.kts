@@ -111,6 +111,11 @@ dependencies {
     implementation("com.mojang:brigadier:1.3.10")
     // snakeyaml
     implementation("org.yaml:snakeyaml:2.3")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:+")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:+")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:+")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:+")
 }
 
 tasks {
@@ -156,6 +161,9 @@ tasks {
     }
     build {
         dependsOn(shadowJar)
+    }
+    test {
+        useJUnitPlatform()
     }
 }
 

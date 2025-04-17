@@ -66,6 +66,10 @@ public interface ConfigReader {
 
     long getLong(@NotNull String key, long def);
 
+    double getDouble(@NotNull String key);
+
+    double getDouble(@NotNull String key, double def);
+
     boolean getBoolean(@NotNull String key);
 
     boolean getBoolean(@NotNull String key, boolean def);

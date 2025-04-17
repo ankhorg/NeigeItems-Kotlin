@@ -114,6 +114,23 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
+    public double getDouble(@NotNull String key) {
+        return getDouble(key, 0);
+    }
+
+    @Override
+    public double getDouble(@NotNull String key, double def) {
+        Object value = get(key);
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue();
+        } else if (value == null) {
+            return def;
+        } else {
+            return Double.parseDouble(value.toString());
+        }
+    }
+
+    @Override
     public boolean getBoolean(@NotNull String key) {
         return getBoolean(key, false);
     }

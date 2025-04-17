@@ -42,6 +42,7 @@ const ListenerUtils = Packages.pers.neige.neigeitems.utils.ListenerUtils
 const ListUtils = Packages.pers.neige.neigeitems.utils.ListUtils
 const SchedulerUtils = Packages.pers.neige.neigeitems.utils.SchedulerUtils
 const UUIDUtils = Packages.pers.neige.neigeitems.utils.UUIDUtils
+const NumberParser = Packages.pers.neige.neigeitems.utils.NumberParser
 
 const ActionContext = Packages.pers.neige.neigeitems.action.ActionContext
 const AnimationType = Packages.pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation.AnimationType
