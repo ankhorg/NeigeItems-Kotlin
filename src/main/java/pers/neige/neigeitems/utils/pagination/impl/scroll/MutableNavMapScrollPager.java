@@ -86,7 +86,11 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
 
     @Override
     public void moveOffsetByFilter(int delta) {
-        if (filter == null || handle.isEmpty()) return;
+        if (handle.isEmpty()) return;
+        if (filter == null) {
+            moveOffset(delta);
+            return;
+        }
         K current = getCursor();
         if (current == null) {
             current = handle.firstKey();

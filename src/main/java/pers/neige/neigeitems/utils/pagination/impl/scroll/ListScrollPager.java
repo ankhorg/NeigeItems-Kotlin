@@ -40,9 +40,12 @@ public class ListScrollPager<T> extends ScrollPager<T> {
 
     @Override
     public void moveOffsetByFilter(int delta) {
-        if (filter == null) return;
+        if (handle.isEmpty()) return;
+        if (filter == null) {
+            moveOffset(delta);
+            return;
+        }
         final int size = handle.size();
-        if (size == 0) return;
         final int start = Math.min(offset.get(), size - 1);
         final int end = size - 1;
         int move = 0;
