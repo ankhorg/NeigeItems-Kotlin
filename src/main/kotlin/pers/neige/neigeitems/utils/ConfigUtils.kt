@@ -485,6 +485,34 @@ object ConfigUtils {
     }
 
     /**
+     * ConfigurationSection 转 单层级HashMap<String, Int>
+     * @return 转换结果
+     */
+    @JvmStatic
+    fun ConfigurationSection.toIntMap(): HashMap<String, Int> {
+        val map = HashMap<String, Int>()
+        this.getKeys(true).forEach { key ->
+            val current = this.get(key)
+            if (current is Number) map[key] = current.toInt()
+        }
+        return map
+    }
+
+    /**
+     * ConfigurationSection 转 单层级HashMap<String, Double>
+     * @return 转换结果
+     */
+    @JvmStatic
+    fun ConfigurationSection.toDoubleMap(): HashMap<String, Double> {
+        val map = HashMap<String, Double>()
+        this.getKeys(true).forEach { key ->
+            val current = this.get(key)
+            if (current is Number) map[key] = current.toDouble()
+        }
+        return map
+    }
+
+    /**
      * ConfigurationSection 转 String
      * @param id 转换后呈现的节点ID, 一般可以为this.name(针对MemorySection)
      * @return 转换结果
