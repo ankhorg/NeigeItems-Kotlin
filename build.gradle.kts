@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     `java-library`
     `maven-publish`
-    id("org.jetbrains.kotlin.jvm") version "2.0.20"
+    id("org.jetbrains.kotlin.jvm") version "2.1.20"
     id("org.jetbrains.dokka") version "1.9.20"
     id("com.gradleup.shadow") version "8.3.5"
     id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.20-SNAPSHOT"
@@ -112,10 +112,11 @@ dependencies {
     // snakeyaml
     implementation("org.yaml:snakeyaml:2.3")
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:+")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:+")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:+")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:+")
+    // junit
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.12.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.12.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.12.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
 }
 
 tasks {
