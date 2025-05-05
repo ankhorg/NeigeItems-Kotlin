@@ -1053,11 +1053,11 @@ public abstract class BaseActionManager {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content);
         });
         // 公告
-        addConsumer("broadcast", (context, content) -> {
+        addConsumer("broadcast", false, (context, content) -> {
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', content));
         });
         // 公告(不将&解析为颜色符号)
-        addConsumer(Arrays.asList("broadcast-no-color", "broadcastNoColor"), (context, content) -> {
+        addConsumer(Arrays.asList("broadcast-no-color", "broadcastNoColor"), false, (context, content) -> {
             Bukkit.broadcastMessage(content);
         });
         // 发送Title
