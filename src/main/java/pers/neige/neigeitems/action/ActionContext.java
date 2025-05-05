@@ -117,11 +117,7 @@ public class ActionContext implements Cloneable {
     private Bindings toBindings() {
         Bindings bindings = new SimpleBindings();
         if (params != null) {
-            params.forEach((key, value) -> {
-                if (value != null) {
-                    bindings.put(key, value);
-                }
-            });
+            bindings.putAll(params);
         }
         bindings.put("player", player);
         if (itemStack != null) {
