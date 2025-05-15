@@ -81,6 +81,7 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
             if (action.isAsyncSafe()) return;
         }
         if (this.defaultAction.isAsyncSafe()) return;
+        if (this.matchAction.isAsyncSafe()) return;
         this.asyncSafe = false;
     }
 

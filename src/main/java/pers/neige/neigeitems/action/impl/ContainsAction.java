@@ -9,11 +9,11 @@ import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-public class KeyAction extends Action {
+public class ContainsAction extends Action {
     @NotNull
     private final String globalId;
     @NotNull
@@ -21,11 +21,11 @@ public class KeyAction extends Action {
     @NotNull
     private final Action defaultAction;
     @NotNull
-    private final Action matchAction;
+    private final Action containsAction;
     @NotNull
-    private final Map<String, Action> actions = new HashMap<>();
+    private final Set<String> elements;
 
-    public KeyAction(
+    public ContainsAction(
             @NotNull BaseActionManager manager,
             @NotNull ConfigReader config
     ) {
@@ -33,28 +33,20 @@ public class KeyAction extends Action {
         this.globalId = config.getString("global-id", "key");
         this.key = Evaluator.createStringEvaluator(manager, config.getString("key"));
         this.defaultAction = manager.compile(config.get("default-action"));
-        this.matchAction = manager.compile(config.get("match-action"));
-        ConfigReader actionsConfig = config.getConfig("actions");
-        if (actionsConfig != null) {
-            for (String key : actionsConfig.keySet()) {
-                this.actions.put(key, manager.compile(actionsConfig.get(key)));
-            }
-        }
+        this.containsAction = manager.compile(config.get("contains-action"));
+        this.elements = new HashSet<>(config.getStringList("elements"));
         checkAsyncSafe();
     }
 
     private void checkAsyncSafe() {
-        for (Action action : this.actions.values()) {
-            if (action.isAsyncSafe()) return;
-        }
         if (this.defaultAction.isAsyncSafe()) return;
-        if (this.matchAction.isAsyncSafe()) return;
+        if (this.containsAction.isAsyncSafe()) return;
         this.asyncSafe = false;
     }
 
     @Override
     public @NotNull ActionType getType() {
-        return ActionType.KEY;
+        return ActionType.CONTAINS;
     }
 
     /**
@@ -85,12 +77,11 @@ public class KeyAction extends Action {
     }
 
     @NotNull
-    public Action getMatchAction() {
-        return matchAction;
+    public Action getContainsAction() {
+        return containsAction;
     }
 
-    @NotNull
-    public Map<String, Action> getActions() {
-        return actions;
+    public @NotNull Set<String> getElements() {
+        return elements;
     }
 }

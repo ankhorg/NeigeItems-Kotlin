@@ -168,6 +168,9 @@ public abstract class BaseActionManager {
             case "condition-weight": {
                 return new ConditionWeightAction(this, config);
             }
+            case "contains": {
+                return new ContainsAction(this, config);
+            }
             case "double-tree": {
                 return new DoubleTreeAction(this, config);
             }
@@ -628,6 +631,27 @@ public abstract class BaseActionManager {
                 return targetAction.evalAsyncSafe(this, context);
             }
         });
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param action  动作内容
+     * @param context 动作上下文
+     * @return 执行结果
+     */
+    @NotNull
+    public CompletableFuture<ActionResult> runAction(
+            @NotNull ContainsAction action,
+            @NotNull ActionContext context
+    ) {
+        String key = action.getKey().get(context);
+        context.getGlobal().put(action.getGlobalId(), key);
+        if (action.getElements().contains(key)) {
+            return action.getContainsAction().evalAsyncSafe(this, context);
+        } else {
+            return action.getDefaultAction().evalAsyncSafe(this, context);
+        }
     }
 
     /**
