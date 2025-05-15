@@ -1067,9 +1067,9 @@ public abstract class BaseActionManager {
             ArrayList<String> args = StringUtils.split(ChatColor.translateAlternateColorCodes('&', content), ' ', '\\');
             String title = getOrNull(args, 0);
             String subtitle = getOrDefault(args, 1, "");
-            int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
-            int stay = getAndApply(args, 3, 70, StringsKt::toIntOrNull);
-            int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
+            int fadeIn = getAndApply(args, 2, 10, NumberParser::parseInteger);
+            int stay = getAndApply(args, 3, 70, NumberParser::parseInteger);
+            int fadeOut = getAndApply(args, 4, 20, NumberParser::parseInteger);
             player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         });
         // 发送Title(不将&解析为颜色符号)
@@ -1079,9 +1079,9 @@ public abstract class BaseActionManager {
             ArrayList<String> args = StringUtils.split(content, ' ', '\\');
             String title = getOrNull(args, 0);
             String subtitle = getOrDefault(args, 1, "");
-            int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
-            int stay = getAndApply(args, 3, 70, StringsKt::toIntOrNull);
-            int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
+            int fadeIn = getAndApply(args, 2, 10, NumberParser::parseInteger);
+            int stay = getAndApply(args, 3, 70, NumberParser::parseInteger);
+            int fadeOut = getAndApply(args, 4, 20, NumberParser::parseInteger);
             player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
         });
         // 发送全体Title
@@ -1089,9 +1089,9 @@ public abstract class BaseActionManager {
             ArrayList<String> args = StringUtils.split(ChatColor.translateAlternateColorCodes('&', content), ' ', '\\');
             String title = getOrNull(args, 0);
             String subtitle = getOrDefault(args, 1, "");
-            int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
-            int stay = getAndApply(args, 3, 70, StringsKt::toIntOrNull);
-            int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
+            int fadeIn = getAndApply(args, 2, 10, NumberParser::parseInteger);
+            int stay = getAndApply(args, 3, 70, NumberParser::parseInteger);
+            int fadeOut = getAndApply(args, 4, 20, NumberParser::parseInteger);
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
             }
@@ -1101,9 +1101,9 @@ public abstract class BaseActionManager {
             ArrayList<String> args = StringUtils.split(content, ' ', '\\');
             String title = getOrNull(args, 0);
             String subtitle = getOrDefault(args, 1, "");
-            int fadeIn = getAndApply(args, 2, 10, StringsKt::toIntOrNull);
-            int stay = getAndApply(args, 3, 70, StringsKt::toIntOrNull);
-            int fadeOut = getAndApply(args, 4, 20, StringsKt::toIntOrNull);
+            int fadeIn = getAndApply(args, 2, 10, NumberParser::parseInteger);
+            int stay = getAndApply(args, 3, 70, NumberParser::parseInteger);
+            int fadeOut = getAndApply(args, 4, 20, NumberParser::parseInteger);
             for (Player player : Bukkit.getOnlinePlayers()) {
                 player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
             }
@@ -1126,8 +1126,8 @@ public abstract class BaseActionManager {
             if (player == null) return;
             String[] args = content.split(" ", 3);
             String sound = getOrDefault(args, 0, "");
-            float volume = getAndApply(args, 1, 1F, StringsKt::toFloatOrNull);
-            float pitch = getAndApply(args, 2, 1F, StringsKt::toFloatOrNull);
+            float volume = getAndApply(args, 1, 1F, NumberParser::parseFloat);
+            float pitch = getAndApply(args, 2, 1F, NumberParser::parseFloat);
             player.playSound(player.getLocation(), sound, volume, pitch);
         });
         // 给予玩家金钱
@@ -1316,7 +1316,7 @@ public abstract class BaseActionManager {
         // 终止
         addFunction(Arrays.asList("return-weight", "returnWeight"), (context, content) -> {
             String[] args = content.split(" ", 2);
-            int priority = getAndApply(args, 0, 1, StringsKt::toIntOrNull);
+            int priority = getAndApply(args, 0, 1, NumberParser::parseInteger);
             String label = getOrNull(args, 1);
             return CompletableFuture.completedFuture(new StopResult(label, priority));
         });
@@ -1424,6 +1424,21 @@ public abstract class BaseActionManager {
             Action function = ActionManager.INSTANCE.getFunctions().get(content);
             if (function == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             return function.evalAsyncSafe(context);
+        });
+        // 设置分组冷却
+        addConsumer("set-cooldown", (context, content) -> {
+            Player player = context.getPlayer();
+            if (player == null) return;
+            User user = UserManager.INSTANCE.get(player.getUniqueId());
+            if (user == null) return;
+            String[] args = content.split(" ", 2);
+            String key = getOrNull(args, 0);
+            if (key == null) return;
+            String cooldownText = getOrNull(args, 1);
+            if (cooldownText == null) return;
+            Long cooldown = NumberParser.parseLong(cooldownText);
+            if (cooldown == null) return;
+            user.setCooldown(key, cooldown);
         });
     }
 }

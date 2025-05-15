@@ -1,10 +1,10 @@
 package pers.neige.neigeitems.action.evaluator.impl.integer;
 
-import kotlin.text.StringsKt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.evaluator.impl.ParseEvaluator;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.NumberParser;
 
 public class ParseIntegerEvaluator extends ParseEvaluator<Integer> {
     public ParseIntegerEvaluator(@NotNull BaseActionManager manager, @Nullable String formula) {
@@ -13,6 +13,6 @@ public class ParseIntegerEvaluator extends ParseEvaluator<Integer> {
 
     @Override
     public @Nullable Integer cast(@NotNull String result) {
-        return StringsKt.toIntOrNull(result);
+        return NumberParser.parseInteger(result);
     }
 }

@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.hook.nms.impl;
 
-import kotlin.text.StringsKt;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.MathHelper;
 import net.minecraft.server.v1_12_R1.MinecraftKey;
@@ -18,6 +17,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EnchantmentUtils;
+import pers.neige.neigeitems.utils.NumberParser;
 
 import java.util.*;
 
@@ -65,7 +65,7 @@ public class NMSHookerNamespacedKey extends NMSHookerCustomModelData {
         if (material == null) return null;
         Material result = Material.getMaterial(material.toUpperCase(Locale.ENGLISH));
         if (result != null) return result;
-        Integer id = StringsKt.toIntOrNull(material);
+        Integer id = NumberParser.parseInteger(material);
         if (id == null) return null;
         return byId.length > id && id >= 0 ? byId[id] : null;
     }

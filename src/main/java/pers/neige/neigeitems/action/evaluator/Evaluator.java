@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.action.evaluator;
 
-import kotlin.text.StringsKt;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +14,7 @@ import pers.neige.neigeitems.action.evaluator.impl.string.JsStringEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.string.ParseStringEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.string.RawStringEvaluator;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.NumberParser;
 
 import java.util.Locale;
 
@@ -53,7 +53,7 @@ public class Evaluator<T> {
             case "raw":
                 return new RawIntegerEvaluator(manager, content);
             default:
-                Integer maybe = StringsKt.toIntOrNull(input);
+                Integer maybe = NumberParser.parseInteger(input);
                 if (maybe == null) {
                     return new ParseIntegerEvaluator(manager, input);
                 } else {
@@ -73,7 +73,7 @@ public class Evaluator<T> {
             case "raw":
                 return new RawDoubleEvaluator(manager, content);
             default:
-                Double maybe = StringsKt.toDoubleOrNull(input);
+                Double maybe = NumberParser.parseDouble(input);
                 if (maybe == null) {
                     return new ParseDoubleEvaluator(manager, input);
                 } else {

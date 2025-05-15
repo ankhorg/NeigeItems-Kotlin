@@ -1,12 +1,12 @@
 package pers.neige.neigeitems.action.impl;
 
-import kotlin.text.StringsKt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.NumberParser;
 
 public class IntTreeAction extends TreeAction<Integer> {
     private final @NotNull Evaluator<Integer> key;
@@ -23,9 +23,9 @@ public class IntTreeAction extends TreeAction<Integer> {
 
     @Override
     public @Nullable Integer cast(@NotNull Object result) {
-        Integer intParseResult = StringsKt.toIntOrNull(result.toString());
+        Integer intParseResult = NumberParser.parseInteger(result.toString());
         if (intParseResult != null) return intParseResult;
-        Double doubleParseResult = StringsKt.toDoubleOrNull(result.toString());
+        Double doubleParseResult = NumberParser.parseDouble(result.toString());
         if (doubleParseResult != null) return doubleParseResult.intValue();
         return null;
     }

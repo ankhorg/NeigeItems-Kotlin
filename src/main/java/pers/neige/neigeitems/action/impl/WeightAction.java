@@ -1,7 +1,6 @@
 package pers.neige.neigeitems.action.impl;
 
 import kotlin.Pair;
-import kotlin.text.StringsKt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.Action;
@@ -10,6 +9,7 @@ import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.NumberParser;
 import pers.neige.neigeitems.utils.StringUtils;
 
 import javax.script.Compilable;
@@ -40,7 +40,7 @@ public class WeightAction extends Action {
         super(manager);
         this.amountScriptString = action.getString("amount");
         if (this.amountScriptString != null) {
-            this.amount = StringsKt.toIntOrNull(this.amountScriptString);
+            this.amount = NumberParser.parseInteger(this.amountScriptString);
             if (this.amount == null) {
                 try {
                     this.amountScript = ((Compilable) manager.getEngine()).compile(amountScriptString);

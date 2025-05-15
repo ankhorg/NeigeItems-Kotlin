@@ -9,11 +9,11 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import kotlin.text.StringsKt;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.command.subcommand.Help;
+import pers.neige.neigeitems.utils.NumberParser;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -44,7 +44,7 @@ public class CommandUtils {
     public static Integer readInteger(StringReader reader) throws CommandSyntaxException {
         final int start = reader.getCursor();
         String number = readUnquotedString(reader);
-        Integer result = StringsKt.toIntOrNull(number);
+        Integer result = NumberParser.parseInteger(number);
         if (result == null) {
             reader.setCursor(start);
             throw READER_INVALID_INT.createWithContext(reader, number);
@@ -56,7 +56,7 @@ public class CommandUtils {
     public static Long readLong(StringReader reader) throws CommandSyntaxException {
         final int start = reader.getCursor();
         String number = readUnquotedString(reader);
-        Long result = StringsKt.toLongOrNull(number);
+        Long result = NumberParser.parseLong(number);
         if (result == null) {
             reader.setCursor(start);
             throw READER_INVALID_LONG.createWithContext(reader, number);
@@ -68,7 +68,7 @@ public class CommandUtils {
     public static Double readDouble(StringReader reader) throws CommandSyntaxException {
         final int start = reader.getCursor();
         String number = readUnquotedString(reader);
-        Double result = StringsKt.toDoubleOrNull(number);
+        Double result = NumberParser.parseDouble(number);
         if (result == null) {
             reader.setCursor(start);
             throw READER_INVALID_DOUBLE.createWithContext(reader, number);
@@ -78,12 +78,12 @@ public class CommandUtils {
 
     @Nullable
     public static BigInteger readBigInteger(StringReader reader) {
-        return StringsKt.toBigIntegerOrNull(readUnquotedString(reader));
+        return NumberParser.parseBigInteger(readUnquotedString(reader));
     }
 
     @Nullable
     public static BigDecimal readBigDecimal(StringReader reader) {
-        return StringsKt.toBigDecimalOrNull(readUnquotedString(reader));
+        return NumberParser.parseBigDecimal(readUnquotedString(reader));
     }
 
     public static <S, T> RequiredArgumentBuilder<S, T> argument(String name, ArgumentType<T> type) {
