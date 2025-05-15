@@ -21,6 +21,8 @@ public class KeyAction extends Action {
     @NotNull
     private final Action defaultAction;
     @NotNull
+    private final Action matchAction;
+    @NotNull
     private final Map<String, Action> actions = new HashMap<>();
 
     public KeyAction(
@@ -31,6 +33,7 @@ public class KeyAction extends Action {
         this.globalId = config.getString("global-id", "key");
         this.key = Evaluator.createStringEvaluator(manager, config.getString("key"));
         this.defaultAction = manager.compile(config.get("default-action"));
+        this.matchAction = manager.compile(config.get("match-action"));
         ConfigReader actionsConfig = config.getConfig("actions");
         if (actionsConfig != null) {
             for (String key : actionsConfig.keySet()) {
@@ -78,6 +81,11 @@ public class KeyAction extends Action {
     @NotNull
     public Action getDefaultAction() {
         return defaultAction;
+    }
+
+    @NotNull
+    public Action getMatchAction() {
+        return matchAction;
     }
 
     @NotNull

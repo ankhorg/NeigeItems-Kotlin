@@ -617,8 +617,17 @@ public abstract class BaseActionManager {
         if (key == null) {
             return action.getDefaultAction().evalAsyncSafe(this, context);
         }
-        Action targetAction = action.getActions().getOrDefault(key, action.getDefaultAction());
-        return targetAction.evalAsyncSafe(this, context);
+        Action targetAction = action.getActions().get(key);
+        if (targetAction == null) {
+            return action.getDefaultAction().evalAsyncSafe(this, context);
+        }
+        return action.getMatchAction().evalAsyncSafe(this, context).thenCompose((result) -> {
+            if (result.getType() == ResultType.STOP) {
+                return CompletableFuture.completedFuture(result);
+            } else {
+                return targetAction.evalAsyncSafe(this, context);
+            }
+        });
     }
 
     /**
@@ -653,8 +662,17 @@ public abstract class BaseActionManager {
                 entry = action.getActions().ceilingEntry(key);
                 break;
         }
-        Action targetAction = entry == null ? action.getDefaultAction() : entry.getValue();
-        return targetAction.evalAsyncSafe(this, context);
+        if (entry == null) {
+            return action.getDefaultAction().evalAsyncSafe(this, context);
+        }
+        Action targetAction = entry.getValue();
+        return action.getMatchAction().evalAsyncSafe(this, context).thenCompose((result) -> {
+            if (result.getType() == ResultType.STOP) {
+                return CompletableFuture.completedFuture(result);
+            } else {
+                return targetAction.evalAsyncSafe(this, context);
+            }
+        });
     }
 
     /**

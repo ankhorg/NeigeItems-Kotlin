@@ -24,6 +24,8 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
     @NotNull
     private final Action defaultAction;
     @NotNull
+    private final Action matchAction;
+    @NotNull
     private final TreeMap<T, Action> actions = new TreeMap<>();
 
     public TreeAction(
@@ -50,6 +52,7 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
         this.actionType = actionType;
         this.globalId = config.getString("global-id", "key");
         this.defaultAction = manager.compile(config.get("default-action"));
+        this.matchAction = manager.compile(config.get("match-action"));
         ConfigReader actionsConfig = config.getConfig("actions");
         if (actionsConfig != null) {
             for (String stringKey : actionsConfig.keySet()) {
@@ -102,6 +105,11 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
     @NotNull
     public Action getDefaultAction() {
         return defaultAction;
+    }
+
+    @NotNull
+    public Action getMatchAction() {
+        return matchAction;
     }
 
     @NotNull
