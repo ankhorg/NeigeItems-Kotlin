@@ -940,7 +940,7 @@ const offHandItem = function () {
 }
 
 /**
- * 在damage,block,kill相关动作中获取MM怪物ID, 不是MM怪物则返回null
+ * 在damage,block,kill相关动作中获取攻击者MM怪物ID, 不是MM怪物则返回null
  */
 const getAttackerMobId = function () {
     const hooker = HookerManager.INSTANCE.mythicMobsHooker
@@ -949,7 +949,7 @@ const getAttackerMobId = function () {
 }
 
 /**
- * 在damage,block,kill相关动作中获取MM怪物ID, 不是MM怪物则返回null
+ * 在damage,block,kill相关动作中获取防御者MM怪物ID, 不是MM怪物则返回null
  */
 const getDefenderMobId = function () {
     const hooker = HookerManager.INSTANCE.mythicMobsHooker
@@ -966,8 +966,8 @@ const getDefenderMobId = function () {
  * @param cooldown 冷却刷新时间
  * @return long 剩余冷却时间
  */
-const checkCooldown = function(key, cooldown) {
-    return PlayerUtils.checkCooldown(player, key, cooldown)
+const checkCooldown = function(key) {
+    return PlayerUtils.checkCooldown(player, key)
 }
 
 /**

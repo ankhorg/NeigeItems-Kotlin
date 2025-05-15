@@ -107,11 +107,9 @@ public class User {
      * 返回剩余冷却时间.
      *
      * @param key      冷却组ID
-     * @param cooldown 冷却刷新时间
      * @return 剩余冷却时间
      */
-    public long getCooldown(@NotNull String key, long cooldown) {
-        if (cooldown <= 0) return 0;
+    public long getCooldown(@NotNull String key) {
         long time = System.currentTimeMillis();
         long lastTime = this.cooldown.getOrDefault(key, 0L);
         if (lastTime > time) {

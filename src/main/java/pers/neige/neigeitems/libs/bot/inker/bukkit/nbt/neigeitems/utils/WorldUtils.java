@@ -611,7 +611,7 @@ public class WorldUtils {
         if (REMOVED_TRACKER) {
             RefTrackedEntity trackedEntity = ((Map<Integer, RefTrackedEntity>) world.getChunkSource().chunkMap.entityMap).get(entityId);
             if (trackedEntity != null) {
-                serverEntity = trackedEntity.serverEntity;
+                return trackedEntity.entity;
             }
         } else {
             serverEntity = world.tracker.trackedEntities.get(entityId);

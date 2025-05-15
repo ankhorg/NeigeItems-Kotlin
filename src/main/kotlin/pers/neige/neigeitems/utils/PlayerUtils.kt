@@ -178,13 +178,12 @@ object PlayerUtils {
      * 返回剩余冷却时间.
      *
      * @param key      冷却组ID
-     * @param cooldown 冷却刷新时间
      * @return 剩余冷却时间
      */
     @JvmStatic
-    fun Player.getCooldown(key: String, cooldown: Long): Long {
+    fun Player.getCooldown(key: String): Long {
         val user = UserManager.INSTANCE[uniqueId] ?: return Long.MAX_VALUE
-        return user.getCooldown(key, cooldown)
+        return user.getCooldown(key)
     }
 
     /**
