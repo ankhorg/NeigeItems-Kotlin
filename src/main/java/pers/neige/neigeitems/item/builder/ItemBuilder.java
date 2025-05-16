@@ -1,6 +1,8 @@
 package pers.neige.neigeitems.item.builder;
 
 import kotlin.text.StringsKt;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -162,6 +164,26 @@ public class ItemBuilder {
                     for (String rawLore : originLore) {
                         for (String loreText : ChatColor.translateAlternateColorCodes('&', rawLore).split("\n")) {
                             finalLore.add(NbtString.valueOf(TranslationUtils.toJsonText(loreText)));
+                        }
+                    }
+                    if (!finalLore.isEmpty()) {
+                        this.lore = finalLore;
+                    }
+                    break;
+                }
+                case "mini-name": {
+                    String rawName = config.getString(key);
+                    if (rawName != null) {
+                        this.name = NbtString.valueOf(GsonComponentSerializer.gson().serialize(MiniMessage.miniMessage().deserialize(ChatColor.translateAlternateColorCodes('&', rawName))));
+                    }
+                    break;
+                }
+                case "mini-lore": {
+                    List<String> originLore = config.getStringList(key);
+                    NbtList finalLore = new NbtList();
+                    for (String rawLore : originLore) {
+                        for (String loreText : ChatColor.translateAlternateColorCodes('&', rawLore).split("\n")) {
+                            finalLore.add(NbtString.valueOf(GsonComponentSerializer.gson().serialize(MiniMessage.miniMessage().deserialize(loreText))));
                         }
                     }
                     if (!finalLore.isEmpty()) {
