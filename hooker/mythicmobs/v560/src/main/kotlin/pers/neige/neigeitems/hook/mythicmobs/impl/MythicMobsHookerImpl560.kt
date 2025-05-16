@@ -16,7 +16,6 @@ import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.utils.ListenerUtils
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 import pers.neige.neigeitems.utils.SchedulerUtils.syncAndGet
-import kotlin.math.roundToInt
 
 /**
  * 5.6.0版本MM挂钩
@@ -63,7 +62,7 @@ class MythicMobsHookerImpl560 : MythicMobsHooker() {
                     event.killer,
                     event.entity as LivingEntity,
                     event.mobType.internalName,
-                    event.mobLevel.roundToInt()
+                    event.mobLevel.toInt()
                 )
             }
         }

@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker
 import pers.neige.neigeitems.utils.ListenerUtils
 import pers.neige.neigeitems.utils.SchedulerUtils.async
-import kotlin.math.roundToInt
 
 
 /**
@@ -63,7 +62,7 @@ class MythicMobsHookerImpl490 : MythicMobsHooker() {
                     event.killer,
                     event.entity as LivingEntity,
                     event.mobType.internalName,
-                    event.mobLevel.roundToInt()
+                    event.mobLevel.toInt()
                 )
             }
         }
