@@ -9,7 +9,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "2.1.20"
     id("org.jetbrains.dokka") version "1.9.20"
     id("com.gradleup.shadow") version "8.3.5"
-    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.20-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.21-SNAPSHOT"
 }
 
 val realVersion = version
@@ -92,7 +92,7 @@ dependencies {
 
     // ankh-invoke
     implementation("org.inksnow.cputil:logger:1.9")
-    implementation("org.inksnow:ankh-invoke-bukkit:1.0.20-SNAPSHOT")
+    implementation("org.inksnow:ankh-invoke-bukkit:1.0.21-SNAPSHOT")
 
     // bstats
     implementation("org.bstats:bstats-bukkit:3.0.2")

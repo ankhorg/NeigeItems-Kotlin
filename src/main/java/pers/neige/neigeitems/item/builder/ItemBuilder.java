@@ -174,7 +174,7 @@ public class ItemBuilder {
                 case "mini-name": {
                     String rawName = config.getString(key);
                     if (rawName != null) {
-                        this.name = NbtString.valueOf(GsonComponentSerializer.gson().serialize(MiniMessage.miniMessage().deserialize(ChatColor.translateAlternateColorCodes('&', rawName))));
+                        this.name = NbtString.valueOf(GsonComponentSerializer.gson().serialize(MiniMessage.miniMessage().deserialize(rawName)));
                     }
                     break;
                 }
@@ -182,7 +182,7 @@ public class ItemBuilder {
                     List<String> originLore = config.getStringList(key);
                     NbtList finalLore = new NbtList();
                     for (String rawLore : originLore) {
-                        for (String loreText : ChatColor.translateAlternateColorCodes('&', rawLore).split("\n")) {
+                        for (String loreText : rawLore.split("\n")) {
                             finalLore.add(NbtString.valueOf(GsonComponentSerializer.gson().serialize(MiniMessage.miniMessage().deserialize(loreText))));
                         }
                     }

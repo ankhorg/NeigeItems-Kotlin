@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("io.papermc.paperweight.userdev") version "1.7.7"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.16"
 }
 
 repositories {
@@ -11,6 +11,10 @@ repositories {
 dependencies {
     paperweight.paperDevBundle("1.21.3-R0.1-SNAPSHOT")
     compileOnly(project(":"))
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
 
 tasks {

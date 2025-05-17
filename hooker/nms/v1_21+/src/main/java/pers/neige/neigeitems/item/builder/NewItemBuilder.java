@@ -2,7 +2,9 @@ package pers.neige.neigeitems.item.builder;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.DataResult;
+import io.papermc.paper.adventure.PaperAdventure;
 import kotlin.text.StringsKt;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -13,7 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Unit;
 import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ItemLore;
@@ -34,6 +35,7 @@ import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
 import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.ItemUtils;
@@ -46,19 +48,18 @@ import java.util.logging.Level;
 
 public class NewItemBuilder extends ItemBuilder {
     public static final RegistryOps<Tag> registryOps = MinecraftServer.getServer().registryAccess().createSerializationContext(NbtOps.INSTANCE);
+    private static final boolean LOWER_THAN_1_21_4 = !CbVersion.v1_21_R4.isSupport();
 
     @NotNull
     private final Set<ItemFlag> hideFlag = new HashSet<>();
     @NotNull
-    private ItemEnchantments.Mutable mutableEnchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
+    private final ItemEnchantments.Mutable mutableEnchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
     @Nullable
     private Component name = null;
     @Nullable
     private List<Component> lore = null;
     @Nullable
     private ResourceLocation tooltipStyle = null;
-    private boolean hideTooltip = false;
-    private boolean hideAdditionalTooltip = false;
     private DataComponentPatch components = null;
 
     public NewItemBuilder() {
@@ -156,6 +157,26 @@ public class NewItemBuilder extends ItemBuilder {
                     }
                     break;
                 }
+                case "mini-name": {
+                    String rawName = config.getString(key);
+                    if (rawName != null) {
+                        this.name = PaperAdventure.asVanilla(MiniMessage.miniMessage().deserialize(rawName));
+                    }
+                    break;
+                }
+                case "mini-lore": {
+                    List<String> originLore = config.getStringList(key);
+                    List<Component> finalLore = new ArrayList<>();
+                    for (String rawLore : originLore) {
+                        for (String loreText : rawLore.split("\n")) {
+                            finalLore.add(PaperAdventure.asVanilla(MiniMessage.miniMessage().deserialize(loreText)));
+                        }
+                    }
+                    if (!finalLore.isEmpty()) {
+                        this.lore = finalLore;
+                    }
+                    break;
+                }
                 case "color": {
                     Object value = config.get(key);
                     if (value instanceof String) {
@@ -187,14 +208,6 @@ public class NewItemBuilder extends ItemBuilder {
                     if (rawTooltipStyle != null) {
                         this.tooltipStyle = ResourceLocation.parse(rawTooltipStyle);
                     }
-                    break;
-                }
-                case "hide-tooltip": {
-                    this.hideTooltip = config.getBoolean(key);
-                    break;
-                }
-                case "hide-additional-tooltip": {
-                    this.hideAdditionalTooltip = config.getBoolean(key);
                     break;
                 }
                 case "nbt": {
@@ -280,16 +293,23 @@ public class NewItemBuilder extends ItemBuilder {
             this.itemStack = air;
             return air;
         }
+        result.lore();
         net.minecraft.world.item.ItemStack handle = result.handle;
         if (this.damage != null) {
             handle.setDamageValue(damage);
         }
         if (!this.enchantments.isEmpty()) {
-            mutableEnchantments.showInTooltip = !this.hideFlag.contains(ItemFlag.HIDE_ENCHANTS);
+            if (LOWER_THAN_1_21_4) {
+                mutableEnchantments.showInTooltip = !this.hideFlag.contains(ItemFlag.HIDE_ENCHANTS);
+            }
             handle.set(DataComponents.ENCHANTMENTS, mutableEnchantments.toImmutable());
         }
         if (customModelData != null) {
-            handle.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(customModelData));
+            if (LOWER_THAN_1_21_4) {
+                handle.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(customModelData));
+            } else {
+                NeigeItems.getInstance().getLogger().warning("1.21.4+的版本请使用components配置项通过组件配置CustomModelData");
+            }
         }
         if (name != null) {
             handle.set(DataComponents.CUSTOM_NAME, name);
@@ -298,19 +318,21 @@ public class NewItemBuilder extends ItemBuilder {
             handle.set(DataComponents.LORE, new ItemLore(lore, new ArrayList<>()));
         }
         if (color != null) {
-            handle.set(DataComponents.DYED_COLOR, new DyedItemColor(color, !this.hideFlag.contains(ItemFlag.HIDE_DYE)));
+            if (LOWER_THAN_1_21_4) {
+                handle.set(DataComponents.DYED_COLOR, new DyedItemColor(color, !this.hideFlag.contains(ItemFlag.HIDE_DYE)));
+            } else {
+                NeigeItems.getInstance().getLogger().warning("1.21.4+的版本请使用components配置项通过组件配置皮革颜色");
+            }
         }
         if (Boolean.TRUE.equals(unbreakable)) {
-            handle.set(DataComponents.UNBREAKABLE, new Unbreakable(!this.hideFlag.contains(ItemFlag.HIDE_UNBREAKABLE)));
+            if (LOWER_THAN_1_21_4) {
+                handle.set(DataComponents.UNBREAKABLE, new Unbreakable(!this.hideFlag.contains(ItemFlag.HIDE_UNBREAKABLE)));
+            } else {
+                NeigeItems.getInstance().getLogger().warning("1.21.4+的版本请使用components配置项通过组件配置无法破坏");
+            }
         }
         if (tooltipStyle != null) {
             handle.set(DataComponents.TOOLTIP_STYLE, tooltipStyle);
-        }
-        if (hideTooltip) {
-            handle.set(DataComponents.HIDE_TOOLTIP, Unit.INSTANCE);
-        }
-        if (hideAdditionalTooltip) {
-            handle.set(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
         }
         if (components != null) {
             handle.applyComponents(components);
