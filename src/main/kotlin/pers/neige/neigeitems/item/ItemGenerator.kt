@@ -82,6 +82,13 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     } else listOf()
 
     /**
+     * 获取更新时保护的组件
+     */
+    val protectComponents = if (update) {
+        configSection.getStringList("options.update.protect-components")
+    } else listOf()
+
+    /**
      * 获取更新时刷新的节点
      */
     val refreshData = if (update) {

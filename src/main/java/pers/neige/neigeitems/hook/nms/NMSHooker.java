@@ -312,4 +312,14 @@ public class NMSHooker {
         }
         return result;
     }
+
+    /**
+     * 1.21+版本, 根据组件ID覆盖指定组件.
+     *
+     * @param receiver   组件接收者.
+     * @param provider   组件提供者.
+     * @param components 需要覆盖的组件.
+     */
+    public void overrideComponent(@NotNull ItemStack receiver, @NotNull ItemStack provider, @NotNull List<String> components) {
+    }
 }

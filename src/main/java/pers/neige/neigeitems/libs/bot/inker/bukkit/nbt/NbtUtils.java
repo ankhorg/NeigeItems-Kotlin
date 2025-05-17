@@ -520,4 +520,9 @@ public class NbtUtils {
         if (!(provider instanceof RefCraftItemStack)) return;
         ((RefCraftItemStack) receiver).handle.components = ((RefCraftItemStack) provider).handle.components;
     }
+
+    public static @Nullable ItemStack getCraftDelegate(@NotNull ItemStack itemStack) {
+        if (!MOJANG_MOTHER_DEAD) return null;
+        return ((RefBukkitItemStack) (Object) itemStack).craftDelegate;
+    }
 }

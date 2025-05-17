@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.hook.nms.impl;
 
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.TypedDataComponent;
@@ -21,6 +22,7 @@ import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.item.builder.NewItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
 import pers.neige.neigeitems.utils.ItemUtils;
 
@@ -150,5 +152,23 @@ public class NMSHookerItemStack extends NMSHooker {
         }
 
         return result;
+    }
+
+    @Override
+    public void overrideComponent(@NotNull ItemStack receiver, @NotNull ItemStack provider, @NotNull List<String> components) {
+        CraftItemStack receiverCraft = receiver instanceof CraftItemStack ? (CraftItemStack) receiver : (CraftItemStack) NbtUtils.getCraftDelegate(receiver);
+        if (receiverCraft == null) return;
+        CraftItemStack providerCraft = provider instanceof CraftItemStack ? (CraftItemStack) provider : (CraftItemStack) NbtUtils.getCraftDelegate(provider);
+        if (providerCraft == null) return;
+        net.minecraft.world.item.ItemStack receiverNms = receiverCraft.handle;
+        net.minecraft.world.item.ItemStack providerNms = providerCraft.handle;
+        DataComponentPatch patch = providerNms.getComponentsPatch();
+        components.forEach(componentId -> {
+            DataComponentType<?> componentType = (DataComponentType<?>) ComponentUtils.getDataComponentType(componentId);
+            if (componentType == null) return;
+            Optional<?> optional = patch.get(componentType);
+            Object component = optional == null ? null : optional.orElse(null);
+            receiverNms.set((DataComponentType<? super Object>) componentType, component);
+        });
     }
 }

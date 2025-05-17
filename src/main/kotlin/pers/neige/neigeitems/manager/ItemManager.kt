@@ -681,9 +681,13 @@ object ItemManager : ItemConfigManager() {
             }
         }
         // 修复保护NBT
-        preGenerateEvent.item.protectNBT.forEach { key ->
+        item.protectNBT.forEach { key ->
             val pre = itemInfo.itemTag.getDeep(key) ?: return@forEach
             newItemTag.putDeep(key, pre)
+        }
+        // 修复保护组件
+        if (item.protectComponents.isNotEmpty()) {
+            nmsHooker.overrideComponent(newItemStack, itemStack, item.protectComponents)
         }
         // 将新物品的组件覆盖至原物品
         NbtUtils.setComponents(itemStack, newItemStack)
