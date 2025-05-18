@@ -1,6 +1,9 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -10,12 +13,14 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVer
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
 import pers.neige.neigeitems.ref.RefMinecraftKey;
+import pers.neige.neigeitems.ref.adventure.RefPaperAdventure;
 import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
 import pers.neige.neigeitems.ref.core.component.*;
 import pers.neige.neigeitems.ref.nbt.*;
 import pers.neige.neigeitems.ref.resources.RefRegistryOps;
 import pers.neige.neigeitems.ref.server.RefMinecraftServer;
+import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 public class NbtUtils {
     public static final RefRegistryOps<RefNbtBase> registryOps;
@@ -635,5 +641,43 @@ public class NbtUtils {
                 nmsItemStack.set(RefDataComponents.LORE, new RefItemLore(lines, styledLines));
             }
         }
+    }
+
+    /**
+     * 将物品保存为NI可识别的配置文件, 性能较差, 不建议于性能敏感处使用, 仅适用于1.21+版本.
+     *
+     * @param itemStack 待转换物品.
+     * @return NI可识别的配置文件
+     */
+    @Nullable
+    public static ConfigurationSection saveAfterV21(@Nullable ItemStack itemStack) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) return null;
+        ConfigurationSection result = new YamlConfiguration();
+        result.set("material", itemStack.getType().toString());
+        NbtCompound nbt = ItemUtils.getNbtOrNull(itemStack);
+        if (nbt != null && !nbt.isEmpty()) {
+            result.set("nbt", ItemUtils.toStringMap(nbt));
+        }
+        if (!(itemStack instanceof RefCraftItemStack))
+            itemStack = ((RefBukkitItemStack) (Object) itemStack).craftDelegate;
+        RefNmsItemStack nmsItemStack = ((RefCraftItemStack) itemStack).handle;
+        RefPatchedDataComponentMap components = nmsItemStack.components;
+        if (components == null) return result;
+        NbtCompound componentsNbt = NbtUtils.getDisplayNbt(itemStack);
+        RefComponent name = components.get(RefDataComponents.CUSTOM_NAME);
+        if (name != null) {
+            result.set("mini-name", MiniMessage.miniMessage().serialize(RefPaperAdventure.asAdventure(name)));
+            componentsNbt.remove("minecraft:custom_name");
+        }
+        RefItemLore lore = components.get(RefDataComponents.LORE);
+        if (lore != null) {
+            result.set("mini-lore", RefPaperAdventure.asAdventure(lore.lines()).stream().map(MiniMessage.miniMessage()::serialize).collect(Collectors.toList()));
+            componentsNbt.remove("minecraft:lore");
+        }
+        componentsNbt.remove("minecraft:custom_data");
+        if (!componentsNbt.isEmpty()) {
+            result.set("components", ItemUtils.toStringMap(componentsNbt));
+        }
+        return result;
     }
 }

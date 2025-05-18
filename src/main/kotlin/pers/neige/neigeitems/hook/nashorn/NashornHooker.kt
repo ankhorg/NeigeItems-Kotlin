@@ -15,7 +15,7 @@ abstract class NashornHooker {
      * @return 一个新的Nashorn引擎
      */
     fun getNashornEngine(): ScriptEngine {
-        return getNashornEngine(arrayOf("-Dnashorn.args=--language=es6"))
+        return getNashornEngine(arrayOf("--language=es6"))
     }
 
     /**
@@ -24,7 +24,7 @@ abstract class NashornHooker {
      * @return 一个新的Nashorn引擎
      */
     fun getGlobalEngine(): ScriptEngine {
-        return getNashornEngine(arrayOf("-Dnashorn.args=--language=es6", "--global-per-engine"))
+        return getNashornEngine(arrayOf("--language=es6", "--global-per-engine"))
     }
 
     /**

@@ -22,7 +22,6 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 import pers.neige.neigeitems.utils.ItemUtils;
@@ -31,10 +30,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class NMSHooker {
-    /**
-     * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
-     */
-    protected final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
     protected final Map<Material, NamespacedKey> materialNamespacedKeys = loadNamespacedKeys();
 
     protected Map<Material, NamespacedKey> loadNamespacedKeys() {
@@ -218,98 +213,86 @@ public class NMSHooker {
         result.set("material", itemStack.getType().toString());
         NbtCompound nbt = ItemUtils.getNbtOrNull(itemStack);
 
-        if (MOJANG_MOTHER_DEAD) {
-            if (nbt != null && !nbt.isEmpty()) {
-                result.set("nbt", ItemUtils.toStringMap(nbt));
-            }
+        short damage = ItemUtils.getDamage(itemStack);
+        if (damage > 0) {
+            result.set("damage", damage);
+        }
 
-            NbtCompound components = NbtUtils.getDisplayNbt(itemStack);
-            components.remove("minecraft:custom_data");
-            if (!components.isEmpty()) {
-                result.set("components", ItemUtils.toStringMap(components));
-            }
-        } else {
-            short damage = ItemUtils.getDamage(itemStack);
-            if (damage > 0) {
-                result.set("damage", damage);
-            }
+        if (nbt == null) return result;
+        nbt = nbt.clone();
 
-            if (nbt == null) return result;
-            nbt = nbt.clone();
+        NbtCompound display = nbt.getCompound(NbtUtils.getDisplayNbtKey());
+        if (display != null) {
+            int color = display.getInt("color", -1);
+            if (color != -1) {
+                result.set("color", Integer.toString(color, 16).toUpperCase(Locale.getDefault()));
+                display.remove("color");
+            }
+            String rawName = display.getString(NbtUtils.getNameNbtKey());
+            if (rawName != null) {
+                String name = TranslationUtils.toLegacyText(rawName);
+                result.set("name", name);
+                display.remove(NbtUtils.getNameNbtKey());
+            }
+            NbtList rawLore = display.getList(NbtUtils.getLoreNbtKey());
+            if (rawLore != null && !rawLore.isEmpty()) {
+                List<String> lore = new ArrayList<>();
+                for (Nbt<?> loreNbt : rawLore) {
+                    lore.add(TranslationUtils.toLegacyText(loreNbt.getAsString()));
+                }
+                result.set("lore", lore);
+                display.remove(NbtUtils.getLoreNbtKey());
+            }
+            if (display.isEmpty()) {
+                nbt.remove(NbtUtils.getDisplayNbtKey());
+            }
+        }
 
-            NbtCompound display = nbt.getCompound(NbtUtils.getDisplayNbtKey());
-            if (display != null) {
-                int color = display.getInt("color", -1);
-                if (color != -1) {
-                    result.set("color", Integer.toString(color, 16).toUpperCase(Locale.getDefault()));
-                    display.remove("color");
-                }
-                String rawName = display.getString(NbtUtils.getNameNbtKey());
-                if (rawName != null) {
-                    String name = TranslationUtils.toLegacyText(rawName);
-                    result.set("name", name);
-                    display.remove(NbtUtils.getNameNbtKey());
-                }
-                NbtList rawLore = display.getList(NbtUtils.getLoreNbtKey());
-                if (rawLore != null && !rawLore.isEmpty()) {
-                    List<String> lore = new ArrayList<>();
-                    for (Nbt<?> loreNbt : rawLore) {
-                        lore.add(TranslationUtils.toLegacyText(loreNbt.getAsString()));
-                    }
-                    result.set("lore", lore);
-                    display.remove(NbtUtils.getLoreNbtKey());
-                }
-                if (display.isEmpty()) {
-                    nbt.remove(NbtUtils.getDisplayNbtKey());
+        String cmdKey = NbtUtils.getCustomModelDataNbtKeyOrNull();
+        if (cmdKey != null) {
+            int customModelData = nbt.getInt(cmdKey, -1);
+            if (customModelData != -1) {
+                result.set("custom-model-data", customModelData);
+                nbt.remove(cmdKey);
+            }
+        }
+
+        boolean unbreakable = nbt.getBoolean(NbtUtils.getUnbreakableNbtKey());
+        if (unbreakable) {
+            result.set("unbreakable", true);
+            nbt.remove(NbtUtils.getUnbreakableNbtKey());
+        }
+
+        int hideFlags = nbt.getInt("HideFlags");
+        if (hideFlags > 0) {
+            List<String> flags = new ArrayList<>();
+            for (ItemFlag flag : ItemFlag.values()) {
+                int bitModifier = (byte) (1 << flag.ordinal());
+                if ((hideFlags & bitModifier) == bitModifier) {
+                    flags.add(flag.name());
                 }
             }
-
-            String cmdKey = NbtUtils.getCustomModelDataNbtKeyOrNull();
-            if (cmdKey != null) {
-                int customModelData = nbt.getInt(cmdKey, -1);
-                if (customModelData != -1) {
-                    result.set("custom-model-data", customModelData);
-                    nbt.remove(cmdKey);
-                }
+            if (!flags.isEmpty()) {
+                result.set("item-flags", flags);
             }
+            nbt.remove("HideFlags");
+        }
 
-            boolean unbreakable = nbt.getBoolean(NbtUtils.getUnbreakableNbtKey());
-            if (unbreakable) {
-                result.set("unbreakable", true);
-                nbt.remove(NbtUtils.getUnbreakableNbtKey());
+        NbtList enchantmentNbt = nbt.getList(NbtUtils.getEnchantmentsNbtKey());
+        if (enchantmentNbt != null) {
+            Map<Enchantment, Integer> enchantments = buildEnchantments(enchantmentNbt);
+            if (!enchantments.isEmpty()) {
+                ConfigurationSection enchantSection = result.createSection("enchantments");
+                enchantments.forEach((enchant, level) -> {
+                    enchantSection.set(enchant.getName(), level);
+                });
             }
+            nbt.remove(NbtUtils.getEnchantmentsNbtKey());
+        }
 
-            int hideFlags = nbt.getInt("HideFlags");
-            if (hideFlags > 0) {
-                List<String> flags = new ArrayList<>();
-                for (ItemFlag flag : ItemFlag.values()) {
-                    int bitModifier = (byte) (1 << flag.ordinal());
-                    if ((hideFlags & bitModifier) == bitModifier) {
-                        flags.add(flag.name());
-                    }
-                }
-                if (!flags.isEmpty()) {
-                    result.set("item-flags", flags);
-                }
-                nbt.remove("HideFlags");
-            }
-
-            NbtList enchantmentNbt = nbt.getList(NbtUtils.getEnchantmentsNbtKey());
-            if (enchantmentNbt != null) {
-                Map<Enchantment, Integer> enchantments = buildEnchantments(enchantmentNbt);
-                if (!enchantments.isEmpty()) {
-                    ConfigurationSection enchantSection = result.createSection("enchantments");
-                    enchantments.forEach((enchant, level) -> {
-                        enchantSection.set(enchant.getName(), level);
-                    });
-                }
-                nbt.remove(NbtUtils.getEnchantmentsNbtKey());
-            }
-
-            // 设置物品NBT
-            if (!nbt.isEmpty()) {
-                result.set("nbt", ItemUtils.toStringMap(nbt));
-            }
+        // 设置物品NBT
+        if (!nbt.isEmpty()) {
+            result.set("nbt", ItemUtils.toStringMap(nbt));
         }
         return result;
     }
