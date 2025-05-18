@@ -5,19 +5,24 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
 import pers.neige.neigeitems.ref.RefMinecraftKey;
-import pers.neige.neigeitems.ref.core.component.RefDataComponentType;
-import pers.neige.neigeitems.ref.core.component.RefTypedDataComponent;
+import pers.neige.neigeitems.ref.chat.RefComponent;
+import pers.neige.neigeitems.ref.chat.RefCraftChatMessage;
+import pers.neige.neigeitems.ref.core.component.*;
 import pers.neige.neigeitems.ref.nbt.*;
 import pers.neige.neigeitems.ref.resources.RefRegistryOps;
 import pers.neige.neigeitems.ref.server.RefMinecraftServer;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 public class NbtUtils {
     public static final RefRegistryOps<RefNbtBase> registryOps;
@@ -561,6 +566,74 @@ public class NbtUtils {
             return new NbtCompound(compound);
         } else {
             return new NbtItemStack(itemStack).getOrCreateTag();
+        }
+    }
+
+    /**
+     * 编辑物品的name和lore, 仅适用于1.21+版本.
+     *
+     * @param itemStack 待操作物品.
+     * @param handler   文本处理器.
+     */
+    public static void editNameAndLoreAfterV21(@NotNull ItemStack itemStack, BiFunction<ItemStack, String, ItemPlaceholder.ParseResult> handler) {
+        if (!MOJANG_MOTHER_DEAD) return;
+        if (!(itemStack instanceof RefCraftItemStack))
+            itemStack = ((RefBukkitItemStack) (Object) itemStack).craftDelegate;
+        RefNmsItemStack nmsItemStack = ((RefCraftItemStack) itemStack).handle;
+        RefPatchedDataComponentMap components = nmsItemStack.components;
+        if (components == null) return;
+        RefComponent name = components.get(RefDataComponents.CUSTOM_NAME);
+        if (name != null) {
+            String json = RefCraftChatMessage.toJSON(name);
+            ItemPlaceholder.ParseResult parsed = handler.apply(itemStack, json);
+            if (parsed.getChanged()) {
+                nmsItemStack.set(RefDataComponents.CUSTOM_NAME, RefCraftChatMessage.fromJSON(parsed.getText()));
+            }
+        }
+        RefItemLore lore = components.get(RefDataComponents.LORE);
+        if (lore != null) {
+            List<RefComponent> lines = lore.lines();
+            boolean edited = false;
+            if (!lines.isEmpty()) {
+                List<RefComponent> newLines = new ArrayList<>();
+                for (RefComponent line : lines) {
+                    if (line == null) {
+                        newLines.add(null);
+                        continue;
+                    }
+                    String json = RefCraftChatMessage.toJSON(line);
+                    ItemPlaceholder.ParseResult parsed = handler.apply(itemStack, json);
+                    if (parsed.getChanged()) {
+                        newLines.add(RefCraftChatMessage.fromJSON(parsed.getText()));
+                        edited = true;
+                    } else {
+                        newLines.add(line);
+                    }
+                }
+                lines = newLines;
+            }
+            List<RefComponent> styledLines = lore.styledLines();
+            if (!styledLines.isEmpty()) {
+                List<RefComponent> newStyledLines = new ArrayList<>();
+                for (RefComponent styledLine : styledLines) {
+                    if (styledLine == null) {
+                        newStyledLines.add(null);
+                        continue;
+                    }
+                    String json = RefCraftChatMessage.toJSON(styledLine);
+                    ItemPlaceholder.ParseResult parsed = handler.apply(itemStack, json);
+                    if (parsed.getChanged()) {
+                        newStyledLines.add(RefCraftChatMessage.fromJSON(parsed.getText()));
+                        edited = true;
+                    } else {
+                        newStyledLines.add(styledLine);
+                    }
+                }
+                styledLines = newStyledLines;
+            }
+            if (edited) {
+                nmsItemStack.set(RefDataComponents.LORE, new RefItemLore(lines, styledLines));
+            }
         }
     }
 }

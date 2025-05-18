@@ -10,7 +10,6 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.manager.ConfigManager.config
-import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ListenerUtils
 import java.util.*
@@ -49,7 +48,7 @@ object ItemPlaceholder {
     fun itemParse(itemStack: ItemStack) {
         if (NbtUtils.isCraftItemStack(itemStack)) {
             if (MOJANG_MOTHER_DEAD) {
-                HookerManager.nmsHooker.editNameAndLoreAfterMojangMotherDead(itemStack, this::parse)
+                NbtUtils.editNameAndLoreAfterV21(itemStack, this::parse)
             } else {
                 val nbt = itemStack.getNbtOrNull() ?: return
                 val display = nbt.getCompound("display") ?: return

@@ -17,21 +17,24 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.config.ConfigReader;
-import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public class NMSHooker {
+    /**
+     * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
+     */
+    protected final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
     protected final Map<Material, NamespacedKey> materialNamespacedKeys = loadNamespacedKeys();
 
     protected Map<Material, NamespacedKey> loadNamespacedKeys() {
@@ -174,9 +177,6 @@ public class NMSHooker {
         player.giveExp(exp);
     }
 
-    public void editNameAndLoreAfterMojangMotherDead(@NotNull ItemStack itemStack, BiFunction<ItemStack, String, ItemPlaceholder.ParseResult> handler) {
-    }
-
     protected org.bukkit.NamespacedKey parseToNamespacedKey(String id) {
         String[] args = new String[]{"minecraft", id};
         int index = id.indexOf(":");
@@ -216,13 +216,25 @@ public class NMSHooker {
         if (itemStack == null || itemStack.getType() == Material.AIR) return null;
         ConfigurationSection result = new YamlConfiguration();
         result.set("material", itemStack.getType().toString());
-        short damage = ItemUtils.getDamage(itemStack);
-        if (damage > 0) {
-            result.set("damage", damage);
-        }
-
         NbtCompound nbt = ItemUtils.getNbtOrNull(itemStack);
-        if (nbt != null) {
+
+        if (MOJANG_MOTHER_DEAD) {
+            if (nbt != null && !nbt.isEmpty()) {
+                result.set("nbt", ItemUtils.toStringMap(nbt));
+            }
+
+            NbtCompound components = NbtUtils.getDisplayNbt(itemStack);
+            components.remove("minecraft:custom_data");
+            if (!components.isEmpty()) {
+                result.set("components", ItemUtils.toStringMap(components));
+            }
+        } else {
+            short damage = ItemUtils.getDamage(itemStack);
+            if (damage > 0) {
+                result.set("damage", damage);
+            }
+
+            if (nbt == null) return result;
             nbt = nbt.clone();
 
             NbtCompound display = nbt.getCompound(NbtUtils.getDisplayNbtKey());

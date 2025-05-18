@@ -12,6 +12,9 @@ public final class RefDataComponents {
     @HandleBy(reference = "Lnet/minecraft/core/component/DataComponents;CUSTOM_NAME:Lnet/minecraft/core/component/DataComponentType;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public static final RefDataComponentType<RefComponent> CUSTOM_NAME = null;
 
+    @HandleBy(reference = "Lnet/minecraft/core/component/DataComponents;LORE:Lnet/minecraft/core/component/DataComponentType;", predicates = "craftbukkit_version:[v1_20_R4,)")
+    public static final RefDataComponentType<RefItemLore> LORE = null;
+
     @HandleBy(reference = "Lnet/minecraft/core/component/DataComponents;ITEM_NAME:Lnet/minecraft/core/component/DataComponentType;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public static final RefDataComponentType<RefComponent> ITEM_NAME = null;
 
