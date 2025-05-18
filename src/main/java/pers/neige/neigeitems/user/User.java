@@ -106,7 +106,7 @@ public class User {
     /**
      * 返回剩余冷却时间.
      *
-     * @param key      冷却组ID
+     * @param key 冷却组ID
      * @return 剩余冷却时间
      */
     public long getCooldown(@NotNull String key) {

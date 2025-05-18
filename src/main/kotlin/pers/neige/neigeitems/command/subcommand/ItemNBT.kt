@@ -10,7 +10,6 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import pers.neige.neigeitems.command.CommandUtils.literal
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
-import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.append
 import pers.neige.neigeitems.manager.HookerManager.hoverText
 import pers.neige.neigeitems.manager.HookerManager.suggestCommand
@@ -42,7 +41,7 @@ object ItemNBT {
 
     private fun itemNBTCommand(sender: Player, itemStack: ItemStack) {
         if (itemStack.type == Material.AIR) return
-        val components = HookerManager.nmsHooker.getDisplayNbt(itemStack).format().create()
+        val components = NbtUtils.getDisplayNbt(itemStack).format().create()
         var temp = TextComponent()
         var length = 0
         // 我这么搞不是闲得蛋疼, 我知道 Player.Spigot#sendMessage 可以直接传数组

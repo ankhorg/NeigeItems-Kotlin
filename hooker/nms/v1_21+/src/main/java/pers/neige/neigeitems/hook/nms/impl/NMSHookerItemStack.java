@@ -1,12 +1,7 @@
 package pers.neige.neigeitems.hook.nms.impl;
 
-import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.component.TypedDataComponent;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.component.ItemLore;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -23,13 +18,10 @@ import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.item.builder.NewItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
 import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiFunction;
 
 /**
@@ -121,19 +113,6 @@ public class NMSHookerItemStack extends NMSHooker {
     }
 
     @Override
-    @NotNull
-    public NbtCompound getDisplayNbt(@NotNull ItemStack itemStack) {
-        net.minecraft.world.item.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemStack);
-        CompoundTag compound = new CompoundTag();
-        for (Map.Entry<DataComponentType<?>, Optional<?>> entry : nmsItemStack.getComponentsPatch().entrySet()) {
-            TypedDataComponent<?> component = TypedDataComponent.createUnchecked(entry.getKey(), entry.getValue().get());
-            ResourceLocation key = (ResourceLocation) ComponentUtils.getKeyByType(component.type());
-            compound.put(key.toString(), component.encodeValue(NewItemBuilder.registryOps).getOrThrow());
-        }
-        return NbtCompound.Unsafe.of(compound);
-    }
-
-    @Override
     @Nullable
     public ConfigurationSection save(@Nullable ItemStack itemStack) {
         if (itemStack == null || itemStack.getType() == Material.AIR) return null;
@@ -145,30 +124,12 @@ public class NMSHookerItemStack extends NMSHooker {
             result.set("nbt", ItemUtils.toStringMap(nbt));
         }
 
-        NbtCompound components = getDisplayNbt(itemStack);
+        NbtCompound components = NbtUtils.getDisplayNbt(itemStack);
         components.remove("minecraft:custom_data");
         if (!components.isEmpty()) {
             result.set("components", ItemUtils.toStringMap(components));
         }
 
         return result;
-    }
-
-    @Override
-    public void overrideComponent(@NotNull ItemStack receiver, @NotNull ItemStack provider, @NotNull List<String> components) {
-        CraftItemStack receiverCraft = receiver instanceof CraftItemStack ? (CraftItemStack) receiver : (CraftItemStack) NbtUtils.getCraftDelegate(receiver);
-        if (receiverCraft == null) return;
-        CraftItemStack providerCraft = provider instanceof CraftItemStack ? (CraftItemStack) provider : (CraftItemStack) NbtUtils.getCraftDelegate(provider);
-        if (providerCraft == null) return;
-        net.minecraft.world.item.ItemStack receiverNms = receiverCraft.handle;
-        net.minecraft.world.item.ItemStack providerNms = providerCraft.handle;
-        DataComponentPatch patch = providerNms.getComponentsPatch();
-        components.forEach(componentId -> {
-            DataComponentType<?> componentType = (DataComponentType<?>) ComponentUtils.getDataComponentType(componentId);
-            if (componentType == null) return;
-            Optional<?> optional = patch.get(componentType);
-            Object component = optional == null ? null : optional.orElse(null);
-            receiverNms.set((DataComponentType<? super Object>) componentType, component);
-        });
     }
 }

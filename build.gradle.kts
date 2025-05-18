@@ -153,7 +153,7 @@ tasks {
         relocate("org.inksnow.cputil", "pers.neige.neigeitems.libs.cputil")
         relocate("org.slf4j", "pers.neige.neigeitems.libs.slf4j")
         // brigadier
-        relocate("com.mojang.", "pers.neige.neigeitems.libs.com.mojang.")
+        relocate("com.mojang.brigadier.", "pers.neige.neigeitems.libs.com.mojang.brigadier.")
         // snakeyaml
         relocate("org.yaml.snakeyaml", "pers.neige.neigeitems.libs.snakeyaml")
     }

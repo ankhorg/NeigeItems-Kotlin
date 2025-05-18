@@ -19,6 +19,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUti
 import pers.neige.neigeitems.manager.HookerManager.getHookedItem
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SchedulerUtils.callSyncMethod
 import pers.neige.neigeitems.utils.SectionUtils.parseSection

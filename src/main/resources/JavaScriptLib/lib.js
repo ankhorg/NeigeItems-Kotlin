@@ -966,7 +966,7 @@ const getDefenderMobId = function () {
  * @param cooldown 冷却刷新时间
  * @return long 剩余冷却时间
  */
-const checkCooldown = function(key, cooldown) {
+const checkCooldown = function (key, cooldown) {
     return PlayerUtils.checkCooldown(player, key, cooldown)
 }
 
@@ -976,7 +976,7 @@ const checkCooldown = function(key, cooldown) {
  * @param key      冷却组ID
  * @return long 剩余冷却时间
  */
-const getCooldown = function(key) {
+const getCooldown = function (key) {
     return PlayerUtils.getCooldown(player, key)
 }
 
@@ -986,6 +986,6 @@ const getCooldown = function(key) {
  * @param key      冷却组ID
  * @param cooldown 冷却刷新时间
  */
-const setCooldown = function(key, cooldown) {
+const setCooldown = function (key, cooldown) {
     PlayerUtils.setCooldown(player, key, cooldown)
 }

@@ -11,7 +11,8 @@ import pers.neige.neigeitems.command.CommandUtils.argument
 import pers.neige.neigeitems.command.CommandUtils.literal
 import pers.neige.neigeitems.command.arguments.FunctionArgumentType.function
 import pers.neige.neigeitems.command.arguments.FunctionArgumentType.getFunctionSelector
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.*
+import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayer
+import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
 import pers.neige.neigeitems.command.selector.FunctionSelector
 import pers.neige.neigeitems.command.selector.PlayerSelector
 import pers.neige.neigeitems.utils.LangUtils.sendLang

@@ -177,17 +177,6 @@ public class NMSHooker {
     public void editNameAndLoreAfterMojangMotherDead(@NotNull ItemStack itemStack, BiFunction<ItemStack, String, ItemPlaceholder.ParseResult> handler) {
     }
 
-    /**
-     * 获取用于/ni itemnbt 指令的展示用NBT.
-     *
-     * @param itemStack 待获取物品.
-     * @return 展示用NBT
-     */
-    @NotNull
-    public NbtCompound getDisplayNbt(@NotNull ItemStack itemStack) {
-        return ItemUtils.getNbt(itemStack);
-    }
-
     protected org.bukkit.NamespacedKey parseToNamespacedKey(String id) {
         String[] args = new String[]{"minecraft", id};
         int index = id.indexOf(":");
@@ -311,15 +300,5 @@ public class NMSHooker {
             }
         }
         return result;
-    }
-
-    /**
-     * 1.21+版本, 根据组件ID覆盖指定组件.
-     *
-     * @param receiver   组件接收者.
-     * @param provider   组件提供者.
-     * @param components 需要覆盖的组件.
-     */
-    public void overrideComponent(@NotNull ItemStack receiver, @NotNull ItemStack provider, @NotNull List<String> components) {
     }
 }

@@ -28,9 +28,9 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
     protected final @NotNull BiFunction<K, R, V> converter;
     protected final @NotNull String elementName;
     protected final @NotNull String directory;
-    protected boolean notNullConfig = true;
     protected final @NotNull ConcurrentHashMap<String, FileConfig> fileConfigs = new ConcurrentHashMap<>();
     protected final @NotNull ConcurrentHashMap<K, RawConfig<R>> rawConfigs = new ConcurrentHashMap<>();
+    protected boolean notNullConfig = true;
 
     public AbstractConfigManager(
             @NotNull JavaPlugin plugin,

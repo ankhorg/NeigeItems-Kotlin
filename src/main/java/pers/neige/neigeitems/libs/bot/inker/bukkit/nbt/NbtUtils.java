@@ -7,12 +7,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
+import pers.neige.neigeitems.ref.RefMinecraftKey;
+import pers.neige.neigeitems.ref.core.component.RefDataComponentType;
+import pers.neige.neigeitems.ref.core.component.RefTypedDataComponent;
 import pers.neige.neigeitems.ref.nbt.*;
+import pers.neige.neigeitems.ref.resources.RefRegistryOps;
+import pers.neige.neigeitems.ref.server.RefMinecraftServer;
 
 import java.io.*;
 import java.util.Map;
+import java.util.Optional;
 
 public class NbtUtils {
+    public static final RefRegistryOps<RefNbtBase> registryOps;
     /**
      * 1.16.2+ 版本起, NbtIo#readCompressed 及 NbtIo#writeCompressed 方法支持使用 File 作为参数.
      */
@@ -29,6 +37,14 @@ public class NbtUtils {
      * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
      */
     private final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
+
+    static {
+        if (MOJANG_MOTHER_DEAD) {
+            registryOps = RefMinecraftServer.getServer().registryAccess().createSerializationContext(RefNbtOps.INSTANCE);
+        } else {
+            registryOps = null;
+        }
+    }
 
     /**
      * 获取物品NBT, 如果物品没有NBT就创建一个空NBT, 设置并返回.
@@ -524,5 +540,27 @@ public class NbtUtils {
     public static @Nullable ItemStack getCraftDelegate(@NotNull ItemStack itemStack) {
         if (!MOJANG_MOTHER_DEAD) return null;
         return ((RefBukkitItemStack) (Object) itemStack).craftDelegate;
+    }
+
+    /**
+     * 获取展示用NBT.
+     *
+     * @param itemStack 待获取物品.
+     * @return 展示用NBT
+     */
+    @NotNull
+    public static NbtCompound getDisplayNbt(@NotNull ItemStack itemStack) {
+        if (MOJANG_MOTHER_DEAD) {
+            RefNmsItemStack nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
+            RefNbtTagCompound compound = new RefNbtTagCompound();
+            for (Map.Entry<RefDataComponentType<?>, Optional<?>> entry : nmsItemStack.getComponentsPatch().entrySet()) {
+                RefTypedDataComponent<?> component = RefTypedDataComponent.createUnchecked(entry.getKey(), entry.getValue().get());
+                RefMinecraftKey key = (RefMinecraftKey) ComponentUtils.getKeyByType(component.type());
+                compound.set1(key.toString(), component.encodeValue(registryOps).getOrThrow());
+            }
+            return new NbtCompound(compound);
+        } else {
+            return new NbtItemStack(itemStack).getOrCreateTag();
+        }
     }
 }

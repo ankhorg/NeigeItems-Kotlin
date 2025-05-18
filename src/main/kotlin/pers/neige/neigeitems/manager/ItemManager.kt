@@ -13,6 +13,7 @@ import pers.neige.neigeitems.item.ItemGenerator
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.nmsHooker
 import pers.neige.neigeitems.utils.ConfigUtils.clone
@@ -687,7 +688,7 @@ object ItemManager : ItemConfigManager() {
         }
         // 修复保护组件
         if (item.protectComponents.isNotEmpty()) {
-            nmsHooker.overrideComponent(newItemStack, itemStack, item.protectComponents)
+            ComponentUtils.overrideComponent(newItemStack, itemStack, item.protectComponents)
         }
         // 将新物品的组件覆盖至原物品
         NbtUtils.setComponents(itemStack, newItemStack)
