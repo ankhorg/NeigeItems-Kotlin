@@ -92,6 +92,7 @@ pers.neige.neigeitems.ref.block
 pers.neige.neigeitems.ref.block.sign
 pers.neige.neigeitems.ref.block.spawner
 pers.neige.neigeitems.ref.chat
+pers.neige.neigeitems.ref.core
 pers.neige.neigeitems.ref.core.component
 pers.neige.neigeitems.ref.damagesource
 pers.neige.neigeitems.ref.enchantment
@@ -106,7 +107,9 @@ pers.neige.neigeitems.ref.nbt
 pers.neige.neigeitems.ref.network
 pers.neige.neigeitems.ref.network.syncher
 pers.neige.neigeitems.ref.registry
+pers.neige.neigeitems.ref.resources
 pers.neige.neigeitems.ref.scores
+pers.neige.neigeitems.ref.serialization
 pers.neige.neigeitems.ref.server
 pers.neige.neigeitems.ref.server.level
 pers.neige.neigeitems.ref.server.players
