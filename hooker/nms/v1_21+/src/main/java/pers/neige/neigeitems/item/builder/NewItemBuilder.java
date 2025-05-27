@@ -1,6 +1,5 @@
 package pers.neige.neigeitems.item.builder;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.DataResult;
 import io.papermc.paper.adventure.PaperAdventure;
 import kotlin.text.StringsKt;
@@ -87,7 +86,7 @@ public class NewItemBuilder extends ItemBuilder {
             @NotNull DataComponentPatch.Builder builder,
             @NotNull DataComponentType<T> type,
             @NotNull Object value
-    ) throws CommandSyntaxException {
+    ) throws IllegalStateException {
         Tag tag = (Tag) Nbt.Unsafe.getDelegate(ItemUtils.toNbt(value));
         DataResult<T> result = type.codecOrThrow().parse(registryOps, tag);
         builder.set(type, result.getOrThrow());
@@ -231,7 +230,7 @@ public class NewItemBuilder extends ItemBuilder {
                             }
                             try {
                                 loadComponent(builder, type, componentValue);
-                            } catch (CommandSyntaxException e) {
+                            } catch (IllegalStateException e) {
                                 NeigeItems.getInstance().getLogger().log(Level.WARNING, "Invalid component value: " + componentValue, e);
                             }
                         }

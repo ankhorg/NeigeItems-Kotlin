@@ -13,7 +13,7 @@ public class ServerUtils {
         try {
             Class.forName(className);
             return true;
-        } catch (ClassNotFoundException var2) {
+        } catch (ClassNotFoundException | NoClassDefFoundError var2) {
             return false;
         }
     }
