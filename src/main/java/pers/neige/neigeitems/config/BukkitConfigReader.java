@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class BukkitConfigReader implements ConfigReader {
@@ -98,6 +99,11 @@ public class BukkitConfigReader implements ConfigReader {
     @Override
     public List<String> getStringList(@NotNull String key) {
         return handle.getStringList(key);
+    }
+
+    @Override
+    public List<Map<?, ?>> getMapList(@NotNull String key) {
+        return handle.getMapList(key);
     }
 
     @Override

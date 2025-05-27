@@ -76,5 +76,7 @@ public interface ConfigReader {
 
     List<String> getStringList(@NotNull String key);
 
+    List<Map<?, ?>> getMapList(@NotNull String key);
+
     ConfigReader getConfig(@NotNull String key);
 }

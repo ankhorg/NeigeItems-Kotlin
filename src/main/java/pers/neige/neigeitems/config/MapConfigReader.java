@@ -163,6 +163,21 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
+    public List<Map<?, ?>> getMapList(@NotNull String key) {
+        Object value = get(key);
+        if (value instanceof List<?>) {
+            List<Map<?, ?>> result = new ArrayList<>();
+            for (Object object : ((List<?>) value)) {
+                if (!(object instanceof Map)) continue;
+                result.add((Map<?, ?>) object);
+            }
+            return result;
+        } else {
+            return new ArrayList<>(0);
+        }
+    }
+
+    @Override
     public ConfigReader getConfig(@NotNull String key) {
         Object value = get(key);
         return value instanceof Map<?, ?> ? new MapConfigReader((Map<?, ?>) value) : null;
