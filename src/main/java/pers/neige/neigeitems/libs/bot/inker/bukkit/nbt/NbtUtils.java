@@ -31,7 +31,7 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 public class NbtUtils {
-    public static final RefRegistryOps<RefNbtBase> registryOps;
+    public static final Object registryOps;
     /**
      * 1.16.2+ 版本起, NbtIo#readCompressed 及 NbtIo#writeCompressed 方法支持使用 File 作为参数.
      */
@@ -560,6 +560,7 @@ public class NbtUtils {
      * @return 展示用NBT
      */
     @NotNull
+    @SuppressWarnings("unchecked")
     public static NbtCompound getDisplayNbt(@NotNull ItemStack itemStack) {
         if (MOJANG_MOTHER_DEAD) {
             RefNmsItemStack nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
@@ -567,7 +568,7 @@ public class NbtUtils {
             for (Map.Entry<RefDataComponentType<?>, Optional<?>> entry : nmsItemStack.getComponentsPatch().entrySet()) {
                 RefTypedDataComponent<?> component = RefTypedDataComponent.createUnchecked(entry.getKey(), entry.getValue().get());
                 RefMinecraftKey key = (RefMinecraftKey) ComponentUtils.getKeyByType(component.type());
-                compound.set1(key.toString(), component.encodeValue(registryOps).getOrThrow());
+                compound.set1(key.toString(), component.encodeValue((RefRegistryOps<RefNbtBase>) registryOps).getOrThrow());
             }
             return new NbtCompound(compound);
         } else {

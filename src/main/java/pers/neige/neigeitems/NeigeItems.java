@@ -106,6 +106,7 @@ public class NeigeItems extends JavaPlugin {
 
         boolean safe = checkMagicUtils("DamageEventUtils");
 
+        if (!checkMagicUtils("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt", "NbtUtils")) safe = false;
         if (!checkMagicUtils("EnchantmentUtils")) safe = false;
         if (!checkMagicUtils("EntityItemUtils")) safe = false;
         if (!checkMagicUtils("EntityPlayerUtils")) safe = false;
@@ -146,9 +147,13 @@ public class NeigeItems extends JavaPlugin {
         }
     }
 
-    private boolean checkMagicUtils(String className) {
+    private static boolean checkMagicUtils(String className) {
+        return checkMagicUtils("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils", className);
+    }
+
+    private static boolean checkMagicUtils(String packageName, String className) {
         try {
-            Class.forName("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils." + className);
+            Class.forName(packageName + "." + className);
             return true;
         } catch (Throwable error) {
             logger.warn("{} 类未正常加载, 这可能造成不可预知的错误, 请联系作者修复", className);
