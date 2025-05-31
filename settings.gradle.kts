@@ -3,7 +3,7 @@ rootProject.name = "NeigeItems"
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        maven("https://r.irepo.space/maven/") {
+        maven("https://s0.blobs.irepo.space/maven/") {
             content { includeGroupByRegex("^org\\.inksnow(\\..+|)\$") }
         }
         maven("https://repo.papermc.io/repository/maven-public/")

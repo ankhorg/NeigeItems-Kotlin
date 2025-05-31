@@ -52,7 +52,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
             if (craftItemStack == null) {
                 return new NbtBukkitItemComponent(itemStack);
             } else {
-                return new NbtCraftItemComponent(craftItemStack);
+                return new NbtCompound(NbtUtils.getOrCreateTag(craftItemStack.handle));
             }
         }
     }
