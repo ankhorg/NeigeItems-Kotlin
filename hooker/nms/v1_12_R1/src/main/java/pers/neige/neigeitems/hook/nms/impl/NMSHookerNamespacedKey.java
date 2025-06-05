@@ -9,7 +9,7 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.hook.nms.NamespacedKey;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
@@ -60,8 +60,7 @@ public class NMSHookerNamespacedKey extends NMSHookerCustomModelData {
     }
 
     @Override
-    @Nullable
-    public Material getMaterial(@Nullable String material) {
+    public @Nullable Material getMaterial(@Nullable String material) {
         if (material == null) return null;
         Material result = Material.getMaterial(material.toUpperCase(Locale.ENGLISH));
         if (result != null) return result;
@@ -71,7 +70,7 @@ public class NMSHookerNamespacedKey extends NMSHookerCustomModelData {
     }
 
     @Override
-    public void giveExp(@NotNull Player player, int exp) {
+    public void giveExp(@NonNull Player player, int exp) {
         EntityPlayer realPlayer = ((CraftPlayer) player).getHandle();
         realPlayer.addScore(exp);
         realPlayer.exp += (float) exp / (float) realPlayer.getExpToLevel();
@@ -96,8 +95,7 @@ public class NMSHookerNamespacedKey extends NMSHookerCustomModelData {
     }
 
     @Override
-    @NotNull
-    protected Map<Enchantment, Integer> buildEnchantments(@NotNull NbtList ench) {
+    protected @NonNull Map<Enchantment, Integer> buildEnchantments(@NonNull NbtList ench) {
         Map<Enchantment, Integer> enchantments = new LinkedHashMap<>(ench.size());
 
         for (Nbt<?> nbt : ench) {

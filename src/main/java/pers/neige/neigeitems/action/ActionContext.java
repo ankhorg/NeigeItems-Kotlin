@@ -1,10 +1,11 @@
 package pers.neige.neigeitems.action;
 
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 
@@ -14,22 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ActionContext implements Cloneable {
-    @NotNull
-    private final Bindings basicBindings;
-    @Nullable
-    private final Player player;
-    @NotNull
-    private final Map<String, Object> global;
-    @Nullable
-    private final Map<String, Object> params;
-    @Nullable
-    private final ItemStack itemStack;
-    @Nullable
-    private final NbtCompound nbt;
-    @Nullable
-    private final Map<String, String> data;
-    @Nullable
-    private final Event event;
+    private final @NonNull Bindings basicBindings;
+    private final @Nullable Player player;
+    private final @NonNull Map<String, Object> global;
+    private final @Nullable Map<String, Object> params;
+    private final @Nullable ItemStack itemStack;
+    private final @Nullable NbtCompound nbt;
+    private final @Nullable Map<String, String> data;
+    private final @Nullable Event event;
     private boolean sync = Bukkit.isPrimaryThread();
 
     public ActionContext() {
@@ -94,15 +87,14 @@ public class ActionContext implements Cloneable {
     /**
      * 返回一个空空荡荡的 ActionContext.
      */
-    @NotNull
-    public static ActionContext empty() {
+    public static @NonNull ActionContext empty() {
         return new ActionContext();
     }
 
     @Override
     public ActionContext clone() {
         try {
-            ActionContext result = (ActionContext) super.clone();
+            val result = (ActionContext) super.clone();
             result.setSync(Bukkit.isPrimaryThread());
             return result;
         } catch (CloneNotSupportedException e) {
@@ -113,9 +105,8 @@ public class ActionContext implements Cloneable {
     /**
      * 根据当前内容构建一个用于传入 js 的 Bindings.
      */
-    @NotNull
-    private Bindings toBindings() {
-        Bindings bindings = new SimpleBindings();
+    private @NonNull Bindings toBindings() {
+        val bindings = new SimpleBindings();
         if (params != null) {
             bindings.putAll(params);
         }
@@ -155,10 +146,9 @@ public class ActionContext implements Cloneable {
     /**
      * 获取用于传入 js 的 Bindings.
      */
-    @NotNull
-    public Bindings getBindings() {
-        Bindings bindings = new SimpleBindings();
-        Map<String, Object> vars = new HashMap<>();
+    public @NonNull Bindings getBindings() {
+        val bindings = new SimpleBindings();
+        val vars = new HashMap<String, Object>();
         bindings.put("variables", vars);
         bindings.put("vars", vars);
         bindings.putAll(basicBindings);
@@ -168,56 +158,49 @@ public class ActionContext implements Cloneable {
     /**
      * 获取触发动作的玩家.
      */
-    @Nullable
-    public Player getPlayer() {
+    public @Nullable Player getPlayer() {
         return player;
     }
 
     /**
      * 获取 js 动作及 condition 中调用的名为 global 的 Map.
      */
-    @NotNull
-    public Map<String, Object> getGlobal() {
+    public @NonNull Map<String, Object> getGlobal() {
         return global;
     }
 
     /**
      * 获取准备放入 js 中的变量.
      */
-    @Nullable
-    public Map<String, Object> getParams() {
+    public @Nullable Map<String, Object> getParams() {
         return params;
     }
 
     /**
      * 获取触发动作的物品.
      */
-    @Nullable
-    public ItemStack getItemStack() {
+    public @Nullable ItemStack getItemStack() {
         return itemStack;
     }
 
     /**
      * 获取触发动作物品的 NBT.
      */
-    @Nullable
-    public NbtCompound getNbt() {
+    public @Nullable NbtCompound getNbt() {
         return nbt;
     }
 
     /**
      * 获取触发动作物品的 NeigeItems 节点信息.
      */
-    @Nullable
-    public Map<String, String> getData() {
+    public @Nullable Map<String, String> getData() {
         return data;
     }
 
     /**
      * 获取触发动作的事件.
      */
-    @Nullable
-    public Event getEvent() {
+    public @Nullable Event getEvent() {
         return event;
     }
 

@@ -2,6 +2,7 @@ package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
 import com.google.common.base.Preconditions;
 import io.netty.channel.Channel;
+import lombok.NonNull;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
@@ -11,7 +12,6 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.EnumHand;
@@ -115,8 +115,8 @@ public class EntityPlayerUtils {
      * @param entity 防御者.
      */
     public static void attack(
-            @NotNull Player player,
-            @NotNull Entity entity
+            @NonNull Player player,
+            @NonNull Entity entity
     ) {
         if (player instanceof RefCraftPlayer) {
             RefEntityPlayer attacker = ((RefCraftPlayer) player).getHandle();
@@ -133,7 +133,7 @@ public class EntityPlayerUtils {
      * @param entity 待获取实体.
      */
     public static float getAttackCooldown(
-            @NotNull HumanEntity entity
+            @NonNull HumanEntity entity
     ) {
         if (ATTACK_COOLDOWN_SUPPORT) {
             return entity.getAttackCooldown();
@@ -148,7 +148,7 @@ public class EntityPlayerUtils {
      * @param entity 待获取实体.
      */
     public static float getAttackCooldown(
-            @NotNull LivingEntity entity
+            @NonNull LivingEntity entity
     ) {
         if (entity instanceof RefCraftLivingEntity) {
             RefEntityLiving livingEntity = ((RefCraftLivingEntity) entity).getHandle();
@@ -173,7 +173,7 @@ public class EntityPlayerUtils {
      * @param attackCooldown 攻击冷却.
      */
     public static void setAttackCooldown(
-            @NotNull LivingEntity entity,
+            @NonNull LivingEntity entity,
             float attackCooldown
     ) {
         if (entity instanceof RefCraftLivingEntity) {
@@ -195,7 +195,7 @@ public class EntityPlayerUtils {
      * @param entity 待获取实体.
      */
     public static int getAttackStrengthTicker(
-            @NotNull LivingEntity entity
+            @NonNull LivingEntity entity
     ) {
         if (entity instanceof RefCraftLivingEntity) {
             RefEntityLiving livingEntity = ((RefCraftLivingEntity) entity).getHandle();
@@ -211,7 +211,7 @@ public class EntityPlayerUtils {
      * @param attackStrengthTicker 实体距上次攻击行为的时间(tick).
      */
     public static void setAttackStrengthTicker(
-            @NotNull LivingEntity entity,
+            @NonNull LivingEntity entity,
             int attackStrengthTicker
     ) {
         if (entity instanceof RefCraftLivingEntity) {
@@ -227,8 +227,8 @@ public class EntityPlayerUtils {
      * @param hand   待使用物品槽位.
      */
     public static void useItem(
-            @NotNull Player player,
-            @NotNull EnumHand hand
+            @NonNull Player player,
+            @NonNull EnumHand hand
     ) {
         if (player instanceof RefCraftPlayer) {
             RefEntityPlayer entityPlayer = ((RefCraftPlayer) player).getHandle();
@@ -246,8 +246,8 @@ public class EntityPlayerUtils {
      * @param hand   待摆动手臂.
      */
     public static void swing(
-            @NotNull Player player,
-            @NotNull EnumHand hand
+            @NonNull Player player,
+            @NonNull EnumHand hand
     ) {
         swing(player, hand, true);
     }
@@ -260,8 +260,8 @@ public class EntityPlayerUtils {
      * @param fromServerPlayer 本人是否可见摆动动作.
      */
     public static void swing(
-            @NotNull Player player,
-            @NotNull EnumHand hand,
+            @NonNull Player player,
+            @NonNull EnumHand hand,
             boolean fromServerPlayer
     ) {
         if (player instanceof RefCraftPlayer) {
@@ -278,8 +278,8 @@ public class EntityPlayerUtils {
      * @param type   动画类型.
      */
     public static void sendAnimationPacket(
-            @NotNull Player player,
-            @NotNull AnimationType type
+            @NonNull Player player,
+            @NonNull AnimationType type
     ) {
         if (player instanceof RefCraftPlayer) {
             RefEntityPlayer entityPlayer = ((RefCraftPlayer) player).getHandle();
@@ -295,7 +295,7 @@ public class EntityPlayerUtils {
      * @return 是否破坏成功
      */
     public static boolean breakBlock(
-            @NotNull Player player,
+            @NonNull Player player,
             Block block
     ) {
         Preconditions.checkArgument(block != null, "Block cannot be null");
@@ -313,7 +313,7 @@ public class EntityPlayerUtils {
      * @return 是否破坏成功
      */
     public static boolean breakBlock(
-            @NotNull Player player,
+            @NonNull Player player,
             int x,
             int y,
             int z
@@ -331,7 +331,7 @@ public class EntityPlayerUtils {
      * @param player 待获取玩家.
      */
     public static float getAbsorptionAmount(
-            @NotNull Player player
+            @NonNull Player player
     ) {
         if (player instanceof RefCraftPlayer) {
             return ((RefCraftPlayer) player).getHandle().getAbsorptionAmount();
@@ -346,7 +346,7 @@ public class EntityPlayerUtils {
      * @param amount 伤害吸收数值.
      */
     public static void setAbsorptionAmount(
-            @NotNull Player player,
+            @NonNull Player player,
             float amount
     ) {
         if (player instanceof RefCraftPlayer) {
@@ -360,7 +360,7 @@ public class EntityPlayerUtils {
      * @param humanEntity 待操作实体.
      */
     public static void jumpFromGround(
-            @NotNull HumanEntity humanEntity
+            @NonNull HumanEntity humanEntity
     ) {
         if (humanEntity.isOnGround() && humanEntity instanceof RefCraftHumanEntity) {
             ((RefCraftHumanEntity) humanEntity).getHandle().jumpFromGround();
@@ -373,7 +373,7 @@ public class EntityPlayerUtils {
      * @param entity 待操作实体.
      */
     public static void jumpFromGround(
-            @NotNull LivingEntity entity
+            @NonNull LivingEntity entity
     ) {
         if (entity.isOnGround() && entity instanceof RefCraftLivingEntity) {
             ((RefCraftLivingEntity) entity).getHandle().jumpFromGround();
@@ -388,7 +388,7 @@ public class EntityPlayerUtils {
      * @param pitch  实体俯仰角.
      */
     public static void setRotation(
-            @NotNull Player player,
+            @NonNull Player player,
             float yaw,
             float pitch
     ) {
@@ -414,8 +414,8 @@ public class EntityPlayerUtils {
      * @param target 目标坐标.
      */
     public static void lookAt(
-            @NotNull Player player,
-            @NotNull Location target
+            @NonNull Player player,
+            @NonNull Location target
     ) {
         lookAt(player, target.getX(), target.getY(), target.getZ());
     }
@@ -429,7 +429,7 @@ public class EntityPlayerUtils {
      * @param z      目标 z 坐标.
      */
     public static void lookAt(
-            @NotNull Player player,
+            @NonNull Player player,
             double x,
             double y,
             double z
@@ -449,9 +449,8 @@ public class EntityPlayerUtils {
      * @param player 待操作玩家.
      * @return 玩家对应的 Channel.
      */
-    @Nullable
-    public static Channel getChannel(
-            @NotNull Player player
+    public static @Nullable Channel getChannel(
+            @NonNull Player player
     ) {
         if (player instanceof RefCraftPlayer) {
             return ((RefCraftPlayer) player).getHandle().playerConnection.networkManager.channel;
@@ -465,7 +464,7 @@ public class EntityPlayerUtils {
      * @param player 待操作玩家.
      */
     public static void openSign(
-            @NotNull Player player
+            @NonNull Player player
     ) {
         if (player instanceof RefCraftPlayer) {
             RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
@@ -492,7 +491,7 @@ public class EntityPlayerUtils {
      * @param subtitle Subtitle.
      */
     public static void sendTitle(
-            @NotNull Player player,
+            @NonNull Player player,
             @Nullable BaseComponent title,
             @Nullable BaseComponent subtitle
     ) {
@@ -510,7 +509,7 @@ public class EntityPlayerUtils {
      * @param fadeOut  渐出时间(tick).
      */
     public static void sendTitle(
-            @NotNull Player player,
+            @NonNull Player player,
             @Nullable BaseComponent title,
             @Nullable BaseComponent subtitle,
             int fadeIn,
@@ -528,7 +527,7 @@ public class EntityPlayerUtils {
      * @param jsonSubtitle Subtitle.
      */
     public static void sendTitle(
-            @NotNull Player player,
+            @NonNull Player player,
             @Nullable String jsonTitle,
             @Nullable String jsonSubtitle
     ) {
@@ -546,7 +545,7 @@ public class EntityPlayerUtils {
      * @param fadeOut      渐出时间(tick).
      */
     public static void sendTitle(
-            @NotNull Player player,
+            @NonNull Player player,
             @Nullable String jsonTitle,
             @Nullable String jsonSubtitle,
             int fadeIn,
@@ -588,9 +587,9 @@ public class EntityPlayerUtils {
      * @param player   待接收玩家.
      */
     public static Entity sendFakeEntity(
-            @NotNull Location location,
-            @NotNull EntityType type,
-            @NotNull Player player
+            @NonNull Location location,
+            @NonNull EntityType type,
+            @NonNull Player player
     ) {
         return sendFakeEntity(location, type, true, null, player);
     }
@@ -604,10 +603,10 @@ public class EntityPlayerUtils {
      * @param player        待接收玩家.
      */
     public static Entity sendFakeEntity(
-            @NotNull Location location,
-            @NotNull EntityType type,
+            @NonNull Location location,
+            @NonNull EntityType type,
             boolean randomizeData,
-            @NotNull Player player
+            @NonNull Player player
     ) {
         return sendFakeEntity(location, type, randomizeData, null, player);
     }
@@ -622,13 +621,12 @@ public class EntityPlayerUtils {
      * @param player        待接收玩家.
      * @return 生成的实体.
      */
-    @Nullable
-    public static Entity sendFakeEntity(
-            @NotNull Location location,
-            @NotNull EntityType type,
+    public static @Nullable Entity sendFakeEntity(
+            @NonNull Location location,
+            @NonNull EntityType type,
             boolean randomizeData,
             @Nullable Consumer<Entity> function,
-            @NotNull Player player
+            @NonNull Player player
     ) {
         RefEntity entity = WorldUtils.createNmsEntity(location, type, randomizeData);
         if (entity == null) return null;
@@ -658,10 +656,9 @@ public class EntityPlayerUtils {
      * @param player 待接收玩家.
      * @return 生成的实体.
      */
-    @NotNull
-    public static Entity sendFakeEntity(
-            @NotNull Entity entity,
-            @NotNull Player player
+    public static @NonNull Entity sendFakeEntity(
+            @NonNull Entity entity,
+            @NonNull Player player
     ) {
         if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -684,8 +681,8 @@ public class EntityPlayerUtils {
      * @param player 待接收玩家.
      */
     public static void refreshFakeEntity(
-            @NotNull Entity entity,
-            @NotNull Player player
+            @NonNull Entity entity,
+            @NonNull Player player
     ) {
         if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -713,8 +710,8 @@ public class EntityPlayerUtils {
      * @param player 待接收玩家.
      */
     public static void removeFakeEntity(
-            @NotNull Entity entity,
-            @NotNull Player player
+            @NonNull Entity entity,
+            @NonNull Player player
     ) {
         if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -735,8 +732,8 @@ public class EntityPlayerUtils {
      * @param onGround 实体在不在地上
      */
     public static void sendFakeEntityLookRaw(
-            @NotNull Entity entity,
-            @NotNull Player player,
+            @NonNull Entity entity,
+            @NonNull Player player,
             float yaw,
             float pitch,
             boolean onGround
@@ -755,8 +752,8 @@ public class EntityPlayerUtils {
      * @param xRot   (byte) ((pitch*256.0)/360.0).
      */
     public static void sendFakeEntityLook(
-            @NotNull Entity entity,
-            @NotNull Player player,
+            @NonNull Entity entity,
+            @NonNull Player player,
             byte yRot,
             byte xRot,
             boolean onGround
@@ -781,8 +778,8 @@ public class EntityPlayerUtils {
      * @param onGround 实体在不在地上
      */
     public static void sendFakeEntityRelMoveRaw(
-            @NotNull Entity entity,
-            @NotNull Player player,
+            @NonNull Entity entity,
+            @NonNull Player player,
             double relX,
             double relY,
             double relZ,
@@ -811,8 +808,8 @@ public class EntityPlayerUtils {
      * @param onGround 实体在不在地上
      */
     public static void sendFakeEntityRelMove(
-            @NotNull Entity entity,
-            @NotNull Player player,
+            @NonNull Entity entity,
+            @NonNull Player player,
             long xa,
             long ya,
             long za,
@@ -840,8 +837,8 @@ public class EntityPlayerUtils {
      * @param onGround 实体在不在地上
      */
     public static void sendFakeEntityRelMoveLookRaw(
-            @NotNull Entity entity,
-            @NotNull Player player,
+            @NonNull Entity entity,
+            @NonNull Player player,
             double relX,
             double relY,
             double relZ,
@@ -876,8 +873,8 @@ public class EntityPlayerUtils {
      * @param onGround 实体在不在地上
      */
     public static void sendFakeEntityRelMoveLook(
-            @NotNull Entity entity,
-            @NotNull Player player,
+            @NonNull Entity entity,
+            @NonNull Player player,
             long xa,
             long ya,
             long za,
@@ -907,8 +904,8 @@ public class EntityPlayerUtils {
      * @param onGround 实体在不在地上
      */
     public static void sendFakeEntityTeleportRaw(
-            @NotNull Entity entity,
-            @NotNull Player player,
+            @NonNull Entity entity,
+            @NonNull Player player,
             double x,
             double y,
             double z,
@@ -934,8 +931,8 @@ public class EntityPlayerUtils {
      * @param onGround 实体在不在地上
      */
     public static void sendFakeEntityTeleport(
-            @NotNull Entity entity,
-            @NotNull Player player,
+            @NonNull Entity entity,
+            @NonNull Player player,
             double x,
             double y,
             double z,
@@ -967,8 +964,8 @@ public class EntityPlayerUtils {
      * @param yaw    偏航角.
      */
     public static void sendFakeEntityHeadRotationRaw(
-            @NotNull Entity entity,
-            @NotNull Player player,
+            @NonNull Entity entity,
+            @NonNull Player player,
             float yaw
     ) {
         sendFakeEntityHeadRotation(entity, player, (byte) ((yaw * 256.0) / 360.0));
@@ -982,8 +979,8 @@ public class EntityPlayerUtils {
      * @param yHeadRot (byte) ((yaw*256.0)/360.0).
      */
     public static void sendFakeEntityHeadRotation(
-            @NotNull Entity entity,
-            @NotNull Player player,
+            @NonNull Entity entity,
+            @NonNull Player player,
             byte yHeadRot
     ) {
         if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
@@ -1002,8 +999,8 @@ public class EntityPlayerUtils {
      * @param player 待接收玩家.
      */
     public static void refreshFakeEntityHeadRotation(
-            @NotNull Entity entity,
-            @NotNull Player player
+            @NonNull Entity entity,
+            @NonNull Player player
     ) {
         if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -1021,8 +1018,8 @@ public class EntityPlayerUtils {
      * @param player 待接收玩家.
      */
     public static void removeFakeCustomName(
-            @NotNull Entity entity,
-            @NotNull Player player
+            @NonNull Entity entity,
+            @NonNull Player player
     ) {
         if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -1058,9 +1055,9 @@ public class EntityPlayerUtils {
      * @param name   显示名.
      */
     public static void setFakeCustomName(
-            @NotNull Entity entity,
-            @NotNull Player player,
-            @NotNull String name
+            @NonNull Entity entity,
+            @NonNull Player player,
+            @NonNull String name
     ) {
         if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -1096,9 +1093,9 @@ public class EntityPlayerUtils {
      * @param name   显示名.
      */
     public static void setFakeCustomName(
-            @NotNull Entity entity,
-            @NotNull Player player,
-            @NotNull BaseComponent name
+            @NonNull Entity entity,
+            @NonNull Player player,
+            @NonNull BaseComponent name
     ) {
         if (entity instanceof RefCraftEntity && player instanceof RefCraftPlayer) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -1133,8 +1130,8 @@ public class EntityPlayerUtils {
      * @param packetObject 待发送的数据包(nms实例).
      */
     public static void sendPacket(
-            @NotNull Player player,
-            @NotNull Object packetObject
+            @NonNull Player player,
+            @NonNull Object packetObject
     ) {
         if (player instanceof RefCraftPlayer && packetObject instanceof RefPacket<?>) {
             RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
@@ -1149,8 +1146,8 @@ public class EntityPlayerUtils {
      * @param title  待发送容器标题.
      */
     public static void sendFakeInventoryTitle(
-            @NotNull Player player,
-            @NotNull BaseComponent title
+            @NonNull Player player,
+            @NonNull BaseComponent title
     ) {
         sendFakeInventoryTitleByNms(player, EntityUtils.toNms(title));
     }
@@ -1162,8 +1159,8 @@ public class EntityPlayerUtils {
      * @param title  待发送容器标题.
      */
     public static void sendFakeInventoryTitle(
-            @NotNull Player player,
-            @NotNull String title
+            @NonNull Player player,
+            @NonNull String title
     ) {
         sendFakeInventoryTitleByNms(player, RefCraftChatMessage.fromString(title)[0]);
     }
@@ -1175,8 +1172,8 @@ public class EntityPlayerUtils {
      * @param title  JSON格式的待发送容器标题.
      */
     public static void sendFakeInventoryJsonTitle(
-            @NotNull Player player,
-            @NotNull String title
+            @NonNull Player player,
+            @NonNull String title
     ) {
         sendFakeInventoryTitleByNms(player, RefChatSerializer.fromJson(title));
     }
@@ -1188,7 +1185,7 @@ public class EntityPlayerUtils {
      * @return 玩家摄像机
      */
     public static Entity getCamera(
-            @NotNull Player player
+            @NonNull Player player
     ) {
         if (player instanceof RefCraftPlayer) {
             RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
@@ -1204,8 +1201,8 @@ public class EntityPlayerUtils {
      * @param entity 待设置摄像机.
      */
     public static void setCamera(
-            @NotNull Player player,
-            @NotNull Entity entity
+            @NonNull Player player,
+            @NonNull Entity entity
     ) {
         if (player instanceof RefCraftPlayer && entity instanceof RefCraftEntity) {
             RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
@@ -1221,8 +1218,8 @@ public class EntityPlayerUtils {
      * @param title  待发送容器标题.
      */
     private static void sendFakeInventoryTitleByNms(
-            @NotNull Player player,
-            @NotNull RefComponent title
+            @NonNull Player player,
+            @NonNull RefComponent title
     ) {
         if (player instanceof RefCraftPlayer) {
             RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
@@ -1247,9 +1244,9 @@ public class EntityPlayerUtils {
     }
 
     static <T> void defineAndForceSet(
-            @NotNull RefSynchedEntityData entityData,
-            @NotNull RefEntityDataAccessor<T> key,
-            @NotNull T value
+            @NonNull RefSynchedEntityData entityData,
+            @NonNull RefEntityDataAccessor<T> key,
+            @NonNull T value
     ) {
         entityData.define(key, value);
         if (FORCE_DATA_SET) {
@@ -1260,7 +1257,7 @@ public class EntityPlayerUtils {
     }
 
     private static void lookAtByNms(
-            @NotNull Player player,
+            @NonNull Player player,
             double x,
             double y,
             double z
@@ -1275,15 +1272,15 @@ public class EntityPlayerUtils {
     }
 
     private static void swingByNms(
-            @NotNull RefEntityPlayer player,
-            @NotNull RefEnumHand hand
+            @NonNull RefEntityPlayer player,
+            @NonNull RefEnumHand hand
     ) {
         swingByNms(player, hand, true);
     }
 
     private static void swingByNms(
-            @NotNull RefEntityPlayer player,
-            @NotNull RefEnumHand hand,
+            @NonNull RefEntityPlayer player,
+            @NonNull RefEnumHand hand,
             boolean fromServerPlayer
     ) {
         if (SWING_AND_SEND_SUPPORT) {
@@ -1296,9 +1293,8 @@ public class EntityPlayerUtils {
         }
     }
 
-    @NotNull
-    private static RefEnumHand toRefEnumHand(
-            @NotNull EnumHand hand
+    private static @NonNull RefEnumHand toRefEnumHand(
+            @NonNull EnumHand hand
     ) {
         if (hand == EnumHand.MAIN_HAND) {
             return RefEnumHand.MAIN_HAND;

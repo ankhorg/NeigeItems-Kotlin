@@ -1,6 +1,8 @@
 package pers.neige.neigeitems.utils;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
@@ -18,19 +20,19 @@ public class NumberParser {
     /**
      * 判断一段文本是否为朴素的十进制整数文本
      */
-    public static boolean isIntegerString(@NotNull String string) {
+    public static boolean isIntegerString(@NonNull String string) {
         if (string.isEmpty()) return false;
 
-        int offset = 0;
+        var offset = 0;
 
-        int firstChar = string.charAt(offset);
+        val firstChar = string.charAt(offset);
         if (firstChar == '+' || firstChar == '-') {
             offset++;
         }
 
-        int digitOffset = offset;
+        val digitOffset = offset;
         while (offset < string.length()) {
-            char current = string.charAt(offset);
+            val current = string.charAt(offset);
             if (current >= '0' && current <= '9') {
                 offset++;
             } else {
@@ -44,21 +46,21 @@ public class NumberParser {
     /**
      * 判断一段文本是否为朴素的十进制小数文本
      */
-    public static boolean isDecimalString(@NotNull String string) {
+    public static boolean isDecimalString(@NonNull String string) {
         if (string.isEmpty()) return false;
 
-        int offset = 0;
+        var offset = 0;
 
-        char firstChar = string.charAt(offset);
+        val firstChar = string.charAt(offset);
         if (firstChar == '+' || firstChar == '-') {
             offset++;
         }
 
-        int digitsStart = offset;
-        boolean hasDot = false;
+        val digitsStart = offset;
+        var hasDot = false;
 
         while (offset < string.length()) {
-            char current = string.charAt(offset);
+            val current = string.charAt(offset);
             if (current >= '0' && current <= '9') {
                 offset++;
             } else {
@@ -71,7 +73,7 @@ public class NumberParser {
             hasDot = true;
 
             while (offset < string.length()) {
-                char current = string.charAt(offset);
+                val current = string.charAt(offset);
                 if (current >= '0' && current <= '9') {
                     offset++;
                 } else {
@@ -86,8 +88,8 @@ public class NumberParser {
     /**
      * 非正常格式则返回 null, 超限则返回对应侧最大值
      */
-    public static @Nullable Byte parseByte(@NotNull String string) {
-        Integer integer = parseInteger(string);
+    public static @Nullable Byte parseByte(@NonNull String string) {
+        val integer = parseInteger(string);
         if (integer == null) return null;
         if (integer < Byte.MIN_VALUE) return Byte.MIN_VALUE;
         if (integer > Byte.MAX_VALUE) return Byte.MAX_VALUE;
@@ -97,8 +99,8 @@ public class NumberParser {
     /**
      * 非正常格式则返回 def, 超限则返回对应侧最大值
      */
-    public static byte parseByte(@NotNull String string, byte def) {
-        int integer = parseInteger(string, def);
+    public static byte parseByte(@NonNull String string, byte def) {
+        val integer = parseInteger(string, def);
         if (integer < Byte.MIN_VALUE) return Byte.MIN_VALUE;
         if (integer > Byte.MAX_VALUE) return Byte.MAX_VALUE;
         return (byte) integer;
@@ -107,8 +109,8 @@ public class NumberParser {
     /**
      * 非正常格式则返回 null, 超限则返回对应侧最大值
      */
-    public static @Nullable Short parseShort(@NotNull String string) {
-        Integer integer = parseInteger(string);
+    public static @Nullable Short parseShort(@NonNull String string) {
+        val integer = parseInteger(string);
         if (integer == null) return null;
         if (integer < Short.MIN_VALUE) return Short.MIN_VALUE;
         if (integer > Short.MAX_VALUE) return Short.MAX_VALUE;
@@ -118,8 +120,8 @@ public class NumberParser {
     /**
      * 非正常格式则返回 def, 超限则返回对应侧最大值
      */
-    public static short parseShort(@NotNull String string, short def) {
-        int integer = parseInteger(string, def);
+    public static short parseShort(@NonNull String string, short def) {
+        val integer = parseInteger(string, def);
         if (integer < Short.MIN_VALUE) return Short.MIN_VALUE;
         if (integer > Short.MAX_VALUE) return Short.MAX_VALUE;
         return (short) integer;
@@ -128,15 +130,15 @@ public class NumberParser {
     /**
      * 非正常格式则返回 null, 超限则返回对应侧最大值
      */
-    public static @Nullable Integer parseInteger(@NotNull String string) {
+    public static @Nullable Integer parseInteger(@NonNull String string) {
         if (string.isEmpty()) return null;
 
-        int offset = 0;
-        boolean negative = false;
+        var offset = 0;
+        var negative = false;
 
-        int limit = INTEGER_POSITIVE_LIMIT;
+        var limit = INTEGER_POSITIVE_LIMIT;
 
-        char firstChar = string.charAt(offset);
+        val firstChar = string.charAt(offset);
         if (firstChar == '+') {
             offset++;
         } else if (firstChar == '-') {
@@ -145,12 +147,12 @@ public class NumberParser {
             offset++;
         }
 
-        int result = 0;
-        boolean overflow = false;
-        int digitOffset = offset;
+        var result = 0;
+        var overflow = false;
+        val digitOffset = offset;
 
         while (offset < string.length()) {
-            char current = string.charAt(offset);
+            val current = string.charAt(offset);
             if (current >= '0' && current <= '9') {
                 if (result < INTEGER_MULTMIN) {
                     result = limit;
@@ -159,7 +161,7 @@ public class NumberParser {
                     break;
                 }
                 result *= 10;
-                int digit = current - 48;
+                val digit = current - 48;
                 if (result < limit + digit) {
                     result = limit;
                     overflow = true;
@@ -175,7 +177,7 @@ public class NumberParser {
 
         if (overflow) {
             while (offset < string.length()) {
-                char current = string.charAt(offset);
+                val current = string.charAt(offset);
                 if (current >= '0' && current <= '9') {
                     offset++;
                 } else {
@@ -194,15 +196,15 @@ public class NumberParser {
     /**
      * 非正常格式则返回 def, 超限则返回对应侧最大值
      */
-    public static int parseInteger(@NotNull String string, int def) {
+    public static int parseInteger(@NonNull String string, int def) {
         if (string.isEmpty()) return def;
 
-        int offset = 0;
-        boolean negative = false;
+        var offset = 0;
+        var negative = false;
 
-        int limit = INTEGER_POSITIVE_LIMIT;
+        var limit = INTEGER_POSITIVE_LIMIT;
 
-        char firstChar = string.charAt(offset);
+        val firstChar = string.charAt(offset);
         if (firstChar == '+') {
             offset++;
         } else if (firstChar == '-') {
@@ -211,12 +213,12 @@ public class NumberParser {
             offset++;
         }
 
-        int result = 0;
-        boolean overflow = false;
-        int digitOffset = offset;
+        var result = 0;
+        var overflow = false;
+        val digitOffset = offset;
 
         while (offset < string.length()) {
-            char current = string.charAt(offset);
+            val current = string.charAt(offset);
             if (current >= '0' && current <= '9') {
                 if (result < INTEGER_MULTMIN) {
                     result = limit;
@@ -225,7 +227,7 @@ public class NumberParser {
                     break;
                 }
                 result *= 10;
-                int digit = current - 48;
+                val digit = current - 48;
                 if (result < limit + digit) {
                     result = limit;
                     overflow = true;
@@ -241,7 +243,7 @@ public class NumberParser {
 
         if (overflow) {
             while (offset < string.length()) {
-                char current = string.charAt(offset);
+                val current = string.charAt(offset);
                 if (current >= '0' && current <= '9') {
                     offset++;
                 } else {
@@ -260,15 +262,15 @@ public class NumberParser {
     /**
      * 非正常格式则返回 null, 超限则返回对应侧最大值
      */
-    public static @Nullable Long parseLong(@NotNull String string) {
+    public static @Nullable Long parseLong(@NonNull String string) {
         if (string.isEmpty()) return null;
 
-        int offset = 0;
-        boolean negative = false;
+        var offset = 0;
+        var negative = false;
 
-        long limit = LONG_POSITIVE_LIMIT;
+        var limit = LONG_POSITIVE_LIMIT;
 
-        char firstChar = string.charAt(offset);
+        val firstChar = string.charAt(offset);
         if (firstChar == '+') {
             offset++;
         } else if (firstChar == '-') {
@@ -277,12 +279,12 @@ public class NumberParser {
             offset++;
         }
 
-        long result = 0;
-        boolean overflow = false;
-        int digitOffset = offset;
+        var result = 0L;
+        var overflow = false;
+        val digitOffset = offset;
 
         while (offset < string.length()) {
-            char current = string.charAt(offset);
+            val current = string.charAt(offset);
             if (current >= '0' && current <= '9') {
                 if (result < LONG_MULTMIN) {
                     result = limit;
@@ -291,7 +293,7 @@ public class NumberParser {
                     break;
                 }
                 result *= 10;
-                int digit = current - 48;
+                val digit = current - 48;
                 if (result < limit + digit) {
                     result = limit;
                     overflow = true;
@@ -307,7 +309,7 @@ public class NumberParser {
 
         if (overflow) {
             while (offset < string.length()) {
-                char current = string.charAt(offset);
+                val current = string.charAt(offset);
                 if (current >= '0' && current <= '9') {
                     offset++;
                 } else {
@@ -326,15 +328,15 @@ public class NumberParser {
     /**
      * 非正常格式则返回 def, 超限则返回对应侧最大值
      */
-    public static long parseLong(@NotNull String string, long def) {
+    public static long parseLong(@NonNull String string, long def) {
         if (string.isEmpty()) return def;
 
-        int offset = 0;
-        boolean negative = false;
+        var offset = 0;
+        var negative = false;
 
-        long limit = LONG_POSITIVE_LIMIT;
+        var limit = LONG_POSITIVE_LIMIT;
 
-        char firstChar = string.charAt(offset);
+        val firstChar = string.charAt(offset);
         if (firstChar == '+') {
             offset++;
         } else if (firstChar == '-') {
@@ -343,12 +345,12 @@ public class NumberParser {
             offset++;
         }
 
-        long result = 0;
-        boolean overflow = false;
-        int digitOffset = offset;
+        var result = 0L;
+        var overflow = false;
+        val digitOffset = offset;
 
         while (offset < string.length()) {
-            char current = string.charAt(offset);
+            val current = string.charAt(offset);
             if (current >= '0' && current <= '9') {
                 if (result < LONG_MULTMIN) {
                     result = limit;
@@ -357,7 +359,7 @@ public class NumberParser {
                     break;
                 }
                 result *= 10;
-                int digit = current - 48;
+                val digit = current - 48;
                 if (result < limit + digit) {
                     result = limit;
                     overflow = true;
@@ -373,7 +375,7 @@ public class NumberParser {
 
         if (overflow) {
             while (offset < string.length()) {
-                char current = string.charAt(offset);
+                val current = string.charAt(offset);
                 if (current >= '0' && current <= '9') {
                     offset++;
                 } else {
@@ -392,7 +394,7 @@ public class NumberParser {
     /**
      * 非正常格式则返回 null
      */
-    public static @Nullable BigInteger parseBigInteger(@NotNull String string) {
+    public static @Nullable BigInteger parseBigInteger(@NonNull String string) {
         if (!isIntegerString(string)) return null;
         return new BigInteger(string);
     }
@@ -400,7 +402,7 @@ public class NumberParser {
     /**
      * 非正常格式则返回 def
      */
-    public static @NotNull BigInteger parseBigInteger(@NotNull String string, @NotNull BigInteger def) {
+    public static @NonNull BigInteger parseBigInteger(@NonNull String string, @NonNull BigInteger def) {
         if (!isIntegerString(string)) return def;
         return new BigInteger(string);
     }
@@ -408,7 +410,7 @@ public class NumberParser {
     /**
      * 非正常格式则返回 null
      */
-    public static @Nullable Float parseFloat(@NotNull String string) {
+    public static @Nullable Float parseFloat(@NonNull String string) {
         if (!isDecimalString(string)) return null;
         return Float.parseFloat(string);
     }
@@ -416,7 +418,7 @@ public class NumberParser {
     /**
      * 非正常格式则返回 def
      */
-    public static float parseFloat(@NotNull String string, float def) {
+    public static float parseFloat(@NonNull String string, float def) {
         if (!isDecimalString(string)) return def;
         return Float.parseFloat(string);
     }
@@ -424,7 +426,7 @@ public class NumberParser {
     /**
      * 非正常格式则返回 null
      */
-    public static @Nullable Double parseDouble(@NotNull String string) {
+    public static @Nullable Double parseDouble(@NonNull String string) {
         if (!isDecimalString(string)) return null;
         return Double.parseDouble(string);
     }
@@ -432,7 +434,7 @@ public class NumberParser {
     /**
      * 非正常格式则返回 def
      */
-    public static double parseDouble(@NotNull String string, double def) {
+    public static double parseDouble(@NonNull String string, double def) {
         if (!isDecimalString(string)) return def;
         return Double.parseDouble(string);
     }
@@ -440,7 +442,7 @@ public class NumberParser {
     /**
      * 非正常格式则返回 null
      */
-    public static @Nullable BigDecimal parseBigDecimal(@NotNull String string) {
+    public static @Nullable BigDecimal parseBigDecimal(@NonNull String string) {
         if (!isDecimalString(string)) return null;
         return new BigDecimal(string);
     }
@@ -448,7 +450,7 @@ public class NumberParser {
     /**
      * 非正常格式则返回 def
      */
-    public static @NotNull BigDecimal parseBigDecimal(@NotNull String string, @NotNull BigDecimal def) {
+    public static @NonNull BigDecimal parseBigDecimal(@NonNull String string, @NonNull BigDecimal def) {
         if (!isDecimalString(string)) return def;
         return new BigDecimal(string);
     }

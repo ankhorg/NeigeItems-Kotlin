@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.action;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
@@ -8,12 +8,10 @@ import javax.script.Compilable;
 import javax.script.ScriptException;
 
 public class Condition {
-    @NotNull
-    private final BaseActionManager manager;
-    @Nullable
-    private final ScriptWithSource condition;
+    private final @NonNull BaseActionManager manager;
+    private final @Nullable ScriptWithSource condition;
 
-    public Condition(@NotNull BaseActionManager manager, @Nullable String conditionString) {
+    public Condition(@NonNull BaseActionManager manager, @Nullable String conditionString) {
         this.manager = manager;
         try {
             this.condition = ScriptWithSource.compile((Compilable) manager.getEngine(), conditionString);
@@ -22,7 +20,7 @@ public class Condition {
         }
     }
 
-    public @NotNull BaseActionManager getManager() {
+    public @NonNull BaseActionManager getManager() {
         return manager;
     }
 
@@ -30,12 +28,11 @@ public class Condition {
         return condition;
     }
 
-    @NotNull
-    public ActionResult check(@NotNull ActionContext context) {
+    public @NonNull ActionResult check(@NonNull ActionContext context) {
         return manager.parseCondition(condition, context);
     }
 
-    public boolean easyCheck(@NotNull ActionContext context) {
+    public boolean easyCheck(@NonNull ActionContext context) {
         return manager.parseCondition(condition, context).getType() == ResultType.SUCCESS;
     }
 }

@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.user;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.catcher.ChatCatcher;
 import pers.neige.neigeitems.action.catcher.SignCatcher;
@@ -11,36 +12,29 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class User {
-    @NotNull
-    private final UUID uuid;
-    @NotNull
-    private final ArrayDeque<ChatCatcher> chatCatchers = new ArrayDeque<>();
-    @NotNull
-    private final ArrayDeque<SignCatcher> signCatchers = new ArrayDeque<>();
-    @NotNull
-    private final Map<String, Object> metadata = new ConcurrentHashMap<>();
-    @NotNull
-    private final Map<String, Long> cooldown = new ConcurrentHashMap<>();
+    private final @NonNull UUID uuid;
+    private final @NonNull ArrayDeque<ChatCatcher> chatCatchers = new ArrayDeque<>();
+    private final @NonNull ArrayDeque<SignCatcher> signCatchers = new ArrayDeque<>();
+    private final @NonNull Map<String, Object> metadata = new ConcurrentHashMap<>();
+    private final @NonNull Map<String, Long> cooldown = new ConcurrentHashMap<>();
 
     public User(
-            @NotNull UUID uuid
+            @NonNull UUID uuid
     ) {
         this.uuid = uuid;
     }
 
-    @NotNull
-    public UUID getUUID() {
+    public @NonNull UUID getUUID() {
         return uuid;
     }
 
-    public void addChatCatcher(@NotNull ChatCatcher catcher) {
+    public void addChatCatcher(@NonNull ChatCatcher catcher) {
         synchronized (chatCatchers) {
             chatCatchers.add(catcher);
         }
     }
 
-    @Nullable
-    public ChatCatcher pollChatCatcher() {
+    public @Nullable ChatCatcher pollChatCatcher() {
         synchronized (chatCatchers) {
             return chatCatchers.poll();
         }
@@ -55,14 +49,13 @@ public class User {
         }
     }
 
-    public void addSignCatcher(@NotNull SignCatcher catcher) {
+    public void addSignCatcher(@NonNull SignCatcher catcher) {
         synchronized (signCatchers) {
             signCatchers.add(catcher);
         }
     }
 
-    @Nullable
-    public SignCatcher pollSignCatcher() {
+    public @Nullable SignCatcher pollSignCatcher() {
         synchronized (signCatchers) {
             return signCatchers.poll();
         }
@@ -77,8 +70,7 @@ public class User {
         }
     }
 
-    @NotNull
-    public Map<String, Object> getMetadata() {
+    public @NonNull Map<String, Object> getMetadata() {
         return metadata;
     }
 
@@ -91,10 +83,10 @@ public class User {
      * @param cooldown 冷却刷新时间
      * @return 剩余冷却时间
      */
-    public long checkCooldown(@NotNull String key, long cooldown) {
+    public long checkCooldown(@NonNull String key, long cooldown) {
         if (cooldown <= 0) return 0;
-        long time = System.currentTimeMillis();
-        long lastTime = this.cooldown.getOrDefault(key, 0L);
+        val time = System.currentTimeMillis();
+        val lastTime = this.cooldown.getOrDefault(key, 0L);
         if (lastTime > time) {
             return lastTime - time;
         } else {
@@ -109,9 +101,9 @@ public class User {
      * @param key 冷却组ID
      * @return 剩余冷却时间
      */
-    public long getCooldown(@NotNull String key) {
-        long time = System.currentTimeMillis();
-        long lastTime = this.cooldown.getOrDefault(key, 0L);
+    public long getCooldown(@NonNull String key) {
+        val time = System.currentTimeMillis();
+        val lastTime = this.cooldown.getOrDefault(key, 0L);
         if (lastTime > time) {
             return lastTime - time;
         } else {
@@ -125,8 +117,8 @@ public class User {
      * @param key      冷却组ID
      * @param cooldown 冷却刷新时间
      */
-    public void setCooldown(@NotNull String key, long cooldown) {
-        long time = System.currentTimeMillis();
+    public void setCooldown(@NonNull String key, long cooldown) {
+        val time = System.currentTimeMillis();
         this.cooldown.put(key, time + cooldown);
     }
 }

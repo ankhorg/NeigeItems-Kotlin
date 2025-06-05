@@ -1,8 +1,9 @@
 package pers.neige.neigeitems.utils;
 
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
 
@@ -18,7 +19,7 @@ public class SchedulerUtils {
      */
     public static void run(
             boolean inPrimaryThread,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         run(NeigeItems.getInstance(), inPrimaryThread, task);
     }
@@ -30,9 +31,9 @@ public class SchedulerUtils {
      * @param task   执行的代码.
      */
     public static void run(
-            @NotNull Plugin plugin,
+            @NonNull Plugin plugin,
             boolean inPrimaryThread,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         if (inPrimaryThread) {
             sync(plugin, task);
@@ -47,7 +48,7 @@ public class SchedulerUtils {
      * @param task 执行的代码.
      */
     public static void sync(
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         sync(NeigeItems.getInstance(), task);
     }
@@ -59,8 +60,8 @@ public class SchedulerUtils {
      * @param task   执行的代码.
      */
     public static void sync(
-            @NotNull Plugin plugin,
-            @NotNull Runnable task
+            @NonNull Plugin plugin,
+            @NonNull Runnable task
     ) {
         if (Bukkit.isPrimaryThread()) {
             task.run();
@@ -77,7 +78,7 @@ public class SchedulerUtils {
      */
     public static void syncLater(
             long delay,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         syncLater(NeigeItems.getInstance(), delay, task);
     }
@@ -90,9 +91,9 @@ public class SchedulerUtils {
      * @param task   执行的代码.
      */
     public static void syncLater(
-            @NotNull Plugin plugin,
+            @NonNull Plugin plugin,
             long delay,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         Bukkit.getScheduler().runTaskLater(plugin, task, delay);
     }
@@ -106,7 +107,7 @@ public class SchedulerUtils {
     public static void syncTimer(
             long delay,
             long period,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         syncTimer(NeigeItems.getInstance(), delay, period, task);
     }
@@ -119,10 +120,10 @@ public class SchedulerUtils {
      * @param task   执行的代码.
      */
     public static void syncTimer(
-            @NotNull Plugin plugin,
+            @NonNull Plugin plugin,
             long delay,
             long period,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         Bukkit.getScheduler().runTaskTimer(plugin, task, delay, period);
     }
@@ -132,9 +133,8 @@ public class SchedulerUtils {
      *
      * @param task 执行的代码.
      */
-    @Nullable
-    public static <T> T syncAndGet(
-            @NotNull Callable<T> task
+    public static @Nullable <T> T syncAndGet(
+            @NonNull Callable<T> task
     ) {
         return syncAndGet(NeigeItems.getInstance(), task);
     }
@@ -145,10 +145,9 @@ public class SchedulerUtils {
      * @param plugin 注册任务的插件.
      * @param task   执行的代码.
      */
-    @Nullable
-    public static <T> T syncAndGet(
-            @NotNull Plugin plugin,
-            @NotNull Callable<T> task
+    public static @Nullable <T> T syncAndGet(
+            @NonNull Plugin plugin,
+            @NonNull Callable<T> task
     ) {
         if (Bukkit.isPrimaryThread()) {
             try {
@@ -171,9 +170,8 @@ public class SchedulerUtils {
      *
      * @param task 执行的代码.
      */
-    @NotNull
-    public static <T> CompletableFuture<T> callSyncMethod(
-            @NotNull Callable<T> task
+    public static @NonNull <T> CompletableFuture<T> callSyncMethod(
+            @NonNull Callable<T> task
     ) {
         return callSyncMethod(NeigeItems.getInstance(), task);
     }
@@ -184,10 +182,9 @@ public class SchedulerUtils {
      * @param plugin 注册任务的插件.
      * @param task   执行的代码.
      */
-    @NotNull
-    public static <T> CompletableFuture<T> callSyncMethod(
-            @NotNull Plugin plugin,
-            @NotNull Callable<T> task
+    public static @NonNull <T> CompletableFuture<T> callSyncMethod(
+            @NonNull Plugin plugin,
+            @NonNull Callable<T> task
     ) {
         if (Bukkit.isPrimaryThread()) {
             try {
@@ -196,7 +193,7 @@ public class SchedulerUtils {
                 e.printStackTrace();
             }
         } else {
-            CompletableFuture<T> future = new CompletableFuture<>();
+            val future = new CompletableFuture<T>();
             Bukkit.getScheduler().runTask(plugin, () -> {
                 try {
                     future.complete(task.call());
@@ -216,7 +213,7 @@ public class SchedulerUtils {
      * @param task 执行的代码.
      */
     public static void async(
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         async(NeigeItems.getInstance(), task);
     }
@@ -228,8 +225,8 @@ public class SchedulerUtils {
      * @param task   执行的代码.
      */
     public static void async(
-            @NotNull Plugin plugin,
-            @NotNull Runnable task
+            @NonNull Plugin plugin,
+            @NonNull Runnable task
     ) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
     }
@@ -242,7 +239,7 @@ public class SchedulerUtils {
      */
     public static void asyncLater(
             long delay,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         asyncLater(NeigeItems.getInstance(), delay, task);
     }
@@ -255,9 +252,9 @@ public class SchedulerUtils {
      * @param task   执行的代码.
      */
     public static void asyncLater(
-            @NotNull Plugin plugin,
+            @NonNull Plugin plugin,
             long delay,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, task, delay);
     }
@@ -271,7 +268,7 @@ public class SchedulerUtils {
     public static void asyncTimer(
             long delay,
             long period,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         asyncTimer(NeigeItems.getInstance(), delay, period, task);
     }
@@ -284,10 +281,10 @@ public class SchedulerUtils {
      * @param task   执行的代码.
      */
     public static void asyncTimer(
-            @NotNull Plugin plugin,
+            @NonNull Plugin plugin,
             long delay,
             long period,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, task, delay, period);
     }
@@ -300,7 +297,7 @@ public class SchedulerUtils {
      */
     public static void runLater(
             long delay,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         runLater(NeigeItems.getInstance(), delay, task);
     }
@@ -313,9 +310,9 @@ public class SchedulerUtils {
      * @param task   执行的代码.
      */
     public static void runLater(
-            @NotNull Plugin plugin,
+            @NonNull Plugin plugin,
             long delay,
-            @NotNull Runnable task
+            @NonNull Runnable task
     ) {
         if (Bukkit.isPrimaryThread()) {
             Bukkit.getScheduler().runTaskLater(plugin, task, delay);

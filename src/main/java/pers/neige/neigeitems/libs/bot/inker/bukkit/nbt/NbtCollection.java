@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import lombok.NonNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtCollectionLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.DelegateAbstractList;
 import pers.neige.neigeitems.ref.nbt.RefNbtBase;
@@ -53,27 +54,27 @@ public abstract class NbtCollection<NMS extends RefNbtBase, E> extends Nbt<NMS> 
     }
 
     @Override
-    public final boolean addAll(int index, Collection<? extends E> c) {
+    public final boolean addAll(int index, @NonNull Collection<? extends E> c) {
         return delegateList.addAll(index, c);
     }
 
     @Override
-    public final Iterator<E> iterator() {
+    public final @NonNull Iterator<E> iterator() {
         return delegateList.iterator();
     }
 
     @Override
-    public final ListIterator<E> listIterator() {
+    public final @NonNull ListIterator<E> listIterator() {
         return delegateList.listIterator();
     }
 
     @Override
-    public final ListIterator<E> listIterator(int index) {
+    public final @NonNull ListIterator<E> listIterator(int index) {
         return delegateList.listIterator(index);
     }
 
     @Override
-    public final List<E> subList(int fromIndex, int toIndex) {
+    public final @NonNull List<E> subList(int fromIndex, int toIndex) {
         return delegateList.subList(fromIndex, toIndex);
     }
 
@@ -88,12 +89,12 @@ public abstract class NbtCollection<NMS extends RefNbtBase, E> extends Nbt<NMS> 
     }
 
     @Override
-    public final Object[] toArray() {
+    public final Object @NonNull [] toArray() {
         return delegateList.toArray();
     }
 
     @Override
-    public final <T> T[] toArray(T[] a) {
+    public final <T> T @NonNull [] toArray(T @NonNull [] a) {
         return delegateList.toArray(a);
     }
 
@@ -103,22 +104,22 @@ public abstract class NbtCollection<NMS extends RefNbtBase, E> extends Nbt<NMS> 
     }
 
     @Override
-    public final boolean containsAll(Collection<?> c) {
+    public final boolean containsAll(@NonNull Collection<?> c) {
         return delegateList.containsAll(c);
     }
 
     @Override
-    public final boolean addAll(Collection<? extends E> c) {
+    public final boolean addAll(@NonNull Collection<? extends E> c) {
         return delegateList.addAll(c);
     }
 
     @Override
-    public final boolean removeAll(Collection<?> c) {
+    public final boolean removeAll(@NonNull Collection<?> c) {
         return delegateList.removeAll(c);
     }
 
     @Override
-    public final boolean retainAll(Collection<?> c) {
+    public final boolean retainAll(@NonNull Collection<?> c) {
         return delegateList.retainAll(c);
     }
 

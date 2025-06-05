@@ -2,6 +2,7 @@ package pers.neige.neigeitems.command.coordinates;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import lombok.val;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -11,12 +12,9 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.command.CommandUtils;
 
 public class Coordinates {
-    @Nullable
-    private final Coordinate x;
-    @Nullable
-    private final Coordinate y;
-    @Nullable
-    private final Coordinate z;
+    private final @Nullable Coordinate x;
+    private final @Nullable Coordinate y;
+    private final @Nullable Coordinate z;
     private final boolean noResult;
     private final boolean local;
 
@@ -35,11 +33,11 @@ public class Coordinates {
 
     public static Coordinates parse(StringReader reader) throws CommandSyntaxException {
         int i = reader.getCursor();
-        Coordinate x = readCoordinate(reader);
+        val x = readCoordinate(reader);
         if (reader.canRead() && reader.peek() == ' ') reader.skip();
-        Coordinate y = readCoordinate(reader);
+        val y = readCoordinate(reader);
         if (reader.canRead() && reader.peek() == ' ') reader.skip();
-        Coordinate z = readCoordinate(reader);
+        val z = readCoordinate(reader);
         return new Coordinates(x, y, z);
     }
 
@@ -57,12 +55,11 @@ public class Coordinates {
         } else {
             type = LocationType.ABSOLUTE;
         }
-        Double value = (!reader.canRead() || reader.peek() == ' ') ? Double.valueOf(0.0) : CommandUtils.readDouble(reader);
+        val value = (!reader.canRead() || reader.peek() == ' ') ? Double.valueOf(0.0) : CommandUtils.readDouble(reader);
         return new Coordinate(type, value);
     }
 
-    @Nullable
-    public Location getLocation(World world, CommandSender sender, Player target) {
+    public @Nullable Location getLocation(World world, CommandSender sender, Player target) {
         if (noResult) return null;
         if (sender instanceof Player || target != null) {
             Player player;
@@ -72,19 +69,19 @@ public class Coordinates {
                 player = (Player) sender;
             }
             if (local) {
-                Location location = player.getEyeLocation();
-                double leftwards = x.getValue();
-                double upwards = y.getValue();
-                double forwards = z.getValue();
+                val location = player.getEyeLocation();
+                val leftwards = x.getValue();
+                val upwards = y.getValue();
+                val forwards = z.getValue();
 
-                Vector rotation = location.getDirection();
-                Vector anchor = location.toVector();
+                val rotation = location.getDirection();
+                val anchor = location.toVector();
 
-                Vector forward = rotation.clone().normalize();
-                Vector left = forward.clone().crossProduct(new Vector(0, -1, 0)).normalize();
-                Vector up = left.clone().crossProduct(forward).normalize();
+                val forward = rotation.clone().normalize();
+                val left = forward.clone().crossProduct(new Vector(0, -1, 0)).normalize();
+                val up = left.clone().crossProduct(forward).normalize();
 
-                Vector position = forward.multiply(forwards)
+                val position = forward.multiply(forwards)
                         .add(up.multiply(-upwards))
                         .add(left.multiply(leftwards));
 
@@ -92,7 +89,7 @@ public class Coordinates {
 
                 return position.toLocation(world);
             } else {
-                Location location = player.getLocation();
+                val location = player.getLocation();
                 return new Location(world, x.get(location.getX()), y.get(location.getY()), z.get(location.getZ()));
             }
         } else {

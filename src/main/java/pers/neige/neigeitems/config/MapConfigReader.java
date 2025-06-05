@@ -1,24 +1,23 @@
 package pers.neige.neigeitems.config;
 
+import lombok.NonNull;
+import lombok.val;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.StringUtils;
 
 import java.util.*;
 
 public class MapConfigReader implements ConfigReader {
-    @NotNull
-    private final Map<String, Object> handle = new HashMap<>();
+    private final @NonNull Map<String, Object> handle = new HashMap<>();
 
-    public MapConfigReader(@NotNull Map<?, ?> map) {
-        for (Map.Entry<?, ?> entry : map.entrySet()) {
+    public MapConfigReader(@NonNull Map<?, ?> map) {
+        for (val entry : map.entrySet()) {
             handle.put(entry.getKey().toString(), entry.getValue());
         }
     }
 
-    @NotNull
-    public Map<?, ?> getHandle() {
+    public @NonNull Map<?, ?> getHandle() {
         return handle;
     }
 
@@ -28,20 +27,18 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
-    @NotNull
-    public Set<String> keySet() {
+    public @NonNull Set<String> keySet() {
         return handle.keySet();
     }
 
     @Override
-    public boolean containsKey(@NotNull String key) {
+    public boolean containsKey(@NonNull String key) {
         return handle.containsKey(key);
     }
 
     @Override
-    @Nullable
-    public Object get(@NotNull String key) {
-        List<String> keys = StringUtils.split(key, '.', '\\');
+    public @Nullable Object get(@NonNull String key) {
+        val keys = StringUtils.split(key, '.', '\\');
 
         Map<?, ?> currentMap = this.handle;
         Object value = null;
@@ -67,26 +64,25 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
-    public String getString(@NotNull String key) {
+    public String getString(@NonNull String key) {
         return getString(key, null);
     }
 
     @Override
-    @Nullable
     @Contract("_, !null -> !null")
-    public String getString(@NotNull String key, @Nullable String def) {
-        Object value = get(key);
+    public @Nullable String getString(@NonNull String key, @Nullable String def) {
+        val value = get(key);
         return value == null ? def : value.toString();
     }
 
     @Override
-    public int getInt(@NotNull String key) {
+    public int getInt(@NonNull String key) {
         return getInt(key, 0);
     }
 
     @Override
-    public int getInt(@NotNull String key, int def) {
-        Object value = get(key);
+    public int getInt(@NonNull String key, int def) {
+        val value = get(key);
         if (value instanceof Number) {
             return ((Number) value).intValue();
         } else if (value == null) {
@@ -97,13 +93,13 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
-    public long getLong(@NotNull String key) {
+    public long getLong(@NonNull String key) {
         return getLong(key, 0);
     }
 
     @Override
-    public long getLong(@NotNull String key, long def) {
-        Object value = get(key);
+    public long getLong(@NonNull String key, long def) {
+        val value = get(key);
         if (value instanceof Number) {
             return ((Number) value).longValue();
         } else if (value == null) {
@@ -114,13 +110,13 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
-    public double getDouble(@NotNull String key) {
+    public double getDouble(@NonNull String key) {
         return getDouble(key, 0);
     }
 
     @Override
-    public double getDouble(@NotNull String key, double def) {
-        Object value = get(key);
+    public double getDouble(@NonNull String key, double def) {
+        val value = get(key);
         if (value instanceof Number) {
             return ((Number) value).doubleValue();
         } else if (value == null) {
@@ -131,13 +127,13 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
-    public boolean getBoolean(@NotNull String key) {
+    public boolean getBoolean(@NonNull String key) {
         return getBoolean(key, false);
     }
 
     @Override
-    public boolean getBoolean(@NotNull String key, boolean def) {
-        Object value = get(key);
+    public boolean getBoolean(@NonNull String key, boolean def) {
+        val value = get(key);
         if (value instanceof Boolean) {
             return (Boolean) value;
         } else if (value == null) {
@@ -148,11 +144,11 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
-    public List<String> getStringList(@NotNull String key) {
-        Object value = get(key);
+    public @NonNull List<String> getStringList(@NonNull String key) {
+        val value = get(key);
         if (value instanceof List<?>) {
-            List<String> result = new ArrayList<>();
-            for (Object object : ((List<?>) value)) {
+            val result = new ArrayList<String>();
+            for (val object : ((List<?>) value)) {
                 if (object == null) continue;
                 result.add(object.toString());
             }
@@ -163,11 +159,11 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
-    public List<Map<?, ?>> getMapList(@NotNull String key) {
-        Object value = get(key);
+    public @NonNull List<Map<?, ?>> getMapList(@NonNull String key) {
+        val value = get(key);
         if (value instanceof List<?>) {
-            List<Map<?, ?>> result = new ArrayList<>();
-            for (Object object : ((List<?>) value)) {
+            val result = new ArrayList<Map<?, ?>>();
+            for (val object : ((List<?>) value)) {
                 if (!(object instanceof Map)) continue;
                 result.add((Map<?, ?>) object);
             }
@@ -178,8 +174,8 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
-    public ConfigReader getConfig(@NotNull String key) {
-        Object value = get(key);
+    public @Nullable ConfigReader getConfig(@NonNull String key) {
+        val value = get(key);
         return value instanceof Map<?, ?> ? new MapConfigReader((Map<?, ?>) value) : null;
     }
 }

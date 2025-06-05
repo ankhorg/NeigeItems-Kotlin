@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * MM怪物通过NI设置穿戴装备事件, MM怪物生成时触发
@@ -15,14 +15,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MythicEquipEvent extends CancellableEvent {
     private static final HandlerList handlers = new HandlerList();
-    @NotNull
-    private final LivingEntity entity;
-    @NotNull
-    private final String internalName;
-    @NotNull
-    private final String slot;
-    @NotNull
-    private ItemStack itemStack;
+    private final @NonNull LivingEntity entity;
+    private final @NonNull String internalName;
+    private final @NonNull String slot;
+    private @NonNull ItemStack itemStack;
 
     /**
      * @param entity       怪物实体
@@ -31,10 +27,10 @@ public final class MythicEquipEvent extends CancellableEvent {
      * @param itemStack    待掉落物品
      */
     public MythicEquipEvent(
-            @NotNull LivingEntity entity,
-            @NotNull String internalName,
-            @NotNull String slot,
-            @NotNull ItemStack itemStack
+            @NonNull LivingEntity entity,
+            @NonNull String internalName,
+            @NonNull String slot,
+            @NonNull ItemStack itemStack
     ) {
         this.entity = entity;
         this.internalName = internalName;
@@ -42,40 +38,35 @@ public final class MythicEquipEvent extends CancellableEvent {
         this.itemStack = itemStack;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
     /**
      * 获取怪物实体
      */
-    @NotNull
-    public LivingEntity getEntity() {
+    public @NonNull LivingEntity getEntity() {
         return entity;
     }
 
     /**
      * 获取怪物ID
      */
-    @NotNull
-    public String getInternalName() {
+    public @NonNull String getInternalName() {
         return internalName;
     }
 
     /**
      * 获取槽位(helmet/chestplate/leggings/boots/mainhand/offhand)
      */
-    @NotNull
-    public String getSlot() {
+    public @NonNull String getSlot() {
         return slot;
     }
 
     /**
      * 获取待掉落物品
      */
-    @NotNull
-    public ItemStack getItemStack() {
+    public @NonNull ItemStack getItemStack() {
         return itemStack;
     }
 
@@ -85,14 +76,13 @@ public final class MythicEquipEvent extends CancellableEvent {
      * @param itemStack 待掉落物品
      */
     public void setItemStack(
-            @NotNull ItemStack itemStack
+            @NonNull ItemStack itemStack
     ) {
         this.itemStack = itemStack;
     }
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

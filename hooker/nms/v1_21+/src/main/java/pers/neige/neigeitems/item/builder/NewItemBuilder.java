@@ -27,7 +27,7 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.config.ConfigReader;
@@ -49,16 +49,11 @@ public class NewItemBuilder extends ItemBuilder {
     public static final RegistryOps<Tag> registryOps = MinecraftServer.getServer().registryAccess().createSerializationContext(NbtOps.INSTANCE);
     private static final boolean LOWER_THAN_1_21_4 = !CbVersion.v1_21_R4.isSupport();
 
-    @NotNull
-    private final Set<ItemFlag> hideFlag = new HashSet<>();
-    @NotNull
-    private final ItemEnchantments.Mutable mutableEnchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
-    @Nullable
-    private Component name = null;
-    @Nullable
-    private List<Component> lore = null;
-    @Nullable
-    private ResourceLocation tooltipStyle = null;
+    private final @NonNull Set<ItemFlag> hideFlag = new HashSet<>();
+    private final @NonNull ItemEnchantments.Mutable mutableEnchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
+    private @Nullable Component name = null;
+    private @Nullable List<Component> lore = null;
+    private @Nullable ResourceLocation tooltipStyle = null;
     private DataComponentPatch components = null;
 
     public NewItemBuilder() {
@@ -83,9 +78,9 @@ public class NewItemBuilder extends ItemBuilder {
     }
 
     public static <T> void loadComponent(
-            @NotNull DataComponentPatch.Builder builder,
-            @NotNull DataComponentType<T> type,
-            @NotNull Object value
+            @NonNull DataComponentPatch.Builder builder,
+            @NonNull DataComponentType<T> type,
+            @NonNull Object value
     ) throws IllegalStateException {
         Tag tag = (Tag) Nbt.Unsafe.getDelegate(ItemUtils.toNbt(value));
         DataResult<T> result = type.codecOrThrow().parse(registryOps, tag);
@@ -251,9 +246,8 @@ public class NewItemBuilder extends ItemBuilder {
      *
      * @return 构建产物.
      */
-    @NotNull
     @Override
-    public ItemStack build() {
+    public @NonNull ItemStack build() {
         if (hasBuild) {
             throw new UnsupportedOperationException("Already build");
         }

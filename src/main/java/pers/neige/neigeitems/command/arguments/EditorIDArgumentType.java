@@ -5,8 +5,9 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.command.CommandUtils;
 import pers.neige.neigeitems.manager.ItemEditorManager;
 
@@ -23,34 +24,30 @@ public class EditorIDArgumentType implements ArgumentType<String> {
     private EditorIDArgumentType() {
     }
 
-    @NotNull
-    public static EditorIDArgumentType editorID() {
+    public static @NonNull EditorIDArgumentType editorID() {
         return new EditorIDArgumentType();
     }
 
-    @NotNull
-    public static String getEditorID(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @NonNull String getEditorID(
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return context.getArgument(name, String.class);
     }
 
-    @NotNull
     @Override
-    public String parse(
-            @NotNull StringReader reader
+    public @NonNull String parse(
+            @NonNull StringReader reader
     ) {
         return CommandUtils.readUnquotedString(reader);
     }
 
-    @NotNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(
-            @NotNull CommandContext<S> context,
-            @NotNull SuggestionsBuilder builder
+    public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
+            @NonNull CommandContext<S> context,
+            @NonNull SuggestionsBuilder builder
     ) {
-        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
+        val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ItemEditorManager.INSTANCE.getItemEditors().keySet().forEach((key) -> {
             if (key.startsWith(lowerCaseRemaining)) {
                 builder.suggest(key);
@@ -59,9 +56,8 @@ public class EditorIDArgumentType implements ArgumentType<String> {
         return builder.buildFuture();
     }
 
-    @NotNull
     @Override
-    public Collection<String> getExamples() {
+    public @NonNull Collection<String> getExamples() {
         return EXAMPLES;
     }
 }

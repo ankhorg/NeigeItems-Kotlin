@@ -1,17 +1,16 @@
 package pers.neige.neigeitems.manager.logger;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.slf4j.Logger;
 
 public class Slf4jLogger implements ILogger {
-    @NotNull
-    protected final Logger logger;
+    protected final @NonNull Logger logger;
 
-    public Slf4jLogger(@NotNull Logger logger) {
+    public Slf4jLogger(@NonNull Logger logger) {
         this.logger = logger;
     }
 
-    public void warn(String message, Throwable thrown) {
+    public void warn(@NonNull String message, @NonNull Throwable thrown) {
         logger.warn(message, thrown);
     }
 }

@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader;
 
+import lombok.NonNull;
+
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Set;
@@ -37,12 +39,12 @@ public final class DelegateAbstractMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public Set<K> keySet() {
+    public @NonNull Set<K> keySet() {
         return delegateMap.keySet();
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public @NonNull Set<Entry<K, V>> entrySet() {
         return delegateMap.entrySet();
     }
 }

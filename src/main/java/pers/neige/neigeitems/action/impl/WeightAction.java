@@ -1,7 +1,8 @@
 package pers.neige.neigeitems.action.impl;
 
 import kotlin.Pair;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
@@ -17,25 +18,21 @@ import javax.script.CompiledScript;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class WeightAction extends Action {
     private final boolean order;
-    @NotNull
-    private final List<Pair<Action, Double>> actions = new ArrayList<>();
-    @Nullable
-    private String amountScriptString = null;
-    @Nullable
-    private CompiledScript amountScript = null;
+    private final @NonNull List<Pair<Action, Double>> actions = new ArrayList<>();
+    private final @Nullable String amountScriptString;
+    private @Nullable CompiledScript amountScript = null;
     private Integer amount = null;
     private double totalWeight = 0;
     private boolean equalWeight = false;
 
     public WeightAction(
-            @NotNull BaseActionManager manager,
-            @NotNull ConfigReader action
+            @NonNull BaseActionManager manager,
+            @NonNull ConfigReader action
     ) {
         super(manager);
         this.amountScriptString = action.getString("amount");
@@ -62,24 +59,18 @@ public class WeightAction extends Action {
     }
 
     public void initActions(
-            @NotNull BaseActionManager manager,
+            @NonNull BaseActionManager manager,
             @Nullable Object actions
     ) {
         if (!(actions instanceof List<?>)) return;
-        List<?> list = (List<?>) actions;
+        val list = (List<?>) actions;
         double total = 0;
         for (Object rawAction : list) {
-            if (!(rawAction instanceof Map<?, ?>)) continue;
-            Map<?, ?> mapAction = (Map<?, ?>) rawAction;
-            Object rawWeight = mapAction.get("weight");
-            double weight;
-            if (rawWeight instanceof Number) {
-                weight = ((Number) rawWeight).doubleValue();
-            } else {
-                weight = 1;
-            }
+            val config = ConfigReader.parse(rawAction);
+            if (config == null) continue;
+            val weight = config.getDouble("weight", 1);
             if (weight <= 0) continue;
-            Action action = manager.compile(mapAction.get("actions"));
+            val action = manager.compile(config.get("actions"));
             this.actions.add(new Pair<>(action, weight));
             total += weight;
         }
@@ -92,17 +83,15 @@ public class WeightAction extends Action {
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.WEIGHT;
     }
 
-    @Nullable
-    public String getAmountScriptString() {
+    public @Nullable String getAmountScriptString() {
         return amountScriptString;
     }
 
-    @Nullable
-    public CompiledScript getAmountScript() {
+    public @Nullable CompiledScript getAmountScript() {
         return amountScript;
     }
 
@@ -110,8 +99,7 @@ public class WeightAction extends Action {
         return order;
     }
 
-    @NotNull
-    public List<Pair<Action, Double>> getActions() {
+    public @NonNull List<Pair<Action, Double>> getActions() {
         return actions;
     }
 
@@ -123,7 +111,7 @@ public class WeightAction extends Action {
         return equalWeight;
     }
 
-    public int getAmount(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
+    public int getAmount(@NonNull BaseActionManager manager, @NonNull ActionContext context) {
         if (this.amount != null) return this.amount;
         if (this.amountScript == null) {
             return 1;
@@ -137,9 +125,9 @@ public class WeightAction extends Action {
         } catch (Throwable error) {
             if (this.amountScriptString != null) {
                 manager.getPlugin().getLogger().warning("Weight动作数量解析异常, 数量脚本内容如下:");
-                String[] lines = this.amountScriptString.split("\n");
+                val lines = this.amountScriptString.split("\n");
                 for (int i = 0; i < lines.length; i++) {
-                    String conditionLine = lines[i];
+                    val conditionLine = lines[i];
                     manager.getPlugin().getLogger().warning((i + 1) + ". " + conditionLine);
                 }
             } else {
@@ -159,8 +147,7 @@ public class WeightAction extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
+    protected @NonNull CompletableFuture<ActionResult> eval(@NonNull BaseActionManager manager, @NonNull ActionContext context) {
         return manager.runAction(this, context);
     }
 }

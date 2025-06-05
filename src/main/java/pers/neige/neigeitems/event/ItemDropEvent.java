@@ -1,10 +1,10 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -18,15 +18,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class ItemDropEvent extends CancellableEvent {
     private static final HandlerList handlers = new HandlerList();
-    @NotNull
-    private final String id;
-    @Nullable
-    private final OfflinePlayer parser;
-    @NotNull
-    private ItemStack itemStack;
+    private final @NonNull String id;
+    private final @Nullable OfflinePlayer parser;
+    private @NonNull ItemStack itemStack;
     private int amount;
-    @NotNull
-    private Location location;
+    private @NonNull Location location;
 
     /**
      * amount 取默认值 itemStack.getAmount()
@@ -37,9 +33,9 @@ public final class ItemDropEvent extends CancellableEvent {
      * @param location  掉落位置
      */
     public ItemDropEvent(
-            @NotNull String id,
-            @NotNull ItemStack itemStack,
-            @NotNull Location location
+            @NonNull String id,
+            @NonNull ItemStack itemStack,
+            @NonNull Location location
     ) {
         this.id = id;
         this.itemStack = itemStack;
@@ -57,10 +53,10 @@ public final class ItemDropEvent extends CancellableEvent {
      * @param location  掉落位置
      */
     public ItemDropEvent(
-            @NotNull String id,
-            @NotNull ItemStack itemStack,
+            @NonNull String id,
+            @NonNull ItemStack itemStack,
             int amount,
-            @NotNull Location location
+            @NonNull Location location
     ) {
         this.id = id;
         this.itemStack = itemStack;
@@ -77,10 +73,10 @@ public final class ItemDropEvent extends CancellableEvent {
      * @param parser    物品解析对象
      */
     public ItemDropEvent(
-            @NotNull String id,
-            @NotNull ItemStack itemStack,
+            @NonNull String id,
+            @NonNull ItemStack itemStack,
             int amount,
-            @NotNull Location location,
+            @NonNull Location location,
             @Nullable OfflinePlayer parser
     ) {
         this.id = id;
@@ -90,24 +86,21 @@ public final class ItemDropEvent extends CancellableEvent {
         this.parser = parser;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
     /**
      * 获取物品ID
      */
-    @NotNull
-    public String getId() {
+    public @NonNull String getId() {
         return id;
     }
 
     /**
      * 获取待掉落物品
      */
-    @NotNull
-    public ItemStack getItemStack() {
+    public @NonNull ItemStack getItemStack() {
         return itemStack;
     }
 
@@ -117,7 +110,7 @@ public final class ItemDropEvent extends CancellableEvent {
      * @param itemStack 待掉落物品
      */
     public void setItemStack(
-            @NotNull ItemStack itemStack
+            @NonNull ItemStack itemStack
     ) {
         this.itemStack = itemStack;
     }
@@ -141,8 +134,7 @@ public final class ItemDropEvent extends CancellableEvent {
     /**
      * 获取掉落位置
      */
-    @NotNull
-    public Location getLocation() {
+    public @NonNull Location getLocation() {
         return location;
     }
 
@@ -152,7 +144,7 @@ public final class ItemDropEvent extends CancellableEvent {
      * @param location 掉落位置
      */
     public void setLocation(
-            @NotNull Location location
+            @NonNull Location location
     ) {
         this.location = location;
     }
@@ -160,14 +152,12 @@ public final class ItemDropEvent extends CancellableEvent {
     /**
      * 获取物品解析对象
      */
-    @Nullable
-    public OfflinePlayer getParser() {
+    public @Nullable OfflinePlayer getParser() {
         return parser;
     }
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

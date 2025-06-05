@@ -6,11 +6,12 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.command.coordinates.Coordinates;
 
@@ -27,50 +28,44 @@ public class LocationArgumentType implements ArgumentType<Coordinates> {
     private LocationArgumentType() {
     }
 
-    @NotNull
-    public static LocationArgumentType location() {
+    public static @NonNull LocationArgumentType location() {
         return new LocationArgumentType();
     }
 
-    @NotNull
-    public static Coordinates getCoordinates(CommandContext<CommandSender> context, String name) {
+    public static @NonNull Coordinates getCoordinates(CommandContext<CommandSender> context, String name) {
         return context.getArgument(name, Coordinates.class);
     }
 
-    @Nullable
-    public static Location getLocation(
-            @NotNull World world,
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @Nullable Location getLocation(
+            @NonNull World world,
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return getLocation(world, context, name, null);
     }
 
-    @Nullable
-    public static Location getLocation(
-            @NotNull World world,
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name,
+    public static @Nullable Location getLocation(
+            @NonNull World world,
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name,
             @Nullable Player target
     ) {
         return getCoordinates(context, name).getLocation(world, context.getSource(), target);
     }
 
-    @NotNull
     @Override
-    public Coordinates parse(
-            @NotNull StringReader reader
+    public @NonNull Coordinates parse(
+            @NonNull StringReader reader
     ) throws CommandSyntaxException {
         return Coordinates.parse(reader);
     }
 
-    @NotNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(
-            @NotNull CommandContext<S> context,
-            @NotNull SuggestionsBuilder builder
+    public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
+            @NonNull CommandContext<S> context,
+            @NonNull SuggestionsBuilder builder
     ) {
-        String remaining = builder.getRemaining();
+        val remaining = builder.getRemaining();
         if (remaining.isEmpty()) {
             builder.suggest("~ ~ ~");
             builder.suggest("^ ^ ^");
@@ -112,9 +107,8 @@ public class LocationArgumentType implements ArgumentType<Coordinates> {
         return builder.buildFuture();
     }
 
-    @NotNull
     @Override
-    public Collection<String> getExamples() {
+    public @NonNull Collection<String> getExamples() {
         return EXAMPLES;
     }
 }

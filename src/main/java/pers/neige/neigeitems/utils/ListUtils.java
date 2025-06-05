@@ -1,25 +1,24 @@
 package pers.neige.neigeitems.utils;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Function;
 
 public class ListUtils {
-    @Nullable
-    public static <T> T getOrNull(
-            @NotNull List<T> list,
+    public static @Nullable <T> T getOrNull(
+            @NonNull List<T> list,
             int index
     ) {
         return index >= 0 && index <= (list.size() - 1) ? list.get(index) : null;
     }
 
-    @NotNull
-    public static <T> T getOrDefault(
-            @NotNull List<T> list,
+    public static @NonNull <T> T getOrDefault(
+            @NonNull List<T> list,
             int index,
-            @NotNull T def
+            @NonNull T def
     ) {
         T value = null;
         if (index >= 0 && index <= (list.size() - 1)) {
@@ -28,19 +27,18 @@ public class ListUtils {
         return value != null ? value : def;
     }
 
-    @NotNull
-    public static <T, V> V getAndApply(
-            @NotNull List<T> list,
+    public static @NonNull <T, V> V getAndApply(
+            @NonNull List<T> list,
             int index,
-            @NotNull V def,
-            @NotNull Function<T, V> handler
+            @NonNull V def,
+            @NonNull Function<T, V> handler
     ) {
         T value = null;
         if (index >= 0 && index <= (list.size() - 1)) {
             value = list.get(index);
         }
         if (value != null) {
-            V result = handler.apply(value);
+            val result = handler.apply(value);
             if (result != null) {
                 return result;
             }
@@ -48,19 +46,17 @@ public class ListUtils {
         return def;
     }
 
-    @Nullable
-    public static <T> T getOrNull(
-            T @NotNull [] list,
+    public static @Nullable <T> T getOrNull(
+            T @NonNull [] list,
             int index
     ) {
         return index >= 0 && index <= (list.length - 1) ? list[index] : null;
     }
 
-    @NotNull
-    public static <T> T getOrDefault(
-            T @NotNull [] list,
+    public static @NonNull <T> T getOrDefault(
+            T @NonNull [] list,
             int index,
-            @NotNull T def
+            @NonNull T def
     ) {
         T value = null;
         if (index >= 0 && index <= (list.length - 1)) {
@@ -69,19 +65,18 @@ public class ListUtils {
         return value != null ? value : def;
     }
 
-    @NotNull
-    public static <T, V> V getAndApply(
-            T @NotNull [] list,
+    public static @NonNull <T, V> V getAndApply(
+            T @NonNull [] list,
             int index,
-            @NotNull V def,
-            @NotNull Function<T, V> handler
+            @NonNull V def,
+            @NonNull Function<T, V> handler
     ) {
         T value = null;
         if (index >= 0 && index <= (list.length - 1)) {
             value = list[index];
         }
         if (value != null) {
-            V result = handler.apply(value);
+            val result = handler.apply(value);
             if (result != null) {
                 return result;
             }

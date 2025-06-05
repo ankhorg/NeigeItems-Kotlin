@@ -1,6 +1,8 @@
 package pers.neige.neigeitems.utils.pagination.impl.circular;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.pagination.CircularPager;
 
@@ -9,16 +11,16 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K, V>> {
-    private final @NotNull NavigableMap<K, V> handle;
-    private final @NotNull AtomicReference<K> cursorKey = new AtomicReference<>();
+    private final @NonNull NavigableMap<K, V> handle;
+    private final @NonNull AtomicReference<K> cursorKey = new AtomicReference<>();
 
-    public MutableNavMapCircularPager(@NotNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
+    public MutableNavMapCircularPager(@NonNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
         super(pageSize, filter);
         this.handle = handle;
         resetOffset();
     }
 
-    public @NotNull NavigableMap<K, V> getHandle() {
+    public @NonNull NavigableMap<K, V> getHandle() {
         return handle;
     }
 
@@ -64,17 +66,17 @@ public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K,
     @Override
     public void moveOffset(int delta) {
         if (delta == 0 || handle.isEmpty()) return;
-        K current = getCursor();
+        var current = getCursor();
         if (current == null) {
             current = handle.firstKey();
         }
 
         delta = delta % getTotalElements();
 
-        boolean reverse = delta < 0;
-        int absDelta = Math.abs(delta);
+        val reverse = delta < 0;
+        val absDelta = Math.abs(delta);
 
-        Iterator<K> it = reverse ?
+        var it = reverse ?
                 handle.headMap(current, false).descendingKeySet().iterator() :
                 handle.tailMap(current, false).navigableKeySet().iterator();
 
@@ -89,22 +91,22 @@ public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K,
     }
 
     @Override
-    public @NotNull List<Map.Entry<K, V>> getCurrentPageElements() {
-        K current = getCursor();
+    public @NonNull List<Map.Entry<K, V>> getCurrentPageElements() {
+        val current = getCursor();
         if (current == null || handle.isEmpty()) return Collections.emptyList();
 
-        List<Map.Entry<K, V>> page = new ArrayList<>(getPageSize());
-        NavigableMap<K, V> tail = handle.tailMap(current, true);
-        Iterator<Map.Entry<K, V>> it = tail.entrySet().iterator();
+        val page = new ArrayList<Map.Entry<K, V>>(getPageSize());
+        val tail = handle.tailMap(current, true);
+        var it = tail.entrySet().iterator();
 
-        boolean newRound = false;
-        boolean anyMatch = false;
+        var newRound = false;
+        var anyMatch = false;
         List<Map.Entry<K, V>> newRoundElements = null;
         while (page.size() < getPageSize()) {
             if (!it.hasNext()) {
                 if (newRound) {
                     if (anyMatch) {
-                        Iterator<Map.Entry<K, V>> roundIterator = newRoundElements.iterator();
+                        var roundIterator = newRoundElements.iterator();
                         while (page.size() < getPageSize()) {
                             if (!roundIterator.hasNext()) roundIterator = newRoundElements.iterator();
                             page.add(roundIterator.next());
@@ -116,7 +118,7 @@ public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K,
                 newRoundElements = new ArrayList<>();
                 it = handle.entrySet().iterator();
             }
-            Map.Entry<K, V> element = it.next();
+            val element = it.next();
             if (filter == null || filter.test(element)) {
                 if (newRound) {
                     anyMatch = true;

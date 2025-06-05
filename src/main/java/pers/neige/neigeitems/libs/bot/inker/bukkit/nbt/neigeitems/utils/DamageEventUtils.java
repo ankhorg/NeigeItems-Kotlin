@@ -1,12 +1,12 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import lombok.NonNull;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.ref.entity.RefCraftPlayer;
 import pers.neige.neigeitems.ref.entity.RefEntityPlayer;
 
@@ -17,7 +17,7 @@ public class DamageEventUtils {
      * @param event 待检测事件.
      */
     public static boolean isCritical(
-            @NotNull EntityDamageByEntityEvent event
+            @NonNull EntityDamageByEntityEvent event
     ) {
         // 检测玩家攻击情况
         if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return false;
@@ -51,7 +51,7 @@ public class DamageEventUtils {
      * @param event 待检测事件.
      */
     public static boolean isBlocking(
-            @NotNull EntityDamageEvent event
+            @NonNull EntityDamageEvent event
     ) {
         // 获取受击者
         Entity entity = event.getEntity();

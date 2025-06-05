@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 插件重载事件, /ni reload指令触发
@@ -25,8 +25,7 @@ public final class PluginReloadEvent {
      */
     public static class Pre extends BasicEvent {
         private static final HandlerList handlers = new HandlerList();
-        @NotNull
-        private final Type type;
+        private final @NonNull Type type;
 
         /**
          * type 取默认值 Type.ALL.
@@ -38,26 +37,23 @@ public final class PluginReloadEvent {
         /**
          * @param type 重载类型
          */
-        public Pre(@NotNull Type type) {
+        public Pre(@NonNull Type type) {
             this.type = type;
         }
 
-        @NotNull
-        public static HandlerList getHandlerList() {
+        public static @NonNull HandlerList getHandlerList() {
             return handlers;
         }
 
         /**
          * 获取重载类型
          */
-        @NotNull
-        public Type getType() {
+        public @NonNull Type getType() {
             return type;
         }
 
         @Override
-        @NotNull
-        public HandlerList getHandlers() {
+        public @NonNull HandlerList getHandlers() {
             return handlers;
         }
     }
@@ -67,8 +63,7 @@ public final class PluginReloadEvent {
      */
     public static class Post extends BasicEvent {
         private static final HandlerList handlers = new HandlerList();
-        @NotNull
-        private final Type type;
+        private final @NonNull Type type;
 
         /**
          * type 取默认值 Type.ALL.
@@ -80,26 +75,23 @@ public final class PluginReloadEvent {
         /**
          * @param type 重载类型
          */
-        public Post(@NotNull Type type) {
+        public Post(@NonNull Type type) {
             this.type = type;
         }
 
-        @NotNull
-        public static HandlerList getHandlerList() {
+        public static @NonNull HandlerList getHandlerList() {
             return handlers;
         }
 
         /**
          * 获取重载类型
          */
-        @NotNull
-        public Type getType() {
+        public @NonNull Type getType() {
             return type;
         }
 
         @Override
-        @NotNull
-        public HandlerList getHandlers() {
+        public @NonNull HandlerList getHandlers() {
             return handlers;
         }
     }

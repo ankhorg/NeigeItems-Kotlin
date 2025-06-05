@@ -1,5 +1,8 @@
 package pers.neige.neigeitems.hook.nms;
 
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.ItemTag;
 import net.md_5.bungee.api.chat.hover.content.Text;
@@ -14,11 +17,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.item.builder.ItemBuilder;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
@@ -33,9 +34,9 @@ public class NMSHooker {
     protected final Map<Material, NamespacedKey> materialNamespacedKeys = loadNamespacedKeys();
 
     protected Map<Material, NamespacedKey> loadNamespacedKeys() {
-        Map<Material, NamespacedKey> result = new HashMap<>();
-        for (Material material : Material.values()) {
-            org.bukkit.NamespacedKey bukkitNamespacedKey = material.getKey();
+        val result = new HashMap<Material, NamespacedKey>();
+        for (val material : Material.values()) {
+            val bukkitNamespacedKey = material.getKey();
             result.put(material, new NamespacedKey(bukkitNamespacedKey.getNamespace(), bukkitNamespacedKey.getKey()));
         }
         return result;
@@ -60,8 +61,7 @@ public class NMSHooker {
      * @param itemMeta 待操作 ItemMeta
      * @return 是否存在 CustomModelData
      */
-    @Nullable
-    public Integer getCustomModelData(@Nullable ItemMeta itemMeta) {
+    public @Nullable Integer getCustomModelData(@Nullable ItemMeta itemMeta) {
         if (itemMeta == null || !hasCustomModelData(itemMeta)) {
             return null;
         } else {
@@ -100,8 +100,7 @@ public class NMSHooker {
      * @return 生成的掉落物.
      */
     @Deprecated
-    @NotNull
-    public Item dropItem(@NotNull World world, @NotNull Location location, @NotNull ItemStack itemStack, @NotNull Consumer<Item> function) {
+    public @NonNull Item dropItem(@NonNull World world, @NonNull Location location, @NonNull ItemStack itemStack, @NonNull Consumer<Item> function) {
         return WorldUtils.dropItem(world, location, itemStack, function);
     }
 
@@ -111,8 +110,7 @@ public class NMSHooker {
      * @param text 待操作物品.
      * @return 生成的 HoverEvent.
      */
-    @NotNull
-    public HoverEvent hoverText(@NotNull String text) {
+    public @NonNull HoverEvent hoverText(@NonNull String text) {
         return new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(text));
     }
 
@@ -122,8 +120,7 @@ public class NMSHooker {
      * @param itemStack 待操作物品.
      * @return 生成的 HoverEvent.
      */
-    @NotNull
-    public HoverEvent hoverItem(@NotNull ItemStack itemStack) {
+    public @NonNull HoverEvent hoverItem(@NonNull ItemStack itemStack) {
         String nbtString;
         if (itemStack.getType() == Material.AIR) {
             nbtString = "{}";
@@ -133,31 +130,26 @@ public class NMSHooker {
         return new HoverEvent(HoverEvent.Action.SHOW_ITEM, new net.md_5.bungee.api.chat.hover.content.Item(getNamespacedKey(itemStack.getType()).getKey(), itemStack.getAmount(), ItemTag.ofNbt(nbtString)));
     }
 
-    @NotNull
-    public ItemBuilder newItemBuilder() {
+    public @NonNull ItemBuilder newItemBuilder() {
         return new ItemBuilder();
     }
 
-    @NotNull
-    public ItemBuilder newItemBuilder(@Nullable Material material) {
+    public @NonNull ItemBuilder newItemBuilder(@Nullable Material material) {
         return new ItemBuilder(material);
     }
 
-    @NotNull
-    public ItemBuilder newItemBuilder(@Nullable ItemStack itemStack) {
+    public @NonNull ItemBuilder newItemBuilder(@Nullable ItemStack itemStack) {
         return new ItemBuilder(itemStack);
     }
 
-    @NotNull
-    public ItemBuilder newItemBuilder(@Nullable ConfigReader config) {
+    public @NonNull ItemBuilder newItemBuilder(@Nullable ConfigReader config) {
         return new ItemBuilder(config);
     }
 
     /**
      * 等效于Material#getMaterial, 但为1.12.2版本添加了数字ID处理.
      */
-    @Nullable
-    public Material getMaterial(@Nullable String material) {
+    public @Nullable Material getMaterial(@Nullable String material) {
         if (material == null) return null;
         return Material.getMaterial(material.toUpperCase(Locale.ENGLISH));
     }
@@ -168,13 +160,13 @@ public class NMSHooker {
      * @param player 接收经验的玩家.
      * @param exp    经验数量.
      */
-    public void giveExp(@NotNull Player player, int exp) {
+    public void giveExp(@NonNull Player player, int exp) {
         player.giveExp(exp);
     }
 
     protected org.bukkit.NamespacedKey parseToNamespacedKey(String id) {
-        String[] args = new String[]{"minecraft", id};
-        int index = id.indexOf(":");
+        val args = new String[]{"minecraft", id};
+        val index = id.indexOf(":");
         if (index >= 0) {
             args[1] = id.substring(index + 1);
             if (index >= 1) {
@@ -184,14 +176,14 @@ public class NMSHooker {
         return new org.bukkit.NamespacedKey(args[0], args[1]);
     }
 
-    @NotNull
-    protected Map<Enchantment, Integer> buildEnchantments(@NotNull NbtList ench) {
-        Map<Enchantment, Integer> enchantments = new LinkedHashMap<>(ench.size());
+    protected @NonNull Map<Enchantment, Integer> buildEnchantments(@NonNull NbtList ench) {
+        val enchantments = new LinkedHashMap<Enchantment, Integer>(ench.size());
 
-        for (Nbt<?> nbt : ench) {
-            String id = ((NbtCompound) nbt).getString(NbtUtils.getEnchantmentIdNbtKey());
+        for (val nbt : ench) {
+            val id = ((NbtCompound) nbt).getString(NbtUtils.getEnchantmentIdNbtKey());
+            if (id == null) continue;
             int level = ((NbtCompound) nbt).getShort(NbtUtils.getEnchantmentLvlNbtKey());
-            Enchantment enchant = Enchantment.getByKey(parseToNamespacedKey(id));
+            val enchant = Enchantment.getByKey(parseToNamespacedKey(id));
             if (enchant != null) {
                 enchantments.put(enchant, level);
             }
@@ -206,14 +198,13 @@ public class NMSHooker {
      * @param itemStack 待转换物品.
      * @return NI可识别的配置文件
      */
-    @Nullable
-    public ConfigurationSection save(@Nullable ItemStack itemStack) {
+    public @Nullable ConfigurationSection save(@Nullable ItemStack itemStack) {
         if (itemStack == null || itemStack.getType() == Material.AIR) return null;
-        ConfigurationSection result = new YamlConfiguration();
+        val result = new YamlConfiguration();
         result.set("material", itemStack.getType().toString());
-        NbtCompound nbt = ItemUtils.getNbtOrNull(itemStack);
+        var nbt = ItemUtils.getNbtOrNull(itemStack);
 
-        short damage = ItemUtils.getDamage(itemStack);
+        val damage = ItemUtils.getDamage(itemStack);
         if (damage > 0) {
             result.set("damage", damage);
         }
@@ -221,23 +212,23 @@ public class NMSHooker {
         if (nbt == null) return result;
         nbt = nbt.clone();
 
-        NbtCompound display = nbt.getCompound(NbtUtils.getDisplayNbtKey());
+        val display = nbt.getCompound(NbtUtils.getDisplayNbtKey());
         if (display != null) {
-            int color = display.getInt("color", -1);
+            val color = display.getInt("color", -1);
             if (color != -1) {
                 result.set("color", Integer.toString(color, 16).toUpperCase(Locale.getDefault()));
                 display.remove("color");
             }
-            String rawName = display.getString(NbtUtils.getNameNbtKey());
+            val rawName = display.getString(NbtUtils.getNameNbtKey());
             if (rawName != null) {
-                String name = TranslationUtils.toLegacyText(rawName);
+                val name = TranslationUtils.toLegacyText(rawName);
                 result.set("name", name);
                 display.remove(NbtUtils.getNameNbtKey());
             }
-            NbtList rawLore = display.getList(NbtUtils.getLoreNbtKey());
+            val rawLore = display.getList(NbtUtils.getLoreNbtKey());
             if (rawLore != null && !rawLore.isEmpty()) {
-                List<String> lore = new ArrayList<>();
-                for (Nbt<?> loreNbt : rawLore) {
+                val lore = new ArrayList<String>();
+                for (val loreNbt : rawLore) {
                     lore.add(TranslationUtils.toLegacyText(loreNbt.getAsString()));
                 }
                 result.set("lore", lore);
@@ -248,16 +239,16 @@ public class NMSHooker {
             }
         }
 
-        String cmdKey = NbtUtils.getCustomModelDataNbtKeyOrNull();
+        val cmdKey = NbtUtils.getCustomModelDataNbtKeyOrNull();
         if (cmdKey != null) {
-            int customModelData = nbt.getInt(cmdKey, -1);
+            val customModelData = nbt.getInt(cmdKey, -1);
             if (customModelData != -1) {
                 result.set("custom-model-data", customModelData);
                 nbt.remove(cmdKey);
             }
         }
 
-        boolean unbreakable = nbt.getBoolean(NbtUtils.getUnbreakableNbtKey());
+        val unbreakable = nbt.getBoolean(NbtUtils.getUnbreakableNbtKey());
         if (unbreakable) {
             result.set("unbreakable", true);
             nbt.remove(NbtUtils.getUnbreakableNbtKey());
@@ -265,8 +256,8 @@ public class NMSHooker {
 
         int hideFlags = nbt.getInt("HideFlags");
         if (hideFlags > 0) {
-            List<String> flags = new ArrayList<>();
-            for (ItemFlag flag : ItemFlag.values()) {
+            val flags = new ArrayList<String>();
+            for (val flag : ItemFlag.values()) {
                 int bitModifier = (byte) (1 << flag.ordinal());
                 if ((hideFlags & bitModifier) == bitModifier) {
                     flags.add(flag.name());
@@ -278,11 +269,11 @@ public class NMSHooker {
             nbt.remove("HideFlags");
         }
 
-        NbtList enchantmentNbt = nbt.getList(NbtUtils.getEnchantmentsNbtKey());
+        val enchantmentNbt = nbt.getList(NbtUtils.getEnchantmentsNbtKey());
         if (enchantmentNbt != null) {
-            Map<Enchantment, Integer> enchantments = buildEnchantments(enchantmentNbt);
+            val enchantments = buildEnchantments(enchantmentNbt);
             if (!enchantments.isEmpty()) {
-                ConfigurationSection enchantSection = result.createSection("enchantments");
+                val enchantSection = result.createSection("enchantments");
                 enchantments.forEach((enchant, level) -> {
                     enchantSection.set(enchant.getName(), level);
                 });

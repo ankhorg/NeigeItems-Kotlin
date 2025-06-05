@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtIntLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagInt;
@@ -47,7 +47,7 @@ public final class NbtInt extends NbtNumeric<RefNbtTagInt> implements NbtIntLike
     }
 
     @Override
-    public int compareTo(@NotNull Nbt<?> o) {
+    public int compareTo(@NonNull Nbt<?> o) {
         if (o instanceof NbtInt) {
             return Integer.compare(getAsInt(), ((NbtInt) o).getAsInt());
         }

@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.text.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.Condition;
 import pers.neige.neigeitems.config.ConfigReader;
@@ -11,16 +11,13 @@ import java.util.List;
 import java.util.function.Function;
 
 public class ConditionText extends Text {
-    @NotNull
-    private final Condition condition;
-    @NotNull
-    private final Text text;
-    @NotNull
-    private final Text deny;
+    private final @NonNull Condition condition;
+    private final @NonNull Text text;
+    private final @NonNull Text deny;
 
     public ConditionText(
-            @NotNull BaseActionManager manager,
-            @NotNull ConfigReader lore
+            @NonNull BaseActionManager manager,
+            @NonNull ConfigReader lore
     ) {
         super(manager);
         condition = new Condition(manager, lore.getString("condition"));
@@ -28,27 +25,23 @@ public class ConditionText extends Text {
         deny = Text.compile(manager, lore.get("deny"));
     }
 
-    @NotNull
-    public Condition getCondition() {
+    public @NonNull Condition getCondition() {
         return condition;
     }
 
-    @NotNull
-    public Text getLore() {
+    public @NonNull Text getLore() {
         return text;
     }
 
-    @NotNull
-    public Text getDeny() {
+    public @NonNull Text getDeny() {
         return deny;
     }
 
-    @NotNull
     @Override
-    public <T, R extends List<T>> R getText(
-            @NotNull R result,
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context,
+    public <T, R extends List<T>> @NonNull R getText(
+            @NonNull R result,
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context,
             Function<String, T> converter
     ) {
         if (condition.easyCheck(context)) {

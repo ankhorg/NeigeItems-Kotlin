@@ -1,17 +1,19 @@
 package pers.neige.neigeitems.utils;
 
+import lombok.val;
+
 public class ColorUtils {
     public static String toHexColorPrefix(int rgb) {
         rgb = Math.max(0, Math.min(0xFFFFFF, rgb));
-        StringBuilder result = new StringBuilder("§x");
-        String hexString = Integer.toHexString(rgb);
-        int zeroLength = 6 - hexString.length();
+        val result = new StringBuilder("§x");
+        val hexString = Integer.toHexString(rgb);
+        val zeroLength = 6 - hexString.length();
         if (zeroLength > 0) {
             for (int i = 0; i < zeroLength; i++) {
                 result.append("§0");
             }
         }
-        for (char c : hexString.toCharArray()) {
+        for (val c : hexString.toCharArray()) {
             result.append("§");
             result.append(c);
         }
@@ -22,28 +24,28 @@ public class ColorUtils {
         r = Math.max(0, Math.min(0xFF, r));
         g = Math.max(0, Math.min(0xFF, g));
         b = Math.max(0, Math.min(0xFF, b));
-        StringBuilder result = new StringBuilder("§x");
-        String rString = Integer.toHexString(r);
+        val result = new StringBuilder("§x");
+        val rString = Integer.toHexString(r);
         if (rString.length() == 1) {
             result.append("§0");
         }
-        for (char c : rString.toCharArray()) {
+        for (val c : rString.toCharArray()) {
             result.append("§");
             result.append(c);
         }
-        String gString = Integer.toHexString(g);
+        val gString = Integer.toHexString(g);
         if (gString.length() == 1) {
             result.append("§0");
         }
-        for (char c : gString.toCharArray()) {
+        for (val c : gString.toCharArray()) {
             result.append("§");
             result.append(c);
         }
-        String bString = Integer.toHexString(b);
+        val bString = Integer.toHexString(b);
         if (bString.length() == 1) {
             result.append("§0");
         }
-        for (char c : bString.toCharArray()) {
+        for (val c : bString.toCharArray()) {
             result.append("§");
             result.append(c);
         }

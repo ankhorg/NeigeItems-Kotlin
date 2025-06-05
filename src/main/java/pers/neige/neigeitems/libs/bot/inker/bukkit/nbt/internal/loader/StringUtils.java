@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +43,7 @@ public final class StringUtils {
         return list.toArray(EMPTY_STRING_ARRAY);
     }
 
-    @NotNull
-    public static ArrayList<String> split(@NotNull String text, char separator, char escape) {
+    public static @NonNull ArrayList<String> split(@NonNull String text, char separator, char escape) {
         // 参数文本
         final char[] chars = text.toCharArray();
         // 所有参数

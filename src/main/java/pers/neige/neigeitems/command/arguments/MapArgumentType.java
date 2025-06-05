@@ -8,8 +8,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.command.CommandUtils;
 
 import java.util.Collection;
@@ -24,35 +25,30 @@ import java.util.function.Supplier;
  */
 public class MapArgumentType<T> implements ArgumentType<T> {
     private static final Collection<String> EXAMPLES = Collections.singletonList("key");
-    @NotNull
-    private final Supplier<Map<String, T>> mapGetter;
-    @NotNull
-    private final DynamicCommandExceptionType exceptionType;
+    private final @NonNull Supplier<Map<String, T>> mapGetter;
+    private final @NonNull DynamicCommandExceptionType exceptionType;
 
-    private MapArgumentType(@NotNull Supplier<Map<String, T>> mapGetter, @NotNull Function<String, String> nullMessageGetter) {
+    private MapArgumentType(@NonNull Supplier<Map<String, T>> mapGetter, @NonNull Function<String, String> nullMessageGetter) {
         this.mapGetter = mapGetter;
         this.exceptionType = new DynamicCommandExceptionType(value -> new LiteralMessage(nullMessageGetter.apply(String.valueOf(value))));
     }
 
-    @NotNull
-    public static <V> MapArgumentType<V> map(@NotNull Supplier<Map<String, V>> mapGetter, @NotNull Function<String, String> nullMessageGetter) {
+    public static @NonNull <V> MapArgumentType<V> map(@NonNull Supplier<Map<String, V>> mapGetter, @NonNull Function<String, String> nullMessageGetter) {
         return new MapArgumentType<>(mapGetter, nullMessageGetter);
     }
 
-    @NotNull
-    public static <V> V getValue(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @NonNull <V> V getValue(
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return (V) context.getArgument(name, Object.class);
     }
 
-    @NotNull
     @Override
-    public T parse(
-            @NotNull StringReader reader
+    public @NonNull T parse(
+            @NonNull StringReader reader
     ) throws CommandSyntaxException {
-        String key = CommandUtils.readUnquotedString(reader);
+        val key = CommandUtils.readUnquotedString(reader);
         T result = mapGetter.get().get(key);
         if (result == null) {
             throw exceptionType.create(key);
@@ -60,13 +56,12 @@ public class MapArgumentType<T> implements ArgumentType<T> {
         return result;
     }
 
-    @NotNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(
-            @NotNull CommandContext<S> context,
-            @NotNull SuggestionsBuilder builder
+    public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
+            @NonNull CommandContext<S> context,
+            @NonNull SuggestionsBuilder builder
     ) {
-        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
+        val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         mapGetter.get().keySet().forEach((id) -> {
             if (id.toLowerCase().startsWith(lowerCaseRemaining)) {
                 builder.suggest(id);
@@ -75,9 +70,8 @@ public class MapArgumentType<T> implements ArgumentType<T> {
         return builder.buildFuture();
     }
 
-    @NotNull
     @Override
-    public Collection<String> getExamples() {
+    public @NonNull Collection<String> getExamples() {
         return EXAMPLES;
     }
 }

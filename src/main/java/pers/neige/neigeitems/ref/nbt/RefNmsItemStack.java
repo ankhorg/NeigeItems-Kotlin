@@ -1,13 +1,13 @@
 package pers.neige.neigeitems.ref.nbt;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.core.component.RefDataComponentPatch;
 import pers.neige.neigeitems.ref.core.component.RefDataComponentType;
 import pers.neige.neigeitems.ref.core.component.RefPatchedDataComponentMap;
 import pers.neige.neigeitems.ref.item.RefItem;
 
-import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
@@ -62,21 +62,17 @@ public final class RefNmsItemStack {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;load(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public native void load(RefNbtTagCompound nbt);
 
-    @Nullable
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;set(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;", predicates = "craftbukkit_version:[v1_20_R4,)")
-    public native <T> T set(RefDataComponentType<? super T> type, @Nullable T value);
+    public native <T> @Nullable T set(RefDataComponentType<? super T> type, @Nullable T value);
 
-    @Nullable
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;update(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;Ljava/lang/Object;Ljava/util/function/BiFunction;)Ljava/lang/Object;", predicates = "craftbukkit_version:[v1_20_R4,)")
-    public native <T, U> T update(RefDataComponentType<T> type, T defaultValue, U change, BiFunction<T, U, T> applier);
+    public native <T, U> @Nullable T update(RefDataComponentType<T> type, T defaultValue, U change, BiFunction<T, U, T> applier);
 
-    @Nullable
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;update(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;Ljava/util/function/UnaryOperator;)Ljava/lang/Object;", predicates = "craftbukkit_version:[v1_20_R4,)")
-    public native <T> T update(RefDataComponentType<T> type, T defaultValue, UnaryOperator<T> applier);
+    public native <T> @Nullable T update(RefDataComponentType<T> type, T defaultValue, UnaryOperator<T> applier);
 
-    @Nullable
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;remove(Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;", predicates = "craftbukkit_version:[v1_20_R4,)")
-    public native <T> T remove(RefDataComponentType<? extends T> type);
+    public native <T> @Nullable T remove(RefDataComponentType<? extends T> type);
 
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;getDisplayName()Lnet/minecraft/network/chat/Component;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public native RefComponent getDisplayName();

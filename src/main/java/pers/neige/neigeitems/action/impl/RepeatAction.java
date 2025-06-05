@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -12,13 +12,13 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 import java.util.concurrent.CompletableFuture;
 
 public class RepeatAction extends Action {
-    private final @NotNull String globalId;
-    private final @NotNull Evaluator<Integer> repeat;
-    private final @NotNull Action actions;
+    private final @NonNull String globalId;
+    private final @NonNull Evaluator<Integer> repeat;
+    private final @NonNull Action actions;
 
     public RepeatAction(
-            @NotNull BaseActionManager manager,
-            @NotNull ConfigReader config
+            @NonNull BaseActionManager manager,
+            @NonNull ConfigReader config
     ) {
         super(manager);
         this.globalId = config.getString("global-id", "i");
@@ -28,7 +28,7 @@ public class RepeatAction extends Action {
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.REPEAT;
     }
 
@@ -36,23 +36,22 @@ public class RepeatAction extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    protected @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }
 
-    public @NotNull String getGlobalId() {
+    public @NonNull String getGlobalId() {
         return globalId;
     }
 
-    public @NotNull Evaluator<Integer> getRepeat() {
+    public @NonNull Evaluator<Integer> getRepeat() {
         return repeat;
     }
 
-    public @NotNull Action getActions() {
+    public @NonNull Action getActions() {
         return actions;
     }
 }

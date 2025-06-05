@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.item.ItemInfo;
 
@@ -16,12 +16,9 @@ import pers.neige.neigeitems.item.ItemInfo;
  */
 public final class ItemExpirationEvent extends CancellableEvent {
     private static final HandlerList handlers = new HandlerList();
-    @Nullable
-    private final OfflinePlayer player;
-    @NotNull
-    private final ItemStack itemStack;
-    @NotNull
-    private final ItemInfo itemInfo;
+    private final @Nullable OfflinePlayer player;
+    private final @NonNull ItemStack itemStack;
+    private final @NonNull ItemInfo itemInfo;
 
     /**
      * @param player    持有物品的玩家
@@ -30,46 +27,41 @@ public final class ItemExpirationEvent extends CancellableEvent {
      */
     public ItemExpirationEvent(
             @Nullable OfflinePlayer player,
-            @NotNull ItemStack itemStack,
-            @NotNull ItemInfo itemInfo
+            @NonNull ItemStack itemStack,
+            @NonNull ItemInfo itemInfo
     ) {
         this.player = player;
         this.itemStack = itemStack;
         this.itemInfo = itemInfo;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
     /**
      * 获取持有物品的玩家
      */
-    @Nullable
-    public OfflinePlayer getPlayer() {
+    public @Nullable OfflinePlayer getPlayer() {
         return player;
     }
 
     /**
      * 获取到期的物品
      */
-    @NotNull
-    public ItemStack getItemStack() {
+    public @NonNull ItemStack getItemStack() {
         return itemStack;
     }
 
     /**
      * 获取物品信息
      */
-    @NotNull
-    public ItemInfo getItemInfo() {
+    public @NonNull ItemInfo getItemInfo() {
         return itemInfo;
     }
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

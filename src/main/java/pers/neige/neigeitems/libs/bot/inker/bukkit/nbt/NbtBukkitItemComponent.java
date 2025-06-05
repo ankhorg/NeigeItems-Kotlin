@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
 import com.google.common.collect.ImmutableSet;
+import lombok.NonNull;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
@@ -32,7 +32,6 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
             meta = itemStack.getItemMeta();
             InvokeUtil.setItemMeta(itemStack, meta);
         }
-        ItemMeta itemMeta = meta;
         refItemMeta = (RefCraftMetaItem) (Object) meta;
     }
 
@@ -59,7 +58,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     @Override
     public Nbt<?> put(String key, Nbt<?> value) {
         if (HANDLED_TAGS.contains(key)) {
-            logger.warn("key " + key + "isn't support for direct access");
+            logger.warn("key {} isn't support for direct access", key);
             return null;
         } else {
             return Nbt.fromNms(refItemMeta.unhandledTags.put(key, value.delegate));
@@ -77,8 +76,8 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     }
 
     @Override
-    public NbtBukkitItemComponent clone() {
-        return new NbtBukkitItemComponent(itemStack.clone());
+    public @NonNull NbtBukkitItemComponent clone() {
+        return new NbtBukkitItemComponent(NbtUtils.asBukkitCopy(itemStack));
     }
 
     @Override
@@ -97,7 +96,7 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     }
 
     @Override
-    public void putAll(@NotNull Map<? extends String, ? extends Nbt<?>> m) {
+    public void putAll(@NonNull Map<? extends String, ? extends Nbt<?>> m) {
         delegateMap.putAll(m);
     }
 
@@ -117,21 +116,21 @@ public class NbtBukkitItemComponent implements NbtComponentLike {
     }
 
     @Override
-    public Collection<Nbt<?>> values() {
+    public @NonNull Collection<Nbt<?>> values() {
         return delegateMap.values();
     }
 
     @Override
-    public Set<String> keySet() {
+    public @NonNull Set<String> keySet() {
         return refItemMeta.unhandledTags.keySet();
     }
 
     @Override
-    public Set<Entry<String, Nbt<?>>> entrySet() {
+    public @NonNull Set<Entry<String, Nbt<?>>> entrySet() {
         if (entrySet == null) {
             entrySet = new AbstractSet<Entry<String, Nbt<?>>>() {
                 @Override
-                public Iterator<Entry<String, Nbt<?>>> iterator() {
+                public @NonNull Iterator<Entry<String, Nbt<?>>> iterator() {
                     return new DelegateIterator(refItemMeta.unhandledTags.entrySet().iterator());
                 }
 

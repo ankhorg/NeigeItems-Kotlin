@@ -1,7 +1,8 @@
 package pers.neige.neigeitems.action.evaluator;
 
+import lombok.NonNull;
+import lombok.val;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.evaluator.impl.dbl.JsDoubleEvaluator;
@@ -19,19 +20,19 @@ import pers.neige.neigeitems.utils.NumberParser;
 import java.util.Locale;
 
 public class Evaluator<T> {
-    protected final @NotNull BaseActionManager manager;
-    protected final @NotNull Class<T> type;
+    protected final @NonNull BaseActionManager manager;
+    protected final @NonNull Class<T> type;
 
-    public Evaluator(@NotNull BaseActionManager manager, @NotNull Class<T> type) {
+    public Evaluator(@NonNull BaseActionManager manager, @NonNull Class<T> type) {
         this.manager = manager;
         this.type = type;
     }
 
-    public static @NotNull Evaluator<String> createStringEvaluator(@NotNull BaseActionManager manager, @Nullable String input) {
+    public static @NonNull Evaluator<String> createStringEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
         if (input == null) return manager.NULL_STRING_EVALUATOR;
-        String[] info = input.split(": ", 2);
-        String key = info[0].toLowerCase(Locale.ROOT);
-        String content = info.length > 1 ? info[1] : null;
+        val info = input.split(": ", 2);
+        val key = info[0].toLowerCase(Locale.ROOT);
+        val content = info.length > 1 ? info[1] : null;
         switch (key) {
             case "js":
                 return new JsStringEvaluator(manager, content);
@@ -42,18 +43,18 @@ public class Evaluator<T> {
         }
     }
 
-    public static @NotNull Evaluator<Integer> createIntegerEvaluator(@NotNull BaseActionManager manager, @Nullable String input) {
+    public static @NonNull Evaluator<Integer> createIntegerEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
         if (input == null) return manager.NULL_INTEGER_EVALUATOR;
-        String[] info = input.split(": ", 2);
-        String key = info[0].toLowerCase(Locale.ROOT);
-        String content = info.length > 1 ? info[1] : null;
+        val info = input.split(": ", 2);
+        val key = info[0].toLowerCase(Locale.ROOT);
+        val content = info.length > 1 ? info[1] : null;
         switch (key) {
             case "js":
                 return new JsIntegerEvaluator(manager, content);
             case "raw":
                 return new RawIntegerEvaluator(manager, content);
             default:
-                Integer maybe = NumberParser.parseInteger(input);
+                val maybe = NumberParser.parseInteger(input);
                 if (maybe == null) {
                     return new ParseIntegerEvaluator(manager, input);
                 } else {
@@ -62,18 +63,18 @@ public class Evaluator<T> {
         }
     }
 
-    public static @NotNull Evaluator<Double> createDoubleEvaluator(@NotNull BaseActionManager manager, @Nullable String input) {
+    public static @NonNull Evaluator<Double> createDoubleEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
         if (input == null) return manager.NULL_DOUBLE_EVALUATOR;
-        String[] info = input.split(": ", 2);
-        String key = info[0].toLowerCase(Locale.ROOT);
-        String content = info.length > 1 ? info[1] : null;
+        val info = input.split(": ", 2);
+        val key = info[0].toLowerCase(Locale.ROOT);
+        val content = info.length > 1 ? info[1] : null;
         switch (key) {
             case "js":
                 return new JsDoubleEvaluator(manager, content);
             case "raw":
                 return new RawDoubleEvaluator(manager, content);
             default:
-                Double maybe = NumberParser.parseDouble(input);
+                val maybe = NumberParser.parseDouble(input);
                 if (maybe == null) {
                     return new ParseDoubleEvaluator(manager, input);
                 } else {
@@ -83,19 +84,19 @@ public class Evaluator<T> {
     }
 
     @Contract("_, !null -> !null")
-    public @Nullable T getOrDefault(@NotNull ActionContext context, @Nullable T def) {
+    public @Nullable T getOrDefault(@NonNull ActionContext context, @Nullable T def) {
         return def;
     }
 
-    public @Nullable T get(@NotNull ActionContext context) {
+    public @Nullable T get(@NonNull ActionContext context) {
         return getOrDefault(context, null);
     }
 
-    public @NotNull BaseActionManager getManager() {
+    public @NonNull BaseActionManager getManager() {
         return manager;
     }
 
-    public @NotNull Class<T> getType() {
+    public @NonNull Class<T> getType() {
         return type;
     }
 }

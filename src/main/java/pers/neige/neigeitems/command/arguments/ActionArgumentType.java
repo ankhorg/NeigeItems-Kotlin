@@ -5,8 +5,9 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.manager.ActionManager;
 
@@ -25,34 +26,30 @@ public class ActionArgumentType implements ArgumentType<Action> {
     private ActionArgumentType() {
     }
 
-    @NotNull
-    public static ActionArgumentType action() {
+    public static @NonNull ActionArgumentType action() {
         return new ActionArgumentType();
     }
 
-    @NotNull
-    public static Action getAction(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @NonNull Action getAction(
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return context.getArgument(name, Action.class);
     }
 
-    @NotNull
     @Override
-    public Action parse(
-            @NotNull StringReader reader
+    public @NonNull Action parse(
+            @NonNull StringReader reader
     ) {
         return ActionManager.INSTANCE.compile(readAllString(reader));
     }
 
-    @NotNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(
-            @NotNull CommandContext<S> context,
-            @NotNull SuggestionsBuilder builder
+    public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
+            @NonNull CommandContext<S> context,
+            @NonNull SuggestionsBuilder builder
     ) {
-        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
+        val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ActionManager.INSTANCE.getActions().keySet().forEach((key) -> {
             if (key.startsWith(lowerCaseRemaining)) {
                 builder.suggest(key + ": ");
@@ -61,9 +58,8 @@ public class ActionArgumentType implements ArgumentType<Action> {
         return builder.buildFuture();
     }
 
-    @NotNull
     @Override
-    public Collection<String> getExamples() {
+    public @NonNull Collection<String> getExamples() {
         return EXAMPLES;
     }
 }

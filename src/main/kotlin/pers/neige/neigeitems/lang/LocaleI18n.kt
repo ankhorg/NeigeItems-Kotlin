@@ -199,17 +199,16 @@ object LocaleI18n {
         // 服务端根目录目标校验文件
         val sha1File = File("lang/$version/$simpleFileName.sha1")
         // 检测是否需要下载语言文件
-        if (
+        return (!file.exists()
+                // sha1校验文件不存在
+                || !sha1File.exists()
+                // sha1校验不通过
+                || file.sha1() != sha1File.readText())
         // 语言文件不存在
-            !file.exists()
-            // sha1校验文件不存在
-            || !sha1File.exists()
-            // sha1校验不通过
-            || file.sha1() != sha1File.readText()
-        ) {
-            return true
-        }
-        return false
+
+        // sha1校验文件不存在
+
+        // sha1校验不通过
     }
 
     /**

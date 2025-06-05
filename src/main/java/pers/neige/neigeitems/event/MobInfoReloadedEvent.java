@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * MM怪物信息重载完毕事件, /mm reload后一段时间触发.
@@ -9,14 +9,12 @@ import org.jetbrains.annotations.NotNull;
 public final class MobInfoReloadedEvent extends BasicEvent {
     private static final HandlerList handlers = new HandlerList();
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

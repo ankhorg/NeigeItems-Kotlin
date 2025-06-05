@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike;
 import pers.neige.neigeitems.ref.nbt.*;
@@ -80,7 +80,7 @@ public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike, Comparable
         return delegate.asString();
     }
 
-    public int compareTo(@NotNull Nbt<?> o) {
+    public int compareTo(@NonNull Nbt<?> o) {
         return Integer.compare(getId(), o.getId());
     }
 

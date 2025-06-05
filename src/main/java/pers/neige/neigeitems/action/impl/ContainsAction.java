@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -14,20 +14,15 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public class ContainsAction extends Action {
-    @NotNull
-    private final String globalId;
-    @NotNull
-    private final Evaluator<String> key;
-    @NotNull
-    private final Action defaultAction;
-    @NotNull
-    private final Action containsAction;
-    @NotNull
-    private final Set<String> elements;
+    private final @NonNull String globalId;
+    private final @NonNull Evaluator<String> key;
+    private final @NonNull Action defaultAction;
+    private final @NonNull Action containsAction;
+    private final @NonNull Set<String> elements;
 
     public ContainsAction(
-            @NotNull BaseActionManager manager,
-            @NotNull ConfigReader config
+            @NonNull BaseActionManager manager,
+            @NonNull ConfigReader config
     ) {
         super(manager);
         this.globalId = config.getString("global-id", "key");
@@ -45,7 +40,7 @@ public class ContainsAction extends Action {
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.CONTAINS;
     }
 
@@ -53,35 +48,30 @@ public class ContainsAction extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    protected @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }
 
-    @NotNull
-    public String getGlobalId() {
+    public @NonNull String getGlobalId() {
         return globalId;
     }
 
-    @NotNull
-    public Evaluator<String> getKey() {
+    public @NonNull Evaluator<String> getKey() {
         return key;
     }
 
-    @NotNull
-    public Action getDefaultAction() {
+    public @NonNull Action getDefaultAction() {
         return defaultAction;
     }
 
-    @NotNull
-    public Action getContainsAction() {
+    public @NonNull Action getContainsAction() {
         return containsAction;
     }
 
-    public @NotNull Set<String> getElements() {
+    public @NonNull Set<String> getElements() {
         return elements;
     }
 }

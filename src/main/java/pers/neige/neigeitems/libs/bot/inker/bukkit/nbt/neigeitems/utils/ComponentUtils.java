@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import lombok.NonNull;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.RefMinecraftKey;
 import pers.neige.neigeitems.ref.core.component.RefDataComponentPatch;
@@ -57,7 +57,7 @@ public class ComponentUtils {
      * @param provider   组件提供者.
      * @param components 需要覆盖的组件.
      */
-    public static void overrideComponent(@NotNull ItemStack receiver, @NotNull ItemStack provider, @NotNull List<String> components) {
+    public static void overrideComponent(@NonNull ItemStack receiver, @NonNull ItemStack provider, @NonNull List<String> components) {
         if (!MOJANG_MOTHER_DEAD) return;
         if (!(receiver instanceof RefCraftItemStack)) receiver = ((RefBukkitItemStack) (Object) receiver).craftDelegate;
         if (!(provider instanceof RefCraftItemStack)) provider = ((RefBukkitItemStack) (Object) provider).craftDelegate;

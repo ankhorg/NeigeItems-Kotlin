@@ -1,6 +1,9 @@
 package pers.neige.neigeitems.item.builder;
 
 import kotlin.text.StringsKt;
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.ChatColor;
@@ -9,7 +12,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*;
@@ -19,10 +21,8 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.Translat
 import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.ItemUtils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -32,8 +32,8 @@ public class ItemBuilder {
     public static final Map<String, Enchantment> byFieldName = new HashMap<>();
 
     static {
-        Field[] fields = Enchantment.class.getDeclaredFields();
-        for (Field field : fields) {
+        val fields = Enchantment.class.getDeclaredFields();
+        for (val field : fields) {
             if (!Modifier.isStatic(field.getModifiers())) continue;
             if (!Enchantment.class.isAssignableFrom(field.getType())) continue;
             try {
@@ -44,39 +44,23 @@ public class ItemBuilder {
         }
     }
 
-    @Nullable
-    protected Material material = null;
-    @Nullable
-    protected ItemStack itemStack = null;
-    @Nullable
-    protected Short damage = null;
-    @NotNull
-    protected Map<Enchantment, Short> enchantments = new HashMap<>();
-    @NotNull
-    protected Map<Short, Short> enchantmentIdToLevel = new HashMap<>();
-    @NotNull
-    protected Map<String, Short> enchantmentKeyToLevel = new HashMap<>();
-    @Nullable
-    protected Integer customModelData = null;
-    @Nullable
-    protected NbtString name = null;
-    @Nullable
-    protected NbtList lore = null;
-    @Nullable
-    protected Integer color = null;
-    @Nullable
-    protected Integer potionColor = null;
-    @Nullable
-    protected Boolean unbreakable = null;
-    @Nullable
-    protected Integer hideFlag = null;
-    @Nullable
-    protected NbtCompound coverNbt = null;
+    protected @Nullable Material material = null;
+    protected @Nullable ItemStack itemStack = null;
+    protected @Nullable Short damage = null;
+    protected @NonNull Map<Enchantment, Short> enchantments = new HashMap<>();
+    protected @NonNull Map<Short, Short> enchantmentIdToLevel = new HashMap<>();
+    protected @NonNull Map<String, Short> enchantmentKeyToLevel = new HashMap<>();
+    protected @Nullable Integer customModelData = null;
+    protected @Nullable NbtString name = null;
+    protected @Nullable NbtList lore = null;
+    protected @Nullable Integer color = null;
+    protected @Nullable Integer potionColor = null;
+    protected @Nullable Boolean unbreakable = null;
+    protected @Nullable Integer hideFlag = null;
+    protected @Nullable NbtCompound coverNbt = null;
     protected boolean hasBuild = false;
-    @Nullable
-    protected Consumer<ItemStack> postItemInit = null;
-    @Nullable
-    protected BiConsumer<ItemStack, NbtCompound> preCoverNbt = null;
+    protected @Nullable Consumer<ItemStack> postItemInit = null;
+    protected @Nullable BiConsumer<ItemStack, NbtCompound> preCoverNbt = null;
 
     public ItemBuilder() {
     }
@@ -110,11 +94,11 @@ public class ItemBuilder {
             @Nullable ConfigReader config
     ) {
         if (config == null) return;
-        for (String key : config.keySet()) {
+        for (val key : config.keySet()) {
             switch (key.toLowerCase()) {
                 case "type":
                 case "material": {
-                    String materialString = config.getString(key);
+                    val materialString = config.getString(key);
                     if (materialString != null) {
                         this.material = HookerManager.getMaterial(materialString);
                     }
@@ -125,12 +109,12 @@ public class ItemBuilder {
                     break;
                 }
                 case "enchantments": {
-                    ConfigReader enchantSection = config.getConfig(key);
+                    val enchantSection = config.getConfig(key);
                     if (enchantSection != null) {
-                        for (String enchantId : enchantSection.keySet()) {
-                            String uppercaseEnchantId = enchantId.toUpperCase();
-                            short level = (short) enchantSection.getInt(enchantId);
-                            Enchantment enchant = Enchantment.getByName(uppercaseEnchantId);
+                        for (val enchantId : enchantSection.keySet()) {
+                            val uppercaseEnchantId = enchantId.toUpperCase();
+                            val level = (short) enchantSection.getInt(enchantId);
+                            var enchant = Enchantment.getByName(uppercaseEnchantId);
                             if (enchant == null) {
                                 enchant = byFieldName.get(uppercaseEnchantId);
                             }
@@ -152,17 +136,17 @@ public class ItemBuilder {
                     break;
                 }
                 case "name": {
-                    String rawName = config.getString(key);
+                    val rawName = config.getString(key);
                     if (rawName != null) {
                         this.name = NbtString.valueOf(TranslationUtils.toJsonText(ChatColor.translateAlternateColorCodes('&', rawName)));
                     }
                     break;
                 }
                 case "lore": {
-                    List<String> originLore = config.getStringList(key);
-                    NbtList finalLore = new NbtList();
-                    for (String rawLore : originLore) {
-                        for (String loreText : ChatColor.translateAlternateColorCodes('&', rawLore).split("\n")) {
+                    val originLore = config.getStringList(key);
+                    val finalLore = new NbtList();
+                    for (val rawLore : originLore) {
+                        for (val loreText : ChatColor.translateAlternateColorCodes('&', rawLore).split("\n")) {
                             finalLore.add(NbtString.valueOf(TranslationUtils.toJsonText(loreText)));
                         }
                     }
@@ -172,17 +156,17 @@ public class ItemBuilder {
                     break;
                 }
                 case "mini-name": {
-                    String rawName = config.getString(key);
+                    val rawName = config.getString(key);
                     if (rawName != null) {
                         this.name = NbtString.valueOf(GsonComponentSerializer.gson().serialize(MiniMessage.miniMessage().deserialize(rawName)));
                     }
                     break;
                 }
                 case "mini-lore": {
-                    List<String> originLore = config.getStringList(key);
-                    NbtList finalLore = new NbtList();
-                    for (String rawLore : originLore) {
-                        for (String loreText : rawLore.split("\n")) {
+                    val originLore = config.getStringList(key);
+                    val finalLore = new NbtList();
+                    for (val rawLore : originLore) {
+                        for (val loreText : rawLore.split("\n")) {
                             finalLore.add(NbtString.valueOf(GsonComponentSerializer.gson().serialize(MiniMessage.miniMessage().deserialize(loreText))));
                         }
                     }
@@ -192,7 +176,7 @@ public class ItemBuilder {
                     break;
                 }
                 case "color": {
-                    Object value = config.get(key);
+                    val value = config.get(key);
                     if (value instanceof String) {
                         color = StringsKt.toIntOrNull((String) value, 16);
                     } else if (value instanceof Integer) {
@@ -201,7 +185,7 @@ public class ItemBuilder {
                     break;
                 }
                 case "potion-color": {
-                    Object value = config.get(key);
+                    val value = config.get(key);
                     if (value instanceof String) {
                         potionColor = StringsKt.toIntOrNull((String) value, 16);
                     } else if (value instanceof Integer) {
@@ -217,12 +201,12 @@ public class ItemBuilder {
                 case "itemflags":
                 case "hide-flags":
                 case "hideflags": {
-                    List<String> flags = config.getStringList(key);
+                    val flags = config.getStringList(key);
                     if (!flags.isEmpty()) {
                         this.hideFlag = 0;
-                        for (String flagText : flags) {
+                        for (val flagText : flags) {
                             try {
-                                ItemFlag flag = ItemFlag.valueOf(flagText);
+                                val flag = ItemFlag.valueOf(flagText);
                                 this.hideFlag |= (1 << flag.ordinal());
                             } catch (IllegalArgumentException exception) {
                                 exception.printStackTrace();
@@ -232,7 +216,7 @@ public class ItemBuilder {
                     break;
                 }
                 case "nbt": {
-                    ConfigReader nbtConfig = config.getConfig(key);
+                    val nbtConfig = config.getConfig(key);
                     if (nbtConfig != null) {
                         this.coverNbt = ItemUtils.toNbtCompound(nbtConfig);
                     }
@@ -251,8 +235,7 @@ public class ItemBuilder {
      *
      * @return 构建产物.
      */
-    @NotNull
-    public ItemStack build() {
+    public @NonNull ItemStack build() {
         if (hasBuild) {
             throw new UnsupportedOperationException("Already build");
         }
@@ -292,8 +275,8 @@ public class ItemBuilder {
             return air;
         }
         if (CbVersion.v1_20_R3.isUpTo()) {
-            NbtItemStack nbtItemStack = new NbtItemStack(result);
-            NbtCompound nbt = nbtItemStack.getOrCreateTag();
+            val nbtItemStack = new NbtItemStack(result);
+            val nbt = nbtItemStack.getOrCreateTag();
             if (this.damage != null) {
                 if (CbVersion.v1_13_R1.isSupport()) {
                     nbt.putInt(NbtUtils.getDamageNbtKeyOrThrow(), damage);
@@ -303,13 +286,13 @@ public class ItemBuilder {
             }
             if (!this.enchantments.isEmpty()) {
                 if (CbVersion.v1_13_R1.isSupport()) {
-                    NbtList list = nbt.getOrCreateList(NbtUtils.getEnchantmentsNbtKey());
+                    val list = nbt.getOrCreateList(NbtUtils.getEnchantmentsNbtKey());
 
-                    for (Nbt<?> tag : list) {
+                    for (val tag : list) {
                         if (!(tag instanceof NbtCompound)) continue;
-                        NbtCompound compound = (NbtCompound) tag;
-                        String id = compound.getString(NbtUtils.getEnchantmentIdNbtKey());
-                        Short lvl = enchantmentKeyToLevel.get(id);
+                        val compound = (NbtCompound) tag;
+                        val id = compound.getString(NbtUtils.getEnchantmentIdNbtKey());
+                        val lvl = enchantmentKeyToLevel.get(id);
                         if (lvl != null) {
                             compound.putShort(NbtUtils.getEnchantmentLvlNbtKey(), lvl);
                             enchantmentKeyToLevel.remove(id);
@@ -317,26 +300,26 @@ public class ItemBuilder {
                     }
 
                     enchantmentKeyToLevel.forEach((id, lvl) -> {
-                        NbtCompound tag = new NbtCompound();
+                        val tag = new NbtCompound();
                         tag.putString(NbtUtils.getEnchantmentIdNbtKey(), id);
                         tag.putShort(NbtUtils.getEnchantmentLvlNbtKey(), lvl);
                         list.add(tag);
                     });
                 } else {
-                    NbtList list = nbt.getOrCreateList(NbtUtils.getEnchantmentsNbtKey());
+                    val list = nbt.getOrCreateList(NbtUtils.getEnchantmentsNbtKey());
 
-                    for (Nbt<?> tag : list) {
+                    for (val tag : list) {
                         if (!(tag instanceof NbtCompound)) continue;
-                        NbtCompound compound = (NbtCompound) tag;
-                        short id = compound.getShort(NbtUtils.getEnchantmentIdNbtKey());
-                        Short lvl = enchantmentIdToLevel.get(id);
+                        val compound = (NbtCompound) tag;
+                        val id = compound.getShort(NbtUtils.getEnchantmentIdNbtKey());
+                        val lvl = enchantmentIdToLevel.get(id);
                         if (lvl != null) {
                             compound.putShort(NbtUtils.getEnchantmentLvlNbtKey(), lvl);
                             enchantmentIdToLevel.remove(id);
                         }
                     }
                     enchantmentIdToLevel.forEach((id, lvl) -> {
-                        NbtCompound tag = new NbtCompound();
+                        val tag = new NbtCompound();
                         tag.putShort(NbtUtils.getEnchantmentIdNbtKey(), id);
                         tag.putShort(NbtUtils.getEnchantmentLvlNbtKey(), lvl);
                         list.add(tag);
@@ -344,13 +327,13 @@ public class ItemBuilder {
                 }
             }
             if (customModelData != null) {
-                String nbtKey = NbtUtils.getCustomModelDataNbtKeyOrNull();
+                val nbtKey = NbtUtils.getCustomModelDataNbtKeyOrNull();
                 if (nbtKey != null) {
                     nbt.putInt(nbtKey, customModelData);
                 }
             }
             if (name != null || lore != null || color != null) {
-                NbtCompound display = nbt.getOrCreateCompound(NbtUtils.getDisplayNbtKey());
+                val display = nbt.getOrCreateCompound(NbtUtils.getDisplayNbtKey());
                 if (name != null) {
                     display.put(NbtUtils.getNameNbtKey(), name);
                 }
@@ -381,8 +364,7 @@ public class ItemBuilder {
         return result;
     }
 
-    @Nullable
-    public Material getType() {
+    public @Nullable Material getType() {
         return material;
     }
 
@@ -390,8 +372,7 @@ public class ItemBuilder {
         this.material = material;
     }
 
-    @Nullable
-    public ItemStack getItemStack() {
+    public @Nullable ItemStack getItemStack() {
         return itemStack;
     }
 
@@ -399,8 +380,7 @@ public class ItemBuilder {
         this.itemStack = itemStack;
     }
 
-    @Nullable
-    public Short getDamage() {
+    public @Nullable Short getDamage() {
         return damage;
     }
 
@@ -408,17 +388,15 @@ public class ItemBuilder {
         this.damage = damage;
     }
 
-    @NotNull
-    public Map<Enchantment, Short> getEnchantments() {
+    public @NonNull Map<Enchantment, Short> getEnchantments() {
         return enchantments;
     }
 
-    public void setEnchantments(@NotNull Map<Enchantment, Short> enchantments) {
+    public void setEnchantments(@NonNull Map<Enchantment, Short> enchantments) {
         this.enchantments = enchantments;
     }
 
-    @Nullable
-    public Integer getCustomModelData() {
+    public @Nullable Integer getCustomModelData() {
         return customModelData;
     }
 
@@ -434,8 +412,7 @@ public class ItemBuilder {
         this.unbreakable = unbreakable;
     }
 
-    @Nullable
-    public Integer getHideFlag() {
+    public @Nullable Integer getHideFlag() {
         return hideFlag;
     }
 
@@ -443,8 +420,7 @@ public class ItemBuilder {
         this.hideFlag = hideFlag;
     }
 
-    @Nullable
-    public NbtCompound getCoverNbt() {
+    public @Nullable NbtCompound getCoverNbt() {
         return coverNbt;
     }
 

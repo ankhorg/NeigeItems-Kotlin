@@ -1,7 +1,9 @@
 package pers.neige.neigeitems.action;
 
+import lombok.NonNull;
+
 public abstract class ActionResult implements Comparable<ActionResult> {
-    public abstract ResultType getType();
+    public abstract @NonNull ResultType getType();
 
     @Override
     public int compareTo(ActionResult o) {

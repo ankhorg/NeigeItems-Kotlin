@@ -1,7 +1,8 @@
 package pers.neige.neigeitems.item;
 
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
@@ -14,20 +15,13 @@ import java.util.HashMap;
  * 用于在判断NI物品后返回NI物品信息, 详见ItemUtils#isNiItem
  */
 public final class ItemInfo {
-    @NotNull
-    private final ItemStack itemStack;
-    @NotNull
-    private final NbtItemStack nbtItemStack;
-    @NotNull
-    private final NbtCompound itemTag;
-    @NotNull
-    private final NbtCompound neigeItems;
-    @Nullable
-    private final Nbt<?> dataNbt;
-    @NotNull
-    private final String id;
-    @Nullable
-    private volatile HashMap<String, String> data;
+    private final @NonNull ItemStack itemStack;
+    private final @NonNull NbtItemStack nbtItemStack;
+    private final @NonNull NbtCompound itemTag;
+    private final @NonNull NbtCompound neigeItems;
+    private final @Nullable Nbt<?> dataNbt;
+    private final @NonNull String id;
+    private volatile @Nullable HashMap<String, String> data;
 
     /**
      * 用于在判断NI物品后返回NI物品信息, 详见ItemUtils#isNiItem
@@ -40,11 +34,11 @@ public final class ItemInfo {
      * @param data         指向数据
      */
     public ItemInfo(
-            @NotNull ItemStack itemStack,
-            @NotNull NbtItemStack nbtItemStack,
-            @NotNull NbtCompound itemTag,
-            @NotNull NbtCompound neigeItems,
-            @NotNull String id,
+            @NonNull ItemStack itemStack,
+            @NonNull NbtItemStack nbtItemStack,
+            @NonNull NbtCompound itemTag,
+            @NonNull NbtCompound neigeItems,
+            @NonNull String id,
             @Nullable HashMap<String, String> data
     ) {
         this.itemStack = itemStack;
@@ -56,16 +50,16 @@ public final class ItemInfo {
         this.data = data;
     }
 
-    private static HashMap<String, String> toFlatStringMap(@NotNull NbtCompound compound) {
-        HashMap<String, String> result = new HashMap<>();
+    private static @NonNull HashMap<String, String> toFlatStringMap(@NonNull NbtCompound compound) {
+        val result = new HashMap<String, String>();
         toFlatStringMap(compound, "", result);
         return result;
     }
 
     private static void toFlatStringMap(
-            @NotNull NbtCompound compound,
-            @NotNull String keyPrefix,
-            @NotNull HashMap<String, String> result
+            @NonNull NbtCompound compound,
+            @NonNull String keyPrefix,
+            @NonNull HashMap<String, String> result
     ) {
         compound.forEach((key, nbt) -> {
             if (nbt instanceof NbtCompound) {
@@ -76,33 +70,27 @@ public final class ItemInfo {
         });
     }
 
-    @NotNull
-    public ItemStack getItemStack() {
+    public @NonNull ItemStack getItemStack() {
         return this.itemStack;
     }
 
-    @NotNull
-    public NbtItemStack getNbtItemStack() {
+    public @NonNull NbtItemStack getNbtItemStack() {
         return this.nbtItemStack;
     }
 
-    @NotNull
-    public NbtCompound getItemTag() {
+    public @NonNull NbtCompound getItemTag() {
         return this.itemTag;
     }
 
-    @NotNull
-    public NbtCompound getNeigeItems() {
+    public @NonNull NbtCompound getNeigeItems() {
         return this.neigeItems;
     }
 
-    @NotNull
-    public String getId() {
+    public @NonNull String getId() {
         return this.id;
     }
 
-    @NotNull
-    public HashMap<String, String> getData() {
+    public @NonNull HashMap<String, String> getData() {
         if (this.data == null) {
             synchronized (this) {
                 if (this.data == null) {
@@ -119,8 +107,7 @@ public final class ItemInfo {
         return this.data;
     }
 
-    @Nullable
-    public String getDataValue(@NotNull String dataKey) {
+    public @Nullable String getDataValue(@NonNull String dataKey) {
         if (this.dataNbt instanceof NbtCompound) {
             return ((NbtCompound) dataNbt).getDeepString(dataKey);
         } else {

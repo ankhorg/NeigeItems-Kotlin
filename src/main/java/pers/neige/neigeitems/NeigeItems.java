@@ -1,19 +1,18 @@
 package pers.neige.neigeitems;
 
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.inksnow.ankhinvoke.bukkit.AnkhInvokeBukkit;
 import org.inksnow.ankhinvoke.bukkit.injector.JarTransformInjector;
 import org.inksnow.cputil.logger.AuroraLoggerFactory;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtItemStack;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.scanner.ClassScanner;
@@ -59,10 +58,10 @@ public class NeigeItems extends JavaPlugin {
     }
 
     public NeigeItems(
-            @NotNull JavaPluginLoader loader,
-            @NotNull PluginDescriptionFile description,
-            @NotNull File dataFolder,
-            @NotNull File file
+            @NonNull JavaPluginLoader loader,
+            @NonNull PluginDescriptionFile description,
+            @NonNull File dataFolder,
+            @NonNull File file
     ) {
         super(loader, description, dataFolder, file);
         onInit();
@@ -72,26 +71,41 @@ public class NeigeItems extends JavaPlugin {
         return INSTANCE;
     }
 
+    private static boolean checkMagicUtils(String className) {
+        return checkMagicUtils("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils", className);
+    }
+
+    private static boolean checkMagicUtils(String packageName, String className) {
+        try {
+            Class.forName(packageName + "." + className);
+            return true;
+        } catch (Throwable error) {
+            logger.warn("{} 类未正常加载, 这可能造成不可预知的错误, 请联系作者修复", className);
+            logger.warn("class {} did not load properly, which may cause unpredictable errors. Please contact the author for repair.", className, error);
+            return false;
+        }
+    }
+
     public void onInit() {
         if (CbVersion.current() == CbVersion.v1_20_R4) {
             logger.warn("1.20.5/1.20.6 是 mojang 拍脑门子更新出来的沟槽的中间版本, NeigeItems 拒绝支持这两个版本。");
             logger.warn("1.20.5/1.20.6 are problematic intermediate versions hastily released by Mojang, which NeigeItems refuses to support.");
 
-            PluginManager pluginManager = Bukkit.getPluginManager();
+            val pluginManager = Bukkit.getPluginManager();
             pluginManager.disablePlugin(this);
         }
         if (CbVersion.v1_13_R1.isSupport() && CbVersion.v1_17_R1.isUpTo()) {
             logger.warn("NeigeItems 已经放弃支持 1.13-1.17 的所有版本。");
             logger.warn("NeigeItems has discontinued support for all Minecraft versions from 1.13 to 1.17.");
 
-            PluginManager pluginManager = Bukkit.getPluginManager();
+            val pluginManager = Bukkit.getPluginManager();
             pluginManager.disablePlugin(this);
         }
         try {
             if (!CbVersion.v1_20_R4.isSupport()) {
-                ItemStack itemStack = new ItemStack(Material.STONE);
-                NbtItemStack nbtItemStack = new NbtItemStack(itemStack);
-                NbtCompound nbt = nbtItemStack.getOrCreateTag();
+                val itemStack = new ItemStack(Material.STONE);
+                val nbtItemStack = new NbtItemStack(itemStack);
+                val nbt = nbtItemStack.getOrCreateTag();
                 nbt.putString("test", "test");
                 nbt.getString("test");
             }
@@ -99,7 +113,7 @@ public class NeigeItems extends JavaPlugin {
             logger.warn("插件NBT前置库未正常加载依赖, 本插件不支持包括但不限于 Mohist/Catserver/Arclight 等混合服务端, 对于每个大版本, 本插件仅支持最新小版本, 如支持 1.19.4 但不支持 1.19.2, 请选用正确的服务端, 或卸载本插件");
             logger.warn("The plugin's NBT pre-requisite library failed to load. This plugin does not support mixed server platforms including but not limited to Mohist/Catserver/Arclight, etc. For each major version, this plugin only supports the latest minor version. For example, it supports 1.19.4 but not 1.19.2. Please use the correct server platform or uninstall this plugin", error);
 
-            PluginManager pluginManager = Bukkit.getPluginManager();
+            val pluginManager = Bukkit.getPluginManager();
             pluginManager.disablePlugin(this);
             return;
         }
@@ -121,7 +135,7 @@ public class NeigeItems extends JavaPlugin {
         if (!checkMagicUtils("WorldUtils")) safe = false;
 
         if (!safe) {
-            PluginManager pluginManager = Bukkit.getPluginManager();
+            val pluginManager = Bukkit.getPluginManager();
             pluginManager.disablePlugin(this);
             return;
         }
@@ -144,21 +158,6 @@ public class NeigeItems extends JavaPlugin {
     public void onDisable() {
         if (scanner != null) {
             scanner.onDisable();
-        }
-    }
-
-    private static boolean checkMagicUtils(String className) {
-        return checkMagicUtils("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils", className);
-    }
-
-    private static boolean checkMagicUtils(String packageName, String className) {
-        try {
-            Class.forName(packageName + "." + className);
-            return true;
-        } catch (Throwable error) {
-            logger.warn("{} 类未正常加载, 这可能造成不可预知的错误, 请联系作者修复", className);
-            logger.warn("class {} did not load properly, which may cause unpredictable errors. Please contact the author for repair.", className, error);
-            return false;
         }
     }
 }

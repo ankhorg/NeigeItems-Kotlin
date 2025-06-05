@@ -3,7 +3,7 @@ package pers.neige.neigeitems.hook.nms.impl;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.hook.nms.NMSHooker;
@@ -16,27 +16,22 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
  */
 public class NMSHookerItemStack extends NMSHooker {
     @Override
-    @NotNull
-
-    public ItemBuilder newItemBuilder() {
+    public @NonNull ItemBuilder newItemBuilder() {
         return new NewItemBuilder();
     }
 
     @Override
-    @NotNull
-    public ItemBuilder newItemBuilder(@Nullable Material material) {
+    public @NonNull ItemBuilder newItemBuilder(@Nullable Material material) {
         return new NewItemBuilder(material);
     }
 
     @Override
-    @NotNull
-    public ItemBuilder newItemBuilder(@Nullable ItemStack itemStack) {
+    public @NonNull ItemBuilder newItemBuilder(@Nullable ItemStack itemStack) {
         return new NewItemBuilder(itemStack);
     }
 
     @Override
-    @NotNull
-    public ItemBuilder newItemBuilder(@Nullable ConfigReader config) {
+    public @NonNull ItemBuilder newItemBuilder(@Nullable ConfigReader config) {
         return new NewItemBuilder(config);
     }
 

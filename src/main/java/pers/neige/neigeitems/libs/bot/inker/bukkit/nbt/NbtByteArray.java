@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagByteArray;
 
 import java.util.Arrays;
@@ -63,7 +63,7 @@ public final class NbtByteArray extends NbtCollection<RefNbtTagByteArray, Byte> 
     }
 
     @Override
-    public int compareTo(@NotNull Nbt<?> o) {
+    public int compareTo(@NonNull Nbt<?> o) {
         if (delegate == o.delegate) return 0;
         if (o instanceof NbtByteArray) {
             byte[] v1 = getAsByteArray();

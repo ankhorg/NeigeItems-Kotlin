@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.calculate;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,7 +28,7 @@ enum CalcOperator {
     static {
         bySymbol = new HashMap<>();
         symbolsExceptRightBracket = new HashSet<>();
-        for (CalcOperator operator : CalcOperator.values()) {
+        for (val operator : CalcOperator.values()) {
             bySymbol.put(operator.symbol, operator);
             if (operator != RIGHT_BRACKET) {
                 symbolsExceptRightBracket.add(operator.symbol);
@@ -36,7 +37,7 @@ enum CalcOperator {
     }
 
     final int priority;
-    final BiFunction<Double, Double, Double> calc;
+    final @NonNull BiFunction<Double, Double, Double> calc;
     private final char symbol;
 
     CalcOperator(char symbol, int priority) {
@@ -45,7 +46,7 @@ enum CalcOperator {
         this.calc = (a, b) -> 0.0;
     }
 
-    CalcOperator(char symbol, int priority, @NotNull BiFunction<Double, Double, Double> calc) {
+    CalcOperator(char symbol, int priority, @NonNull BiFunction<Double, Double, Double> calc) {
         this.symbol = symbol;
         this.priority = priority;
         this.calc = calc;
@@ -59,9 +60,8 @@ enum CalcOperator {
         return symbolsExceptRightBracket.contains(c);
     }
 
-    @NotNull
-    static CalcOperator toCalcOperator(char c) throws IllegalStateException {
-        CalcOperator result = bySymbol.get(c);
+    static @NonNull CalcOperator toCalcOperator(char c) throws IllegalStateException {
+        val result = bySymbol.get(c);
         if (result == null) {
             throw new IllegalStateException("No such Operator " + c);
         }

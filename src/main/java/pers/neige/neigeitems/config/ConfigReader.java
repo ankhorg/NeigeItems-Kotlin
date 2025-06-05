@@ -1,8 +1,8 @@
 package pers.neige.neigeitems.config;
 
+import lombok.NonNull;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
 
@@ -11,23 +11,19 @@ import java.util.Map;
 import java.util.Set;
 
 public interface ConfigReader {
-    @NotNull
-    static ConfigReader parse(@NotNull ConfigurationSection config) {
+    static @NonNull ConfigReader parse(@NonNull ConfigurationSection config) {
         return new BukkitConfigReader(config);
     }
 
-    @NotNull
-    static ConfigReader parse(@NotNull Map<?, ?> config) {
+    static @NonNull ConfigReader parse(@NonNull Map<?, ?> config) {
         return new MapConfigReader(config);
     }
 
-    @NotNull
-    static ConfigReader parse(@NotNull String config) {
+    static @NonNull ConfigReader parse(@NonNull String config) {
         return new MapConfigReader(new Yaml().load(config));
     }
 
-    @Nullable
-    static ConfigReader parse(@Nullable Object config) {
+    static @Nullable ConfigReader parse(@Nullable Object config) {
         if (config instanceof ConfigReader) {
             return (ConfigReader) config;
         } else if (config instanceof ConfigurationSection) {
@@ -43,40 +39,39 @@ public interface ConfigReader {
 
     int size();
 
-    @NotNull
+    @NonNull
     Set<String> keySet();
 
-    boolean containsKey(@NotNull String key);
+    boolean containsKey(@NonNull String key);
 
-    @Nullable
-    Object get(@NotNull String key);
+    @Nullable Object get(@NonNull String key);
 
-    @Nullable
-    String getString(@NotNull String key);
+    @Nullable String getString(@NonNull String key);
 
-    @Nullable
     @Contract("_, !null -> !null")
-    String getString(@NotNull String key, @Nullable String def);
+    @Nullable String getString(@NonNull String key, @Nullable String def);
 
-    int getInt(@NotNull String key);
+    int getInt(@NonNull String key);
 
-    int getInt(@NotNull String key, int def);
+    int getInt(@NonNull String key, int def);
 
-    long getLong(@NotNull String key);
+    long getLong(@NonNull String key);
 
-    long getLong(@NotNull String key, long def);
+    long getLong(@NonNull String key, long def);
 
-    double getDouble(@NotNull String key);
+    double getDouble(@NonNull String key);
 
-    double getDouble(@NotNull String key, double def);
+    double getDouble(@NonNull String key, double def);
 
-    boolean getBoolean(@NotNull String key);
+    boolean getBoolean(@NonNull String key);
 
-    boolean getBoolean(@NotNull String key, boolean def);
+    boolean getBoolean(@NonNull String key, boolean def);
 
-    List<String> getStringList(@NotNull String key);
+    @NonNull
+    List<String> getStringList(@NonNull String key);
 
-    List<Map<?, ?>> getMapList(@NotNull String key);
+    @NonNull
+    List<Map<?, ?>> getMapList(@NonNull String key);
 
-    ConfigReader getConfig(@NotNull String key);
+    @Nullable ConfigReader getConfig(@NonNull String key);
 }

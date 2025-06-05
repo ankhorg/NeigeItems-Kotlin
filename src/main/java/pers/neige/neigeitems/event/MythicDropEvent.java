@@ -1,10 +1,10 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -29,24 +29,15 @@ public final class MythicDropEvent {
      */
     public static class ConfigLoaded extends CancellableEvent {
         private static final HandlerList handlers = new HandlerList();
-        @NotNull
-        private final String internalName;
-        @NotNull
-        private final LivingEntity entity;
-        @Nullable
-        private final LivingEntity killer;
-        @Nullable
-        private List<String> drops;
-        @Nullable
-        private List<String> fishDrops;
-        @Nullable
-        private List<String> dropPacks;
-        @Nullable
-        private String offsetXString;
-        @Nullable
-        private String offsetYString;
-        @Nullable
-        private String angleType;
+        private final @NonNull String internalName;
+        private final @NonNull LivingEntity entity;
+        private final @Nullable LivingEntity killer;
+        private @Nullable List<String> drops;
+        private @Nullable List<String> fishDrops;
+        private @Nullable List<String> dropPacks;
+        private @Nullable String offsetXString;
+        private @Nullable String offsetYString;
+        private @Nullable String angleType;
 
         /**
          * @param internalName  怪物ID
@@ -60,8 +51,8 @@ public final class MythicDropEvent {
          * @param angleType     NeigeItems.FancyDrop.offset.angle.type(可能在后续被物品包配置覆盖)
          */
         public ConfigLoaded(
-                @NotNull String internalName,
-                @NotNull LivingEntity entity,
+                @NonNull String internalName,
+                @NonNull LivingEntity entity,
                 @Nullable LivingEntity killer,
                 @Nullable List<String> drops,
                 @Nullable List<String> fishDrops,
@@ -81,40 +72,35 @@ public final class MythicDropEvent {
             this.angleType = angleType;
         }
 
-        @NotNull
-        public static HandlerList getHandlerList() {
+        public static @NonNull HandlerList getHandlerList() {
             return handlers;
         }
 
         /**
          * 获取怪物ID
          */
-        @NotNull
-        public String getInternalName() {
+        public @NonNull String getInternalName() {
             return internalName;
         }
 
         /**
          * 获取怪物实体(你可能需要通过编辑它身上的装备来改变掉落装备)
          */
-        @NotNull
-        public LivingEntity getEntity() {
+        public @NonNull LivingEntity getEntity() {
             return entity;
         }
 
         /**
          * 获取怪物击杀者
          */
-        @Nullable
-        public LivingEntity getKiller() {
+        public @Nullable LivingEntity getKiller() {
             return killer;
         }
 
         /**
          * 获取 NeigeItems.Drop.
          */
-        @Nullable
-        public List<String> getDrops() {
+        public @Nullable List<String> getDrops() {
             return drops;
         }
 
@@ -132,8 +118,7 @@ public final class MythicDropEvent {
         /**
          * 获取 NeigeItems.FishDrop.
          */
-        @Nullable
-        public List<String> getFishDrops() {
+        public @Nullable List<String> getFishDrops() {
             return fishDrops;
         }
 
@@ -151,8 +136,7 @@ public final class MythicDropEvent {
         /**
          * 获取 NeigeItems.DropPacks.
          */
-        @Nullable
-        public List<String> getDropPacks() {
+        public @Nullable List<String> getDropPacks() {
             return dropPacks;
         }
 
@@ -170,8 +154,7 @@ public final class MythicDropEvent {
         /**
          * 获取 NeigeItems.FancyDrop.offset.x(可能在后续被物品包配置覆盖)
          */
-        @Nullable
-        public String getOffsetXString() {
+        public @Nullable String getOffsetXString() {
             return offsetXString;
         }
 
@@ -189,8 +172,7 @@ public final class MythicDropEvent {
         /**
          * 获取 NeigeItems.FancyDrop.offset.y(可能在后续被物品包配置覆盖)
          */
-        @Nullable
-        public String getOffsetYString() {
+        public @Nullable String getOffsetYString() {
             return offsetYString;
         }
 
@@ -208,8 +190,7 @@ public final class MythicDropEvent {
         /**
          * 获取 NeigeItems.FancyDrop.offset.angle.type(可能在后续被物品包配置覆盖)
          */
-        @Nullable
-        public String getAngleType() {
+        public @Nullable String getAngleType() {
             return angleType;
         }
 
@@ -225,8 +206,7 @@ public final class MythicDropEvent {
         }
 
         @Override
-        @NotNull
-        public HandlerList getHandlers() {
+        public @NonNull HandlerList getHandlers() {
             return handlers;
         }
     }
@@ -246,22 +226,14 @@ public final class MythicDropEvent {
      */
     public static class Drop extends CancellableEvent {
         private static final HandlerList handlers = new HandlerList();
-        @NotNull
-        private final String internalName;
-        @NotNull
-        private final LivingEntity entity;
-        @Nullable
-        private final Player player;
-        @NotNull
-        private List<ItemStack> dropItems;
-        @Nullable
-        private List<ItemStack> fishDropItems;
-        @Nullable
-        private String offsetXString;
-        @Nullable
-        private String offsetYString;
-        @Nullable
-        private String angleType;
+        private final @NonNull String internalName;
+        private final @NonNull LivingEntity entity;
+        private final @Nullable Player player;
+        private @NonNull List<ItemStack> dropItems;
+        private @Nullable List<ItemStack> fishDropItems;
+        private @Nullable String offsetXString;
+        private @Nullable String offsetYString;
+        private @Nullable String angleType;
 
         /**
          * @param internalName  怪物ID
@@ -274,10 +246,10 @@ public final class MythicDropEvent {
          * @param angleType     多彩掉落喷射模式
          */
         public Drop(
-                @NotNull String internalName,
-                @NotNull LivingEntity entity,
+                @NonNull String internalName,
+                @NonNull LivingEntity entity,
                 @Nullable Player player,
-                @NotNull List<ItemStack> dropItems,
+                @NonNull List<ItemStack> dropItems,
                 @Nullable List<ItemStack> fishDropItems,
                 @Nullable String offsetXString,
                 @Nullable String offsetYString,
@@ -293,40 +265,35 @@ public final class MythicDropEvent {
             this.angleType = angleType;
         }
 
-        @NotNull
-        public static HandlerList getHandlerList() {
+        public static @NonNull HandlerList getHandlerList() {
             return handlers;
         }
 
         /**
          * 获取怪物ID
          */
-        @NotNull
-        public String getInternalName() {
+        public @NonNull String getInternalName() {
             return internalName;
         }
 
         /**
          * 获取怪物实体
          */
-        @NotNull
-        public LivingEntity getEntity() {
+        public @NonNull LivingEntity getEntity() {
             return entity;
         }
 
         /**
          * 获取怪物击杀者
          */
-        @Nullable
-        public Player getPlayer() {
+        public @Nullable Player getPlayer() {
             return player;
         }
 
         /**
          * 获取待掉落物品
          */
-        @NotNull
-        public List<ItemStack> getDropItems() {
+        public @NonNull List<ItemStack> getDropItems() {
             return dropItems;
         }
 
@@ -336,7 +303,7 @@ public final class MythicDropEvent {
          * @param dropItems 待掉落物品
          */
         public void setDropItems(
-                @NotNull List<ItemStack> dropItems
+                @NonNull List<ItemStack> dropItems
         ) {
             this.dropItems = dropItems;
         }
@@ -344,8 +311,7 @@ public final class MythicDropEvent {
         /**
          * 获取拟渔获掉落物品(不存在击杀者时并入dropItems)
          */
-        @Nullable
-        public List<ItemStack> getFishDropItems() {
+        public @Nullable List<ItemStack> getFishDropItems() {
             return fishDropItems;
         }
 
@@ -363,8 +329,7 @@ public final class MythicDropEvent {
         /**
          * 获取多彩掉落横向偏移
          */
-        @Nullable
-        public String getOffsetXString() {
+        public @Nullable String getOffsetXString() {
             return offsetXString;
         }
 
@@ -382,8 +347,7 @@ public final class MythicDropEvent {
         /**
          * 获取多彩掉落纵向偏移
          */
-        @Nullable
-        public String getOffsetYString() {
+        public @Nullable String getOffsetYString() {
             return offsetYString;
         }
 
@@ -401,8 +365,7 @@ public final class MythicDropEvent {
         /**
          * 获取多彩掉落喷射模式
          */
-        @Nullable
-        public String getAngleType() {
+        public @Nullable String getAngleType() {
             return angleType;
         }
 
@@ -418,8 +381,7 @@ public final class MythicDropEvent {
         }
 
         @Override
-        @NotNull
-        public HandlerList getHandlers() {
+        public @NonNull HandlerList getHandlers() {
             return handlers;
         }
     }

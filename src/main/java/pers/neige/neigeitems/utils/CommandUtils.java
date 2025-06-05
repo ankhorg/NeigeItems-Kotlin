@@ -1,12 +1,13 @@
 package pers.neige.neigeitems.utils;
 
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
@@ -25,29 +26,21 @@ public class CommandUtils {
     private static Field ownPluginField;
 
     static {
-        SimplePluginManager pluginManager = (SimplePluginManager) Bukkit.getPluginManager();
-        Field commandMapField = null;
+        val pluginManager = (SimplePluginManager) Bukkit.getPluginManager();
+        Field commandMapField;
         try {
             commandMapField = SimplePluginManager.class.getDeclaredField("commandMap");
             commandMapField.setAccessible(true);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        try {
             commandMap = (SimpleCommandMap) commandMapField.get(pluginManager);
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        Field knownCommandsField = null;
+        Field knownCommandsField;
         try {
             knownCommandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
             knownCommandsField.setAccessible(true);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        try {
             knownCommands = (Map<String, Command>) knownCommandsField.get(commandMap);
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
         try {
@@ -71,10 +64,9 @@ public class CommandUtils {
      * @param owner 创建指令的插件.
      * @return 对应的 PluginCommand 对象.
      */
-    @Nullable
-    public static PluginCommand newPluginCommand(
-            @NotNull String name,
-            @NotNull Plugin owner
+    public static @Nullable PluginCommand newPluginCommand(
+            @NonNull String name,
+            @NonNull Plugin owner
     ) {
         try {
             return constructor.newInstance(name, owner);
@@ -89,8 +81,7 @@ public class CommandUtils {
      *
      * @return SimpleCommandMap.
      */
-    @NotNull
-    public static SimpleCommandMap getCommandMap() {
+    public static @NonNull SimpleCommandMap getCommandMap() {
         return commandMap;
     }
 
@@ -99,8 +90,7 @@ public class CommandUtils {
      *
      * @return 所有已注册指令.
      */
-    @NotNull
-    public static Map<String, Command> getKnownCommands() {
+    public static @NonNull Map<String, Command> getKnownCommands() {
         return knownCommands;
     }
 

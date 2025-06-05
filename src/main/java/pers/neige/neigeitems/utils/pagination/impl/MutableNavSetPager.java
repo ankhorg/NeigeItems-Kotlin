@@ -1,37 +1,42 @@
 package pers.neige.neigeitems.utils.pagination.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.pagination.PageCursor;
 import pers.neige.neigeitems.utils.pagination.Pager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.NavigableSet;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MutableNavSetPager<T> extends Pager<T> {
     /**
      * 可变数据
      */
-    private final @NotNull NavigableSet<T> handle;
+    private final @NonNull NavigableSet<T> handle;
     /**
      * 当前页游标
      */
-    private final @NotNull AtomicReference<PageCursor<T>> cursorRef;
+    private final @NonNull AtomicReference<PageCursor<T>> cursorRef;
 
-    public MutableNavSetPager(@NotNull NavigableSet<T> set, int pageSize) {
+    public MutableNavSetPager(@NonNull NavigableSet<T> set, int pageSize) {
         super(pageSize);
         this.handle = set;
         this.cursorRef = new AtomicReference<>(initCursor());
     }
 
-    public @NotNull NavigableSet<T> getHandle() {
+    public @NonNull NavigableSet<T> getHandle() {
         return handle;
     }
 
     /**
      * 初始化游标位置（第一页起始键）
      */
-    private @NotNull PageCursor<T> initCursor() {
+    private @NonNull PageCursor<T> initCursor() {
         if (handle.isEmpty()) return PageCursor.empty();
         return new PageCursor<>(handle.first(), 1);
     }
@@ -43,10 +48,10 @@ public class MutableNavSetPager<T> extends Pager<T> {
             prev = getCursor();
             if (prev.getCurrentPage() >= getTotalPages()) return false;
 
-            T nextStart = findNextStart(prev.getStartElement());
+            val nextStart = findNextStart(prev.getStartElement());
             if (nextStart == null) return false;
 
-            int newPage = prev.getCurrentPage() + 1;
+            val newPage = prev.getCurrentPage() + 1;
             next = new PageCursor<>(nextStart, newPage);
         } while (!cursorRef.compareAndSet(prev, next));
         return true;
@@ -66,10 +71,10 @@ public class MutableNavSetPager<T> extends Pager<T> {
                 }
             }
 
-            T prevStart = findPrevStart(prev.getStartElement());
+            val prevStart = findPrevStart(prev.getStartElement());
             if (prevStart == null) return false;
 
-            int newPage = prev.getCurrentPage() - 1;
+            val newPage = prev.getCurrentPage() - 1;
             next = new PageCursor<>(prevStart, newPage);
         } while (!cursorRef.compareAndSet(prev, next));
         return true;
@@ -78,7 +83,7 @@ public class MutableNavSetPager<T> extends Pager<T> {
     public boolean goToPage(int page) {
         if (page < 1 || page > getTotalPages()) return false;
 
-        PageCursor<T> target = calculatePageStart(page);
+        val target = calculatePageStart(page);
         if (target == null) return false;
 
         cursorRef.set(target);
@@ -120,15 +125,15 @@ public class MutableNavSetPager<T> extends Pager<T> {
         return getCursor().getCurrentPage();
     }
 
-    public @NotNull List<T> getCurrentPageElements() {
+    public @NonNull List<T> getCurrentPageElements() {
         if (handle.isEmpty()) return Collections.emptyList();
-        PageCursor<T> cursor = getCursor();
+        val cursor = getCursor();
         if (cursor.isEmpty()) return Collections.emptyList();
 
-        List<T> pageElements = new ArrayList<>(getPageSize());
-        Iterator<T> it = handle.tailSet(cursor.getStartElement(), true).iterator();
+        val pageElements = new ArrayList<T>(getPageSize());
+        val it = handle.tailSet(cursor.getStartElement(), true).iterator();
 
-        int count = 0;
+        var count = 0;
         while (it.hasNext() && count < getPageSize()) {
             pageElements.add(it.next());
             count++;
@@ -149,7 +154,7 @@ public class MutableNavSetPager<T> extends Pager<T> {
     }
 
     private T findNextStart(T currentStart) {
-        Iterator<T> it = handle.tailSet(currentStart, false).iterator();
+        val it = handle.tailSet(currentStart, false).iterator();
         for (int i = 0; i < getPageSize() - 1 && it.hasNext(); i++) {
             it.next();
         }
@@ -158,11 +163,11 @@ public class MutableNavSetPager<T> extends Pager<T> {
 
     private T findPrevStart(T currentStart) {
         if (handle.isEmpty()) return null;
-        NavigableSet<T> headSet = handle.headSet(currentStart, false);
+        val headSet = handle.headSet(currentStart, false);
         if (headSet.isEmpty()) return null;
 
-        Iterator<T> it = headSet.descendingIterator();
-        int steps = (getPageSize() - 1) % getPageSize(); // 计算上一页起始偏移
+        val it = headSet.descendingIterator();
+        val steps = (getPageSize() - 1) % getPageSize(); // 计算上一页起始偏移
         for (int i = 0; i < steps && it.hasNext(); i++) {
             it.next();
         }
@@ -173,16 +178,16 @@ public class MutableNavSetPager<T> extends Pager<T> {
         // 范围检测
         if (targetPage < 1 || targetPage > getTotalPages()) return null;
 
-        final int totalSize = handle.size();
+        val totalSize = handle.size();
         if (totalSize == 0) return null;
 
-        final int skip = (targetPage - 1) * getPageSize();
+        val skip = (targetPage - 1) * getPageSize();
         // 反向遍历逻辑
         if (targetPage > (getTotalPages() / 2)) {
-            final int reverseSkip = totalSize - skip - 1; // 计算反向跳过的位置
+            val reverseSkip = totalSize - skip - 1; // 计算反向跳过的位置
             if (reverseSkip < 0) return null;
 
-            Iterator<T> it = handle.descendingIterator();
+            val it = handle.descendingIterator();
             for (int i = 0; i < reverseSkip && it.hasNext(); i++) {
                 it.next();
             }
@@ -190,7 +195,7 @@ public class MutableNavSetPager<T> extends Pager<T> {
             return it.hasNext() ? new PageCursor<>(it.next(), targetPage) : null;
         } else {
             // 正向遍历逻辑
-            Iterator<T> it = handle.iterator();
+            val it = handle.iterator();
             for (int i = 0; i < skip && it.hasNext(); i++) {
                 it.next();
             }

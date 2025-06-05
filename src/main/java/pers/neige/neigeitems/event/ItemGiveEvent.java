@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * 物品给予事件, /ni give指令触发.
@@ -15,12 +15,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class ItemGiveEvent extends CancellableEvent {
     private static final HandlerList handlers = new HandlerList();
-    @NotNull
-    private final String id;
-    @NotNull
-    private final Player player;
-    @NotNull
-    private ItemStack itemStack;
+    private final @NonNull String id;
+    private final @NonNull Player player;
+    private @NonNull ItemStack itemStack;
     private int amount;
 
     /**
@@ -29,9 +26,9 @@ public final class ItemGiveEvent extends CancellableEvent {
      * @param itemStack 待给予物品
      */
     public ItemGiveEvent(
-            @NotNull String id,
-            @NotNull Player player,
-            @NotNull ItemStack itemStack
+            @NonNull String id,
+            @NonNull Player player,
+            @NonNull ItemStack itemStack
     ) {
         this.id = id;
         this.player = player;
@@ -46,9 +43,9 @@ public final class ItemGiveEvent extends CancellableEvent {
      * @param amount    给予数量
      */
     public ItemGiveEvent(
-            @NotNull String id,
-            @NotNull Player player,
-            @NotNull ItemStack itemStack,
+            @NonNull String id,
+            @NonNull Player player,
+            @NonNull ItemStack itemStack,
             int amount
     ) {
         this.id = id;
@@ -57,32 +54,28 @@ public final class ItemGiveEvent extends CancellableEvent {
         this.amount = amount;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
     /**
      * 获取物品ID
      */
-    @NotNull
-    public String getId() {
+    public @NonNull String getId() {
         return id;
     }
 
     /**
      * 获取物品接收者
      */
-    @NotNull
-    public Player getPlayer() {
+    public @NonNull Player getPlayer() {
         return player;
     }
 
     /**
      * 获取待给予物品
      */
-    @NotNull
-    public ItemStack getItemStack() {
+    public @NonNull ItemStack getItemStack() {
         return itemStack;
     }
 
@@ -92,7 +85,7 @@ public final class ItemGiveEvent extends CancellableEvent {
      * @param itemStack 待给予物品
      */
     public void setItemStack(
-            @NotNull ItemStack itemStack
+            @NonNull ItemStack itemStack
     ) {
         this.itemStack = itemStack;
     }
@@ -116,8 +109,7 @@ public final class ItemGiveEvent extends CancellableEvent {
     }
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

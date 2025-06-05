@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -12,12 +12,11 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class ListAction extends Action {
-    @NotNull
-    private final List<Action> actions;
+    private final @NonNull List<Action> actions;
 
     public ListAction(
-            @NotNull BaseActionManager manager,
-            @NotNull List<?> action
+            @NonNull BaseActionManager manager,
+            @NonNull List<?> action
     ) {
         super(manager);
         actions = new ArrayList<>();
@@ -28,7 +27,7 @@ public class ListAction extends Action {
     }
 
     private ListAction(
-            @NotNull ListAction action,
+            @NonNull ListAction action,
             int fromIndex,
             int toIndex
     ) {
@@ -45,7 +44,7 @@ public class ListAction extends Action {
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.LIST;
     }
 
@@ -53,10 +52,9 @@ public class ListAction extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    public CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }
@@ -66,22 +64,19 @@ public class ListAction extends Action {
      *
      * @param fromIndex 从这个索引对应的位置开始执行
      */
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context,
+    protected @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context,
             int fromIndex
     ) {
         return manager.runAction(this, context, fromIndex);
     }
 
-    @NotNull
-    public List<Action> getActions() {
+    public @NonNull List<Action> getActions() {
         return actions;
     }
 
-    @NotNull
-    public ListAction subList(int fromIndex, int toIndex) {
+    public @NonNull ListAction subList(int fromIndex, int toIndex) {
         return new ListAction(this, fromIndex, toIndex);
     }
 }

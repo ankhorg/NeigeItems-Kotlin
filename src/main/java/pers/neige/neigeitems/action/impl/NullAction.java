@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -11,12 +11,12 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 import java.util.concurrent.CompletableFuture;
 
 public class NullAction extends Action {
-    public NullAction(@NotNull BaseActionManager manager) {
+    public NullAction(@NonNull BaseActionManager manager) {
         super(manager);
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.NULL;
     }
 
@@ -24,10 +24,9 @@ public class NullAction extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    protected @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         return CompletableFuture.completedFuture(Results.SUCCESS);
     }

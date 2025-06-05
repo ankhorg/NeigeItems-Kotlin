@@ -1,12 +1,12 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import lombok.NonNull;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.NumberConversions;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NeigeItemsUtils;
@@ -50,9 +50,8 @@ public class EntityUtils {
      * @param entity 待保存实体.
      * @return 包含实体信息的 NBT.
      */
-    @Nullable
-    public static NbtCompound save(
-            @NotNull Entity entity
+    public static @Nullable NbtCompound save(
+            @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             RefNbtTagCompound nbt = new RefNbtTagCompound();
@@ -69,8 +68,8 @@ public class EntityUtils {
      * @param nbt    待加载 NBT.
      */
     public static void load(
-            @NotNull Entity entity,
-            @NotNull NbtCompound nbt
+            @NonNull Entity entity,
+            @NonNull NbtCompound nbt
     ) {
         if (entity instanceof RefCraftEntity) {
             ((RefCraftEntity) entity).getHandle().load(NeigeItemsUtils.toNms(nbt));
@@ -88,7 +87,7 @@ public class EntityUtils {
      * @return 寻路是否成功.
      */
     public static boolean tryToMoveTo(
-            @NotNull LivingEntity entity,
+            @NonNull LivingEntity entity,
             double x,
             double y,
             double z,
@@ -112,7 +111,7 @@ public class EntityUtils {
      * @return 寻路是否成功.
      */
     public static boolean tryToMoveTo(
-            @NotNull LivingEntity entity,
+            @NonNull LivingEntity entity,
             Entity target,
             double speed
     ) {
@@ -130,7 +129,7 @@ public class EntityUtils {
      *
      * @param entity 待操作实体.
      */
-    public static void tick(@NotNull Entity entity) {
+    public static void tick(@NonNull Entity entity) {
         if (entity instanceof RefCraftEntity) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
             nmsEntity.tick();
@@ -142,7 +141,7 @@ public class EntityUtils {
      *
      * @param entity 待操作实体.
      */
-    public static void tickNavigation(@NotNull LivingEntity entity) {
+    public static void tickNavigation(@NonNull LivingEntity entity) {
         if (entity instanceof RefCraftLivingEntity) {
             RefEntityLiving living = ((RefCraftLivingEntity) entity).getHandle();
             if (living instanceof RefMob) {
@@ -222,7 +221,7 @@ public class EntityUtils {
      * @param z      移动方向 z 轴分量.
      */
     public static void move(
-            @NotNull Entity entity,
+            @NonNull Entity entity,
             double x,
             double y,
             double z
@@ -243,7 +242,7 @@ public class EntityUtils {
      * @return 实体俯仰角.
      */
     public static float getPitch(
-            @NotNull Entity entity
+            @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             return getPitchByNms(((RefCraftEntity) entity).getHandle());
@@ -258,7 +257,7 @@ public class EntityUtils {
      * @return 实体偏航角.
      */
     public static float getYaw(
-            @NotNull Entity entity
+            @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             return getYawByNms(((RefCraftEntity) entity).getHandle());
@@ -274,7 +273,7 @@ public class EntityUtils {
      * @param pitch  实体俯仰角.
      */
     public static void setRotation(
-            @NotNull Entity entity,
+            @NonNull Entity entity,
             float yaw,
             float pitch
     ) {
@@ -297,7 +296,7 @@ public class EntityUtils {
     }
 
     public static float getHeadRotation(
-            @NotNull Entity entity
+            @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -307,7 +306,7 @@ public class EntityUtils {
     }
 
     public static void setHeadRotation(
-            @NotNull Entity entity,
+            @NonNull Entity entity,
             float headRotation
     ) {
         if (entity instanceof RefCraftEntity) {
@@ -317,7 +316,7 @@ public class EntityUtils {
     }
 
     public static void absMoveTo(
-            @NotNull Entity entity,
+            @NonNull Entity entity,
             double x,
             double y,
             double z,
@@ -330,7 +329,7 @@ public class EntityUtils {
     }
 
     public static void moveTo(
-            @NotNull Entity entity,
+            @NonNull Entity entity,
             double x,
             double y,
             double z,
@@ -349,8 +348,8 @@ public class EntityUtils {
      * @param target 目标坐标.
      */
     public static void lookAt(
-            @NotNull Entity entity,
-            @NotNull Location target
+            @NonNull Entity entity,
+            @NonNull Location target
     ) {
         lookAt(entity, target.getX(), target.getY(), target.getZ());
     }
@@ -364,7 +363,7 @@ public class EntityUtils {
      * @param z      目标 z 坐标.
      */
     public static void lookAt(
-            @NotNull Entity entity,
+            @NonNull Entity entity,
             double x,
             double y,
             double z
@@ -379,7 +378,7 @@ public class EntityUtils {
     }
 
     protected static void lookAtByNms(
-            @NotNull Entity entity,
+            @NonNull Entity entity,
             double x,
             double y,
             double z
@@ -404,8 +403,8 @@ public class EntityUtils {
      * @param target 目标坐标.
      */
     public static void lookAt(
-            @NotNull LivingEntity entity,
-            @NotNull Location target
+            @NonNull LivingEntity entity,
+            @NonNull Location target
     ) {
         lookAt(entity, target.getX(), target.getY(), target.getZ());
     }
@@ -419,7 +418,7 @@ public class EntityUtils {
      * @param z      目标 z 坐标.
      */
     public static void lookAt(
-            @NotNull LivingEntity entity,
+            @NonNull LivingEntity entity,
             double x,
             double y,
             double z
@@ -440,8 +439,8 @@ public class EntityUtils {
      * @param name   自定义名称.
      */
     public static void setCustomName(
-            @NotNull Entity entity,
-            @NotNull BaseComponent name
+            @NonNull Entity entity,
+            @NonNull BaseComponent name
     ) {
         if (COMPONENT_NAME_SUPPORT && entity instanceof RefCraftEntity) {
             ((RefCraftEntity) entity).getHandle().setCustomName(toNms(name));
@@ -455,7 +454,7 @@ public class EntityUtils {
      * @return 实体ID.
      */
     public static int getId(
-            @NotNull Entity entity
+            @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             return ((RefCraftEntity) entity).getHandle().getId();
@@ -470,7 +469,7 @@ public class EntityUtils {
      * @param invisible 是否隐身.
      */
     public static void setInvisible(
-            @NotNull Entity entity,
+            @NonNull Entity entity,
             boolean invisible
     ) {
         if (entity instanceof RefCraftEntity) {
@@ -483,7 +482,7 @@ public class EntityUtils {
     }
 
     protected static void lookAtByNms(
-            @NotNull LivingEntity entity,
+            @NonNull LivingEntity entity,
             double x,
             double y,
             double z
@@ -530,7 +529,7 @@ public class EntityUtils {
     }
 
     private static float getPitchByNms(
-            @NotNull RefEntity entity
+            @NonNull RefEntity entity
     ) {
         if (GET_YAW_SUPPORT) {
             return entity.getPitch();
@@ -540,7 +539,7 @@ public class EntityUtils {
     }
 
     private static float getYawByNms(
-            @NotNull RefEntity entity
+            @NonNull RefEntity entity
     ) {
         if (GET_YAW_SUPPORT) {
             return entity.getYaw();

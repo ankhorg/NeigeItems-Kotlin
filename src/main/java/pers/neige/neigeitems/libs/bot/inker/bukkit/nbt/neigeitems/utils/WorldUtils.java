@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -9,7 +10,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
@@ -77,11 +77,10 @@ public class WorldUtils {
      * @param function  掉落前对物品执行的操作.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static Item dropItem(
-            @NotNull World world,
-            @NotNull Location location,
-            @NotNull ItemStack itemStack,
+    public static @NonNull Item dropItem(
+            @NonNull World world,
+            @NonNull Location location,
+            @NonNull ItemStack itemStack,
             @Nullable Consumer<Item> function
     ) {
         RefWorldServer worldServer = ((RefCraftWorld) (Object) world).getHandle();
@@ -112,12 +111,11 @@ public class WorldUtils {
      * @param velocity  待添加向量.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static Item dropItem(
-            @NotNull World world,
-            @NotNull Location location,
-            @NotNull ItemStack itemStack,
-            @NotNull Vector velocity
+    public static @NonNull Item dropItem(
+            @NonNull World world,
+            @NonNull Location location,
+            @NonNull ItemStack itemStack,
+            @NonNull Vector velocity
     ) {
         RefWorldServer worldServer = ((RefCraftWorld) (Object) world).getHandle();
 
@@ -146,9 +144,8 @@ public class WorldUtils {
      * @param filter 对应实体需要满足的条件.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static List<Entity> getNearbyEntities(
-            @NotNull Entity entity,
+    public static @NonNull List<Entity> getNearbyEntities(
+            @NonNull Entity entity,
             double x,
             double y,
             double z,
@@ -167,9 +164,8 @@ public class WorldUtils {
      * @param limit  检索数量上限.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static List<Entity> getNearbyEntities(
-            @NotNull Entity entity,
+    public static @NonNull List<Entity> getNearbyEntities(
+            @NonNull Entity entity,
             double x,
             double y,
             double z,
@@ -189,9 +185,8 @@ public class WorldUtils {
      * @param filter 对应实体需要满足的条件.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static List<Entity> getNearbyEntities(
-            @NotNull Entity entity,
+    public static @NonNull List<Entity> getNearbyEntities(
+            @NonNull Entity entity,
             double x,
             double y,
             double z,
@@ -213,10 +208,9 @@ public class WorldUtils {
      * @param filter   对应实体需要满足的条件.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static List<Entity> getNearbyEntities(
-            @NotNull World world,
-            @NotNull Location location,
+    public static @NonNull List<Entity> getNearbyEntities(
+            @NonNull World world,
+            @NonNull Location location,
             double x,
             double y,
             double z,
@@ -236,10 +230,9 @@ public class WorldUtils {
      * @param limit    检索数量上限.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static List<Entity> getNearbyEntities(
-            @NotNull World world,
-            @NotNull Location location,
+    public static @NonNull List<Entity> getNearbyEntities(
+            @NonNull World world,
+            @NonNull Location location,
             double x,
             double y,
             double z,
@@ -260,10 +253,9 @@ public class WorldUtils {
      * @param filter   对应实体需要满足的条件.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static List<Entity> getNearbyEntities(
-            @NotNull World world,
-            @NotNull Location location,
+    public static @NonNull List<Entity> getNearbyEntities(
+            @NonNull World world,
+            @NonNull Location location,
             double x,
             double y,
             double z,
@@ -286,9 +278,8 @@ public class WorldUtils {
      * @param filter 对应实体需要满足的条件.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static List<Entity> getEntities(
-            @NotNull World world,
+    public static @NonNull List<Entity> getEntities(
+            @NonNull World world,
             double minX,
             double minY,
             double minZ,
@@ -313,9 +304,8 @@ public class WorldUtils {
      * @param limit 检索数量上限.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static List<Entity> getEntities(
-            @NotNull World world,
+    public static @NonNull List<Entity> getEntities(
+            @NonNull World world,
             double minX,
             double minY,
             double minZ,
@@ -341,9 +331,8 @@ public class WorldUtils {
      * @param filter 对应实体需要满足的条件.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static List<Entity> getEntities(
-            @NotNull World world,
+    public static @NonNull List<Entity> getEntities(
+            @NonNull World world,
             double minX,
             double minY,
             double minZ,
@@ -371,10 +360,9 @@ public class WorldUtils {
      * @param filter 对应实体需要满足的条件.
      * @return 生成的掉落物.
      */
-    @NotNull
-    public static List<Entity> getEntities(
+    public static @NonNull List<Entity> getEntities(
             @Nullable Entity except,
-            @NotNull World world,
+            @NonNull World world,
             double minX,
             double minY,
             double minZ,
@@ -424,10 +412,9 @@ public class WorldUtils {
      * @param type     实体类型.
      * @return 生成的实体.
      */
-    @Nullable
-    public static Entity createEntity(
-            @NotNull Location location,
-            @NotNull EntityType type
+    public static @Nullable Entity createEntity(
+            @NonNull Location location,
+            @NonNull EntityType type
     ) {
         return createEntity(location, type, true);
     }
@@ -440,10 +427,9 @@ public class WorldUtils {
      * @param randomizeData 是否随机实体数据(仅在1.17+版本生效).
      * @return 生成的实体.
      */
-    @Nullable
-    public static Entity createEntity(
-            @NotNull Location location,
-            @NotNull EntityType type,
+    public static @Nullable Entity createEntity(
+            @NonNull Location location,
+            @NonNull EntityType type,
             boolean randomizeData
     ) {
         RefEntity entity = createNmsEntity(location, type, randomizeData);
@@ -458,10 +444,9 @@ public class WorldUtils {
      * @param function 生成前对实体执行的操作.
      * @return 生成的实体.
      */
-    @Nullable
-    public static Entity spawnEntity(
-            @NotNull Location location,
-            @NotNull EntityType type,
+    public static @Nullable Entity spawnEntity(
+            @NonNull Location location,
+            @NonNull EntityType type,
             @Nullable Consumer<Entity> function
     ) {
         return spawnEntity(location, type, true, function, CreatureSpawnEvent.SpawnReason.CUSTOM);
@@ -476,10 +461,9 @@ public class WorldUtils {
      * @param function      生成前对实体执行的操作.
      * @return 生成的实体.
      */
-    @Nullable
-    public static Entity spawnEntity(
-            @NotNull Location location,
-            @NotNull EntityType type,
+    public static @Nullable Entity spawnEntity(
+            @NonNull Location location,
+            @NonNull EntityType type,
             boolean randomizeData,
             @Nullable Consumer<Entity> function
     ) {
@@ -496,10 +480,9 @@ public class WorldUtils {
      * @param spawnReason   生成原因.
      * @return 生成的实体.
      */
-    @Nullable
-    public static Entity spawnEntity(
-            @NotNull Location location,
-            @NotNull EntityType type,
+    public static @Nullable Entity spawnEntity(
+            @NonNull Location location,
+            @NonNull EntityType type,
             boolean randomizeData,
             @Nullable Consumer<Entity> function,
             @Nullable CreatureSpawnEvent.SpawnReason spawnReason
@@ -543,9 +526,8 @@ public class WorldUtils {
      * @param entityId 实体ID.
      * @return 对应的实体.
      */
-    @Nullable
-    public static Entity getEntityFromID(
-            @NotNull World world,
+    public static @Nullable Entity getEntityFromID(
+            @NonNull World world,
             int entityId
     ) {
         if ((Object) world instanceof RefCraftWorld) {
@@ -564,9 +546,8 @@ public class WorldUtils {
      * @param entityId 实体ID.
      * @return 对应的实体.
      */
-    @NotNull
-    public static CompletableFuture<Entity> getEntityFromIDAsync(
-            @NotNull World world,
+    public static @NonNull CompletableFuture<Entity> getEntityFromIDAsync(
+            @NonNull World world,
             int entityId
     ) {
         if (Bukkit.isPrimaryThread()) {
@@ -587,9 +568,8 @@ public class WorldUtils {
      * @param entityId 实体ID.
      * @return 对应的实体.
      */
-    @Nullable
-    public static Entity getEntityFromID1(
-            @NotNull World world,
+    public static @Nullable Entity getEntityFromID1(
+            @NonNull World world,
             int entityId
     ) {
         if ((Object) world instanceof RefCraftWorld) {
@@ -601,10 +581,9 @@ public class WorldUtils {
         return null;
     }
 
-    @Nullable
     @SuppressWarnings("unchecked")
-    protected static RefEntity getEntityFromIDByNms1(
-            @NotNull RefWorldServer world,
+    protected static @Nullable RefEntity getEntityFromIDByNms1(
+            @NonNull RefWorldServer world,
             int entityId
     ) {
         RefServerEntity serverEntity = null;
@@ -629,10 +608,9 @@ public class WorldUtils {
      * @param type     实体类型.
      * @return 生成的实体.
      */
-    @Nullable
-    protected static RefEntity createNmsEntity(
-            @NotNull Location location,
-            @NotNull EntityType type
+    protected static @Nullable RefEntity createNmsEntity(
+            @NonNull Location location,
+            @NonNull EntityType type
     ) {
         return createNmsEntity(location, type, true);
     }
@@ -645,10 +623,9 @@ public class WorldUtils {
      * @param randomizeData 是否随机实体数据(仅在1.17+版本生效).
      * @return 生成的实体.
      */
-    @Nullable
-    protected static RefEntity createNmsEntity(
-            @NotNull Location location,
-            @NotNull EntityType type,
+    protected static @Nullable RefEntity createNmsEntity(
+            @NonNull Location location,
+            @NonNull EntityType type,
             boolean randomizeData
     ) {
         World world = location.getWorld();
@@ -665,7 +642,7 @@ public class WorldUtils {
     }
 
     public static Entity getEntityFromServerEntity(
-            @NotNull Object serverEntity
+            @NonNull Object serverEntity
     ) {
         if (serverEntity instanceof RefServerEntity) {
             return ((RefServerEntity) serverEntity).entity.getBukkitEntity();

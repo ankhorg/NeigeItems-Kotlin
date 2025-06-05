@@ -1,8 +1,7 @@
 package pers.neige.neigeitems.ref.registry;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 @HandleBy(reference = "net/minecraft/core/Holder$c", predicates = "craftbukkit_version:[v1_17_R1,)")
 public final class RefReference<T> implements RefHolder<T> {

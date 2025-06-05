@@ -5,7 +5,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.hook.nms.NMSHooker;
 import pers.neige.neigeitems.utils.ItemUtils;
 
@@ -14,9 +14,8 @@ import pers.neige.neigeitems.utils.ItemUtils;
  */
 public class NMSHookerHoverEvent extends NMSHooker {
     @Override
-    @NotNull
-    public HoverEvent hoverText(
-            @NotNull String text
+    public @NonNull HoverEvent hoverText(
+            @NonNull String text
     ) {
         return new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
@@ -25,9 +24,8 @@ public class NMSHookerHoverEvent extends NMSHooker {
     }
 
     @Override
-    @NotNull
-    public HoverEvent hoverItem(
-            @NotNull ItemStack itemStack
+    public @NonNull HoverEvent hoverItem(
+            @NonNull ItemStack itemStack
     ) {
         String nbtString;
         if (itemStack.getType() == Material.AIR) {

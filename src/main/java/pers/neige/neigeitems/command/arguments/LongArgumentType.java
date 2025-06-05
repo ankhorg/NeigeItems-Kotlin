@@ -4,8 +4,9 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.command.CommandUtils;
 
 import java.util.Arrays;
@@ -27,62 +28,55 @@ public class LongArgumentType implements ArgumentType<Long> {
     /**
      * 正整数类型
      */
-    @NotNull
-    public static LongArgumentType positiveLong() {
+    public static @NonNull LongArgumentType positiveLong() {
         return longValue(1);
     }
 
     /**
      * 非负整数类型
      */
-    @NotNull
-    public static LongArgumentType nonNegativeLong() {
+    public static @NonNull LongArgumentType nonNegativeLong() {
         return longValue(0);
     }
 
     /**
      * 负整数类型
      */
-    @NotNull
-    public static LongArgumentType negativeLong() {
+    public static @NonNull LongArgumentType negativeLong() {
         return longValue(Long.MIN_VALUE, -1);
     }
 
     /**
      * 非正整数类型
      */
-    @NotNull
-    public static LongArgumentType nonPositiveLong() {
+    public static @NonNull LongArgumentType nonPositiveLong() {
         return longValue(Long.MIN_VALUE, 0);
     }
 
     /**
      * 无限制整数类型
      */
-    @NotNull
-    public static LongArgumentType longValue() {
+    public static @NonNull LongArgumentType longValue() {
         return longValue(Long.MIN_VALUE);
     }
 
     /**
      * 限制最小值整数类型
      */
-    @NotNull
-    public static LongArgumentType longValue(long min) {
+    public static @NonNull LongArgumentType longValue(long min) {
         return longValue(min, Long.MAX_VALUE);
     }
 
     /**
      * 限制最大值整数类型
      */
-    @NotNull
-    public static LongArgumentType longValue(long min, long max) {
+    public static @NonNull LongArgumentType longValue(long min, long max) {
         return new LongArgumentType(min, max);
     }
 
     public static long getLong(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return context.getArgument(name, Long.TYPE);
     }
@@ -101,18 +95,16 @@ public class LongArgumentType implements ArgumentType<Long> {
         return this.maximum;
     }
 
-    @NotNull
     @Override
-    public Long parse(
-            @NotNull StringReader reader
+    public @NonNull Long parse(
+            @NonNull StringReader reader
     ) throws CommandSyntaxException {
-        Long result = CommandUtils.readLong(reader);
+        val result = CommandUtils.readLong(reader);
         return Math.min(Math.max(result, minimum), maximum);
     }
 
-    @NotNull
     @Override
-    public Collection<String> getExamples() {
+    public @NonNull Collection<String> getExamples() {
         return EXAMPLES;
     }
 }

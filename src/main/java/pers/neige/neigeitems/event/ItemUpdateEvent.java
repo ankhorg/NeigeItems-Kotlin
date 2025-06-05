@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.item.ItemGenerator;
 
@@ -23,14 +23,10 @@ public final class ItemUpdateEvent {
      */
     public static class PreGenerate extends CancellableEvent {
         private static final HandlerList handlers = new HandlerList();
-        @Nullable
-        private final OfflinePlayer player;
-        @NotNull
-        private final ItemStack oldItem;
-        @Nullable
-        private final Map<String, String> data;
-        @NotNull
-        private final ItemGenerator item;
+        private final @Nullable OfflinePlayer player;
+        private final @NonNull ItemStack oldItem;
+        private final @Nullable Map<String, String> data;
+        private final @NonNull ItemGenerator item;
 
         /**
          * @param player  持有物品的玩家
@@ -40,9 +36,9 @@ public final class ItemUpdateEvent {
          */
         public PreGenerate(
                 @Nullable OfflinePlayer player,
-                @NotNull ItemStack oldItem,
+                @NonNull ItemStack oldItem,
                 @Nullable Map<String, String> data,
-                @NotNull ItemGenerator item
+                @NonNull ItemGenerator item
         ) {
             this.player = player;
             this.oldItem = oldItem;
@@ -50,46 +46,40 @@ public final class ItemUpdateEvent {
             this.item = item;
         }
 
-        @NotNull
-        public static HandlerList getHandlerList() {
+        public static @NonNull HandlerList getHandlerList() {
             return handlers;
         }
 
         /**
          * 获取持有物品的玩家
          */
-        @Nullable
-        public OfflinePlayer getPlayer() {
+        public @Nullable OfflinePlayer getPlayer() {
             return player;
         }
 
         /**
          * 获取待更新物品
          */
-        @NotNull
-        public ItemStack getOldItem() {
+        public @NonNull ItemStack getOldItem() {
             return oldItem;
         }
 
         /**
          * 获取旧物品内部的指向数据
          */
-        @Nullable
-        public Map<String, String> getData() {
+        public @Nullable Map<String, String> getData() {
             return data;
         }
 
         /**
          * 获取根据旧物品的物品ID获得的NI物品生成器
          */
-        @NotNull
-        public ItemGenerator getItem() {
+        public @NonNull ItemGenerator getItem() {
             return item;
         }
 
         @Override
-        @NotNull
-        public HandlerList getHandlers() {
+        public @NonNull HandlerList getHandlers() {
             return handlers;
         }
     }
@@ -103,12 +93,9 @@ public final class ItemUpdateEvent {
      */
     public static class PostGenerate extends CancellableEvent {
         private static final HandlerList handlers = new HandlerList();
-        @Nullable
-        private final OfflinePlayer player;
-        @NotNull
-        private final ItemStack oldItem;
-        @NotNull
-        private final ItemStack newItem;
+        private final @Nullable OfflinePlayer player;
+        private final @NonNull ItemStack oldItem;
+        private final @NonNull ItemStack newItem;
 
         /**
          * @param player  持有物品的玩家
@@ -117,46 +104,41 @@ public final class ItemUpdateEvent {
          */
         public PostGenerate(
                 @Nullable OfflinePlayer player,
-                @NotNull ItemStack oldItem,
-                @NotNull ItemStack newItem
+                @NonNull ItemStack oldItem,
+                @NonNull ItemStack newItem
         ) {
             this.player = player;
             this.oldItem = oldItem;
             this.newItem = newItem;
         }
 
-        @NotNull
-        public static HandlerList getHandlerList() {
+        public static @NonNull HandlerList getHandlerList() {
             return handlers;
         }
 
         /**
          * 获取持有物品的玩家
          */
-        @Nullable
-        public OfflinePlayer getPlayer() {
+        public @Nullable OfflinePlayer getPlayer() {
             return player;
         }
 
         /**
          * 获取待更新物品
          */
-        @NotNull
-        public ItemStack getOldItem() {
+        public @NonNull ItemStack getOldItem() {
             return oldItem;
         }
 
         /**
          * 获取待覆盖物品
          */
-        @NotNull
-        public ItemStack getNewItem() {
+        public @NonNull ItemStack getNewItem() {
             return newItem;
         }
 
         @Override
-        @NotNull
-        public HandlerList getHandlers() {
+        public @NonNull HandlerList getHandlers() {
             return handlers;
         }
     }

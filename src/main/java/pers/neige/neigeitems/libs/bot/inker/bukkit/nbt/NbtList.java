@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtListLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.nbt.RefNbtBase;
@@ -101,7 +101,7 @@ public final class NbtList extends NbtCollection<RefNbtTagList, Nbt<?>> implemen
     }
 
     @Override
-    public int compareTo(@NotNull Nbt<?> o) {
+    public int compareTo(@NonNull Nbt<?> o) {
         if (delegate == o.delegate) return 0;
         if (o instanceof NbtList) {
             NbtList anotherList = (NbtList) o;

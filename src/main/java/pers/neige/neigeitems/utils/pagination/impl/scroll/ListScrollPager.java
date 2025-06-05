@@ -1,26 +1,27 @@
 package pers.neige.neigeitems.utils.pagination.impl.scroll;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.pagination.ScrollPager;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 public class ListScrollPager<T> extends ScrollPager<T> {
-    private final @NotNull List<T> handle;
-    private final @NotNull AtomicInteger offset = new AtomicInteger(0);
+    private final @NonNull List<T> handle;
+    private final @NonNull AtomicInteger offset = new AtomicInteger(0);
 
-    public ListScrollPager(@NotNull List<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+    public ListScrollPager(@NonNull List<T> handle, int pageSize, @Nullable Predicate<T> filter) {
         super(pageSize, filter);
         this.handle = handle;
     }
 
-    public @NotNull List<T> getHandle() {
+    public @NonNull List<T> getHandle() {
         return handle;
     }
 
@@ -32,7 +33,7 @@ public class ListScrollPager<T> extends ScrollPager<T> {
     @Override
     public void moveOffset(int delta) {
         offset.updateAndGet(current -> {
-            int size = handle.size();
+            val size = handle.size();
             if (size == 0) return 0;
             return Math.max(0, Math.min(current + delta, size));
         });
@@ -45,12 +46,12 @@ public class ListScrollPager<T> extends ScrollPager<T> {
             moveOffset(delta);
             return;
         }
-        final int size = handle.size();
-        final int start = Math.min(offset.get(), size - 1);
-        final int end = size - 1;
-        int move = 0;
-        int match = 0;
-        for (T element : handle.subList(start, end)) {
+        val size = handle.size();
+        val start = Math.min(offset.get(), size - 1);
+        val end = size - 1;
+        var move = 0;
+        var match = 0;
+        for (val element : handle.subList(start, end)) {
             if (filter.test(element)) {
                 match++;
                 if (match >= delta) break;
@@ -61,29 +62,29 @@ public class ListScrollPager<T> extends ScrollPager<T> {
     }
 
     @Override
-    public @NotNull List<T> getCurrentPageElements() {
-        final int size = handle.size();
+    public @NonNull List<T> getCurrentPageElements() {
+        val size = handle.size();
         if (size == 0) return Collections.emptyList();
 
-        final int start = Math.min(offset.get(), size - 1);
-        final int end = Math.min(start + getPageSize(), size);
+        val start = Math.min(offset.get(), size - 1);
+        val end = Math.min(start + getPageSize(), size);
 
-        List<T> page = new ArrayList<>(getPageSize());
-        Iterator<T> it = handle.subList(start, end).iterator();
+        val page = new ArrayList<T>(getPageSize());
+        var it = handle.subList(start, end).iterator();
 
         while (it.hasNext() && page.size() < getPageSize()) {
-            T element = it.next();
+            val element = it.next();
             if (filter == null || filter.test(element)) page.add(element);
         }
         if (offset.get() == 0) return page;
 
         if (page.size() < getPageSize()) {
-            int delta = getPageSize() - page.size();
-            List<T> list = handle.subList(Math.max(0, start - delta), start);
+            val delta = getPageSize() - page.size();
+            val list = handle.subList(Math.max(0, start - delta), start);
 
             for (int i = list.size() - 1; i >= 0; i--) {
                 if (page.size() >= getPageSize()) break;
-                T element = list.get(i);
+                val element = list.get(i);
                 if (filter == null || filter.test(element)) page.add(0, element);
             }
         }

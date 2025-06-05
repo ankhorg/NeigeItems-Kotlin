@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLongLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagLong;
@@ -47,7 +47,7 @@ public final class NbtLong extends NbtNumeric<RefNbtTagLong> implements NbtLongL
     }
 
     @Override
-    public int compareTo(@NotNull Nbt<?> o) {
+    public int compareTo(@NonNull Nbt<?> o) {
         if (o instanceof NbtLong) {
             return Long.compare(getAsLong(), ((NbtLong) o).getAsLong());
         }

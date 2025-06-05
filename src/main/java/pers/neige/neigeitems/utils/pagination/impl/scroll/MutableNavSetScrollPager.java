@@ -1,24 +1,29 @@
 package pers.neige.neigeitems.utils.pagination.impl.scroll;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.pagination.ScrollPager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.NavigableSet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
-    private final @NotNull NavigableSet<T> handle;
-    private final @NotNull AtomicReference<T> cursor = new AtomicReference<>();
+    private final @NonNull NavigableSet<T> handle;
+    private final @NonNull AtomicReference<T> cursor = new AtomicReference<>();
 
-    public MutableNavSetScrollPager(@NotNull NavigableSet<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+    public MutableNavSetScrollPager(@NonNull NavigableSet<T> handle, int pageSize, @Nullable Predicate<T> filter) {
         super(pageSize, filter);
         this.handle = handle;
         resetOffset();
     }
 
-    public @NotNull NavigableSet<T> getHandle() {
+    public @NonNull NavigableSet<T> getHandle() {
         return handle;
     }
 
@@ -64,15 +69,15 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
     @Override
     public void moveOffset(int delta) {
         if (delta == 0 || handle.isEmpty()) return;
-        T current = getCursor();
+        var current = getCursor();
         if (current == null) {
             current = handle.first();
         }
 
-        boolean reverse = delta < 0;
-        int absDelta = Math.abs(delta);
+        val reverse = delta < 0;
+        val absDelta = Math.abs(delta);
 
-        Iterator<T> it = reverse ?
+        var it = reverse ?
                 handle.headSet(current, false).descendingIterator() :
                 handle.tailSet(current, false).iterator();
 
@@ -91,14 +96,14 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
             moveOffset(delta);
             return;
         }
-        T current = getCursor();
+        var current = getCursor();
         if (current == null) {
             current = handle.first();
         }
         if (filter.test(current)) return;
         T next = null;
-        int match = 0;
-        for (T element : handle.tailSet(current, false)) {
+        var match = 0;
+        for (val element : handle.tailSet(current, false)) {
             next = element;
             if (filter.test(element)) {
                 match++;
@@ -109,26 +114,26 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
     }
 
     @Override
-    public @NotNull List<T> getCurrentPageElements() {
-        T current = getCursor();
+    public @NonNull List<T> getCurrentPageElements() {
+        val current = getCursor();
         if (current == null || handle.isEmpty()) return Collections.emptyList();
 
-        List<T> page = new ArrayList<>(getPageSize());
-        NavigableSet<T> tail = handle.tailSet(current, true);
-        Iterator<T> it = tail.iterator();
+        val page = new ArrayList<T>(getPageSize());
+        val tail = handle.tailSet(current, true);
+        var it = tail.iterator();
 
         while (it.hasNext() && page.size() < getPageSize()) {
-            T element = it.next();
+            val element = it.next();
             if (filter == null || filter.test(element)) page.add(element);
         }
         if (current == handle.first()) return page;
 
         if (page.size() < getPageSize()) {
-            NavigableSet<T> head = handle.headSet(current, false);
+            val head = handle.headSet(current, false);
             it = head.descendingIterator();
 
             while (it.hasNext() && page.size() < getPageSize()) {
-                T element = it.next();
+                val element = it.next();
                 if (filter == null || filter.test(element)) page.add(0, element);
             }
         }
@@ -142,15 +147,15 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
 
     private <C extends Comparable<C>> boolean isLast() {
         if (handle.isEmpty()) return true;
-        C current = (C) getCursor();
-        C last = (C) handle.last();
+        val current = (C) getCursor();
+        val last = (C) handle.last();
         return current.compareTo(last) >= 0;
     }
 
     private <C extends Comparable<C>> boolean isFirst() {
         if (handle.isEmpty()) return true;
-        C current = (C) getCursor();
-        C first = (C) handle.first();
+        val current = (C) getCursor();
+        val first = (C) handle.first();
         return current.compareTo(first) <= 0;
     }
 

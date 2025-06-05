@@ -1,10 +1,10 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -19,14 +19,10 @@ import java.util.List;
  */
 public final class ItemPackDropEvent extends CancellableEvent {
     private static final HandlerList handlers = new HandlerList();
-    @NotNull
-    private final String id;
-    @Nullable
-    private final OfflinePlayer parser;
-    @NotNull
-    private List<ItemStack> itemStacks;
-    @NotNull
-    private Location location;
+    private final @NonNull String id;
+    private final @Nullable OfflinePlayer parser;
+    private @NonNull List<ItemStack> itemStacks;
+    private @NonNull Location location;
 
     /**
      * @param id         物品ID
@@ -35,9 +31,9 @@ public final class ItemPackDropEvent extends CancellableEvent {
      * @param parser     物品解析对象
      */
     public ItemPackDropEvent(
-            @NotNull String id,
-            @NotNull List<ItemStack> itemStacks,
-            @NotNull Location location,
+            @NonNull String id,
+            @NonNull List<ItemStack> itemStacks,
+            @NonNull Location location,
             @Nullable OfflinePlayer parser
     ) {
         this.id = id;
@@ -46,24 +42,21 @@ public final class ItemPackDropEvent extends CancellableEvent {
         this.parser = parser;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
     /**
      * 获取物品ID
      */
-    @NotNull
-    public String getId() {
+    public @NonNull String getId() {
         return id;
     }
 
     /**
      * 获取待掉落物品
      */
-    @NotNull
-    public List<ItemStack> getItemStacks() {
+    public @NonNull List<ItemStack> getItemStacks() {
         return itemStacks;
     }
 
@@ -73,7 +66,7 @@ public final class ItemPackDropEvent extends CancellableEvent {
      * @param itemStacks 待掉落物品
      */
     public void setItemStacks(
-            @NotNull List<ItemStack> itemStacks
+            @NonNull List<ItemStack> itemStacks
     ) {
         this.itemStacks = itemStacks;
     }
@@ -81,8 +74,7 @@ public final class ItemPackDropEvent extends CancellableEvent {
     /**
      * 获取掉落位置
      */
-    @NotNull
-    public Location getLocation() {
+    public @NonNull Location getLocation() {
         return location;
     }
 
@@ -92,7 +84,7 @@ public final class ItemPackDropEvent extends CancellableEvent {
      * @param location 掉落位置
      */
     public void setLocation(
-            @NotNull Location location
+            @NonNull Location location
     ) {
         this.location = location;
     }
@@ -100,14 +92,12 @@ public final class ItemPackDropEvent extends CancellableEvent {
     /**
      * 获取物品解析对象
      */
-    @Nullable
-    public OfflinePlayer getParser() {
+    public @Nullable OfflinePlayer getParser() {
         return parser;
     }
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

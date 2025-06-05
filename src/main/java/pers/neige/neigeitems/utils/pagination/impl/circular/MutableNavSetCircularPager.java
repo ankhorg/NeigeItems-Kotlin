@@ -1,24 +1,29 @@
 package pers.neige.neigeitems.utils.pagination.impl.circular;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.pagination.CircularPager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.NavigableSet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class MutableNavSetCircularPager<T> extends CircularPager<T> {
-    private final @NotNull NavigableSet<T> handle;
-    private final @NotNull AtomicReference<T> cursor = new AtomicReference<>();
+    private final @NonNull NavigableSet<T> handle;
+    private final @NonNull AtomicReference<T> cursor = new AtomicReference<>();
 
-    public MutableNavSetCircularPager(@NotNull NavigableSet<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+    public MutableNavSetCircularPager(@NonNull NavigableSet<T> handle, int pageSize, @Nullable Predicate<T> filter) {
         super(pageSize, filter);
         this.handle = handle;
         resetOffset();
     }
 
-    public @NotNull NavigableSet<T> getHandle() {
+    public @NonNull NavigableSet<T> getHandle() {
         return handle;
     }
 
@@ -64,17 +69,17 @@ public class MutableNavSetCircularPager<T> extends CircularPager<T> {
     @Override
     public void moveOffset(int delta) {
         if (delta == 0 || handle.isEmpty()) return;
-        T current = getCursor();
+        var current = getCursor();
         if (current == null) {
             current = handle.first();
         }
 
         delta = delta % getTotalElements();
 
-        boolean reverse = delta < 0;
-        int absDelta = Math.abs(delta);
+        val reverse = delta < 0;
+        val absDelta = Math.abs(delta);
 
-        Iterator<T> it = reverse ?
+        var it = reverse ?
                 handle.headSet(current, false).descendingIterator() :
                 handle.tailSet(current, false).iterator();
 
@@ -89,22 +94,22 @@ public class MutableNavSetCircularPager<T> extends CircularPager<T> {
     }
 
     @Override
-    public @NotNull List<T> getCurrentPageElements() {
-        T current = getCursor();
+    public @NonNull List<T> getCurrentPageElements() {
+        val current = getCursor();
         if (current == null || handle.isEmpty()) return Collections.emptyList();
 
-        List<T> page = new ArrayList<>(getPageSize());
-        NavigableSet<T> tail = handle.tailSet(current, true);
-        Iterator<T> it = tail.iterator();
+        val page = new ArrayList<T>(getPageSize());
+        val tail = handle.tailSet(current, true);
+        var it = tail.iterator();
 
-        boolean newRound = false;
-        boolean anyMatch = false;
+        var newRound = false;
+        var anyMatch = false;
         List<T> newRoundElements = null;
         while (page.size() < getPageSize()) {
             if (!it.hasNext()) {
                 if (newRound) {
                     if (anyMatch) {
-                        Iterator<T> roundIterator = newRoundElements.iterator();
+                        var roundIterator = newRoundElements.iterator();
                         while (page.size() < getPageSize()) {
                             if (!roundIterator.hasNext()) roundIterator = newRoundElements.iterator();
                             page.add(roundIterator.next());
@@ -116,7 +121,7 @@ public class MutableNavSetCircularPager<T> extends CircularPager<T> {
                 newRoundElements = new ArrayList<>();
                 it = handle.iterator();
             }
-            T element = it.next();
+            val element = it.next();
             if (filter == null || filter.test(element)) {
                 if (newRound) {
                     anyMatch = true;

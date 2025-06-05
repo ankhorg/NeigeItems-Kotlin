@@ -1,12 +1,12 @@
 package pers.neige.neigeitems.action.result;
 
+import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ResultType;
 
 public class StopResult extends ActionResult {
-    @Nullable
-    private final String label;
+    private final @Nullable String label;
     private int priority = 1;
 
     public StopResult() {
@@ -28,7 +28,7 @@ public class StopResult extends ActionResult {
     }
 
     @Override
-    public ResultType getType() {
+    public @NonNull ResultType getType() {
         return ResultType.STOP;
     }
 
@@ -37,8 +37,7 @@ public class StopResult extends ActionResult {
         return priority;
     }
 
-    @Nullable
-    public String getLabel() {
+    public @Nullable String getLabel() {
         return label;
     }
 }

@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import lombok.NonNull;
 import org.bukkit.inventory.Inventory;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 
 public class InventoryUtils {
@@ -15,8 +15,8 @@ public class InventoryUtils {
      * @param title     待设置标题
      */
     public static void setTitle(
-            @NotNull Inventory inventory,
-            @NotNull String title
+            @NonNull Inventory inventory,
+            @NonNull String title
     ) throws IllegalAccessException {
         if (USE_PAPER) {
             PaperInventoryUtils.setTitle(inventory, title);
@@ -33,8 +33,8 @@ public class InventoryUtils {
      * @param title     JSON格式待设置标题
      */
     public static void setJsonTitle(
-            @NotNull Inventory inventory,
-            @NotNull String title
+            @NonNull Inventory inventory,
+            @NonNull String title
     ) throws IllegalAccessException {
         if (USE_PAPER) {
             PaperInventoryUtils.setJsonTitle(inventory, title);

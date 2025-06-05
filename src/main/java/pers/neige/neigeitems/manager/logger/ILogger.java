@@ -1,7 +1,10 @@
 package pers.neige.neigeitems.manager.logger;
 
+import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
+
 public interface ILogger {
-    static ILogger of(Object logger) {
+    static @Nullable ILogger of(Object logger) {
         if (logger instanceof java.util.logging.Logger) {
             return new JavaLogger((java.util.logging.Logger) logger);
         } else if (logger instanceof org.slf4j.Logger) {
@@ -10,5 +13,5 @@ public interface ILogger {
         return null;
     }
 
-    void warn(String message, Throwable thrown);
+    void warn(@NonNull String message, @NonNull Throwable thrown);
 }

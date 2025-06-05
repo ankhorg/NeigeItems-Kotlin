@@ -1,7 +1,8 @@
 package pers.neige.neigeitems.action;
 
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SchedulerUtils;
@@ -10,34 +11,30 @@ import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class Action {
-    @NotNull
-    protected final BaseActionManager manager;
+    protected final @NonNull BaseActionManager manager;
     protected boolean asyncSafe = true;
 
-    public Action(@NotNull BaseActionManager manager) {
+    public Action(@NonNull BaseActionManager manager) {
         this.manager = manager;
     }
 
-    @NotNull
-    public ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.UNKNOWN;
     }
 
-    @NotNull
-    protected abstract CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    protected abstract @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     );
 
-    @NotNull
-    public CompletableFuture<ActionResult> evalAsyncSafe(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> evalAsyncSafe(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         if (this.asyncSafe) {
             // 如果线程状态不一致, 回归原始线程
             if (context.isSync() != Bukkit.isPrimaryThread()) {
-                CompletableFuture<ActionResult> result = new CompletableFuture<>();
+                val result = new CompletableFuture<ActionResult>();
                 SchedulerUtils.run(manager.getPlugin(), context.isSync(), () -> {
                     eval(manager, context).thenAccept(result::complete);
                 });
@@ -46,7 +43,7 @@ public abstract class Action {
             // 非主线程运行非线程安全动作, 进行线程切换
         } else {
             if (!Bukkit.isPrimaryThread()) {
-                CompletableFuture<ActionResult> result = new CompletableFuture<>();
+                val result = new CompletableFuture<ActionResult>();
                 // 转主线程
                 Bukkit.getScheduler().runTask(manager.getPlugin(), () -> {
                     eval(manager, context).thenAccept(result::complete);
@@ -61,16 +58,14 @@ public abstract class Action {
         return asyncSafe;
     }
 
-    @NotNull
-    public CompletableFuture<ActionResult> evalAsyncSafe(
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> evalAsyncSafe(
+            @NonNull ActionContext context
     ) {
         return evalAsyncSafe(manager, context);
     }
 
-    @NotNull
-    public CompletableFuture<ActionResult> eval(
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull ActionContext context
     ) {
         return evalAsyncSafe(manager, context.clone());
     }
@@ -81,8 +76,7 @@ public abstract class Action {
      * @param action 插入的动作
      * @return 新动作
      */
-    @NotNull
-    public Action insertBefore(@Nullable Object action) {
+    public @NonNull Action insertBefore(@Nullable Object action) {
         return manager.compile(Arrays.asList(action, this));
     }
 
@@ -92,8 +86,7 @@ public abstract class Action {
      * @param action 插入的动作
      * @return 新动作
      */
-    @NotNull
-    public Action insertAfter(@Nullable Object action) {
+    public @NonNull Action insertAfter(@Nullable Object action) {
         return manager.compile(Arrays.asList(this, action));
     }
 }

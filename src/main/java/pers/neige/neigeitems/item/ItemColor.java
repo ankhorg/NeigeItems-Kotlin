@@ -1,9 +1,10 @@
 package pers.neige.neigeitems.item;
 
+import lombok.NonNull;
+import lombok.var;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,8 +12,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class ItemColor {
-    private static final Map<String, ChatColor> colors = new HashMap<>();
-    private static final Set<Scoreboard> checkedScoreboard = new HashSet<>();
+    private static final @NonNull Map<String, ChatColor> colors = new HashMap<>();
+    private static final @NonNull Set<Scoreboard> checkedScoreboard = new HashSet<>();
 
     static {
         colors.put("BLACK", ChatColor.BLACK);
@@ -36,7 +37,7 @@ public class ItemColor {
     /**
      * 获取物品光效颜色对应Map
      */
-    public static Map<String, ChatColor> getColors() {
+    public static @NonNull Map<String, ChatColor> getColors() {
         return colors;
     }
 
@@ -51,11 +52,11 @@ public class ItemColor {
      *
      * @param player 待操作玩家
      */
-    public static void initTeam(Player player) {
+    public static void initTeam(@NonNull Player player) {
         if (!checkedScoreboard.contains(player.getScoreboard())) {
             colors.forEach((id, color) -> {
                 // 注册Team
-                Team team = player.getScoreboard().getTeam("NI-" + color);
+                var team = player.getScoreboard().getTeam("NI-" + color);
                 if (team != null) team.unregister();
                 team = player.getScoreboard().registerNewTeam("NI-" + color);
                 // 1.13+设置color即可改变光效发光颜色

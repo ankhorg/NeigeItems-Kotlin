@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.utils.pagination.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 import pers.neige.neigeitems.utils.pagination.Pager;
 
 import java.util.Collections;
@@ -11,20 +12,20 @@ public class MutableListPager<T> extends Pager<T> {
     /**
      * 可变数据
      */
-    private final @NotNull List<T> handle;
+    private final @NonNull List<T> handle;
     /**
      * 当前页码（从1开始）
      */
-    private final @NotNull AtomicInteger currentPage;
+    private final @NonNull AtomicInteger currentPage;
 
-    public MutableListPager(@NotNull List<T> handle, int pageSize) {
+    public MutableListPager(@NonNull List<T> handle, int pageSize) {
         super(pageSize);
         this.handle = handle;
         // 初始化当前页（总页数为0时设为0，否则从1开始）
         this.currentPage = new AtomicInteger(getTotalPages() == 0 ? 0 : 1);
     }
 
-    public @NotNull List<T> getHandle() {
+    public @NonNull List<T> getHandle() {
         return handle;
     }
 
@@ -74,13 +75,13 @@ public class MutableListPager<T> extends Pager<T> {
         return maybeReplacement;
     }
 
-    public @NotNull List<T> getCurrentPageElements() {
-        int current = getCurrentPage();
+    public @NonNull List<T> getCurrentPageElements() {
+        val current = getCurrentPage();
         if (current == 0) {
             return Collections.emptyList();
         }
-        int startIndex = (current - 1) * getPageSize();
-        int endIndex = Math.min(startIndex + getPageSize(), handle.size());
+        val startIndex = (current - 1) * getPageSize();
+        val endIndex = Math.min(startIndex + getPageSize(), handle.size());
         if (startIndex >= endIndex) {
             return Collections.emptyList();
         }

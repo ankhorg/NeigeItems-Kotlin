@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import io.freefair.gradle.plugins.lombok.tasks.Delombok
 import org.inksnow.ankhinvoke.gradle.ApplyReferenceTask
 import org.inksnow.ankhinvoke.gradle.BuildMappingsTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -6,8 +7,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     `java-library`
     `maven-publish`
+    id("io.freefair.lombok") version "8.13.1"
     id("org.jetbrains.kotlin.jvm") version "2.1.20"
-    id("org.jetbrains.dokka") version "1.9.20"
+    kotlin("plugin.lombok") version "2.1.20"
+    id("org.jetbrains.dokka") version "2.0.0"
     id("com.gradleup.shadow") version "8.3.5"
     id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.21-SNAPSHOT"
 }
@@ -22,6 +25,7 @@ subprojects {
     apply<JavaPlugin>()
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "maven-publish")
+    apply(plugin = "io.freefair.lombok")
 
     val projectName = this.name
 
@@ -71,7 +75,7 @@ repositories {
 }
 
 dependencies {
-    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:1.9.20")
+    dokkaHtmlPlugin("org.jetbrains.dokka:kotlin-as-java-plugin:2.0.0")
     compileOnly(fileTree("libs"))
     compileOnly("io.netty:netty-all:5.0.0.Alpha2")
     compileOnly("net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")

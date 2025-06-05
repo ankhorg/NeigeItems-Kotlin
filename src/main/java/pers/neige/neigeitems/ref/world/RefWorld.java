@@ -1,10 +1,10 @@
 package pers.neige.neigeitems.ref.world;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import org.jetbrains.annotations.Nullable;
 import org.spigotmc.SpigotWorldConfig;
 import pers.neige.neigeitems.ref.entity.RefEntity;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 

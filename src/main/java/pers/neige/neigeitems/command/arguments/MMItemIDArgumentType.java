@@ -5,10 +5,10 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.command.CommandUtils;
-import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker;
 import pers.neige.neigeitems.manager.HookerManager;
 
 import java.util.Collection;
@@ -24,36 +24,32 @@ public class MMItemIDArgumentType implements ArgumentType<String> {
     private MMItemIDArgumentType() {
     }
 
-    @NotNull
-    public static MMItemIDArgumentType mmItemID() {
+    public static @NonNull MMItemIDArgumentType mmItemID() {
         return new MMItemIDArgumentType();
     }
 
-    @NotNull
-    public static String getMMItemID(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @NonNull String getMMItemID(
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return context.getArgument(name, String.class);
     }
 
-    @NotNull
     @Override
-    public String parse(
-            @NotNull StringReader reader
+    public @NonNull String parse(
+            @NonNull StringReader reader
     ) {
         return CommandUtils.readUnquotedString(reader);
     }
 
-    @NotNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(
-            @NotNull CommandContext<S> context,
-            @NotNull SuggestionsBuilder builder
+    public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
+            @NonNull CommandContext<S> context,
+            @NonNull SuggestionsBuilder builder
     ) {
-        MythicMobsHooker hooker = HookerManager.INSTANCE.getMythicMobsHooker();
+        val hooker = HookerManager.INSTANCE.getMythicMobsHooker();
         if (hooker != null) {
-            String lowerCaseRemaining = builder.getRemaining().toLowerCase();
+            val lowerCaseRemaining = builder.getRemaining().toLowerCase();
             hooker.getItemIds().forEach((id) -> {
                 if (id.toLowerCase().startsWith(lowerCaseRemaining)) {
                     builder.suggest(id);
@@ -63,9 +59,8 @@ public class MMItemIDArgumentType implements ArgumentType<String> {
         return builder.buildFuture();
     }
 
-    @NotNull
     @Override
-    public Collection<String> getExamples() {
+    public @NonNull Collection<String> getExamples() {
         return EXAMPLES;
     }
 }

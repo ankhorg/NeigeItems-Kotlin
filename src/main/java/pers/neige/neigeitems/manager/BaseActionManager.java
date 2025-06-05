@@ -1,20 +1,18 @@
 package pers.neige.neigeitems.manager;
 
-import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import kotlin.Pair;
 import kotlin.text.StringsKt;
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.action.*;
@@ -26,19 +24,15 @@ import pers.neige.neigeitems.action.impl.*;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.action.result.StopResult;
 import pers.neige.neigeitems.config.ConfigReader;
-import pers.neige.neigeitems.hook.mythicmobs.MythicMobsHooker;
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker;
-import pers.neige.neigeitems.hook.vault.VaultHooker;
 import pers.neige.neigeitems.item.action.ComboInfo;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils;
 import pers.neige.neigeitems.text.Text;
 import pers.neige.neigeitems.text.impl.NullText;
-import pers.neige.neigeitems.user.User;
 import pers.neige.neigeitems.utils.*;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -53,35 +47,31 @@ import static pers.neige.neigeitems.utils.ListUtils.*;
 
 @SuppressWarnings("unchecked")
 public abstract class BaseActionManager {
-    public final @NotNull Action NULL_ACTION = new NullAction(this);
-    public final @NotNull Text NULL_TEXT = new NullText(this);
-    public final @NotNull Evaluator<String> NULL_STRING_EVALUATOR = new Evaluator<>(this, String.class);
-    public final @NotNull Evaluator<Integer> NULL_INTEGER_EVALUATOR = new Evaluator<>(this, Integer.class);
-    public final @NotNull Evaluator<Double> NULL_DOUBLE_EVALUATOR = new Evaluator<>(this, Double.class);
-    private final @NotNull Plugin plugin;
+    public final @NonNull Action NULL_ACTION = new NullAction(this);
+    public final @NonNull Text NULL_TEXT = new NullText(this);
+    public final @NonNull Evaluator<String> NULL_STRING_EVALUATOR = new Evaluator<>(this, String.class);
+    public final @NonNull Evaluator<Integer> NULL_INTEGER_EVALUATOR = new Evaluator<>(this, Integer.class);
+    public final @NonNull Evaluator<Double> NULL_DOUBLE_EVALUATOR = new Evaluator<>(this, Double.class);
+    private final @NonNull Plugin plugin;
     /**
      * 物品动作实现函数
      */
-    @NotNull
-    private final HashMap<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>> actions = new HashMap<>();
+    private final @NonNull HashMap<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>> actions = new HashMap<>();
     /**
      * 用于编译condition的脚本引擎
      */
-    @NotNull
-    private final ScriptEngine engine = HookerManager.INSTANCE.getNashornHooker().getGlobalEngine();
+    private final @NonNull ScriptEngine engine = HookerManager.INSTANCE.getNashornHooker().getGlobalEngine();
     /**
      * 缓存的已编译condition脚本
      */
-    @NotNull
-    private final ConcurrentHashMap<String, CompiledScript> conditionScripts = new ConcurrentHashMap<>();
+    private final @NonNull ConcurrentHashMap<String, CompiledScript> conditionScripts = new ConcurrentHashMap<>();
     /**
      * 缓存的已编译action脚本
      */
-    @NotNull
-    private final ConcurrentHashMap<String, CompiledScript> actionScripts = new ConcurrentHashMap<>();
+    private final @NonNull ConcurrentHashMap<String, CompiledScript> actionScripts = new ConcurrentHashMap<>();
 
     public BaseActionManager(
-            @NotNull Plugin plugin
+            @NonNull Plugin plugin
     ) {
         this.plugin = plugin;
         engine.put("plugin", plugin);
@@ -90,28 +80,23 @@ public abstract class BaseActionManager {
         loadBasicActions();
     }
 
-    @NotNull
-    public Plugin getPlugin() {
+    public @NonNull Plugin getPlugin() {
         return plugin;
     }
 
-    @NotNull
-    public HashMap<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>> getActions() {
+    public @NonNull HashMap<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>> getActions() {
         return actions;
     }
 
-    @NotNull
-    public ScriptEngine getEngine() {
+    public @NonNull ScriptEngine getEngine() {
         return engine;
     }
 
-    @NotNull
-    public ConcurrentHashMap<String, CompiledScript> getConditionScripts() {
+    public @NonNull ConcurrentHashMap<String, CompiledScript> getConditionScripts() {
         return conditionScripts;
     }
 
-    @NotNull
-    public ConcurrentHashMap<String, CompiledScript> getActionScripts() {
+    public @NonNull ConcurrentHashMap<String, CompiledScript> getActionScripts() {
         return actionScripts;
     }
 
@@ -120,17 +105,15 @@ public abstract class BaseActionManager {
         actionScripts.clear();
     }
 
-    @NotNull
-    public Action compile(
+    public @NonNull Action compile(
             @Nullable Object action,
-            @NotNull Action def
+            @NonNull Action def
     ) {
         if (action == null) return def;
         return compile(action);
     }
 
-    @NotNull
-    public Action compile(
+    public @NonNull Action compile(
             @Nullable Object action,
             @Nullable Object def
     ) {
@@ -138,17 +121,16 @@ public abstract class BaseActionManager {
         return compile(action);
     }
 
-    @NotNull
-    public Action compile(
+    public @NonNull Action compile(
             @Nullable Object action
     ) {
         if (action == null) return NULL_ACTION;
         if (action instanceof Action) return (Action) action;
         if (action instanceof String) {
-            String string = (String) action;
-            String[] info = string.split(": ", 2);
-            String key = info[0].toLowerCase(Locale.ROOT);
-            String content = info.length > 1 ? info[1] : "";
+            val string = (String) action;
+            val info = string.split(": ", 2);
+            val key = info[0].toLowerCase(Locale.ROOT);
+            var content = info.length > 1 ? info[1] : "";
             if (key.equals("js")) {
                 return new JsAction(this, content);
             } else {
@@ -158,9 +140,9 @@ public abstract class BaseActionManager {
         } else if (action instanceof List<?>) {
             return new ListAction(this, (List<?>) action);
         }
-        ConfigReader config = ConfigReader.parse(action);
+        val config = ConfigReader.parse(action);
         if (config == null) return NULL_ACTION;
-        String type = config.getString("type", "").toLowerCase();
+        val type = config.getString("type", "").toLowerCase();
         switch (type) {
             case "condition": {
                 return new ConditionAction(this, config);
@@ -206,12 +188,12 @@ public abstract class BaseActionManager {
             return compile(config.get("actions"));
         } else {
             // 处理有人连引号都能忘的情况('tell: 123'写成了tell: 123, 也就是字符串写成了长度为1的map)
-            Set<String> keySet = config.keySet();
+            val keySet = config.keySet();
             if (keySet.size() != 1) return NULL_ACTION;
-            String key = keySet.iterator().next();
-            Object value = config.get(key);
+            val key = keySet.iterator().next();
+            val value = config.get(key);
             if (!(value instanceof String)) return NULL_ACTION;
-            String content = (String) value;
+            var content = (String) value;
             if (key.equals("js")) {
                 return new JsAction(this, content);
             } else {
@@ -227,11 +209,10 @@ public abstract class BaseActionManager {
      * @param action 动作内容
      * @return 永远返回 Results.SUCCESS, 这是历史遗留问题, 要获取真实结果请调用 runActionWithResult 方法.
      */
-    @NotNull
     @Deprecated
     @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
-    public ActionResult runAction(
-            @NotNull Action action
+    public @NonNull ActionResult runAction(
+            @NonNull Action action
     ) {
         action.eval(ActionContext.empty());
         return Results.SUCCESS;
@@ -243,11 +224,10 @@ public abstract class BaseActionManager {
      * @param action 动作内容
      * @return 执行结果
      */
-    @NotNull
     @Deprecated
     @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
-    public CompletableFuture<ActionResult> runActionWithResult(
-            @NotNull Action action
+    public @NonNull CompletableFuture<ActionResult> runActionWithResult(
+            @NonNull Action action
     ) {
         return action.eval(ActionContext.empty());
     }
@@ -259,12 +239,11 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 永远返回 Results.SUCCESS, 这是历史遗留问题, 要获取真实结果请调用 runActionWithResult 方法.
      */
-    @NotNull
     @Deprecated
     @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
-    public ActionResult runAction(
-            @NotNull Action action,
-            @NotNull ActionContext context
+    public @NonNull ActionResult runAction(
+            @NonNull Action action,
+            @NonNull ActionContext context
     ) {
         action.eval(context);
         return Results.SUCCESS;
@@ -277,12 +256,11 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
     @Deprecated
     @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
-    public CompletableFuture<ActionResult> runActionWithResult(
-            @NotNull Action action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runActionWithResult(
+            @NonNull Action action,
+            @NonNull ActionContext context
     ) {
         return action.eval(context);
     }
@@ -294,12 +272,11 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull RawStringAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull RawStringAction action,
+            @NonNull ActionContext context
     ) {
-        BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler = action.getHandler();
+        val handler = action.getHandler();
         if (handler == null) return CompletableFuture.completedFuture(Results.SUCCESS);
         return handler.apply(context, action.getContent());
     }
@@ -311,15 +288,14 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull StringAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull StringAction action,
+            @NonNull ActionContext context
     ) {
-        BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler = action.getHandler();
+        val handler = action.getHandler();
         if (handler == null) return CompletableFuture.completedFuture(Results.SUCCESS);
         // 对动作内容进行节点解析
-        String content = SectionUtils.parseSection(
+        val content = SectionUtils.parseSection(
                 action.getContent(),
                 (Map<String, String>) (Object) context.getGlobal(),
                 context.getPlayer(),
@@ -334,8 +310,7 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @Nullable
-    public ConfigurationSection getSectionConfig(@NotNull ActionContext context) {
+    public @Nullable ConfigurationSection getSectionConfig(@NonNull ActionContext context) {
         return null;
     }
 
@@ -346,10 +321,9 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull JsAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull JsAction action,
+            @NonNull ActionContext context
     ) {
         Object result;
         try {
@@ -359,9 +333,9 @@ public abstract class BaseActionManager {
             }
         } catch (Throwable error) {
             plugin.getLogger().warning("JS动作执行异常, 动作内容如下:");
-            String[] lines = action.getScriptString().split("\n");
+            val lines = action.getScriptString().split("\n");
             for (int i = 0; i < lines.length; i++) {
-                String contentLine = lines[i];
+                val contentLine = lines[i];
                 plugin.getLogger().warning((i + 1) + ". " + contentLine);
             }
             error.printStackTrace();
@@ -385,10 +359,9 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull ListAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull ListAction action,
+            @NonNull ActionContext context
     ) {
         return runAction(action, context, 0);
     }
@@ -401,13 +374,12 @@ public abstract class BaseActionManager {
      * @param fromIndex 从这个索引对应的位置开始执行
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull ListAction action,
-            @NotNull ActionContext context,
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull ListAction action,
+            @NonNull ActionContext context,
             int fromIndex
     ) {
-        List<Action> actions = action.getActions();
+        val actions = action.getActions();
         if (fromIndex >= actions.size()) return CompletableFuture.completedFuture(Results.SUCCESS);
         return actions.get(fromIndex).evalAsyncSafe(this, context).thenCompose((result) -> {
             if (result.getType() == ResultType.STOP) {
@@ -424,10 +396,9 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull ConditionAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull ConditionAction action,
+            @NonNull ActionContext context
     ) {
         // 如果条件通过
         if (action.getCondition().easyCheck(context)) {
@@ -449,10 +420,9 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull LabelAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull LabelAction action,
+            @NonNull ActionContext context
     ) {
         return action.getActions().evalAsyncSafe(this, context).thenApply((result) -> {
             if (result instanceof StopResult && action.getLabel().equals(((StopResult) result).getLabel())) {
@@ -469,17 +439,16 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull WeightAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull WeightAction action,
+            @NonNull ActionContext context
     ) {
         if (action.getTotalWeight() <= 0 || action.getActions().isEmpty())
             return CompletableFuture.completedFuture(Results.SUCCESS);
         int amount = action.getAmount(this, context);
         if (amount >= action.getActions().size()) {
-            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
-            for (Pair<Action, Double> currentAction : action.getActions()) {
+            var result = CompletableFuture.completedFuture(Results.SUCCESS);
+            for (val currentAction : action.getActions()) {
                 result = result.thenCombine(currentAction.getFirst().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
                         return r2;
@@ -501,12 +470,12 @@ public abstract class BaseActionManager {
                 return result.evalAsyncSafe(this, context);
             }
         } else if (amount > 1) {
-            List<SamplingUtils.SamplingResult<Action>> actions = SamplingUtils.weightWithIndex(action.getActions(), amount);
+            val actions = SamplingUtils.weightWithIndex(action.getActions(), amount);
             if (action.isOrder()) {
                 actions.sort(Comparator.comparingInt(SamplingUtils.SamplingResult::getIndex));
             }
-            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
-            for (SamplingUtils.SamplingResult<Action> currentAction : actions) {
+            var result = CompletableFuture.completedFuture(Results.SUCCESS);
+            for (val currentAction : actions) {
                 result = result.thenCombine(currentAction.getValue().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
                         return r2;
@@ -527,17 +496,16 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull ConditionWeightAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull ConditionWeightAction action,
+            @NonNull ActionContext context
     ) {
-        List<Pair<Action, Double>> actions = action.getActions(context);
+        val actions = action.getActions(context);
         if (actions.isEmpty()) return CompletableFuture.completedFuture(Results.SUCCESS);
-        int amount = action.getAmount(this, context);
+        val amount = action.getAmount(this, context);
         if (amount >= actions.size()) {
-            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
-            for (Pair<Action, Double> currentAction : actions) {
+            var result = CompletableFuture.completedFuture(Results.SUCCESS);
+            for (val currentAction : actions) {
                 result = result.thenCombine(currentAction.getFirst().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
                         return r2;
@@ -549,17 +517,17 @@ public abstract class BaseActionManager {
             return result;
         }
         if (amount == 1) {
-            Action result = SamplingUtils.weight(actions);
+            val result = SamplingUtils.weight(actions);
             if (result != null) {
                 return result.evalAsyncSafe(this, context);
             }
         } else if (amount > 1) {
-            List<SamplingUtils.SamplingResult<Action>> finalActions = SamplingUtils.weightWithIndex(actions, amount);
+            val finalActions = SamplingUtils.weightWithIndex(actions, amount);
             if (action.isOrder()) {
                 finalActions.sort(Comparator.comparingInt(SamplingUtils.SamplingResult::getIndex));
             }
-            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
-            for (SamplingUtils.SamplingResult<Action> currentAction : finalActions) {
+            var result = CompletableFuture.completedFuture(Results.SUCCESS);
+            for (val currentAction : finalActions) {
                 result = result.thenCombine(currentAction.getValue().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
                         return r2;
@@ -580,10 +548,9 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull WhileAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull WhileAction action,
+            @NonNull ActionContext context
     ) {
         // while循环判断条件
         if (action.getCondition().easyCheck(context)) {
@@ -610,17 +577,16 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull KeyAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull KeyAction action,
+            @NonNull ActionContext context
     ) {
-        String key = action.getKey().get(context);
+        val key = action.getKey().get(context);
         context.getGlobal().put(action.getGlobalId(), key);
         if (key == null) {
             return action.getDefaultAction().evalAsyncSafe(this, context);
         }
-        Action targetAction = action.getActions().get(key);
+        val targetAction = action.getActions().get(key);
         if (targetAction == null) {
             return action.getDefaultAction().evalAsyncSafe(this, context);
         }
@@ -640,12 +606,11 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull ContainsAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull ContainsAction action,
+            @NonNull ActionContext context
     ) {
-        String key = action.getKey().get(context);
+        val key = action.getKey().get(context);
         context.getGlobal().put(action.getGlobalId(), key);
         if (action.getElements().contains(key)) {
             return action.getContainsAction().evalAsyncSafe(this, context);
@@ -661,12 +626,11 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public <T extends Comparable<?>> CompletableFuture<ActionResult> runAction(
-            @NotNull TreeAction<T> action,
-            @NotNull ActionContext context
+    public @NonNull <T extends Comparable<?>> CompletableFuture<ActionResult> runAction(
+            @NonNull TreeAction<T> action,
+            @NonNull ActionContext context
     ) {
-        T key = action.getKey().get(context);
+        val key = action.getKey().get(context);
         context.getGlobal().put(action.getGlobalId(), key);
         if (key == null) {
             return action.getDefaultAction().evalAsyncSafe(this, context);
@@ -689,7 +653,7 @@ public abstract class BaseActionManager {
         if (entry == null) {
             return action.getDefaultAction().evalAsyncSafe(this, context);
         }
-        Action targetAction = entry.getValue();
+        val targetAction = entry.getValue();
         return action.getMatchAction().evalAsyncSafe(this, context).thenCompose((result) -> {
             if (result.getType() == ResultType.STOP) {
                 return CompletableFuture.completedFuture(result);
@@ -706,10 +670,9 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            @NotNull RepeatAction action,
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            @NonNull RepeatAction action,
+            @NonNull ActionContext context
     ) {
         final int repeat = action.getRepeat().getOrDefault(context, 0);
         if (repeat <= 0) return CompletableFuture.completedFuture(Results.SUCCESS);
@@ -723,10 +686,9 @@ public abstract class BaseActionManager {
      * @param context 动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public CompletableFuture<ActionResult> runAction(
-            final @NotNull RepeatAction action,
-            final @NotNull ActionContext context,
+    public @NonNull CompletableFuture<ActionResult> runAction(
+            final @NonNull RepeatAction action,
+            final @NonNull ActionContext context,
             final int repeat,
             final int count
     ) {
@@ -735,7 +697,7 @@ public abstract class BaseActionManager {
             if (result.getType() == ResultType.STOP) {
                 return CompletableFuture.completedFuture(result);
             } else {
-                int newCount = count + 1;
+                val newCount = count + 1;
                 if (newCount < repeat) {
                     return runAction(action, context, repeat, newCount);
                 } else {
@@ -752,10 +714,9 @@ public abstract class BaseActionManager {
      * @param context   动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public ActionResult parseCondition(
+    public @NonNull ActionResult parseCondition(
             @Nullable String condition,
-            @NotNull ActionContext context
+            @NonNull ActionContext context
     ) {
         if (condition == null) {
             return Results.SUCCESS;
@@ -774,10 +735,9 @@ public abstract class BaseActionManager {
      * @param context   动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public ActionResult parseCondition(
+    public @NonNull ActionResult parseCondition(
             @Nullable ScriptWithSource condition,
-            @NotNull ActionContext context
+            @NonNull ActionContext context
     ) {
         if (condition == null) {
             return Results.SUCCESS;
@@ -797,11 +757,10 @@ public abstract class BaseActionManager {
      * @param context         动作上下文
      * @return 执行结果
      */
-    @NotNull
-    public ActionResult parseCondition(
+    public @NonNull ActionResult parseCondition(
             @Nullable String conditionString,
             @Nullable CompiledScript condition,
-            @NotNull ActionContext context
+            @NonNull ActionContext context
     ) {
         if (condition == null) {
             return Results.SUCCESS;
@@ -815,9 +774,9 @@ public abstract class BaseActionManager {
         } catch (Throwable error) {
             if (conditionString != null) {
                 plugin.getLogger().warning("条件解析异常, 条件内容如下:");
-                String[] lines = conditionString.split("\n");
+                val lines = conditionString.split("\n");
                 for (int i = 0; i < lines.length; i++) {
-                    String conditionLine = lines[i];
+                    val conditionLine = lines[i];
                     plugin.getLogger().warning((i + 1) + ". " + conditionLine);
                 }
             } else {
@@ -842,11 +801,11 @@ public abstract class BaseActionManager {
      * @param function 动作执行函数
      */
     public void addFunction(
-            @NotNull Collection<String> ids,
+            @NonNull Collection<String> ids,
             @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
         if (function == null) return;
-        for (String id : ids) {
+        for (val id : ids) {
             addFunction(id, function);
         }
     }
@@ -859,12 +818,12 @@ public abstract class BaseActionManager {
      * @param function  动作执行函数
      */
     public void addFunction(
-            @NotNull Collection<String> ids,
+            @NonNull Collection<String> ids,
             boolean asyncSafe,
             @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
         if (function == null) return;
-        for (String id : ids) {
+        for (val id : ids) {
             addFunction(id, asyncSafe, function);
         }
     }
@@ -876,7 +835,7 @@ public abstract class BaseActionManager {
      * @param function 动作执行函数
      */
     public void addFunction(
-            @NotNull String id,
+            @NonNull String id,
             @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
         addFunction(id, true, function);
@@ -890,7 +849,7 @@ public abstract class BaseActionManager {
      * @param function  动作执行函数
      */
     public void addFunction(
-            @NotNull String id,
+            @NonNull String id,
             boolean asyncSafe,
             @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
@@ -898,13 +857,13 @@ public abstract class BaseActionManager {
         BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler;
         if (asyncSafe) {
             handler = (context, content) -> {
-                CompletableFuture<ActionResult> result = function.apply(context, content);
+                var result = function.apply(context, content);
                 if (result == null) result = CompletableFuture.completedFuture(Results.SUCCESS);
                 return result;
             };
         } else {
             handler = (SyncActionHandler) (context, content) -> {
-                CompletableFuture<ActionResult> result = function.apply(context, content);
+                var result = function.apply(context, content);
                 if (result == null) result = CompletableFuture.completedFuture(Results.SUCCESS);
                 return result;
             };
@@ -919,11 +878,11 @@ public abstract class BaseActionManager {
      * @param consumer 动作执行函数
      */
     public void addConsumer(
-            @NotNull Collection<String> ids,
+            @NonNull Collection<String> ids,
             @Nullable BiConsumer<ActionContext, String> consumer
     ) {
         if (consumer == null) return;
-        for (String id : ids) {
+        for (val id : ids) {
             addConsumer(id, consumer);
         }
     }
@@ -936,12 +895,12 @@ public abstract class BaseActionManager {
      * @param consumer  动作执行函数
      */
     public void addConsumer(
-            @NotNull Collection<String> ids,
+            @NonNull Collection<String> ids,
             boolean asyncSafe,
             @Nullable BiConsumer<ActionContext, String> consumer
     ) {
         if (consumer == null) return;
-        for (String id : ids) {
+        for (val id : ids) {
             addConsumer(id, asyncSafe, consumer);
         }
     }
@@ -953,7 +912,7 @@ public abstract class BaseActionManager {
      * @param consumer 动作执行函数
      */
     public void addConsumer(
-            @NotNull String id,
+            @NonNull String id,
             @Nullable BiConsumer<ActionContext, String> consumer
     ) {
         addConsumer(id, true, consumer);
@@ -967,7 +926,7 @@ public abstract class BaseActionManager {
      * @param consumer  动作执行函数
      */
     public void addConsumer(
-            @NotNull String id,
+            @NonNull String id,
             boolean asyncSafe,
             @Nullable BiConsumer<ActionContext, String> consumer
     ) {
@@ -1001,10 +960,10 @@ public abstract class BaseActionManager {
      * @param resourceName 资源文件名
      */
     public void loadJSLib(
-            @NotNull String pluginName,
-            @NotNull String resourceName
+            @NonNull String pluginName,
+            @NonNull String resourceName
     ) {
-        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        val plugin = Bukkit.getPluginManager().getPlugin(pluginName);
         if (plugin == null) return;
         loadJSLib(plugin, resourceName);
     }
@@ -1016,12 +975,12 @@ public abstract class BaseActionManager {
      * @param resourceName 资源文件名
      */
     public void loadJSLib(
-            @NotNull Plugin plugin,
-            @NotNull String resourceName
+            @NonNull Plugin plugin,
+            @NonNull String resourceName
     ) {
-        try (InputStream input = plugin.getResource(resourceName)) {
+        try (val input = plugin.getResource(resourceName)) {
             if (input != null) {
-                try (InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8)) {
+                try (val reader = new InputStreamReader(input, StandardCharsets.UTF_8)) {
                     getEngine().eval(reader);
                 } catch (Throwable error) {
                     this.plugin.getLogger().log(Level.WARNING, "error occurred while loading " + resourceName + " from " + plugin.getName(), error);
@@ -1040,13 +999,13 @@ public abstract class BaseActionManager {
     protected void loadBasicActions() {
         // 向玩家发送消息
         addConsumer("tell", (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', content));
         });
         // 向玩家发送消息(不将&解析为颜色符号)
         addConsumer(Arrays.asList("tell-no-color", "tellNoColor"), (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.sendMessage(content);
         });
@@ -1064,25 +1023,25 @@ public abstract class BaseActionManager {
         });
         // 强制玩家发送消息
         addConsumer("chat", false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.chat(content);
         });
         // 强制玩家发送消息(将&解析为颜色符号)
         addConsumer(Arrays.asList("chat-with-color", "chatWithColor"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.chat(ChatColor.translateAlternateColorCodes('&', content));
         });
         // 强制玩家执行指令
         addConsumer(Arrays.asList("command", "player"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             Bukkit.dispatchCommand(player, ChatColor.translateAlternateColorCodes('&', content));
         });
         // 强制玩家执行指令(不将&解析为颜色符号)
         addConsumer(Arrays.asList("command-no-color", "commandNoColor"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             Bukkit.dispatchCommand(player, content);
         });
@@ -1104,11 +1063,11 @@ public abstract class BaseActionManager {
         });
         // 发送Title
         addConsumer("title", (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            ArrayList<String> args = StringUtils.split(ChatColor.translateAlternateColorCodes('&', content), ' ', '\\');
-            String title = getOrNull(args, 0);
-            String subtitle = getOrDefault(args, 1, "");
+            val args = StringUtils.split(ChatColor.translateAlternateColorCodes('&', content), ' ', '\\');
+            val title = getOrNull(args, 0);
+            val subtitle = getOrDefault(args, 1, "");
             int fadeIn = getAndApply(args, 2, 10, NumberParser::parseInteger);
             int stay = getAndApply(args, 3, 70, NumberParser::parseInteger);
             int fadeOut = getAndApply(args, 4, 20, NumberParser::parseInteger);
@@ -1116,11 +1075,11 @@ public abstract class BaseActionManager {
         });
         // 发送Title(不将&解析为颜色符号)
         addConsumer(Arrays.asList("title-no-color", "titleNoColor"), (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            ArrayList<String> args = StringUtils.split(content, ' ', '\\');
-            String title = getOrNull(args, 0);
-            String subtitle = getOrDefault(args, 1, "");
+            val args = StringUtils.split(content, ' ', '\\');
+            val title = getOrNull(args, 0);
+            val subtitle = getOrDefault(args, 1, "");
             int fadeIn = getAndApply(args, 2, 10, NumberParser::parseInteger);
             int stay = getAndApply(args, 3, 70, NumberParser::parseInteger);
             int fadeOut = getAndApply(args, 4, 20, NumberParser::parseInteger);
@@ -1128,182 +1087,182 @@ public abstract class BaseActionManager {
         });
         // 发送全体Title
         addConsumer("broadcast-title", false, (context, content) -> {
-            ArrayList<String> args = StringUtils.split(ChatColor.translateAlternateColorCodes('&', content), ' ', '\\');
-            String title = getOrNull(args, 0);
-            String subtitle = getOrDefault(args, 1, "");
+            val args = StringUtils.split(ChatColor.translateAlternateColorCodes('&', content), ' ', '\\');
+            val title = getOrNull(args, 0);
+            val subtitle = getOrDefault(args, 1, "");
             int fadeIn = getAndApply(args, 2, 10, NumberParser::parseInteger);
             int stay = getAndApply(args, 3, 70, NumberParser::parseInteger);
             int fadeOut = getAndApply(args, 4, 20, NumberParser::parseInteger);
-            for (Player player : Bukkit.getOnlinePlayers()) {
+            for (val player : Bukkit.getOnlinePlayers()) {
                 player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
             }
         });
         // 发送全体Title(不将&解析为颜色符号)
         addConsumer("broadcast-title-no-color", false, (context, content) -> {
-            ArrayList<String> args = StringUtils.split(content, ' ', '\\');
-            String title = getOrNull(args, 0);
-            String subtitle = getOrDefault(args, 1, "");
+            val args = StringUtils.split(content, ' ', '\\');
+            val title = getOrNull(args, 0);
+            val subtitle = getOrDefault(args, 1, "");
             int fadeIn = getAndApply(args, 2, 10, NumberParser::parseInteger);
             int stay = getAndApply(args, 3, 70, NumberParser::parseInteger);
             int fadeOut = getAndApply(args, 4, 20, NumberParser::parseInteger);
-            for (Player player : Bukkit.getOnlinePlayers()) {
+            for (val player : Bukkit.getOnlinePlayers()) {
                 player.sendTitle(title, subtitle, fadeIn, stay, fadeOut);
             }
         });
         // 发送ActionBar
         addConsumer("actionbar", (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             PlayerUtils.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', content));
         });
         // 发送ActionBar(不将&解析为颜色符号)
         addConsumer(Arrays.asList("actionbar-no-color", "actionbarNoColor"), (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             PlayerUtils.sendActionBar(player, content);
         });
         // 播放音乐
         addConsumer("sound", (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            String[] args = content.split(" ", 3);
-            String sound = getOrDefault(args, 0, "");
+            val args = content.split(" ", 3);
+            val sound = getOrDefault(args, 0, "");
             float volume = getAndApply(args, 1, 1F, NumberParser::parseFloat);
             float pitch = getAndApply(args, 2, 1F, NumberParser::parseFloat);
             player.playSound(player.getLocation(), sound, volume, pitch);
         });
         // 给予玩家金钱
         addConsumer(Arrays.asList("give-money", "giveMoney"), (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            VaultHooker hooker = HookerManager.INSTANCE.getVaultHooker();
+            val hooker = HookerManager.INSTANCE.getVaultHooker();
             if (hooker == null) return;
             hooker.giveMoney(player, StringUtils.parseDouble(content, 0.0));
         });
         // 扣除玩家金钱
         addConsumer(Arrays.asList("take-money", "takeMoney"), (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            VaultHooker hooker = HookerManager.INSTANCE.getVaultHooker();
+            val hooker = HookerManager.INSTANCE.getVaultHooker();
             if (hooker == null) return;
             hooker.takeMoney(player, StringUtils.parseDouble(content, 0.0));
         });
         // 给予玩家经验
         addConsumer(Arrays.asList("give-exp", "giveExp"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.parseInteger(content, 0));
         });
         // 扣除玩家经验
         addConsumer(Arrays.asList("take-exp", "takeExp"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.parseInteger(content, 0) * -1);
         });
         // 设置玩家经验
         addConsumer(Arrays.asList("set-exp", "setExp"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.parseInteger(content, 0) - player.getTotalExperience());
         });
         // 给予玩家经验等级
         addConsumer(Arrays.asList("give-level", "giveLevel"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.giveExpLevels(StringUtils.parseInteger(content, 0));
         });
         // 扣除玩家经验等级
         addConsumer(Arrays.asList("take-level", "takeLevel"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.giveExpLevels(StringUtils.parseInteger(content, 0) * -1);
         });
         // 设置玩家经验等级
         addConsumer(Arrays.asList("set-level", "setLevel"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.setLevel(StringUtils.parseInteger(content, 0));
         });
         // 给予玩家饱食度
         addConsumer(Arrays.asList("give-food", "giveFood"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.parseInteger(content, 0))));
         });
         // 扣除玩家饱食度
         addConsumer(Arrays.asList("take-food", "takeFood"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.parseInteger(content, 0))));
         });
         // 设置玩家饱食度
         addConsumer(Arrays.asList("set-food", "setFood"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.parseInteger(content, 0))));
         });
         // 给予玩家饱和度
         addConsumer(Arrays.asList("give-saturation", "giveSaturation"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.parseFloat(content, 0))));
         });
         // 扣除玩家饱和度
         addConsumer(Arrays.asList("take-saturation", "takeSaturation"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.parseFloat(content, 0))));
         });
         // 设置玩家饱和度
         addConsumer(Arrays.asList("set-saturation", "setSaturation"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.parseFloat(content, 0))));
         });
         // 给予玩家生命
         addConsumer(Arrays.asList("give-health", "giveHealth"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() + StringUtils.parseDouble(content, 0))));
         });
         // 扣除玩家生命
         addConsumer(Arrays.asList("take-health", "takeHealth"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), player.getHealth() - StringUtils.parseDouble(content, 0))));
         });
         // 设置玩家生命
         addConsumer(Arrays.asList("set-health", "setHealth"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             player.setHealth(Math.max(0, Math.min(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), StringUtils.parseDouble(content, 0))));
         });
         // 释放MM技能
         addConsumer(Arrays.asList("cast-skill", "castSkill"), (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            MythicMobsHooker hooker = HookerManager.INSTANCE.getMythicMobsHooker();
+            val hooker = HookerManager.INSTANCE.getMythicMobsHooker();
             if (hooker == null) return;
             hooker.castSkill(player, content, player);
         });
         // 连击记录
         addConsumer("combo", (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            String[] info = content.split(" ", 2);
+            val info = content.split(" ", 2);
             // 连击组
-            String comboGroup = info[0];
+            val comboGroup = info[0];
             // 连击类型
-            String comboType = getOrDefault(info, 1, "");
+            val comboType = getOrDefault(info, 1, "");
             // 为空则填入
             if (!PlayerUtils.hasMetadataEZ(player, "Combo-" + comboGroup)) {
                 PlayerUtils.setMetadataEZ(player, "Combo-" + comboGroup, new ArrayList<ComboInfo>());
             }
             // 当前时间
-            long time = System.currentTimeMillis();
+            val time = System.currentTimeMillis();
             // 记录列表
-            ArrayList<ComboInfo> comboInfos = (ArrayList<ComboInfo>) PlayerUtils.getMetadataEZ(player, "Combo-" + comboGroup, "");
-            assert comboInfos != null;
+            val comboInfos = (ArrayList<ComboInfo>) PlayerUtils.getMetadataEZ(player, "Combo-" + comboGroup, "");
+            if (comboInfos == null) return;
             if (!comboInfos.isEmpty()) {
                 // 连击中断
                 if (comboInfos.get(comboInfos.size() - 1).getTime() + ConfigManager.INSTANCE.getComboInterval() < time) {
@@ -1315,33 +1274,33 @@ public abstract class BaseActionManager {
         });
         // 连击清空
         addConsumer(Arrays.asList("combo-clear", "comboClear"), (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
             PlayerUtils.setMetadataEZ(player, "Combo-" + content, new ArrayList<ComboInfo>());
         });
         // 设置药水效果
         addConsumer(Arrays.asList("set-potion", "setPotion", "set-potion-effect", "setPotionEffect"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            String[] args = content.split(" ", 3);
+            val args = content.split(" ", 3);
             if (args.length < 3) return;
-            PotionEffectType type = PotionEffectType.getByName(args[0].toUpperCase(Locale.ROOT));
-            Integer amplifier = StringUtils.parseInteger(args[1]);
-            Integer duration = StringUtils.parseInteger(args[2]);
+            val type = PotionEffectType.getByName(args[0].toUpperCase(Locale.ROOT));
+            val amplifier = StringUtils.parseInteger(args[1]);
+            val duration = StringUtils.parseInteger(args[2]);
             if (type == null || duration == null || amplifier == null) return;
             player.addPotionEffect(new PotionEffect(type, duration * 20, amplifier - 1), true);
         });
         // 移除药水效果
         addConsumer(Arrays.asList("remove-potion", "removePotion", "remove-potion-effect", "removePotionEffect"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            PotionEffectType type = PotionEffectType.getByName(content.toUpperCase(Locale.ROOT));
+            val type = PotionEffectType.getByName(content.toUpperCase(Locale.ROOT));
             if (type == null) return;
             player.removePotionEffect(type);
         });
         // 延迟(单位是tick)
         addFunction("delay", (context, content) -> {
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            val result = new CompletableFuture<ActionResult>();
             SchedulerUtils.runLater(plugin, StringUtils.parseInteger(content, 0), () -> {
                 result.complete(Results.SUCCESS);
             });
@@ -1357,14 +1316,14 @@ public abstract class BaseActionManager {
         });
         // 终止
         addFunction(Arrays.asList("return-weight", "returnWeight"), (context, content) -> {
-            String[] args = content.split(" ", 2);
+            val args = content.split(" ", 2);
             int priority = getAndApply(args, 0, 1, NumberParser::parseInteger);
-            String label = getOrNull(args, 1);
+            val label = getOrNull(args, 1);
             return CompletableFuture.completedFuture(new StopResult(label, priority));
         });
         // 向global中设置内容
         addConsumer(Arrays.asList("set-global", "setGlobal"), (context, content) -> {
-            String[] args = content.split(" ", 2);
+            val args = content.split(" ", 2);
             if (args.length > 1) {
                 context.getGlobal().put(args[0], args[1]);
             }
@@ -1373,15 +1332,15 @@ public abstract class BaseActionManager {
         addConsumer(Arrays.asList("del-global", "delGlobal"), (context, content) -> context.getGlobal().remove(content));
         // 扣除NI物品
         addConsumer(Arrays.asList("take-ni-item", "takeNiItem"), false, (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            String[] args = content.split(" ", 2);
+            val args = content.split(" ", 2);
             if (args.length < 2) return;
-            String itemId = args[0];
+            val itemId = args[0];
             int amount = StringUtils.parseInteger(args[1], 0);
-            ItemStack[] contents = player.getInventory().getContents();
-            for (ItemStack itemStack : contents) {
-                String currentItemId = ItemUtils.getItemId(itemStack);
+            val contents = player.getInventory().getContents();
+            for (val itemStack : contents) {
+                val currentItemId = ItemUtils.getItemId(itemStack);
                 if (!itemId.equals(currentItemId)) continue;
                 if (amount > itemStack.getAmount()) {
                     amount -= itemStack.getAmount();
@@ -1394,9 +1353,9 @@ public abstract class BaseActionManager {
         });
         // 跨服
         addConsumer("server", (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            ByteArrayDataOutput out = ByteStreams.newDataOutput();
+            val out = ByteStreams.newDataOutput();
             out.writeUTF("Connect");
             out.writeUTF(content);
             player.sendPluginMessage(NeigeItems.getInstance(), "BungeeCord", out.toByteArray());
@@ -1407,7 +1366,7 @@ public abstract class BaseActionManager {
             if (Bukkit.isPrimaryThread()) {
                 return CompletableFuture.completedFuture(Results.SUCCESS);
             }
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            val result = new CompletableFuture<ActionResult>();
             Bukkit.getScheduler().runTask(plugin, () -> result.complete(Results.SUCCESS));
             return result;
         });
@@ -1417,68 +1376,68 @@ public abstract class BaseActionManager {
             if (!Bukkit.isPrimaryThread()) {
                 return CompletableFuture.completedFuture(Results.SUCCESS);
             }
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            val result = new CompletableFuture<ActionResult>();
             Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> result.complete(Results.SUCCESS));
             return result;
         });
         // 聊天捕获器
         addFunction(Arrays.asList("catch-chat", "catchChat"), (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            ArrayList<String> args = StringUtils.split(content, ' ', '\\');
-            String messageKey = getOrDefault(args, 0, "catchChat");
+            val args = StringUtils.split(content, ' ', '\\');
+            val messageKey = getOrDefault(args, 0, "catchChat");
             boolean cancel = getAndApply(args, 1, true, StringsKt::toBooleanStrictOrNull);
-            User user = UserManager.INSTANCE.get(player.getUniqueId());
+            val user = UserManager.INSTANCE.get(player.getUniqueId());
             if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            val result = new CompletableFuture<ActionResult>();
             user.addChatCatcher(new ChatCatcher(this, messageKey, cancel, context, result));
             return result;
         });
         // 告示牌捕获器
         addFunction(Arrays.asList("catch-sign", "catchSign"), (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            User user = UserManager.INSTANCE.get(player.getUniqueId());
+            val user = UserManager.INSTANCE.get(player.getUniqueId());
             if (user == null) return CompletableFuture.completedFuture(Results.SUCCESS);
-            CompletableFuture<ActionResult> result = new CompletableFuture<>();
+            val result = new CompletableFuture<ActionResult>();
             user.addSignCatcher(new SignCatcher(this, content, context, result));
             EntityPlayerUtils.openSign(player);
             return result;
         });
         // 清除聊天捕获器
         addConsumer("clear-catch-chat", (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            User user = UserManager.INSTANCE.get(player.getUniqueId());
+            val user = UserManager.INSTANCE.get(player.getUniqueId());
             if (user == null) return;
             user.clearChatCatcher();
         });
         // 清除告示牌捕获器
         addConsumer("clear-catch-sign", (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            User user = UserManager.INSTANCE.get(player.getUniqueId());
+            val user = UserManager.INSTANCE.get(player.getUniqueId());
             if (user == null) return;
             user.clearSignCatcher();
         });
         // 触发动作组
         addFunction("func", (context, content) -> {
-            Action function = ActionManager.INSTANCE.getFunctions().get(content);
+            val function = ActionManager.INSTANCE.getFunctions().get(content);
             if (function == null) return CompletableFuture.completedFuture(Results.SUCCESS);
             return function.evalAsyncSafe(context);
         });
         // 设置分组冷却
         addConsumer("set-cooldown", (context, content) -> {
-            Player player = context.getPlayer();
+            val player = context.getPlayer();
             if (player == null) return;
-            User user = UserManager.INSTANCE.get(player.getUniqueId());
+            val user = UserManager.INSTANCE.get(player.getUniqueId());
             if (user == null) return;
-            String[] args = content.split(" ", 2);
-            String key = getOrNull(args, 0);
+            val args = content.split(" ", 2);
+            val key = getOrNull(args, 0);
             if (key == null) return;
-            String cooldownText = getOrNull(args, 1);
+            val cooldownText = getOrNull(args, 1);
             if (cooldownText == null) return;
-            Long cooldown = NumberParser.parseLong(cooldownText);
+            val cooldown = NumberParser.parseLong(cooldownText);
             if (cooldown == null) return;
             user.setCooldown(key, cooldown);
         });

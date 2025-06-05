@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader;
 
+import lombok.NonNull;
+
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -15,7 +17,7 @@ public final class LazyLoadEntrySet<K, V> extends AbstractSet<Map.Entry<K, V>> {
     }
 
     @Override
-    public Iterator<Map.Entry<K, V>> iterator() {
+    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
         return new Iterator<Map.Entry<K, V>>() {
             private final Iterator<K> i = keySet.iterator();
             private K latestKey;

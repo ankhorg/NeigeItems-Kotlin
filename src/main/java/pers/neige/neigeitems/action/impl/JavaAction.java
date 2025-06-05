@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -11,21 +11,20 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
 public class JavaAction extends Action {
-    @NotNull
-    private final BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function;
+    private final @NonNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function;
 
     public JavaAction(
-            @NotNull BaseActionManager manager,
-            @NotNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function
+            @NonNull BaseActionManager manager,
+            @NonNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function
     ) {
         super(manager);
         this.function = function;
     }
 
     public JavaAction(
-            @NotNull BaseActionManager manager,
+            @NonNull BaseActionManager manager,
             boolean asyncSafe,
-            @NotNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function
+            @NonNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function
     ) {
         super(manager);
         this.asyncSafe = asyncSafe;
@@ -33,21 +32,19 @@ public class JavaAction extends Action {
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.JAVA;
     }
 
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    protected @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         return function.apply(manager, context);
     }
 
-    @NotNull
-    public BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> getFunction() {
+    public @NonNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> getFunction() {
         return function;
     }
 }

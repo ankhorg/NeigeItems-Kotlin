@@ -13,8 +13,7 @@ public class NMSHookerCustomModelData extends NMSHookerHoverEvent {
     }
 
     @Override
-    @Nullable
-    public Integer getCustomModelData(@Nullable ItemMeta itemMeta) {
+    public @Nullable Integer getCustomModelData(@Nullable ItemMeta itemMeta) {
         return null;
     }
 

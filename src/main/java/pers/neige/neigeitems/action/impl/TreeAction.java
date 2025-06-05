@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
@@ -15,27 +16,21 @@ import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class TreeAction<T extends Comparable<?>> extends Action {
-    @NotNull
-    protected final Class<T> keyType;
-    @NotNull
-    private final TreeActionType actionType;
-    @NotNull
-    private final String globalId;
-    @NotNull
-    private final Action defaultAction;
-    @NotNull
-    private final Action matchAction;
-    @NotNull
-    private final TreeMap<T, Action> actions = new TreeMap<>();
+    protected final @NonNull Class<T> keyType;
+    private final @NonNull TreeActionType actionType;
+    private final @NonNull String globalId;
+    private final @NonNull Action defaultAction;
+    private final @NonNull Action matchAction;
+    private final @NonNull TreeMap<T, Action> actions = new TreeMap<>();
 
     public TreeAction(
-            @NotNull BaseActionManager manager,
-            @NotNull ConfigReader config,
-            @NotNull Class<T> keyType
+            @NonNull BaseActionManager manager,
+            @NonNull ConfigReader config,
+            @NonNull Class<T> keyType
     ) {
         super(manager);
         this.keyType = keyType;
-        Object rawActionType = config.get("action-type");
+        val rawActionType = config.get("action-type");
         TreeActionType actionType;
         try {
             if (rawActionType instanceof String) {
@@ -53,10 +48,10 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
         this.globalId = config.getString("global-id", "key");
         this.defaultAction = manager.compile(config.get("default-action"));
         this.matchAction = manager.compile(config.get("match-action"));
-        ConfigReader actionsConfig = config.getConfig("actions");
+        val actionsConfig = config.getConfig("actions");
         if (actionsConfig != null) {
-            for (String stringKey : actionsConfig.keySet()) {
-                T key = cast(stringKey);
+            for (val stringKey : actionsConfig.keySet()) {
+                val key = cast(stringKey);
                 if (key == null) {
                     manager.getPlugin().getLogger().warning(stringKey + " is not a valid tree action key.");
                     continue;
@@ -68,16 +63,16 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.TREE;
     }
 
-    public @Nullable T cast(@NotNull Object result) {
+    public @Nullable T cast(@NonNull Object result) {
         return keyType.isInstance(result) ? keyType.cast(result) : null;
     }
 
     private void checkAsyncSafe() {
-        for (Action action : this.actions.values()) {
+        for (val action : this.actions.values()) {
             if (action.isAsyncSafe()) return;
         }
         if (this.defaultAction.isAsyncSafe()) return;
@@ -85,36 +80,29 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
         this.asyncSafe = false;
     }
 
-    @NotNull
-    public Class<T> getKeyType() {
+    public @NonNull Class<T> getKeyType() {
         return keyType;
     }
 
-    @NotNull
-    public TreeActionType getActionType() {
+    public @NonNull TreeActionType getActionType() {
         return actionType;
     }
 
-    @NotNull
-    public String getGlobalId() {
+    public @NonNull String getGlobalId() {
         return globalId;
     }
 
-    @NotNull
-    public abstract Evaluator<T> getKey();
+    public abstract @NonNull Evaluator<T> getKey();
 
-    @NotNull
-    public Action getDefaultAction() {
+    public @NonNull Action getDefaultAction() {
         return defaultAction;
     }
 
-    @NotNull
-    public Action getMatchAction() {
+    public @NonNull Action getMatchAction() {
         return matchAction;
     }
 
-    @NotNull
-    public TreeMap<T, Action> getActions() {
+    public @NonNull TreeMap<T, Action> getActions() {
         return actions;
     }
 
@@ -122,10 +110,9 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    protected @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }

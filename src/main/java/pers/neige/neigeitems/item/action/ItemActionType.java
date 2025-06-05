@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.item.action;
 
+import lombok.NonNull;
+import lombok.val;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -79,28 +81,27 @@ public enum ItemActionType {
     TICK_39("tick_39"),
     TICK_40("tick_40");
 
-    private static final Map<String, ItemActionType> typeToEnum = new HashMap<>();
+    private static final @NonNull Map<String, ItemActionType> typeToEnum = new HashMap<>();
 
     static {
-        for (ItemActionType value : ItemActionType.values()) {
+        for (val value : ItemActionType.values()) {
             typeToEnum.put(value.type, value);
         }
     }
 
-    private final String type;
+    private final @NonNull String type;
 
-    ItemActionType(String type) {
+    ItemActionType(@NonNull String type) {
         this.type = type;
     }
 
-    @Nullable
-    public static ItemActionType matchType(
+    public static @Nullable ItemActionType matchType(
             @Nullable String type
     ) {
         return typeToEnum.get(type);
     }
 
-    public String getType() {
+    public @NonNull String getType() {
         return type;
     }
 }

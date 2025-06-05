@@ -5,10 +5,11 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.command.selector.WorldSelector;
 
@@ -25,44 +26,39 @@ public class WorldArgumentType implements ArgumentType<WorldSelector> {
     private WorldArgumentType() {
     }
 
-    @NotNull
-    public static WorldArgumentType world() {
+    public static @NonNull WorldArgumentType world() {
         return new WorldArgumentType();
     }
 
-    @Nullable
-    public static World getWorld(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @Nullable World getWorld(
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return getWorldSelector(context, name).select(context);
     }
 
-    @NotNull
-    public static WorldSelector getWorldSelector(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @NonNull WorldSelector getWorldSelector(
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return context.getArgument(name, WorldSelector.class);
     }
 
-    @NotNull
     @Override
-    public WorldSelector parse(
-            @NotNull StringReader reader
+    public @NonNull WorldSelector parse(
+            @NonNull StringReader reader
     ) {
         return new WorldSelector(reader);
     }
 
-    @NotNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(
-            @NotNull CommandContext<S> context,
-            @NotNull SuggestionsBuilder builder
+    public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
+            @NonNull CommandContext<S> context,
+            @NonNull SuggestionsBuilder builder
     ) {
-        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
+        val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         Bukkit.getWorlds().forEach((world) -> {
-            String name = world.getName();
+            val name = world.getName();
             if (name.toLowerCase().startsWith(lowerCaseRemaining)) {
                 builder.suggest(name);
             }
@@ -70,9 +66,8 @@ public class WorldArgumentType implements ArgumentType<WorldSelector> {
         return builder.buildFuture();
     }
 
-    @NotNull
     @Override
-    public Collection<String> getExamples() {
+    public @NonNull Collection<String> getExamples() {
         return EXAMPLES;
     }
 }

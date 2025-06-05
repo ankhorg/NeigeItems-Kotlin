@@ -1,8 +1,8 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import lombok.NonNull;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
@@ -88,7 +88,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public void putAll(@NotNull Map<? extends String, ? extends Nbt<?>> m) {
+    public void putAll(@NonNull Map<? extends String, ? extends Nbt<?>> m) {
         delegateMap.putAll(m);
     }
 
@@ -103,20 +103,17 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    @NotNull
-    public Set<String> keySet() {
+    public @NonNull Set<String> keySet() {
         return delegate.getKeys();
     }
 
-    @NotNull
     @Override
-    public Collection<Nbt<?>> values() {
+    public @NonNull Collection<Nbt<?>> values() {
         return delegateMap.values();
     }
 
     @Override
-    @NotNull
-    public Set<Entry<String, Nbt<?>>> entrySet() {
+    public @NonNull Set<Entry<String, Nbt<?>>> entrySet() {
         Set<String> newKeySet = delegate.getKeys();
         if (oldKeySet == newKeySet) {
             return oldEntrySet;
@@ -264,7 +261,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public byte getByte(@NotNull String key, byte def) {
+    public byte getByte(@NonNull String key, byte def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asByte()
@@ -272,7 +269,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Byte getByteOrNull(@NotNull String key) {
+    public @Nullable Byte getByteOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asByte()
@@ -280,7 +277,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public short getShort(@NotNull String key, short def) {
+    public short getShort(@NonNull String key, short def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asShort()
@@ -288,7 +285,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Short getShortOrNull(@NotNull String key) {
+    public @Nullable Short getShortOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asShort()
@@ -296,7 +293,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public int getInt(@NotNull String key, int def) {
+    public int getInt(@NonNull String key, int def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asInt()
@@ -304,7 +301,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Integer getIntOrNull(@NotNull String key) {
+    public @Nullable Integer getIntOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asInt()
@@ -312,7 +309,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public long getLong(@NotNull String key, long def) {
+    public long getLong(@NonNull String key, long def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asLong()
@@ -320,7 +317,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Long getLongOrNull(@NotNull String key) {
+    public @Nullable Long getLongOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asLong()
@@ -329,7 +326,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public @Nullable UUID getUUID(@NotNull String key, @Nullable UUID def) {
+    public @Nullable UUID getUUID(@NonNull String key, @Nullable UUID def) {
         RefNbtBase value = delegate.get(key);
         if (value instanceof RefNbtTagIntArray) {
             int[] ints = ((RefNbtTagIntArray) value).getInts();
@@ -350,7 +347,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public float getFloat(@NotNull String key, float def) {
+    public float getFloat(@NonNull String key, float def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asFloat()
@@ -358,7 +355,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Float getFloatOrNull(@NotNull String key) {
+    public @Nullable Float getFloatOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asFloat()
@@ -366,7 +363,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public double getDouble(@NotNull String key, double def) {
+    public double getDouble(@NonNull String key, double def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asDouble()
@@ -374,7 +371,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Double getDoubleOrNull(@NotNull String key) {
+    public @Nullable Double getDoubleOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asDouble()
@@ -383,7 +380,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public @Nullable String getString(@NotNull String key, @Nullable String def) {
+    public @Nullable String getString(@NonNull String key, @Nullable String def) {
         RefNbtBase value = delegate.get(key);
         return (value != null)
                 ? value.asString()
@@ -392,7 +389,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public byte @Nullable [] getByteArray(@NotNull String key, byte @Nullable [] def) {
+    public byte @Nullable [] getByteArray(@NonNull String key, byte @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagByteArray)
                 ? ((RefNbtTagByteArray) value).getBytes()
@@ -401,7 +398,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public int @Nullable [] getIntArray(@NotNull String key, int @Nullable [] def) {
+    public int @Nullable [] getIntArray(@NonNull String key, int @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagIntArray)
                 ? ((RefNbtTagIntArray) value).getInts()
@@ -410,7 +407,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public long @Nullable [] getLongArray(@NotNull String key, long @Nullable [] def) {
+    public long @Nullable [] getLongArray(@NonNull String key, long @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagLongArray)
                 ? (LONG_ARRAY_SUPPORT ? ((RefNbtTagLongArray) value).getLongs() : ((RefNbtTagLongArray) value).longs)
@@ -419,7 +416,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public @Nullable NbtCompound getCompound(@NotNull String key, @Nullable NbtCompound def) {
+    public @Nullable NbtCompound getCompound(@NonNull String key, @Nullable NbtCompound def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagCompound)
                 ? new NbtCompound((RefNbtTagCompound) value)
@@ -427,7 +424,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @NotNull NbtCompound getOrCreateCompound(@NotNull String key) {
+    public @NonNull NbtCompound getOrCreateCompound(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         if (!(value instanceof RefNbtTagCompound)) {
             value = new RefNbtTagCompound();
@@ -443,7 +440,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public @Nullable NbtList getList(@NotNull String key, @Nullable NbtList def) {
+    public @Nullable NbtList getList(@NonNull String key, @Nullable NbtList def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagList)
                 ? new NbtList((RefNbtTagList) value)
@@ -451,7 +448,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @NotNull NbtList getOrCreateList(@NotNull String key) {
+    public @NonNull NbtList getOrCreateList(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         if (!(value instanceof RefNbtTagList)) {
             value = new RefNbtTagList();
@@ -461,7 +458,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public boolean getBoolean(@NotNull String key, boolean def) {
+    public boolean getBoolean(@NonNull String key, boolean def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asByte() != 0
@@ -469,7 +466,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Boolean getBooleanOrNull(@NotNull String key) {
+    public @Nullable Boolean getBooleanOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
                 ? ((RefNbtNumber) value).asByte() != 0
@@ -482,11 +479,11 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @NotNull NbtCompound clone() {
+    public @NonNull NbtCompound clone() {
         return new NbtCompound(cloneNms());
     }
 
-    private @Nullable RefNbtBase getDeepRefNbt(@NotNull String key, char separator, char escape) {
+    private @Nullable RefNbtBase getDeepRefNbt(@NonNull String key, char separator, char escape) {
         List<String> keys = StringUtils.split(key, separator, escape);
 
         RefNbtTagCompound currentNbtCompound = this.delegate;
@@ -512,22 +509,22 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
         return value;
     }
 
-    private @Nullable RefNbtBase getDeepRefNbt(@NotNull String key) {
+    private @Nullable RefNbtBase getDeepRefNbt(@NonNull String key) {
         return getDeepRefNbt(key, '.', '\\');
     }
 
     @Override
-    public @Nullable Nbt<?> getDeep(@NotNull String key, char separator, char escape) {
+    public @Nullable Nbt<?> getDeep(@NonNull String key, char separator, char escape) {
         return fromNms(getDeepRefNbt(key, separator, escape));
     }
 
     @Override
-    public @Nullable Nbt<?> getDeep(@NotNull String key) {
+    public @Nullable Nbt<?> getDeep(@NonNull String key) {
         return getDeep(key, '.', '\\');
     }
 
     @Override
-    public byte getDeepByte(@NotNull String key, byte def) {
+    public byte getDeepByte(@NonNull String key, byte def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asByte()
@@ -535,7 +532,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Byte getDeepByteOrNull(@NotNull String key) {
+    public @Nullable Byte getDeepByteOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asByte()
@@ -543,7 +540,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public short getDeepShort(@NotNull String key, short def) {
+    public short getDeepShort(@NonNull String key, short def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asShort()
@@ -551,7 +548,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Short getDeepShortOrNull(@NotNull String key) {
+    public @Nullable Short getDeepShortOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asShort()
@@ -559,7 +556,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public int getDeepInt(@NotNull String key, int def) {
+    public int getDeepInt(@NonNull String key, int def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asInt()
@@ -567,7 +564,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Integer getDeepIntOrNull(@NotNull String key) {
+    public @Nullable Integer getDeepIntOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asInt()
@@ -575,7 +572,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public long getDeepLong(@NotNull String key, long def) {
+    public long getDeepLong(@NonNull String key, long def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asLong()
@@ -583,7 +580,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Long getDeepLongOrNull(@NotNull String key) {
+    public @Nullable Long getDeepLongOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asLong()
@@ -592,7 +589,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public @Nullable UUID getDeepUUID(@NotNull String key, @Nullable UUID def) {
+    public @Nullable UUID getDeepUUID(@NonNull String key, @Nullable UUID def) {
         RefNbtBase value = getDeepRefNbt(key);
         if (value instanceof RefNbtTagIntArray) {
             int[] ints = ((RefNbtTagIntArray) value).getInts();
@@ -613,7 +610,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public float getDeepFloat(@NotNull String key, float def) {
+    public float getDeepFloat(@NonNull String key, float def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asFloat()
@@ -621,7 +618,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Float getDeepFloatOrNull(@NotNull String key) {
+    public @Nullable Float getDeepFloatOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asFloat()
@@ -629,7 +626,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public double getDeepDouble(@NotNull String key, double def) {
+    public double getDeepDouble(@NonNull String key, double def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asDouble()
@@ -637,7 +634,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Double getDeepDoubleOrNull(@NotNull String key) {
+    public @Nullable Double getDeepDoubleOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asDouble()
@@ -646,7 +643,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public @Nullable String getDeepString(@NotNull String key, @Nullable String def) {
+    public @Nullable String getDeepString(@NonNull String key, @Nullable String def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value != null
                 ? value.asString()
@@ -655,7 +652,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public byte @Nullable [] getDeepByteArray(@NotNull String key, byte @Nullable [] def) {
+    public byte @Nullable [] getDeepByteArray(@NonNull String key, byte @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagByteArray
                 ? ((RefNbtTagByteArray) value).getBytes()
@@ -664,7 +661,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public int @Nullable [] getDeepIntArray(@NotNull String key, int @Nullable [] def) {
+    public int @Nullable [] getDeepIntArray(@NonNull String key, int @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagIntArray
                 ? ((RefNbtTagIntArray) value).getInts()
@@ -673,7 +670,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public long @Nullable [] getDeepLongArray(@NotNull String key, long @Nullable [] def) {
+    public long @Nullable [] getDeepLongArray(@NonNull String key, long @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return (value instanceof RefNbtTagLongArray)
                 ? (LONG_ARRAY_SUPPORT ? ((RefNbtTagLongArray) value).getLongs() : ((RefNbtTagLongArray) value).longs)
@@ -682,7 +679,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public @Nullable NbtCompound getDeepCompound(@NotNull String key, @Nullable NbtCompound def) {
+    public @Nullable NbtCompound getDeepCompound(@NonNull String key, @Nullable NbtCompound def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagCompound
                 ? new NbtCompound((RefNbtTagCompound) value)
@@ -691,7 +688,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public @Nullable NbtList getDeepList(@NotNull String key, @Nullable NbtList def) {
+    public @Nullable NbtList getDeepList(@NonNull String key, @Nullable NbtList def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagList
                 ? new NbtList((RefNbtTagList) value)
@@ -699,7 +696,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public boolean getDeepBoolean(@NotNull String key, boolean def) {
+    public boolean getDeepBoolean(@NonNull String key, boolean def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asByte() != 0
@@ -707,14 +704,14 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     }
 
     @Override
-    public @Nullable Boolean getDeepBooleanOrNull(@NotNull String key) {
+    public @Nullable Boolean getDeepBooleanOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asByte() != 0
                 : null;
     }
 
-    private void putDeepRefNbt(@NotNull String key, @NotNull RefNbtBase value, boolean force, char separator, char escape) {
+    private void putDeepRefNbt(@NonNull String key, @NonNull RefNbtBase value, boolean force, char separator, char escape) {
         List<String> keys = StringUtils.split(key, separator, escape);
 
         RefNbtTagCompound currentNbtCompound = this.delegate;
@@ -772,42 +769,42 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
         }
     }
 
-    private void putDeepRefNbt(@NotNull String key, @NotNull RefNbtBase value, boolean force) {
+    private void putDeepRefNbt(@NonNull String key, @NonNull RefNbtBase value, boolean force) {
         putDeepRefNbt(key, value, force, '.', '\\');
     }
 
     @Override
-    public void putDeep(@NotNull String key, @NotNull Nbt<?> value, boolean force) {
+    public void putDeep(@NonNull String key, @NonNull Nbt<?> value, boolean force) {
         putDeepRefNbt(key, value.delegate, force);
     }
 
     @Override
-    public void putDeepByteArray(@NotNull String key, byte[] value, boolean force) {
+    public void putDeepByteArray(@NonNull String key, byte[] value, boolean force) {
         putDeepRefNbt(key, new RefNbtTagByteArray(value), force);
     }
 
     @Override
-    public void putDeepByteArray(@NotNull String key, @NotNull List<Byte> value, boolean force) {
+    public void putDeepByteArray(@NonNull String key, @NonNull List<Byte> value, boolean force) {
         putDeepRefNbt(key, new RefNbtTagByteArray(value), force);
     }
 
     @Override
-    public void putDeepIntArray(@NotNull String key, int[] value, boolean force) {
+    public void putDeepIntArray(@NonNull String key, int[] value, boolean force) {
         putDeepRefNbt(key, new RefNbtTagIntArray(value), force);
     }
 
     @Override
-    public void putDeepIntArray(@NotNull String key, @NotNull List<Integer> value, boolean force) {
+    public void putDeepIntArray(@NonNull String key, @NonNull List<Integer> value, boolean force) {
         putDeepRefNbt(key, new RefNbtTagIntArray(value), force);
     }
 
     @Override
-    public void putDeepLongArray(@NotNull String key, long[] value, boolean force) {
+    public void putDeepLongArray(@NonNull String key, long[] value, boolean force) {
         putDeepRefNbt(key, new RefNbtTagLongArray(value), force);
     }
 
     @Override
-    public void putDeepLongArray(@NotNull String key, @NotNull List<Long> value, boolean force) {
+    public void putDeepLongArray(@NonNull String key, @NonNull List<Long> value, boolean force) {
         putDeepRefNbt(key, new RefNbtTagLongArray(value), force);
     }
 
@@ -816,7 +813,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
      *
      * @param itemStack 用于接收 NbtCompound 的 ItemStack.
      */
-    public void saveTo(@Nullable ItemStack itemStack) {
+    public void saveTo(@NonNull ItemStack itemStack) {
         new NbtItemStack(itemStack).setTag(this);
     }
 
@@ -826,13 +823,13 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
      * @param overlayCompound 用于提供覆盖值的 NbtCompound.
      * @return this.
      */
-    public @NotNull NbtCompound coverWith(@NotNull NbtCompound overlayCompound) {
+    public @NonNull NbtCompound coverWith(@NonNull NbtCompound overlayCompound) {
         NbtUtils.coverWith(this.delegate, overlayCompound.delegate);
         return this;
     }
 
     @Override
-    public int compareTo(@NotNull Nbt<?> o) {
+    public int compareTo(@NonNull Nbt<?> o) {
         if (delegate == o.delegate) return 0;
         if (o instanceof NbtCompound) {
             NbtCompound anotherCompound = (NbtCompound) o;

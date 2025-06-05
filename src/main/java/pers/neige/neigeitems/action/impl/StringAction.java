@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
@@ -15,22 +16,18 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
 public class StringAction extends Action {
-    @NotNull
-    private final String action;
-    @NotNull
-    private final String key;
-    @NotNull
-    private final String content;
-    @Nullable
-    private BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler;
+    private final @NonNull String action;
+    private final @NonNull String key;
+    private final @NonNull String content;
+    private @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler;
 
     public StringAction(
-            @NotNull BaseActionManager manager,
-            @NotNull String action
+            @NonNull BaseActionManager manager,
+            @NonNull String action
     ) {
         super(manager);
         this.action = action;
-        String[] info = action.split(": ", 2);
+        val info = action.split(": ", 2);
         this.key = info[0].toLowerCase(Locale.ROOT);
         this.content = info.length > 1 ? info[1] : "";
         this.handler = manager.getActions().get(this.key);
@@ -38,10 +35,10 @@ public class StringAction extends Action {
     }
 
     public StringAction(
-            @NotNull BaseActionManager manager,
-            @NotNull String action,
-            @NotNull String key,
-            @NotNull String content
+            @NonNull BaseActionManager manager,
+            @NonNull String action,
+            @NonNull String key,
+            @NonNull String content
     ) {
         super(manager);
         this.action = action;
@@ -52,9 +49,9 @@ public class StringAction extends Action {
     }
 
     public StringAction(
-            @NotNull BaseActionManager manager,
-            @NotNull String key,
-            @NotNull String content
+            @NonNull BaseActionManager manager,
+            @NonNull String key,
+            @NonNull String content
     ) {
         super(manager);
         this.action = key + ": " + content;
@@ -71,7 +68,7 @@ public class StringAction extends Action {
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.STRING;
     }
 
@@ -79,16 +76,15 @@ public class StringAction extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    protected @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         try {
             return manager.runAction(this, context);
         } catch (Throwable throwable) {
             manager.getPlugin().getLogger().warning("动作执行异常, 动作原始内容如下:");
-            for (String actionLine : action.split("\n")) {
+            for (val actionLine : action.split("\n")) {
                 manager.getPlugin().getLogger().warning(actionLine);
             }
             throwable.printStackTrace();
@@ -97,7 +93,7 @@ public class StringAction extends Action {
     }
 
     @Override
-    public @NotNull CompletableFuture<ActionResult> evalAsyncSafe(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
+    public @NonNull CompletableFuture<ActionResult> evalAsyncSafe(@NonNull BaseActionManager manager, @NonNull ActionContext context) {
         if (handler == null) {
             this.handler = manager.getActions().get(this.key);
             checkAsyncSafe();
@@ -105,23 +101,19 @@ public class StringAction extends Action {
         return super.evalAsyncSafe(manager, context);
     }
 
-    @NotNull
-    public String getAction() {
+    public @NonNull String getAction() {
         return action;
     }
 
-    @NotNull
-    public String getKey() {
+    public @NonNull String getKey() {
         return key;
     }
 
-    @NotNull
-    public String getContent() {
+    public @NonNull String getContent() {
         return content;
     }
 
-    @Nullable
-    public BiFunction<ActionContext, String, CompletableFuture<ActionResult>> getHandler() {
+    public @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> getHandler() {
         return handler;
     }
 }

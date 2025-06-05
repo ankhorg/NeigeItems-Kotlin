@@ -1,26 +1,27 @@
 package pers.neige.neigeitems.utils.pagination.impl.circular;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.pagination.CircularPager;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 public class ListCircularPager<T> extends CircularPager<T> {
-    private final @NotNull List<T> handle;
-    private final @NotNull AtomicInteger offset = new AtomicInteger(0);
+    private final @NonNull List<T> handle;
+    private final @NonNull AtomicInteger offset = new AtomicInteger(0);
 
-    public ListCircularPager(@NotNull List<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+    public ListCircularPager(@NonNull List<T> handle, int pageSize, @Nullable Predicate<T> filter) {
         super(pageSize, filter);
         this.handle = handle;
     }
 
-    public @NotNull List<T> getHandle() {
+    public @NonNull List<T> getHandle() {
         return handle;
     }
 
@@ -32,31 +33,31 @@ public class ListCircularPager<T> extends CircularPager<T> {
     @Override
     public void moveOffset(int delta) {
         offset.updateAndGet(current -> {
-            int size = handle.size();
+            val size = handle.size();
             if (size == 0) return 0;
             return (current + delta) % size;
         });
     }
 
     @Override
-    public @NotNull List<T> getCurrentPageElements() {
-        final int size = handle.size();
+    public @NonNull List<T> getCurrentPageElements() {
+        val size = handle.size();
         if (size == 0) return Collections.emptyList();
 
-        final int start = Math.min(offset.get(), size - 1);
-        final int end = Math.min(start + getPageSize(), size);
+        val start = Math.min(offset.get(), size - 1);
+        val end = Math.min(start + getPageSize(), size);
 
-        List<T> page = new ArrayList<>(getPageSize());
-        Iterator<T> it = handle.subList(start, end).iterator();
+        val page = new ArrayList<T>(getPageSize());
+        var it = handle.subList(start, end).iterator();
 
-        boolean newRound = false;
-        boolean anyMatch = false;
+        var newRound = false;
+        var anyMatch = false;
         List<T> newRoundElements = null;
         while (page.size() < getPageSize()) {
             if (!it.hasNext()) {
                 if (newRound) {
                     if (anyMatch) {
-                        Iterator<T> roundIterator = newRoundElements.iterator();
+                        var roundIterator = newRoundElements.iterator();
                         while (page.size() < getPageSize()) {
                             if (!roundIterator.hasNext()) roundIterator = newRoundElements.iterator();
                             page.add(roundIterator.next());
@@ -68,7 +69,7 @@ public class ListCircularPager<T> extends CircularPager<T> {
                 newRoundElements = new ArrayList<>();
                 it = handle.iterator();
             }
-            T element = it.next();
+            val element = it.next();
             if (filter == null || filter.test(element)) {
                 if (newRound) {
                     anyMatch = true;

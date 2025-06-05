@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api;
 
+import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.ArrayUtils;
@@ -17,7 +17,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtByte addByte(byte value) {
+    default @NonNull NbtByte addByte(byte value) {
         NbtByte nbt = NbtByte.valueOf(value);
         add(nbt);
         return nbt;
@@ -29,7 +29,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtShort addShort(short value) {
+    default @NonNull NbtShort addShort(short value) {
         NbtShort nbt = NbtShort.valueOf(value);
         add(nbt);
         return nbt;
@@ -41,7 +41,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtInt addInt(int value) {
+    default @NonNull NbtInt addInt(int value) {
         NbtInt nbt = NbtInt.valueOf(value);
         add(nbt);
         return nbt;
@@ -53,7 +53,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtLong addLong(long value) {
+    default @NonNull NbtLong addLong(long value) {
         NbtLong nbt = NbtLong.valueOf(value);
         add(nbt);
         return nbt;
@@ -65,7 +65,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtFloat addFloat(float value) {
+    default @NonNull NbtFloat addFloat(float value) {
         NbtFloat nbt = NbtFloat.valueOf(value);
         add(nbt);
         return nbt;
@@ -77,7 +77,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtDouble addDouble(double value) {
+    default @NonNull NbtDouble addDouble(double value) {
         NbtDouble nbt = NbtDouble.valueOf(value);
         add(nbt);
         return nbt;
@@ -89,7 +89,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtString addString(@NotNull String value) {
+    default @NonNull NbtString addString(@NonNull String value) {
         NbtString nbt = NbtString.valueOf(value);
         add(nbt);
         return nbt;
@@ -101,7 +101,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtByteArray addByteArray(byte @NotNull [] value) {
+    default @NonNull NbtByteArray addByteArray(byte @NonNull [] value) {
         NbtByteArray nbt = new NbtByteArray(value);
         add(nbt);
         return nbt;
@@ -113,7 +113,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtByteArray addByteArray(@NotNull List<Byte> value) {
+    default @NonNull NbtByteArray addByteArray(@NonNull List<Byte> value) {
         NbtByteArray nbt = new NbtByteArray(value);
         add(nbt);
         return nbt;
@@ -125,7 +125,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtIntArray addIntArray(int @NotNull [] value) {
+    default @NonNull NbtIntArray addIntArray(int @NonNull [] value) {
         NbtIntArray nbt = new NbtIntArray(value);
         add(nbt);
         return nbt;
@@ -137,7 +137,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtIntArray addIntArray(@NotNull List<Integer> value) {
+    default @NonNull NbtIntArray addIntArray(@NonNull List<Integer> value) {
         NbtIntArray nbt = new NbtIntArray(value);
         add(nbt);
         return nbt;
@@ -149,7 +149,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtLongArray addLongArray(long @NotNull [] value) {
+    default @NonNull NbtLongArray addLongArray(long @NonNull [] value) {
         NbtLongArray nbt = new NbtLongArray(value);
         add(nbt);
         return nbt;
@@ -161,7 +161,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtLongArray addLongArray(@NotNull List<Long> value) {
+    default @NonNull NbtLongArray addLongArray(@NonNull List<Long> value) {
         NbtLongArray nbt = new NbtLongArray(value);
         add(nbt);
         return nbt;
@@ -173,7 +173,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtByte addBoolean(boolean value) {
+    default @NonNull NbtByte addBoolean(boolean value) {
         NbtByte nbt = NbtByte.valueOf(value);
         add(nbt);
         return nbt;
@@ -184,7 +184,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      *
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtCompound addEmptyCompound() {
+    default @NonNull NbtCompound addEmptyCompound() {
         NbtCompound nbt = new NbtCompound();
         add(nbt);
         return nbt;
@@ -195,7 +195,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      *
      * @return 添加至列表末尾的 NBT实例.
      */
-    default @NotNull NbtList addEmptyList() {
+    default @NonNull NbtList addEmptyList() {
         NbtList nbt = new NbtList();
         add(nbt);
         return nbt;
@@ -208,7 +208,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtByte addByte(int index, byte value) {
+    default @NonNull NbtByte addByte(int index, byte value) {
         NbtByte nbt = NbtByte.valueOf(value);
         add(index, nbt);
         return nbt;
@@ -221,7 +221,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtShort addShort(int index, short value) {
+    default @NonNull NbtShort addShort(int index, short value) {
         NbtShort nbt = NbtShort.valueOf(value);
         add(index, nbt);
         return nbt;
@@ -234,7 +234,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtInt addInt(int index, int value) {
+    default @NonNull NbtInt addInt(int index, int value) {
         NbtInt nbt = NbtInt.valueOf(value);
         add(index, nbt);
         return nbt;
@@ -247,7 +247,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtLong addLong(int index, long value) {
+    default @NonNull NbtLong addLong(int index, long value) {
         NbtLong nbt = NbtLong.valueOf(value);
         add(index, nbt);
         return nbt;
@@ -260,7 +260,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtFloat addFloat(int index, float value) {
+    default @NonNull NbtFloat addFloat(int index, float value) {
         NbtFloat nbt = NbtFloat.valueOf(value);
         add(index, nbt);
         return nbt;
@@ -273,7 +273,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtDouble addDouble(int index, double value) {
+    default @NonNull NbtDouble addDouble(int index, double value) {
         NbtDouble nbt = NbtDouble.valueOf(value);
         add(index, nbt);
         return nbt;
@@ -286,7 +286,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtString addString(int index, @NotNull String value) {
+    default @NonNull NbtString addString(int index, @NonNull String value) {
         NbtString nbt = NbtString.valueOf(value);
         add(index, nbt);
         return nbt;
@@ -299,7 +299,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtByteArray addByteArray(int index, byte @NotNull [] value) {
+    default @NonNull NbtByteArray addByteArray(int index, byte @NonNull [] value) {
         NbtByteArray nbt = new NbtByteArray(value);
         add(index, nbt);
         return nbt;
@@ -312,7 +312,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtByteArray addByteArray(int index, @NotNull List<Byte> value) {
+    default @NonNull NbtByteArray addByteArray(int index, @NonNull List<Byte> value) {
         NbtByteArray nbt = new NbtByteArray(value);
         add(index, nbt);
         return nbt;
@@ -325,7 +325,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtIntArray addIntArray(int index, int @NotNull [] value) {
+    default @NonNull NbtIntArray addIntArray(int index, int @NonNull [] value) {
         NbtIntArray nbt = new NbtIntArray(value);
         add(index, nbt);
         return nbt;
@@ -338,7 +338,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtIntArray addIntArray(int index, @NotNull List<Integer> value) {
+    default @NonNull NbtIntArray addIntArray(int index, @NonNull List<Integer> value) {
         NbtIntArray nbt = new NbtIntArray(value);
         add(index, nbt);
         return nbt;
@@ -351,7 +351,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtLongArray addLongArray(int index, long @NotNull [] value) {
+    default @NonNull NbtLongArray addLongArray(int index, long @NonNull [] value) {
         NbtLongArray nbt = new NbtLongArray(value);
         add(index, nbt);
         return nbt;
@@ -364,7 +364,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtLongArray addLongArray(int index, @NotNull List<Long> value) {
+    default @NonNull NbtLongArray addLongArray(int index, @NonNull List<Long> value) {
         NbtLongArray nbt = new NbtLongArray(value);
         add(index, nbt);
         return nbt;
@@ -377,7 +377,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtByte addBoolean(int index, boolean value) {
+    default @NonNull NbtByte addBoolean(int index, boolean value) {
         NbtByte nbt = NbtByte.valueOf(value);
         add(index, nbt);
         return nbt;
@@ -389,7 +389,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param index 要插入指定元素的索引.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtCompound addEmptyCompound(int index) {
+    default @NonNull NbtCompound addEmptyCompound(int index) {
         NbtCompound nbt = new NbtCompound();
         add(index, nbt);
         return nbt;
@@ -401,7 +401,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param index 要插入指定元素的索引.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtList addEmptyList(int index) {
+    default @NonNull NbtList addEmptyList(int index) {
         NbtList nbt = new NbtList();
         add(index, nbt);
         return nbt;
@@ -414,7 +414,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtByte setByte(int index, byte value) {
+    default @NonNull NbtByte setByte(int index, byte value) {
         NbtByte nbt = NbtByte.valueOf(value);
         set(index, nbt);
         return nbt;
@@ -427,7 +427,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtShort setShort(int index, short value) {
+    default @NonNull NbtShort setShort(int index, short value) {
         NbtShort nbt = NbtShort.valueOf(value);
         set(index, nbt);
         return nbt;
@@ -440,7 +440,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtInt setInt(int index, int value) {
+    default @NonNull NbtInt setInt(int index, int value) {
         NbtInt nbt = NbtInt.valueOf(value);
         set(index, nbt);
         return nbt;
@@ -453,7 +453,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtLong setLong(int index, long value) {
+    default @NonNull NbtLong setLong(int index, long value) {
         NbtLong nbt = NbtLong.valueOf(value);
         set(index, nbt);
         return nbt;
@@ -466,7 +466,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtFloat setFloat(int index, float value) {
+    default @NonNull NbtFloat setFloat(int index, float value) {
         NbtFloat nbt = NbtFloat.valueOf(value);
         set(index, nbt);
         return nbt;
@@ -479,7 +479,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtDouble setDouble(int index, double value) {
+    default @NonNull NbtDouble setDouble(int index, double value) {
         NbtDouble nbt = NbtDouble.valueOf(value);
         set(index, nbt);
         return nbt;
@@ -492,7 +492,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtString setString(int index, @NotNull String value) {
+    default @NonNull NbtString setString(int index, @NonNull String value) {
         NbtString nbt = NbtString.valueOf(value);
         set(index, nbt);
         return nbt;
@@ -505,7 +505,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtByteArray setByteArray(int index, byte @NotNull [] value) {
+    default @NonNull NbtByteArray setByteArray(int index, byte @NonNull [] value) {
         NbtByteArray nbt = new NbtByteArray(value);
         set(index, nbt);
         return nbt;
@@ -518,7 +518,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtByteArray setByteArray(int index, @NotNull List<Byte> value) {
+    default @NonNull NbtByteArray setByteArray(int index, @NonNull List<Byte> value) {
         NbtByteArray nbt = new NbtByteArray(value);
         set(index, nbt);
         return nbt;
@@ -531,7 +531,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtIntArray setIntArray(int index, int @NotNull [] value) {
+    default @NonNull NbtIntArray setIntArray(int index, int @NonNull [] value) {
         NbtIntArray nbt = new NbtIntArray(value);
         set(index, nbt);
         return nbt;
@@ -544,7 +544,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtIntArray setIntArray(int index, @NotNull List<Integer> value) {
+    default @NonNull NbtIntArray setIntArray(int index, @NonNull List<Integer> value) {
         NbtIntArray nbt = new NbtIntArray(value);
         set(index, nbt);
         return nbt;
@@ -557,7 +557,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtLongArray setLongArray(int index, long @NotNull [] value) {
+    default @NonNull NbtLongArray setLongArray(int index, long @NonNull [] value) {
         NbtLongArray nbt = new NbtLongArray(value);
         set(index, nbt);
         return nbt;
@@ -570,7 +570,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtLongArray setLongArray(int index, @NotNull List<Long> value) {
+    default @NonNull NbtLongArray setLongArray(int index, @NonNull List<Long> value) {
         NbtLongArray nbt = new NbtLongArray(value);
         set(index, nbt);
         return nbt;
@@ -583,7 +583,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param value 待添加元素.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtByte setBoolean(int index, boolean value) {
+    default @NonNull NbtByte setBoolean(int index, boolean value) {
         NbtByte nbt = NbtByte.valueOf(value);
         set(index, nbt);
         return nbt;
@@ -595,7 +595,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param index 待替换元素的索引.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtCompound setEmptyCompound(int index) {
+    default @NonNull NbtCompound setEmptyCompound(int index) {
         NbtCompound nbt = new NbtCompound();
         set(index, nbt);
         return nbt;
@@ -607,7 +607,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param index 待替换元素的索引.
      * @return 插入的 NBT实例.
      */
-    default @NotNull NbtList setEmptyList(int index) {
+    default @NonNull NbtList setEmptyList(int index) {
         NbtList nbt = new NbtList();
         set(index, nbt);
         return nbt;
@@ -876,7 +876,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param index 元素的索引.
      * @return 对应索引的元素.
      */
-    default byte @NotNull [] getByteArray(int index) {
+    default byte @NonNull [] getByteArray(int index) {
         return getByteArray(index, ArrayUtils.EMPTY_BYTE_ARRAY);
     }
 
@@ -911,7 +911,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param index 元素的索引.
      * @return 对应索引的元素.
      */
-    default int @NotNull [] getIntArray(int index) {
+    default int @NonNull [] getIntArray(int index) {
         return getIntArray(index, ArrayUtils.EMPTY_INT_ARRAY);
     }
 
@@ -946,7 +946,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param index 元素的索引.
      * @return 对应索引的元素.
      */
-    default long @NotNull [] getLongArray(int index) {
+    default long @NonNull [] getLongArray(int index) {
         return getLongArray(index, ArrayUtils.EMPTY_LONG_ARRAY);
     }
 
@@ -1016,7 +1016,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param index 元素的索引.
      * @return 待查找的 NbtCompound.
      */
-    default @NotNull NbtCompound getOrCreateCompound(int index) {
+    default @NonNull NbtCompound getOrCreateCompound(int index) {
         Nbt<?> value = get(index);
         if (!(value instanceof NbtCompound)) {
             value = new NbtCompound();
@@ -1066,7 +1066,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
      * @param index 元素的索引.
      * @return 待查找的 NbtList.
      */
-    default @NotNull NbtList getOrCreateList(int index) {
+    default @NonNull NbtList getOrCreateList(int index) {
         Nbt<?> value = get(index);
         if (!(value instanceof NbtList)) {
             value = new NbtList();

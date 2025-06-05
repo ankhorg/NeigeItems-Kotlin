@@ -1,12 +1,12 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import lombok.NonNull;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
@@ -63,7 +63,7 @@ public class NbtUtils {
      * @param itemStack 待获取NBT的物品.
      * @return 物品NBT.
      */
-    public static @NotNull RefNbtTagCompound getOrCreateTag(@NotNull RefNmsItemStack itemStack) {
+    public static @NonNull RefNbtTagCompound getOrCreateTag(@NonNull RefNmsItemStack itemStack) {
         if (itemStack.getTag() == null) {
             itemStack.setTag(new RefNbtTagCompound());
         }
@@ -77,7 +77,7 @@ public class NbtUtils {
      * @param overlayCompound 用于提供覆盖值的 RefNbtTagCompound.
      * @return baseCompound.
      */
-    public static @NotNull RefNbtTagCompound coverWith(@NotNull RefNbtTagCompound baseCompound, @NotNull RefNbtTagCompound overlayCompound) {
+    public static @NonNull RefNbtTagCompound coverWith(@NonNull RefNbtTagCompound baseCompound, @NonNull RefNbtTagCompound overlayCompound) {
         // 遍历附加NBT
         overlayCompound.tags.forEach((key, value) -> {
             // 如果二者包含相同键
@@ -107,7 +107,7 @@ public class NbtUtils {
      * @param itemStack 待检测物品.
      * @return 检测结果.
      */
-    public static boolean isCraftItemStack(@NotNull ItemStack itemStack) {
+    public static boolean isCraftItemStack(@NonNull ItemStack itemStack) {
         return itemStack instanceof RefCraftItemStack;
     }
 
@@ -120,8 +120,7 @@ public class NbtUtils {
      * @param itemStack 待获取物品.
      * @return ItemMeta.
      */
-    @Nullable
-    public static ItemMeta getItemMeta(@NotNull ItemStack itemStack) {
+    public static @Nullable ItemMeta getItemMeta(@NonNull ItemStack itemStack) {
         if (MOJANG_MOTHER_DEAD) return itemStack.getItemMeta();
         if (itemStack instanceof RefCraftItemStack) {
             return itemStack.getItemMeta();
@@ -138,9 +137,8 @@ public class NbtUtils {
      * @param itemStack 待操作物品.
      * @return 物品克隆.
      */
-    @NotNull
     @SuppressWarnings("unchecked")
-    public static ItemStack bukkitCopy(@NotNull ItemStack itemStack) {
+    public static @NonNull ItemStack bukkitCopy(@NonNull ItemStack itemStack) {
         if (MOJANG_MOTHER_DEAD) return itemStack.clone();
         ItemStack result = itemStack.clone();
         RefCraftMetaItem refItemMeta = (RefCraftMetaItem) (Object) InvokeUtil.getItemMeta(itemStack);
@@ -164,8 +162,7 @@ public class NbtUtils {
      * @param itemStack 待操作物品.
      * @return 物品克隆.
      */
-    @NotNull
-    public static ItemStack asCopy(@NotNull ItemStack itemStack) {
+    public static @NonNull ItemStack asCopy(@NonNull ItemStack itemStack) {
         if (itemStack instanceof RefCraftItemStack) {
             return itemStack.clone();
         } else {
@@ -180,8 +177,7 @@ public class NbtUtils {
      * @param itemStack 待操作物品.
      * @return org.bukkit.inventory.ItemStack 形式的物品克隆.
      */
-    @NotNull
-    public static ItemStack asBukkitCopy(@NotNull ItemStack itemStack) {
+    public static @NonNull ItemStack asBukkitCopy(@NonNull ItemStack itemStack) {
         if (itemStack instanceof RefCraftItemStack) {
             return RefCraftItemStack.asBukkitCopy(((RefCraftItemStack) itemStack).handle);
         } else {
@@ -196,8 +192,7 @@ public class NbtUtils {
      * @param itemStack 待操作物品.
      * @return CraftItemStack 形式的物品克隆.
      */
-    @NotNull
-    public static ItemStack asCraftCopy(@NotNull ItemStack itemStack) {
+    public static @NonNull ItemStack asCraftCopy(@NonNull ItemStack itemStack) {
         if (itemStack instanceof RefCraftItemStack) {
             return itemStack.clone();
         } else {
@@ -300,8 +295,7 @@ public class NbtUtils {
     /**
      * 把物品保存成 NbtCompound.
      */
-    @NotNull
-    public static NbtCompound save(
+    public static @NonNull NbtCompound save(
             @Nullable ItemStack itemStack
     ) {
         RefNbtTagCompound nmsNbt = new RefNbtTagCompound();
@@ -318,8 +312,7 @@ public class NbtUtils {
     /**
      * 根据 NbtCompound 掏一个物品出来.
      */
-    @NotNull
-    public static ItemStack of(
+    public static @NonNull ItemStack of(
             @Nullable NbtCompound nbt
     ) {
         if (nbt == null) return new ItemStack(Material.AIR);
@@ -330,28 +323,23 @@ public class NbtUtils {
         }
     }
 
-    @NotNull
-    public static String getNameNbtKey() {
+    public static @NonNull String getNameNbtKey() {
         return RefCraftMetaItem.NAME.NBT;
     }
 
-    @NotNull
-    public static String getLocNameNbtKey() {
+    public static @NonNull String getLocNameNbtKey() {
         return RefCraftMetaItem.LOCNAME.NBT;
     }
 
-    @NotNull
-    public static String getDisplayNbtKey() {
+    public static @NonNull String getDisplayNbtKey() {
         return RefCraftMetaItem.DISPLAY.NBT;
     }
 
-    @NotNull
-    public static String getLoreNbtKey() {
+    public static @NonNull String getLoreNbtKey() {
         return RefCraftMetaItem.LORE.NBT;
     }
 
-    @Nullable
-    public static String getCustomModelDataNbtKeyOrNull() {
+    public static @Nullable String getCustomModelDataNbtKeyOrNull() {
         if (CbVersion.v1_14_R1.isSupport()) {
             return RefCraftMetaItem.CUSTOM_MODEL_DATA.NBT;
         } else {
@@ -359,8 +347,7 @@ public class NbtUtils {
         }
     }
 
-    @NotNull
-    public static String getCustomModelDataNbtKeyOrThrow() {
+    public static @NonNull String getCustomModelDataNbtKeyOrThrow() {
         if (CbVersion.v1_14_R1.isSupport()) {
             return RefCraftMetaItem.CUSTOM_MODEL_DATA.NBT;
         } else {
@@ -368,63 +355,51 @@ public class NbtUtils {
         }
     }
 
-    @NotNull
-    public static String getEnchantmentsNbtKey() {
+    public static @NonNull String getEnchantmentsNbtKey() {
         return RefCraftMetaItem.ENCHANTMENTS.NBT;
     }
 
-    @NotNull
-    public static String getEnchantmentIdNbtKey() {
+    public static @NonNull String getEnchantmentIdNbtKey() {
         return RefCraftMetaItem.ENCHANTMENTS_ID.NBT;
     }
 
-    @NotNull
-    public static String getEnchantmentLvlNbtKey() {
+    public static @NonNull String getEnchantmentLvlNbtKey() {
         return RefCraftMetaItem.ENCHANTMENTS_LVL.NBT;
     }
 
-    @NotNull
-    public static String getRepairNbtKey() {
+    public static @NonNull String getRepairNbtKey() {
         return RefCraftMetaItem.REPAIR.NBT;
     }
 
-    @NotNull
-    public static String getAttributesNbtKey() {
+    public static @NonNull String getAttributesNbtKey() {
         return RefCraftMetaItem.ATTRIBUTES.NBT;
     }
 
-    @NotNull
-    public static String getAttributesIdentifierNbtKey() {
+    public static @NonNull String getAttributesIdentifierNbtKey() {
         return RefCraftMetaItem.ATTRIBUTES_IDENTIFIER.NBT;
     }
 
-    @NotNull
-    public static String getAttributesNameNbtKey() {
+    public static @NonNull String getAttributesNameNbtKey() {
         return RefCraftMetaItem.ATTRIBUTES_NAME.NBT;
     }
 
-    @NotNull
-    public static String getAttributesValueNbtKey() {
+    public static @NonNull String getAttributesValueNbtKey() {
         return RefCraftMetaItem.ATTRIBUTES_VALUE.NBT;
     }
 
-    @NotNull
-    public static String getAttributesTypeNbtKey() {
+    public static @NonNull String getAttributesTypeNbtKey() {
         return RefCraftMetaItem.ATTRIBUTES_TYPE.NBT;
     }
 
-    @NotNull
-    public static String getAttributesUUIDHighNbtKey() {
+    public static @NonNull String getAttributesUUIDHighNbtKey() {
         return RefCraftMetaItem.ATTRIBUTES_UUID_HIGH.NBT;
     }
 
-    @NotNull
-    public static String getAttributesUUIDLowNbtKey() {
+    public static @NonNull String getAttributesUUIDLowNbtKey() {
         return RefCraftMetaItem.ATTRIBUTES_UUID_LOW.NBT;
     }
 
-    @Nullable
-    public static String getAttributesSlotNbtKeyOrNull() {
+    public static @Nullable String getAttributesSlotNbtKeyOrNull() {
         if (CbVersion.v1_13_R1.isSupport()) {
             return RefCraftMetaItem.ATTRIBUTES_SLOT.NBT;
         } else {
@@ -432,8 +407,7 @@ public class NbtUtils {
         }
     }
 
-    @NotNull
-    public static String getAttributesSlotNbtKeyOrThrow() {
+    public static @NonNull String getAttributesSlotNbtKeyOrThrow() {
         if (CbVersion.v1_13_R1.isSupport()) {
             return RefCraftMetaItem.ATTRIBUTES_SLOT.NBT;
         } else {
@@ -441,18 +415,15 @@ public class NbtUtils {
         }
     }
 
-    @NotNull
-    public static String getHideFlagsNbtKey() {
+    public static @NonNull String getHideFlagsNbtKey() {
         return RefCraftMetaItem.HIDEFLAGS.NBT;
     }
 
-    @NotNull
-    public static String getUnbreakableNbtKey() {
+    public static @NonNull String getUnbreakableNbtKey() {
         return RefCraftMetaItem.UNBREAKABLE.NBT;
     }
 
-    @Nullable
-    public static String getDamageNbtKeyOrNull() {
+    public static @Nullable String getDamageNbtKeyOrNull() {
         if (CbVersion.v1_13_R1.isSupport()) {
             return RefCraftMetaItem.DAMAGE.NBT;
         } else {
@@ -460,8 +431,7 @@ public class NbtUtils {
         }
     }
 
-    @NotNull
-    public static String getDamageNbtKeyOrThrow() {
+    public static @NonNull String getDamageNbtKeyOrThrow() {
         if (CbVersion.v1_13_R1.isSupport()) {
             return RefCraftMetaItem.DAMAGE.NBT;
         } else {
@@ -469,8 +439,7 @@ public class NbtUtils {
         }
     }
 
-    @Nullable
-    public static String getBlockDataNbtKeyOrNull() {
+    public static @Nullable String getBlockDataNbtKeyOrNull() {
         if (CbVersion.v1_14_R1.isSupport()) {
             return RefCraftMetaItem.BLOCK_DATA.NBT;
         } else {
@@ -478,8 +447,7 @@ public class NbtUtils {
         }
     }
 
-    @NotNull
-    public static String getBlockDataNbtKeyOrThrow() {
+    public static @NonNull String getBlockDataNbtKeyOrThrow() {
         if (CbVersion.v1_14_R1.isSupport()) {
             return RefCraftMetaItem.BLOCK_DATA.NBT;
         } else {
@@ -487,8 +455,7 @@ public class NbtUtils {
         }
     }
 
-    @Nullable
-    public static String getBukkitCustomTagNbtKeyOrNull() {
+    public static @Nullable String getBukkitCustomTagNbtKeyOrNull() {
         if (CbVersion.v1_13_R1.isSupport()) {
             return RefCraftMetaItem.BUKKIT_CUSTOM_TAG.NBT;
         } else {
@@ -496,8 +463,7 @@ public class NbtUtils {
         }
     }
 
-    @NotNull
-    public static String getBukkitCustomTagNbtKeyOrThrow() {
+    public static @NonNull String getBukkitCustomTagNbtKeyOrThrow() {
         if (CbVersion.v1_13_R1.isSupport()) {
             return RefCraftMetaItem.BUKKIT_CUSTOM_TAG.NBT;
         } else {
@@ -505,8 +471,7 @@ public class NbtUtils {
         }
     }
 
-    @Nullable
-    public static String getCanDestroyNbtKeyOrNull() {
+    public static @Nullable String getCanDestroyNbtKeyOrNull() {
         if (CbVersion.v1_18_R1.isSupport()) {
             return RefCraftMetaItem.CAN_DESTROY.NBT;
         } else {
@@ -514,8 +479,7 @@ public class NbtUtils {
         }
     }
 
-    @NotNull
-    public static String getCanDestroyNbtKeyOrThrow() {
+    public static @NonNull String getCanDestroyNbtKeyOrThrow() {
         if (CbVersion.v1_18_R1.isSupport()) {
             return RefCraftMetaItem.CAN_DESTROY.NBT;
         } else {
@@ -523,8 +487,7 @@ public class NbtUtils {
         }
     }
 
-    @Nullable
-    public static String getCanPlaceOnNbtKeyOrNull() {
+    public static @Nullable String getCanPlaceOnNbtKeyOrNull() {
         if (CbVersion.v1_18_R1.isSupport()) {
             return RefCraftMetaItem.CAN_PLACE_ON.NBT;
         } else {
@@ -532,8 +495,7 @@ public class NbtUtils {
         }
     }
 
-    @NotNull
-    public static String getCanPlaceOnNbtKeyOrThrow() {
+    public static @NonNull String getCanPlaceOnNbtKeyOrThrow() {
         if (CbVersion.v1_18_R1.isSupport()) {
             return RefCraftMetaItem.CAN_PLACE_ON.NBT;
         } else {
@@ -541,14 +503,14 @@ public class NbtUtils {
         }
     }
 
-    public static void setComponents(@NotNull ItemStack receiver, @NotNull ItemStack provider) {
+    public static void setComponents(@NonNull ItemStack receiver, @NonNull ItemStack provider) {
         if (!MOJANG_MOTHER_DEAD) return;
         if (!(receiver instanceof RefCraftItemStack)) return;
         if (!(provider instanceof RefCraftItemStack)) return;
         ((RefCraftItemStack) receiver).handle.components = ((RefCraftItemStack) provider).handle.components;
     }
 
-    public static @Nullable ItemStack getCraftDelegate(@NotNull ItemStack itemStack) {
+    public static @Nullable ItemStack getCraftDelegate(@NonNull ItemStack itemStack) {
         if (!MOJANG_MOTHER_DEAD) return null;
         return ((RefBukkitItemStack) (Object) itemStack).craftDelegate;
     }
@@ -559,9 +521,8 @@ public class NbtUtils {
      * @param itemStack 待获取物品.
      * @return 展示用NBT
      */
-    @NotNull
     @SuppressWarnings("unchecked")
-    public static NbtCompound getDisplayNbt(@NotNull ItemStack itemStack) {
+    public static @NonNull NbtCompound getDisplayNbt(@NonNull ItemStack itemStack) {
         if (MOJANG_MOTHER_DEAD) {
             RefNmsItemStack nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
             RefNbtTagCompound compound = new RefNbtTagCompound();
@@ -582,7 +543,7 @@ public class NbtUtils {
      * @param itemStack 待操作物品.
      * @param handler   文本处理器.
      */
-    public static void editNameAndLoreAfterV21(@NotNull ItemStack itemStack, BiFunction<ItemStack, String, ItemPlaceholder.ParseResult> handler) {
+    public static void editNameAndLoreAfterV21(@NonNull ItemStack itemStack, BiFunction<ItemStack, String, ItemPlaceholder.ParseResult> handler) {
         if (!MOJANG_MOTHER_DEAD) return;
         if (!(itemStack instanceof RefCraftItemStack))
             itemStack = ((RefBukkitItemStack) (Object) itemStack).craftDelegate;
@@ -650,8 +611,7 @@ public class NbtUtils {
      * @param itemStack 待转换物品.
      * @return NI可识别的配置文件
      */
-    @Nullable
-    public static ConfigurationSection saveAfterV21(@Nullable ItemStack itemStack) {
+    public static @Nullable ConfigurationSection saveAfterV21(@Nullable ItemStack itemStack) {
         if (itemStack == null || itemStack.getType() == Material.AIR) return null;
         ConfigurationSection result = new YamlConfiguration();
         result.set("material", itemStack.getType().toString());

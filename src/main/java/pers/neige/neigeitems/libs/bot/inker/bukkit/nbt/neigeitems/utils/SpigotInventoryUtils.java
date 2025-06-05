@@ -1,10 +1,10 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import lombok.NonNull;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pers.neige.neigeitems.ref.world.inventory.RefContainer;
@@ -35,8 +35,8 @@ public class SpigotInventoryUtils {
      * @param title     待设置标题
      */
     public static void setTitle(
-            @NotNull Inventory inventory,
-            @NotNull String title
+            @NonNull Inventory inventory,
+            @NonNull String title
     ) throws IllegalAccessException {
         if (inventory instanceof RefCraftInventory) {
             RefContainer container = ((RefCraftInventory) inventory).getInventory();
@@ -57,8 +57,8 @@ public class SpigotInventoryUtils {
      * @param title     JSON格式待设置标题
      */
     public static void setJsonTitle(
-            @NotNull Inventory inventory,
-            @NotNull String title
+            @NonNull Inventory inventory,
+            @NonNull String title
     ) throws IllegalAccessException {
         if (inventory instanceof RefCraftInventory) {
             RefContainer container = ((RefCraftInventory) inventory).getInventory();
@@ -79,8 +79,8 @@ public class SpigotInventoryUtils {
      * @param title     待设置标题
      */
     public static void setTitle(
-            @NotNull Inventory inventory,
-            @NotNull BaseComponent title
+            @NonNull Inventory inventory,
+            @NonNull BaseComponent title
     ) throws IllegalAccessException {
         if (inventory instanceof RefCraftInventory) {
             RefContainer container = ((RefCraftInventory) inventory).getInventory();

@@ -4,8 +4,9 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.command.CommandUtils;
 
 import java.util.Arrays;
@@ -27,62 +28,55 @@ public class IntegerArgumentType implements ArgumentType<Integer> {
     /**
      * 正整数类型
      */
-    @NotNull
-    public static IntegerArgumentType positiveInteger() {
+    public static @NonNull IntegerArgumentType positiveInteger() {
         return integer(1);
     }
 
     /**
      * 非负整数类型
      */
-    @NotNull
-    public static IntegerArgumentType nonNegativeInteger() {
+    public static @NonNull IntegerArgumentType nonNegativeInteger() {
         return integer(0);
     }
 
     /**
      * 负整数类型
      */
-    @NotNull
-    public static IntegerArgumentType negativeInteger() {
+    public static @NonNull IntegerArgumentType negativeInteger() {
         return integer(Integer.MIN_VALUE, -1);
     }
 
     /**
      * 非正整数类型
      */
-    @NotNull
-    public static IntegerArgumentType nonPositiveInteger() {
+    public static @NonNull IntegerArgumentType nonPositiveInteger() {
         return integer(Integer.MIN_VALUE, 0);
     }
 
     /**
      * 无限制整数类型
      */
-    @NotNull
-    public static IntegerArgumentType integer() {
+    public static @NonNull IntegerArgumentType integer() {
         return integer(Integer.MIN_VALUE);
     }
 
     /**
      * 限制最小值整数类型
      */
-    @NotNull
-    public static IntegerArgumentType integer(int min) {
+    public static @NonNull IntegerArgumentType integer(int min) {
         return integer(min, Integer.MAX_VALUE);
     }
 
     /**
      * 限制最大值整数类型
      */
-    @NotNull
-    public static IntegerArgumentType integer(int min, int max) {
+    public static @NonNull IntegerArgumentType integer(int min, int max) {
         return new IntegerArgumentType(min, max);
     }
 
     public static int getInteger(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return context.getArgument(name, Integer.TYPE);
     }
@@ -101,18 +95,16 @@ public class IntegerArgumentType implements ArgumentType<Integer> {
         return this.maximum;
     }
 
-    @NotNull
     @Override
-    public Integer parse(
-            @NotNull StringReader reader
+    public @NonNull Integer parse(
+            @NonNull StringReader reader
     ) throws CommandSyntaxException {
-        Integer result = CommandUtils.readInteger(reader);
+        val result = CommandUtils.readInteger(reader);
         return Math.min(Math.max(result, minimum), maximum);
     }
 
-    @NotNull
     @Override
-    public Collection<String> getExamples() {
+    public @NonNull Collection<String> getExamples() {
         return EXAMPLES;
     }
 }

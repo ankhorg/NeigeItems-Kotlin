@@ -1,12 +1,13 @@
 package pers.neige.neigeitems.utils;
 
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
 
@@ -23,10 +24,9 @@ public class ListenerUtils {
      * @param eventExecutor 事件处理器.
      * @return 对应的 Listener 对象.
      */
-    @NotNull
-    public static <T extends Event> Listener registerListener(
-            @NotNull Class<T> eventClass,
-            @NotNull Consumer<T> eventExecutor
+    public static @NonNull <T extends Event> Listener registerListener(
+            @NonNull Class<T> eventClass,
+            @NonNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, EventPriority.NORMAL, NeigeItems.getInstance(), true, eventExecutor);
     }
@@ -41,11 +41,10 @@ public class ListenerUtils {
      * @param plugin        注册监听器的插件.
      * @return 对应的 Listener 对象.
      */
-    @NotNull
-    public static <T extends Event> Listener registerListener(
-            @NotNull Class<T> eventClass,
-            @NotNull Plugin plugin,
-            @NotNull Consumer<T> eventExecutor
+    public static @NonNull <T extends Event> Listener registerListener(
+            @NonNull Class<T> eventClass,
+            @NonNull Plugin plugin,
+            @NonNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, EventPriority.NORMAL, plugin, true, eventExecutor);
     }
@@ -60,11 +59,10 @@ public class ListenerUtils {
      * @param eventExecutor 事件处理器.
      * @return 对应的 Listener 对象.
      */
-    @NotNull
-    public static <T extends Event> Listener registerListener(
-            @NotNull Class<T> eventClass,
-            @NotNull EventPriority eventPriority,
-            @NotNull Consumer<T> eventExecutor
+    public static @NonNull <T extends Event> Listener registerListener(
+            @NonNull Class<T> eventClass,
+            @NonNull EventPriority eventPriority,
+            @NonNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, eventPriority, NeigeItems.getInstance(), true, eventExecutor);
     }
@@ -79,12 +77,11 @@ public class ListenerUtils {
      * @param plugin        注册监听器的插件.
      * @return 对应的 Listener 对象.
      */
-    @NotNull
-    public static <T extends Event> Listener registerListener(
-            @NotNull Class<T> eventClass,
-            @NotNull EventPriority eventPriority,
-            @NotNull Plugin plugin,
-            @NotNull Consumer<T> eventExecutor
+    public static @NonNull <T extends Event> Listener registerListener(
+            @NonNull Class<T> eventClass,
+            @NonNull EventPriority eventPriority,
+            @NonNull Plugin plugin,
+            @NonNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, eventPriority, plugin, true, eventExecutor);
     }
@@ -99,12 +96,11 @@ public class ListenerUtils {
      * @param ignoreCancelled 是否忽略已取消事件.
      * @return 对应的 Listener 对象.
      */
-    @NotNull
-    public static <T extends Event> Listener registerListener(
-            @NotNull Class<T> eventClass,
-            @NotNull EventPriority eventPriority,
+    public static @NonNull <T extends Event> Listener registerListener(
+            @NonNull Class<T> eventClass,
+            @NonNull EventPriority eventPriority,
             boolean ignoreCancelled,
-            @NotNull Consumer<T> eventExecutor
+            @NonNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, eventPriority, NeigeItems.getInstance(), ignoreCancelled, eventExecutor);
     }
@@ -119,16 +115,15 @@ public class ListenerUtils {
      * @param ignoreCancelled 是否忽略已取消事件.
      * @return 对应的 Listener 对象.
      */
-    @NotNull
     @SuppressWarnings("unchecked")
-    public static <T extends Event> Listener registerListener(
-            @NotNull Class<T> eventClass,
-            @NotNull EventPriority eventPriority,
-            @NotNull Plugin plugin,
+    public static <T extends Event> @NonNull Listener registerListener(
+            @NonNull Class<T> eventClass,
+            @NonNull EventPriority eventPriority,
+            @NonNull Plugin plugin,
             boolean ignoreCancelled,
-            @NotNull Consumer<T> eventExecutor
+            @NonNull Consumer<T> eventExecutor
     ) {
-        Listener listener = new Listener() {
+        val listener = new Listener() {
         };
         Bukkit.getPluginManager().registerEvent(
                 eventClass,

@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -16,12 +16,9 @@ import java.util.List;
  */
 public final class ItemPackGiveEvent extends CancellableEvent {
     private static final HandlerList handlers = new HandlerList();
-    @NotNull
-    private final String id;
-    @NotNull
-    private final Player player;
-    @NotNull
-    private List<ItemStack> itemStacks;
+    private final @NonNull String id;
+    private final @NonNull Player player;
+    private @NonNull List<ItemStack> itemStacks;
 
     /**
      * @param id         物品包ID
@@ -29,41 +26,37 @@ public final class ItemPackGiveEvent extends CancellableEvent {
      * @param itemStacks 待给予物品
      */
     public ItemPackGiveEvent(
-            @NotNull String id,
-            @NotNull Player player,
-            @NotNull List<ItemStack> itemStacks
+            @NonNull String id,
+            @NonNull Player player,
+            @NonNull List<ItemStack> itemStacks
     ) {
         this.id = id;
         this.player = player;
         this.itemStacks = itemStacks;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
     /**
      * 获取物品包ID
      */
-    @NotNull
-    public String getId() {
+    public @NonNull String getId() {
         return id;
     }
 
     /**
      * 获取物品接收者
      */
-    @NotNull
-    public Player getPlayer() {
+    public @NonNull Player getPlayer() {
         return player;
     }
 
     /**
      * 获取待给予物品
      */
-    @NotNull
-    public List<ItemStack> getItemStacks() {
+    public @NonNull List<ItemStack> getItemStacks() {
         return itemStacks;
     }
 
@@ -73,14 +66,13 @@ public final class ItemPackGiveEvent extends CancellableEvent {
      * @param itemStacks 待给予物品
      */
     public void setItemStacks(
-            @NotNull List<ItemStack> itemStacks
+            @NonNull List<ItemStack> itemStacks
     ) {
         this.itemStacks = itemStacks;
     }
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

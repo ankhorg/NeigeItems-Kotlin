@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -13,48 +13,42 @@ import java.util.UUID;
  */
 public final class PacketReceiveEvent extends CancellableEvent {
     private static final HandlerList handlers = new HandlerList();
-    @NotNull
-    private final UUID uuid;
-    @NotNull
-    private final Object packet;
+    private final @NonNull UUID uuid;
+    private final @NonNull Object packet;
 
     /**
      * @param uuid   接收数据包的玩家 UUID
      * @param packet 发送的数据包
      */
     public PacketReceiveEvent(
-            @NotNull UUID uuid,
-            @NotNull Object packet
+            @NonNull UUID uuid,
+            @NonNull Object packet
     ) {
         this.uuid = uuid;
         this.packet = packet;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
     /**
      * 获取发送数据包的玩家 UUID
      */
-    @NotNull
-    public UUID getUuid() {
+    public @NonNull UUID getUuid() {
         return uuid;
     }
 
     /**
      * 获取接收的数据包
      */
-    @NotNull
-    public Object getPacket() {
+    public @NonNull Object getPacket() {
         return packet;
     }
 
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 public class BasicEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
@@ -12,8 +12,7 @@ public class BasicEvent extends Event {
         super(!Bukkit.isPrimaryThread());
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
@@ -23,8 +22,7 @@ public class BasicEvent extends Event {
     }
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

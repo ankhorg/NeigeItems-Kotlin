@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.action.*;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
@@ -8,16 +8,13 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 import java.util.concurrent.CompletableFuture;
 
 public class WhileAction extends Action {
-    @NotNull
-    private final Condition condition;
-    @NotNull
-    private final Action actions;
-    @NotNull
-    private final Action _finally;
+    private final @NonNull Condition condition;
+    private final @NonNull Action actions;
+    private final @NonNull Action _finally;
 
     public WhileAction(
-            @NotNull BaseActionManager manager,
-            @NotNull ConfigReader action
+            @NonNull BaseActionManager manager,
+            @NonNull ConfigReader action
     ) {
         super(manager);
         condition = new Condition(manager, action.getString("while"));
@@ -33,7 +30,7 @@ public class WhileAction extends Action {
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.WHILE;
     }
 
@@ -41,26 +38,22 @@ public class WhileAction extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    protected @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }
 
-    @NotNull
-    public Condition getCondition() {
+    public @NonNull Condition getCondition() {
         return condition;
     }
 
-    @NotNull
-    public Action getActions() {
+    public @NonNull Action getActions() {
         return actions;
     }
 
-    @NotNull
-    public Action getFinally() {
+    public @NonNull Action getFinally() {
         return _finally;
     }
 }

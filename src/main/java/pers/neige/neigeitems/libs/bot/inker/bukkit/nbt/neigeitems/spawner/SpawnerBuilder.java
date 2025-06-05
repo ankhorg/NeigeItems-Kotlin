@@ -1,12 +1,12 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.spawner;
 
+import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.block.RefBlockPos;
 import pers.neige.neigeitems.ref.block.spawner.RefCraftCreatureSpawner;
@@ -25,8 +25,7 @@ public class SpawnerBuilder {
      * 1.12.2, Material.MOB_SPAWNER.
      * 1.13+, Material.SPAWNER.
      */
-    @NotNull
-    private static final Material MATERIAL_SPAWNER;
+    private static final @NonNull Material MATERIAL_SPAWNER;
 //    private static Field snapshot = null;
 
     static {
@@ -53,13 +52,11 @@ public class SpawnerBuilder {
     /**
      * ItemStack 内部的 ItemMeta 原本.
      */
-    @NotNull
-    private final BlockStateMeta itemMeta;
+    private final @NonNull BlockStateMeta itemMeta;
     /**
      * 用于构建 ItemMeta 的 CreatureSpawner.
      */
-    @NotNull
-    private final CreatureSpawner blockState;
+    private final @NonNull CreatureSpawner blockState;
 
     public SpawnerBuilder() {
         itemStack = new ItemStack(MATERIAL_SPAWNER);
@@ -95,8 +92,7 @@ public class SpawnerBuilder {
      *
      * @return 刷怪笼生成实体类型.
      */
-    @NotNull
-    public EntityType getSpawnedType() {
+    public @NonNull EntityType getSpawnedType() {
         return blockState.getSpawnedType();
     }
 
@@ -107,7 +103,7 @@ public class SpawnerBuilder {
      * @return SpawnerBuilder 本身.
      */
     public SpawnerBuilder setSpawnedType(
-            @NotNull EntityType creatureType
+            @NonNull EntityType creatureType
     ) {
         blockState.setSpawnedType(creatureType);
         return this;
@@ -120,7 +116,7 @@ public class SpawnerBuilder {
      * @return SpawnerBuilder 本身.
      */
     public SpawnerBuilder setCreatureTypeByName(
-            @NotNull String creatureType
+            @NonNull String creatureType
     ) {
         blockState.setCreatureTypeByName(creatureType);
         return this;
@@ -131,8 +127,7 @@ public class SpawnerBuilder {
      *
      * @return minecraft 实体ID 形式的刷怪笼生成实体类型.
      */
-    @NotNull
-    public String getCreatureTypeName() {
+    public @NonNull String getCreatureTypeName() {
         return blockState.getCreatureTypeName();
     }
 
@@ -280,7 +275,7 @@ public class SpawnerBuilder {
 //     * @return SpawnerBuilder 本身.
 //     */
 //    public SpawnerBuilder addSpawnData(
-//            @NotNull Entity entity,
+//            @NonNull Entity entity,
 //            int weight
 //    ) {
 //        addSpawnData(EntityUtils.save(entity), weight);
@@ -295,7 +290,7 @@ public class SpawnerBuilder {
 //     * @return SpawnerBuilder 本身.
 //     */
 //    public SpawnerBuilder addSpawnData(
-//            @NotNull NbtCompound nbt,
+//            @NonNull NbtCompound nbt,
 //            int weight
 //    ) {
 //        if (NEW_CONSTRUCTOR) {

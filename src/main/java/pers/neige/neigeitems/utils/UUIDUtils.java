@@ -1,5 +1,7 @@
 package pers.neige.neigeitems.utils;
 
+import lombok.val;
+
 import java.util.UUID;
 
 /**
@@ -28,8 +30,8 @@ public class UUIDUtils {
     }
 
     public static byte[] bytesFromUuid(UUID uuid) {
-        long mostSigBits = uuid.getMostSignificantBits();
-        long leastSigBits = uuid.getLeastSignificantBits();
+        val mostSigBits = uuid.getMostSignificantBits();
+        val leastSigBits = uuid.getLeastSignificantBits();
         return new byte[]{
                 (byte) (mostSigBits >> 56),
                 (byte) (mostSigBits >> 48),

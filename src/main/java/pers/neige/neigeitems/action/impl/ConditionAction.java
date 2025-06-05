@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.action.*;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
@@ -8,20 +8,15 @@ import pers.neige.neigeitems.manager.BaseActionManager;
 import java.util.concurrent.CompletableFuture;
 
 public class ConditionAction extends Action {
-    @NotNull
-    private final Condition condition;
-    @NotNull
-    private final Action actions;
-    @NotNull
-    private final Action async;
-    @NotNull
-    private final Action sync;
-    @NotNull
-    private final Action deny;
+    private final @NonNull Condition condition;
+    private final @NonNull Action actions;
+    private final @NonNull Action async;
+    private final @NonNull Action sync;
+    private final @NonNull Action deny;
 
     public ConditionAction(
-            @NotNull BaseActionManager manager,
-            @NotNull ConfigReader action
+            @NonNull BaseActionManager manager,
+            @NonNull ConfigReader action
     ) {
         super(manager);
         condition = new Condition(manager, action.getString("condition"));
@@ -39,7 +34,7 @@ public class ConditionAction extends Action {
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.CONDITION;
     }
 
@@ -47,36 +42,30 @@ public class ConditionAction extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    protected @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }
 
-    @NotNull
-    public Condition getCondition() {
+    public @NonNull Condition getCondition() {
         return condition;
     }
 
-    @NotNull
-    public Action getActions() {
+    public @NonNull Action getActions() {
         return actions;
     }
 
-    @NotNull
-    public Action getAsync() {
+    public @NonNull Action getAsync() {
         return async;
     }
 
-    @NotNull
-    public Action getSync() {
+    public @NonNull Action getSync() {
         return sync;
     }
 
-    @NotNull
-    public Action getDeny() {
+    public @NonNull Action getDeny() {
         return deny;
     }
 }

@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api;
 
+import lombok.NonNull;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.ArrayUtils;
@@ -32,11 +32,11 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
                 : null;
     }
 
-    default Nbt<?> removeDeep(@NotNull String key) {
+    default Nbt<?> removeDeep(@NonNull String key) {
         return removeDeep(key, '.', '\\');
     }
 
-    default Nbt<?> removeDeep(@NotNull String key, char separator, char escape) {
+    default Nbt<?> removeDeep(@NonNull String key, char separator, char escape) {
         List<String> keys = StringUtils.split(key, separator, escape);
 
         NbtComponentLike currentNbtCompound = this;
@@ -218,7 +218,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 byte 的 NBT键.
      * @return 待查找的 byte.
      */
-    default byte getByte(@NotNull String key) {
+    default byte getByte(@NonNull String key) {
         return getByte(key, (byte) 0);
     }
 
@@ -228,7 +228,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 byte 的 NBT键.
      * @return 待查找的 byte.
      */
-    default @Nullable Byte getByteOrNull(@NotNull String key) {
+    default @Nullable Byte getByteOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsByte()
@@ -242,7 +242,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 byte.
      */
-    default byte getByte(@NotNull String key, byte def) {
+    default byte getByte(@NonNull String key, byte def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsByte()
@@ -255,7 +255,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 short 的 NBT键.
      * @return 待查找的 short.
      */
-    default short getShort(@NotNull String key) {
+    default short getShort(@NonNull String key) {
         return getShort(key, (short) 0);
     }
 
@@ -265,7 +265,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 short 的 NBT键.
      * @return 待查找的 short.
      */
-    default @Nullable Short getShortOrNull(@NotNull String key) {
+    default @Nullable Short getShortOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsShort()
@@ -279,7 +279,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 short.
      */
-    default short getShort(@NotNull String key, short def) {
+    default short getShort(@NonNull String key, short def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsShort()
@@ -292,7 +292,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 int 的 NBT键.
      * @return 待查找的 int.
      */
-    default int getInt(@NotNull String key) {
+    default int getInt(@NonNull String key) {
         return getInt(key, 0);
     }
 
@@ -302,7 +302,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 int 的 NBT键.
      * @return 待查找的 int.
      */
-    default @Nullable Integer getIntOrNull(@NotNull String key) {
+    default @Nullable Integer getIntOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsInt()
@@ -316,7 +316,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 int.
      */
-    default int getInt(@NotNull String key, int def) {
+    default int getInt(@NonNull String key, int def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsInt()
@@ -329,7 +329,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 long 的 NBT键.
      * @return 待查找的 long.
      */
-    default long getLong(@NotNull String key) {
+    default long getLong(@NonNull String key) {
         return getLong(key, 0);
     }
 
@@ -339,7 +339,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 long 的 NBT键.
      * @return 待查找的 long.
      */
-    default @Nullable Long getLongOrNull(@NotNull String key) {
+    default @Nullable Long getLongOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsLong()
@@ -353,7 +353,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 long.
      */
-    default long getLong(@NotNull String key, long def) {
+    default long getLong(@NonNull String key, long def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsLong()
@@ -366,7 +366,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 UUID 的 NBT键.
      * @return 待查找的 UUID.
      */
-    default @Nullable UUID getUUID(@NotNull String key) {
+    default @Nullable UUID getUUID(@NonNull String key) {
         return getUUID(key, null);
     }
 
@@ -376,7 +376,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 UUID 的 NBT键.
      * @return 待查找的 UUID.
      */
-    default @Nullable UUID getUUIDOrNull(@NotNull String key) {
+    default @Nullable UUID getUUIDOrNull(@NonNull String key) {
         return getUUID(key, null);
     }
 
@@ -388,7 +388,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 UUID.
      */
     @Contract("_, !null -> !null")
-    default @Nullable UUID getUUID(@NotNull String key, @Nullable UUID def) {
+    default @Nullable UUID getUUID(@NonNull String key, @Nullable UUID def) {
         Nbt<?> value = get(key);
         if (value instanceof NbtIntArray) {
             int[] ints = ((NbtIntArray) value).getAsIntArray();
@@ -414,7 +414,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 float 的 NBT键.
      * @return 待查找的 float.
      */
-    default float getFloat(@NotNull String key) {
+    default float getFloat(@NonNull String key) {
         return getFloat(key, 0);
     }
 
@@ -424,7 +424,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 float 的 NBT键.
      * @return 待查找的 float.
      */
-    default @Nullable Float getFloatOrNull(@NotNull String key) {
+    default @Nullable Float getFloatOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsFloat()
@@ -438,7 +438,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 float.
      */
-    default float getFloat(@NotNull String key, float def) {
+    default float getFloat(@NonNull String key, float def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsFloat()
@@ -451,7 +451,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 double 的 NBT键.
      * @return 待查找的 double.
      */
-    default double getDouble(@NotNull String key) {
+    default double getDouble(@NonNull String key) {
         return getDouble(key, 0);
     }
 
@@ -461,7 +461,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 double 的 NBT键.
      * @return 待查找的 double.
      */
-    default @Nullable Double getDoubleOrNull(@NotNull String key) {
+    default @Nullable Double getDoubleOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsDouble()
@@ -475,7 +475,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 double.
      */
-    default double getDouble(@NotNull String key, double def) {
+    default double getDouble(@NonNull String key, double def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsDouble()
@@ -488,7 +488,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 String 的 NBT键.
      * @return 待查找的 String.
      */
-    default @Nullable String getString(@NotNull String key) {
+    default @Nullable String getString(@NonNull String key) {
         return getString(key, null);
     }
 
@@ -498,7 +498,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 String 的 NBT键.
      * @return 待查找的 String.
      */
-    default @Nullable String getStringOrNull(@NotNull String key) {
+    default @Nullable String getStringOrNull(@NonNull String key) {
         return getString(key, null);
     }
 
@@ -510,7 +510,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 String.
      */
     @Contract("_, !null -> !null")
-    default @Nullable String getString(@NotNull String key, @Nullable String def) {
+    default @Nullable String getString(@NonNull String key, @Nullable String def) {
         Nbt<?> value = get(key);
         return (value != null)
                 ? value.getAsString()
@@ -523,7 +523,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 byte[] 的 NBT键.
      * @return 待查找的 byte[].
      */
-    default byte @NotNull [] getByteArray(@NotNull String key) {
+    default byte @NonNull [] getByteArray(@NonNull String key) {
         return getByteArray(key, ArrayUtils.EMPTY_BYTE_ARRAY);
     }
 
@@ -533,7 +533,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 byte[] 的 NBT键.
      * @return 待查找的 byte[].
      */
-    default byte @Nullable [] getByteArrayOrNull(@NotNull String key) {
+    default byte @Nullable [] getByteArrayOrNull(@NonNull String key) {
         return getByteArray(key, ArrayUtils.EMPTY_BYTE_ARRAY);
     }
 
@@ -545,7 +545,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 byte[].
      */
     @Contract("_, !null -> !null")
-    default byte @Nullable [] getByteArray(@NotNull String key, byte @Nullable [] def) {
+    default byte @Nullable [] getByteArray(@NonNull String key, byte @Nullable [] def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtByteArray)
                 ? ((NbtByteArray) value).getAsByteArray()
@@ -558,7 +558,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 int[] 的 NBT键.
      * @return 待查找的 int[].
      */
-    default int @NotNull [] getIntArray(@NotNull String key) {
+    default int @NonNull [] getIntArray(@NonNull String key) {
         return getIntArray(key, ArrayUtils.EMPTY_INT_ARRAY);
     }
 
@@ -568,7 +568,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 int[] 的 NBT键.
      * @return 待查找的 int[].
      */
-    default int @Nullable [] getIntArrayOrNull(@NotNull String key) {
+    default int @Nullable [] getIntArrayOrNull(@NonNull String key) {
         return getIntArray(key, ArrayUtils.EMPTY_INT_ARRAY);
     }
 
@@ -580,7 +580,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 int[].
      */
     @Contract("_, !null -> !null")
-    default int @Nullable [] getIntArray(@NotNull String key, int @Nullable [] def) {
+    default int @Nullable [] getIntArray(@NonNull String key, int @Nullable [] def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtIntArray)
                 ? ((NbtIntArray) value).getAsIntArray()
@@ -593,7 +593,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 long[] 的 NBT键.
      * @return 待查找的 long[].
      */
-    default long @NotNull [] getLongArray(@NotNull String key) {
+    default long @NonNull [] getLongArray(@NonNull String key) {
         return getLongArray(key, ArrayUtils.EMPTY_LONG_ARRAY);
     }
 
@@ -603,7 +603,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 long[] 的 NBT键.
      * @return 待查找的 long[].
      */
-    default long @Nullable [] getLongArrayOrNull(@NotNull String key) {
+    default long @Nullable [] getLongArrayOrNull(@NonNull String key) {
         return getLongArray(key, null);
     }
 
@@ -615,7 +615,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 long[].
      */
     @Contract("_, !null -> !null")
-    default long @Nullable [] getLongArray(@NotNull String key, long @Nullable [] def) {
+    default long @Nullable [] getLongArray(@NonNull String key, long @Nullable [] def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtLongArray)
                 ? ((NbtLongArray) value).getAsLongArray()
@@ -628,7 +628,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 NbtCompound 的 NBT键.
      * @return 待查找的 NbtCompound.
      */
-    default @Nullable NbtCompound getCompound(@NotNull String key) {
+    default @Nullable NbtCompound getCompound(@NonNull String key) {
         return getCompound(key, null);
     }
 
@@ -638,7 +638,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 NbtCompound 的 NBT键.
      * @return 待查找的 NbtCompound.
      */
-    default @Nullable NbtCompound getCompoundOrNull(@NotNull String key) {
+    default @Nullable NbtCompound getCompoundOrNull(@NonNull String key) {
         return getCompound(key, null);
     }
 
@@ -650,7 +650,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 NbtCompound.
      */
     @Contract("_, !null -> !null")
-    default @Nullable NbtCompound getCompound(@NotNull String key, @Nullable NbtCompound def) {
+    default @Nullable NbtCompound getCompound(@NonNull String key, @Nullable NbtCompound def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtCompound)
                 ? (NbtCompound) value
@@ -663,7 +663,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 NbtCompound 的 NBT键.
      * @return 待查找的 NbtCompound.
      */
-    default @NotNull NbtCompound getOrCreateCompound(@NotNull String key) {
+    default @NonNull NbtCompound getOrCreateCompound(@NonNull String key) {
         Nbt<?> value = get(key);
         if (!(value instanceof NbtCompound)) {
             value = new NbtCompound();
@@ -678,7 +678,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 NbtList 的 NBT键.
      * @return 待查找的 NbtList.
      */
-    default @Nullable NbtList getList(@NotNull String key) {
+    default @Nullable NbtList getList(@NonNull String key) {
         return getList(key, null);
     }
 
@@ -688,7 +688,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 NbtList 的 NBT键.
      * @return 待查找的 NbtList.
      */
-    default @Nullable NbtList getListOrNull(@NotNull String key) {
+    default @Nullable NbtList getListOrNull(@NonNull String key) {
         return getList(key, null);
     }
 
@@ -700,7 +700,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 NbtList.
      */
     @Contract("_, !null -> !null")
-    default @Nullable NbtList getList(@NotNull String key, @Nullable NbtList def) {
+    default @Nullable NbtList getList(@NonNull String key, @Nullable NbtList def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtList)
                 ? (NbtList) value
@@ -713,7 +713,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 NbtList 的 NBT键.
      * @return 待查找的 NbtList.
      */
-    default @NotNull NbtList getOrCreateList(@NotNull String key) {
+    default @NonNull NbtList getOrCreateList(@NonNull String key) {
         Nbt<?> value = get(key);
         if (!(value instanceof NbtList)) {
             value = new NbtList();
@@ -740,7 +740,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 boolean 的 NBT键.
      * @return 待查找的 boolean.
      */
-    default boolean getBoolean(@NotNull String key) {
+    default boolean getBoolean(@NonNull String key) {
         return getBoolean(key, false);
     }
 
@@ -750,7 +750,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 boolean 的 NBT键.
      * @return 待查找的 boolean.
      */
-    default @Nullable Boolean getBooleanOrNull(@NotNull String key) {
+    default @Nullable Boolean getBooleanOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsByte() != 0
@@ -764,7 +764,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 boolean, 则返回的默认值.
      * @return 待查找的 boolean.
      */
-    default boolean getBoolean(@NotNull String key, boolean def) {
+    default boolean getBoolean(@NonNull String key, boolean def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsByte() != 0
@@ -781,7 +781,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param escape    分隔符转义符.
      * @return 待查找的 Nbt.
      */
-    default @Nullable Nbt<?> getDeep(@NotNull String key, char separator, char escape) {
+    default @Nullable Nbt<?> getDeep(@NonNull String key, char separator, char escape) {
         List<String> keys = StringUtils.split(key, separator, escape);
 
         NbtComponentLike currentNbtCompound = this;
@@ -814,7 +814,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 Nbt 的 NBT键.
      * @return 待查找的 Nbt.
      */
-    default @Nullable Nbt<?> getDeep(@NotNull String key) {
+    default @Nullable Nbt<?> getDeep(@NonNull String key) {
         return getDeep(key, '.', '\\');
     }
 
@@ -825,7 +825,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 byte 的 NBT键.
      * @return 待查找的 byte.
      */
-    default byte getDeepByte(@NotNull String key) {
+    default byte getDeepByte(@NonNull String key) {
         return getDeepByte(key, (byte) 0);
     }
 
@@ -836,7 +836,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 byte 的 NBT键.
      * @return 待查找的 byte.
      */
-    default @Nullable Byte getDeepByteOrNull(@NotNull String key) {
+    default @Nullable Byte getDeepByteOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsByte()
@@ -851,7 +851,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 byte.
      */
-    default byte getDeepByte(@NotNull String key, byte def) {
+    default byte getDeepByte(@NonNull String key, byte def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsByte()
@@ -865,7 +865,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 short 的 NBT键.
      * @return 待查找的 short.
      */
-    default short getDeepShort(@NotNull String key) {
+    default short getDeepShort(@NonNull String key) {
         return getDeepShort(key, (short) 0);
     }
 
@@ -876,7 +876,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 short 的 NBT键.
      * @return 待查找的 short.
      */
-    default @Nullable Short getDeepShortOrNull(@NotNull String key) {
+    default @Nullable Short getDeepShortOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsShort()
@@ -891,7 +891,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 short.
      */
-    default short getDeepShort(@NotNull String key, short def) {
+    default short getDeepShort(@NonNull String key, short def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsShort()
@@ -905,7 +905,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 int 的 NBT键.
      * @return 待查找的 int.
      */
-    default int getDeepInt(@NotNull String key) {
+    default int getDeepInt(@NonNull String key) {
         return getDeepInt(key, 0);
     }
 
@@ -916,7 +916,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 int 的 NBT键.
      * @return 待查找的 int.
      */
-    default @Nullable Integer getDeepIntOrNull(@NotNull String key) {
+    default @Nullable Integer getDeepIntOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsInt()
@@ -931,7 +931,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 int.
      */
-    default int getDeepInt(@NotNull String key, int def) {
+    default int getDeepInt(@NonNull String key, int def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsInt()
@@ -945,7 +945,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 long 的 NBT键.
      * @return 待查找的 long.
      */
-    default long getDeepLong(@NotNull String key) {
+    default long getDeepLong(@NonNull String key) {
         return getDeepLong(key, 0);
     }
 
@@ -956,7 +956,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 long 的 NBT键.
      * @return 待查找的 long.
      */
-    default @Nullable Long getDeepLongOrNull(@NotNull String key) {
+    default @Nullable Long getDeepLongOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsLong()
@@ -971,7 +971,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 long.
      */
-    default long getDeepLong(@NotNull String key, long def) {
+    default long getDeepLong(@NonNull String key, long def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsLong()
@@ -985,7 +985,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 UUID 的 NBT键.
      * @return 待查找的 UUID.
      */
-    default @Nullable UUID getDeepUUID(@NotNull String key) {
+    default @Nullable UUID getDeepUUID(@NonNull String key) {
         return getDeepUUID(key, null);
     }
 
@@ -996,7 +996,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 UUID 的 NBT键.
      * @return 待查找的 UUID.
      */
-    default @Nullable UUID getDeepUUIDOrNull(@NotNull String key) {
+    default @Nullable UUID getDeepUUIDOrNull(@NonNull String key) {
         return getDeepUUID(key, null);
     }
 
@@ -1009,7 +1009,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 UUID.
      */
     @Contract("_, !null -> !null")
-    default @Nullable UUID getDeepUUID(@NotNull String key, @Nullable UUID def) {
+    default @Nullable UUID getDeepUUID(@NonNull String key, @Nullable UUID def) {
         Nbt<?> value = getDeep(key);
         if (value instanceof NbtIntArray) {
             int[] ints = ((NbtIntArray) value).getAsIntArray();
@@ -1036,7 +1036,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 float 的 NBT键.
      * @return 待查找的 float.
      */
-    default float getDeepFloat(@NotNull String key) {
+    default float getDeepFloat(@NonNull String key) {
         return getDeepFloat(key, 0.0F);
     }
 
@@ -1047,7 +1047,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 float 的 NBT键.
      * @return 待查找的 float.
      */
-    default @Nullable Float getDeepFloatOrNull(@NotNull String key) {
+    default @Nullable Float getDeepFloatOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsFloat()
@@ -1062,7 +1062,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 float.
      */
-    default float getDeepFloat(@NotNull String key, float def) {
+    default float getDeepFloat(@NonNull String key, float def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsFloat()
@@ -1076,7 +1076,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 double 的 NBT键.
      * @return 待查找的 double.
      */
-    default double getDeepDouble(@NotNull String key) {
+    default double getDeepDouble(@NonNull String key) {
         return getDeepDouble(key, 0.0D);
     }
 
@@ -1087,7 +1087,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 double 的 NBT键.
      * @return 待查找的 double.
      */
-    default @Nullable Double getDeepDoubleOrNull(@NotNull String key) {
+    default @Nullable Double getDeepDoubleOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsDouble()
@@ -1102,7 +1102,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 数字, 则返回的默认值.
      * @return 待查找的 double.
      */
-    default double getDeepDouble(@NotNull String key, double def) {
+    default double getDeepDouble(@NonNull String key, double def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsDouble()
@@ -1116,7 +1116,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 String 的 NBT键.
      * @return 待查找的 String.
      */
-    default @Nullable String getDeepString(@NotNull String key) {
+    default @Nullable String getDeepString(@NonNull String key) {
         return getDeepString(key, null);
     }
 
@@ -1127,7 +1127,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 String 的 NBT键.
      * @return 待查找的 String.
      */
-    default @Nullable String getDeepStringOrNull(@NotNull String key) {
+    default @Nullable String getDeepStringOrNull(@NonNull String key) {
         return getDeepString(key, null);
     }
 
@@ -1140,7 +1140,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 String.
      */
     @Contract("_, !null -> !null")
-    default @Nullable String getDeepString(@NotNull String key, @Nullable String def) {
+    default @Nullable String getDeepString(@NonNull String key, @Nullable String def) {
         Nbt<?> value = getDeep(key);
         return (value != null)
                 ? value.getAsString()
@@ -1154,7 +1154,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 byte[] 的 NBT键.
      * @return 待查找的 byte[].
      */
-    default byte @NotNull [] getDeepByteArray(@NotNull String key) {
+    default byte @NonNull [] getDeepByteArray(@NonNull String key) {
         return getDeepByteArray(key, ArrayUtils.EMPTY_BYTE_ARRAY);
     }
 
@@ -1165,7 +1165,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 byte[] 的 NBT键.
      * @return 待查找的 byte[].
      */
-    default byte @Nullable [] getDeepByteArrayOrNull(@NotNull String key) {
+    default byte @Nullable [] getDeepByteArrayOrNull(@NonNull String key) {
         return getDeepByteArray(key, null);
     }
 
@@ -1178,7 +1178,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 byte[].
      */
     @Contract("_, !null -> !null")
-    default byte @Nullable [] getDeepByteArray(@NotNull String key, byte @Nullable [] def) {
+    default byte @Nullable [] getDeepByteArray(@NonNull String key, byte @Nullable [] def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtByteArray)
                 ? ((NbtByteArray) value).getAsByteArray()
@@ -1192,7 +1192,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 int[] 的 NBT键.
      * @return 待查找的 int[].
      */
-    default int @NotNull [] getDeepIntArray(@NotNull String key) {
+    default int @NonNull [] getDeepIntArray(@NonNull String key) {
         return getDeepIntArray(key, ArrayUtils.EMPTY_INT_ARRAY);
     }
 
@@ -1203,7 +1203,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 int[] 的 NBT键.
      * @return 待查找的 int[].
      */
-    default int @Nullable [] getDeepIntArrayOrNull(@NotNull String key) {
+    default int @Nullable [] getDeepIntArrayOrNull(@NonNull String key) {
         return getDeepIntArray(key, null);
     }
 
@@ -1216,7 +1216,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 int[].
      */
     @Contract("_, !null -> !null")
-    default int @Nullable [] getDeepIntArray(@NotNull String key, int @Nullable [] def) {
+    default int @Nullable [] getDeepIntArray(@NonNull String key, int @Nullable [] def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtIntArray)
                 ? ((NbtIntArray) value).getAsIntArray()
@@ -1230,7 +1230,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 long[] 的 NBT键.
      * @return 待查找的 long[].
      */
-    default long @NotNull [] getDeepLongArray(@NotNull String key) {
+    default long @NonNull [] getDeepLongArray(@NonNull String key) {
         return getDeepLongArray(key, ArrayUtils.EMPTY_LONG_ARRAY);
     }
 
@@ -1241,7 +1241,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 long[] 的 NBT键.
      * @return 待查找的 long[].
      */
-    default long @Nullable [] getDeepLongArrayOrNull(@NotNull String key) {
+    default long @Nullable [] getDeepLongArrayOrNull(@NonNull String key) {
         return getDeepLongArray(key, null);
     }
 
@@ -1254,7 +1254,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 long[].
      */
     @Contract("_, !null -> !null")
-    default long @Nullable [] getDeepLongArray(@NotNull String key, long @Nullable [] def) {
+    default long @Nullable [] getDeepLongArray(@NonNull String key, long @Nullable [] def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtLongArray)
                 ? ((NbtLongArray) value).getAsLongArray()
@@ -1268,7 +1268,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 NbtCompound 的 NBT键.
      * @return 待查找的 NbtCompound.
      */
-    default @Nullable NbtCompound getDeepCompound(@NotNull String key) {
+    default @Nullable NbtCompound getDeepCompound(@NonNull String key) {
         return getDeepCompound(key, null);
     }
 
@@ -1279,7 +1279,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 NbtCompound 的 NBT键.
      * @return 待查找的 NbtCompound.
      */
-    default @Nullable NbtCompound getDeepCompoundOrNull(@NotNull String key) {
+    default @Nullable NbtCompound getDeepCompoundOrNull(@NonNull String key) {
         return getDeepCompound(key, null);
     }
 
@@ -1292,7 +1292,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 NbtCompound.
      */
     @Contract("_, !null -> !null")
-    default @Nullable NbtCompound getDeepCompound(@NotNull String key, @Nullable NbtCompound def) {
+    default @Nullable NbtCompound getDeepCompound(@NonNull String key, @Nullable NbtCompound def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtCompound)
                 ? (NbtCompound) value
@@ -1306,7 +1306,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 NbtList 的 NBT键.
      * @return 待查找的 NbtList.
      */
-    default @Nullable NbtList getDeepList(@NotNull String key) {
+    default @Nullable NbtList getDeepList(@NonNull String key) {
         return getDeepList(key, null);
     }
 
@@ -1317,7 +1317,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 NbtList 的 NBT键.
      * @return 待查找的 NbtList.
      */
-    default @Nullable NbtList getDeepListOrNull(@NotNull String key) {
+    default @Nullable NbtList getDeepListOrNull(@NonNull String key) {
         return getDeepList(key, null);
     }
 
@@ -1331,7 +1331,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @return 待查找的 NbtList.
      */
     @Contract("_, !null -> !null")
-    default @Nullable NbtList getDeepList(@NotNull String key, @Nullable NbtList def) {
+    default @Nullable NbtList getDeepList(@NonNull String key, @Nullable NbtList def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtList)
                 ? (NbtList) value
@@ -1345,7 +1345,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 boolean 的 NBT键.
      * @return 待查找的 boolean.
      */
-    default boolean getDeepBoolean(@NotNull String key) {
+    default boolean getDeepBoolean(@NonNull String key) {
         return getDeepBoolean(key, false);
     }
 
@@ -1356,7 +1356,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key 要获取 boolean 的 NBT键.
      * @return 待查找的 boolean.
      */
-    default @Nullable Boolean getDeepBooleanOrNull(@NotNull String key) {
+    default @Nullable Boolean getDeepBooleanOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsByte() != 0
@@ -1371,14 +1371,14 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param def 如果找不到对应的 NBT 或对应的 NBT 不是 boolean, 则返回的默认值.
      * @return 待查找的 boolean.
      */
-    default boolean getDeepBoolean(@NotNull String key, boolean def) {
+    default boolean getDeepBoolean(@NonNull String key, boolean def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
                 ? ((NbtNumeric<?>) value).getAsByte() != 0
                 : def;
     }
 
-    default void putDeep(@NotNull String key, @NotNull Nbt<?> value, boolean force, char separator, char escape) {
+    default void putDeep(@NonNull String key, @NonNull Nbt<?> value, boolean force, char separator, char escape) {
         List<String> keys = StringUtils.split(key, separator, escape);
 
         NbtComponentLike currentNbtCompound = this;
@@ -1412,11 +1412,11 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
         }
     }
 
-    default void putDeep(@NotNull String key, @NotNull Nbt<?> value, boolean force) {
+    default void putDeep(@NonNull String key, @NonNull Nbt<?> value, boolean force) {
         putDeep(key, value, force, '.', '\\');
     }
 
-    default void putDeep(@NotNull String key, @NotNull Nbt<?> value) {
+    default void putDeep(@NonNull String key, @NonNull Nbt<?> value) {
         putDeep(key, value, false);
     }
 
@@ -1432,7 +1432,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepByte(@NotNull String key, byte value, boolean force) {
+    default void putDeepByte(@NonNull String key, byte value, boolean force) {
         putDeep(key, NbtByte.valueOf(value), force);
     }
 
@@ -1445,7 +1445,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepByte(@NotNull String key, byte value) {
+    default void putDeepByte(@NonNull String key, byte value) {
         putDeepByte(key, value, false);
     }
 
@@ -1461,7 +1461,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepShort(@NotNull String key, short value, boolean force) {
+    default void putDeepShort(@NonNull String key, short value, boolean force) {
         putDeep(key, NbtShort.valueOf(value), force);
     }
 
@@ -1474,7 +1474,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepShort(@NotNull String key, short value) {
+    default void putDeepShort(@NonNull String key, short value) {
         putDeepShort(key, value, false);
     }
 
@@ -1490,7 +1490,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepInt(@NotNull String key, int value, boolean force) {
+    default void putDeepInt(@NonNull String key, int value, boolean force) {
         putDeep(key, NbtInt.valueOf(value), force);
     }
 
@@ -1503,7 +1503,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepInt(@NotNull String key, int value) {
+    default void putDeepInt(@NonNull String key, int value) {
         putDeepInt(key, value, false);
     }
 
@@ -1519,7 +1519,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepLong(@NotNull String key, long value, boolean force) {
+    default void putDeepLong(@NonNull String key, long value, boolean force) {
         putDeep(key, NbtLong.valueOf(value), force);
     }
 
@@ -1532,7 +1532,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepLong(@NotNull String key, long value) {
+    default void putDeepLong(@NonNull String key, long value) {
         putDeepLong(key, value, false);
     }
 
@@ -1548,7 +1548,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepFloat(@NotNull String key, float value, boolean force) {
+    default void putDeepFloat(@NonNull String key, float value, boolean force) {
         putDeep(key, NbtFloat.valueOf(value), force);
     }
 
@@ -1561,7 +1561,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepFloat(@NotNull String key, float value) {
+    default void putDeepFloat(@NonNull String key, float value) {
         putDeepFloat(key, value, false);
     }
 
@@ -1577,7 +1577,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepDouble(@NotNull String key, double value, boolean force) {
+    default void putDeepDouble(@NonNull String key, double value, boolean force) {
         putDeep(key, NbtDouble.valueOf(value), force);
     }
 
@@ -1590,7 +1590,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepDouble(@NotNull String key, double value) {
+    default void putDeepDouble(@NonNull String key, double value) {
         putDeepDouble(key, value, false);
     }
 
@@ -1606,7 +1606,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepString(@NotNull String key, @NotNull String value, boolean force) {
+    default void putDeepString(@NonNull String key, @NonNull String value, boolean force) {
         putDeep(key, NbtString.valueOf(value), force);
     }
 
@@ -1619,7 +1619,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepString(@NotNull String key, @NotNull String value) {
+    default void putDeepString(@NonNull String key, @NonNull String value) {
         putDeepString(key, value, false);
     }
 
@@ -1635,7 +1635,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepByteArray(@NotNull String key, byte[] value, boolean force) {
+    default void putDeepByteArray(@NonNull String key, byte[] value, boolean force) {
         putDeep(key, new NbtByteArray(value), force);
     }
 
@@ -1648,7 +1648,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepByteArray(@NotNull String key, byte[] value) {
+    default void putDeepByteArray(@NonNull String key, byte[] value) {
         putDeepByteArray(key, value, false);
     }
 
@@ -1664,7 +1664,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepByteArray(@NotNull String key, @NotNull List<Byte> value, boolean force) {
+    default void putDeepByteArray(@NonNull String key, @NonNull List<Byte> value, boolean force) {
         putDeep(key, new NbtByteArray(value), force);
     }
 
@@ -1677,7 +1677,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepByteArray(@NotNull String key, @NotNull List<Byte> value) {
+    default void putDeepByteArray(@NonNull String key, @NonNull List<Byte> value) {
         putDeepByteArray(key, value, false);
     }
 
@@ -1693,7 +1693,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepIntArray(@NotNull String key, int[] value, boolean force) {
+    default void putDeepIntArray(@NonNull String key, int[] value, boolean force) {
         putDeep(key, new NbtIntArray(value), force);
     }
 
@@ -1706,7 +1706,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepIntArray(@NotNull String key, int[] value) {
+    default void putDeepIntArray(@NonNull String key, int[] value) {
         putDeepIntArray(key, value, false);
     }
 
@@ -1722,7 +1722,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepIntArray(@NotNull String key, @NotNull List<Integer> value, boolean force) {
+    default void putDeepIntArray(@NonNull String key, @NonNull List<Integer> value, boolean force) {
         putDeep(key, new NbtIntArray(value), force);
     }
 
@@ -1735,7 +1735,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepIntArray(@NotNull String key, @NotNull List<Integer> value) {
+    default void putDeepIntArray(@NonNull String key, @NonNull List<Integer> value) {
         putDeepIntArray(key, value, false);
     }
 
@@ -1751,7 +1751,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepLongArray(@NotNull String key, long[] value, boolean force) {
+    default void putDeepLongArray(@NonNull String key, long[] value, boolean force) {
         putDeep(key, new NbtLongArray(value), force);
     }
 
@@ -1764,7 +1764,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepLongArray(@NotNull String key, long[] value) {
+    default void putDeepLongArray(@NonNull String key, long[] value) {
         putDeepLongArray(key, value, false);
     }
 
@@ -1780,7 +1780,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepLongArray(@NotNull String key, @NotNull List<Long> value, boolean force) {
+    default void putDeepLongArray(@NonNull String key, @NonNull List<Long> value, boolean force) {
         putDeep(key, new NbtLongArray(value), force);
     }
 
@@ -1793,7 +1793,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepLongArray(@NotNull String key, @NotNull List<Long> value) {
+    default void putDeepLongArray(@NonNull String key, @NonNull List<Long> value) {
         putDeepLongArray(key, value, false);
     }
 
@@ -1809,7 +1809,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param value 待设置的 NBT键 的新值.
      * @param force key 无效时是否强制设置.
      */
-    default void putDeepBoolean(@NotNull String key, boolean value, boolean force) {
+    default void putDeepBoolean(@NonNull String key, boolean value, boolean force) {
         putDeep(key, NbtByte.valueOf(value), force);
     }
 
@@ -1822,7 +1822,7 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
      * @param key   待设置的 NBT键.
      * @param value 待设置的 NBT键 的新值.
      */
-    default void putDeepBoolean(@NotNull String key, boolean value) {
+    default void putDeepBoolean(@NonNull String key, boolean value) {
         putDeepBoolean(key, value, false);
     }
 

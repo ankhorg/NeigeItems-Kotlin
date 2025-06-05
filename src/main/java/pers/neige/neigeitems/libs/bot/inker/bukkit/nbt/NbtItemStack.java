@@ -1,8 +1,8 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
+import lombok.NonNull;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
@@ -25,10 +25,10 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
      */
     private final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
 
-    private final ItemStack itemStack;
-    private final RefCraftItemStack craftItemStack;
+    private final @NonNull ItemStack itemStack;
+    private final @Nullable RefCraftItemStack craftItemStack;
 
-    public NbtItemStack(@NotNull ItemStack itemStack) {
+    public NbtItemStack(@NonNull ItemStack itemStack) {
         if (itemStack instanceof RefCraftItemStack) {
             this.itemStack = itemStack;
             this.craftItemStack = (RefCraftItemStack) itemStack;
@@ -44,8 +44,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
         }
     }
 
-    @Nullable
-    public NbtComponentLike getDirectTag() {
+    public @Nullable NbtComponentLike getDirectTag() {
         if (MOJANG_MOTHER_DEAD) {
             return getTag();
         } else {
@@ -57,8 +56,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
         }
     }
 
-    @Nullable
-    public NbtCompound getTag() {
+    public @Nullable NbtCompound getTag() {
         if (craftItemStack == null) {
             RefCraftMetaItem meta = (RefCraftMetaItem) (Object) InvokeUtil.getItemMeta(itemStack);
             if (meta == null) {
@@ -93,7 +91,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
         }
     }
 
-    public void setTag(@NotNull NbtCompound compound) {
+    public void setTag(@NonNull NbtCompound compound) {
         if (craftItemStack == null) {
             InvokeUtil.setItemMeta(itemStack, null);
             RefCraftItemStack craftItemStack = RefCraftItemStack.asCraftCopy(itemStack);
@@ -112,7 +110,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
         }
     }
 
-    public @NotNull NbtCompound getOrCreateTag() {
+    public @NonNull NbtCompound getOrCreateTag() {
         if (craftItemStack == null) {
             RefCraftMetaItem meta = (RefCraftMetaItem) (Object) InvokeUtil.getItemMeta(itemStack);
             if (meta == null) {
@@ -156,7 +154,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
         }
     }
 
-    public ItemStack asBukkitCopy() {
+    public @NonNull ItemStack asBukkitCopy() {
         if (craftItemStack == null) {
             return itemStack.clone();
         } else {
@@ -164,7 +162,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
         }
     }
 
-    public ItemStack asCraftCopy() {
+    public @NonNull ItemStack asCraftCopy() {
         if (craftItemStack == null) {
             return RefCraftItemStack.asCraftCopy(itemStack);
         } else {
@@ -172,7 +170,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
         }
     }
 
-    public ItemStack asCopy() {
+    public @NonNull ItemStack asCopy() {
         if (craftItemStack == null) {
             return NbtUtils.bukkitCopy(itemStack);
         } else {
@@ -188,17 +186,17 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
         return craftItemStack != null;
     }
 
-    public ItemStack asItemStack() {
+    public @NonNull ItemStack asItemStack() {
         return itemStack;
     }
 
     @Override
-    public NbtItemStack clone() throws CloneNotSupportedException {
+    public @NonNull NbtItemStack clone() {
         return new NbtItemStack(NbtUtils.asCopy(itemStack));
     }
 
     @Override
-    public int compareTo(@NotNull NbtItemStack o) {
+    public int compareTo(@NonNull NbtItemStack o) {
         int materialResult = Integer.compare(itemStack.getType().ordinal(), o.itemStack.getType().ordinal());
         if (materialResult != 0) return materialResult;
         int amountResult = Integer.compare(itemStack.getAmount(), o.itemStack.getAmount());

@@ -5,8 +5,9 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.command.selector.ItemSelector;
 import pers.neige.neigeitems.item.ItemGenerator;
@@ -25,42 +26,37 @@ public class ItemArgumentType implements ArgumentType<ItemSelector> {
     private ItemArgumentType() {
     }
 
-    @NotNull
-    public static ItemArgumentType item() {
+    public static @NonNull ItemArgumentType item() {
         return new ItemArgumentType();
     }
 
-    @Nullable
-    public static ItemGenerator getItem(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @Nullable ItemGenerator getItem(
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return getItemSelector(context, name).select(context);
     }
 
-    @NotNull
-    public static ItemSelector getItemSelector(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @NonNull ItemSelector getItemSelector(
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return context.getArgument(name, ItemSelector.class);
     }
 
-    @NotNull
     @Override
-    public ItemSelector parse(
-            @NotNull StringReader reader
+    public @NonNull ItemSelector parse(
+            @NonNull StringReader reader
     ) {
         return new ItemSelector(reader);
     }
 
-    @NotNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(
-            @NotNull CommandContext<S> context,
-            @NotNull SuggestionsBuilder builder
+    public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
+            @NonNull CommandContext<S> context,
+            @NonNull SuggestionsBuilder builder
     ) {
-        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
+        val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ItemManager.INSTANCE.getItems().keySet().forEach((id) -> {
             if (id.toLowerCase().startsWith(lowerCaseRemaining)) {
                 builder.suggest(id);
@@ -69,9 +65,8 @@ public class ItemArgumentType implements ArgumentType<ItemSelector> {
         return builder.buildFuture();
     }
 
-    @NotNull
     @Override
-    public Collection<String> getExamples() {
+    public @NonNull Collection<String> getExamples() {
         return EXAMPLES;
     }
 }

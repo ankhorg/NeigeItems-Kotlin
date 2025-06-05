@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.ref.adventure;
 
+import lombok.NonNull;
 import net.kyori.adventure.text.Component;
 import org.inksnow.ankhinvoke.comments.HandleBy;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.ref.chat.RefComponent;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @HandleBy(reference = "io/papermc/paper/adventure/PaperAdventure", predicates = "craftbukkit_version:[v1_17_R1,)")
 public final class RefPaperAdventure {
     @HandleBy(reference = "Lio/papermc/paper/adventure/PaperAdventure;asAdventure(Lnet/minecraft/network/chat/Component;)Lnet/kyori/adventure/text/Component;", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public static native @NotNull Component asAdventure(@Nullable RefComponent component);
+    public static native @NonNull Component asAdventure(@Nullable RefComponent component);
 
     @HandleBy(reference = "Lio/papermc/paper/adventure/PaperAdventure;asAdventure(Ljava/util/List;)Ljava/util/ArrayList;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public static native ArrayList<Component> asAdventure(List<? extends RefComponent> vanillas);

@@ -1,8 +1,9 @@
 package pers.neige.neigeitems.config;
 
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -10,15 +11,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class BukkitConfigReader implements ConfigReader {
-    @NotNull
-    private final ConfigurationSection handle;
+    private final @NonNull ConfigurationSection handle;
 
-    public BukkitConfigReader(@NotNull ConfigurationSection config) {
+    public BukkitConfigReader(@NonNull ConfigurationSection config) {
         this.handle = config;
     }
 
-    @NotNull
-    public ConfigurationSection getHandle() {
+    public @NonNull ConfigurationSection getHandle() {
         return handle;
     }
 
@@ -28,87 +27,84 @@ public class BukkitConfigReader implements ConfigReader {
     }
 
     @Override
-    @NotNull
-    public Set<String> keySet() {
+    public @NonNull Set<String> keySet() {
         return handle.getKeys(false);
     }
 
     @Override
-    public boolean containsKey(@NotNull String key) {
+    public boolean containsKey(@NonNull String key) {
         return handle.contains(key);
     }
 
     @Override
-    @Nullable
-    public Object get(@NotNull String key) {
+    public @Nullable Object get(@NonNull String key) {
         return handle.get(key);
     }
 
     @Override
-    public String getString(@NotNull String key) {
+    public String getString(@NonNull String key) {
         return handle.getString(key);
     }
 
     @Override
-    @Nullable
     @Contract("_, !null -> !null")
-    public String getString(@NotNull String key, @Nullable String def) {
+    public @Nullable String getString(@NonNull String key, @Nullable String def) {
         return handle.getString(key, def);
     }
 
     @Override
-    public int getInt(@NotNull String key) {
+    public int getInt(@NonNull String key) {
         return handle.getInt(key);
     }
 
     @Override
-    public int getInt(@NotNull String key, int def) {
+    public int getInt(@NonNull String key, int def) {
         return handle.getInt(key, def);
     }
 
     @Override
-    public long getLong(@NotNull String key) {
+    public long getLong(@NonNull String key) {
         return handle.getLong(key);
     }
 
     @Override
-    public long getLong(@NotNull String key, long def) {
+    public long getLong(@NonNull String key, long def) {
         return handle.getLong(key, def);
     }
 
     @Override
-    public double getDouble(@NotNull String key) {
+    public double getDouble(@NonNull String key) {
         return handle.getDouble(key);
     }
 
     @Override
-    public double getDouble(@NotNull String key, double def) {
+    public double getDouble(@NonNull String key, double def) {
         return handle.getDouble(key, def);
     }
 
     @Override
-    public boolean getBoolean(@NotNull String key) {
+    public boolean getBoolean(@NonNull String key) {
         return handle.getBoolean(key);
     }
 
     @Override
-    public boolean getBoolean(@NotNull String key, boolean def) {
+    public boolean getBoolean(@NonNull String key, boolean def) {
         return handle.getBoolean(key, def);
     }
 
     @Override
-    public List<String> getStringList(@NotNull String key) {
+    public @NonNull List<String> getStringList(@NonNull String key) {
         return handle.getStringList(key);
     }
 
     @Override
-    public List<Map<?, ?>> getMapList(@NotNull String key) {
+    public @NonNull List<Map<?, ?>> getMapList(@NonNull String key) {
         return handle.getMapList(key);
     }
 
     @Override
-    public ConfigReader getConfig(@NotNull String key) {
-        ConfigurationSection config = handle.getConfigurationSection(key);
+    public @Nullable ConfigReader getConfig(@NonNull String key) {
+        val config = handle.getConfigurationSection(key);
         return config == null ? null : new BukkitConfigReader(config);
     }
 }

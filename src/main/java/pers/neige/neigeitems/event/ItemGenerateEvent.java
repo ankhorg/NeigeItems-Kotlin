@@ -1,10 +1,10 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.config.ConfigReader;
 
@@ -22,18 +22,12 @@ import java.util.Map;
  */
 public final class ItemGenerateEvent extends BasicEvent {
     private static final HandlerList handlers = new HandlerList();
-    @NotNull
-    private final String id;
-    @Nullable
-    private final OfflinePlayer player;
-    @NotNull
-    private final Map<String, String> cache;
-    @NotNull
-    private final ConfigReader configSection;
-    @Nullable
-    private final ConfigurationSection sections;
-    @NotNull
-    private ItemStack itemStack;
+    private final @NonNull String id;
+    private final @Nullable OfflinePlayer player;
+    private final @NonNull Map<String, String> cache;
+    private final @NonNull ConfigReader configSection;
+    private final @Nullable ConfigurationSection sections;
+    private @NonNull ItemStack itemStack;
 
     /**
      * @param id            物品ID
@@ -44,11 +38,11 @@ public final class ItemGenerateEvent extends BasicEvent {
      * @param sections      节点配置
      */
     public ItemGenerateEvent(
-            @NotNull String id,
+            @NonNull String id,
             @Nullable OfflinePlayer player,
-            @NotNull ItemStack itemStack,
-            @NotNull Map<String, String> cache,
-            @NotNull ConfigReader configSection,
+            @NonNull ItemStack itemStack,
+            @NonNull Map<String, String> cache,
+            @NonNull ConfigReader configSection,
             @Nullable ConfigurationSection sections
     ) {
         this.id = id;
@@ -59,32 +53,28 @@ public final class ItemGenerateEvent extends BasicEvent {
         this.sections = sections;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
     /**
      * 获取物品ID
      */
-    @NotNull
-    public String getId() {
+    public @NonNull String getId() {
         return id;
     }
 
     /**
      * 获取用于解析物品的玩家
      */
-    @Nullable
-    public OfflinePlayer getPlayer() {
+    public @Nullable OfflinePlayer getPlayer() {
         return player;
     }
 
     /**
      * 获取生成的物品
      */
-    @NotNull
-    public ItemStack getItemStack() {
+    public @NonNull ItemStack getItemStack() {
         return itemStack;
     }
 
@@ -94,7 +84,7 @@ public final class ItemGenerateEvent extends BasicEvent {
      * @param itemStack 生成的物品
      */
     public void setItemStack(
-            @NotNull ItemStack itemStack
+            @NonNull ItemStack itemStack
     ) {
         this.itemStack = itemStack;
     }
@@ -102,30 +92,26 @@ public final class ItemGenerateEvent extends BasicEvent {
     /**
      * 获取节点缓存
      */
-    @NotNull
-    public Map<String, String> getCache() {
+    public @NonNull Map<String, String> getCache() {
         return cache;
     }
 
     /**
      * 获取物品配置(经过了节点解析, 不包含节点配置)
      */
-    @NotNull
-    public ConfigReader getConfigSection() {
+    public @NonNull ConfigReader getConfigSection() {
         return configSection;
     }
 
     /**
      * 获取节点配置
      */
-    @Nullable
-    public ConfigurationSection getSections() {
+    public @Nullable ConfigurationSection getSections() {
         return sections;
     }
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

@@ -1,6 +1,6 @@
 package pers.neige.neigeitems.utils.pagination;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pers.neige.neigeitems.utils.pagination.impl.ImmutableListPager;
 import pers.neige.neigeitems.utils.pagination.impl.MutableListPager;
 import pers.neige.neigeitems.utils.pagination.impl.MutableNavMapPager;
@@ -15,7 +15,7 @@ public abstract class Pager<T> {
     /**
      * 页面信息
      */
-    protected final PagerInfo pagerInfo;
+    protected final @NonNull PagerInfo pagerInfo;
 
     protected Pager(int pageSize) {
         this.pagerInfo = new PagerInfo(Math.max(1, pageSize));
@@ -33,7 +33,7 @@ public abstract class Pager<T> {
      * @param clone    是否对传入的 List 进行复制
      * @return 分页工具
      */
-    public static <T> @NotNull Pager<T> fromImmutableList(@NotNull List<T> handle, int pageSize, boolean clone) {
+    public static <T> @NonNull Pager<T> fromImmutableList(@NonNull List<T> handle, int pageSize, boolean clone) {
         return new ImmutableListPager<>(clone ? Collections.unmodifiableList(new ArrayList<>(handle)) : handle, pageSize);
     }
 
@@ -47,7 +47,7 @@ public abstract class Pager<T> {
      * @param pageSize 页大小
      * @return 分页工具
      */
-    public static <T> @NotNull Pager<T> fromImmutableArray(T @NotNull [] handle, int pageSize) {
+    public static <T> @NonNull Pager<T> fromImmutableArray(T @NonNull [] handle, int pageSize) {
         return fromImmutableList(Arrays.asList(handle), pageSize, true);
     }
 
@@ -61,7 +61,7 @@ public abstract class Pager<T> {
      * @param pageSize 页大小
      * @return 分页工具
      */
-    public static <T> @NotNull Pager<T> fromImmutableSet(@NotNull Set<T> handle, int pageSize) {
+    public static <T> @NonNull Pager<T> fromImmutableSet(@NonNull Set<T> handle, int pageSize) {
         return fromImmutableList(Collections.unmodifiableList(new ArrayList<>(handle)), pageSize, false);
     }
 
@@ -75,7 +75,7 @@ public abstract class Pager<T> {
      * @param pageSize 页大小
      * @return 分页工具
      */
-    public static <K, V> @NotNull Pager<Map.Entry<K, V>> fromImmutableMap(@NotNull Map<K, V> handle, int pageSize) {
+    public static <K, V> @NonNull Pager<Map.Entry<K, V>> fromImmutableMap(@NonNull Map<K, V> handle, int pageSize) {
         return fromImmutableList(Collections.unmodifiableList(new ArrayList<>(handle.entrySet())), pageSize, false);
     }
 
@@ -89,7 +89,7 @@ public abstract class Pager<T> {
      * @param pageSize 页大小
      * @return 分页工具
      */
-    public static <T> @NotNull Pager<T> fromMutableList(@NotNull List<T> handle, int pageSize) {
+    public static <T> @NonNull Pager<T> fromMutableList(@NonNull List<T> handle, int pageSize) {
         return new MutableListPager<>(handle, pageSize);
     }
 
@@ -103,7 +103,7 @@ public abstract class Pager<T> {
      * @param pageSize 页大小
      * @return 分页工具
      */
-    public static <T> @NotNull Pager<T> fromMutableNavSet(@NotNull NavigableSet<T> handle, int pageSize) {
+    public static <T> @NonNull Pager<T> fromMutableNavSet(@NonNull NavigableSet<T> handle, int pageSize) {
         return new MutableNavSetPager<>(handle, pageSize);
     }
 
@@ -117,7 +117,7 @@ public abstract class Pager<T> {
      * @param pageSize 页大小
      * @return 分页工具
      */
-    public static <K, V> @NotNull Pager<Map.Entry<K, V>> fromMutableNavMap(@NotNull NavigableMap<K, V> handle, int pageSize) {
+    public static <K, V> @NonNull Pager<Map.Entry<K, V>> fromMutableNavMap(@NonNull NavigableMap<K, V> handle, int pageSize) {
         return new MutableNavMapPager<>(handle, pageSize);
     }
 
@@ -178,7 +178,7 @@ public abstract class Pager<T> {
     /**
      * 获取当前页的元素列表
      */
-    public abstract @NotNull List<T> getCurrentPageElements();
+    public abstract @NonNull List<T> getCurrentPageElements();
 
     /**
      * 检查是否存在下一页

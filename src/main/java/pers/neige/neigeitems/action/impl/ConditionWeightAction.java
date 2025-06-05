@@ -1,7 +1,8 @@
 package pers.neige.neigeitems.action.impl;
 
 import kotlin.Pair;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.*;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
@@ -15,20 +16,16 @@ import javax.script.CompiledScript;
 import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ConditionWeightAction extends Action {
     private final boolean order;
-    @NotNull
-    private final List<Pair<Pair<Condition, Action>, Evaluator<Double>>> actions = new ArrayList<>();
-    @Nullable
-    private String amountScriptString = null;
-    @Nullable
-    private CompiledScript amountScript = null;
+    private final @NonNull List<Pair<Pair<Condition, Action>, Evaluator<Double>>> actions = new ArrayList<>();
+    private final @Nullable String amountScriptString;
+    private @Nullable CompiledScript amountScript = null;
     private Integer amount = null;
 
-    public ConditionWeightAction(@NotNull BaseActionManager manager, @NotNull ConfigReader action) {
+    public ConditionWeightAction(@NonNull BaseActionManager manager, @NonNull ConfigReader action) {
         super(manager);
         this.amountScriptString = action.getString("amount");
         if (this.amountScriptString != null) {
@@ -47,39 +44,35 @@ public class ConditionWeightAction extends Action {
     }
 
     private void checkAsyncSafe() {
-        for (Pair<Pair<Condition, Action>, Evaluator<Double>> action : actions) {
+        for (val action : actions) {
             if (action.getFirst().getSecond().isAsyncSafe()) return;
         }
         this.asyncSafe = false;
     }
 
-    public void initActions(@NotNull BaseActionManager manager, @Nullable Object actions) {
+    public void initActions(@NonNull BaseActionManager manager, @Nullable Object actions) {
         if (!(actions instanceof List<?>)) return;
-        List<?> list = (List<?>) actions;
-        for (Object rawAction : list) {
-            if (!(rawAction instanceof Map<?, ?>)) continue;
-            Map<?, ?> mapAction = (Map<?, ?>) rawAction;
-            Object rawWeight = mapAction.get("weight");
-            if (rawWeight == null) rawWeight = "1";
-            Object conditionString = mapAction.get("condition");
-            Condition condition = new Condition(manager, conditionString == null ? null : conditionString.toString());
-            Action action = manager.compile(mapAction.get("actions"));
-            this.actions.add(new Pair<>(new Pair<>(condition, action), Evaluator.createDoubleEvaluator(manager, rawWeight.toString())));
+        val list = (List<?>) actions;
+        for (val rawAction : list) {
+            val config = ConfigReader.parse(rawAction);
+            if (config == null) continue;
+            val rawWeight = config.getString("weight", "1");
+            val condition = new Condition(manager, config.getString("condition"));
+            val action = manager.compile(config.get("actions"));
+            this.actions.add(new Pair<>(new Pair<>(condition, action), Evaluator.createDoubleEvaluator(manager, rawWeight)));
         }
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.CONDITION_WEIGHT;
     }
 
-    @Nullable
-    public String getAmountScriptString() {
+    public @Nullable String getAmountScriptString() {
         return amountScriptString;
     }
 
-    @Nullable
-    public CompiledScript getAmountScript() {
+    public @Nullable CompiledScript getAmountScript() {
         return amountScript;
     }
 
@@ -87,18 +80,16 @@ public class ConditionWeightAction extends Action {
         return order;
     }
 
-    @NotNull
-    public List<Pair<Pair<Condition, Action>, Evaluator<Double>>> getActions() {
+    public @NonNull List<Pair<Pair<Condition, Action>, Evaluator<Double>>> getActions() {
         return actions;
     }
 
-    @NotNull
-    public List<Pair<Action, Double>> getActions(@NotNull ActionContext context) {
-        List<Pair<Action, Double>> result = new ArrayList<>();
-        for (Pair<Pair<Condition, Action>, Evaluator<Double>> action : this.actions) {
-            Pair<Condition, Action> info = action.getFirst();
+    public @NonNull List<Pair<Action, Double>> getActions(@NonNull ActionContext context) {
+        val result = new ArrayList<Pair<Action, Double>>();
+        for (val action : this.actions) {
+            val info = action.getFirst();
             if (info.getFirst().easyCheck(context)) {
-                double weight = action.getSecond().getOrDefault(context, 0D);
+                val weight = action.getSecond().getOrDefault(context, 0D);
                 if (weight <= 0) continue;
                 result.add(new Pair<>(info.getSecond(), weight));
             }
@@ -106,7 +97,7 @@ public class ConditionWeightAction extends Action {
         return result;
     }
 
-    public int getAmount(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
+    public int getAmount(@NonNull BaseActionManager manager, @NonNull ActionContext context) {
         if (this.amount != null) return this.amount;
         if (this.amountScript == null) {
             return 1;
@@ -120,9 +111,9 @@ public class ConditionWeightAction extends Action {
         } catch (Throwable error) {
             if (this.amountScriptString != null) {
                 manager.getPlugin().getLogger().warning("ConditionWeight动作数量解析异常, 数量脚本内容如下:");
-                String[] lines = this.amountScriptString.split("\n");
+                val lines = this.amountScriptString.split("\n");
                 for (int i = 0; i < lines.length; i++) {
-                    String conditionLine = lines[i];
+                    val conditionLine = lines[i];
                     manager.getPlugin().getLogger().warning((i + 1) + ". " + conditionLine);
                 }
             } else {
@@ -142,8 +133,7 @@ public class ConditionWeightAction extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(@NotNull BaseActionManager manager, @NotNull ActionContext context) {
+    protected @NonNull CompletableFuture<ActionResult> eval(@NonNull BaseActionManager manager, @NonNull ActionContext context) {
         return manager.runAction(this, context);
     }
 }

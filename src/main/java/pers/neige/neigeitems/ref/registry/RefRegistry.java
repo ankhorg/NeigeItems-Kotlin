@@ -1,9 +1,8 @@
 package pers.neige.neigeitems.ref.registry;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.ref.RefMinecraftKey;
-
-import javax.annotation.Nullable;
 
 @HandleBy(reference = "net/minecraft/core/Registry", isInterface = true, predicates = "craftbukkit_version:[v1_17_R1,)")
 public interface RefRegistry<T> {

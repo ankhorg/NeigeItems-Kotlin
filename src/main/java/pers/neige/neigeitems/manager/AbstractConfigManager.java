@@ -1,9 +1,11 @@
 package pers.neige.neigeitems.manager;
 
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.manager.logger.ILogger;
@@ -21,24 +23,24 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 
 public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K, V> {
-    protected final @NotNull String pluginName;
-    protected final @NotNull ILogger logger;
-    protected final @NotNull BiFunction<ConfigurationSection, String, R> configGetter;
-    protected final @NotNull Function<String, K> keyConverter;
-    protected final @NotNull BiFunction<K, R, V> converter;
-    protected final @NotNull String elementName;
-    protected final @NotNull String directory;
-    protected final @NotNull ConcurrentHashMap<String, FileConfig> fileConfigs = new ConcurrentHashMap<>();
-    protected final @NotNull ConcurrentHashMap<K, RawConfig<R>> rawConfigs = new ConcurrentHashMap<>();
+    protected final @NonNull String pluginName;
+    protected final @NonNull ILogger logger;
+    protected final @NonNull BiFunction<ConfigurationSection, String, R> configGetter;
+    protected final @NonNull Function<String, K> keyConverter;
+    protected final @NonNull BiFunction<K, R, V> converter;
+    protected final @NonNull String elementName;
+    protected final @NonNull String directory;
+    protected final @NonNull ConcurrentHashMap<String, FileConfig> fileConfigs = new ConcurrentHashMap<>();
+    protected final @NonNull ConcurrentHashMap<K, RawConfig<R>> rawConfigs = new ConcurrentHashMap<>();
     protected boolean notNullConfig = true;
 
     public AbstractConfigManager(
-            @NotNull JavaPlugin plugin,
-            @NotNull String elementName,
-            @NotNull String directory,
-            @NotNull BiFunction<ConfigurationSection, String, R> configGetter,
-            @NotNull Function<String, K> keyConverter,
-            @NotNull BiFunction<K, R, V> converter
+            @NonNull JavaPlugin plugin,
+            @NonNull String elementName,
+            @NonNull String directory,
+            @NonNull BiFunction<ConfigurationSection, String, R> configGetter,
+            @NonNull Function<String, K> keyConverter,
+            @NonNull BiFunction<K, R, V> converter
     ) {
         this.pluginName = plugin.getName();
         this.logger = new JavaLogger(plugin.getLogger());
@@ -50,13 +52,13 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
     }
 
     public AbstractConfigManager(
-            @NotNull String pluginName,
-            @NotNull Logger logger,
-            @NotNull String elementName,
-            @NotNull String directory,
-            @NotNull BiFunction<ConfigurationSection, String, R> configGetter,
-            @NotNull Function<String, K> keyConverter,
-            @NotNull BiFunction<K, R, V> converter
+            @NonNull String pluginName,
+            @NonNull Logger logger,
+            @NonNull String elementName,
+            @NonNull String directory,
+            @NonNull BiFunction<ConfigurationSection, String, R> configGetter,
+            @NonNull Function<String, K> keyConverter,
+            @NonNull BiFunction<K, R, V> converter
     ) {
         this.pluginName = pluginName;
         this.logger = new JavaLogger(logger);
@@ -68,13 +70,13 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
     }
 
     public AbstractConfigManager(
-            @NotNull String pluginName,
-            @NotNull org.slf4j.Logger logger,
-            @NotNull String elementName,
-            @NotNull String directory,
-            @NotNull BiFunction<ConfigurationSection, String, R> configGetter,
-            @NotNull Function<String, K> keyConverter,
-            @NotNull BiFunction<K, R, V> converter
+            @NonNull String pluginName,
+            @NonNull org.slf4j.Logger logger,
+            @NonNull String elementName,
+            @NonNull String directory,
+            @NonNull BiFunction<ConfigurationSection, String, R> configGetter,
+            @NonNull Function<String, K> keyConverter,
+            @NonNull BiFunction<K, R, V> converter
     ) {
         this.pluginName = pluginName;
         this.logger = new Slf4jLogger(logger);
@@ -85,20 +87,19 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
         this.converter = converter;
     }
 
-    public @NotNull ConcurrentHashMap<String, FileConfig> getFileConfigs() {
+    public @NonNull ConcurrentHashMap<String, FileConfig> getFileConfigs() {
         return fileConfigs;
     }
 
-    public @NotNull ConcurrentHashMap<K, RawConfig<R>> getRawConfigs() {
+    public @NonNull ConcurrentHashMap<K, RawConfig<R>> getRawConfigs() {
         return rawConfigs;
     }
 
     /**
      * 通过给定的路径加载所有文件对象
      */
-    @NotNull
-    protected List<File> getFiles() {
-        File file = new File(new File(NeigeItems.getInstance().getDataFolder().getParentFile(), pluginName), directory);
+    protected @NonNull List<File> getFiles() {
+        val file = new File(new File(NeigeItems.getInstance().getDataFolder().getParentFile(), pluginName), directory);
         if (file.isDirectory()) {
             return ConfigUtils.getAllFiles(file);
         } else {
@@ -111,15 +112,15 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
      */
     protected void loadConfigs() {
         fileConfigs.clear();
-        String prefix = "plugins" + File.separator + pluginName + File.separator + directory + File.separator;
-        for (File file : getFiles()) {
+        val prefix = "plugins" + File.separator + pluginName + File.separator + directory + File.separator;
+        for (val file : getFiles()) {
             if (!file.getName().endsWith(".yml")) continue;
             try {
-                String path = file.getPath();
+                var path = file.getPath();
                 if (path.startsWith(prefix)) {
                     path = path.substring(prefix.length());
                 }
-                FileConfig fileConfig = new FileConfig(path, file);
+                val fileConfig = new FileConfig(path, file);
                 fileConfigs.put(path, fileConfig);
             } catch (Throwable throwable) {
                 logger.warn("error occurred while loading " + elementName + " file: " + file.getPath(), throwable);
@@ -146,14 +147,14 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
      * 解析配置文件获取配置组件
      * 默认逻辑: 通过 getKeys(false) 获取当前配置文件的所有顶级键, 然后通过 configGetter 获取对应内容, 通过 keyConverter 转换键类型
      */
-    protected void loadRawConfig(@NotNull FileConfig fileConfig) {
-        String currentKey = "";
+    protected void loadRawConfig(@NonNull FileConfig fileConfig) {
+        var currentKey = "";
         try {
-            for (String rawKey : fileConfig.config.getKeys(false)) {
+            for (val rawKey : fileConfig.config.getKeys(false)) {
                 currentKey = rawKey;
-                R value = configGetter.apply(fileConfig.config, rawKey);
+                val value = configGetter.apply(fileConfig.config, rawKey);
                 if (value == null && notNullConfig) return;
-                K key = keyConverter.apply(rawKey);
+                val key = keyConverter.apply(rawKey);
                 if (key == null) {
                     throw new InvalidParameterException("convert result of " + elementName + " key is null! current key: " + rawKey);
                 }
@@ -179,7 +180,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
         loadRawConfigs();
         rawConfigs.forEach((id, rawConfig) -> {
             try {
-                V result = converter.apply(id, rawConfig.config);
+                val result = converter.apply(id, rawConfig.config);
                 if (result == null) return;
                 put(id, result);
             } catch (Throwable throwable) {
@@ -189,39 +190,39 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
     }
 
     public static class FileConfig {
-        private final @NotNull String path;
-        private final @NotNull File file;
-        private final @NotNull YamlConfiguration config;
+        private final @NonNull String path;
+        private final @NonNull File file;
+        private final @NonNull YamlConfiguration config;
 
-        public FileConfig(@NotNull String path, @NotNull File file) {
+        public FileConfig(@NonNull String path, @NonNull File file) {
             this.path = path;
             this.file = file;
             this.config = YamlConfiguration.loadConfiguration(file);
         }
 
-        public @NotNull String getPath() {
+        public @NonNull String getPath() {
             return path;
         }
 
-        public @NotNull File getFile() {
+        public @NonNull File getFile() {
             return file;
         }
 
-        public @NotNull YamlConfiguration getConfig() {
+        public @NonNull YamlConfiguration getConfig() {
             return config;
         }
     }
 
     public static class RawConfig<R> {
-        private final @NotNull FileConfig fileConfig;
+        private final @NonNull FileConfig fileConfig;
         private final @Nullable R config;
 
-        public RawConfig(@NotNull FileConfig fileConfig, @Nullable R config) {
+        public RawConfig(@NonNull FileConfig fileConfig, @Nullable R config) {
             this.fileConfig = fileConfig;
             this.config = config;
         }
 
-        public @NotNull FileConfig getFileConfig() {
+        public @NonNull FileConfig getFileConfig() {
             return fileConfig;
         }
 

@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.utils.pagination;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.pagination.impl.scroll.ListScrollPager;
 import pers.neige.neigeitems.utils.pagination.impl.scroll.MutableNavMapScrollPager;
@@ -15,7 +16,7 @@ import java.util.stream.StreamSupport;
  * 滚动分页工具, 非并发安全(曾尝试进行并发安全处理, 但失败了)
  */
 public abstract class ScrollPager<T> {
-    protected final PagerInfo pagerInfo;
+    protected final @NonNull PagerInfo pagerInfo;
     protected final @Nullable Predicate<T> filter;
 
     protected ScrollPager(int pageSize, @Nullable Predicate<T> filter) {
@@ -34,8 +35,8 @@ public abstract class ScrollPager<T> {
      * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <T> @NotNull ScrollPager<T> fromImmutableIterable(@NotNull Iterable<T> handle, int pageSize, @Nullable Predicate<T> filter) {
-        List<T> handleClone = StreamSupport.stream(handle.spliterator(), false)
+    public static <T> @NonNull ScrollPager<T> fromImmutableIterable(@NonNull Iterable<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+        val handleClone = StreamSupport.stream(handle.spliterator(), false)
                 .filter(t -> filter == null || filter.test(t))
                 .collect(Collectors.toList());
         return new ListScrollPager<>(Collections.unmodifiableList(handleClone), pageSize, null);
@@ -52,7 +53,7 @@ public abstract class ScrollPager<T> {
      * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <T> @NotNull ScrollPager<T> fromImmutableArray(T @NotNull [] handle, int pageSize, @Nullable Predicate<T> filter) {
+    public static <T> @NonNull ScrollPager<T> fromImmutableArray(T @NonNull [] handle, int pageSize, @Nullable Predicate<T> filter) {
         return fromImmutableIterable(Arrays.asList(handle), pageSize, filter);
     }
 
@@ -67,7 +68,7 @@ public abstract class ScrollPager<T> {
      * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <T> @NotNull ScrollPager<T> fromMutableList(@NotNull List<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+    public static <T> @NonNull ScrollPager<T> fromMutableList(@NonNull List<T> handle, int pageSize, @Nullable Predicate<T> filter) {
         return new ListScrollPager<>(handle, pageSize, filter);
     }
 
@@ -82,7 +83,7 @@ public abstract class ScrollPager<T> {
      * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <T> @NotNull ScrollPager<T> fromMutableNavSet(@NotNull NavigableSet<T> handle, int pageSize, @Nullable Predicate<T> filter) {
+    public static <T> @NonNull ScrollPager<T> fromMutableNavSet(@NonNull NavigableSet<T> handle, int pageSize, @Nullable Predicate<T> filter) {
         return new MutableNavSetScrollPager<>(handle, pageSize, filter);
     }
 
@@ -97,7 +98,7 @@ public abstract class ScrollPager<T> {
      * @param filter   元素过滤器
      * @return 分页工具
      */
-    public static <K, V> @NotNull ScrollPager<Map.Entry<K, V>> fromMutableNavMap(@NotNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
+    public static <K, V> @NonNull ScrollPager<Map.Entry<K, V>> fromMutableNavMap(@NonNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
         return new MutableNavMapScrollPager<>(handle, pageSize, filter);
     }
 
@@ -137,7 +138,7 @@ public abstract class ScrollPager<T> {
     /**
      * 获取当前页的元素列表
      */
-    public abstract @NotNull List<T> getCurrentPageElements();
+    public abstract @NonNull List<T> getCurrentPageElements();
 
     /**
      * 获取总页数

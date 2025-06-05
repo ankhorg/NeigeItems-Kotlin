@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.action.container;
 
+import lombok.NonNull;
 import org.bukkit.configuration.ConfigurationSection;
-import org.jetbrains.annotations.NotNull;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -11,21 +11,16 @@ import pers.neige.neigeitems.utils.SchedulerUtils;
 import java.util.concurrent.CompletableFuture;
 
 public class ActionTrigger {
-    @NotNull
-    private final BaseActionManager actionManager;
-    @NotNull
-    private final String type;
-    @NotNull
-    private Action actions;
-    @NotNull
-    private Action async;
-    @NotNull
-    private Action sync;
+    private final @NonNull BaseActionManager actionManager;
+    private final @NonNull String type;
+    private @NonNull Action actions;
+    private @NonNull Action async;
+    private @NonNull Action sync;
 
     public ActionTrigger(
-            @NotNull BaseActionManager actionManager,
-            @NotNull String type,
-            @NotNull ConfigurationSection config
+            @NonNull BaseActionManager actionManager,
+            @NonNull String type,
+            @NonNull ConfigurationSection config
     ) {
         this.actionManager = actionManager;
         this.type = type;
@@ -35,9 +30,9 @@ public class ActionTrigger {
     }
 
     public ActionTrigger(
-            @NotNull BaseActionManager actionManager,
-            @NotNull String type,
-            @NotNull Action actions
+            @NonNull BaseActionManager actionManager,
+            @NonNull String type,
+            @NonNull Action actions
     ) {
         this.actionManager = actionManager;
         this.type = type;
@@ -46,46 +41,40 @@ public class ActionTrigger {
         this.sync = actionManager.NULL_ACTION;
     }
 
-    @NotNull
-    public BaseActionManager getActionManager() {
+    public @NonNull BaseActionManager getActionManager() {
         return actionManager;
     }
 
-    @NotNull
-    public String getType() {
+    public @NonNull String getType() {
         return type;
     }
 
-    @NotNull
-    public Action getActions() {
+    public @NonNull Action getActions() {
         return actions;
     }
 
-    public void setActions(@NotNull Action actions) {
+    public void setActions(@NonNull Action actions) {
         this.actions = actions;
     }
 
-    @NotNull
-    public Action getAsync() {
+    public @NonNull Action getAsync() {
         return async;
     }
 
-    public void setAsync(@NotNull Action async) {
+    public void setAsync(@NonNull Action async) {
         this.async = async;
     }
 
-    @NotNull
-    public Action getSync() {
+    public @NonNull Action getSync() {
         return sync;
     }
 
-    public void setSync(@NotNull Action sync) {
+    public void setSync(@NonNull Action sync) {
         this.sync = sync;
     }
 
-    @NotNull
-    public CompletableFuture<ActionResult> run(
-            @NotNull ActionContext context
+    public @NonNull CompletableFuture<ActionResult> run(
+            @NonNull ActionContext context
     ) {
         async(context);
         sync(context);
@@ -93,7 +82,7 @@ public class ActionTrigger {
     }
 
     public void async(
-            @NotNull ActionContext context
+            @NonNull ActionContext context
     ) {
         SchedulerUtils.async(actionManager.getPlugin(), () -> {
             async.eval(context.clone());
@@ -101,7 +90,7 @@ public class ActionTrigger {
     }
 
     public void sync(
-            @NotNull ActionContext context
+            @NonNull ActionContext context
     ) {
         SchedulerUtils.sync(actionManager.getPlugin(), () -> {
             sync.eval(context.clone());

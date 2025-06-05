@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import lombok.NonNull;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.TranslatableComponent;
@@ -7,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.lang.LocaleI18n;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtType;
@@ -71,9 +71,8 @@ public class TranslationUtils {
      * @param itemStack 待获取物品.
      * @return 显示名或翻译名.
      */
-    @NotNull
-    public static String getDisplayOrTranslationName(
-            @NotNull ItemStack itemStack
+    public static @NonNull String getDisplayOrTranslationName(
+            @NonNull ItemStack itemStack
     ) {
         String displayName = getDisplayName(itemStack);
         return displayName == null ? TranslationUtils.getTranslationName(itemStack) : displayName;
@@ -85,9 +84,8 @@ public class TranslationUtils {
      * @param itemStack 待获取物品.
      * @return 显示名或翻译键.
      */
-    @NotNull
-    public static BaseComponent getDisplayOrTranslationComponent(
-            @NotNull ItemStack itemStack
+    public static @NonNull BaseComponent getDisplayOrTranslationComponent(
+            @NonNull ItemStack itemStack
     ) {
         String displayName = getDisplayName(itemStack);
         return displayName == null ? TranslationUtils.getTranslationComponent(itemStack) : new TextComponent(displayName);
@@ -99,9 +97,8 @@ public class TranslationUtils {
      * @param itemStack 待获取物品.
      * @return 显示名.
      */
-    @Nullable
-    public static String getDisplayName(
-            @NotNull ItemStack itemStack
+    public static @Nullable String getDisplayName(
+            @NonNull ItemStack itemStack
     ) {
         if (itemStack instanceof RefCraftItemStack) {
             return getDisplayNameFromCraftItemStack(itemStack);
@@ -123,8 +120,7 @@ public class TranslationUtils {
      * @param itemStack 待获取物品.
      * @return 显示名.
      */
-    @Nullable
-    public static String getDisplayNameFromCraftItemStack(@Nullable ItemStack itemStack) {
+    public static @Nullable String getDisplayNameFromCraftItemStack(@Nullable ItemStack itemStack) {
         if (!(itemStack instanceof RefCraftItemStack) || itemStack.getType() == Material.AIR) return null;
         if (MOJANG_MOTHER_DEAD) {
             RefComponent name = ((RefDataComponentHolder) (Object) ((RefCraftItemStack) itemStack).handle).get(RefDataComponents.CUSTOM_NAME);
@@ -153,9 +149,8 @@ public class TranslationUtils {
      * @param json 待转换json.
      * @return 传统文本.
      */
-    @NotNull
-    public static String toLegacyText(
-            @NotNull String json
+    public static @NonNull String toLegacyText(
+            @NonNull String json
     ) {
         if (V12) {
             return json;
@@ -174,9 +169,8 @@ public class TranslationUtils {
      * @param json 待转换json.
      * @return 传统文本.
      */
-    @NotNull
-    public static String toJsonText(
-            @NotNull String json
+    public static @NonNull String toJsonText(
+            @NonNull String json
     ) {
         if (CbVersion.v1_16_R3.isSupport()) {
             return fromStringToJSON(json);
@@ -191,8 +185,7 @@ public class TranslationUtils {
      * @param jsonMessage 待转换json.
      * @return 传统文本.
      */
-    @Nullable
-    public static String fromJSONComponent(
+    public static @Nullable String fromJSONComponent(
             @Nullable String jsonMessage
     ) {
         if (jsonMessage == null) return null;
@@ -236,7 +229,7 @@ public class TranslationUtils {
      * @return 是否包含自定义显示名.
      */
     public static boolean hasDisplayName(
-            @NotNull ItemStack itemStack
+            @NonNull ItemStack itemStack
     ) {
         if (itemStack instanceof RefCraftItemStack) {
             if (itemStack.getType() != Material.AIR) {
@@ -262,9 +255,8 @@ public class TranslationUtils {
      * @param itemStack 待获取物品.
      * @return 翻译名.
      */
-    @NotNull
-    public static String getTranslationName(
-            @NotNull ItemStack itemStack
+    public static @NonNull String getTranslationName(
+            @NonNull ItemStack itemStack
     ) {
         RefNmsItemStack nmsItemStack;
         if (itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
@@ -395,9 +387,8 @@ public class TranslationUtils {
      * @param itemStack 待获取物品.
      * @return 包含翻译键的 BaseComponent.
      */
-    @NotNull
-    public static BaseComponent getTranslationComponent(
-            @NotNull ItemStack itemStack
+    public static @NonNull BaseComponent getTranslationComponent(
+            @NonNull ItemStack itemStack
     ) {
         RefNmsItemStack nmsItemStack;
         if (itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
@@ -528,9 +519,8 @@ public class TranslationUtils {
      * @param entity 待获取实体.
      * @return 显示名或翻译名.
      */
-    @NotNull
-    public static String getDisplayOrTranslationName(
-            @NotNull Entity entity
+    public static @NonNull String getDisplayOrTranslationName(
+            @NonNull Entity entity
     ) {
         String name = entity.getCustomName();
         if (name != null) {
@@ -545,9 +535,8 @@ public class TranslationUtils {
      * @param entity 待获取实体.
      * @return 显示名或翻译键.
      */
-    @NotNull
-    public static BaseComponent getDisplayOrTranslationComponent(
-            @NotNull Entity entity
+    public static @NonNull BaseComponent getDisplayOrTranslationComponent(
+            @NonNull Entity entity
     ) {
         String name = entity.getCustomName();
         if (name != null) {
@@ -562,9 +551,8 @@ public class TranslationUtils {
      * @param entity 待获取实体.
      * @return 翻译名.
      */
-    @NotNull
-    public static String getTranslationName(
-            @NotNull Entity entity
+    public static @NonNull String getTranslationName(
+            @NonNull Entity entity
     ) {
         String descriptionId = getDescriptionId(entity);
         if (descriptionId != null) {
@@ -580,9 +568,8 @@ public class TranslationUtils {
      * @param entity 待获取实体.
      * @return 翻译键.
      */
-    @NotNull
-    public static BaseComponent getTranslationComponent(
-            @NotNull Entity entity
+    public static @NonNull BaseComponent getTranslationComponent(
+            @NonNull Entity entity
     ) {
         String descriptionId = getDescriptionId(entity);
         if (descriptionId != null) {
@@ -598,9 +585,8 @@ public class TranslationUtils {
      * @param entity 待检测实体.
      * @return DescriptionId.
      */
-    @Nullable
-    public static String getDescriptionId(
-            @NotNull Entity entity
+    public static @Nullable String getDescriptionId(
+            @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -620,9 +606,8 @@ public class TranslationUtils {
      * @param material 待检测材质.
      * @return DescriptionId.
      */
-    @Nullable
-    public static String getDescriptionId(
-            @NotNull Material material
+    public static @Nullable String getDescriptionId(
+            @NonNull Material material
     ) {
         RefItem item = RefCraftMagicNumbers.getItem(material);
         if (item == null) return null;

@@ -5,10 +5,11 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import lombok.NonNull;
+import lombok.val;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.command.selector.PlayerSelector;
 
@@ -25,42 +26,37 @@ public class PlayerArgumentType implements ArgumentType<PlayerSelector> {
     private PlayerArgumentType() {
     }
 
-    @NotNull
-    public static PlayerArgumentType player() {
+    public static @NonNull PlayerArgumentType player() {
         return new PlayerArgumentType();
     }
 
-    @Nullable
-    public static Player getPlayer(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @Nullable Player getPlayer(
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return getPlayerSelector(context, name).select(context);
     }
 
-    @NotNull
-    public static PlayerSelector getPlayerSelector(
-            @NotNull CommandContext<CommandSender> context,
-            @NotNull String name
+    public static @NonNull PlayerSelector getPlayerSelector(
+            @NonNull CommandContext<CommandSender> context,
+            @NonNull String name
     ) {
         return context.getArgument(name, PlayerSelector.class);
     }
 
-    @NotNull
     @Override
-    public PlayerSelector parse(
-            @NotNull StringReader reader
+    public @NonNull PlayerSelector parse(
+            @NonNull StringReader reader
     ) {
         return new PlayerSelector(reader);
     }
 
-    @NotNull
     @Override
-    public <S> CompletableFuture<Suggestions> listSuggestions(
-            @NotNull CommandContext<S> context,
-            @NotNull SuggestionsBuilder builder
+    public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
+            @NonNull CommandContext<S> context,
+            @NonNull SuggestionsBuilder builder
     ) {
-        String lowerCaseRemaining = builder.getRemaining().toLowerCase();
+        val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         if ("me".startsWith(lowerCaseRemaining)) {
             builder.suggest("me");
         }
@@ -73,9 +69,8 @@ public class PlayerArgumentType implements ArgumentType<PlayerSelector> {
         return builder.buildFuture();
     }
 
-    @NotNull
     @Override
-    public Collection<String> getExamples() {
+    public @NonNull Collection<String> getExamples() {
         return EXAMPLES;
     }
 }

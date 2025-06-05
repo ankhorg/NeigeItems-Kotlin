@@ -1,6 +1,8 @@
 package pers.neige.neigeitems.utils.pagination.impl.scroll;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
+import lombok.var;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.utils.pagination.ScrollPager;
 
@@ -9,16 +11,16 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>> {
-    private final @NotNull NavigableMap<K, V> handle;
-    private final @NotNull AtomicReference<K> cursorKey = new AtomicReference<>();
+    private final @NonNull NavigableMap<K, V> handle;
+    private final @NonNull AtomicReference<K> cursorKey = new AtomicReference<>();
 
-    public MutableNavMapScrollPager(@NotNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
+    public MutableNavMapScrollPager(@NonNull NavigableMap<K, V> handle, int pageSize, @Nullable Predicate<Map.Entry<K, V>> filter) {
         super(pageSize, filter);
         this.handle = handle;
         resetOffset();
     }
 
-    public @NotNull NavigableMap<K, V> getHandle() {
+    public @NonNull NavigableMap<K, V> getHandle() {
         return handle;
     }
 
@@ -64,15 +66,15 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
     @Override
     public void moveOffset(int delta) {
         if (delta == 0 || handle.isEmpty()) return;
-        K current = getCursor();
+        var current = getCursor();
         if (current == null) {
             current = handle.firstKey();
         }
 
-        boolean reverse = delta < 0;
-        int absDelta = Math.abs(delta);
+        val reverse = delta < 0;
+        val absDelta = Math.abs(delta);
 
-        Iterator<K> it = reverse ?
+        var it = reverse ?
                 handle.headMap(current, false).descendingKeySet().iterator() :
                 handle.tailMap(current, false).navigableKeySet().iterator();
 
@@ -91,18 +93,18 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
             moveOffset(delta);
             return;
         }
-        K current = getCursor();
+        var current = getCursor();
         if (current == null) {
             current = handle.firstKey();
         }
-        Iterator<Map.Entry<K, V>> it = handle.tailMap(current, true).entrySet().iterator();
+        var it = handle.tailMap(current, true).entrySet().iterator();
         if (!it.hasNext()) return;
-        Map.Entry<K, V> currentEntry = it.next();
+        val currentEntry = it.next();
         if (filter.test(currentEntry)) return;
         K nextKey = null;
-        int match = 0;
+        var match = 0;
         while (it.hasNext()) {
-            Map.Entry<K, V> entry = it.next();
+            val entry = it.next();
             nextKey = entry.getKey();
             if (filter.test(entry)) {
                 match++;
@@ -113,26 +115,26 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
     }
 
     @Override
-    public @NotNull List<Map.Entry<K, V>> getCurrentPageElements() {
-        K current = getCursor();
+    public @NonNull List<Map.Entry<K, V>> getCurrentPageElements() {
+        val current = getCursor();
         if (current == null || handle.isEmpty()) return Collections.emptyList();
 
-        List<Map.Entry<K, V>> page = new ArrayList<>(getPageSize());
-        NavigableMap<K, V> tail = handle.tailMap(current, true);
-        Iterator<Map.Entry<K, V>> it = tail.entrySet().iterator();
+        val page = new ArrayList<Map.Entry<K, V>>(getPageSize());
+        val tail = handle.tailMap(current, true);
+        var it = tail.entrySet().iterator();
 
         while (it.hasNext() && page.size() < getPageSize()) {
-            Map.Entry<K, V> element = it.next();
+            val element = it.next();
             if (filter == null || filter.test(element)) page.add(element);
         }
         if (current == handle.firstKey()) return page;
 
         if (page.size() < getPageSize()) {
-            NavigableMap<K, V> head = handle.headMap(current, false);
+            val head = handle.headMap(current, false);
             it = head.descendingMap().entrySet().iterator();
 
             while (it.hasNext() && page.size() < getPageSize()) {
-                Map.Entry<K, V> element = it.next();
+                val element = it.next();
                 if (filter == null || filter.test(element)) page.add(0, element);
             }
         }
@@ -146,15 +148,15 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
 
     private <C extends Comparable<C>> boolean isLast() {
         if (handle.isEmpty()) return true;
-        C current = (C) getCursor();
-        C last = (C) handle.lastKey();
+        val current = (C) getCursor();
+        val last = (C) handle.lastKey();
         return current.compareTo(last) >= 0;
     }
 
     private <C extends Comparable<C>> boolean isFirst() {
         if (handle.isEmpty()) return true;
-        C current = (C) getCursor();
-        C first = (C) handle.firstKey();
+        val current = (C) getCursor();
+        val first = (C) handle.firstKey();
         return current.compareTo(first) <= 0;
     }
 

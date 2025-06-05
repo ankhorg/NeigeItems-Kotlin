@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Item;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.entity.RefCraftItem;
@@ -61,9 +61,8 @@ public class EntityItemUtils {
      * @param item 待检测物品.
      * @return 掉落物实体的已存活时长(tick).
      */
-    @Nullable
-    public static Integer getAge(
-            @NotNull Item item
+    public static @Nullable Integer getAge(
+            @NonNull Item item
     ) {
         if ((Object) item instanceof RefCraftItem) {
             return getHandle((RefCraftItem) (Object) item).age;
@@ -78,7 +77,7 @@ public class EntityItemUtils {
      * @param age  掉落物实体的已存活时长(tick).
      */
     public static void setAge(
-            @NotNull Item item,
+            @NonNull Item item,
             int age
     ) {
         if ((Object) item instanceof RefCraftItem) {
@@ -93,7 +92,7 @@ public class EntityItemUtils {
      * @return 掉落物实体的最大存活时长(tick).
      */
     public static int getDespawnRate(
-            @NotNull Item item
+            @NonNull Item item
     ) {
         if (HAS_DESPAWN_RATE && ((Object) item instanceof RefCraftItem)) {
             return getHandle((RefCraftItem) (Object) item).despawnRate;
@@ -109,9 +108,8 @@ public class EntityItemUtils {
      * @param item 待检测物品.
      * @return 物品拥有者.
      */
-    @Nullable
-    public static OfflinePlayer getOwner(
-            @NotNull Item item
+    public static @Nullable OfflinePlayer getOwner(
+            @NonNull Item item
     ) {
         if (GET_AND_SET_SUPPORT) {
             UUID owner = item.getOwner();
@@ -140,9 +138,8 @@ public class EntityItemUtils {
      * @param item 待检测物品.
      * @return 物品拥有者玩家名.
      */
-    @Nullable
-    public static String getOwnerName(
-            @NotNull Item item
+    public static @Nullable String getOwnerName(
+            @NonNull Item item
     ) {
         if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
             return getHandle((RefCraftItem) (Object) item).ownerName;
@@ -157,9 +154,8 @@ public class EntityItemUtils {
      * @param item 待检测物品.
      * @return 物品拥有者UUID.
      */
-    @Nullable
-    public static UUID getOwnerUUID(
-            @NotNull Item item
+    public static @Nullable UUID getOwnerUUID(
+            @NonNull Item item
     ) {
         if (GET_AND_SET_SUPPORT) {
             return item.getOwner();
@@ -179,8 +175,8 @@ public class EntityItemUtils {
      * @param player 物品拥有者.
      */
     public static void setOwner(
-            @NotNull Item item,
-            @NotNull OfflinePlayer player
+            @NonNull Item item,
+            @NonNull OfflinePlayer player
     ) {
         if (GET_AND_SET_SUPPORT) {
             item.setOwner(player.getUniqueId());
@@ -203,8 +199,8 @@ public class EntityItemUtils {
      * @param name 物品拥有者玩家名.
      */
     public static void setOwnerName(
-            @NotNull Item item,
-            @NotNull String name
+            @NonNull Item item,
+            @NonNull String name
     ) {
         if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
             getHandle((RefCraftItem) (Object) item).ownerName = name;
@@ -219,8 +215,8 @@ public class EntityItemUtils {
      * @param uuid 物品拥有者UUID.
      */
     public static void setOwnerUUID(
-            @NotNull Item item,
-            @NotNull UUID uuid
+            @NonNull Item item,
+            @NonNull UUID uuid
     ) {
         if (GET_AND_SET_SUPPORT) {
             item.setOwner(uuid);
@@ -238,9 +234,8 @@ public class EntityItemUtils {
      * @param item 待检测物品.
      * @return 物品丢出者.
      */
-    @Nullable
-    public static OfflinePlayer getThrower(
-            @NotNull Item item
+    public static @Nullable OfflinePlayer getThrower(
+            @NonNull Item item
     ) {
         if (GET_AND_SET_SUPPORT) {
             UUID thrower = item.getThrower();
@@ -269,9 +264,8 @@ public class EntityItemUtils {
      * @param item 待检测物品.
      * @return 物品丢出者玩家名.
      */
-    @Nullable
-    public static String getThrowerName(
-            @NotNull Item item
+    public static @Nullable String getThrowerName(
+            @NonNull Item item
     ) {
         if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
             return getHandle((RefCraftItem) (Object) item).throwerName;
@@ -286,9 +280,8 @@ public class EntityItemUtils {
      * @param item 待检测物品.
      * @return 物品丢出者UUID.
      */
-    @Nullable
-    public static UUID getThrowerUUID(
-            @NotNull Item item
+    public static @Nullable UUID getThrowerUUID(
+            @NonNull Item item
     ) {
         if (GET_AND_SET_SUPPORT) {
             return item.getThrower();
@@ -308,8 +301,8 @@ public class EntityItemUtils {
      * @param player 物品丢出者.
      */
     public static void setThrower(
-            @NotNull Item item,
-            @NotNull OfflinePlayer player
+            @NonNull Item item,
+            @NonNull OfflinePlayer player
     ) {
         if (GET_AND_SET_SUPPORT) {
             item.setThrower(player.getUniqueId());
@@ -332,8 +325,8 @@ public class EntityItemUtils {
      * @param name 物品丢出者玩家名.
      */
     public static void setThrowerName(
-            @NotNull Item item,
-            @NotNull String name
+            @NonNull Item item,
+            @NonNull String name
     ) {
         if ((Object) item instanceof RefCraftItem && !UUID_SUPPORT) {
             getHandle((RefCraftItem) (Object) item).throwerName = name;
@@ -348,8 +341,8 @@ public class EntityItemUtils {
      * @param uuid 物品丢出者UUID.
      */
     public static void setThrowerUUID(
-            @NotNull Item item,
-            @NotNull UUID uuid
+            @NonNull Item item,
+            @NonNull UUID uuid
     ) {
         if (GET_AND_SET_SUPPORT) {
             item.setThrower(uuid);

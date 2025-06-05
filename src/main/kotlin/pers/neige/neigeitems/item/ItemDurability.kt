@@ -191,7 +191,7 @@ object ItemDurability {
         // NI物品数据
         val neigeItems: NbtCompound = itemInfo.neigeItems
         // NI物品id
-        val id: String = itemInfo.id
+        itemInfo.id
         return damage(player, itemStack, itemTag, neigeItems, damage, breakItem, damageEvent)
     }
 

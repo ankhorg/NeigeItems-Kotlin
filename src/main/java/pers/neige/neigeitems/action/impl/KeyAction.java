@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.action.impl;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -14,29 +15,24 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class KeyAction extends Action {
-    @NotNull
-    private final String globalId;
-    @NotNull
-    private final Evaluator<String> key;
-    @NotNull
-    private final Action defaultAction;
-    @NotNull
-    private final Action matchAction;
-    @NotNull
-    private final Map<String, Action> actions = new HashMap<>();
+    private final @NonNull String globalId;
+    private final @NonNull Evaluator<String> key;
+    private final @NonNull Action defaultAction;
+    private final @NonNull Action matchAction;
+    private final @NonNull Map<String, Action> actions = new HashMap<>();
 
     public KeyAction(
-            @NotNull BaseActionManager manager,
-            @NotNull ConfigReader config
+            @NonNull BaseActionManager manager,
+            @NonNull ConfigReader config
     ) {
         super(manager);
         this.globalId = config.getString("global-id", "key");
         this.key = Evaluator.createStringEvaluator(manager, config.getString("key"));
         this.defaultAction = manager.compile(config.get("default-action"));
         this.matchAction = manager.compile(config.get("match-action"));
-        ConfigReader actionsConfig = config.getConfig("actions");
+        val actionsConfig = config.getConfig("actions");
         if (actionsConfig != null) {
-            for (String key : actionsConfig.keySet()) {
+            for (val key : actionsConfig.keySet()) {
                 this.actions.put(key, manager.compile(actionsConfig.get(key)));
             }
         }
@@ -44,7 +40,7 @@ public class KeyAction extends Action {
     }
 
     private void checkAsyncSafe() {
-        for (Action action : this.actions.values()) {
+        for (val action : this.actions.values()) {
             if (action.isAsyncSafe()) return;
         }
         if (this.defaultAction.isAsyncSafe()) return;
@@ -53,7 +49,7 @@ public class KeyAction extends Action {
     }
 
     @Override
-    public @NotNull ActionType getType() {
+    public @NonNull ActionType getType() {
         return ActionType.KEY;
     }
 
@@ -61,36 +57,30 @@ public class KeyAction extends Action {
      * 将基础类型动作的执行逻辑放入 BaseActionManager 是为了给其他插件覆写的机会
      */
     @Override
-    @NotNull
-    protected CompletableFuture<ActionResult> eval(
-            @NotNull BaseActionManager manager,
-            @NotNull ActionContext context
+    protected @NonNull CompletableFuture<ActionResult> eval(
+            @NonNull BaseActionManager manager,
+            @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }
 
-    @NotNull
-    public String getGlobalId() {
+    public @NonNull String getGlobalId() {
         return globalId;
     }
 
-    @NotNull
-    public Evaluator<String> getKey() {
+    public @NonNull Evaluator<String> getKey() {
         return key;
     }
 
-    @NotNull
-    public Action getDefaultAction() {
+    public @NonNull Action getDefaultAction() {
         return defaultAction;
     }
 
-    @NotNull
-    public Action getMatchAction() {
+    public @NonNull Action getMatchAction() {
         return matchAction;
     }
 
-    @NotNull
-    public Map<String, Action> getActions() {
+    public @NonNull Map<String, Action> getActions() {
         return actions;
     }
 }

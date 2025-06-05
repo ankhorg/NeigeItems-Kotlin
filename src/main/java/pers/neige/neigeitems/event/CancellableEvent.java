@@ -1,16 +1,15 @@
 package pers.neige.neigeitems.event;
 
+import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 
 public class CancellableEvent extends BasicEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NonNull HandlerList getHandlerList() {
         return handlers;
     }
 
@@ -31,8 +30,7 @@ public class CancellableEvent extends BasicEvent implements Cancellable {
     }
 
     @Override
-    @NotNull
-    public HandlerList getHandlers() {
+    public @NonNull HandlerList getHandlers() {
         return handlers;
     }
 }

@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 
+import lombok.NonNull;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -7,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
@@ -28,9 +28,8 @@ public class PaperInventoryUtils {
 
     static {
         InventoryHolder tempHolder = new InventoryHolder() {
-            @NotNull
             @Override
-            public Inventory getInventory() {
+            public @NonNull Inventory getInventory() {
                 return Bukkit.createInventory(null, 9);
             }
         };
@@ -68,8 +67,8 @@ public class PaperInventoryUtils {
      * @param title     待设置标题
      */
     public static void setTitle(
-            @NotNull Inventory inventory,
-            @NotNull String title
+            @NonNull Inventory inventory,
+            @NonNull String title
     ) throws IllegalAccessException {
         if (inventory instanceof RefCraftInventory) {
             RefContainer container = ((RefCraftInventory) inventory).getInventory();
@@ -94,8 +93,8 @@ public class PaperInventoryUtils {
      * @param title     JSON格式待设置标题
      */
     public static void setJsonTitle(
-            @NotNull Inventory inventory,
-            @NotNull String title
+            @NonNull Inventory inventory,
+            @NonNull String title
     ) throws IllegalAccessException {
         if (inventory instanceof RefCraftInventory) {
             RefContainer container = ((RefCraftInventory) inventory).getInventory();
@@ -120,8 +119,8 @@ public class PaperInventoryUtils {
      * @param title     待设置标题
      */
     public static void setTitle(
-            @NotNull Inventory inventory,
-            @NotNull Component title
+            @NonNull Inventory inventory,
+            @NonNull Component title
     ) throws IllegalAccessException {
         if (inventory instanceof RefCraftInventory) {
             RefContainer container = ((RefCraftInventory) inventory).getInventory();

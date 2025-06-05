@@ -1,15 +1,14 @@
 package pers.neige.neigeitems.command.coordinates;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Coordinate {
-    @NotNull
-    private final LocationType type;
+    private final @NonNull LocationType type;
     private final double value;
 
     public Coordinate(
-            @NotNull LocationType type,
+            @NonNull LocationType type,
             @Nullable Double value
     ) {
         this.type = type;
@@ -28,8 +27,7 @@ public class Coordinate {
         }
     }
 
-    @NotNull
-    public LocationType getType() {
+    public @NonNull LocationType getType() {
         return type;
     }
 
