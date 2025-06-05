@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>WorldUtils 1.21.78 API </title>
+    <title>WorldUtils 1.21.79 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../../../../../stylesheet.css" title="Style">
@@ -262,7 +262,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i1" class="rowColor">
                                             <td class="colFirst"><code>static Item</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,java.util.function.Consumer)>dropItem</a>(@NotNull() World world, @NotNull() Location location, @NotNull() ItemStack itemStack, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,java.util.function.Consumer)>dropItem</a>(@NonNull() World world, @NonNull() Location location, @NonNull() ItemStack itemStack, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function) </code>
                                             </th>
                                             <td class="colLast">在指定世界的指定坐标生成一个掉落物, 生成实体前对实体进行一些操作.</td>
                                         </tr>
@@ -270,7 +270,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i2" class="altColor">
                                             <td class="colFirst"><code>static Item</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,org.bukkit.util.Vector)>dropItem</a>(@NotNull() World world, @NotNull() Location location, @NotNull() ItemStack itemStack, @NotNull() Vector velocity) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,org.bukkit.util.Vector)>dropItem</a>(@NonNull() World world, @NonNull() Location location, @NonNull() ItemStack itemStack, @NonNull() Vector velocity) </code>
                                             </th>
                                             <td class="colLast">在指定世界的指定坐标生成一个掉落物, 生成实体前对实体添加一个向量.</td>
                                         </tr>
@@ -278,7 +278,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i3" class="rowColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,java.util.function.Predicate)>getNearbyEntities</a>(@NotNull() Entity entity, double x, double y, double z, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,java.util.function.Predicate)>getNearbyEntities</a>(@NonNull() Entity entity, double x, double y, double z, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
                                             </th>
                                             <td class="colLast">检索实体周围, 指定大小立方体区域内的实体.</td>
                                         </tr>
@@ -286,7 +286,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i4" class="altColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,int)>getNearbyEntities</a>(@NotNull() Entity entity, double x, double y, double z, int limit) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,int)>getNearbyEntities</a>(@NonNull() Entity entity, double x, double y, double z, int limit) </code>
                                             </th>
                                             <td class="colLast">检索实体周围, 指定大小立方体区域内的实体.</td>
                                         </tr>
@@ -294,7 +294,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i5" class="rowColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,int,java.util.function.Predicate)>getNearbyEntities</a>(@NotNull() Entity entity, double x, double y, double z, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,int,java.util.function.Predicate)>getNearbyEntities</a>(@NonNull() Entity entity, double x, double y, double z, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
                                             </th>
                                             <td class="colLast">检索实体周围, 指定大小立方体区域内的实体.</td>
                                         </tr>
@@ -302,7 +302,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i6" class="altColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,java.util.function.Predicate)>getNearbyEntities</a>(@NotNull() World world, @NotNull() Location location, double x, double y, double z, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,java.util.function.Predicate)>getNearbyEntities</a>(@NonNull() World world, @NonNull() Location location, double x, double y, double z, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
                                             </th>
                                             <td class="colLast">检索指定世界的指定坐标周围, 指定大小立方体区域内的实体.</td>
                                         </tr>
@@ -310,7 +310,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i7" class="rowColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,int)>getNearbyEntities</a>(@NotNull() World world, @NotNull() Location location, double x, double y, double z, int limit) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,int)>getNearbyEntities</a>(@NonNull() World world, @NonNull() Location location, double x, double y, double z, int limit) </code>
                                             </th>
                                             <td class="colLast">检索指定世界的指定坐标周围, 指定大小立方体区域内的实体.</td>
                                         </tr>
@@ -318,7 +318,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i8" class="altColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,int,java.util.function.Predicate)>getNearbyEntities</a>(@NotNull() World world, @NotNull() Location location, double x, double y, double z, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,int,java.util.function.Predicate)>getNearbyEntities</a>(@NonNull() World world, @NonNull() Location location, double x, double y, double z, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
                                             </th>
                                             <td class="colLast">检索指定世界的指定坐标周围, 指定大小立方体区域内的实体.</td>
                                         </tr>
@@ -326,7 +326,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i9" class="rowColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,java.util.function.Predicate)>getEntities</a>(@NotNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,java.util.function.Predicate)>getEntities</a>(@NonNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
                                             </th>
                                             <td class="colLast">检索指定世界指定大小立方体区域内的实体.</td>
                                         </tr>
@@ -334,7 +334,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i10" class="altColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,int)>getEntities</a>(@NotNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,int)>getEntities</a>(@NonNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit) </code>
                                             </th>
                                             <td class="colLast">检索指定世界指定大小立方体区域内的实体.</td>
                                         </tr>
@@ -342,7 +342,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i11" class="rowColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,int,java.util.function.Predicate)>getEntities</a>(@NotNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,int,java.util.function.Predicate)>getEntities</a>(@NonNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
                                             </th>
                                             <td class="colLast">检索指定世界指定大小立方体区域内的实体.</td>
                                         </tr>
@@ -350,7 +350,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i12" class="altColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntities(org.bukkit.entity.Entity,org.bukkit.World,double,double,double,double,double,double,int,java.util.function.Predicate)>getEntities</a>(@Nullable() Entity except, @NotNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntities(org.bukkit.entity.Entity,org.bukkit.World,double,double,double,double,double,double,int,java.util.function.Predicate)>getEntities</a>(@Nullable() Entity except, @NonNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter) </code>
                                             </th>
                                             <td class="colLast">检索指定世界指定大小立方体区域内的实体.</td>
                                         </tr>
@@ -358,7 +358,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i13" class="rowColor">
                                             <td class="colFirst"><code>static Entity</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#createEntity(org.bukkit.Location,org.bukkit.entity.EntityType)>createEntity</a>(@NotNull() Location location, @NotNull() EntityType type) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#createEntity(org.bukkit.Location,org.bukkit.entity.EntityType)>createEntity</a>(@NonNull() Location location, @NonNull() EntityType type) </code>
                                             </th>
                                             <td class="colLast">生成一个实体, 但不添加进世界里.</td>
                                         </tr>
@@ -366,7 +366,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i14" class="altColor">
                                             <td class="colFirst"><code>static Entity</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#createEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean)>createEntity</a>(@NotNull() Location location, @NotNull() EntityType type, boolean randomizeData) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#createEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean)>createEntity</a>(@NonNull() Location location, @NonNull() EntityType type, boolean randomizeData) </code>
                                             </th>
                                             <td class="colLast">生成一个实体, 但不添加进世界里.</td>
                                         </tr>
@@ -374,7 +374,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i15" class="rowColor">
                                             <td class="colFirst"><code>static Entity</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,java.util.function.Consumer)>spawnEntity</a>(@NotNull() Location location, @NotNull() EntityType type, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,java.util.function.Consumer)>spawnEntity</a>(@NonNull() Location location, @NonNull() EntityType type, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function) </code>
                                             </th>
                                             <td class="colLast">在指定世界的指定坐标生成一个实体, 生成实体前对实体进行一些操作.</td>
                                         </tr>
@@ -382,7 +382,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i16" class="altColor">
                                             <td class="colFirst"><code>static Entity</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean,java.util.function.Consumer)>spawnEntity</a>(@NotNull() Location location, @NotNull() EntityType type, boolean randomizeData, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean,java.util.function.Consumer)>spawnEntity</a>(@NonNull() Location location, @NonNull() EntityType type, boolean randomizeData, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function) </code>
                                             </th>
                                             <td class="colLast">在指定世界的指定坐标生成一个实体, 生成实体前对实体进行一些操作.</td>
                                         </tr>
@@ -390,7 +390,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i17" class="rowColor">
                                             <td class="colFirst"><code>static Entity</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean,java.util.function.Consumer,org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason)>spawnEntity</a>(@NotNull() Location location, @NotNull() EntityType type, boolean randomizeData, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function, @Nullable() CreatureSpawnEvent.SpawnReason spawnReason) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean,java.util.function.Consumer,org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason)>spawnEntity</a>(@NonNull() Location location, @NonNull() EntityType type, boolean randomizeData, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function, @Nullable() CreatureSpawnEvent.SpawnReason spawnReason) </code>
                                             </th>
                                             <td class="colLast">在指定世界的指定坐标生成一个实体, 生成实体前对实体进行一些操作.</td>
                                         </tr>
@@ -398,7 +398,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i18" class="altColor">
                                             <td class="colFirst"><code>static Entity</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntityFromID(org.bukkit.World,int)>getEntityFromID</a>(@NotNull() World world, int entityId) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntityFromID(org.bukkit.World,int)>getEntityFromID</a>(@NonNull() World world, int entityId) </code>
                                             </th>
                                             <td class="colLast">通过实体ID获取对应的实体.</td>
                                         </tr>
@@ -406,7 +406,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i19" class="rowColor">
                                             <td class="colFirst"><code>static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;Entity&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntityFromIDAsync(org.bukkit.World,int)>getEntityFromIDAsync</a>(@NotNull() World world, int entityId) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntityFromIDAsync(org.bukkit.World,int)>getEntityFromIDAsync</a>(@NonNull() World world, int entityId) </code>
                                             </th>
                                             <td class="colLast">通过实体ID获取对应的实体(允许异步操作).</td>
                                         </tr>
@@ -414,7 +414,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i20" class="altColor">
                                             <td class="colFirst"><code>static Entity</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntityFromID1(org.bukkit.World,int)>getEntityFromID1</a>(@NotNull() World world, int entityId) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntityFromID1(org.bukkit.World,int)>getEntityFromID1</a>(@NonNull() World world, int entityId) </code>
                                             </th>
                                             <td class="colLast">通过实体ID获取对应的实体.</td>
                                         </tr>
@@ -422,7 +422,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                         <tr id="i21" class="rowColor">
                                             <td class="colFirst"><code>static Entity</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntityFromServerEntity(Object)>getEntityFromServerEntity</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> serverEntity) </code>
+                                            <th class="colSecond" scope="row"><code><a href=WorldUtils.html#getEntityFromServerEntity(Object)>getEntityFromServerEntity</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> serverEntity) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -522,7 +522,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>dropItem</h4>
-                                        <pre class="methodSignature">@NotNull() static Item <a href=WorldUtils.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,java.util.function.Consumer)>dropItem</a>(@NotNull() World world, @NotNull() Location location, @NotNull() ItemStack itemStack, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function)</pre>
+                                        <pre class="methodSignature">@NonNull() static Item <a href=WorldUtils.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,java.util.function.Consumer)>dropItem</a>(@NonNull() World world, @NonNull() Location location, @NonNull() ItemStack itemStack, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function)</pre>
                                         <div class="block"><p>在指定世界的指定坐标生成一个掉落物, 生成实体前对实体进行一些操作.</p></div>
 
                                         <dl>
@@ -567,7 +567,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>dropItem</h4>
-                                        <pre class="methodSignature">@NotNull() static Item <a href=WorldUtils.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,org.bukkit.util.Vector)>dropItem</a>(@NotNull() World world, @NotNull() Location location, @NotNull() ItemStack itemStack, @NotNull() Vector velocity)</pre>
+                                        <pre class="methodSignature">@NonNull() static Item <a href=WorldUtils.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,org.bukkit.util.Vector)>dropItem</a>(@NonNull() World world, @NonNull() Location location, @NonNull() ItemStack itemStack, @NonNull() Vector velocity)</pre>
                                         <div class="block"><p>在指定世界的指定坐标生成一个掉落物, 生成实体前对实体添加一个向量.</p></div>
 
                                         <dl>
@@ -612,7 +612,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getNearbyEntities</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,java.util.function.Predicate)>getNearbyEntities</a>(@NotNull() Entity entity, double x, double y, double z, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,java.util.function.Predicate)>getNearbyEntities</a>(@NonNull() Entity entity, double x, double y, double z, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
                                         <div class="block"><p>检索实体周围, 指定大小立方体区域内的实体.</p></div>
 
                                         <dl>
@@ -661,7 +661,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getNearbyEntities</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,int)>getNearbyEntities</a>(@NotNull() Entity entity, double x, double y, double z, int limit)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,int)>getNearbyEntities</a>(@NonNull() Entity entity, double x, double y, double z, int limit)</pre>
                                         <div class="block"><p>检索实体周围, 指定大小立方体区域内的实体.</p></div>
 
                                         <dl>
@@ -710,7 +710,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getNearbyEntities</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,int,java.util.function.Predicate)>getNearbyEntities</a>(@NotNull() Entity entity, double x, double y, double z, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.entity.Entity,double,double,double,int,java.util.function.Predicate)>getNearbyEntities</a>(@NonNull() Entity entity, double x, double y, double z, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
                                         <div class="block"><p>检索实体周围, 指定大小立方体区域内的实体.</p></div>
 
                                         <dl>
@@ -763,7 +763,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getNearbyEntities</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,java.util.function.Predicate)>getNearbyEntities</a>(@NotNull() World world, @NotNull() Location location, double x, double y, double z, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,java.util.function.Predicate)>getNearbyEntities</a>(@NonNull() World world, @NonNull() Location location, double x, double y, double z, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
                                         <div class="block"><p>检索指定世界的指定坐标周围, 指定大小立方体区域内的实体.</p></div>
 
                                         <dl>
@@ -816,7 +816,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getNearbyEntities</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,int)>getNearbyEntities</a>(@NotNull() World world, @NotNull() Location location, double x, double y, double z, int limit)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,int)>getNearbyEntities</a>(@NonNull() World world, @NonNull() Location location, double x, double y, double z, int limit)</pre>
                                         <div class="block"><p>检索指定世界的指定坐标周围, 指定大小立方体区域内的实体.</p></div>
 
                                         <dl>
@@ -869,7 +869,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getNearbyEntities</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,int,java.util.function.Predicate)>getNearbyEntities</a>(@NotNull() World world, @NotNull() Location location, double x, double y, double z, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getNearbyEntities(org.bukkit.World,org.bukkit.Location,double,double,double,int,java.util.function.Predicate)>getNearbyEntities</a>(@NonNull() World world, @NonNull() Location location, double x, double y, double z, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
                                         <div class="block"><p>检索指定世界的指定坐标周围, 指定大小立方体区域内的实体.</p></div>
 
                                         <dl>
@@ -926,7 +926,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getEntities</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,java.util.function.Predicate)>getEntities</a>(@NotNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,java.util.function.Predicate)>getEntities</a>(@NonNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
                                         <div class="block"><p>检索指定世界指定大小立方体区域内的实体.</p></div>
 
                                         <dl>
@@ -987,7 +987,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getEntities</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,int)>getEntities</a>(@NotNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,int)>getEntities</a>(@NonNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit)</pre>
                                         <div class="block"><p>检索指定世界指定大小立方体区域内的实体.</p></div>
 
                                         <dl>
@@ -1048,7 +1048,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getEntities</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,int,java.util.function.Predicate)>getEntities</a>(@NotNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getEntities(org.bukkit.World,double,double,double,double,double,double,int,java.util.function.Predicate)>getEntities</a>(@NonNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
                                         <div class="block"><p>检索指定世界指定大小立方体区域内的实体.</p></div>
 
                                         <dl>
@@ -1113,7 +1113,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getEntities</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getEntities(org.bukkit.entity.Entity,org.bukkit.World,double,double,double,double,double,double,int,java.util.function.Predicate)>getEntities</a>(@Nullable() Entity except, @NotNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;Entity&gt; <a href=WorldUtils.html#getEntities(org.bukkit.entity.Entity,org.bukkit.World,double,double,double,double,double,double,int,java.util.function.Predicate)>getEntities</a>(@Nullable() Entity except, @NonNull() World world, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, int limit, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;in Entity&gt; filter)</pre>
                                         <div class="block"><p>检索指定世界指定大小立方体区域内的实体.</p></div>
 
                                         <dl>
@@ -1182,7 +1182,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>createEntity</h4>
-                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#createEntity(org.bukkit.Location,org.bukkit.entity.EntityType)>createEntity</a>(@NotNull() Location location, @NotNull() EntityType type)</pre>
+                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#createEntity(org.bukkit.Location,org.bukkit.entity.EntityType)>createEntity</a>(@NonNull() Location location, @NonNull() EntityType type)</pre>
                                         <div class="block"><p>生成一个实体, 但不添加进世界里.</p></div>
 
                                         <dl>
@@ -1219,7 +1219,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>createEntity</h4>
-                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#createEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean)>createEntity</a>(@NotNull() Location location, @NotNull() EntityType type, boolean randomizeData)</pre>
+                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#createEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean)>createEntity</a>(@NonNull() Location location, @NonNull() EntityType type, boolean randomizeData)</pre>
                                         <div class="block"><p>生成一个实体, 但不添加进世界里.</p></div>
 
                                         <dl>
@@ -1260,7 +1260,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>spawnEntity</h4>
-                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,java.util.function.Consumer)>spawnEntity</a>(@NotNull() Location location, @NotNull() EntityType type, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function)</pre>
+                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,java.util.function.Consumer)>spawnEntity</a>(@NonNull() Location location, @NonNull() EntityType type, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function)</pre>
                                         <div class="block"><p>在指定世界的指定坐标生成一个实体, 生成实体前对实体进行一些操作.</p></div>
 
                                         <dl>
@@ -1301,7 +1301,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>spawnEntity</h4>
-                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean,java.util.function.Consumer)>spawnEntity</a>(@NotNull() Location location, @NotNull() EntityType type, boolean randomizeData, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function)</pre>
+                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean,java.util.function.Consumer)>spawnEntity</a>(@NonNull() Location location, @NonNull() EntityType type, boolean randomizeData, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function)</pre>
                                         <div class="block"><p>在指定世界的指定坐标生成一个实体, 生成实体前对实体进行一些操作.</p></div>
 
                                         <dl>
@@ -1346,7 +1346,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>spawnEntity</h4>
-                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean,java.util.function.Consumer,org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason)>spawnEntity</a>(@NotNull() Location location, @NotNull() EntityType type, boolean randomizeData, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function, @Nullable() CreatureSpawnEvent.SpawnReason spawnReason)</pre>
+                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#spawnEntity(org.bukkit.Location,org.bukkit.entity.EntityType,boolean,java.util.function.Consumer,org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason)>spawnEntity</a>(@NonNull() Location location, @NonNull() EntityType type, boolean randomizeData, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Entity&gt; function, @Nullable() CreatureSpawnEvent.SpawnReason spawnReason)</pre>
                                         <div class="block"><p>在指定世界的指定坐标生成一个实体, 生成实体前对实体进行一些操作.</p></div>
 
                                         <dl>
@@ -1395,7 +1395,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getEntityFromID</h4>
-                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#getEntityFromID(org.bukkit.World,int)>getEntityFromID</a>(@NotNull() World world, int entityId)</pre>
+                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#getEntityFromID(org.bukkit.World,int)>getEntityFromID</a>(@NonNull() World world, int entityId)</pre>
                                         <div class="block"><p>通过实体ID获取对应的实体.</p></div>
 
                                         <dl>
@@ -1432,7 +1432,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getEntityFromIDAsync</h4>
-                                        <pre class="methodSignature">@NotNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;Entity&gt; <a href=WorldUtils.html#getEntityFromIDAsync(org.bukkit.World,int)>getEntityFromIDAsync</a>(@NotNull() World world, int entityId)</pre>
+                                        <pre class="methodSignature">@NonNull() static <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;Entity&gt; <a href=WorldUtils.html#getEntityFromIDAsync(org.bukkit.World,int)>getEntityFromIDAsync</a>(@NonNull() World world, int entityId)</pre>
                                         <div class="block"><p>通过实体ID获取对应的实体(允许异步操作).</p></div>
 
                                         <dl>
@@ -1469,7 +1469,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getEntityFromID1</h4>
-                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#getEntityFromID1(org.bukkit.World,int)>getEntityFromID1</a>(@NotNull() World world, int entityId)</pre>
+                                        <pre class="methodSignature">@Nullable() static Entity <a href=WorldUtils.html#getEntityFromID1(org.bukkit.World,int)>getEntityFromID1</a>(@NonNull() World world, int entityId)</pre>
                                         <div class="block"><p>通过实体ID获取对应的实体.</p></div>
 
                                         <dl>
@@ -1506,7 +1506,7 @@ public class <span class="typeNameLabel"><a href=WorldUtils.html>WorldUtils</a><
                                           >
                                     <li class="blockList">
                                         <h4>getEntityFromServerEntity</h4>
-                                        <pre class="methodSignature"> static Entity <a href=WorldUtils.html#getEntityFromServerEntity(Object)>getEntityFromServerEntity</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> serverEntity)</pre>
+                                        <pre class="methodSignature"> static Entity <a href=WorldUtils.html#getEntityFromServerEntity(Object)>getEntityFromServerEntity</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> serverEntity)</pre>
                                         <div class="block"></div>
 
                                         <dl>

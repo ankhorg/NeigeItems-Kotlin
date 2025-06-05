@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>NMSHooker 1.21.78 API </title>
+    <title>NMSHooker 1.21.79 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
@@ -286,7 +286,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                         <tr id="i4" class="altColor">
                                             <td class="colFirst"><code>Item</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,java.util.function.Consumer)>dropItem</a>(@NotNull() World world, @NotNull() Location location, @NotNull() ItemStack itemStack, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function) </code>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,java.util.function.Consumer)>dropItem</a>(@NonNull() World world, @NonNull() Location location, @NonNull() ItemStack itemStack, @NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function) </code>
                                             </th>
                                             <td class="colLast">在指定世界的指定坐标生成一个掉落物, 生成实体前对实体进行一些操作.</td>
                                         </tr>
@@ -294,7 +294,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                         <tr id="i5" class="rowColor">
                                             <td class="colFirst"><code>HoverEvent</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#hoverText(java.lang.String)>hoverText</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text) </code>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#hoverText(java.lang.String)>hoverText</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text) </code>
                                             </th>
                                             <td class="colLast">根据给定的文本生成一个 HoverEvent.</td>
                                         </tr>
@@ -302,7 +302,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                         <tr id="i6" class="altColor">
                                             <td class="colFirst"><code>HoverEvent</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#hoverItem(org.bukkit.inventory.ItemStack)>hoverItem</a>(@NotNull() ItemStack itemStack) </code>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#hoverItem(org.bukkit.inventory.ItemStack)>hoverItem</a>(@NonNull() ItemStack itemStack) </code>
                                             </th>
                                             <td class="colLast">根据给定的物品生成一个 HoverEvent.</td>
                                         </tr>
@@ -350,7 +350,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                         <tr id="i12" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#giveExp(org.bukkit.entity.Player,int)>giveExp</a>(@NotNull() Player player, int exp) </code>
+                                            <th class="colSecond" scope="row"><code><a href=NMSHooker.html#giveExp(org.bukkit.entity.Player,int)>giveExp</a>(@NonNull() Player player, int exp) </code>
                                             </th>
                                             <td class="colLast">给予玩家经验, 修复了1.12.2的逻辑谬误.</td>
                                         </tr>
@@ -553,7 +553,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                           >
                                     <li class="blockList">
                                         <h4>dropItem</h4>
-                                        <pre class="methodSignature">@<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html>Deprecated</a>()@NotNull() Item <a href=NMSHooker.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,java.util.function.Consumer)>dropItem</a>(@NotNull() World world, @NotNull() Location location, @NotNull() ItemStack itemStack, @NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function)</pre>
+                                        <pre class="methodSignature">@<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Deprecated.html>Deprecated</a>()@NonNull() Item <a href=NMSHooker.html#dropItem(org.bukkit.World,org.bukkit.Location,org.bukkit.inventory.ItemStack,java.util.function.Consumer)>dropItem</a>(@NonNull() World world, @NonNull() Location location, @NonNull() ItemStack itemStack, @NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html>Consumer</a>&lt;Item&gt; function)</pre>
                                         <div class="block"><p>在指定世界的指定坐标生成一个掉落物, 生成实体前对实体进行一些操作.</p></div>
 
                                         <dl>
@@ -598,7 +598,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                           >
                                     <li class="blockList">
                                         <h4>hoverText</h4>
-                                        <pre class="methodSignature">@NotNull() HoverEvent <a href=NMSHooker.html#hoverText(java.lang.String)>hoverText</a>(@NotNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text)</pre>
+                                        <pre class="methodSignature">@NonNull() HoverEvent <a href=NMSHooker.html#hoverText(java.lang.String)>hoverText</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text)</pre>
                                         <div class="block"><p>根据给定的文本生成一个 HoverEvent.</p></div>
 
                                         <dl>
@@ -631,7 +631,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                           >
                                     <li class="blockList">
                                         <h4>hoverItem</h4>
-                                        <pre class="methodSignature">@NotNull() HoverEvent <a href=NMSHooker.html#hoverItem(org.bukkit.inventory.ItemStack)>hoverItem</a>(@NotNull() ItemStack itemStack)</pre>
+                                        <pre class="methodSignature">@NonNull() HoverEvent <a href=NMSHooker.html#hoverItem(org.bukkit.inventory.ItemStack)>hoverItem</a>(@NonNull() ItemStack itemStack)</pre>
                                         <div class="block"><p>根据给定的物品生成一个 HoverEvent.</p></div>
 
                                         <dl>
@@ -664,7 +664,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                           >
                                     <li class="blockList">
                                         <h4>newItemBuilder</h4>
-                                        <pre class="methodSignature">@NotNull() <a href=../../item/builder/ItemBuilder.html>ItemBuilder</a> <a href=NMSHooker.html#newItemBuilder()>newItemBuilder</a>()</pre>
+                                        <pre class="methodSignature">@NonNull() <a href=../../item/builder/ItemBuilder.html>ItemBuilder</a> <a href=NMSHooker.html#newItemBuilder()>newItemBuilder</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -687,7 +687,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                           >
                                     <li class="blockList">
                                         <h4>newItemBuilder</h4>
-                                        <pre class="methodSignature">@NotNull() <a href=../../item/builder/ItemBuilder.html>ItemBuilder</a> <a href=NMSHooker.html#newItemBuilder(org.bukkit.Material)>newItemBuilder</a>(@Nullable() Material material)</pre>
+                                        <pre class="methodSignature">@NonNull() <a href=../../item/builder/ItemBuilder.html>ItemBuilder</a> <a href=NMSHooker.html#newItemBuilder(org.bukkit.Material)>newItemBuilder</a>(@Nullable() Material material)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -710,7 +710,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                           >
                                     <li class="blockList">
                                         <h4>newItemBuilder</h4>
-                                        <pre class="methodSignature">@NotNull() <a href=../../item/builder/ItemBuilder.html>ItemBuilder</a> <a href=NMSHooker.html#newItemBuilder(org.bukkit.inventory.ItemStack)>newItemBuilder</a>(@Nullable() ItemStack itemStack)</pre>
+                                        <pre class="methodSignature">@NonNull() <a href=../../item/builder/ItemBuilder.html>ItemBuilder</a> <a href=NMSHooker.html#newItemBuilder(org.bukkit.inventory.ItemStack)>newItemBuilder</a>(@Nullable() ItemStack itemStack)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -733,7 +733,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                           >
                                     <li class="blockList">
                                         <h4>newItemBuilder</h4>
-                                        <pre class="methodSignature">@NotNull() <a href=../../item/builder/ItemBuilder.html>ItemBuilder</a> <a href=NMSHooker.html#newItemBuilder(pers.neige.neigeitems.config.ConfigReader)>newItemBuilder</a>(@Nullable() <a href=../../config/ConfigReader.html>ConfigReader</a> config)</pre>
+                                        <pre class="methodSignature">@NonNull() <a href=../../item/builder/ItemBuilder.html>ItemBuilder</a> <a href=NMSHooker.html#newItemBuilder(pers.neige.neigeitems.config.ConfigReader)>newItemBuilder</a>(@Nullable() <a href=../../config/ConfigReader.html>ConfigReader</a> config)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -779,7 +779,7 @@ public class <span class="typeNameLabel"><a href=NMSHooker.html>NMSHooker</a></s
                                           >
                                     <li class="blockList">
                                         <h4>giveExp</h4>
-                                        <pre class="methodSignature"> void <a href=NMSHooker.html#giveExp(org.bukkit.entity.Player,int)>giveExp</a>(@NotNull() Player player, int exp)</pre>
+                                        <pre class="methodSignature"> void <a href=NMSHooker.html#giveExp(org.bukkit.entity.Player,int)>giveExp</a>(@NonNull() Player player, int exp)</pre>
                                         <div class="block"><p>给予玩家经验, 修复了1.12.2的逻辑谬误.</p></div>
 
                                         <dl>
