@@ -2,6 +2,9 @@ $dokka.format:javadoc-v1
 $dokka.linkExtension:html
 $dokka.location:pers.neige.neigeitems.action.impl/TreeAction.TreeActionType///PointingToDeclaration/pers/neige/neigeitems/action/impl/TreeAction.TreeActionType.html
 $dokka.location:pers.neige.neigeitems.annotation/Awake.LifeCycle///PointingToDeclaration/pers/neige/neigeitems/annotation/Awake.LifeCycle.html
+$dokka.location:pers.neige.neigeitems.colonel.argument.command/FunctionArgument.FunctionContainer///PointingToDeclaration/pers/neige/neigeitems/colonel/argument/command/FunctionArgument.FunctionContainer.html
+$dokka.location:pers.neige.neigeitems.colonel.argument.command/ItemArgument.ItemContainer///PointingToDeclaration/pers/neige/neigeitems/colonel/argument/command/ItemArgument.ItemContainer.html
+$dokka.location:pers.neige.neigeitems.colonel.argument.command/ItemPackArgument.ItemPackContainer///PointingToDeclaration/pers/neige/neigeitems/colonel/argument/command/ItemPackArgument.ItemPackContainer.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PostGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PostGenerate.html
 $dokka.location:pers.neige.neigeitems.event/ItemUpdateEvent.PreGenerate///PointingToDeclaration/pers/neige/neigeitems/event/ItemUpdateEvent.PreGenerate.html
 $dokka.location:pers.neige.neigeitems.event/MythicDropEvent.ConfigLoaded///PointingToDeclaration/pers/neige/neigeitems/event/MythicDropEvent.ConfigLoaded.html
@@ -24,6 +27,7 @@ $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayInFlying.Rot///Po
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutEntityLook///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutEntityLook.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMove.html
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook.html
+$dokka.location:pers.neige.neigeitems.scanner/ClassScanner.EasyField///PointingToDeclaration/pers/neige/neigeitems/scanner/ClassScanner.EasyField.html
 $dokka.location:pers.neige.neigeitems.scanner/ClassScanner.EasyMethod///PointingToDeclaration/pers/neige/neigeitems/scanner/ClassScanner.EasyMethod.html
 $dokka.location:pers.neige.neigeitems.utils/SamplingUtils.SamplingResult///PointingToDeclaration/pers/neige/neigeitems/utils/SamplingUtils.SamplingResult.html
 pers.neige.neigeitems
@@ -40,12 +44,12 @@ pers.neige.neigeitems.action.impl
 pers.neige.neigeitems.action.result
 pers.neige.neigeitems.annotation
 pers.neige.neigeitems.calculate
+pers.neige.neigeitems.colonel.argument.command
 pers.neige.neigeitems.command
 pers.neige.neigeitems.command.arguments
 pers.neige.neigeitems.command.coordinates
 pers.neige.neigeitems.command.selector
 pers.neige.neigeitems.command.subcommand
-pers.neige.neigeitems.command.subcommand.expansion
 pers.neige.neigeitems.command.subcommand.mm
 pers.neige.neigeitems.config
 pers.neige.neigeitems.event
