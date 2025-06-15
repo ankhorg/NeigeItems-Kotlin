@@ -1,29 +1,16 @@
 package pers.neige.neigeitems.command.subcommand
 
-import com.mojang.brigadier.arguments.StringArgumentType
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import com.mojang.brigadier.builder.RequiredArgumentBuilder
-import com.mojang.brigadier.context.CommandContext
 import org.bukkit.Location
+import org.bukkit.World
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.command.CommandUtils.argument
-import pers.neige.neigeitems.command.CommandUtils.literal
-import pers.neige.neigeitems.command.arguments.IntegerArgumentType.getInteger
-import pers.neige.neigeitems.command.arguments.IntegerArgumentType.positiveInteger
-import pers.neige.neigeitems.command.arguments.ItemPackArgumentType.getItemPackSelector
-import pers.neige.neigeitems.command.arguments.ItemPackArgumentType.pack
-import pers.neige.neigeitems.command.arguments.LocationArgumentType.getLocation
-import pers.neige.neigeitems.command.arguments.LocationArgumentType.location
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayerSelector
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
-import pers.neige.neigeitems.command.arguments.WorldArgumentType.getWorldSelector
-import pers.neige.neigeitems.command.arguments.WorldArgumentType.world
-import pers.neige.neigeitems.command.coordinates.Coordinates
-import pers.neige.neigeitems.command.selector.ItemPackSelector
-import pers.neige.neigeitems.command.selector.PlayerSelector
-import pers.neige.neigeitems.command.selector.WorldSelector
+import pers.neige.colonel.argument
+import pers.neige.colonel.arguments.impl.StringArgument
+import pers.neige.colonel.coordinates.CoordinatesContainer
+import pers.neige.colonel.literal
+import pers.neige.neigeitems.annotation.CustomField
+import pers.neige.neigeitems.colonel.argument.command.*
 import pers.neige.neigeitems.event.ItemPackDropEvent
 import pers.neige.neigeitems.item.ItemPack
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
@@ -34,90 +21,45 @@ import pers.neige.neigeitems.utils.SchedulerUtils.async
  * ni droppack指令
  */
 object DropPack {
-    private val dropPackLogic: RequiredArgumentBuilder<CommandSender, ItemPackSelector> =
-        // ni dropPack [pack]
-        argument<CommandSender, ItemPackSelector>("pack", pack()).then(
-            // ni dropPack [pack] [amount]
-            argument<CommandSender, Int>("amount", positiveInteger()).then(
-                // ni dropPack [pack] [amount] [world]
-                argument<CommandSender, WorldSelector>("world", world()).then(
-                    // ni dropPack [pack] [amount] [world] [location]
-                    argument<CommandSender, Coordinates>("location", location()).executes { context ->
-                        dropPack(context)
-                    }.then(
-                        // ni dropPack [pack] [amount] [world] [location] (target)
-                        argument<CommandSender, PlayerSelector>("target", player()).executes { context ->
-                            dropPack(
-                                context,
-                                getPlayerSelector(context, "target")
-                            )
-                        }.then(
-                            // ni dropPack [pack] [amount] [world] [location] (target) (data)
-                            argument<CommandSender, String>(
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val dropPack = literal<CommandSender, Unit>("dropPack", arrayListOf("dropPack", "dropPackSilent")) {
+        argument("pack", ItemPackArgument.INSTANCE) {
+            argument("amount", IntegerArgument.POSITIVE_DEFAULT_ONE) {
+                argument("world", WorldArgument.INSTANCE) {
+                    argument("location", CoordinatesArgument.INSTANCE) {
+                        argument("target", PlayerArgument.NONNULL.setDefaultValue(null)) {
+                            argument(
                                 "data",
-                                StringArgumentType.greedyString()
-                            ).executes { context ->
-                                dropPack(
-                                    context,
-                                    getPlayerSelector(context, "target"),
-                                    StringArgumentType.getString(context, "data")
-                                )
+                                StringArgument.builder<CommandSender, Unit>().readAll(true).build()
+                                    .setDefaultValue(null)
+                            ) {
+                                setNullExecutor { context ->
+                                    async {
+                                        val sender = context.source ?: return@async
+                                        val tip = context.getArgument<String>("dropPack").equals("dropPack", true)
+                                        val pack =
+                                            context.getArgument<ItemPackArgument.ItemPackContainer>("pack").itemPack!!
+                                        val amount = context.getArgument<Int?>("amount")!!
+                                        val world = context.getArgument<World>("world")!!
+                                        val location =
+                                            context.getArgument<CoordinatesContainer>("location")!!.result!!.getLocation(
+                                                world,
+                                                sender as? Player
+                                            )
+                                        val parser = context.getArgument<Player>("target")
+                                        val data = context.getArgument<String>("data")
+                                        dropPackCommand(
+                                            sender, pack, amount, location, parser, data, tip
+                                        )
+                                    }
+                                }
                             }
-                        )
-                    )
-                )
-            )
-        )
-
-    // ni dropPack
-    val dropPack: LiteralArgumentBuilder<CommandSender> = literal<CommandSender>("dropPack").then(dropPackLogic)
-
-    // ni dropPackSilent
-    val dropPackSilent: LiteralArgumentBuilder<CommandSender> =
-        literal<CommandSender>("dropPackSilent").then(dropPackLogic)
-
-    private fun dropPack(
-        context: CommandContext<CommandSender>,
-        parserSelector: PlayerSelector? = null,
-        data: String? = null
-    ): Int {
-        async {
-            val tip = context.nodes[0].node.name == "dropPack"
-            val sender = context.source
-
-            val itemPackSelector = getItemPackSelector(context, "pack")
-            val pack = itemPackSelector.select(context) ?: let {
-                sender.sendLang("Messages.unknownItemPack", mapOf(Pair("{packID}", itemPackSelector.text)))
-                return@async
-            }
-
-            val amount = getInteger(context, "amount")
-
-            val worldSelector = getWorldSelector(context, "world")
-            val world = worldSelector.select(context) ?: let {
-                sender.sendLang("Messages.invalidWorld", mapOf(Pair("{world}", worldSelector.text)))
-                return@async
-            }
-
-            val location = getLocation(world, context, "location") ?: let {
-                sender.sendLang("Messages.invalidLocation")
-                return@async
-            }
-
-            val parser = if (parserSelector == null) {
-                null
-            } else {
-                parserSelector.select(context) ?: let {
-                    sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", parserSelector.text)))
-                    return@async
+                        }
+                    }
                 }
             }
-
-            dropPackCommand(
-                sender, pack, amount, location, parser, data, tip
-            )
         }
-        return 1
     }
 
     fun dropPackCommand(

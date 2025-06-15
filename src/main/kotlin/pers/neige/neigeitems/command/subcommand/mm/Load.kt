@@ -1,17 +1,13 @@
 package pers.neige.neigeitems.command.subcommand.mm
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import com.mojang.brigadier.builder.RequiredArgumentBuilder
-import com.mojang.brigadier.context.CommandContext
 import org.bukkit.command.CommandSender
 import org.bukkit.configuration.file.YamlConfiguration
-import pers.neige.neigeitems.command.CommandUtils.argument
-import pers.neige.neigeitems.command.CommandUtils.literal
-import pers.neige.neigeitems.command.arguments.FileNameArgumentType.fileName
-import pers.neige.neigeitems.command.arguments.FileNameArgumentType.getFileName
-import pers.neige.neigeitems.command.arguments.UnquotedStringArgumentType.getUnquotedString
-import pers.neige.neigeitems.command.arguments.UnquotedStringArgumentType.string
-import pers.neige.neigeitems.manager.ConfigManager
+import pers.neige.colonel.argument
+import pers.neige.colonel.context.Context
+import pers.neige.colonel.literal
+import pers.neige.neigeitems.annotation.CustomField
+import pers.neige.neigeitems.colonel.argument.command.FileNameArgument
+import pers.neige.neigeitems.colonel.argument.command.MaybeMMItemIdArgument
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
@@ -24,52 +20,38 @@ import java.io.File
  * ni mm load指令
  */
 object Load {
-    private val loadLogic: RequiredArgumentBuilder<CommandSender, String> =
-        // ni mm load [item]
-        argument<CommandSender, String>("item", string()).executes { context ->
-            save(context, getUnquotedString(context, "item"))
-            1
-        }.suggests { _, builder ->
-            mythicMobsHooker!!.getItemIds().forEach {
-                builder.suggest(it)
+    @JvmStatic
+    @CustomField(fieldType = "mm")
+    val load = literal<CommandSender, Unit>("load", arrayListOf("load", "cover")) {
+        argument("itemId", MaybeMMItemIdArgument.INSTANCE) {
+            setNullExecutor { context ->
+                save(context, context.getArgument("itemId"))
             }
-            builder.buildFuture()
-        }.then(
-            // ni mm load [item] (path)
-            argument<CommandSender, String>("path", fileName("Items")).executes { context ->
-                save(context, getUnquotedString(context, "item"), getFileName(context, "path"))
-                1
+            argument("path", FileNameArgument(getFileOrCreate("Items"))) {
+                setNullExecutor { context ->
+                    save(context, context.getArgument("itemId"), context.getArgument("path"))
+                }
             }
-        )
+        }
+    }
 
-    // ni mm load
-    val load: LiteralArgumentBuilder<CommandSender> = literal<CommandSender>("load").then(loadLogic)
-
-    // ni mm cover
-    val cover: LiteralArgumentBuilder<CommandSender> = literal<CommandSender>("cover").then(loadLogic)
-
-    val loadAll: LiteralArgumentBuilder<CommandSender> =
-        // ni mm loadAll
-        literal<CommandSender>("loadAll").executes { context ->
-            val path = ConfigManager.config.getString("Main.MMItemsPath") ?: "MMItems.yml"
-            saveAll(context, path)
-            1
-        }.then(
-            // ni mm loadAll (path)
-            argument<CommandSender, String>("path", fileName("Items")).executes { context ->
-                val path = getFileName(context, "path")
-                saveAll(context, path)
-                1
+    @JvmStatic
+    @CustomField(fieldType = "mm")
+    val loadAll = literal<CommandSender, Unit>("loadAll") {
+        argument("path", FileNameArgument(getFileOrCreate("Items"))) {
+            setNullExecutor { context ->
+                saveAll(context, context.getArgument("path"))
             }
-        )
+        }
+    }
 
-    private fun save(context: CommandContext<CommandSender>, id: String, path: String = "$id.yml") {
+    private fun save(context: Context<CommandSender, Unit>, id: String, path: String = "$id.yml") {
         val file = getFileOrCreate("Items${File.separator}$path")
         val config = YamlConfiguration.loadConfiguration(file)
         save(context, id, file, config)
     }
 
-    private fun saveAll(context: CommandContext<CommandSender>, path: String) {
+    private fun saveAll(context: Context<CommandSender, Unit>, path: String) {
         val file = getFileOrCreate("Items${File.separator}$path")
         val config = YamlConfiguration.loadConfiguration(file)
         mythicMobsHooker!!.getItemIds().forEach {
@@ -77,9 +59,9 @@ object Load {
         }
     }
 
-    private fun save(context: CommandContext<CommandSender>, id: String, file: File, config: YamlConfiguration) {
-        val cover = context.nodes[0].node.name == "cover"
-        val sender = context.source
+    private fun save(context: Context<CommandSender, Unit>, id: String, file: File, config: YamlConfiguration) {
+        val cover = context.getArgument<String>("load").equals("cover", true)
+        val sender = context.source ?: return
         val itemStack = try {
             mythicMobsHooker!!.getItemStackSync(id) ?: let {
                 sender.sendLang(

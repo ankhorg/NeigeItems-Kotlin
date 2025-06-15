@@ -3,6 +3,9 @@ package pers.neige.neigeitems.event;
 import lombok.NonNull;
 import org.bukkit.event.HandlerList;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 插件重载事件, /ni reload指令触发
  */
@@ -15,7 +18,15 @@ public final class PluginReloadEvent {
         PACK,
         ACTION,
         EDITOR,
-        EXPANSION,
+        EXPANSION;
+
+        public static Map<String, Type> lowercaseNameToType = new HashMap<>();
+
+        static {
+            for (Type type : values()) {
+                lowercaseNameToType.put(type.name().toLowerCase(), type);
+            }
+        }
     }
 
     /**

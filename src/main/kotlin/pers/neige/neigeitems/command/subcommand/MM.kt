@@ -1,24 +1,27 @@
 package pers.neige.neigeitems.command.subcommand
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.command.CommandSender
-import pers.neige.neigeitems.command.CommandUtils
-import pers.neige.neigeitems.command.subcommand.mm.Give
-import pers.neige.neigeitems.command.subcommand.mm.Load
+import org.bukkit.event.EventPriority
+import pers.neige.colonel.literal
+import pers.neige.colonel.node.Node
+import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.annotation.Awake
+import pers.neige.neigeitems.annotation.CustomField
 
 /**
  * ni mm指令
  */
 object MM {
-    // ni mm
-    val mm: LiteralArgumentBuilder<CommandSender> = CommandUtils.literal<CommandSender>("mm")
-        .then(Load.load)
-        .then(Load.cover)
-        .then(Load.loadAll)
-        .then(Give.get)
-        .then(Give.getSilent)
-        .then(Give.give)
-        .then(Give.giveSilent)
-        .then(Give.giveAll)
-        .then(Give.giveAllSilent)
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val mm = literal<CommandSender, Unit>("mm")
+
+    @JvmStatic
+    @Awake(lifeCycle = Awake.LifeCycle.ENABLE, priority = EventPriority.LOW)
+    fun init() {
+        NeigeItems.getInstance().scanner.getCustomFields("mm", Node::class.java).forEach {
+            Node.then(mm, it as Node<CommandSender, Unit>, false)
+        }
+        mm.buildLiteralSearcher()
+    }
 }

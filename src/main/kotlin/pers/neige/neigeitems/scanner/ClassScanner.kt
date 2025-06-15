@@ -4,15 +4,13 @@ import org.bukkit.Bukkit
 import org.bukkit.event.Event
 import org.bukkit.event.EventPriority
 import org.bukkit.plugin.Plugin
-import pers.neige.neigeitems.annotation.Awake
+import pers.neige.neigeitems.annotation.*
 import pers.neige.neigeitems.annotation.Awake.LifeCycle
 import pers.neige.neigeitems.annotation.Awake.LifeCycle.*
-import pers.neige.neigeitems.annotation.CustomTask
-import pers.neige.neigeitems.annotation.Listener
-import pers.neige.neigeitems.annotation.Schedule
 import pers.neige.neigeitems.utils.ListenerUtils
 import pers.neige.neigeitems.utils.SchedulerUtils.asyncTimer
 import pers.neige.neigeitems.utils.SchedulerUtils.syncTimer
+import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.util.*
@@ -57,6 +55,7 @@ class ClassScanner {
     private val scheduleMethods = ArrayList<EasyMethod>()
     private val awakeMethods = ConcurrentHashMap<LifeCycle, EnumMap<EventPriority, MutableList<EasyMethod>>>()
     private val customTaskMethods = ConcurrentHashMap<String, EnumMap<EventPriority, MutableList<EasyMethod>>>()
+    private val customFields = ConcurrentHashMap<String, MutableList<EasyField>>()
 
     private fun scan() {
         loadClasses(plugin, packageName, except)
@@ -123,6 +122,19 @@ class ClassScanner {
         customTaskMethods[taskId]?.values?.runMethods()
     }
 
+    fun <T> getCustomFields(fieldType: String, type: Class<out T>, allowNull: Boolean = false): MutableList<Any?> {
+        val results = arrayListOf<Any?>()
+        customFields[fieldType]?.forEach {
+            val value = it.get()
+            if (value == null) {
+                if (allowNull) results.add(null)
+            } else if (type.isInstance(value)) {
+                results.add(it.get())
+            }
+        }
+        return results
+    }
+
     private fun Collection<List<EasyMethod>>.runMethods() {
         forEach { it -> it.forEach { it.invoke() } }
     }
@@ -132,7 +144,7 @@ class ClassScanner {
         classes.forEach { clazz ->
             val methods = try {
                 clazz.declaredMethods
-            } catch (error: Throwable) {
+            } catch (_: Throwable) {
                 null
             }
             methods?.forEach { method ->
@@ -169,6 +181,21 @@ class ClassScanner {
                     val finalMethod = method.check("错误的周期触发注解")
                     if (finalMethod != null) {
                         scheduleMethods.add(finalMethod)
+                    }
+                }
+            }
+            val fields = try {
+                clazz.declaredFields
+            } catch (_: Throwable) {
+                null
+            }
+            fields?.forEach { field ->
+                // 自定义任务方法
+                if (field.isAnnotationPresent(CustomField::class.java)) {
+                    val finalField = field.check("错误的自定义字段注解")
+                    if (finalField != null) {
+                        val annotation = field.getAnnotation(CustomField::class.java)
+                        customFields.computeIfAbsent(annotation.fieldType) { ArrayList() }.add(finalField)
                     }
                 }
             }
@@ -226,13 +253,26 @@ class ClassScanner {
         }
     }
 
+    private fun Field.check(msg: String): EasyField? {
+        if (!isAccessible) {
+            isAccessible = true
+        }
+        return try {
+            EasyField.parse(this)
+        } catch (error: Throwable) {
+            plugin.logger.warning(msg + "${declaringClass.canonicalName}#${name}")
+            error.printStackTrace()
+            null
+        }
+    }
+
     class EasyMethod(val method: Method, val instance: Any?) {
         companion object {
             @JvmStatic
             fun parse(method: Method): EasyMethod? {
                 // kotlin伴生类
                 if (method.declaringClass.canonicalName.endsWith(".Companion")) {
-                    // 伴生类静态方法, 将被复制只主类, 伴生类方法可忽略, 不进行操作
+                    // 伴生类静态方法, 将被复制至主类, 伴生类方法可忽略, 不进行操作
                     if (method.isAnnotationPresent(JvmStatic::class.java)) {
                         return null
                     } else {
@@ -274,6 +314,29 @@ class ClassScanner {
             } catch (error: Throwable) {
                 error.printStackTrace()
             }
+        }
+    }
+
+    class EasyField(val field: Field, val instance: Any?) {
+        companion object {
+            @JvmStatic
+            fun parse(field: Field): EasyField? {
+                // 普通静态字段
+                if (Modifier.isStatic(field.modifiers)) {
+                    return EasyField(field, null)
+                } else {
+                    // 普通的kotlin单例字段, 单例为当前类的静态INSTANCE字段
+                    val instance = field.declaringClass.getDeclaredField("INSTANCE").get(null)
+                    if (instance == null || instance.javaClass != field.declaringClass) {
+                        throw UnsupportedOperationException()
+                    }
+                    return EasyField(field, instance)
+                }
+            }
+        }
+
+        fun get(): Any? {
+            return field.get(instance)
         }
     }
 }

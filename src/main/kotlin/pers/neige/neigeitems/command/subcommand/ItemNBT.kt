@@ -1,14 +1,14 @@
 package pers.neige.neigeitems.command.subcommand
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import com.mojang.brigadier.context.CommandContext
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Material
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.command.CommandUtils.literal
+import pers.neige.colonel.context.Context
+import pers.neige.colonel.literal
+import pers.neige.neigeitems.annotation.CustomField
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
 import pers.neige.neigeitems.manager.HookerManager.append
 import pers.neige.neigeitems.manager.HookerManager.hoverText
@@ -20,18 +20,19 @@ import pers.neige.neigeitems.utils.SchedulerUtils.async
  * ni itemnbt指令
  */
 object ItemNBT {
-    // ni itemNBT
-    val itemNBT: LiteralArgumentBuilder<CommandSender> =
-        literal<CommandSender>("itemNBT").executes { context ->
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val itemNBT = literal<CommandSender, Unit>("itemNBT") {
+        setNullExecutor { context ->
             itemNBT(context)
-            1
         }
+    }
 
-    private fun itemNBT(context: CommandContext<CommandSender>) {
+    private fun itemNBT(context: Context<CommandSender, Unit>) {
         async {
             val sender = context.source
             if (sender !is Player) {
-                sender.sendLang("Messages.onlyPlayer")
+                sender?.sendLang("Messages.onlyPlayer")
                 return@async
             }
             val itemStack = sender.inventory.itemInMainHand

@@ -1,18 +1,15 @@
 package pers.neige.neigeitems.command.subcommand
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import com.mojang.brigadier.builder.RequiredArgumentBuilder
-import com.mojang.brigadier.context.CommandContext
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import pers.neige.neigeitems.command.CommandUtils.argument
-import pers.neige.neigeitems.command.CommandUtils.literal
-import pers.neige.neigeitems.command.arguments.FileNameArgumentType.fileName
-import pers.neige.neigeitems.command.arguments.FileNameArgumentType.getFileName
-import pers.neige.neigeitems.command.arguments.ItemArgumentType.item
-import pers.neige.neigeitems.command.arguments.UnquotedStringArgumentType.getUnquotedString
-import pers.neige.neigeitems.command.arguments.UnquotedStringArgumentType.string
+import pers.neige.colonel.argument
+import pers.neige.colonel.context.Context
+import pers.neige.colonel.literal
+import pers.neige.neigeitems.annotation.CustomField
+import pers.neige.neigeitems.colonel.argument.command.FileNameArgument
+import pers.neige.neigeitems.colonel.argument.command.MaybeItemIdArgument
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
@@ -21,34 +18,28 @@ import pers.neige.neigeitems.utils.SchedulerUtils.async
  * ni save指令
  */
 object Save {
-    private val saveLogic: RequiredArgumentBuilder<CommandSender, String> =
-        // ni save [item]
-        argument<CommandSender, String>("item", string()).executes { context ->
-            save(context, getUnquotedString(context, "item"))
-            1
-        }.suggests { context, builder ->
-            item().listSuggestions(context, builder)
-        }.then(
-            // ni save [item] (path)
-            argument<CommandSender, String>("path", fileName("Items")).executes { context ->
-                save(context, getUnquotedString(context, "item"), getFileName(context, "path"))
-                1
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val save = literal<CommandSender, Unit>("save", arrayListOf("save", "cover")) {
+        argument("item", MaybeItemIdArgument.INSTANCE) {
+            setNullExecutor { context ->
+                handle(context, context.getArgument("item"))
             }
-        )
+            argument("path", FileNameArgument(ConfigUtils.getFileOrCreate("Items"))) {
+                setNullExecutor { context ->
+                    handle(context, context.getArgument("item"), context.getArgument("path"))
+                }
+            }
+        }
+    }
 
-    // ni save
-    val save: LiteralArgumentBuilder<CommandSender> = literal<CommandSender>("save").then(saveLogic)
-
-    // ni cover
-    val cover: LiteralArgumentBuilder<CommandSender> = literal<CommandSender>("cover").then(saveLogic)
-
-    private fun save(context: CommandContext<CommandSender>, id: String, path: String = "$id.yml") {
-        val cover = context.nodes[0].node.name == "cover"
-        val sender = context.source
+    private fun handle(context: Context<CommandSender, Unit>, id: String, path: String = "$id.yml") {
+        val sender = context.source ?: return
         if (sender !is Player) {
             sender.sendLang("Messages.onlyPlayer")
             return
         }
+        val cover = context.getArgument<String>("save").equals("cover", true)
         val itemStack = sender.inventory.itemInMainHand
         async {
             when (ItemManager.saveItem(itemStack, id, path, cover)) {

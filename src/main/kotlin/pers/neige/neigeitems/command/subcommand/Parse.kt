@@ -1,34 +1,30 @@
 package pers.neige.neigeitems.command.subcommand
 
-import com.mojang.brigadier.arguments.StringArgumentType.getString
-import com.mojang.brigadier.arguments.StringArgumentType.greedyString
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.command.CommandSender
-import pers.neige.neigeitems.command.CommandUtils.argument
-import pers.neige.neigeitems.command.CommandUtils.literal
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayer
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
-import pers.neige.neigeitems.command.selector.PlayerSelector
+import org.bukkit.entity.Player
+import pers.neige.colonel.argument
+import pers.neige.colonel.arguments.impl.StringArgument
+import pers.neige.colonel.literal
+import pers.neige.neigeitems.annotation.CustomField
+import pers.neige.neigeitems.colonel.argument.command.PlayerArgument
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 /**
  * ni parse指令
  */
 object Parse {
-    val parse: LiteralArgumentBuilder<CommandSender> =
-        // ni parse
-        literal<CommandSender>("parse").then(
-            // ni parse [player]
-            argument<CommandSender, PlayerSelector>("player", player()).then(
-                // ni parse [player] [sections]
-                argument<CommandSender, String>("sections", greedyString()).executes { context ->
-                    context.source.sendMessage(
-                        getString(context, "sections").parseSection(
-                            getPlayer(context, "player")
-                        )
-                    )
-                    1
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val parse = literal<CommandSender, Unit>("parse") {
+        argument("player", PlayerArgument.NULLABLE) {
+            argument("sections", StringArgument.builder<CommandSender, Unit>().readAll(true).build()) {
+                setNullExecutor { context ->
+                    val sender = context.source ?: return@setNullExecutor
+                    val player = context.getArgument<Player>("player")
+                    val sections = context.getArgument<String>("sections")
+                    sender.sendMessage(sections.parseSection(player))
                 }
-            )
-        )
+            }
+        }
+    }
 }

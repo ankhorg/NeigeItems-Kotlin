@@ -1,23 +1,15 @@
 package pers.neige.neigeitems.command.subcommand
 
-import com.mojang.brigadier.arguments.StringArgumentType.getString
-import com.mojang.brigadier.arguments.StringArgumentType.greedyString
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import com.mojang.brigadier.builder.RequiredArgumentBuilder
-import com.mojang.brigadier.context.CommandContext
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import pers.neige.neigeitems.command.CommandUtils.argument
-import pers.neige.neigeitems.command.CommandUtils.literal
-import pers.neige.neigeitems.command.arguments.IntegerArgumentType.getInteger
-import pers.neige.neigeitems.command.arguments.IntegerArgumentType.positiveInteger
-import pers.neige.neigeitems.command.arguments.ItemPackArgumentType.getItemPackSelector
-import pers.neige.neigeitems.command.arguments.ItemPackArgumentType.pack
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayerSelector
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
-import pers.neige.neigeitems.command.selector.ItemPackSelector
-import pers.neige.neigeitems.command.selector.PlayerSelector
+import pers.neige.colonel.argument
+import pers.neige.colonel.arguments.impl.StringArgument
+import pers.neige.colonel.literal
+import pers.neige.neigeitems.annotation.CustomField
+import pers.neige.neigeitems.colonel.argument.command.IntegerArgument
+import pers.neige.neigeitems.colonel.argument.command.ItemPackArgument
+import pers.neige.neigeitems.colonel.argument.command.PlayerArgument
 import pers.neige.neigeitems.event.ItemPackGiveEvent
 import pers.neige.neigeitems.item.ItemPack
 import pers.neige.neigeitems.manager.ConfigManager
@@ -33,59 +25,35 @@ import pers.neige.neigeitems.utils.SchedulerUtils.sync
  * ni givepack指令
  */
 object GivePack {
-    private val givePackLogic: RequiredArgumentBuilder<CommandSender, PlayerSelector> =
-        // ni givePack [player]
-        argument<CommandSender, PlayerSelector>("player", player()).then(
-            // ni givePack [player] [pack]
-            argument<CommandSender, ItemPackSelector>("pack", pack()).executes { context ->
-                givePack(context)
-            }.then(
-                // ni givePack [player] [pack] (amount)
-                argument<CommandSender, Int>("amount", positiveInteger()).executes { context ->
-                    givePack(context, getInteger(context, "amount"))
-                }.then(
-                    // ni givePack [player] [pack] (amount) (data)
-                    argument<CommandSender, String>("data", greedyString()).executes { context ->
-                        givePack(
-                            context,
-                            getInteger(context, "amount"),
-                            getString(context, "data")
-                        )
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val givePack = literal<CommandSender, Unit>("givePack", arrayListOf("givePack", "givePackSilent")) {
+        argument("player", PlayerArgument.NONNULL) {
+            argument("pack", ItemPackArgument.INSTANCE) {
+                argument("amount", IntegerArgument.POSITIVE_DEFAULT_ONE) {
+                    argument(
+                        "data",
+                        StringArgument.builder<CommandSender, Unit>().readAll(true).build()
+                            .setDefaultValue(null)
+                    ) {
+                        setNullExecutor { context ->
+                            async {
+                                val sender = context.source ?: return@async
+                                val tip = context.getArgument<String>("givePack").equals("givePack", true)
+                                val player = context.getArgument<Player>("player")!!
+                                val itemPack =
+                                    context.getArgument<ItemPackArgument.ItemPackContainer>("pack").itemPack!!
+                                val amount = context.getArgument<Int?>("amount")!!
+                                val data = context.getArgument<String>("data")
+                                givePackCommand(
+                                    sender, player, itemPack, amount, data, tip
+                                )
+                            }
+                        }
                     }
-                )
-            )
-        )
-
-    // ni givePack
-    val givePack: LiteralArgumentBuilder<CommandSender> = literal<CommandSender>("givePack").then(givePackLogic)
-
-    // ni givePackSilent
-    val givePackSilent: LiteralArgumentBuilder<CommandSender> =
-        literal<CommandSender>("givePackSilent").then(givePackLogic)
-
-    private fun givePack(
-        context: CommandContext<CommandSender>,
-        amount: Int = 1,
-        data: String? = null
-    ): Int {
-        async {
-            val tip = !context.nodes[0].node.name.endsWith("Silent")
-            val sender = context.source
-            val itemPackSelector = getItemPackSelector(context, "pack")
-            val itemPack = itemPackSelector.select(context) ?: let {
-                sender.sendLang("Messages.unknownItemPack", mapOf(Pair("{packID}", itemPackSelector.text)))
-                return@async
+                }
             }
-            val playerSelector = getPlayerSelector(context, "player")
-            val player = playerSelector.select(context) ?: let {
-                sender.sendLang("Messages.invalidPlayer", mapOf(Pair("{player}", playerSelector.text)))
-                return@async
-            }
-            givePackCommand(
-                sender, player, itemPack, amount, data, tip
-            )
         }
-        return 1
     }
 
     fun givePackCommand(

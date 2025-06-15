@@ -1,91 +1,96 @@
 package pers.neige.neigeitems.command.subcommand
 
-import com.mojang.brigadier.arguments.StringArgumentType.getString
-import com.mojang.brigadier.arguments.StringArgumentType.greedyString
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import org.bukkit.command.CommandSender
-import pers.neige.neigeitems.command.CommandUtils.argument
-import pers.neige.neigeitems.command.CommandUtils.literal
-import pers.neige.neigeitems.command.arguments.EditorIDArgumentType.editorID
-import pers.neige.neigeitems.command.arguments.EditorIDArgumentType.getEditorID
-import pers.neige.neigeitems.command.arguments.IntegerArgumentType.getInteger
-import pers.neige.neigeitems.command.arguments.IntegerArgumentType.integer
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.getPlayer
-import pers.neige.neigeitems.command.arguments.PlayerArgumentType.player
-import pers.neige.neigeitems.command.selector.PlayerSelector
+import org.bukkit.entity.Player
+import pers.neige.colonel.argument
+import pers.neige.colonel.arguments.impl.StringArgument
+import pers.neige.colonel.literal
+import pers.neige.neigeitems.annotation.CustomField
+import pers.neige.neigeitems.colonel.argument.command.IntegerArgument
+import pers.neige.neigeitems.colonel.argument.command.MaybeEditorIdArgument
+import pers.neige.neigeitems.colonel.argument.command.PlayerArgument
 import pers.neige.neigeitems.manager.ItemEditorManager
 
 /**
- * ni edithand/editoffhand/editslot指令
+ * ni editHand/editOffHand/editSlot指令
  */
 object Editor {
-    val editHand: LiteralArgumentBuilder<CommandSender> =
-        // ni edithand
-        literal<CommandSender>("editHand").then(
-            // ni edithand [player]
-            argument<CommandSender, PlayerSelector>("player", player()).then(
-                // ni edithand [player] [editor]
-                argument<CommandSender, String>("editor", editorID()).then(
-                    // ni edithand [player] [editor] [content]
-                    argument<CommandSender, String>("content", greedyString()).executes { context ->
-                        val player = getPlayer(context, "player") ?: return@executes 1
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val editHand = literal<CommandSender, Unit>("editHand") {
+        argument("player", PlayerArgument.NULLABLE) {
+            argument("editor", MaybeEditorIdArgument.INSTANCE) {
+                argument(
+                    "content",
+                    StringArgument.builder<CommandSender, Unit>().readAll(true).build()
+                ) {
+                    setNullExecutor { context ->
+                        val player = context.getArgument<Player>("player")
+                        val editorId = context.getArgument<String>("editor")
+                        val content = context.getArgument<String>("content")
                         ItemEditorManager.runEditor(
-                            getEditorID(context, "editor"),
-                            getString(context, "content"),
+                            editorId,
+                            content,
                             player.inventory.itemInMainHand,
                             player
                         )
-                        1
                     }
-                )
-            )
-        )
+                }
+            }
+        }
+    }
 
-    val editOffHand: LiteralArgumentBuilder<CommandSender> =
-        // ni editoffhand
-        literal<CommandSender>("editOffHand").then(
-            // ni editoffhand [player]
-            argument<CommandSender, PlayerSelector>("player", player()).then(
-                // ni editoffhand [player] [editor]
-                argument<CommandSender, String>("editor", editorID()).then(
-                    // ni editoffhand [player] [editor] [content]
-                    argument<CommandSender, String>("content", greedyString()).executes { context ->
-                        val player = getPlayer(context, "player") ?: return@executes 1
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val editOffHand = literal<CommandSender, Unit>("editOffHand") {
+        argument("player", PlayerArgument.NULLABLE) {
+            argument("editor", MaybeEditorIdArgument.INSTANCE) {
+                argument(
+                    "content",
+                    StringArgument.builder<CommandSender, Unit>().readAll(true).build()
+                ) {
+                    setNullExecutor { context ->
+                        val player = context.getArgument<Player>("player")
+                        val editorId = context.getArgument<String>("editor")
+                        val content = context.getArgument<String>("content")
                         ItemEditorManager.runEditor(
-                            getEditorID(context, "editor"),
-                            getString(context, "content"),
+                            editorId,
+                            content,
                             player.inventory.itemInOffHand,
                             player
                         )
-                        1
                     }
-                )
-            )
-        )
+                }
+            }
+        }
+    }
 
-    val editSlot: LiteralArgumentBuilder<CommandSender> =
-        // ni edithand
-        literal<CommandSender>("editSlot").then(
-            // ni edithand [player]
-            argument<CommandSender, PlayerSelector>("player", player()).then(
-                // ni edithand [player] [slot]
-                argument<CommandSender, Int>("slot", integer(0, 40)).then(
-                    // ni edithand [player] [slot] [editor]
-                    argument<CommandSender, String>("editor", editorID()).then(
-                        // ni edithand [player] [slot] [editor] [content]
-                        argument<CommandSender, String>("content", greedyString()).executes { context ->
-                            val player = getPlayer(context, "player") ?: return@executes 1
-                            val itemStack = player.inventory.getItem(getInteger(context, "slot")) ?: return@executes 1
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val editSlot = literal<CommandSender, Unit>("editSlot") {
+        argument("player", PlayerArgument.NULLABLE) {
+            argument("slot", IntegerArgument.SLOT) {
+                argument("editor", MaybeEditorIdArgument.INSTANCE) {
+                    argument(
+                        "content",
+                        StringArgument.builder<CommandSender, Unit>().readAll(true).build()
+                    ) {
+                        setNullExecutor { context ->
+                            val player = context.getArgument<Player>("player")
+                            val slot = context.getArgument<Int?>("slot")!!
+                            val itemStack = player.inventory.getItem(slot) ?: return@setNullExecutor
+                            val editorId = context.getArgument<String>("editor")
+                            val content = context.getArgument<String>("content")
                             ItemEditorManager.runEditor(
-                                getEditorID(context, "editor"),
-                                getString(context, "content"),
+                                editorId,
+                                content,
                                 itemStack,
                                 player
                             )
-                            1
                         }
-                    )
-                )
-            )
-        )
+                    }
+                }
+            }
+        }
+    }
 }

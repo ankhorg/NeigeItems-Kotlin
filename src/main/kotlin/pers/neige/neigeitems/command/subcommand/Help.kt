@@ -1,13 +1,12 @@
 package pers.neige.neigeitems.command.subcommand
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.md_5.bungee.api.chat.ComponentBuilder
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import pers.neige.neigeitems.command.CommandUtils.argument
-import pers.neige.neigeitems.command.CommandUtils.literal
-import pers.neige.neigeitems.command.arguments.IntegerArgumentType.getInteger
-import pers.neige.neigeitems.command.arguments.IntegerArgumentType.integer
+import pers.neige.colonel.argument
+import pers.neige.colonel.literal
+import pers.neige.neigeitems.annotation.CustomField
+import pers.neige.neigeitems.colonel.argument.command.IntegerArgument
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager.append
 import pers.neige.neigeitems.manager.HookerManager.hoverText
@@ -23,26 +22,24 @@ object Help {
         (ConfigManager.config.getConfigurationSection("Help.commands")?.getKeys(false)?.size ?: 1).toDouble()
     }
 
-    val help: LiteralArgumentBuilder<CommandSender> =
-        // ni help
-        literal<CommandSender>("help").executes { context ->
-            help(context.source)
-            1
-        }.then(
-            // ni help (page)
-            argument<CommandSender, Int>(
-                "page",
-                integer(1, ceil(commandsPages / ConfigManager.config.getInt("Help.amount").toDouble()).toInt())
-            ).executes { context ->
-                help(context.source, getInteger(context, "page"))
-                1
-            }.suggests { _, builder ->
-                for (i in 1..ceil(commandsPages / ConfigManager.config.getInt("Help.amount").toDouble()).toInt()) {
-                    builder.suggest(i.toString())
-                }
-                builder.buildFuture()
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val help = literal<CommandSender, Unit>("help") {
+        argument("page", IntegerArgument.POSITIVE_DEFAULT_ONE) {
+            setNullExecutor { context ->
+                val sender = context.source ?: return@setNullExecutor
+                val page = context.getArgument<Int?>("page")!!
+                help(sender, page)
             }
-        )
+            setTaber { context, remaining ->
+                val result = arrayListOf<String>()
+                for (i in 1..ceil(commandsPages / ConfigManager.config.getInt("Help.amount").toDouble()).toInt()) {
+                    result.add(i.toString())
+                }
+                result
+            }
+        }
+    }
 
     fun help(
         sender: CommandSender,

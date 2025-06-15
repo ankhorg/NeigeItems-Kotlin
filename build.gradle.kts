@@ -1,5 +1,4 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import io.freefair.gradle.plugins.lombok.tasks.Delombok
 import org.inksnow.ankhinvoke.gradle.ApplyReferenceTask
 import org.inksnow.ankhinvoke.gradle.BuildMappingsTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -116,6 +115,12 @@ dependencies {
     implementation("com.mojang:brigadier:1.3.10")
     // snakeyaml
     implementation("org.yaml:snakeyaml:2.3")
+    // colonel
+    implementation("pers.neige.colonel:colonel-common:+") {
+        exclude(group = "org.neosearch.stringsearcher")
+    }
+    implementation("pers.neige.colonel:colonel-kotlin:+")
+    implementation("pers.neige.colonel:colonel-bukkit:+")
 
     // junit
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.12.2")
@@ -135,31 +140,33 @@ tasks {
         exclude("org/intellij/lang/annotations/**")
         exclude("org/jetbrains/annotations/**")
         // kotlin
-        relocate("kotlin.", "pers.neige.neigeitems.libs.kotlin.")
+        relocate("kotlin.", "${rootProject.group}.libs.kotlin.")
         // ankh-invoke
-        relocate("org.inksnow.ankhinvoke", "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke")
+        relocate("org.inksnow.ankhinvoke", "${rootProject.group}.libs.org.inksnow.ankhinvoke")
         // bstats
-        relocate("org.bstats", "pers.neige.neigeitems.libs.bstats")
+        relocate("org.bstats", "${rootProject.group}.libs.bstats")
         // stringsearcher
-        relocate("org.neosearch.stringsearcher", "pers.neige.neigeitems.libs.stringsearcher")
+        relocate("org.neosearch.stringsearcher", "${rootProject.group}.libs.stringsearcher")
         // javassist
-        relocate("javassist", "pers.neige.neigeitems.libs.javassist")
+        relocate("javassist", "${rootProject.group}.libs.javassist")
         // maven-model
-        relocate("org.codehaus.plexus.util", "pers.neige.neigeitems.libs.plexus.util")
-        relocate("org.apache.maven.model", "pers.neige.neigeitems.libs.maven.model")
+        relocate("org.codehaus.plexus.util", "${rootProject.group}.libs.plexus.util")
+        relocate("org.apache.maven.model", "${rootProject.group}.libs.maven.model")
         // fastjson2
-        relocate("com.alibaba.fastjson2", "pers.neige.neigeitems.libs.fastjson2")
+        relocate("com.alibaba.fastjson2", "${rootProject.group}.libs.fastjson2")
         // asm
-        relocate("org.objectweb.asm", "pers.neige.neigeitems.libs.asm9")
+        relocate("org.objectweb.asm", "${rootProject.group}.libs.asm9")
         // JvmHacker
-        relocate("bot.inker.acj", "pers.neige.neigeitems.libs.acj")
+        relocate("bot.inker.acj", "${rootProject.group}.libs.acj")
         // slf4j
-        relocate("org.inksnow.cputil", "pers.neige.neigeitems.libs.cputil")
-        relocate("org.slf4j", "pers.neige.neigeitems.libs.slf4j")
+        relocate("org.inksnow.cputil", "${rootProject.group}.libs.cputil")
+        relocate("org.slf4j", "${rootProject.group}.libs.slf4j")
         // brigadier
-        relocate("com.mojang.brigadier.", "pers.neige.neigeitems.libs.com.mojang.brigadier.")
+        relocate("com.mojang.brigadier.", "${rootProject.group}.libs.com.mojang.brigadier.")
         // snakeyaml
-        relocate("org.yaml.snakeyaml", "pers.neige.neigeitems.libs.snakeyaml")
+        relocate("org.yaml.snakeyaml", "${rootProject.group}.libs.snakeyaml")
+        // colonel
+        relocate("pers.neige.colonel", "${rootProject.group}.libs.colonel")
     }
     kotlinSourcesJar {
         // include subprojects
@@ -240,7 +247,7 @@ tasks.withType<ProcessResources> {
 tasks.create<BuildMappingsTask>("build-mappings") {
     registryName = "neigeitems"
     outputDirectory = layout.buildDirectory.file("cache/build-mappings").get().asFile
-    ankhInvokePackage = "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke"
+    ankhInvokePackage = "${rootProject.group}.libs.org.inksnow.ankhinvoke"
 
     mapping("nms", "1.21.4") {
         predicates = arrayOf("craftbukkit_version:{v1_21_R3}")
@@ -275,8 +282,8 @@ tasks.processResources {
 tasks.create<ApplyReferenceTask>("apply-reference") {
     dependsOn(tasks.getByName("shadowJar"))
 
-    ankhInvokePackage = "pers.neige.neigeitems.libs.org.inksnow.ankhinvoke"
-    appendReferencePackage("pers.neige.neigeitems.ref")
+    ankhInvokePackage = "${rootProject.group}.libs.org.inksnow.ankhinvoke"
+    appendReferencePackage("${rootProject.group}.ref")
     inputJars = tasks.getByName("shadowJar").outputs.files
     outputJar = layout.buildDirectory.file("libs/NeigeItems-$version-shaded.jar").get().asFile
 }

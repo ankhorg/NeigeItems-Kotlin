@@ -71,6 +71,10 @@ public class NeigeItems extends JavaPlugin {
         return INSTANCE;
     }
 
+    public ClassScanner getScanner() {
+        return scanner;
+    }
+
     private static boolean checkMagicUtils(String className) {
         return checkMagicUtils("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils", className);
     }
