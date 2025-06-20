@@ -37,7 +37,8 @@ pers.neige.neigeitems.action.container
 pers.neige.neigeitems.action.evaluator
 pers.neige.neigeitems.action.evaluator.impl
 pers.neige.neigeitems.action.evaluator.impl.dbl
-pers.neige.neigeitems.action.evaluator.impl.integer
+pers.neige.neigeitems.action.evaluator.impl.i32
+pers.neige.neigeitems.action.evaluator.impl.i64
 pers.neige.neigeitems.action.evaluator.impl.string
 pers.neige.neigeitems.action.handler
 pers.neige.neigeitems.action.impl
