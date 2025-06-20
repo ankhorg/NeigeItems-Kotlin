@@ -143,6 +143,7 @@ object SectionManager {
         JoinParser.register()
         NumberParser.register()
         PapiParser.register()
+        RepeatableWeightDeclareParser.register()
         RepeatableWeightJoinParser.register()
         RepeatParser.register()
         StringsParser.register()

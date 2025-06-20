@@ -9,7 +9,7 @@ import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.util.concurrent.ConcurrentHashMap
 
 /**
- * repeatableweightjoin节点解析器
+ * rweightjoin节点解析器
  */
 object RepeatableWeightJoinParser : SectionParser() {
     override val id: String = "rweightjoin"
