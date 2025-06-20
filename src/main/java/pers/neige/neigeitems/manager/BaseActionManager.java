@@ -51,6 +51,7 @@ public abstract class BaseActionManager {
     public final @NonNull Text NULL_TEXT = new NullText(this);
     public final @NonNull Evaluator<String> NULL_STRING_EVALUATOR = new Evaluator<>(this, String.class);
     public final @NonNull Evaluator<Integer> NULL_INTEGER_EVALUATOR = new Evaluator<>(this, Integer.class);
+    public final @NonNull Evaluator<Long> NULL_LONG_EVALUATOR = new Evaluator<>(this, Long.class);
     public final @NonNull Evaluator<Double> NULL_DOUBLE_EVALUATOR = new Evaluator<>(this, Double.class);
     private final @NonNull Plugin plugin;
     /**

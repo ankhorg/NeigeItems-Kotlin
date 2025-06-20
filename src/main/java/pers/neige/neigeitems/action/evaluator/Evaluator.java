@@ -8,9 +8,12 @@ import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.evaluator.impl.dbl.JsDoubleEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.dbl.ParseDoubleEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.dbl.RawDoubleEvaluator;
-import pers.neige.neigeitems.action.evaluator.impl.integer.JsIntegerEvaluator;
-import pers.neige.neigeitems.action.evaluator.impl.integer.ParseIntegerEvaluator;
-import pers.neige.neigeitems.action.evaluator.impl.integer.RawIntegerEvaluator;
+import pers.neige.neigeitems.action.evaluator.impl.i32.JsIntegerEvaluator;
+import pers.neige.neigeitems.action.evaluator.impl.i32.ParseIntegerEvaluator;
+import pers.neige.neigeitems.action.evaluator.impl.i32.RawIntegerEvaluator;
+import pers.neige.neigeitems.action.evaluator.impl.i64.JsLongEvaluator;
+import pers.neige.neigeitems.action.evaluator.impl.i64.ParseLongEvaluator;
+import pers.neige.neigeitems.action.evaluator.impl.i64.RawLongEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.string.JsStringEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.string.ParseStringEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.string.RawStringEvaluator;
@@ -59,6 +62,26 @@ public class Evaluator<T> {
                     return new ParseIntegerEvaluator(manager, input);
                 } else {
                     return new RawIntegerEvaluator(manager, maybe);
+                }
+        }
+    }
+
+    public static @NonNull Evaluator<Long> createLongEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
+        if (input == null) return manager.NULL_LONG_EVALUATOR;
+        val info = input.split(": ", 2);
+        val key = info[0].toLowerCase(Locale.ROOT);
+        val content = info.length > 1 ? info[1] : null;
+        switch (key) {
+            case "js":
+                return new JsLongEvaluator(manager, content);
+            case "raw":
+                return new RawLongEvaluator(manager, content);
+            default:
+                val maybe = NumberParser.parseLong(input);
+                if (maybe == null) {
+                    return new ParseLongEvaluator(manager, input);
+                } else {
+                    return new RawLongEvaluator(manager, maybe);
                 }
         }
     }

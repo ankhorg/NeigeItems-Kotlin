@@ -1,4 +1,4 @@
-package pers.neige.neigeitems.action.evaluator.impl.integer;
+package pers.neige.neigeitems.action.evaluator.impl.i32;
 
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
