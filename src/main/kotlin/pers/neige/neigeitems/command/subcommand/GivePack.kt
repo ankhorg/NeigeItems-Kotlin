@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.command.subcommand
 
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -45,6 +46,36 @@ object GivePack {
                                     context.getArgument<ItemPackArgument.ItemPackContainer>("pack").itemPack!!
                                 val amount = context.getArgument<Int?>("amount")!!
                                 val data = context.getArgument<String>("data")
+                                givePackCommand(
+                                    sender, player, itemPack, amount, data, tip
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @JvmStatic
+    @CustomField(fieldType = "root")
+    val givePackAll = literal<CommandSender, Unit>("givePackAll", arrayListOf("givePackAll", "givePackAllSilent")) {
+        argument("pack", ItemPackArgument.INSTANCE) {
+            argument("amount", IntegerArgument.POSITIVE_DEFAULT_ONE) {
+                argument(
+                    "data",
+                    StringArgument.builder<CommandSender, Unit>().readAll(true).build()
+                        .setDefaultValue(null)
+                ) {
+                    setNullExecutor { context ->
+                        async {
+                            val sender = context.source ?: return@async
+                            val tip = context.getArgument<String>("givePackAll").equals("givePackAll", true)
+                            val itemPack =
+                                context.getArgument<ItemPackArgument.ItemPackContainer>("pack").itemPack!!
+                            val amount = context.getArgument<Int?>("amount")!!
+                            val data = context.getArgument<String>("data")
+                            Bukkit.getOnlinePlayers().forEach { player ->
                                 givePackCommand(
                                     sender, player, itemPack, amount, data, tip
                                 )

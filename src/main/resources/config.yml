@@ -147,6 +147,9 @@ Help:
     giveAll:
       command: §e/ni §fgiveAll [物品ID] (数量) (是否反复随机) (指向数据)
       description: 根据ID给予所有人NI物品
+    givePackAll:
+      command: §e/ni §fgivePackAll [物品包ID] (数量) (指向数据)
+      description: 根据ID给予所有人NI物品包
     drop:
       command: §e/ni §fdrop [物品ID] [数量] [世界名] [X坐标] [Y坐标] [Z坐标] [是否反复随机] [物品解析对象] (指向数据)
       description: 于指定位置掉落NI物品
