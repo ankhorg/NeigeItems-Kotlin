@@ -9,7 +9,7 @@ import pers.neige.neigeitems.annotation.CustomField
 import pers.neige.neigeitems.colonel.argument.command.FileNameArgument
 import pers.neige.neigeitems.colonel.argument.command.MaybeItemIdArgument
 import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.utils.ConfigUtils
+import pers.neige.neigeitems.utils.ConfigUtils.getDirectoryOrCreate
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.LangUtils.sendLang
 import pers.neige.neigeitems.utils.SchedulerUtils.async
@@ -25,7 +25,7 @@ object Save {
             setNullExecutor { context ->
                 handle(context, context.getArgument("item"))
             }
-            argument("path", FileNameArgument(ConfigUtils.getFileOrCreate("Items"))) {
+            argument("path", FileNameArgument { getDirectoryOrCreate("Items") }) {
                 setNullExecutor { context ->
                     handle(context, context.getArgument("item"), context.getArgument("path"))
                 }

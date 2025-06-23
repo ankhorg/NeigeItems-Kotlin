@@ -17,6 +17,7 @@ import pers.neige.neigeitems.manager.ExpansionManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.script.ScriptExpansion
 import pers.neige.neigeitems.utils.ConfigUtils
+import pers.neige.neigeitems.utils.ConfigUtils.getDirectoryOrCreate
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrNull
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -35,7 +36,7 @@ object Expansion {
     @CustomField(fieldType = "root")
     val expansion = literal<CommandSender, Unit>("expansion") {
         literal("build") {
-            argument("path", FileNameArgument(getFileOrCreate("Expansions"))) {
+            argument("path", FileNameArgument { getDirectoryOrCreate("Expansions") }) {
                 setNullExecutor { context ->
                     val path = context.getArgument<String>("path")!!
                     async {

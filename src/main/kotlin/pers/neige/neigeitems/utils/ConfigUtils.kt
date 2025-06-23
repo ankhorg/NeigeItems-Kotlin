@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets
  */
 object ConfigUtils {
     /**
-     * 获取文件夹内所有文件
+     * 获取本插件文件夹内所有文件
      *
      * @param dir 待获取文件夹
      * @return 文件夹内所有文件
@@ -41,7 +41,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内所有文件
+     * 获取本插件文件夹内所有文件
      *
      * @param dir 待获取文件夹路径
      * @return 文件夹内所有文件
@@ -52,7 +52,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内文件
+     * 获取本插件文件夹内文件
      *
      * @param file 待获取文件路径
      * @return 对应文件
@@ -63,7 +63,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内文件(不存在时返回null)
+     * 获取本插件文件夹内文件(不存在时返回null)
      *
      * @param file 待获取文件路径
      * @return 对应文件
@@ -77,7 +77,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内文件(不存在时创建文件)
+     * 获取本插件文件夹内文件(不存在时创建文件)
      *
      * @param file 待获取文件路径
      * @return 对应文件
@@ -88,7 +88,18 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内文件
+     * 获取本插件文件夹内文件夹(不存在时创建文件)
+     *
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getDirectoryOrCreate(file: String): File {
+        return File(NeigeItems.getInstance().dataFolder, file).createDirectory()
+    }
+
+    /**
+     * 获取指定插件文件夹内文件
      *
      * @param plugin 待获取文件归属插件
      * @param file 待获取文件路径
@@ -100,7 +111,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内文件(不存在时返回null)
+     * 获取指定插件文件夹内文件(不存在时返回null)
      *
      * @param plugin 待获取文件归属插件
      * @param file 待获取文件路径
@@ -115,7 +126,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内文件(不存在时创建文件)
+     * 获取指定插件文件夹内文件(不存在时创建文件)
      *
      * @param plugin 待获取文件归属插件
      * @param file 待获取文件路径
@@ -127,7 +138,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内所有文件
+     * 获取指定插件文件夹内所有文件
      *
      * @param plugin 待获取文件夹归属插件
      * @param dir 待获取文件夹路径
@@ -139,7 +150,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内所有文件
+     * 获取指定插件文件夹内所有文件
      *
      * @param plugin 待获取文件夹归属插件
      * @param dir 待获取文件夹路径
@@ -151,7 +162,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内文件
+     * 获取指定插件文件夹内文件
      *
      * @param plugin 待获取文件夹归属插件
      * @param file 待获取文件路径
@@ -163,7 +174,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内文件(不存在时返回null)
+     * 获取指定插件文件夹内文件(不存在时返回null)
      *
      * @param plugin 待获取文件夹归属插件
      * @param file 待获取文件路径
@@ -178,7 +189,7 @@ object ConfigUtils {
     }
 
     /**
-     * 获取文件夹内文件(不存在时创建文件)
+     * 获取指定插件文件夹内文件(不存在时创建文件)
      *
      * @param plugin 待获取文件夹归属插件
      * @param file 待获取文件路径
@@ -187,6 +198,18 @@ object ConfigUtils {
     @JvmStatic
     fun getFileOrCreate(plugin: String, file: String): File {
         return File(File(NeigeItems.getInstance().dataFolder.parent, plugin), file).createFile()
+    }
+
+    /**
+     * 获取指定插件文件夹内文件夹(不存在时创建文件)
+     *
+     * @param plugin 待获取文件夹归属插件
+     * @param file 待获取文件路径
+     * @return 对应文件
+     */
+    @JvmStatic
+    fun getDirectoryOrCreate(plugin: String, file: String): File {
+        return File(File(NeigeItems.getInstance().dataFolder.parent, plugin), file).createDirectory()
     }
 
     /**

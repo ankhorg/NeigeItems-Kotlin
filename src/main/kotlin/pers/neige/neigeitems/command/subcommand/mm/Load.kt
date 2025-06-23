@@ -10,6 +10,7 @@ import pers.neige.neigeitems.colonel.argument.command.FileNameArgument
 import pers.neige.neigeitems.colonel.argument.command.MaybeMMItemIdArgument
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
+import pers.neige.neigeitems.utils.ConfigUtils.getDirectoryOrCreate
 import pers.neige.neigeitems.utils.ConfigUtils.getFileOrCreate
 import pers.neige.neigeitems.utils.ItemUtils.getName
 import pers.neige.neigeitems.utils.LangUtils.sendLang
@@ -27,7 +28,7 @@ object Load {
             setNullExecutor { context ->
                 save(context, context.getArgument("itemId"))
             }
-            argument("path", FileNameArgument(getFileOrCreate("Items"))) {
+            argument("path", FileNameArgument { getDirectoryOrCreate("Items") }) {
                 setNullExecutor { context ->
                     save(context, context.getArgument("itemId"), context.getArgument("path"))
                 }
@@ -38,7 +39,7 @@ object Load {
     @JvmStatic
     @CustomField(fieldType = "mm")
     val loadAll = literal<CommandSender, Unit>("loadAll") {
-        argument("path", FileNameArgument(getFileOrCreate("Items"))) {
+        argument("path", FileNameArgument { getDirectoryOrCreate("Items") }) {
             setNullExecutor { context ->
                 saveAll(context, context.getArgument("path"))
             }
