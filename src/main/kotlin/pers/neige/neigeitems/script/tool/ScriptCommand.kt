@@ -9,6 +9,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ServerUt
 import pers.neige.neigeitems.manager.ExpansionManager
 import pers.neige.neigeitems.utils.CommandUtils
 import pers.neige.neigeitems.utils.SchedulerUtils.sync
+import java.util.function.Consumer
 
 /**
  * Bukkit 指令
@@ -22,9 +23,20 @@ class ScriptCommand(rawName: String) {
     /**
      * Bukkit PluginCommand 对象
      */
-    private val command: PluginCommand = CommandUtils.newPluginCommand(name, NeigeItems.getInstance())!!
+    val command: PluginCommand = CommandUtils.newPluginCommand(name, NeigeItems.getInstance())!!
 
     private var nameSpace = name
+
+    /**
+     * 编辑包装的 PluginCommand
+     *
+     * @param consumer 编辑器
+     * @return ScriptCommand 本身
+     */
+    fun editCommand(consumer: Consumer<PluginCommand>): ScriptCommand {
+        consumer.accept(command)
+        return this
+    }
 
     /**
      * 设置注册指令的插件
