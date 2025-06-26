@@ -3,6 +3,7 @@ package pers.neige.neigeitems.item.builder;
 import com.mojang.serialization.DataResult;
 import io.papermc.paper.adventure.PaperAdventure;
 import kotlin.text.StringsKt;
+import lombok.NonNull;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
@@ -27,7 +28,6 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.config.ConfigReader;
@@ -52,6 +52,7 @@ public class NewItemBuilder extends ItemBuilder {
     private final @NonNull Set<ItemFlag> hideFlag = new HashSet<>();
     private final @NonNull ItemEnchantments.Mutable mutableEnchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
     private @Nullable Component name = null;
+    private @Nullable Component itemName = null;
     private @Nullable List<Component> lore = null;
     private @Nullable ResourceLocation tooltipStyle = null;
     private DataComponentPatch components = null;
@@ -137,6 +138,14 @@ public class NewItemBuilder extends ItemBuilder {
                     }
                     break;
                 }
+                case "item-name": {
+                    String rawName = config.getString(key);
+                    if (rawName != null) {
+                        Component component = CraftChatMessage.fromStringOrNull(ChatColor.translateAlternateColorCodes('&', rawName));
+                        this.itemName = component == null ? CommonComponents.EMPTY : component;
+                    }
+                    break;
+                }
                 case "lore": {
                     List<String> originLore = config.getStringList(key);
                     List<Component> finalLore = new ArrayList<>();
@@ -155,6 +164,13 @@ public class NewItemBuilder extends ItemBuilder {
                     String rawName = config.getString(key);
                     if (rawName != null) {
                         this.name = PaperAdventure.asVanilla(MiniMessage.miniMessage().deserialize(rawName));
+                    }
+                    break;
+                }
+                case "mini-item-name": {
+                    String rawName = config.getString(key);
+                    if (rawName != null) {
+                        this.itemName = PaperAdventure.asVanilla(MiniMessage.miniMessage().deserialize(rawName));
                     }
                     break;
                 }
@@ -306,6 +322,9 @@ public class NewItemBuilder extends ItemBuilder {
         }
         if (name != null) {
             handle.set(DataComponents.CUSTOM_NAME, name);
+        }
+        if (itemName != null) {
+            handle.set(DataComponents.ITEM_NAME, itemName);
         }
         if (lore != null) {
             handle.set(DataComponents.LORE, new ItemLore(lore, new ArrayList<>()));
