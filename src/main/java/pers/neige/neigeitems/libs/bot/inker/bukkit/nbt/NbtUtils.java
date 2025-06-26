@@ -527,7 +527,9 @@ public class NbtUtils {
             RefNmsItemStack nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
             RefNbtTagCompound compound = new RefNbtTagCompound();
             for (Map.Entry<RefDataComponentType<?>, Optional<?>> entry : nmsItemStack.getComponentsPatch().entrySet()) {
-                RefTypedDataComponent<?> component = RefTypedDataComponent.createUnchecked(entry.getKey(), entry.getValue().orElse(null));
+                Optional<?> value = entry.getValue();
+                if (!value.isPresent()) continue;
+                RefTypedDataComponent<?> component = RefTypedDataComponent.createUnchecked(entry.getKey(), value.get());
                 RefMinecraftKey key = (RefMinecraftKey) ComponentUtils.getKeyByType(component.type());
                 compound.set1(key.toString(), component.encodeValue((RefRegistryOps<RefNbtBase>) registryOps).getOrThrow());
             }
