@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.metadata.Metadatable
 import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.event.PlayerUtilsItemGiveDropEvent
 import pers.neige.neigeitems.manager.UserManager
 import pers.neige.neigeitems.utils.ItemUtils.getItemId
 
@@ -22,9 +23,24 @@ object PlayerUtils {
      * @param itemStack 待给予物品
      */
     @JvmStatic
+    private fun Player.giveItem0(itemStack: ItemStack) {
+        inventory.addItem(itemStack).values.forEach {
+            val event = PlayerUtilsItemGiveDropEvent(this, it)
+            if (event.call()) {
+                world.dropItem(location, event.itemStack)
+            }
+        }
+    }
+
+    /**
+     * 给予玩家物品.
+     *
+     * @param itemStack 待给予物品
+     */
+    @JvmStatic
     fun Player.giveItem(itemStack: ItemStack) {
         if (itemStack.type != Material.AIR) {
-            inventory.addItem(itemStack).values.forEach { world.dropItem(location, it) }
+            giveItem0(itemStack)
         }
     }
 
@@ -40,7 +56,7 @@ object PlayerUtils {
             // CraftInventory.addItem 的执行过程中, 实质上有可能修改ItemStack的amount, 如果不注意这一点, 则会吞物品而不自知
             val preAmount = itemStack.amount
             repeat(repeat) {
-                inventory.addItem(itemStack).values.forEach { world.dropItem(location, it) }
+                giveItem0(itemStack)
                 itemStack.amount = preAmount
             }
         }
@@ -65,13 +81,13 @@ object PlayerUtils {
         if (repeat > 0) {
             repeat(repeat) {
                 itemStack.amount = maxStackSize
-                inventory.addItem(itemStack).values.forEach { world.dropItem(location, it) }
+                giveItem0(itemStack)
             }
         }
         // 单独给予
         if (leftAmount > 0) {
             itemStack.amount = leftAmount
-            inventory.addItem(itemStack).values.forEach { world.dropItem(location, it) }
+            giveItem0(itemStack)
         }
         itemStack.amount = preAmount
     }
