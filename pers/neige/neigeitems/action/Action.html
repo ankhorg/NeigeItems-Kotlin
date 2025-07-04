@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>Action 1.21.88 API </title>
+    <title>Action 1.21.89 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -270,9 +270,9 @@ public abstract class <span class="typeNameLabel"><a href=Action.html>Action</a>
                                         <tr id="i2" class="altColor">
                                             <td class="colFirst"><code>boolean</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=impl/IntTreeAction.html#isAsyncSafe()>isAsyncSafe</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=impl/IntTreeAction.html#canRunInOtherThread()>canRunInOtherThread</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">当前动作是否可以在非主线程运行.</td>
                                         </tr>
                                         
                                         <tr id="i3" class="rowColor">
@@ -407,16 +407,16 @@ public abstract class <span class="typeNameLabel"><a href=Action.html>Action</a>
                                     </li>
                                 </ul>
                                 
-                                <a id="isAsyncSafe()">
+                                <a id="canRunInOtherThread()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>isAsyncSafe</h4>
-                                        <pre class="methodSignature"> boolean <a href=impl/IntTreeAction.html#isAsyncSafe()>isAsyncSafe</a>()</pre>
-                                        <div class="block"></div>
+                                        <h4>canRunInOtherThread</h4>
+                                        <pre class="methodSignature"> boolean <a href=impl/IntTreeAction.html#canRunInOtherThread()>canRunInOtherThread</a>()</pre>
+                                        <div class="block"><p>当前动作是否可以在非主线程运行. 假设当前动作是单一动作, 比如 String 类型动作. 那么此方法应反映当前动作的运行逻辑. 假设当前动作是多个动作的组合, 比如 List 类型动作. 那么, 只有组合内所有动作均需要在主线程运行时, 当前动作组合才需要在主线程运行. 或者说, 只要组合内存在不需要在主线程运行的动作, 就认定该动作组合不需要在主线程运行. 具体原因与线程切换判断有关, 是为了防止混合动作执行过程中频繁地反复横跳.</p></div>
 
                                         <dl>
 
