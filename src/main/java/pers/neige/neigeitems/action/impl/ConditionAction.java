@@ -4,6 +4,7 @@ import lombok.NonNull;
 import pers.neige.neigeitems.action.*;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -28,9 +29,7 @@ public class ConditionAction extends Action {
     }
 
     private void checkAsyncSafe() {
-        if (!this.actions.isAsyncSafe() && !this.deny.isAsyncSafe()) {
-            this.asyncSafe = false;
-        }
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(() -> this.actions.canRunInOtherThread() || this.deny.canRunInOtherThread());
     }
 
     @Override

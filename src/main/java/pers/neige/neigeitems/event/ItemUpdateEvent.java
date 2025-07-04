@@ -25,7 +25,7 @@ public final class ItemUpdateEvent {
         private static final HandlerList handlers = new HandlerList();
         private final @Nullable OfflinePlayer player;
         private final @NonNull ItemStack oldItem;
-        private final @Nullable Map<String, String> data;
+        private final @NonNull Map<String, String> data;
         private final @NonNull ItemGenerator item;
 
         /**
@@ -37,7 +37,7 @@ public final class ItemUpdateEvent {
         public PreGenerate(
                 @Nullable OfflinePlayer player,
                 @NonNull ItemStack oldItem,
-                @Nullable Map<String, String> data,
+                @NonNull Map<String, String> data,
                 @NonNull ItemGenerator item
         ) {
             this.player = player;
@@ -67,7 +67,7 @@ public final class ItemUpdateEvent {
         /**
          * 获取旧物品内部的指向数据
          */
-        public @Nullable Map<String, String> getData() {
+        public @NonNull Map<String, String> getData() {
             return data;
         }
 

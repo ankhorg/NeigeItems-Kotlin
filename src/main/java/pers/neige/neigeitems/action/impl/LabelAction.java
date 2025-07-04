@@ -7,6 +7,7 @@ import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -25,7 +26,7 @@ public class LabelAction extends Action {
             label = "label";
         }
         actions = manager.compile(action.get("actions"));
-        this.asyncSafe = actions.isAsyncSafe();
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(actions::canRunInOtherThread);
     }
 
     @Override

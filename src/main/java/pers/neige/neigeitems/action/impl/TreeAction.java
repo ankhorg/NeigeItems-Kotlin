@@ -10,6 +10,7 @@ import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import java.util.Locale;
 import java.util.TreeMap;
@@ -72,12 +73,13 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
     }
 
     private void checkAsyncSafe() {
-        for (val action : this.actions.values()) {
-            if (action.isAsyncSafe()) return;
-        }
-        if (this.defaultAction.isAsyncSafe()) return;
-        if (this.matchAction.isAsyncSafe()) return;
-        this.asyncSafe = false;
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(() -> {
+            for (val action : this.actions.values()) {
+                if (action.canRunInOtherThread()) return true;
+            }
+            if (this.defaultAction.canRunInOtherThread()) return true;
+            return this.matchAction.canRunInOtherThread();
+        });
     }
 
     public @NonNull Class<T> getKeyType() {

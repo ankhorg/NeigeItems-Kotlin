@@ -10,6 +10,7 @@ import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.NumberParser;
 import pers.neige.neigeitems.utils.StringUtils;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import javax.script.Compilable;
 import javax.script.CompiledScript;
@@ -44,10 +45,12 @@ public class ConditionWeightAction extends Action {
     }
 
     private void checkAsyncSafe() {
-        for (val action : actions) {
-            if (action.getFirst().getSecond().isAsyncSafe()) return;
-        }
-        this.asyncSafe = false;
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(() -> {
+            for (val action : actions) {
+                if (action.getFirst().getSecond().canRunInOtherThread()) return true;
+            }
+            return false;
+        });
     }
 
     public void initActions(@NonNull BaseActionManager manager, @Nullable Object actions) {

@@ -6,6 +6,7 @@ import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +38,12 @@ public class ListAction extends Action {
     }
 
     private void checkAsyncSafe() {
-        for (Action action : actions) {
-            if (action.isAsyncSafe()) return;
-        }
-        this.asyncSafe = false;
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(() -> {
+            for (Action action : actions) {
+                if (action.canRunInOtherThread()) return true;
+            }
+            return false;
+        });
     }
 
     @Override

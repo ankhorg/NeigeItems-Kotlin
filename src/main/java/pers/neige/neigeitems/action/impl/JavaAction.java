@@ -6,6 +6,7 @@ import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
@@ -27,7 +28,7 @@ public class JavaAction extends Action {
             @NonNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function
     ) {
         super(manager);
-        this.asyncSafe = asyncSafe;
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(() -> asyncSafe);
         this.function = function;
     }
 

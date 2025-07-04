@@ -9,6 +9,7 @@ import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,12 +41,13 @@ public class KeyAction extends Action {
     }
 
     private void checkAsyncSafe() {
-        for (val action : this.actions.values()) {
-            if (action.isAsyncSafe()) return;
-        }
-        if (this.defaultAction.isAsyncSafe()) return;
-        if (this.matchAction.isAsyncSafe()) return;
-        this.asyncSafe = false;
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(() -> {
+            for (val action : this.actions.values()) {
+                if (action.canRunInOtherThread()) return true;
+            }
+            if (this.defaultAction.canRunInOtherThread()) return true;
+            return this.matchAction.canRunInOtherThread();
+        });
     }
 
     @Override

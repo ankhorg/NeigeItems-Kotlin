@@ -6,13 +6,14 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SchedulerUtils;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class Action {
     protected final @NonNull BaseActionManager manager;
-    protected boolean asyncSafe = true;
+    protected @Nullable ThreadSafeLazyBoolean canRunInOtherThread = null;
 
     public Action(@NonNull BaseActionManager manager) {
         this.manager = manager;
@@ -31,7 +32,7 @@ public abstract class Action {
             @NonNull BaseActionManager manager,
             @NonNull ActionContext context
     ) {
-        if (this.asyncSafe) {
+        if (canRunInOtherThread()) {
             // 如果线程状态不一致, 回归原始线程
             if (context.isSync() != Bukkit.isPrimaryThread()) {
                 val result = new CompletableFuture<ActionResult>();
@@ -54,8 +55,17 @@ public abstract class Action {
         return eval(manager, context);
     }
 
-    public boolean isAsyncSafe() {
-        return asyncSafe;
+    /**
+     * 当前动作是否可以在非主线程运行.<br>
+     * 假设当前动作是单一动作, 比如 String 类型动作.<br>
+     * 那么此方法应反映当前动作的运行逻辑.<br>
+     * 假设当前动作是多个动作的组合, 比如 List 类型动作.<br>
+     * 那么, 只有组合内所有动作均需要在主线程运行时, 当前动作组合才需要在主线程运行.<br>
+     * 或者说, 只要组合内存在不需要在主线程运行的动作, 就认定该动作组合不需要在主线程运行.<br>
+     * 具体原因与线程切换判断有关, 是为了防止混合动作执行过程中频繁地反复横跳.
+     */
+    public boolean canRunInOtherThread() {
+        return canRunInOtherThread == null || canRunInOtherThread.get();
     }
 
     public @NonNull CompletableFuture<ActionResult> evalAsyncSafe(

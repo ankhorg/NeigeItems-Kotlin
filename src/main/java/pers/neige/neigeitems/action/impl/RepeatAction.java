@@ -8,6 +8,7 @@ import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,7 +25,7 @@ public class RepeatAction extends Action {
         this.globalId = config.getString("global-id", "i");
         this.repeat = Evaluator.createIntegerEvaluator(manager, config.getString("repeat"));
         this.actions = manager.compile(config.get("actions"));
-        this.asyncSafe = actions.isAsyncSafe();
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(actions::canRunInOtherThread);
     }
 
     @Override

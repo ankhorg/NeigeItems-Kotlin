@@ -4,7 +4,6 @@ import com.google.common.io.ByteStreams;
 import kotlin.text.StringsKt;
 import lombok.NonNull;
 import lombok.val;
-import lombok.var;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
@@ -131,7 +130,7 @@ public abstract class BaseActionManager {
             val string = (String) action;
             val info = string.split(": ", 2);
             val key = info[0].toLowerCase(Locale.ROOT);
-            var content = info.length > 1 ? info[1] : "";
+            String content = info.length > 1 ? info[1] : "";
             if (key.equals("js")) {
                 return new JsAction(this, content);
             } else {
@@ -194,7 +193,7 @@ public abstract class BaseActionManager {
             val key = keySet.iterator().next();
             val value = config.get(key);
             if (!(value instanceof String)) return NULL_ACTION;
-            var content = (String) value;
+            String content = (String) value;
             if (key.equals("js")) {
                 return new JsAction(this, content);
             } else {
@@ -448,7 +447,7 @@ public abstract class BaseActionManager {
             return CompletableFuture.completedFuture(Results.SUCCESS);
         int amount = action.getAmount(this, context);
         if (amount >= action.getActions().size()) {
-            var result = CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
             for (val currentAction : action.getActions()) {
                 result = result.thenCombine(currentAction.getFirst().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
@@ -475,7 +474,7 @@ public abstract class BaseActionManager {
             if (action.isOrder()) {
                 actions.sort(Comparator.comparingInt(SamplingUtils.SamplingResult::getIndex));
             }
-            var result = CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
             for (val currentAction : actions) {
                 result = result.thenCombine(currentAction.getValue().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
@@ -505,7 +504,7 @@ public abstract class BaseActionManager {
         if (actions.isEmpty()) return CompletableFuture.completedFuture(Results.SUCCESS);
         val amount = action.getAmount(this, context);
         if (amount >= actions.size()) {
-            var result = CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
             for (val currentAction : actions) {
                 result = result.thenCombine(currentAction.getFirst().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
@@ -527,7 +526,7 @@ public abstract class BaseActionManager {
             if (action.isOrder()) {
                 finalActions.sort(Comparator.comparingInt(SamplingUtils.SamplingResult::getIndex));
             }
-            var result = CompletableFuture.completedFuture(Results.SUCCESS);
+            CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
             for (val currentAction : finalActions) {
                 result = result.thenCombine(currentAction.getValue().evalAsyncSafe(this, context), (r1, r2) -> {
                     if (r1.compareTo(r2) < 0) {
@@ -858,13 +857,13 @@ public abstract class BaseActionManager {
         BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler;
         if (asyncSafe) {
             handler = (context, content) -> {
-                var result = function.apply(context, content);
+                CompletableFuture<ActionResult> result = function.apply(context, content);
                 if (result == null) result = CompletableFuture.completedFuture(Results.SUCCESS);
                 return result;
             };
         } else {
             handler = (SyncActionHandler) (context, content) -> {
-                var result = function.apply(context, content);
+                CompletableFuture<ActionResult> result = function.apply(context, content);
                 if (result == null) result = CompletableFuture.completedFuture(Results.SUCCESS);
                 return result;
             };

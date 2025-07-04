@@ -8,6 +8,7 @@ import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,9 +35,10 @@ public class ContainsAction extends Action {
     }
 
     private void checkAsyncSafe() {
-        if (this.defaultAction.isAsyncSafe()) return;
-        if (this.containsAction.isAsyncSafe()) return;
-        this.asyncSafe = false;
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(() -> {
+            if (this.defaultAction.canRunInOtherThread()) return true;
+            return this.containsAction.canRunInOtherThread();
+        });
     }
 
     @Override

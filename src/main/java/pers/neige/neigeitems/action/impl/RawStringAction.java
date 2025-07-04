@@ -10,6 +10,8 @@ import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.handler.SyncActionHandler;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.manager.BaseActionManager;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazy;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +21,7 @@ public class RawStringAction extends Action {
     private final @NonNull String action;
     private final @NonNull String key;
     private final @NonNull String content;
-    private @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler;
+    private final @NonNull ThreadSafeLazy<BiFunction<ActionContext, String, CompletableFuture<ActionResult>>> handler;
 
     public RawStringAction(
             @NonNull BaseActionManager manager,
@@ -30,7 +32,7 @@ public class RawStringAction extends Action {
         val info = action.split(": ", 2);
         key = info[0].toLowerCase(Locale.ROOT);
         content = info.length > 1 ? info[1] : "";
-        this.handler = manager.getActions().get(this.key);
+        this.handler = new ThreadSafeLazy<>(() -> manager.getActions().get(this.key));
         checkAsyncSafe();
     }
 
@@ -44,14 +46,12 @@ public class RawStringAction extends Action {
         this.action = action;
         this.key = key;
         this.content = content;
-        this.handler = manager.getActions().get(this.key);
+        this.handler = new ThreadSafeLazy<>(() -> manager.getActions().get(this.key));
         checkAsyncSafe();
     }
 
     private void checkAsyncSafe() {
-        if (this.handler != null && this.handler instanceof SyncActionHandler) {
-            this.asyncSafe = false;
-        }
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(() -> !(this.handler.get() instanceof SyncActionHandler));
     }
 
     @Override
@@ -81,10 +81,6 @@ public class RawStringAction extends Action {
 
     @Override
     public @NonNull CompletableFuture<ActionResult> evalAsyncSafe(@NonNull BaseActionManager manager, @NonNull ActionContext context) {
-        if (handler == null) {
-            this.handler = manager.getActions().get(this.key);
-            checkAsyncSafe();
-        }
         return super.evalAsyncSafe(manager, context);
     }
 
@@ -101,6 +97,6 @@ public class RawStringAction extends Action {
     }
 
     public @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> getHandler() {
-        return handler;
+        return handler.get();
     }
 }
