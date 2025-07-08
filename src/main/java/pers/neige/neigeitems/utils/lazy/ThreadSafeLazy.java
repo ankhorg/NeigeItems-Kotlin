@@ -13,6 +13,12 @@ public class ThreadSafeLazy<T> {
         this.supplier = supplier;
     }
 
+    public ThreadSafeLazy(@NonNull T value) {
+        this.value = value;
+        this.initialized = true;
+        this.supplier = null;
+    }
+
     public T get() {
         if (!this.initialized) {
             synchronized (this) {

@@ -13,6 +13,12 @@ public class ThreadSafeLazyLong {
         this.supplier = supplier;
     }
 
+    public ThreadSafeLazyLong(long value) {
+        this.value = value;
+        this.initialized = true;
+        this.supplier = null;
+    }
+
     public long get() {
         if (!this.initialized) {
             synchronized (this) {

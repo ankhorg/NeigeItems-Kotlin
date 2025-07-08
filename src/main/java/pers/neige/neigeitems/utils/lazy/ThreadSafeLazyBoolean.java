@@ -13,6 +13,12 @@ public class ThreadSafeLazyBoolean {
         this.supplier = supplier;
     }
 
+    public ThreadSafeLazyBoolean(boolean value) {
+        this.value = value;
+        this.initialized = true;
+        this.supplier = null;
+    }
+
     public boolean get() {
         if (!this.initialized) {
             synchronized (this) {

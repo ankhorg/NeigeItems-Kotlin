@@ -27,13 +27,23 @@ public class StringAction extends Action {
             @NonNull BaseActionManager manager,
             @NonNull String action
     ) {
-        super(manager);
-        this.action = action;
-        val info = action.split(": ", 2);
-        this.key = info[0].toLowerCase(Locale.ROOT);
-        this.content = info.length > 1 ? info[1] : "";
-        this.handler = new ThreadSafeLazy<>(() -> manager.getActions().get(this.key));
-        checkAsyncSafe();
+        this(manager, action, action.split(": ", 2));
+    }
+
+    private StringAction(
+            @NonNull BaseActionManager manager,
+            @NonNull String action,
+            @NonNull String[] keyAndContent
+    ) {
+        this(manager, action, keyAndContent[0].toLowerCase(Locale.ROOT), keyAndContent.length > 1 ? keyAndContent[1] : "");
+    }
+
+    public StringAction(
+            @NonNull BaseActionManager manager,
+            @NonNull String key,
+            @NonNull String content
+    ) {
+        this(manager, key + ": " + content, key, content);
     }
 
     public StringAction(
@@ -46,16 +56,9 @@ public class StringAction extends Action {
         this.action = action;
         this.key = key;
         this.content = content;
-        this.handler = new ThreadSafeLazy<>(() -> manager.getActions().get(this.key));
+        val maybeHandler = manager.getActions().get(this.key);
+        this.handler = maybeHandler == null ? new ThreadSafeLazy<>(() -> manager.getActions().get(this.key)) : new ThreadSafeLazy<>(maybeHandler);
         checkAsyncSafe();
-    }
-
-    public StringAction(
-            @NonNull BaseActionManager manager,
-            @NonNull String key,
-            @NonNull String content
-    ) {
-        this(manager, key + ": " + content, key, content);
     }
 
     private void checkAsyncSafe() {

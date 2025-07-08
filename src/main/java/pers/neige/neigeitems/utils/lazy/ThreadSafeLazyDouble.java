@@ -13,6 +13,12 @@ public class ThreadSafeLazyDouble {
         this.supplier = supplier;
     }
 
+    public ThreadSafeLazyDouble(double value) {
+        this.value = value;
+        this.initialized = true;
+        this.supplier = null;
+    }
+
     public double get() {
         if (!this.initialized) {
             synchronized (this) {

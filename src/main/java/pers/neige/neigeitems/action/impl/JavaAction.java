@@ -28,7 +28,7 @@ public class JavaAction extends Action {
             @NonNull BiFunction<BaseActionManager, ActionContext, CompletableFuture<ActionResult>> function
     ) {
         super(manager);
-        this.canRunInOtherThread = new ThreadSafeLazyBoolean(() -> asyncSafe);
+        this.canRunInOtherThread = new ThreadSafeLazyBoolean(asyncSafe);
         this.function = function;
     }
 
