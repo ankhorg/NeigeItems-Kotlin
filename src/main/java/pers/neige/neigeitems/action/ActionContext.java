@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ActionContext implements Cloneable {
-    private final @NonNull Bindings basicBindings;
+    private final @NonNull Bindings bindings;
     private final @Nullable Player player;
     private final @NonNull Map<String, Object> global;
     private final @Nullable Map<String, Object> params;
@@ -81,7 +81,7 @@ public class ActionContext implements Cloneable {
         this.nbt = nbt;
         this.data = data;
         this.event = event;
-        basicBindings = toBindings();
+        this.bindings = toBindings();
     }
 
     /**
@@ -137,7 +137,7 @@ public class ActionContext implements Cloneable {
         if (params != null) {
             params.forEach((key, value) -> {
                 if (value != null) {
-                    basicBindings.put(key, value);
+                    bindings.put(key, value);
                 }
             });
         }
@@ -147,11 +147,6 @@ public class ActionContext implements Cloneable {
      * 获取用于传入 js 的 Bindings.
      */
     public @NonNull Bindings getBindings() {
-        val bindings = new SimpleBindings();
-        val vars = new HashMap<String, Object>();
-        bindings.put("variables", vars);
-        bindings.put("vars", vars);
-        bindings.putAll(basicBindings);
         return bindings;
     }
 

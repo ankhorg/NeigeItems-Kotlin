@@ -4,15 +4,15 @@ import lombok.NonNull;
 import org.bukkit.inventory.ItemStack;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.RefMinecraftKey;
-import pers.neige.neigeitems.ref.core.component.RefDataComponentPatch;
 import pers.neige.neigeitems.ref.core.component.RefDataComponentType;
+import pers.neige.neigeitems.ref.core.component.RefPatchedDataComponentMap;
 import pers.neige.neigeitems.ref.nbt.RefBukkitItemStack;
 import pers.neige.neigeitems.ref.nbt.RefCraftItemStack;
 import pers.neige.neigeitems.ref.nbt.RefNmsItemStack;
 import pers.neige.neigeitems.ref.registry.RefBuiltInRegistries;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 public class ComponentUtils {
     /**
@@ -65,16 +65,18 @@ public class ComponentUtils {
         RefCraftItemStack providerCraft = (RefCraftItemStack) provider;
         RefNmsItemStack receiverNms = receiverCraft.handle;
         RefNmsItemStack providerNms = providerCraft.handle;
-        RefDataComponentPatch patch = providerNms.getComponentsPatch();
+        RefPatchedDataComponentMap receiverComponentMap = receiverNms.components;
+        RefPatchedDataComponentMap providerComponentMap = providerNms.components;
         components.forEach(componentId -> {
             RefDataComponentType<?> componentType = getDataComponentType0(componentId);
             if (componentType == null) return;
-            Optional<?> optional = patch.get(componentType);
-            Object component = optional == null ? null : optional.orElse(null);
-            if (component == null) {
-                receiverNms.remove(componentType);
+            Object receiverComponent = receiverComponentMap.get(componentType);
+            Object providerComponent = providerComponentMap.get(componentType);
+            if (Objects.equals(receiverComponent, providerComponent)) return;
+            if (providerComponent == null) {
+                receiverComponentMap.remove(componentType);
             } else {
-                receiverNms.set((RefDataComponentType<? super Object>) componentType, component);
+                receiverComponentMap.set((RefDataComponentType<? super Object>) componentType, providerComponent);
             }
         });
     }
