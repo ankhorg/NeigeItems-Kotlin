@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>ActionContext 1.21.90 API </title>
+    <title>ActionContext 1.21.91 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -176,42 +176,48 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                         </tr>
                                         
                                         <tr class="altColor">
+                                            <td class="colFirst"><code>public final <a href=https://docs.oracle.com/javase/8/docs/api/javax/script/Bindings.html>Bindings</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=ActionContext.html#bindings>bindings</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
                                             <td class="colFirst"><code>public final Player</code></td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#player>player</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
+                                        <tr class="altColor">
                                             <td class="colFirst"><code>public final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;</code></td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#global>global</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="altColor">
+                                        <tr class="rowColor">
                                             <td class="colFirst"><code>public final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;</code></td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#params>params</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
+                                        <tr class="altColor">
                                             <td class="colFirst"><code>public final ItemStack</code></td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#itemStack>itemStack</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="altColor">
+                                        <tr class="rowColor">
                                             <td class="colFirst"><code>public final <a href=../libs/bot/inker/bukkit/nbt/NbtCompound.html>NbtCompound</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#nbt>nbt</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
+                                        <tr class="altColor">
                                             <td class="colFirst"><code>public final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt;</code></td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#data>data</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="altColor">
+                                        <tr class="rowColor">
                                             <td class="colFirst"><code>public final Event</code></td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#event>event</a></code></th>
                                             <td class="colLast"></td>
@@ -327,6 +333,14 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/javax/script/Bindings.html>Bindings</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=ActionContext.html#getBindings()>getBindings</a>() </code>
+                                            </th>
+                                            <td class="colLast">获取用于传入 js 的 Bindings.</td>
+                                        </tr>
+                                        
+                                        <tr id="i1" class="rowColor">
                                             <td class="colFirst"><code>Player</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#getPlayer()>getPlayer</a>() </code>
@@ -334,7 +348,7 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                             <td class="colLast">获取触发动作的玩家.</td>
                                         </tr>
                                         
-                                        <tr id="i1" class="rowColor">
+                                        <tr id="i2" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#getGlobal()>getGlobal</a>() </code>
@@ -342,7 +356,7 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                             <td class="colLast">获取 js 动作及 condition 中调用的名为 global 的 Map.</td>
                                         </tr>
                                         
-                                        <tr id="i2" class="altColor">
+                                        <tr id="i3" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#getParams()>getParams</a>() </code>
@@ -350,7 +364,7 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                             <td class="colLast">获取准备放入 js 中的变量.</td>
                                         </tr>
                                         
-                                        <tr id="i3" class="rowColor">
+                                        <tr id="i4" class="altColor">
                                             <td class="colFirst"><code>ItemStack</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#getItemStack()>getItemStack</a>() </code>
@@ -358,7 +372,7 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                             <td class="colLast">获取触发动作的物品.</td>
                                         </tr>
                                         
-                                        <tr id="i4" class="altColor">
+                                        <tr id="i5" class="rowColor">
                                             <td class="colFirst"><code><a href=../libs/bot/inker/bukkit/nbt/NbtCompound.html>NbtCompound</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#getNbt()>getNbt</a>() </code>
@@ -366,7 +380,7 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                             <td class="colLast">获取触发动作物品的 NBT.</td>
                                         </tr>
                                         
-                                        <tr id="i5" class="rowColor">
+                                        <tr id="i6" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#getData()>getData</a>() </code>
@@ -374,7 +388,7 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                             <td class="colLast">获取触发动作物品的 NeigeItems 节点信息.</td>
                                         </tr>
                                         
-                                        <tr id="i6" class="altColor">
+                                        <tr id="i7" class="rowColor">
                                             <td class="colFirst"><code>Event</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#getEvent()>getEvent</a>() </code>
@@ -382,7 +396,7 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                             <td class="colLast">获取触发动作的事件.</td>
                                         </tr>
                                         
-                                        <tr id="i7" class="rowColor">
+                                        <tr id="i8" class="altColor">
                                             <td class="colFirst"><code>static <a href=ActionContext.html>ActionContext</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#empty()>empty</a>() </code>
@@ -390,7 +404,7 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                             <td class="colLast">返回一个空空荡荡的 ActionContext.</td>
                                         </tr>
                                         
-                                        <tr id="i8" class="altColor">
+                                        <tr id="i9" class="rowColor">
                                             <td class="colFirst"><code><a href=ActionContext.html>ActionContext</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#clone()>clone</a>() </code>
@@ -398,20 +412,12 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i9" class="rowColor">
+                                        <tr id="i10" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=ActionContext.html#refreshParams()>refreshParams</a>() </code>
                                             </th>
                                             <td class="colLast">修改 params 后请调用该方法刷新 Bindings.</td>
-                                        </tr>
-                                        
-                                        <tr id="i10" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/javax/script/Bindings.html>Bindings</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=ActionContext.html#getBindings()>getBindings</a>() </code>
-                                            </th>
-                                            <td class="colLast">获取用于传入 js 的 Bindings.</td>
                                         </tr>
                                         
                                         <tr id="i11" class="rowColor">
@@ -533,6 +539,29 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                 <!--   -->
                             </a>
                                 <h3>Method Detail</h3>
+                                
+                                <a id="getBindings()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getBindings</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/javax/script/Bindings.html>Bindings</a> <a href=ActionContext.html#getBindings()>getBindings</a>()</pre>
+                                        <div class="block"><p>获取用于传入 js 的 Bindings.</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
                                 
                                 <a id="getPlayer()">
                                     <!--   -->
@@ -751,29 +780,6 @@ public class <span class="typeNameLabel"><a href=ActionContext.html>ActionContex
                                         <h4>refreshParams</h4>
                                         <pre class="methodSignature"> void <a href=ActionContext.html#refreshParams()>refreshParams</a>()</pre>
                                         <div class="block"><p>修改 params 后请调用该方法刷新 Bindings.</p></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getBindings()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getBindings</h4>
-                                        <pre class="methodSignature">@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/javax/script/Bindings.html>Bindings</a> <a href=ActionContext.html#getBindings()>getBindings</a>()</pre>
-                                        <div class="block"><p>获取用于传入 js 的 Bindings.</p></div>
 
                                         <dl>
 
