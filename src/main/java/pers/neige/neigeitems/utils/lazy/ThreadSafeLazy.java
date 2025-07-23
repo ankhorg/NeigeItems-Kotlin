@@ -4,7 +4,7 @@ import lombok.NonNull;
 
 import java.util.function.Supplier;
 
-public class ThreadSafeLazy<T> {
+public class ThreadSafeLazy<T> implements Supplier<T> {
     private volatile T value;
     private volatile boolean initialized;
     private Supplier<T> supplier;
@@ -19,6 +19,7 @@ public class ThreadSafeLazy<T> {
         this.supplier = null;
     }
 
+    @Override
     public T get() {
         if (!this.initialized) {
             synchronized (this) {

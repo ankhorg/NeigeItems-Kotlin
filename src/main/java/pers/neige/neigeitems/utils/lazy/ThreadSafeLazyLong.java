@@ -4,7 +4,7 @@ import lombok.NonNull;
 
 import java.util.function.LongSupplier;
 
-public class ThreadSafeLazyLong {
+public class ThreadSafeLazyLong implements LongSupplier {
     private volatile long value;
     private volatile boolean initialized;
     private LongSupplier supplier;
@@ -36,5 +36,10 @@ public class ThreadSafeLazyLong {
         synchronized (this) {
             return this.initialized;
         }
+    }
+
+    @Override
+    public long getAsLong() {
+        return get();
     }
 }

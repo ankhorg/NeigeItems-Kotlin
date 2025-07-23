@@ -375,6 +375,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
                 event.cache
             )
             eventActions.run("post-generate", context)
+            event.itemStack.amount = 1
             return event.itemStack
         } else {
             Bukkit.getConsoleSender().sendLang(

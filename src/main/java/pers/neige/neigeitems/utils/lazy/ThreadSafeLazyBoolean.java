@@ -4,7 +4,7 @@ import lombok.NonNull;
 
 import java.util.function.BooleanSupplier;
 
-public class ThreadSafeLazyBoolean {
+public class ThreadSafeLazyBoolean implements BooleanSupplier {
     private volatile boolean value;
     private volatile boolean initialized;
     private BooleanSupplier supplier;
@@ -36,5 +36,10 @@ public class ThreadSafeLazyBoolean {
         synchronized (this) {
             return this.initialized;
         }
+    }
+
+    @Override
+    public boolean getAsBoolean() {
+        return get();
     }
 }

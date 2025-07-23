@@ -4,7 +4,7 @@ import lombok.NonNull;
 
 import java.util.function.IntSupplier;
 
-public class ThreadSafeLazyInt {
+public class ThreadSafeLazyInt implements IntSupplier {
     private volatile int value;
     private volatile boolean initialized;
     private IntSupplier supplier;
@@ -36,5 +36,10 @@ public class ThreadSafeLazyInt {
         synchronized (this) {
             return this.initialized;
         }
+    }
+
+    @Override
+    public int getAsInt() {
+        return get();
     }
 }

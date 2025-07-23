@@ -4,7 +4,7 @@ import lombok.NonNull;
 
 import java.util.function.DoubleSupplier;
 
-public class ThreadSafeLazyDouble {
+public class ThreadSafeLazyDouble implements DoubleSupplier {
     private volatile double value;
     private volatile boolean initialized;
     private DoubleSupplier supplier;
@@ -36,5 +36,10 @@ public class ThreadSafeLazyDouble {
         synchronized (this) {
             return this.initialized;
         }
+    }
+
+    @Override
+    public double getAsDouble() {
+        return get();
     }
 }
