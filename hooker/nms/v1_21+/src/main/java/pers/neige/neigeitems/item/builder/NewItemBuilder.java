@@ -47,7 +47,8 @@ import java.util.logging.Level;
 
 public class NewItemBuilder extends ItemBuilder {
     public static final RegistryOps<Tag> registryOps = MinecraftServer.getServer().registryAccess().createSerializationContext(NbtOps.INSTANCE);
-    private static final boolean LOWER_THAN_1_21_4 = !CbVersion.v1_21_R4.isSupport();
+    private static final boolean LOWER_THAN_1_21_R4 = !CbVersion.v1_21_R4.isSupport();
+    private static final boolean LOWER_THAN_1_21_R3 = !CbVersion.v1_21_R3.isSupport();
 
     private final @NonNull Set<ItemFlag> hideFlag = new HashSet<>();
     private final @NonNull ItemEnchantments.Mutable mutableEnchantments = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
@@ -308,13 +309,13 @@ public class NewItemBuilder extends ItemBuilder {
             handle.setDamageValue(damage);
         }
         if (!this.enchantments.isEmpty()) {
-            if (LOWER_THAN_1_21_4) {
+            if (LOWER_THAN_1_21_R4) {
                 mutableEnchantments.showInTooltip = !this.hideFlag.contains(ItemFlag.HIDE_ENCHANTS);
             }
             handle.set(DataComponents.ENCHANTMENTS, mutableEnchantments.toImmutable());
         }
         if (customModelData != null) {
-            if (LOWER_THAN_1_21_4) {
+            if (LOWER_THAN_1_21_R3) {
                 handle.set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(customModelData));
             } else {
                 NeigeItems.getInstance().getLogger().warning("1.21.4+的版本请使用components配置项通过组件配置CustomModelData");
@@ -330,14 +331,14 @@ public class NewItemBuilder extends ItemBuilder {
             handle.set(DataComponents.LORE, new ItemLore(lore, new ArrayList<>()));
         }
         if (color != null) {
-            if (LOWER_THAN_1_21_4) {
+            if (LOWER_THAN_1_21_R4) {
                 handle.set(DataComponents.DYED_COLOR, new DyedItemColor(color, !this.hideFlag.contains(ItemFlag.HIDE_DYE)));
             } else {
                 NeigeItems.getInstance().getLogger().warning("1.21.4+的版本请使用components配置项通过组件配置皮革颜色");
             }
         }
         if (Boolean.TRUE.equals(unbreakable)) {
-            if (LOWER_THAN_1_21_4) {
+            if (LOWER_THAN_1_21_R4) {
                 handle.set(DataComponents.UNBREAKABLE, new Unbreakable(!this.hideFlag.contains(ItemFlag.HIDE_UNBREAKABLE)));
             } else {
                 NeigeItems.getInstance().getLogger().warning("1.21.4+的版本请使用components配置项通过组件配置无法破坏");
