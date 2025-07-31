@@ -36,6 +36,7 @@ pers.neige.neigeitems.action.catcher
 pers.neige.neigeitems.action.container
 pers.neige.neigeitems.action.evaluator
 pers.neige.neigeitems.action.evaluator.impl
+pers.neige.neigeitems.action.evaluator.impl.bool
 pers.neige.neigeitems.action.evaluator.impl.dbl
 pers.neige.neigeitems.action.evaluator.impl.i32
 pers.neige.neigeitems.action.evaluator.impl.i64
