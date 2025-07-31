@@ -52,6 +52,7 @@ public abstract class BaseActionManager {
     public final @NonNull Evaluator<Integer> NULL_INTEGER_EVALUATOR = new Evaluator<>(this, Integer.class);
     public final @NonNull Evaluator<Long> NULL_LONG_EVALUATOR = new Evaluator<>(this, Long.class);
     public final @NonNull Evaluator<Double> NULL_DOUBLE_EVALUATOR = new Evaluator<>(this, Double.class);
+    public final @NonNull Evaluator<Boolean> NULL_BOOLEAN_EVALUATOR = new Evaluator<>(this, Boolean.class);
     private final @NonNull Plugin plugin;
     /**
      * 物品动作实现函数

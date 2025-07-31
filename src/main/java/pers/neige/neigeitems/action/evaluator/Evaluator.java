@@ -5,6 +5,9 @@ import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
+import pers.neige.neigeitems.action.evaluator.impl.bool.JsBooleanEvaluator;
+import pers.neige.neigeitems.action.evaluator.impl.bool.ParseBooleanEvaluator;
+import pers.neige.neigeitems.action.evaluator.impl.bool.RawBooleanEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.dbl.JsDoubleEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.dbl.ParseDoubleEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.dbl.RawDoubleEvaluator;
@@ -18,7 +21,6 @@ import pers.neige.neigeitems.action.evaluator.impl.string.JsStringEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.string.ParseStringEvaluator;
 import pers.neige.neigeitems.action.evaluator.impl.string.RawStringEvaluator;
 import pers.neige.neigeitems.manager.BaseActionManager;
-import pers.neige.neigeitems.utils.NumberParser;
 
 import java.util.Locale;
 
@@ -57,11 +59,11 @@ public class Evaluator<T> {
             case "raw":
                 return new RawIntegerEvaluator(manager, content);
             default:
-                val maybe = NumberParser.parseInteger(input);
-                if (maybe == null) {
+                val maybeRaw = new RawIntegerEvaluator(manager, input);
+                if (maybeRaw.getValue() == null) {
                     return new ParseIntegerEvaluator(manager, input);
                 } else {
-                    return new RawIntegerEvaluator(manager, maybe);
+                    return maybeRaw;
                 }
         }
     }
@@ -77,11 +79,11 @@ public class Evaluator<T> {
             case "raw":
                 return new RawLongEvaluator(manager, content);
             default:
-                val maybe = NumberParser.parseLong(input);
-                if (maybe == null) {
+                val maybeRaw = new RawLongEvaluator(manager, input);
+                if (maybeRaw.getValue() == null) {
                     return new ParseLongEvaluator(manager, input);
                 } else {
-                    return new RawLongEvaluator(manager, maybe);
+                    return maybeRaw;
                 }
         }
     }
@@ -97,11 +99,31 @@ public class Evaluator<T> {
             case "raw":
                 return new RawDoubleEvaluator(manager, content);
             default:
-                val maybe = NumberParser.parseDouble(input);
-                if (maybe == null) {
+                val maybeRaw = new RawDoubleEvaluator(manager, input);
+                if (maybeRaw.getValue() == null) {
                     return new ParseDoubleEvaluator(manager, input);
                 } else {
-                    return new RawDoubleEvaluator(manager, maybe);
+                    return maybeRaw;
+                }
+        }
+    }
+
+    public static @NonNull Evaluator<Boolean> createBooleanEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
+        if (input == null) return manager.NULL_BOOLEAN_EVALUATOR;
+        val info = input.split(": ", 2);
+        val key = info[0].toLowerCase(Locale.ROOT);
+        val content = info.length > 1 ? info[1] : null;
+        switch (key) {
+            case "js":
+                return new JsBooleanEvaluator(manager, content);
+            case "raw":
+                return new RawBooleanEvaluator(manager, content);
+            default:
+                val maybeRaw = new RawBooleanEvaluator(manager, input);
+                if (maybeRaw.getValue() == null) {
+                    return new ParseBooleanEvaluator(manager, input);
+                } else {
+                    return maybeRaw;
                 }
         }
     }
