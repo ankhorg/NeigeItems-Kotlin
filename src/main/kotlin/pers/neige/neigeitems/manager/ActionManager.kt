@@ -8,6 +8,7 @@ import org.bukkit.event.Event
 import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -46,6 +47,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     @JvmStatic
     private val logger = LoggerFactory.getLogger(ActionManager::class.java.simpleName)
 
+    val registeredActionTypes: MutableSet<String> = ConcurrentHashMap.newKeySet()
     /**
      * 获取拥有动作的物品ID及相关动作
      */
@@ -66,6 +68,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
      */
     override fun reload() {
         super.reload()
+        registeredActionTypes.clear()
         itemActions.clear()
         functions.clear()
         loadItemActions()
@@ -123,7 +126,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
                     // 进行升级操作
                     if (upgrade && upgradeConfig(configurationSection)) upgraded = true
                     // 加载物品动作
-                    itemActions[id] = ItemAction(id, configurationSection)
+                    val itemAction = ItemAction(id, configurationSection)
+                    registeredActionTypes.addAll(itemAction.triggers.keys)
+                    itemActions[id] = itemAction
                 }
             }
             // 保存升级内容
@@ -320,6 +325,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun eatListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: PlayerItemConsumeEvent
     ) {
+        if (!registeredActionTypes.contains(ItemActionType.EAT.type)) return
         basicHandler(
             player,
             itemStack,
@@ -338,6 +344,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun dropListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: PlayerDropItemEvent
     ) {
+        if (!registeredActionTypes.contains(ItemActionType.DROP.type)) return
         basicHandler(
             player, itemStack, itemInfo, event, ItemActionType.DROP.type, cancel = false, cancelIfCooldown = true
         )
@@ -349,6 +356,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun pickListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityPickupItemEvent
     ) {
+        if (!registeredActionTypes.contains(ItemActionType.PICK.type)) return
         basicHandler(
             player,
             itemStack,
@@ -367,6 +375,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun clickListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: InventoryClickEvent
     ) {
+        if (!registeredActionTypes.contains(ItemActionType.CLICK.type)) return
         basicHandler(
             player, itemStack, itemInfo, event, ItemActionType.CLICK.type
         )
@@ -378,6 +387,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun beClickedListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: InventoryClickEvent
     ) {
+        if (!registeredActionTypes.contains(ItemActionType.BECLICKED.type)) return
         basicHandler(
             player, itemStack, itemInfo, event, ItemActionType.BECLICKED.type
         )
@@ -389,6 +399,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun shootBowListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityShootBowEvent
     ) {
+        if (!registeredActionTypes.contains(ItemActionType.SHOOT_BOW.type)) return
         basicHandler(
             player,
             itemStack,
@@ -407,6 +418,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun shootArrowListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityShootBowEvent
     ) {
+        if (!registeredActionTypes.contains(ItemActionType.SHOOT_ARROW.type)) return
         basicHandler(
             player,
             itemStack,
@@ -425,19 +437,33 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun blockingListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent
     ) {
+        if (!registeredActionTypes.contains(ItemActionType.BLOCKING.type)) return
         basicHandler(
             player, itemStack, itemInfo, event, ItemActionType.BLOCKING.type, cancel = false
         )
     }
 
     /**
-     * 攻击实体时由主手物品触发
+     * 攻击实体时触发
      */
     fun damageListener(
-        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent, key: String
     ) {
+        if (!registeredActionTypes.contains(key)) return
         basicHandler(
-            player, itemStack, itemInfo, event, ItemActionType.DAMAGE.type, cancel = false
+            player, itemStack, itemInfo, event, key, cancel = false
+        )
+    }
+
+    /**
+     * 受攻击时触发
+     */
+    fun damagedListener(
+        player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageEvent, key: String
+    ) {
+        if (!registeredActionTypes.contains(key)) return
+        basicHandler(
+            player, itemStack, itemInfo, event, key, cancel = false
         )
     }
 
@@ -447,6 +473,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun killListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: EntityDamageByEntityEvent, key: String
     ) {
+        if (!registeredActionTypes.contains(key)) return
         basicHandler(
             player, itemStack, itemInfo, event, key, cancel = false, consumeItem = false
         )
@@ -458,6 +485,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     fun breakBlockListener(
         player: Player, itemStack: ItemStack, itemInfo: ItemInfo, event: BlockBreakEvent
     ) {
+        if (!registeredActionTypes.contains(ItemActionType.BREAK_BLOCK.type)) return
         basicHandler(
             player, itemStack, itemInfo, event, ItemActionType.BREAK_BLOCK.type, cancel = false, cancelIfCooldown = true
         )

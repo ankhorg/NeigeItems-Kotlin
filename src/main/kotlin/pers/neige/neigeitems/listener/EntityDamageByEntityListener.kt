@@ -31,9 +31,31 @@ object EntityDamageByEntityListener {
         // 检测已损坏物品
         ItemDurability.durabilityChecker(player, neigeItems, event)
         if (event.isCancelled) return
-        // 执行物品动作
-        ActionManager.damageListener(player, itemStack, itemInfo, event)
-        if (event.isCancelled) return
+        // 执行动作
+        val inventory = player.inventory
+        damageAction(player, inventory.itemInMainHand, event, ItemActionType.DAMAGE.type)
+        damageAction(player, inventory.itemInOffHand, event, ItemActionType.DAMAGE_OFFHAND.type)
+        inventory.helmet?.let { damageAction(player, it, event, ItemActionType.DAMAGE_HEAD.type) }
+        inventory.chestplate?.let { damageAction(player, it, event, ItemActionType.DAMAGE_CHEST.type) }
+        inventory.leggings?.let { damageAction(player, it, event, ItemActionType.DAMAGE_LEGS.type) }
+        inventory.boots?.let { damageAction(player, it, event, ItemActionType.DAMAGE_FEET.type) }
+    }
+
+    @JvmStatic
+    @Listener(eventPriority = EventPriority.LOWEST)
+    private fun damaged(event: EntityDamageEvent) {
+        if (event.entity !is Player) return
+        // 获取玩家(受击者)
+        val player = event.entity as Player
+
+        // 执行动作
+        val inventory = player.inventory
+        damagedAction(player, inventory.itemInMainHand, event, ItemActionType.DAMAGED_HAND.type)
+        damagedAction(player, inventory.itemInOffHand, event, ItemActionType.DAMAGED_OFFHAND.type)
+        inventory.helmet?.let { damagedAction(player, it, event, ItemActionType.DAMAGED_HEAD.type) }
+        inventory.chestplate?.let { damagedAction(player, it, event, ItemActionType.DAMAGED_CHEST.type) }
+        inventory.leggings?.let { damagedAction(player, it, event, ItemActionType.DAMAGED_LEGS.type) }
+        inventory.boots?.let { damagedAction(player, it, event, ItemActionType.DAMAGED_FEET.type) }
     }
 
     @JvmStatic
@@ -89,6 +111,32 @@ object EntityDamageByEntityListener {
         inventory.chestplate?.let { killAction(attacker, it, event, ItemActionType.KILL_CHEST.type) }
         inventory.leggings?.let { killAction(attacker, it, event, ItemActionType.KILL_LEGS.type) }
         inventory.boots?.let { killAction(attacker, it, event, ItemActionType.KILL_FEET.type) }
+    }
+
+    private fun damageAction(
+        player: Player,
+        itemStack: ItemStack,
+        event: EntityDamageByEntityEvent,
+        key: String
+    ) {
+        // 获取NI物品信息(不是NI物品就停止操作)
+        val itemInfo = itemStack.isNiItem() ?: return
+
+        // 执行物品动作
+        ActionManager.damageListener(player, itemStack, itemInfo, event, key)
+    }
+
+    private fun damagedAction(
+        player: Player,
+        itemStack: ItemStack,
+        event: EntityDamageEvent,
+        key: String
+    ) {
+        // 获取NI物品信息(不是NI物品就停止操作)
+        val itemInfo = itemStack.isNiItem() ?: return
+
+        // 执行物品动作
+        ActionManager.damagedListener(player, itemStack, itemInfo, event, key)
     }
 
     private fun killAction(
