@@ -106,6 +106,11 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         ActionContainer(ActionManager, "event", configSection.getConfigurationSection("event"))
 
     /**
+     * 节点中物品ID对应的节点ID
+     */
+    val idSection: String? = configSection.getString("options.id-section")
+
+    /**
      * 获取物品静态配置
      */
     val static = ConfigReader.parse(configSection.getConfigurationSection("static"))
@@ -121,6 +126,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         it.set("static", null)
         it.set("options.update", null)
         it.set("event", null)
+        it.set("options.id-section", null)
     }.saveToString()
 
     /**
@@ -333,6 +339,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
     fun getItemStack(player: OfflinePlayer?, data: MutableMap<String, String>?): ItemStack? {
         // 加载缓存
         val cache = data ?: HashMap<String, String>()
+        if (idSection != null) cache[idSection] = id
         // 获取私有节点配置
         val sections = this.sections
         // 对文本化配置进行全局节点解析
