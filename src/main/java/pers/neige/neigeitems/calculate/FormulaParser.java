@@ -98,7 +98,8 @@ public class FormulaParser {
             }
             // 若是符号，则判断其与栈顶符号的优先级，是右括号或优先级不高于栈顶符号（乘除优先加减）则栈顶元素依次出栈并输出，并将当前符号进栈，一直到最终输出后缀表达式为止
             val calcOperator = (CalcOperator) it;
-            if (calcOperator == CalcOperator.LEFT_BRACKET) {
+            // 幂运算在大多数编程语言中为右结合运算，即2 ^ 2 ^ 3 == 2 ^ (2 ^ 3)
+            if (calcOperator == CalcOperator.LEFT_BRACKET || calcOperator == CalcOperator.POWER) {
                 operators.push(calcOperator);
             } else if (calcOperator == CalcOperator.RIGHT_BRACKET) {
                 while (!infix.isEmpty() && operators.peek() != CalcOperator.LEFT_BRACKET) {
