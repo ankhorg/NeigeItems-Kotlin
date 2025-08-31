@@ -112,7 +112,7 @@ object PlayerUtils {
      * @return Metadata值
      */
     @JvmStatic
-    fun Player.getMetadataEZ(key: String, def: Any): Any? {
+    fun Player.getMetadataEZ(key: String, def: Any?): Any? {
         val user = UserManager.INSTANCE[uniqueId] ?: return def
         return user.metadata.getOrDefault(key, def)
     }
@@ -124,7 +124,7 @@ object PlayerUtils {
      * @param value Metadata值
      */
     @JvmStatic
-    fun Player.setMetadataEZ(key: String, value: Any) {
+    fun Player.setMetadataEZ(key: String, value: Any?) {
         val user = UserManager.INSTANCE[uniqueId] ?: return
         user.metadata[key] = value
     }
@@ -137,7 +137,7 @@ object PlayerUtils {
      * @return Metadata值
      */
     @JvmStatic
-    fun Metadatable.getMetadataEZ(key: String, def: Any): Any? {
+    fun Metadatable.getMetadataEZ(key: String, def: Any?): Any? {
         if (!this.hasMetadata(key)) {
             return def
         }
@@ -151,7 +151,7 @@ object PlayerUtils {
      * @param value Metadata值
      */
     @JvmStatic
-    fun Metadatable.setMetadataEZ(key: String, value: Any) {
+    fun Metadatable.setMetadataEZ(key: String, value: Any?) {
         this.setMetadata(key, FixedMetadataValue(NeigeItems.getInstance(), value))
     }
 

@@ -194,15 +194,20 @@ object HookerManager {
         // 没事儿改包名很爽吗, 写MM的, 你妈死了
         mythicMobsHooker =
             kotlin.runCatching {
-                // 5.6.0+
-                if (Class.forName("io.lumine.mythic.core.config.MythicConfigImpl")
-                        .getDeclaredMethod("getFileConfiguration").returnType == FileConfiguration::class.java
-                ) {
-                    Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl560")
-                        .newInstance() as MythicMobsHooker
-                } else {
-                    null
+                for (method in Class.forName("io.lumine.mythic.core.config.MythicConfigImpl").declaredMethods) {
+                    if (method.name == "getFileConfiguration") {
+                        if (method.returnType == FileConfiguration::class.java) {
+                            // 5.6.0+
+                            return@runCatching Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl560")
+                                .newInstance() as MythicMobsHooker
+                        } else {
+                            return@runCatching null
+                        }
+                    }
                 }
+                // 5.9.0+
+                return@runCatching Class.forName("pers.neige.neigeitems.hook.mythicmobs.impl.MythicMobsHookerImpl560")
+                    .newInstance() as MythicMobsHooker
             }.getOrNull() ?: kotlin.runCatching {
                 // 5.1.0+
                 Class.forName("io.lumine.mythic.bukkit.utils.config.file.YamlConfiguration")
