@@ -10,6 +10,7 @@ import org.bukkit.entity.Item;
 import pers.neige.neigeitems.NeigeItems;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.PacketUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
+import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.PlayerUtils;
 
 public class ItemHider {
@@ -26,7 +27,7 @@ public class ItemHider {
                 val packet = event.getPacket().getHandle();
                 val id = PacketUtils.getEntityIdFromPacketPlayOutEntityMetadata(packet);
                 if (id < 0) return;
-                val entity = WorldUtils.getEntityFromID1(player.getWorld(), id);
+                val entity = HookerManager.INSTANCE.getNmsHooker().getEntityFromID1(player.getWorld(), id);
                 if (entity == null) return;
                 if (!(entity instanceof Item) || !entity.hasMetadata("NI-Owner")) return;
                 // 获取归属者

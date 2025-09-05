@@ -17,5 +17,5 @@ public final class RefNbtTagString extends RefNbtBase {
     @HandleBy(reference = "Lnet/minecraft/nbt/Tag;getAsString()Ljava/lang/String;", isInterface = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/NBTTagString;asString()Ljava/lang/String;", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagString;c_()Ljava/lang/String;", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
-    public native String asString();
+    public native String asString0();
 }

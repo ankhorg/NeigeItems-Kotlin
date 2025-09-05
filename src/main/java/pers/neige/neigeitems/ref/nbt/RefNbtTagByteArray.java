@@ -13,7 +13,7 @@ public final class RefNbtTagByteArray extends RefNbtBase {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/ByteArrayTag;<init>(Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/ByteArrayTag;<init>(Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_17_R1,v1_21_R4)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagByteArray;<init>(Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefNbtTagByteArray(List<Byte> value) {
         throw new UnsupportedOperationException();

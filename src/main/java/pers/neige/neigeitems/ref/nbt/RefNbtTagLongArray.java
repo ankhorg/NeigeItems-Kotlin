@@ -16,7 +16,7 @@ public final class RefNbtTagLongArray extends RefNbtBase {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/LongArrayTag;<init>(Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/LongArrayTag;<init>(Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_17_R1,v1_21_R4)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagLongArray;<init>(Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefNbtTagLongArray(List<Long> value) {
         throw new UnsupportedOperationException();

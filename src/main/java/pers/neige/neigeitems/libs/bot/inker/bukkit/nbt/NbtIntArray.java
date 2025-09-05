@@ -6,6 +6,9 @@ import pers.neige.neigeitems.ref.nbt.RefNbtTagIntArray;
 import java.util.Arrays;
 import java.util.List;
 
+import static pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound.LIST_CONSTRUCTOR_NOT_SUPPORTED;
+import static pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound.toIntArray;
+
 public final class NbtIntArray extends NbtCollection<RefNbtTagIntArray, Integer> {
     NbtIntArray(RefNbtTagIntArray delegate) {
         super(delegate);
@@ -16,7 +19,7 @@ public final class NbtIntArray extends NbtCollection<RefNbtTagIntArray, Integer>
     }
 
     public NbtIntArray(List<Integer> value) {
-        super(new RefNbtTagIntArray(value));
+        super(LIST_CONSTRUCTOR_NOT_SUPPORTED ? new RefNbtTagIntArray(toIntArray(value)) : new RefNbtTagIntArray(value));
     }
 
     @Override

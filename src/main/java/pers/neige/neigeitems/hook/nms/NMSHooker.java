@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -25,6 +26,8 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
+import pers.neige.neigeitems.ref.entity.RefEntity;
+import pers.neige.neigeitems.ref.world.RefCraftWorld;
 import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.util.*;
@@ -286,5 +289,12 @@ public class NMSHooker {
             result.set("nbt", ItemUtils.toStringMap(nbt));
         }
         return result;
+    }
+
+    public @Nullable Entity getEntityFromID1(
+            @NonNull World world,
+            int entityId
+    ) {
+        return WorldUtils.getEntityFromID(world, entityId);
     }
 }

@@ -69,8 +69,15 @@ object HookerManager {
                 CbVersion.current().ordinal < CbVersion.v1_16_R2.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerHoverEvent")
                     .newInstance() as NMSHooker
 
-                CbVersion.current().ordinal >= CbVersion.v1_20_R4.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerItemStack")
-                    .newInstance() as NMSHooker
+                CbVersion.current().ordinal >= CbVersion.v1_20_R4.ordinal -> {
+                    when {
+                        CbVersion.current().ordinal >= CbVersion.v1_21_R4.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerWorldEntity")
+                            .newInstance() as NMSHooker
+
+                        else -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerItemStack")
+                            .newInstance() as NMSHooker
+                    }
+                }
 
                 else -> NMSHooker()
             }

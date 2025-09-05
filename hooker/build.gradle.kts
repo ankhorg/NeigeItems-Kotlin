@@ -1,4 +1,6 @@
 import java.io.FileOutputStream
+import java.nio.charset.StandardCharsets
+import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 
@@ -27,7 +29,8 @@ dependencies {
     implementation(project(":hooker:nms:v1_12_R1"))
     implementation(project(":hooker:nms:v1_14_R1"))
     implementation(project(":hooker:nms:v1_16_R2"))
-    implementation(project(":hooker:nms:v1_21+"))
+    implementation(project(":hooker:nms:v1_21"))
+    implementation(project(":hooker:nms:v1_21_R4"))
 //     implementation(project(path = ":hooker:nms:v1_21+", configuration = "reobf"))
 }
 
@@ -72,15 +75,29 @@ fun final() {
     if (!currentFile.exists()) return
 
     JarOutputStream(FileOutputStream(newMainFile)).use { jarOutputStream ->
+        val manifestContent = """
+            Manifest-Version: 1.0
+            paperweight-mappings-namespace: mojang
+        """.trimIndent() + "\n"
+
+        val manifestEntry = JarEntry("META-INF/MANIFEST.MF")
+
+        jarOutputStream.putNextEntry(manifestEntry)
+        jarOutputStream.write(manifestContent.toByteArray(StandardCharsets.UTF_8))
+        jarOutputStream.closeEntry()
+
         JarFile(mainFile).use { jarFile ->
             val entries = jarFile.entries()
             while (entries.hasMoreElements()) {
                 val entry = entries.nextElement()
+                if (entry.name == "META-INF/MANIFEST.MF") continue
+
                 jarOutputStream.putNextEntry(entry)
                 jarFile.getInputStream(entry).copyTo(jarOutputStream)
                 jarOutputStream.closeEntry()
             }
         }
+
         JarFile(currentFile).use { jarFile ->
             val entries = jarFile.entries()
             while (entries.hasMoreElements()) {

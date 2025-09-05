@@ -63,14 +63,14 @@ public final class RefNbtTagCompound extends RefNbtBase {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;setByteArray(Ljava/lang/String;[B)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native void setByteArray(String key, byte[] value);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;putByteArray(Ljava/lang/String;Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_17_R1,v1_17_R1)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;putByteArray(Ljava/lang/String;Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_17_R1,v1_21_R4)")
     public native void setByteArray(String key, List<Byte> value);
 
     @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;putIntArray(Ljava/lang/String;[I)V", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;setIntArray(Ljava/lang/String;[I)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native void setIntArray(String key, int[] value);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;putIntArray(Ljava/lang/String;Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;putIntArray(Ljava/lang/String;Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_17_R1,v1_21_R4)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/NBTTagCompound;b(Ljava/lang/String;Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
     public native void setIntArray(String key, List<Integer> value);
 
@@ -78,7 +78,7 @@ public final class RefNbtTagCompound extends RefNbtBase {
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/NBTTagCompound;a(Ljava/lang/String;[J)V", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
     public native void setLongArray(String key, long[] value);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;putLongArray(Ljava/lang/String;Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;putLongArray(Ljava/lang/String;Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_17_R1,v1_21_R4)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/NBTTagCompound;c(Ljava/lang/String;Ljava/util/List;)V", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
     public native void setLongArray(String key, List<Long> value);
 

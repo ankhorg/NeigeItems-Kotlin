@@ -16,8 +16,10 @@ import java.util.*;
 public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentLike {
     private static final boolean SET_RETURN_SUPPORT = CbVersion.v1_14_R1.isSupport();
     private static final boolean LONG_ARRAY_SUPPORT = CbVersion.v1_13_R1.isSupport();
-    private static final boolean PUT_BYTE_LIST_SUPPORT = CbVersion.v1_17_R1.isSupport();
-    private static final boolean PUT_INT_LIST_SUPPORT = CbVersion.v1_13_R1.isSupport();
+    private static final boolean PUT_BYTE_LIST_SUPPORT = CbVersion.v1_17_R1.isSupport() && !CbVersion.v1_21_R4.isSupport();
+    private static final boolean PUT_INT_LIST_SUPPORT = CbVersion.v1_13_R1.isSupport() && !CbVersion.v1_21_R4.isSupport();
+    private static final boolean PUT_LONG_LIST_SUPPORT = CbVersion.v1_13_R1.isSupport() && !CbVersion.v1_21_R4.isSupport();
+    static final boolean LIST_CONSTRUCTOR_NOT_SUPPORTED = CbVersion.v1_21_R4.isSupport();
 
     private final Map<String, Nbt<?>> delegateMap;
     private Set<String> oldKeySet;
@@ -38,6 +40,33 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
             return new NbtCompound((RefNbtTagCompound) delegate);
         }
         return null;
+    }
+
+    static byte[] toByteArray(List<Byte> value) {
+        byte[] bytes = new byte[value.size()];
+        for (int i = 0; i < value.size(); i++) {
+            Byte element = value.get(i);
+            bytes[i] = (element == null) ? 0 : element;
+        }
+        return bytes;
+    }
+
+    static int[] toIntArray(List<Integer> value) {
+        int[] ints = new int[value.size()];
+        for (int i = 0; i < value.size(); i++) {
+            Integer element = value.get(i);
+            ints[i] = (element == null) ? 0 : element;
+        }
+        return ints;
+    }
+
+    static long[] toLongArray(List<Long> value) {
+        long[] longs = new long[value.size()];
+        for (int i = 0; i < value.size(); i++) {
+            Long element = value.get(i);
+            longs[i] = (element == null) ? 0 : element;
+        }
+        return longs;
     }
 
     public Set<String> getAllKeys() {
@@ -195,12 +224,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
         if (PUT_BYTE_LIST_SUPPORT) {
             delegate.setByteArray(key, value);
         } else {
-            byte[] bytes = new byte[value.size()];
-            for (int i = 0; i < value.size(); i++) {
-                Byte element = value.get(i);
-                bytes[i] = (element == null) ? 0 : element;
-            }
-            delegate.setByteArray(key, bytes);
+            delegate.setByteArray(key, toByteArray(value));
         }
     }
 
@@ -214,12 +238,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
         if (PUT_INT_LIST_SUPPORT) {
             delegate.setIntArray(key, value);
         } else {
-            int[] ints = new int[value.size()];
-            for (int i = 0; i < value.size(); i++) {
-                Integer element = value.get(i);
-                ints[i] = (element == null) ? 0 : element;
-            }
-            delegate.setIntArray(key, ints);
+            delegate.setIntArray(key, toIntArray(value));
         }
     }
 
@@ -227,8 +246,6 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public void putLongArray(String key, long[] value) {
         if (LONG_ARRAY_SUPPORT) {
             delegate.setLongArray(key, value);
-        } else if (SET_RETURN_SUPPORT) {
-            delegate.set1(key, new RefNbtTagLongArray(value));
         } else {
             delegate.set0(key, new RefNbtTagLongArray(value));
         }
@@ -236,12 +253,10 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public void putLongArray(String key, List<Long> value) {
-        if (LONG_ARRAY_SUPPORT) {
+        if (PUT_LONG_LIST_SUPPORT) {
             delegate.setLongArray(key, value);
-        } else if (SET_RETURN_SUPPORT) {
-            delegate.set1(key, new RefNbtTagLongArray(value));
         } else {
-            delegate.set0(key, new RefNbtTagLongArray(value));
+            putLongArray(key, toLongArray(value));
         }
     }
 
@@ -383,7 +398,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public @Nullable String getString(@NonNull String key, @Nullable String def) {
         RefNbtBase value = delegate.get(key);
         return (value != null)
-                ? value.asString()
+                ? NBT_FORMAT_CHANGE ? value.asString1().orElse("") : value.asString0()
                 : def;
     }
 
@@ -646,7 +661,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public @Nullable String getDeepString(@NonNull String key, @Nullable String def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value != null
-                ? value.asString()
+                ? NBT_FORMAT_CHANGE ? value.asString1().orElse("") : value.asString0()
                 : def;
     }
 
@@ -785,7 +800,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public void putDeepByteArray(@NonNull String key, @NonNull List<Byte> value, boolean force) {
-        putDeepRefNbt(key, new RefNbtTagByteArray(value), force);
+        putDeepRefNbt(key, LIST_CONSTRUCTOR_NOT_SUPPORTED ? new RefNbtTagByteArray(toByteArray(value)) : new RefNbtTagByteArray(value), force);
     }
 
     @Override
@@ -795,7 +810,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public void putDeepIntArray(@NonNull String key, @NonNull List<Integer> value, boolean force) {
-        putDeepRefNbt(key, new RefNbtTagIntArray(value), force);
+        putDeepRefNbt(key, LIST_CONSTRUCTOR_NOT_SUPPORTED ? new RefNbtTagIntArray(toIntArray(value)) : new RefNbtTagIntArray(value), force);
     }
 
     @Override
@@ -805,7 +820,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public void putDeepLongArray(@NonNull String key, @NonNull List<Long> value, boolean force) {
-        putDeepRefNbt(key, new RefNbtTagLongArray(value), force);
+        putDeepRefNbt(key, LIST_CONSTRUCTOR_NOT_SUPPORTED ? new RefNbtTagLongArray(toLongArray(value)) : new RefNbtTagLongArray(value), force);
     }
 
     /**

@@ -3,9 +3,12 @@ package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtLike;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.ref.nbt.*;
 
 public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike, Comparable<Nbt<?>> {
+    static final boolean NBT_FORMAT_CHANGE = CbVersion.v1_21_R4.isSupport();
+
     final NMS delegate;
 
     Nbt(NMS delegate) {
@@ -77,7 +80,7 @@ public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike, Comparable
 
     @Override
     public String getAsString() {
-        return delegate.asString();
+        return NBT_FORMAT_CHANGE ? delegate.asString1().orElse("") : delegate.asString0();
     }
 
     public int compareTo(@NonNull Nbt<?> o) {

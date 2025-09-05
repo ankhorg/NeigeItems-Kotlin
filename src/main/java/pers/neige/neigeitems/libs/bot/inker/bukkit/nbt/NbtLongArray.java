@@ -7,6 +7,9 @@ import pers.neige.neigeitems.ref.nbt.RefNbtTagLongArray;
 import java.util.Arrays;
 import java.util.List;
 
+import static pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound.LIST_CONSTRUCTOR_NOT_SUPPORTED;
+import static pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound.toLongArray;
+
 public final class NbtLongArray extends NbtCollection<RefNbtTagLongArray, Long> {
     private static final boolean DIRECT_ACCESS_SUPPORT = CbVersion.v1_13_R1.isSupport();
 
@@ -19,7 +22,7 @@ public final class NbtLongArray extends NbtCollection<RefNbtTagLongArray, Long> 
     }
 
     public NbtLongArray(List<Long> value) {
-        super(new RefNbtTagLongArray(value));
+        super(LIST_CONSTRUCTOR_NOT_SUPPORTED ? new RefNbtTagLongArray(toLongArray(value)) : new RefNbtTagLongArray(value));
     }
 
     @Override

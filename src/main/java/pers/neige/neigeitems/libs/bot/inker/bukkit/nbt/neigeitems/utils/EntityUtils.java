@@ -16,6 +16,7 @@ import pers.neige.neigeitems.ref.chat.RefChatSerializer;
 import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.entity.*;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
+import pers.neige.neigeitems.ref.server.level.RefTrackedEntity;
 import pers.neige.neigeitems.ref.world.RefVec3;
 
 public class EntityUtils {
@@ -475,6 +476,20 @@ public class EntityUtils {
         if (entity instanceof RefCraftEntity) {
             ((RefCraftEntity) entity).getHandle().setInvisible(invisible);
         }
+    }
+
+    /**
+     * 从 TrackedEntity 中获取 Entity.
+     *
+     * @param trackedEntity 待操作实体.
+     */
+    public static @NonNull Entity getEntityFromTrackedEntity(
+            @NonNull Object trackedEntity
+    ) {
+        if (!(trackedEntity instanceof RefTrackedEntity)) {
+            throw new IllegalArgumentException("trackedEntity must be of type RefTrackedEntity");
+        }
+        return ((RefTrackedEntity) trackedEntity).entity.getBukkitEntity();
     }
 
     protected static RefComponent toNms(BaseComponent component) {

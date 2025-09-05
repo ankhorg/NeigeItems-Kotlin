@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.ref.entity.RefCraftEntity;
 import pers.neige.neigeitems.ref.entity.RefEntity;
 import pers.neige.neigeitems.ref.entity.RefEntityItem;
@@ -84,7 +85,7 @@ public class PacketUtils {
             RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
 
             int entityId = packet.id;
-            Entity bukkitEntity = WorldUtils.getEntityFromID1(world, entityId);
+            Entity bukkitEntity = HookerManager.INSTANCE.getNmsHooker().getEntityFromID1(world, entityId);
             if (!(bukkitEntity instanceof RefCraftEntity)) return;
             RefEntity entity = ((RefCraftEntity) bukkitEntity).getHandle();
 
@@ -172,7 +173,7 @@ public class PacketUtils {
             RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
 
             int entityId = packet.id;
-            Entity bukkitEntity = WorldUtils.getEntityFromID1(world, entityId);
+            Entity bukkitEntity = HookerManager.INSTANCE.getNmsHooker().getEntityFromID1(world, entityId);
             if (!(bukkitEntity instanceof RefCraftEntity)) return;
             RefEntity entity = ((RefCraftEntity) bukkitEntity).getHandle();
             if (!(entity instanceof RefEntityItem)) return;

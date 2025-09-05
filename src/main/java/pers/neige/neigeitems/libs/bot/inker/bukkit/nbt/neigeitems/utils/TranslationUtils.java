@@ -45,6 +45,7 @@ public class TranslationUtils {
     private final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
     private final static boolean V13_OR_ABOVE = CbVersion.v1_13_R1.isSupport();
     private final static boolean V12 = CbVersion.current() == CbVersion.v1_12_R1;
+    private static final boolean NBT_FORMAT_CHANGE = CbVersion.v1_21_R4.isSupport();
 
     static {
         CHAT_COLORS.put("BLACK", RefChatFormatting.BLACK);
@@ -132,7 +133,7 @@ public class TranslationUtils {
             if (!(display instanceof RefNbtTagCompound)) return null;
             RefNbtBase tagName = ((RefNbtTagCompound) display).get("Name");
             if (!(tagName instanceof RefNbtTagString)) return null;
-            String rawName = tagName.asString();
+            String rawName = getAsString(tagName);
             if (V12) {
                 return rawName;
             } else if (CbVersion.v1_15_R1.isSupport()) {
@@ -288,11 +289,11 @@ public class TranslationUtils {
                 RefNbtBase skullOwnerTag = tag.get("SkullOwner");
                 String ownerName = null;
                 if (skullOwnerTag instanceof RefNbtTagString) {
-                    ownerName = skullOwnerTag.asString();
+                    ownerName = getAsString(skullOwnerTag);
                 } else if (skullOwnerTag instanceof RefNbtTagCompound) {
                     RefNbtBase nameTag = ((RefNbtTagCompound) skullOwnerTag).get("Name");
                     if (nameTag instanceof RefNbtTagString) {
-                        ownerName = nameTag.asString();
+                        ownerName = getAsString(nameTag);
                     }
                 }
                 if (ownerName != null) {
@@ -313,7 +314,7 @@ public class TranslationUtils {
             if (tag != null) {
                 RefNbtBase title = tag.get("title");
                 if (title instanceof RefNbtTagString) {
-                    result = title.asString();
+                    result = getAsString(title);
                 }
             }
         }
@@ -420,11 +421,11 @@ public class TranslationUtils {
                 RefNbtBase skullOwnerTag = tag.get("SkullOwner");
                 String ownerName = null;
                 if (skullOwnerTag instanceof RefNbtTagString) {
-                    ownerName = skullOwnerTag.asString();
+                    ownerName = getAsString(skullOwnerTag);
                 } else if (skullOwnerTag instanceof RefNbtTagCompound) {
                     RefNbtBase nameTag = ((RefNbtTagCompound) skullOwnerTag).get("Name");
                     if (nameTag instanceof RefNbtTagString) {
-                        ownerName = nameTag.asString();
+                        ownerName = getAsString(nameTag);
                     }
                 }
                 if (ownerName != null) {
@@ -443,7 +444,7 @@ public class TranslationUtils {
             if (tag != null) {
                 RefNbtBase title = tag.get("title");
                 if (title instanceof RefNbtTagString) {
-                    result = new TextComponent(title.asString());
+                    result = new TextComponent(getAsString(title));
                 }
             }
         }
@@ -612,5 +613,9 @@ public class TranslationUtils {
         RefItem item = RefCraftMagicNumbers.getItem(material);
         if (item == null) return null;
         return item.getDescriptionId();
+    }
+
+    private static @Nullable String getAsString(@NonNull RefNbtBase nbt) {
+        return NBT_FORMAT_CHANGE ? nbt.asString1().orElse("") : nbt.asString0();
     }
 }
