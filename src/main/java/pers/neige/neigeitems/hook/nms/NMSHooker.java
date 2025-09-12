@@ -295,6 +295,6 @@ public class NMSHooker {
             @NonNull World world,
             int entityId
     ) {
-        return WorldUtils.getEntityFromID(world, entityId);
+        return WorldUtils.getEntityFromID1(world, entityId);
     }
 }
