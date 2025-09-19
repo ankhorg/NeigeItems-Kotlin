@@ -1329,6 +1329,27 @@ public abstract class BaseActionManager {
                 context.getGlobal().put(args[0], args[1]);
             }
         });
+        // 向global中设置内容
+        addConsumer("set-global-int", (context, content) -> {
+            val args = content.split(" ", 2);
+            if (args.length > 1) {
+                context.getGlobal().put(args[0], NumberParser.parseInteger(args[1]));
+            }
+        });
+        // 向global中设置内容
+        addConsumer("set-global-long", (context, content) -> {
+            val args = content.split(" ", 2);
+            if (args.length > 1) {
+                context.getGlobal().put(args[0], NumberParser.parseLong(args[1]));
+            }
+        });
+        // 向global中设置内容
+        addConsumer("set-global-double", (context, content) -> {
+            val args = content.split(" ", 2);
+            if (args.length > 1) {
+                context.getGlobal().put(args[0], NumberParser.parseDouble(args[1]));
+            }
+        });
         // 从global中删除内容
         addConsumer(Arrays.asList("del-global", "delGlobal"), (context, content) -> context.getGlobal().remove(content));
         // 扣除NI物品
