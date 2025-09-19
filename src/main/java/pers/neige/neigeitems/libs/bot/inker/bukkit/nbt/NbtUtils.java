@@ -1,7 +1,9 @@
 package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt;
 
 import lombok.NonNull;
+import lombok.val;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -32,6 +34,10 @@ import java.util.stream.Collectors;
 
 public class NbtUtils {
     public static final Object registryOps;
+    /**
+     * 当前版本是否为 1.12.2.
+     */
+    private static final boolean LEGACY = CbVersion.current() == CbVersion.v1_12_R1;
     /**
      * 1.16.2+ 版本起, NbtIo#readCompressed 及 NbtIo#writeCompressed 方法支持使用 File 作为参数.
      */
@@ -642,5 +648,28 @@ public class NbtUtils {
             result.set("components", ItemUtils.toStringMap(componentsNbt));
         }
         return result;
+    }
+
+    /**
+     * 比较两物品是否相似(除数量外完全一致), 在 1.12.2 到 1.20.4 版本中的某些情况下相较于 ItemStack#isSimilar 方法具有更好的性能表现.
+     *
+     * @param itemStack1 物品1.
+     * @param itemStack2 物品2.
+     * @return 两物品是否相似
+     */
+    public static boolean isSimilar(@Nullable ItemStack itemStack1, @Nullable ItemStack itemStack2) {
+        if (itemStack1 == null) return itemStack2 == null;
+        if (itemStack2 == null) return false;
+        if (MOJANG_MOTHER_DEAD
+                || itemStack1 instanceof RefCraftItemStack
+                || itemStack2 instanceof RefCraftItemStack
+        ) return itemStack1.isSimilar(itemStack2);
+        if (itemStack1.getType() != itemStack2.getType()) return false;
+        if (LEGACY && ItemUtils.getDamage(itemStack1) != ItemUtils.getDamage(itemStack2)) return false;
+        val meta1 = InvokeUtil.getItemMeta(itemStack1);
+        val meta2 = InvokeUtil.getItemMeta(itemStack1);
+        if (meta1 == null) return meta2 == null;
+        if (meta2 == null) return false;
+        return Bukkit.getItemFactory().equals(meta1, meta2);
     }
 }
