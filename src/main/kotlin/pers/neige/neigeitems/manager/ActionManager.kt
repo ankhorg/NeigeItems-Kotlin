@@ -48,6 +48,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     private val logger = LoggerFactory.getLogger(ActionManager::class.java.simpleName)
 
     val registeredActionTypes: MutableSet<String> = ConcurrentHashMap.newKeySet()
+
     /**
      * 获取拥有动作的物品ID及相关动作
      */

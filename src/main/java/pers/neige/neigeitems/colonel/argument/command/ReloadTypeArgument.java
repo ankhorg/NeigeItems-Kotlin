@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.colonel.arguments.Argument;
 import pers.neige.colonel.arguments.ParseResult;
 import pers.neige.colonel.context.Context;
+import pers.neige.colonel.context.NodeChain;
 import pers.neige.colonel.reader.StringReader;
 import pers.neige.neigeitems.event.PluginReloadEvent;
 
@@ -22,7 +23,7 @@ public class ReloadTypeArgument extends Argument<CommandSender, PluginReloadEven
 
     @Override
     @NonNull
-    public ParseResult<PluginReloadEvent.Type> parse(@NonNull StringReader input, @Nullable CommandSender source) {
+    public ParseResult<PluginReloadEvent.Type> parse(@NonNull NodeChain<CommandSender, Unit> nodeChain, @NonNull StringReader input, @Nullable CommandSender source) {
         val name = input.readString();
         val type = PluginReloadEvent.Type.lowercaseNameToType.getOrDefault(name.toLowerCase(), PluginReloadEvent.Type.ALL);
         return new ParseResult<>(type, true);

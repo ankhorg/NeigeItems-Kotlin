@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.colonel.arguments.Argument;
 import pers.neige.colonel.arguments.ParseResult;
 import pers.neige.colonel.context.Context;
+import pers.neige.colonel.context.NodeChain;
 import pers.neige.colonel.reader.StringReader;
 import pers.neige.neigeitems.item.ItemPack;
 import pers.neige.neigeitems.manager.ItemPackManager;
@@ -33,7 +34,7 @@ public class ItemPackArgument extends Argument<CommandSender, ItemPackArgument.I
 
     @Override
     @NonNull
-    public ParseResult<ItemPackContainer> parse(@NonNull StringReader input, @Nullable CommandSender source) {
+    public ParseResult<ItemPackContainer> parse(@NonNull NodeChain<CommandSender, Unit> nodeChain, @NonNull StringReader input, @Nullable CommandSender source) {
         val start = input.getOffset();
         val id = input.readString();
         val item = ItemPackManager.INSTANCE.getItemPack(id);

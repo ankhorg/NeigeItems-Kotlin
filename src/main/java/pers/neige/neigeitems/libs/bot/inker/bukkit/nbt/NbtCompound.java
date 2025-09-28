@@ -14,13 +14,12 @@ import pers.neige.neigeitems.ref.nbt.*;
 import java.util.*;
 
 public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentLike {
+    static final boolean LIST_CONSTRUCTOR_NOT_SUPPORTED = CbVersion.v1_21_R4.isSupport();
     private static final boolean SET_RETURN_SUPPORT = CbVersion.v1_14_R1.isSupport();
     private static final boolean LONG_ARRAY_SUPPORT = CbVersion.v1_13_R1.isSupport();
     private static final boolean PUT_BYTE_LIST_SUPPORT = CbVersion.v1_17_R1.isSupport() && !CbVersion.v1_21_R4.isSupport();
     private static final boolean PUT_INT_LIST_SUPPORT = CbVersion.v1_13_R1.isSupport() && !CbVersion.v1_21_R4.isSupport();
     private static final boolean PUT_LONG_LIST_SUPPORT = CbVersion.v1_13_R1.isSupport() && !CbVersion.v1_21_R4.isSupport();
-    static final boolean LIST_CONSTRUCTOR_NOT_SUPPORTED = CbVersion.v1_21_R4.isSupport();
-
     private final Map<String, Nbt<?>> delegateMap;
     private Set<String> oldKeySet;
     private Set<Entry<String, Nbt<?>>> oldEntrySet;

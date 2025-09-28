@@ -71,10 +71,6 @@ public class NeigeItems extends JavaPlugin {
         return INSTANCE;
     }
 
-    public ClassScanner getScanner() {
-        return scanner;
-    }
-
     private static boolean checkMagicUtils(String className) {
         return checkMagicUtils("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils", className);
     }
@@ -88,6 +84,10 @@ public class NeigeItems extends JavaPlugin {
             logger.warn("class {} did not load properly, which may cause unpredictable errors. Please contact the author for repair.", className, error);
             return false;
         }
+    }
+
+    public ClassScanner getScanner() {
+        return scanner;
     }
 
     public void onInit() {

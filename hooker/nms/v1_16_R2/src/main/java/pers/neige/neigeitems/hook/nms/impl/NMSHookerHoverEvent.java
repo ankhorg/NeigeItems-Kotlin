@@ -1,11 +1,11 @@
 package pers.neige.neigeitems.hook.nms.impl;
 
+import lombok.NonNull;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import lombok.NonNull;
 import pers.neige.neigeitems.hook.nms.NMSHooker;
 import pers.neige.neigeitems.utils.ItemUtils;
 

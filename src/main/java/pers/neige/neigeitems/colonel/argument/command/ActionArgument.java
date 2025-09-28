@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.colonel.arguments.Argument;
 import pers.neige.colonel.arguments.ParseResult;
 import pers.neige.colonel.context.Context;
+import pers.neige.colonel.context.NodeChain;
 import pers.neige.colonel.reader.StringReader;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.manager.ActionManager;
@@ -23,7 +24,7 @@ public class ActionArgument extends Argument<CommandSender, Action, Unit> {
 
     @Override
     @NonNull
-    public ParseResult<Action> parse(@NonNull StringReader input, @Nullable CommandSender source) {
+    public ParseResult<Action> parse(@NonNull NodeChain<CommandSender, Unit> nodeChain, @NonNull StringReader input, @Nullable CommandSender source) {
         return new ParseResult<>(ActionManager.INSTANCE.compile(input.readRemaining()), true);
     }
 

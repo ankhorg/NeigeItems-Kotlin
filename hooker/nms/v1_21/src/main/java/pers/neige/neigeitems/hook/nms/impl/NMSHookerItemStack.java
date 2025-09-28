@@ -1,9 +1,9 @@
 package pers.neige.neigeitems.hook.nms.impl;
 
+import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.hook.nms.NMSHooker;

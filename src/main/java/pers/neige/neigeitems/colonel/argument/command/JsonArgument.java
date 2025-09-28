@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.colonel.arguments.Argument;
 import pers.neige.colonel.arguments.ParseResult;
+import pers.neige.colonel.context.NodeChain;
 import pers.neige.colonel.reader.StringReader;
 
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class JsonArgument<A> extends Argument<CommandSender, A, Unit> {
 
     @Override
     @NonNull
-    public ParseResult<A> parse(@NonNull StringReader input, @Nullable CommandSender source) {
+    public ParseResult<A> parse(@NonNull NodeChain<CommandSender, Unit> nodeChain, @NonNull StringReader input, @Nullable CommandSender source) {
         val start = input.getOffset();
         try {
             A result = JSON.parseObject(input.readRemaining(), type);

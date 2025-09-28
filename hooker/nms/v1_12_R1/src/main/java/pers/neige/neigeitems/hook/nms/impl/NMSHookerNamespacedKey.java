@@ -1,5 +1,6 @@
 package pers.neige.neigeitems.hook.nms.impl;
 
+import lombok.NonNull;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.MathHelper;
 import net.minecraft.server.v1_12_R1.MinecraftKey;
@@ -9,7 +10,6 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.hook.nms.NamespacedKey;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
@@ -25,8 +25,8 @@ import java.util.*;
  * 1.12.2 版本, NamespacedKey 特殊兼容
  */
 public class NMSHookerNamespacedKey extends NMSHookerCustomModelData {
-    private Material[] byId = new Material[383];
     private final Map<Integer, Enchantment> enchantmentsById = new HashMap<>();
+    private Material[] byId = new Material[383];
 
     public NMSHookerNamespacedKey() {
         for (Material material : Material.values()) {
