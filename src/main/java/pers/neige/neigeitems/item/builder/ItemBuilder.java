@@ -114,7 +114,7 @@ public class ItemBuilder {
                         for (val enchantId : enchantSection.keySet()) {
                             val uppercaseEnchantId = enchantId.toUpperCase();
                             val level = (short) enchantSection.getInt(enchantId);
-                            var enchant = Enchantment.getByName(uppercaseEnchantId);
+                            Enchantment enchant = Enchantment.getByName(uppercaseEnchantId);
                             if (enchant == null) {
                                 enchant = byFieldName.get(uppercaseEnchantId);
                             }

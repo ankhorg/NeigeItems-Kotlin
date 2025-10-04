@@ -269,7 +269,7 @@ class LegacyPapiHookerImpl : PapiHooker() {
         return false
     }
 
-    override fun request(player: OfflinePlayer, identifier: String, parameters: String): String {
+    override fun request(player: OfflinePlayer?, identifier: String, parameters: String): String {
         val placeholder = placeholders[identifier.lowercase(Locale.getDefault())]
         if (placeholder != null) {
             val replacement = placeholder.onRequest(player, parameters)

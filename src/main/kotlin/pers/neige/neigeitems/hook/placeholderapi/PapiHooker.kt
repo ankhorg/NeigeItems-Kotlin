@@ -143,7 +143,7 @@ abstract class PapiHooker {
      * @param parameters PAPI参数
      * @return 解析后文本
      */
-    abstract fun request(player: OfflinePlayer, identifier: String, parameters: String): String
+    abstract fun request(player: OfflinePlayer?, identifier: String, parameters: String): String
 
     /**
      * 卸载papi扩展

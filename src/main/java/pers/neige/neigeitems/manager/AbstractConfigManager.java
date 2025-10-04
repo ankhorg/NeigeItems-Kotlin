@@ -116,7 +116,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
         for (val file : getFiles()) {
             if (!file.getName().endsWith(".yml")) continue;
             try {
-                var path = file.getPath();
+                String path = file.getPath();
                 if (path.startsWith(prefix)) {
                     path = path.substring(prefix.length());
                 }
@@ -148,7 +148,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
      * 默认逻辑: 通过 getKeys(false) 获取当前配置文件的所有顶级键, 然后通过 configGetter 获取对应内容, 通过 keyConverter 转换键类型
      */
     protected void loadRawConfig(@NonNull FileConfig fileConfig) {
-        var currentKey = "";
+        String currentKey = "";
         try {
             for (val rawKey : fileConfig.config.getKeys(false)) {
                 currentKey = rawKey;

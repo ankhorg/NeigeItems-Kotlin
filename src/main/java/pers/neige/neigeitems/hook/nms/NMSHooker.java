@@ -203,7 +203,7 @@ public class NMSHooker {
         if (itemStack == null || itemStack.getType() == Material.AIR) return null;
         val result = new YamlConfiguration();
         result.set("material", itemStack.getType().toString());
-        var nbt = ItemUtils.getNbtOrNull(itemStack);
+        NbtCompound nbt = ItemUtils.getNbtOrNull(itemStack);
 
         val damage = ItemUtils.getDamage(itemStack);
         if (damage > 0) {
