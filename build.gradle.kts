@@ -93,7 +93,7 @@ dependencies {
     compileOnly(project(":fake-api"))
 
     // ankh-invoke
-    implementation("org.inksnow.cputil:logger:1.9")
+    implementation("org.inksnow.cputil:logger:1.15")
     implementation("org.inksnow:ankh-invoke-bukkit:1.0.21-SNAPSHOT")
 
     // bstats
