@@ -2,7 +2,6 @@ package pers.neige.neigeitems.manager;
 
 import lombok.NonNull;
 import lombok.val;
-import lombok.var;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;

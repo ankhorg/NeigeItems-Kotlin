@@ -13,6 +13,7 @@ import pers.neige.neigeitems.ref.world.RefVec3;
 import pers.neige.neigeitems.ref.world.RefWorld;
 
 import java.util.Optional;
+import java.util.Random;
 
 @HandleBy(reference = "net/minecraft/world/entity/Entity", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/Entity", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
@@ -32,6 +33,9 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/Entity;aF:Lnet/minecraft/server/v1_13_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_13_R1,v1_14_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;aC:Lnet/minecraft/server/v1_12_R1/DataWatcherObject;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public static final RefEntityDataAccessor<Boolean> DATA_CUSTOM_NAME_VISIBLE = null;
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;random:Ljava/util/Random;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;random:Ljava/util/Random;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public final Random random = null;
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;motX:D", predicates = "craftbukkit_version:[v1_12_R1,v1_14_R1)")
     public double motX;
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;motY:D", predicates = "craftbukkit_version:[v1_12_R1,v1_14_R1)")
@@ -53,7 +57,6 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;level:Lnet/minecraft/world/level/Level;", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;world:Lnet/minecraft/server/v1_12_R1/World;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefWorld world;
-
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;lastX:D", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public double lastX;
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;lastY:D", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
@@ -66,7 +69,6 @@ public abstract class RefEntity {
     public double locY;
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;locZ:D", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
     public double locZ;
-
 
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getBukkitEntity()Lorg/bukkit/craftbukkit/v1_17_R1/entity/CraftEntity;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;getBukkitEntity()Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftEntity;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")

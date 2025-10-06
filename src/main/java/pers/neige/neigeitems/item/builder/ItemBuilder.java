@@ -3,7 +3,6 @@ package pers.neige.neigeitems.item.builder;
 import kotlin.text.StringsKt;
 import lombok.NonNull;
 import lombok.val;
-import lombok.var;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.ChatColor;

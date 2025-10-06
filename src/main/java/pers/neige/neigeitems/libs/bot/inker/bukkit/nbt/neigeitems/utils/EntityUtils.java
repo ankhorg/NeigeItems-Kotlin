@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.util.NumberConversions;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,8 @@ import pers.neige.neigeitems.ref.entity.*;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
 import pers.neige.neigeitems.ref.server.level.RefTrackedEntity;
 import pers.neige.neigeitems.ref.world.RefVec3;
+
+import java.util.Random;
 
 public class EntityUtils {
     /**
@@ -492,6 +495,150 @@ public class EntityUtils {
         return ((RefTrackedEntity) trackedEntity).entity.getBukkitEntity();
     }
 
+    /**
+     * 获取等待多久后有鱼游过来(tick).
+     *
+     * @param hook 待获取鱼钩实体.
+     */
+    public static int getTimeUntilLured(
+            @NonNull FishHook hook
+    ) {
+        if ((Object) hook instanceof RefCraftFishHook) {
+            throw new IllegalArgumentException("hook must be of type CraftFishHook");
+        }
+        return ((RefCraftFishHook) (Object) hook).getHandle().timeUntilLured;
+    }
+
+    /**
+     * 设置等待多久后有鱼游过来(tick).
+     *
+     * @param hook           待设置鱼钩实体.
+     * @param timeUntilLured 等待多久后有鱼游过来(tick).
+     */
+    public static void setTimeUntilLured(
+            @NonNull FishHook hook,
+            int timeUntilLured
+    ) {
+        if ((Object) hook instanceof RefCraftFishHook) {
+            throw new IllegalArgumentException("hook must be of type CraftFishHook");
+        }
+        ((RefCraftFishHook) (Object) hook).getHandle().timeUntilLured = timeUntilLured;
+    }
+
+    /**
+     * 获取游多久咬钩(tick).
+     *
+     * @param hook 待获取鱼钩实体.
+     */
+    public static int getTimeUntilHooked(
+            @NonNull FishHook hook
+    ) {
+        if ((Object) hook instanceof RefCraftFishHook) {
+            throw new IllegalArgumentException("hook must be of type CraftFishHook");
+        }
+        return ((RefCraftFishHook) (Object) hook).getHandle().timeUntilHooked;
+    }
+
+    /**
+     * 设置游多久咬钩(tick).
+     *
+     * @param hook            待设置鱼钩实体.
+     * @param timeUntilHooked 游多久咬钩(tick).
+     */
+    public static void setTimeUntilHooked(
+            @NonNull FishHook hook,
+            int timeUntilHooked
+    ) {
+        if ((Object) hook instanceof RefCraftFishHook) {
+            throw new IllegalArgumentException("hook must be of type CraftFishHook");
+        }
+        ((RefCraftFishHook) (Object) hook).getHandle().timeUntilHooked = timeUntilHooked;
+    }
+
+    /**
+     * 获取咬钩多久脱钩(tick).
+     *
+     * @param hook 待获取鱼钩实体.
+     */
+    public static int getNibble(
+            @NonNull FishHook hook
+    ) {
+        if ((Object) hook instanceof RefCraftFishHook) {
+            throw new IllegalArgumentException("hook must be of type CraftFishHook");
+        }
+        return ((RefCraftFishHook) (Object) hook).getHandle().nibble;
+    }
+
+    /**
+     * 设置咬钩多久脱钩(tick).
+     *
+     * @param hook   待设置鱼钩实体.
+     * @param nibble 咬钩多久脱钩(tick).
+     */
+    public static void setNibble(
+            @NonNull FishHook hook,
+            int nibble
+    ) {
+        if ((Object) hook instanceof RefCraftFishHook) {
+            throw new IllegalArgumentException("hook must be of type CraftFishHook");
+        }
+        ((RefCraftFishHook) (Object) hook).getHandle().nibble = nibble;
+    }
+
+    /**
+     * 获取当前鱼钩状态.
+     *
+     * @param hook 待获取鱼钩实体.
+     */
+    public static FishHookState getCurrentState(
+            @NonNull FishHook hook
+    ) {
+        if ((Object) hook instanceof RefCraftFishHook) {
+            throw new IllegalArgumentException("hook must be of type CraftFishHook");
+        }
+        RefFishHookState nmsState = ((RefCraftFishHook) (Object) hook).getHandle().currentState;
+        if (nmsState == RefFishHookState.FLYING) return FishHookState.FLYING;
+        if (nmsState == RefFishHookState.HOOKED_IN_ENTITY) return FishHookState.HOOKED_IN_ENTITY;
+        return FishHookState.BOBBING;
+    }
+
+    /**
+     * 设置当前鱼钩状态.
+     *
+     * @param hook  待设置鱼钩实体.
+     * @param state 鱼钩状态.
+     */
+    public static void setCurrentState(
+            @NonNull FishHook hook,
+            @NonNull FishHookState state
+    ) {
+        if ((Object) hook instanceof RefCraftFishHook) {
+            throw new IllegalArgumentException("hook must be of type CraftFishHook");
+        }
+        RefEntityFishingHook nmsHook = ((RefCraftFishHook) (Object) hook).getHandle();
+        if (state == FishHookState.FLYING) {
+            nmsHook.currentState = RefFishHookState.FLYING;
+        } else if (state == FishHookState.HOOKED_IN_ENTITY) {
+            nmsHook.currentState = RefFishHookState.HOOKED_IN_ENTITY;
+        } else {
+            nmsHook.currentState = RefFishHookState.BOBBING;
+        }
+    }
+
+    /**
+     * 获取与实体绑定的 Random.
+     *
+     * @param entity 待获取实体.
+     */
+    public static @NonNull Random getRandom(
+            @NonNull Entity entity
+    ) {
+        if (entity instanceof RefCraftEntity) {
+            throw new IllegalArgumentException("entity must be of type CraftEntity");
+        }
+        return ((RefCraftEntity) entity).getHandle().random;
+    }
+
     protected static RefComponent toNms(BaseComponent component) {
         return RefChatSerializer.fromJson(ComponentSerializer.toString(component));
     }
@@ -509,7 +656,7 @@ public class EntityUtils {
         nmsEntity.yBodyRotO = nmsEntity.yBodyRot;
     }
 
-    public static float wrapDegrees(float degrees) {
+    private static float wrapDegrees(float degrees) {
         float f = degrees % 360.0F;
         if (f >= 180.0F) {
             f -= 360.0F;
@@ -561,5 +708,11 @@ public class EntityUtils {
         } else {
             return entity.yaw;
         }
+    }
+
+    public enum FishHookState {
+        FLYING,
+        HOOKED_IN_ENTITY,
+        BOBBING
     }
 }

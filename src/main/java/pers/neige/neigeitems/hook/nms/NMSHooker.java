@@ -2,7 +2,6 @@ package pers.neige.neigeitems.hook.nms;
 
 import lombok.NonNull;
 import lombok.val;
-import lombok.var;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.ItemTag;
 import net.md_5.bungee.api.chat.hover.content.Text;
