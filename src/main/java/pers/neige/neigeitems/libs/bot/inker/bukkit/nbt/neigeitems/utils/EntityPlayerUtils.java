@@ -1212,6 +1212,22 @@ public class EntityPlayerUtils {
     }
 
     /**
+     * 获取玩家当前抛出的鱼钩实体.
+     *
+     * @param player 待操作玩家.
+     * @return 玩家摄像机
+     */
+    public static @Nullable FishHook getFishHook(
+            @NonNull Player player
+    ) {
+        if (!(player instanceof RefCraftPlayer)) {
+            throw new IllegalArgumentException("player must be of type CraftPlayer");
+        }
+        RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
+        return (FishHook) nmsPlayer.hookedFish.getBukkitEntity();
+    }
+
+    /**
      * 向玩家发送虚假的容器标题.
      *
      * @param player 待接收玩家.

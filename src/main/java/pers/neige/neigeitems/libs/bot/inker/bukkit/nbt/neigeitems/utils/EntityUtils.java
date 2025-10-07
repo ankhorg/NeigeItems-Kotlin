@@ -503,7 +503,7 @@ public class EntityUtils {
     public static int getTimeUntilLured(
             @NonNull FishHook hook
     ) {
-        if ((Object) hook instanceof RefCraftFishHook) {
+        if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
         }
         return ((RefCraftFishHook) (Object) hook).getHandle().timeUntilLured;
@@ -519,7 +519,7 @@ public class EntityUtils {
             @NonNull FishHook hook,
             int timeUntilLured
     ) {
-        if ((Object) hook instanceof RefCraftFishHook) {
+        if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
         }
         ((RefCraftFishHook) (Object) hook).getHandle().timeUntilLured = timeUntilLured;
@@ -533,7 +533,7 @@ public class EntityUtils {
     public static int getTimeUntilHooked(
             @NonNull FishHook hook
     ) {
-        if ((Object) hook instanceof RefCraftFishHook) {
+        if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
         }
         return ((RefCraftFishHook) (Object) hook).getHandle().timeUntilHooked;
@@ -549,7 +549,7 @@ public class EntityUtils {
             @NonNull FishHook hook,
             int timeUntilHooked
     ) {
-        if ((Object) hook instanceof RefCraftFishHook) {
+        if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
         }
         ((RefCraftFishHook) (Object) hook).getHandle().timeUntilHooked = timeUntilHooked;
@@ -563,7 +563,7 @@ public class EntityUtils {
     public static int getNibble(
             @NonNull FishHook hook
     ) {
-        if ((Object) hook instanceof RefCraftFishHook) {
+        if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
         }
         return ((RefCraftFishHook) (Object) hook).getHandle().nibble;
@@ -579,7 +579,7 @@ public class EntityUtils {
             @NonNull FishHook hook,
             int nibble
     ) {
-        if ((Object) hook instanceof RefCraftFishHook) {
+        if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
         }
         ((RefCraftFishHook) (Object) hook).getHandle().nibble = nibble;
@@ -593,7 +593,7 @@ public class EntityUtils {
     public static FishHookState getCurrentState(
             @NonNull FishHook hook
     ) {
-        if ((Object) hook instanceof RefCraftFishHook) {
+        if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
         }
         RefFishHookState nmsState = ((RefCraftFishHook) (Object) hook).getHandle().currentState;
@@ -612,7 +612,7 @@ public class EntityUtils {
             @NonNull FishHook hook,
             @NonNull FishHookState state
     ) {
-        if ((Object) hook instanceof RefCraftFishHook) {
+        if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
         }
         RefEntityFishingHook nmsHook = ((RefCraftFishHook) (Object) hook).getHandle();
@@ -633,7 +633,7 @@ public class EntityUtils {
     public static @NonNull Random getRandom(
             @NonNull Entity entity
     ) {
-        if (entity instanceof RefCraftEntity) {
+        if (!(entity instanceof RefCraftEntity)) {
             throw new IllegalArgumentException("entity must be of type CraftEntity");
         }
         return ((RefCraftEntity) entity).getHandle().random;

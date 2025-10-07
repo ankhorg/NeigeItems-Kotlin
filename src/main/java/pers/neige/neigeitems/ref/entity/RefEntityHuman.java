@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.ref.entity;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
+import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.ref.world.inventory.RefAbstractContainerMenu;
 
 @HandleBy(reference = "net/minecraft/world/entity/player/Player", predicates = "craftbukkit_version:[v1_17_R1,)")
@@ -13,6 +14,10 @@ public abstract class RefEntityHuman extends RefEntityLiving {
     @HandleBy(reference = "Lnet/minecraft/world/entity/player/Player;containerMenu:Lnet/minecraft/world/inventory/AbstractContainerMenu;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityHuman;activeContainer:Lnet/minecraft/server/v1_12_R1/Container;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefAbstractContainerMenu containerMenu;
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/player/Player;fishing:Lnet/minecraft/world/entity/projectile/FishingHook;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityHuman;hookedFish:Lnet/minecraft/server/v1_12_R1/EntityFishingHook;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
+    public @Nullable RefEntityFishingHook hookedFish;
 
     @HandleBy(reference = "Lnet/minecraft/world/entity/player/Player;getAbsorptionAmount()F", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityHuman;getAbsorptionHearts()F", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
