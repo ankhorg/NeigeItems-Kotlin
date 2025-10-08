@@ -1224,7 +1224,9 @@ public class EntityPlayerUtils {
             throw new IllegalArgumentException("player must be of type CraftPlayer");
         }
         RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
-        return (FishHook) nmsPlayer.hookedFish.getBukkitEntity();
+        RefEntityFishingHook hookedFish = nmsPlayer.hookedFish;
+        if (hookedFish == null) return null;
+        return (FishHook) hookedFish.getBukkitEntity();
     }
 
     /**
