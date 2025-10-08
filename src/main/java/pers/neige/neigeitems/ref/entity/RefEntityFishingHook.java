@@ -58,5 +58,5 @@ public final class RefEntityFishingHook extends RefEntity {
      */
     @HandleBy(reference = "Lnet/minecraft/world/entity/projectile/FishingHook;currentState:Lnet/minecraft/world/entity/projectile/FishingHook$FishHookState;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityFishingHook;av:Lnet/minecraft/server/v1_12_R1/EntityFishingHook$HookState;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
-    public RefFishHookState currentState;
+    public Object currentState;
 }

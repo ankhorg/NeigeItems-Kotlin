@@ -596,10 +596,8 @@ public class EntityUtils {
         if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
         }
-        RefFishHookState nmsState = ((RefCraftFishHook) (Object) hook).getHandle().currentState;
-        if (nmsState == RefFishHookState.FLYING) return FishHookState.FLYING;
-        if (nmsState == RefFishHookState.HOOKED_IN_ENTITY) return FishHookState.HOOKED_IN_ENTITY;
-        return FishHookState.BOBBING;
+        Enum<?> nmsState = (Enum<?>) ((RefCraftFishHook) (Object) hook).getHandle().currentState;
+        return FishHookState.values()[nmsState.ordinal()];
     }
 
     /**
