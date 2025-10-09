@@ -22,7 +22,7 @@ object PlayerJoinListener {
         // 初始化掉落物颜色Team
         ItemColor.initTeam(event.player)
         // 初始化User
-        UserManager.INSTANCE.create(event.player.uniqueId)
+        UserManager.INSTANCE.createUser(event.player.uniqueId)
         // 为op发送更新检测信息
         if (!event.player.isOp) return
         if (Updater.latestVersion == null || Updater.latestVersion == Updater.currentVersion) return

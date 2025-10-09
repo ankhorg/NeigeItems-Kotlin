@@ -29,6 +29,7 @@ object ConfigManager {
     var forceSync = config.getBoolean("ItemDurability.forceSync", false)
     var checkInventory = config.getBoolean("ItemCheck.checkInventory", true)
     var enableJsPapi = config.getBoolean("Papi.enableJs", false)
+    var resetCooldownWhenPlayerQuit = config.getBoolean("ItemAction.resetCooldownWhenPlayerQuit", true)
 
     /**
      * 加载默认配置文件
@@ -89,6 +90,7 @@ object ConfigManager {
         forceSync = config.getBoolean("ItemDurability.forceSync", false)
         checkInventory = config.getBoolean("ItemCheck.checkInventory", true)
         enableJsPapi = config.getBoolean("Papi.enableJs", false)
+        resetCooldownWhenPlayerQuit = config.getBoolean("ItemAction.resetCooldownWhenPlayerQuit", true)
     }
 
     /**

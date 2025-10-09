@@ -8,6 +8,6 @@ object PlayerQuitListener {
     @JvmStatic
     @Listener
     private fun listener(event: PlayerQuitEvent) {
-        UserManager.INSTANCE.remove(event.player.uniqueId)
+        UserManager.INSTANCE.removeUser(event.player.uniqueId)
     }
 }

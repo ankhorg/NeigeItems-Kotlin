@@ -13,9 +13,17 @@ public class UserManager extends ConcurrentHashMap<UUID, User> {
     private UserManager() {
     }
 
-    public @NonNull User create(UUID uuid) {
-        val user = new User(uuid);
-        put(uuid, user);
-        return user;
+    public void createUser(UUID uuid) {
+        if (ConfigManager.INSTANCE.getResetCooldownWhenPlayerQuit()) {
+            put(uuid, new User(uuid));
+        } else {
+            computeIfAbsent(uuid, User::new);
+        }
+    }
+
+    public void removeUser(UUID uuid) {
+        if (ConfigManager.INSTANCE.getResetCooldownWhenPlayerQuit()) {
+            remove(uuid);
+        }
     }
 }

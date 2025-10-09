@@ -27,32 +27,38 @@ import kotlin.math.ceil
  * ni search指令
  */
 object Search {
+    enum class SearchType(val command: String) {
+        CONTAINS("search"),
+        PREFIX("searchPrefix"),
+        SUFFIX("searchSuffix");
+
+        companion object {
+            @JvmStatic
+            val keyToPayload = hashMapOf<String, SearchType>().also {
+                entries.forEach { type ->
+                    it[type.command] = type
+                }
+            }
+        }
+    }
+
     @JvmStatic
     @CustomField(fieldType = "root")
-    val search = literal<CommandSender, Unit>("search", arrayListOf("search", "searchPrefix", "searchSuffix")) {
+    val search = literal<CommandSender, SearchType, Unit>("search", SearchType.keyToPayload) {
         argument("text", StringArgument()) {
             argument("page", IntegerArgument.POSITIVE_DEFAULT_ONE) {
                 setNullExecutor { context ->
                     val sender = context.source ?: return@setNullExecutor
                     val text = context.getArgument<String>("text")
                     val page = context.getArgument<Int?>("page")!!
-                    val typeText = context.getArgument<String>("search")
-                    val searchType = if (typeText.equals("search", true)) {
-                        0
-                    } else if (typeText.equals("searchPrefix", true)) {
-                        1
-                    } else {
-                        2
+                    val searchType = context.getArgument<SearchType>("search")
+                    val searchFunction: (String) -> Boolean = when (searchType) {
+                        SearchType.CONTAINS -> { id -> id.contains(text) }
+                        SearchType.PREFIX -> { id -> id.startsWith(text) }
+                        SearchType.SUFFIX -> { id -> id.endsWith(text) }
                     }
                     async {
-                        val ids = ItemManager.itemIds.filter { id ->
-                            when (searchType) {
-                                0 -> id.contains(text)
-                                1 -> id.startsWith(text)
-                                2 -> id.endsWith(text)
-                                else -> false
-                            }
-                        }
+                        val ids = ItemManager.itemIds.filter(searchFunction)
                         val pageAmount =
                             ceil(ids.size.toDouble() / ConfigManager.config.getDouble("ItemList.ItemAmount")).toInt()
                         val realPage = page.coerceAtMost(pageAmount)
@@ -119,14 +125,14 @@ object Search {
                             prevRaw.hoverText(
                                 (ConfigManager.config.getString("ItemList.Prev")
                                     ?: "") + ": " + (realPage - 1).toString()
-                            ).runCommand("/ni $typeText $text ${realPage - 1}")
+                            ).runCommand("/ni ${searchType.command} $text ${realPage - 1}")
                         }
                         val nextRaw = ComponentBuilder(ConfigManager.config.getString("ItemList.Next") ?: "")
                         if (realPage != pageAmount) {
                             nextRaw.hoverText(
                                 (ConfigManager.config.getString("ItemList.Next") ?: "") + ": " + (realPage + 1)
                             )
-                            nextRaw.runCommand("/ni $typeText $text ${realPage + 1}")
+                            nextRaw.runCommand("/ni ${searchType.command} $text ${realPage + 1}")
                         }
                         var listSuffixMessage =
                             (ConfigManager.config.getString("ItemList.Suffix") ?: "").replace(
