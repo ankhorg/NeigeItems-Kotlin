@@ -133,8 +133,14 @@ Help:
       command: §e/ni §flist (页码)
       description: 查看所有NI物品
     search:
-      command: §e/ni §fsearch [ID前缀] (页码)
+      command: §e/ni §fsearch [ID关键词] (页码)
+      description: 查看对应ID包含关键词的NI物品
+    searchPrefix:
+      command: §e/ni §fsearchPrefix [ID前缀] (页码)
       description: 查看对应ID前缀的NI物品
+    searchSuffix:
+      command: §e/ni §fsearchSuffix [ID后缀] (页码)
+      description: 查看对应ID后缀的NI物品
     get:
       command: §e/ni §fget [物品ID] (数量) (是否反复随机) (指向数据)
       description: 根据ID获取NI物品

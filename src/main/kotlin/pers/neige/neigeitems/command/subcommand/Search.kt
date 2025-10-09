@@ -29,15 +29,30 @@ import kotlin.math.ceil
 object Search {
     @JvmStatic
     @CustomField(fieldType = "root")
-    val search = literal<CommandSender, Unit>("search") {
-        argument("prefix", StringArgument()) {
+    val search = literal<CommandSender, Unit>("search", arrayListOf("search", "searchPrefix", "searchSuffix")) {
+        argument("text", StringArgument()) {
             argument("page", IntegerArgument.POSITIVE_DEFAULT_ONE) {
                 setNullExecutor { context ->
                     val sender = context.source ?: return@setNullExecutor
-                    val prefix = context.getArgument<String>("prefix")
+                    val text = context.getArgument<String>("text")
                     val page = context.getArgument<Int?>("page")!!
+                    val typeText = context.getArgument<String>("search")
+                    val searchType = if (typeText.equals("search", true)) {
+                        0
+                    } else if (typeText.equals("searchPrefix", true)) {
+                        1
+                    } else {
+                        2
+                    }
                     async {
-                        val ids = ItemManager.itemIds.filter { id -> id.startsWith(prefix) }
+                        val ids = ItemManager.itemIds.filter { id ->
+                            when (searchType) {
+                                0 -> id.contains(text)
+                                1 -> id.startsWith(text)
+                                2 -> id.endsWith(text)
+                                else -> false
+                            }
+                        }
                         val pageAmount =
                             ceil(ids.size.toDouble() / ConfigManager.config.getDouble("ItemList.ItemAmount")).toInt()
                         val realPage = page.coerceAtMost(pageAmount)
@@ -104,14 +119,14 @@ object Search {
                             prevRaw.hoverText(
                                 (ConfigManager.config.getString("ItemList.Prev")
                                     ?: "") + ": " + (realPage - 1).toString()
-                            ).runCommand("/ni search $prefix ${realPage - 1}")
+                            ).runCommand("/ni $typeText $text ${realPage - 1}")
                         }
                         val nextRaw = ComponentBuilder(ConfigManager.config.getString("ItemList.Next") ?: "")
                         if (realPage != pageAmount) {
                             nextRaw.hoverText(
                                 (ConfigManager.config.getString("ItemList.Next") ?: "") + ": " + (realPage + 1)
                             )
-                            nextRaw.runCommand("/ni search $prefix ${realPage + 1}")
+                            nextRaw.runCommand("/ni $typeText $text ${realPage + 1}")
                         }
                         var listSuffixMessage =
                             (ConfigManager.config.getString("ItemList.Suffix") ?: "").replace(
