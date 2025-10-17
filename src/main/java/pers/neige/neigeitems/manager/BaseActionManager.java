@@ -1463,5 +1463,30 @@ public abstract class BaseActionManager {
             if (cooldown == null) return;
             user.setCooldown(key, cooldown);
         });
+        // 传送
+        addConsumer(Arrays.asList("teleport", "tp"), false, (context, content) -> {
+            val player = context.getPlayer();
+            if (player == null) return;
+            val args = content.split(" ", 6);
+            if (args.length < 4) return;
+            val world = Bukkit.getWorld(args[0]);
+            if (world == null) return;
+            val x = NumberParser.parseDouble(args[1]);
+            if (x == null) return;
+            val y = NumberParser.parseDouble(args[2]);
+            if (y == null) return;
+            val z = NumberParser.parseDouble(args[3]);
+            if (z == null) return;
+            val location = player.getLocation();
+            val yaw = ListUtils.getAndApply(args, 4, location.getYaw(), NumberParser::parseFloat);
+            val pitch = ListUtils.getAndApply(args, 5, location.getPitch(), NumberParser::parseFloat);
+            location.setWorld(world);
+            location.setX(x);
+            location.setY(y);
+            location.setZ(z);
+            location.setYaw(yaw);
+            location.setPitch(pitch);
+            player.teleport(location);
+        });
     }
 }

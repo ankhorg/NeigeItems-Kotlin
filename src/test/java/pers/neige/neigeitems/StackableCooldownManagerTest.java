@@ -13,7 +13,7 @@ import pers.neige.neigeitems.utils.cooldown.StackableCooldownManager;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("StackableCooldownManager累计次数冷却功能测试")
-public class StackableStackableCooldownManagerTest {
+public class StackableCooldownManagerTest {
     private final @NonNull String TEST_KEY = "TEST";
     private final int MAX_AMOUNT = 3; // 最大累计 3 次
     private final long COOLDOWN = 10000; // 10 秒充能一次
