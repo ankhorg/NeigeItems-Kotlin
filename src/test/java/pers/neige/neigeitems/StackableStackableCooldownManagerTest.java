@@ -390,4 +390,80 @@ public class StackableStackableCooldownManagerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("配置操作方法测试")
+    class ConfigManipulationTest {
+        @Test
+        @DisplayName("设置最大使用次数")
+        void setMaxAmount() {
+            try (val mockedClass = Mockito.mockStatic(StackableCooldown.class)) {
+                // 固定时间
+                mockedClass.when(StackableCooldown::currentTimeMillis).thenReturn(START_TIME);
+
+                val cooldown = manager.computeIfAbsent(TEST_KEY, TEST_CONFIG_3);
+
+                // 将最大次数设置为 2 次
+                cooldown.setMaxAmount(2);
+
+                val status1 = cooldown.getCooldownStatus();
+                assertEquals(2, status1.getAmount(), "剩余次数不会超过最大次数");
+                assertEquals(0, status1.getRemainingRecoveryTime(), "次数满时剩余时间为 0");
+
+                // 将最大次数设置为 3 次
+                cooldown.setMaxAmount(3);
+
+                val status2 = cooldown.getCooldownStatus();
+                assertEquals(2, status2.getAmount(), "最大次数变大不会影响剩余次数");
+                assertEquals(COOLDOWN, status2.getRemainingRecoveryTime(), "次数不满, 剩余时间变为 10000ms");
+
+                // 时间流逝 5 秒
+                long time5Sec = START_TIME + 5000;
+                mockedClass.when(StackableCooldown::currentTimeMillis).thenReturn(time5Sec);
+
+                val status3 = cooldown.getCooldownStatus();
+                assertEquals(2, status3.getAmount(), "剩余 2 次");
+                assertEquals(COOLDOWN - 5000, status3.getRemainingRecoveryTime(), "剩余时间 5000ms");
+
+                // 将最大次数设置为 2 次
+                cooldown.setMaxAmount(2);
+
+                val status4 = cooldown.getCooldownStatus();
+                assertEquals(2, status4.getAmount(), "剩余次数不会超过最大次数");
+                assertEquals(0, status4.getRemainingRecoveryTime(), "次数满时剩余时间为 0");
+
+                // 将最大次数设置为 -1 次
+                cooldown.setMaxAmount(-1);
+
+                val status5 = cooldown.getCooldownStatus();
+                assertEquals(1, status5.getAmount(), "最大次数无法被设置为小于 1 的值");
+                assertEquals(0, status5.getRemainingRecoveryTime(), "次数满时剩余时间为 0");
+            }
+        }
+
+        @Test
+        @DisplayName("设置刷新冷却")
+        void setConfigCooldown() {
+            try (val mockedClass = Mockito.mockStatic(StackableCooldown.class)) {
+                // 固定时间
+                mockedClass.when(StackableCooldown::currentTimeMillis).thenReturn(START_TIME);
+
+                val cooldown = manager.computeIfAbsent(TEST_KEY, TEST_CONFIG_3);
+
+                // 消耗 1 次
+                cooldown.consume();
+
+                val status1 = cooldown.getCooldownStatus();
+                assertEquals(MAX_AMOUNT - 1, status1.getAmount(), "剩余 2 次");
+                assertEquals(COOLDOWN, status1.getRemainingRecoveryTime(), "剩余时间 10000ms");
+
+                // 设置刷新冷却为 5000ms
+                cooldown.setConfigCooldown(5000);
+
+                val status2 = cooldown.getCooldownStatus();
+                assertEquals(MAX_AMOUNT - 1, status2.getAmount(), "剩余 2 次");
+                assertEquals(5000, status2.getRemainingRecoveryTime(), "剩余时间不会超过刷新冷却");
+            }
+        }
+    }
 }

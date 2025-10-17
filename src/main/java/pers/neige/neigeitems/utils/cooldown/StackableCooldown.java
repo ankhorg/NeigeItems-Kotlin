@@ -1,9 +1,6 @@
 package pers.neige.neigeitems.utils.cooldown;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import lombok.*;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -264,9 +261,62 @@ public class StackableCooldown {
     }
 
     /**
+     * 设置最大累计次数
+     *
+     * @param maxAmount 最大累计次数
+     */
+    public void setMaxAmount(int maxAmount) {
+        maxAmount = Math.max(1, maxAmount);
+        lock.lock();
+        try {
+            val preMaxAmount = config.maxAmount;
+            // 无变化则中止操作
+            if (preMaxAmount == maxAmount) return;
+            config.maxAmount = maxAmount;
+            // 更新后数量超了
+            if (amount >= maxAmount) {
+                // 规范数量
+                amount = maxAmount;
+                // 重新设置刷新时间
+                nextRecoveryTime = currentTimeMillis();
+                // 之前是满的, 更新后不满
+            } else if (amount >= preMaxAmount) {
+                // 重新设置刷新时间
+                nextRecoveryTime = currentTimeMillis() + config.cooldown;
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
+     * 设置刷新冷却
+     *
+     * @param cooldown 刷新冷却
+     */
+    public void setConfigCooldown(long cooldown) {
+        cooldown = Math.max(1, cooldown);
+        lock.lock();
+        try {
+            config.cooldown = cooldown;
+            // 获取还有多久刷新
+            val time = currentTimeMillis();
+            val delta = nextRecoveryTime - time;
+            // 如果还未刷新且剩余时间大于新设置的最大刷新时间
+            if (delta > 0 && delta > cooldown) {
+                // 重新设置刷新时间
+                nextRecoveryTime = time + cooldown;
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
      * 冷却配置
      */
     @Getter
+    @Setter(value = AccessLevel.PRIVATE)
     public static class Config {
         /**
          * 初始次数
@@ -275,20 +325,20 @@ public class StackableCooldown {
         /**
          * 最大次数
          */
-        private final int maxAmount;
+        private int maxAmount;
         /**
          * 冷却时间
          */
-        private final long cooldown;
+        private long cooldown;
 
         public Config(int maxAmount, long cooldown) {
             this(maxAmount, maxAmount, cooldown);
         }
 
         public Config(int initialAmount, int maxAmount, long cooldown) {
-            this.initialAmount = Math.max(0, Math.min(initialAmount, maxAmount));
-            this.maxAmount = maxAmount;
-            this.cooldown = cooldown;
+            this.maxAmount = Math.max(1, maxAmount);
+            this.initialAmount = Math.max(0, Math.min(initialAmount, this.maxAmount));
+            this.cooldown = Math.max(1, cooldown);
         }
     }
 
