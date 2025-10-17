@@ -32,6 +32,9 @@ $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPack
 $dokka.location:pers.neige.neigeitems.ref.network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook///PointingToDeclaration/pers/neige/neigeitems/ref/network/RefPacketPlayOutEntity.RefPacketPlayOutRelEntityMoveLook.html
 $dokka.location:pers.neige.neigeitems.scanner/ClassScanner.EasyField///PointingToDeclaration/pers/neige/neigeitems/scanner/ClassScanner.EasyField.html
 $dokka.location:pers.neige.neigeitems.scanner/ClassScanner.EasyMethod///PointingToDeclaration/pers/neige/neigeitems/scanner/ClassScanner.EasyMethod.html
+$dokka.location:pers.neige.neigeitems.utils.cooldown/StackableCooldown.Config///PointingToDeclaration/pers/neige/neigeitems/utils/cooldown/StackableCooldown.Config.html
+$dokka.location:pers.neige.neigeitems.utils.cooldown/StackableCooldown.ConsumeResult///PointingToDeclaration/pers/neige/neigeitems/utils/cooldown/StackableCooldown.ConsumeResult.html
+$dokka.location:pers.neige.neigeitems.utils.cooldown/StackableCooldown.Status///PointingToDeclaration/pers/neige/neigeitems/utils/cooldown/StackableCooldown.Status.html
 $dokka.location:pers.neige.neigeitems.utils/SamplingUtils.SamplingResult///PointingToDeclaration/pers/neige/neigeitems/utils/SamplingUtils.SamplingResult.html
 pers.neige.neigeitems
 pers.neige.neigeitems.action
@@ -141,6 +144,7 @@ pers.neige.neigeitems.text
 pers.neige.neigeitems.text.impl
 pers.neige.neigeitems.user
 pers.neige.neigeitems.utils
+pers.neige.neigeitems.utils.cooldown
 pers.neige.neigeitems.utils.function
 pers.neige.neigeitems.utils.lazy
 pers.neige.neigeitems.utils.pagination
