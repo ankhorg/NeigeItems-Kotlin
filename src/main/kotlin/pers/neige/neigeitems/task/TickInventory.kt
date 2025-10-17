@@ -21,11 +21,11 @@ object TickInventory {
         Bukkit.getOnlinePlayers().forEach { player ->
             val inventory = player.inventory
             for (index in 0 until 41) {
-                kotlin.runCatching {
+                try {
                     // 获取物品
                     val itemStack = inventory.getItem(index)
                     // 获取NI物品信息(不是NI物品就停止操作)
-                    val itemInfo = itemStack?.isNiItem() ?: return@runCatching
+                    val itemInfo = itemStack?.isNiItem() ?: continue
 
                     // 检测物品过期, 检测物品更新
                     ItemCheck.checkItem(player, itemStack, itemInfo)
@@ -50,6 +50,7 @@ object TickInventory {
                             36 -> ActionManager.tick(player, itemStack, itemInfo, "tick_feet")
                         }
                     }
+                } catch (_: Throwable) {
                 }
             }
         }

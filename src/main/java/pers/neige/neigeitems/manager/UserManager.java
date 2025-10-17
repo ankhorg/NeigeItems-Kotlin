@@ -1,7 +1,6 @@
 package pers.neige.neigeitems.manager;
 
 import lombok.NonNull;
-import lombok.val;
 import pers.neige.neigeitems.user.User;
 
 import java.util.UUID;

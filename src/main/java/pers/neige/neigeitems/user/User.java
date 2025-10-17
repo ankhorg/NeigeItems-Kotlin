@@ -1,10 +1,12 @@
 package pers.neige.neigeitems.user;
 
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.val;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.catcher.ChatCatcher;
 import pers.neige.neigeitems.action.catcher.SignCatcher;
+import pers.neige.neigeitems.utils.cooldown.CooldownManager;
+import pers.neige.neigeitems.utils.cooldown.StackableCooldownManager;
 
 import java.util.ArrayDeque;
 import java.util.Map;
@@ -16,7 +18,10 @@ public class User {
     private final @NonNull ArrayDeque<ChatCatcher> chatCatchers = new ArrayDeque<>();
     private final @NonNull ArrayDeque<SignCatcher> signCatchers = new ArrayDeque<>();
     private final @NonNull Map<String, Object> metadata = new ConcurrentHashMap<>();
-    private final @NonNull Map<String, Long> cooldown = new ConcurrentHashMap<>();
+    @Getter
+    private final @NonNull CooldownManager cooldownManager = new CooldownManager();
+    @Getter
+    private final @NonNull StackableCooldownManager stackableCooldownManager = new StackableCooldownManager();
 
     public User(
             @NonNull UUID uuid
@@ -84,15 +89,7 @@ public class User {
      * @return 剩余冷却时间
      */
     public long checkCooldown(@NonNull String key, long cooldown) {
-        if (cooldown <= 0) return 0;
-        val time = System.currentTimeMillis();
-        val lastTime = this.cooldown.getOrDefault(key, 0L);
-        if (lastTime > time) {
-            return lastTime - time;
-        } else {
-            this.cooldown.put(key, time + cooldown);
-            return 0;
-        }
+        return cooldownManager.checkCooldown(key, cooldown);
     }
 
     /**
@@ -102,13 +99,7 @@ public class User {
      * @return 剩余冷却时间
      */
     public long getCooldown(@NonNull String key) {
-        val time = System.currentTimeMillis();
-        val lastTime = this.cooldown.getOrDefault(key, 0L);
-        if (lastTime > time) {
-            return lastTime - time;
-        } else {
-            return 0;
-        }
+        return cooldownManager.getCooldown(key);
     }
 
     /**
@@ -118,7 +109,6 @@ public class User {
      * @param cooldown 冷却刷新时间
      */
     public void setCooldown(@NonNull String key, long cooldown) {
-        val time = System.currentTimeMillis();
-        this.cooldown.put(key, time + cooldown);
+        cooldownManager.setCooldown(key, cooldown);
     }
 }

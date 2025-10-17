@@ -68,10 +68,6 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
         return longs;
     }
 
-    public Set<String> getAllKeys() {
-        return delegate.getKeys();
-    }
-
     @Override
     public Nbt<?> get(String key) {
         return Nbt.fromNms(delegate.get(key));
@@ -132,7 +128,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public @NonNull Set<String> keySet() {
-        return delegate.getKeys();
+        return delegate.keySet();
     }
 
     @Override
@@ -142,7 +138,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public @NonNull Set<Entry<String, Nbt<?>>> entrySet() {
-        Set<String> newKeySet = delegate.getKeys();
+        Set<String> newKeySet = delegate.keySet();
         if (oldKeySet == newKeySet) {
             return oldEntrySet;
         }

@@ -161,10 +161,11 @@ public final class RefNbtTagCompound extends RefNbtBase {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getBoolean(Ljava/lang/String;)Z", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native boolean getBoolean(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getAllKeys()Ljava/util/Set;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;keySet()Ljava/util/Set;", predicates = "craftbukkit_version:[v1_21_R4,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getAllKeys()Ljava/util/Set;", predicates = "craftbukkit_version:[v1_17_R1,v1_21_R4)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/NBTTagCompound;getKeys()Ljava/util/Set;", predicates = "craftbukkit_version:[v1_13_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;c()Ljava/util/Set;", predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
-    public native Set<String> getKeys();
+    public native Set<String> keySet();
 
     @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;size()I", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/NBTTagCompound;e()I", predicates = "craftbukkit_version:[v1_15_R1,v1_17_R1)")

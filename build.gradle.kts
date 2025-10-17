@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.lombok") version "2.1.20"
     id("org.jetbrains.dokka") version "2.0.0"
     id("com.gradleup.shadow") version "8.3.5"
-    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.21-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.22-SNAPSHOT"
 }
 
 val realVersion = version
@@ -94,7 +94,7 @@ dependencies {
 
     // ankh-invoke
     implementation("org.inksnow.cputil:logger:1.15")
-    implementation("org.inksnow:ankh-invoke-bukkit:1.0.21-SNAPSHOT")
+    implementation("org.inksnow:ankh-invoke-bukkit:1.0.22-SNAPSHOT")
 
     // bstats
     implementation("org.bstats:bstats-bukkit:3.0.2")
@@ -122,10 +122,12 @@ dependencies {
     implementation("pers.neige.colonel:colonel-bukkit:+")
 
     // junit
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.12.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.12.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.12.2")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.14.+")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.14.+")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.14.+")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.14.+")
+    // mockito
+    testImplementation("org.mockito:mockito-core:5.+")
 }
 
 tasks {

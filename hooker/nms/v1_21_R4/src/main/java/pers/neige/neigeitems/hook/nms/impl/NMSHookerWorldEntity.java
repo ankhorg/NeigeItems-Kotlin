@@ -21,6 +21,7 @@ public class NMSHookerWorldEntity extends NMSHookerItemStack {
             int entityId
     ) {
         val trackedEntity = ((Map<Integer, ChunkMap.TrackedEntity>) (Object) ((CraftWorld) world).getHandle().getChunkSource().chunkMap.entityMap).get(entityId);
+        if (trackedEntity == null) return null;
         return EntityUtils.getEntityFromTrackedEntity(trackedEntity);
     }
 }
