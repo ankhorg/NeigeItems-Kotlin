@@ -2,6 +2,9 @@ package pers.neige.neigeitems.hook.nms.impl;
 
 import lombok.NonNull;
 import lombok.val;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkMap;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.CraftWorld;
@@ -23,5 +26,15 @@ public class NMSHookerWorldEntity extends NMSHookerItemStack {
         val trackedEntity = ((Map<Integer, ChunkMap.TrackedEntity>) (Object) ((CraftWorld) world).getHandle().getChunkSource().chunkMap.entityMap).get(entityId);
         if (trackedEntity == null) return null;
         return EntityUtils.getEntityFromTrackedEntity(trackedEntity);
+    }
+
+    @Override
+    public Object getDataComponentType(String key) {
+        return BuiltInRegistries.DATA_COMPONENT_TYPE.getValue(ResourceLocation.parse(key));
+    }
+
+    @Override
+    public Object getKeyByType(Object type) {
+        return BuiltInRegistries.DATA_COMPONENT_TYPE.getKey((DataComponentType<?>) type);
     }
 }

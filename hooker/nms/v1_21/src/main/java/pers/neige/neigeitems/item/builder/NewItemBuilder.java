@@ -235,7 +235,7 @@ public class NewItemBuilder extends ItemBuilder {
                         for (String componentKey : componentsConfig.keySet()) {
                             Object componentValue = componentsConfig.get(componentKey);
                             if (componentValue == null) continue;
-                            DataComponentType<?> type = (DataComponentType<?>) ComponentUtils.getDataComponentType(componentKey);
+                            DataComponentType<?> type = (DataComponentType<?>) HookerManager.INSTANCE.getNmsHooker().getDataComponentType(componentKey);
                             if (type == null) {
                                 NeigeItems.getInstance().getLogger().warning("Unknown component type: " + componentKey);
                                 continue;

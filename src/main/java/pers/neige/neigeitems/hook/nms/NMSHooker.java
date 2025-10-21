@@ -23,6 +23,7 @@ import pers.neige.neigeitems.item.builder.ItemBuilder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtList;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils;
 import pers.neige.neigeitems.utils.ItemUtils;
@@ -293,5 +294,25 @@ public class NMSHooker {
             int entityId
     ) {
         return WorldUtils.getEntityFromID1(world, entityId);
+    }
+
+    /**
+     * 1.21+版本, 根据 ResourceLocation 获取对应的 DataComponentType.
+     *
+     * @param key 可解析为 ResourceLocation 的文本.
+     * @return DataComponentType.
+     */
+    public Object getDataComponentType(String key) {
+        return ComponentUtils.getDataComponentType(key);
+    }
+
+    /**
+     * 1.21+版本, 根据 DataComponentType 获取对应的 ResourceLocation.
+     *
+     * @param type DataComponentType.
+     * @return ResourceLocation.
+     */
+    public Object getKeyByType(Object type) {
+        return ComponentUtils.getKeyByType(type);
     }
 }

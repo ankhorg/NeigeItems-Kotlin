@@ -14,6 +14,7 @@ import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
+import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.ref.RefMinecraftKey;
 import pers.neige.neigeitems.ref.adventure.RefPaperAdventure;
 import pers.neige.neigeitems.ref.chat.RefComponent;
@@ -536,7 +537,7 @@ public class NbtUtils {
                 Optional<?> value = entry.getValue();
                 if (!value.isPresent()) continue;
                 RefTypedDataComponent<?> component = RefTypedDataComponent.createUnchecked(entry.getKey(), value.get());
-                RefMinecraftKey key = (RefMinecraftKey) ComponentUtils.getKeyByType(component.type());
+                RefMinecraftKey key = (RefMinecraftKey) HookerManager.INSTANCE.getNmsHooker().getKeyByType(component.type());
                 compound.set1(key.toString(), component.encodeValue((RefRegistryOps<RefNbtBase>) registryOps).getOrThrow());
             }
             return new NbtCompound(compound);
