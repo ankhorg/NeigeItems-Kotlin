@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.lombok") version "2.1.20"
     id("org.jetbrains.dokka") version "2.0.0"
     id("com.gradleup.shadow") version "8.3.5"
-    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.22-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.23-SNAPSHOT"
 }
 
 val realVersion = version
@@ -94,7 +94,7 @@ dependencies {
 
     // ankh-invoke
     implementation("org.inksnow.cputil:logger:1.15")
-    implementation("org.inksnow:ankh-invoke-bukkit:1.0.22-SNAPSHOT")
+    implementation("org.inksnow:ankh-invoke-bukkit:1.0.23-SNAPSHOT")
 
     // bstats
     implementation("org.bstats:bstats-bukkit:3.0.2")
