@@ -26,6 +26,9 @@ public class PacketHandler {
     static {
         packetSendHandlers.put(PacketUtils.SET_SLOT, PacketHandler::handleSetSlotPacket);
         packetSendHandlers.put(PacketUtils.WINDOW_ITEMS, PacketHandler::handleWindowItemsPacket);
+        if (PacketUtils.ADD_CURSOR_ITEM_PACKET) {
+            packetSendHandlers.put(PacketUtils.CURSOR_ITEM.get(), PacketHandler::handleCursorItemPacket);
+        }
         packetSendHandlers.put(PacketUtils.ENTITY_METADATA, PacketHandler::handleEntityMetadataPacket);
     }
 
@@ -43,6 +46,16 @@ public class PacketHandler {
         val gameMode = player.getGameMode();
         if (gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE) return true;
         val itemStack = PacketUtils.getItemStackFromPacketPlayOutSetSlot(packet);
+        if (itemStack == null || itemStack.getType() == Material.AIR) return true;
+        return new ItemPacketEvent(player, itemStack).call();
+    }
+
+    public static boolean handleCursorItemPacket(@NonNull UUID uuid, @NonNull Object packet) {
+        val player = Bukkit.getPlayer(uuid);
+        if (player == null) return true;
+        val gameMode = player.getGameMode();
+        if (gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE) return true;
+        val itemStack = PacketUtils.getContentsFromClientboundSetCursorItemPacket(packet);
         if (itemStack == null || itemStack.getType() == Material.AIR) return true;
         return new ItemPacketEvent(player, itemStack).call();
     }

@@ -19,6 +19,7 @@ import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataItem;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataValue;
 import pers.neige.neigeitems.ref.scores.RefCraftTeam;
+import pers.neige.neigeitems.utils.lazy.ThreadSafeLazy;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,8 +31,19 @@ import java.util.stream.Collectors;
 public class PacketUtils {
     public static final @NonNull String SET_SLOT = RefPacketPlayOutSetSlot.class.getSimpleName();
     public static final @NonNull String WINDOW_ITEMS = RefPacketPlayOutWindowItems.class.getSimpleName();
+    public static final @NonNull ThreadSafeLazy<String> CURSOR_ITEM = new ThreadSafeLazy<>(() -> {
+        if (CbVersion.v1_21_R2.isSupport()) {
+            return RefClientboundSetCursorItemPacket.class.getSimpleName();
+        } else {
+            return null;
+        }
+    });
     public static final @NonNull String ENTITY_METADATA = RefPacketPlayOutEntityMetadata.class.getSimpleName();
     public static final @NonNull String SPAWN_ENTITY = RefPacketPlayOutSpawnEntity.class.getSimpleName();
+    /**
+     * 1.21.3+ 版本起, 添加 ClientboundSetCursorItemPacket 数据包, 代表指针物品.
+     */
+    public static final boolean ADD_CURSOR_ITEM_PACKET = CbVersion.v1_21_R2.isSupport();
     /**
      * 1.17+ 版本起, PacketPlayOutWindowItems 内部添加一个 carriedItem 字段, 用于存储指针上的物品.
      */
@@ -206,6 +218,20 @@ public class PacketUtils {
         if (packetObject instanceof RefPacketPlayOutSetSlot) {
             RefPacketPlayOutSetSlot packet = (RefPacketPlayOutSetSlot) packetObject;
             return RefCraftItemStack.asCraftMirror(packet.itemStack);
+        }
+        return null;
+    }
+
+    /**
+     * 获取 ClientboundSetCursorItemPacket 数据包中的 contents 字段, 包装为 CraftItemStack 并返回.
+     *
+     * @param packetObject 待操作的数据包(nms实例).
+     * @return 经过包装的数据包中的 contents 字段, 传入的不是 ClientboundSetCursorItemPacket 数据包时返回 null.
+     */
+    public static @Nullable ItemStack getContentsFromClientboundSetCursorItemPacket(@NonNull Object packetObject) {
+        if (packetObject instanceof RefClientboundSetCursorItemPacket) {
+            RefClientboundSetCursorItemPacket packet = (RefClientboundSetCursorItemPacket) packetObject;
+            return RefCraftItemStack.asCraftMirror(packet.contents());
         }
         return null;
     }
