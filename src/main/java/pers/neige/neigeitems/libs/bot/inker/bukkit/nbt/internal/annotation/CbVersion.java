@@ -27,9 +27,13 @@ public enum CbVersion {
     v1_21_R3,
     v1_21_R4,
     v1_21_R5,
-    v1_21_R6;
+    v1_21_R6,
+    v1_21_R7;
 
-    private static final CbVersion CURRENT = valueOf(CraftBukkitVersion.current().name());
+    private static final CbVersion CURRENT =
+            CraftBukkitVersion.current() != CraftBukkitVersion.ALL
+                    ? valueOf(CraftBukkitVersion.current().name())
+                    : CbVersion.values()[CbVersion.values().length - 1];
 
     public static CbVersion current() {
         return CURRENT;

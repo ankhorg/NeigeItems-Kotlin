@@ -157,7 +157,10 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
                 if (key == null) {
                     throw new InvalidParameterException("convert result of " + elementName + " key is null! current key: " + rawKey);
                 }
-                rawConfigs.put(key, new RawConfig<>(fileConfig, value));
+                val pre = rawConfigs.put(key, new RawConfig<>(fileConfig, value));
+                if (pre != null) {
+                    throw new InvalidParameterException("duplicate key found: later values override earlier ones! current key: " + rawKey);
+                }
             }
         } catch (Throwable throwable) {
             logger.warn("error occurred while loading " + elementName + " raw config, current key: " + currentKey + ", current file: " + fileConfig.path + ", config content: \n" + fileConfig.config.saveToString(), throwable);
