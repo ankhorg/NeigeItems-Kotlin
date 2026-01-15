@@ -640,7 +640,11 @@ public class NbtUtils {
         }
         RefItemLore lore = components.get(RefDataComponents.LORE);
         if (lore != null) {
-            result.set("mini-lore", RefPaperAdventure.asAdventure(lore.lines()).stream().map(MiniMessage.miniMessage()::serialize).collect(Collectors.toList()));
+            if (CbVersion.v1_21_R6.isSupport()) {
+                result.set("mini-lore", RefPaperAdventure.asAdventure1(lore.lines()).stream().map(MiniMessage.miniMessage()::serialize).collect(Collectors.toList()));
+            } else {
+                result.set("mini-lore", RefPaperAdventure.asAdventure0(lore.lines()).stream().map(MiniMessage.miniMessage()::serialize).collect(Collectors.toList()));
+            }
             componentsNbt.remove("minecraft:lore");
         }
         componentsNbt.remove("minecraft:custom_data");

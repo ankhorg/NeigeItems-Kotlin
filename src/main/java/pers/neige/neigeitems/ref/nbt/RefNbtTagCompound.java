@@ -176,7 +176,10 @@ public final class RefNbtTagCompound extends RefNbtBase {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;isEmpty()Z", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native boolean isEmpty();
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;remove(Ljava/lang/String;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;remove(Ljava/lang/String;)V", predicates = "craftbukkit_version:[v1_17_R1,v1_21_R7)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;remove(Ljava/lang/String;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
-    public native void remove(String key);
+    public native void remove0(String key);
+
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;remove(Ljava/lang/String;)Lnet/minecraft/nbt/Tag;", predicates = "craftbukkit_version:[v1_21_R7,)")
+    public native RefNbtBase remove1(String key);
 }

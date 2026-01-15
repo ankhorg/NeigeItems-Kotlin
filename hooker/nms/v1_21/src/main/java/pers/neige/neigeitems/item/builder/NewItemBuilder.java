@@ -13,7 +13,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.component.CustomModelData;
 import net.minecraft.world.item.component.DyedItemColor;
@@ -35,7 +34,6 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.Nbt;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
-import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.ComponentUtils;
 import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.utils.ItemUtils;
 
@@ -55,7 +53,6 @@ public class NewItemBuilder extends ItemBuilder {
     private @Nullable Component name = null;
     private @Nullable Component itemName = null;
     private @Nullable List<Component> lore = null;
-    private @Nullable ResourceLocation tooltipStyle = null;
     private DataComponentPatch components = null;
 
     public NewItemBuilder() {
@@ -214,13 +211,6 @@ public class NewItemBuilder extends ItemBuilder {
                     }
                     break;
                 }
-                case "tooltip-style": {
-                    String rawTooltipStyle = config.getString(key);
-                    if (rawTooltipStyle != null) {
-                        this.tooltipStyle = ResourceLocation.parse(rawTooltipStyle);
-                    }
-                    break;
-                }
                 case "nbt": {
                     ConfigReader nbtConfig = config.getConfig(key);
                     if (nbtConfig != null) {
@@ -343,9 +333,6 @@ public class NewItemBuilder extends ItemBuilder {
             } else {
                 NeigeItems.getInstance().getLogger().warning("1.21.4+的版本请使用components配置项通过组件配置无法破坏");
             }
-        }
-        if (tooltipStyle != null) {
-            handle.set(DataComponents.TOOLTIP_STYLE, tooltipStyle);
         }
         if (components != null) {
             handle.applyComponents(components);

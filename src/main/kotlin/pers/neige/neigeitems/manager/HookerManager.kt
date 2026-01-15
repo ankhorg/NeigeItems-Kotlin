@@ -71,6 +71,9 @@ object HookerManager {
 
                 CbVersion.current().ordinal >= CbVersion.v1_20_R4.ordinal -> {
                     when {
+                        CbVersion.current().ordinal >= CbVersion.v1_21_R7.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerIdentifier")
+                            .newInstance() as NMSHooker
+
                         CbVersion.current().ordinal >= CbVersion.v1_21_R4.ordinal -> Class.forName("pers.neige.neigeitems.hook.nms.impl.NMSHookerWorldEntity")
                             .newInstance() as NMSHooker
 

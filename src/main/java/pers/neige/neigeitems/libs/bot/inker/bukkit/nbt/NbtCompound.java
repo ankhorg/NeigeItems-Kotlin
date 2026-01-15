@@ -20,6 +20,7 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     private static final boolean PUT_BYTE_LIST_SUPPORT = CbVersion.v1_17_R1.isSupport() && !CbVersion.v1_21_R4.isSupport();
     private static final boolean PUT_INT_LIST_SUPPORT = CbVersion.v1_13_R1.isSupport() && !CbVersion.v1_21_R4.isSupport();
     private static final boolean PUT_LONG_LIST_SUPPORT = CbVersion.v1_13_R1.isSupport() && !CbVersion.v1_21_R4.isSupport();
+    private static final boolean REMOVE_WITH_RETURN = CbVersion.v1_21_R7.isSupport();
     private final Map<String, Nbt<?>> delegateMap;
     private Set<String> oldKeySet;
     private Set<Entry<String, Nbt<?>>> oldEntrySet;
@@ -106,9 +107,13 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public Nbt<?> remove(String key) {
-        RefNbtBase oldValue = delegate.get(key);
-        delegate.remove(key);
-        return Nbt.fromNms(oldValue);
+        if (REMOVE_WITH_RETURN) {
+            return fromNms(delegate.remove1(key));
+        } else {
+            RefNbtBase oldValue = delegate.get(key);
+            delegate.remove0(key);
+            return Nbt.fromNms(oldValue);
+        }
     }
 
     @Override
@@ -149,7 +154,11 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public void delete(String key) {
-        delegate.remove(key);
+        if (REMOVE_WITH_RETURN) {
+            delegate.remove1(key);
+        } else {
+            delegate.remove0(key);
+        }
     }
 
     @Override

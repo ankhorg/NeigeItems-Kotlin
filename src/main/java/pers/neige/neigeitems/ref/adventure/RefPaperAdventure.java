@@ -15,8 +15,11 @@ public final class RefPaperAdventure {
     @HandleBy(reference = "Lio/papermc/paper/adventure/PaperAdventure;asAdventure(Lnet/minecraft/network/chat/Component;)Lnet/kyori/adventure/text/Component;", predicates = "craftbukkit_version:[v1_17_R1,)")
     public static native @NonNull Component asAdventure(@Nullable RefComponent component);
 
-    @HandleBy(reference = "Lio/papermc/paper/adventure/PaperAdventure;asAdventure(Ljava/util/List;)Ljava/util/ArrayList;", predicates = "craftbukkit_version:[v1_17_R1,)")
-    public static native ArrayList<Component> asAdventure(List<? extends RefComponent> vanillas);
+    @HandleBy(reference = "Lio/papermc/paper/adventure/PaperAdventure;asAdventure(Ljava/util/List;)Ljava/util/List;", predicates = "craftbukkit_version:[v1_21_R6,)")
+    public static native List<Component> asAdventure1(List<? extends RefComponent> vanillas);
+
+    @HandleBy(reference = "Lio/papermc/paper/adventure/PaperAdventure;asAdventure(Ljava/util/List;)Ljava/util/ArrayList;", predicates = "craftbukkit_version:[v1_17_R1,v1_21_R6)")
+    public static native ArrayList<Component> asAdventure0(List<? extends RefComponent> vanillas);
 
     @Contract("null -> null; !null -> !null")
     @HandleBy(reference = "Lio/papermc/paper/adventure/PaperAdventure;asVanilla(Lnet/kyori/adventure/text/Component;)Lnet/minecraft/network/chat/Component;", predicates = "craftbukkit_version:[v1_17_R1,)")
