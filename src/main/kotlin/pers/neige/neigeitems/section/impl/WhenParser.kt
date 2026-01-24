@@ -3,7 +3,6 @@ package pers.neige.neigeitems.section.impl
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.action.ActionContext
-import pers.neige.neigeitems.action.ResultType
 import pers.neige.neigeitems.manager.ActionManager.parseCondition
 import pers.neige.neigeitems.section.SectionParser
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
@@ -56,12 +55,12 @@ object WhenParser : SectionParser() {
                 // 确认类型正确
                 if (condition !is String?) return@forEach
                 // 如果符合条件
-                if (parseCondition(
+                if (!parseCondition(
                         condition, ActionContext(
                             player?.player,
                             mapOf(Pair("value", value), Pair("cache", cache), Pair("sections", sections))
                         )
-                    ).type != ResultType.STOP
+                    ).isStop
                 ) {
                     // 返回
                     return result.toString().parseSection(cache, player, sections).also { cache?.remove("value") }

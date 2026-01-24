@@ -296,7 +296,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             // 检测条件
             consume.condition?.let {
                 // 不满足条件就爬
-                if (parseCondition(it, context).type == ResultType.STOP) {
+                if (parseCondition(it, context).isStop) {
                     // 跑一下deny动作
                     consume.deny.eval(context)
                     // 爬
@@ -546,7 +546,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
                 // 检测条件
                 consume.condition?.let {
                     // 不满足条件就爬
-                    if (parseCondition(it, context).type == ResultType.STOP) {
+                    if (parseCondition(it, context).isStop) {
                         // 跑一下deny动作
                         consume.deny.eval(context)
                         // 爬

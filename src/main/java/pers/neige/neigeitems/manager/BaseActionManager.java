@@ -383,7 +383,7 @@ public abstract class BaseActionManager {
         val actions = action.getActions();
         if (fromIndex >= actions.size()) return CompletableFuture.completedFuture(Results.SUCCESS);
         return actions.get(fromIndex).evalAsyncSafe(this, context).thenCompose((result) -> {
-            if (result.getType() == ResultType.STOP) {
+            if (result.isStop()) {
                 return CompletableFuture.completedFuture(result);
             }
             return runAction(action, context, fromIndex + 1);
@@ -557,7 +557,7 @@ public abstract class BaseActionManager {
         if (action.getCondition().easyCheck(context)) {
             return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
                 // 执行中止
-                if (result.getType() == ResultType.STOP) {
+                if (result.isStop()) {
                     // 执行finally块
                     return action.getFinally().evalAsyncSafe(this, context);
                 } else {
@@ -592,7 +592,7 @@ public abstract class BaseActionManager {
             return action.getDefaultAction().evalAsyncSafe(this, context);
         }
         return action.getMatchAction().evalAsyncSafe(this, context).thenCompose((result) -> {
-            if (result.getType() == ResultType.STOP) {
+            if (result.isStop()) {
                 return CompletableFuture.completedFuture(result);
             } else {
                 return targetAction.evalAsyncSafe(this, context);
@@ -656,7 +656,7 @@ public abstract class BaseActionManager {
         }
         val targetAction = entry.getValue();
         return action.getMatchAction().evalAsyncSafe(this, context).thenCompose((result) -> {
-            if (result.getType() == ResultType.STOP) {
+            if (result.isStop()) {
                 return CompletableFuture.completedFuture(result);
             } else {
                 return targetAction.evalAsyncSafe(this, context);
@@ -695,7 +695,7 @@ public abstract class BaseActionManager {
     ) {
         context.getGlobal().put(action.getGlobalId(), count);
         return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
-            if (result.getType() == ResultType.STOP) {
+            if (result.isStop()) {
                 return CompletableFuture.completedFuture(result);
             } else {
                 val newCount = count + 1;

@@ -13,4 +13,8 @@ public abstract class ActionResult implements Comparable<ActionResult> {
     public int getPriority() {
         return 0;
     }
+
+    public boolean isStop() {
+        return getType() == ResultType.STOP;
+    }
 }

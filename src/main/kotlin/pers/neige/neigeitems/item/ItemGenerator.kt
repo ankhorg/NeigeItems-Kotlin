@@ -162,7 +162,7 @@ class ItemGenerator(val itemConfig: ItemConfig) {
             val neigeItems = nbt.getOrCreateCompound("NeigeItems")
             if (cache != null) {
                 neigeItems.putString("id", id)
-                if (ConfigManager.newDataFormat && cache.isNotEmpty()) {
+                if (ConfigManager.newDataFormat) {
                     val data = neigeItems.getOrCreateCompound("data")
                     (cache as Map<String, Any?>).forEach { (key, value) ->
                         if (value == null) return@forEach
