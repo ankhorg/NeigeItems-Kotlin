@@ -1,7 +1,7 @@
 package pers.neige.neigeitems.item.builder;
 
 import com.mojang.serialization.DataResult;
-import io.papermc.paper.adventure.PaperAdventure;
+import io.papermc.paper.adventure.AdventureComponent;
 import kotlin.text.StringsKt;
 import lombok.NonNull;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -161,14 +161,14 @@ public class NewItemBuilder extends ItemBuilder {
                 case "mini-name": {
                     String rawName = config.getString(key);
                     if (rawName != null) {
-                        this.name = PaperAdventure.asVanilla(MiniMessage.miniMessage().deserialize(rawName));
+                        this.name = new AdventureComponent(MiniMessage.miniMessage().deserialize(rawName)).deepConverted();
                     }
                     break;
                 }
                 case "mini-item-name": {
                     String rawName = config.getString(key);
                     if (rawName != null) {
-                        this.itemName = PaperAdventure.asVanilla(MiniMessage.miniMessage().deserialize(rawName));
+                        this.itemName = new AdventureComponent(MiniMessage.miniMessage().deserialize(rawName)).deepConverted();
                     }
                     break;
                 }
@@ -177,7 +177,7 @@ public class NewItemBuilder extends ItemBuilder {
                     List<Component> finalLore = new ArrayList<>();
                     for (String rawLore : originLore) {
                         for (String loreText : rawLore.split("\n")) {
-                            finalLore.add(PaperAdventure.asVanilla(MiniMessage.miniMessage().deserialize(loreText)));
+                            finalLore.add(new AdventureComponent(MiniMessage.miniMessage().deserialize(loreText)).deepConverted());
                         }
                     }
                     if (!finalLore.isEmpty()) {
@@ -318,7 +318,7 @@ public class NewItemBuilder extends ItemBuilder {
             handle.set(DataComponents.ITEM_NAME, itemName);
         }
         if (lore != null) {
-            handle.set(DataComponents.LORE, new ItemLore(lore, new ArrayList<>()));
+            handle.set(DataComponents.LORE, new ItemLore(lore));
         }
         if (color != null) {
             if (LOWER_THAN_1_21_R4) {
