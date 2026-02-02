@@ -223,8 +223,10 @@ object ItemManager : ItemConfigManager() {
         if (hasItem(id) && !cover) return SaveResult.CONFLICT
         // 创建物品节点
         config.set(id, nmsHooker.save(itemStack))
-        // 保存文件
-        config.save(file)
+        synchronized(this) {
+            // 保存文件
+            config.save(file)
+        }
         // 物品保存好了, 信息加进ItemManager里
         addItem(ItemGenerator(ItemConfig(id, file, config)))
         return SaveResult.SUCCESS
