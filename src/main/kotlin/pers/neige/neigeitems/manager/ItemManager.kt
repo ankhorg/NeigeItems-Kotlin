@@ -217,19 +217,19 @@ object ItemManager : ItemConfigManager() {
      * @return 保存结果
      */
     fun saveItem(itemStack: ItemStack?, id: String, file: File, config: YamlConfiguration, cover: Boolean): SaveResult {
-        // 检测是否为空气
-        if (itemStack == null || itemStack.type == Material.AIR) return SaveResult.AIR
-        // 检测节点是否存在
-        if (hasItem(id) && !cover) return SaveResult.CONFLICT
-        // 创建物品节点
-        config.set(id, nmsHooker.save(itemStack))
         synchronized(this) {
+            // 检测是否为空气
+            if (itemStack == null || itemStack.type == Material.AIR) return SaveResult.AIR
+            // 检测节点是否存在
+            if (hasItem(id) && !cover) return SaveResult.CONFLICT
+            // 创建物品节点
+            config.set(id, nmsHooker.save(itemStack))
             // 保存文件
             config.save(file)
+            // 物品保存好了, 信息加进ItemManager里
+            addItem(ItemGenerator(ItemConfig(id, file, config)))
+            return SaveResult.SUCCESS
         }
-        // 物品保存好了, 信息加进ItemManager里
-        addItem(ItemGenerator(ItemConfig(id, file, config)))
-        return SaveResult.SUCCESS
     }
 
     /**
