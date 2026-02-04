@@ -188,4 +188,12 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
         if (handle.isEmpty()) cursor.set(null);
         cursor.set(handle.last());
     }
+
+    @Override
+    protected int getCurrentIndex() {
+        val cur = getCursor();
+        if (cur == null || handle.isEmpty()) return 0;
+
+        return handle.headSet(cur, false).size();
+    }
 }

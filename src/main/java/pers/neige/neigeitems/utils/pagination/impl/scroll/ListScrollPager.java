@@ -124,4 +124,9 @@ public class ListScrollPager<T> extends ScrollPager<T> {
     public void toFinalOffset() {
         offset.set(getTotalElements() - 1);
     }
+
+    @Override
+    protected int getCurrentIndex() {
+        return offset.get();
+    }
 }

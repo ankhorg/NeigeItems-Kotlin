@@ -189,4 +189,12 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
         if (handle.isEmpty()) cursorKey.set(null);
         cursorKey.set(handle.firstKey());
     }
+
+    @Override
+    protected int getCurrentIndex() {
+        val cur = getCursor();
+        if (cur == null || handle.isEmpty()) return 0;
+
+        return handle.headMap(cur, false).size();
+    }
 }

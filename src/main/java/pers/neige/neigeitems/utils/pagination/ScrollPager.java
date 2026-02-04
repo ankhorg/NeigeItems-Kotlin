@@ -175,4 +175,18 @@ public abstract class ScrollPager<T> {
      * 检查是否存在上一页
      */
     public abstract boolean hasPrevPage();
+
+    /**
+     * 获取当前偏移对应的元素下标
+     */
+    protected abstract int getCurrentIndex();
+
+    /**
+     * 获取当前页码（从1开始）
+     */
+    public int getCurrentPage() {
+        if (getTotalElements() <= 0) return 0;
+
+        return (getCurrentIndex() / getPageSize()) + 1;
+    }
 }
