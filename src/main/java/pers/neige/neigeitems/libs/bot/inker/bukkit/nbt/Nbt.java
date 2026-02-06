@@ -80,7 +80,7 @@ public abstract class Nbt<NMS extends RefNbtBase> implements NbtLike, Comparable
 
     @Override
     public String getAsString() {
-        return NBT_FORMAT_CHANGE ? delegate.asString1().orElse("") : delegate.asString0();
+        return NBT_FORMAT_CHANGE ? delegate.toString() : delegate.asString0();
     }
 
     public int compareTo(@NonNull Nbt<?> o) {

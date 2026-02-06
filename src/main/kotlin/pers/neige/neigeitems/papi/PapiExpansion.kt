@@ -41,7 +41,7 @@ object PapiExpansion {
                 "parse" -> return@newPlaceholderExpansion params.getOrNull(1)?.parseSection(player) ?: ""
                 "data", "nbt" -> {
                     // 玩家在线且当前PAPI变量输入了参数
-                    if (player != null && player is Player && params.size == 2) {
+                    if (player is Player && params.size == 2) {
                         // %ni_data/nbt_type_slot_content%
                         params[1].split("_", limit = 3).let {
                             if (it.size == 3) {

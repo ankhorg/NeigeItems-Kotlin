@@ -63,5 +63,10 @@ public abstract class NbtNumeric<NMS extends RefNbtNumber> extends Nbt<NMS> impl
     }
 
     @Override
+    public String getAsString() {
+        return NBT_FORMAT_CHANGE ? getAsNumber().toString() : delegate.asString0();
+    }
+
+    @Override
     public abstract NbtNumeric<NMS> clone();
 }

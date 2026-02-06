@@ -30,6 +30,11 @@ public final class NbtString extends Nbt<RefNbtTagString> implements NbtStringLi
     }
 
     @Override
+    public String getAsString() {
+        return NBT_FORMAT_CHANGE ? delegate.asString1().orElse("") : delegate.asString0();
+    }
+
+    @Override
     public NbtString clone() {
         return this;
     }

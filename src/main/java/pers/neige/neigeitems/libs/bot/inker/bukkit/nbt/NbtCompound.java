@@ -399,15 +399,6 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     @Contract("_, !null -> !null")
-    public @Nullable String getString(@NonNull String key, @Nullable String def) {
-        RefNbtBase value = delegate.get(key);
-        return (value != null)
-                ? NBT_FORMAT_CHANGE ? value.asString1().orElse("") : value.asString0()
-                : def;
-    }
-
-    @Override
-    @Contract("_, !null -> !null")
     public byte @Nullable [] getByteArray(@NonNull String key, byte @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagByteArray)
@@ -658,15 +649,6 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
         return value instanceof RefNbtNumber
                 ? ((RefNbtNumber) value).asDouble()
                 : null;
-    }
-
-    @Override
-    @Contract("_, !null -> !null")
-    public @Nullable String getDeepString(@NonNull String key, @Nullable String def) {
-        RefNbtBase value = getDeepRefNbt(key);
-        return value != null
-                ? NBT_FORMAT_CHANGE ? value.asString1().orElse("") : value.asString0()
-                : def;
     }
 
     @Override
