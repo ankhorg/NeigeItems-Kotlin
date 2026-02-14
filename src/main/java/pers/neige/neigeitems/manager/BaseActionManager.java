@@ -446,7 +446,7 @@ public abstract class BaseActionManager {
     ) {
         if (action.getTotalWeight() <= 0 || action.getActions().isEmpty())
             return CompletableFuture.completedFuture(Results.SUCCESS);
-        int amount = action.getAmount(this, context);
+        int amount = action.getAmount(context);
         if (amount >= action.getActions().size()) {
             CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
             for (val currentAction : action.getActions()) {
@@ -503,7 +503,7 @@ public abstract class BaseActionManager {
     ) {
         val actions = action.getActions(context);
         if (actions.isEmpty()) return CompletableFuture.completedFuture(Results.SUCCESS);
-        val amount = action.getAmount(this, context);
+        val amount = action.getAmount(context);
         if (amount >= actions.size()) {
             CompletableFuture<ActionResult> result = CompletableFuture.completedFuture(Results.SUCCESS);
             for (val currentAction : actions) {
