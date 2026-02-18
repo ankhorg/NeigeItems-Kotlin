@@ -22,6 +22,7 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 
 public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K, V> {
+    protected final @Nullable JavaPlugin plugin;
     protected final @NonNull String pluginName;
     protected final @NonNull ILogger logger;
     protected final @NonNull BiFunction<ConfigurationSection, String, R> configGetter;
@@ -41,6 +42,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
             @NonNull Function<String, K> keyConverter,
             @NonNull BiFunction<K, R, V> converter
     ) {
+        this.plugin = plugin;
         this.pluginName = plugin.getName();
         this.logger = new JavaLogger(plugin.getLogger());
         this.elementName = elementName;
@@ -59,6 +61,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
             @NonNull Function<String, K> keyConverter,
             @NonNull BiFunction<K, R, V> converter
     ) {
+        this.plugin = null;
         this.pluginName = pluginName;
         this.logger = new JavaLogger(logger);
         this.elementName = elementName;
@@ -77,6 +80,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
             @NonNull Function<String, K> keyConverter,
             @NonNull BiFunction<K, R, V> converter
     ) {
+        this.plugin = null;
         this.pluginName = pluginName;
         this.logger = new Slf4jLogger(logger);
         this.elementName = elementName;
@@ -168,6 +172,16 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
     }
 
     /**
+     * 如果 plugin 不为 null, 尝试保存目录下的 example.yml 文件
+     */
+    public void saveExamples() {
+        if (this.plugin == null) return;
+        if (ConfigUtils.getFileOrNull(this.plugin, this.directory) == null) {
+            ConfigUtils.saveResourceNotWarn(this.plugin, this.directory + File.separator + "example.yml");
+        }
+    }
+
+    /**
      * clear 后调用 load
      */
     public void reload() {
@@ -179,6 +193,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
      * 根据 loadConfigsParts 方法加载所有配置组件, 而后通过 converter 对组件进行类型转换
      */
     public void load() {
+        saveExamples();
         loadRawConfigs();
         rawConfigs.forEach((id, rawConfig) -> {
             try {

@@ -184,18 +184,19 @@ public abstract class BaseActionManager {
             return new WhileAction(this, config);
         } else if (config.containsKey("label")) {
             return new LabelAction(this, config);
-            // 处理有人闲的没事干多包了一层actions的情况
-        } else if (config.containsKey("actions")) {
-            return compile(config.get("actions"));
         } else {
             // 处理有人连引号都能忘的情况('tell: 123'写成了tell: 123, 也就是字符串写成了长度为1的map)
             val keySet = config.keySet();
             if (keySet.size() != 1) return NULL_ACTION;
             val key = keySet.iterator().next();
             val value = config.get(key);
+            // 处理有人闲的没事干多包了一层actions的情况
+            if ("actions".equals(key)) {
+                return compile(value);
+            }
             if (!(value instanceof String)) return NULL_ACTION;
             String content = (String) value;
-            if (key.equals("js")) {
+            if ("js".equals(key)) {
                 return new JsAction(this, content);
             } else {
                 content = PapiHooker.toAllSection(content);
