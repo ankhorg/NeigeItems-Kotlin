@@ -24,15 +24,15 @@ public class UnquotedStringArgumentType implements ArgumentType<String> {
     }
 
     public static @NonNull String getUnquotedString(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, String.class);
     }
 
     @Override
     public @NonNull String parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) {
         return CommandUtils.readUnquotedString(reader);
     }

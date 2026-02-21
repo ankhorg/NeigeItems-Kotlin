@@ -26,9 +26,9 @@ public final class ItemExpirationEvent extends CancellableEvent {
      * @param itemInfo  物品信息
      */
     public ItemExpirationEvent(
-            @Nullable OfflinePlayer player,
-            @NonNull ItemStack itemStack,
-            @NonNull ItemInfo itemInfo
+        @Nullable OfflinePlayer player,
+        @NonNull ItemStack itemStack,
+        @NonNull ItemInfo itemInfo
     ) {
         this.player = player;
         this.itemStack = itemStack;

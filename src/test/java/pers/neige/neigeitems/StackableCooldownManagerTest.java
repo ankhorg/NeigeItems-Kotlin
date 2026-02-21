@@ -257,6 +257,7 @@ public class StackableCooldownManagerTest {
                 assertEquals(8000, status3.getRemainingRecoveryTime(), "延长 5 秒后恢复时间应为 8000ms");
             }
         }
+
         @Test
         @DisplayName("设置冷却时间")
         void setCooldown() {

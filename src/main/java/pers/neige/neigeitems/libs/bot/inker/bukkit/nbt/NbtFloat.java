@@ -8,8 +8,8 @@ import pers.neige.neigeitems.ref.nbt.RefNbtTagFloat;
 public final class NbtFloat extends NbtNumeric<RefNbtTagFloat> implements NbtFloatLike {
     private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();
     private static final NbtFloat ZERO = new NbtFloat(OF_SUPPORTED
-            ? RefNbtTagFloat.of(0.0F)
-            : new RefNbtTagFloat(0.0F)
+        ? RefNbtTagFloat.of(0.0F)
+        : new RefNbtTagFloat(0.0F)
     );
 
     NbtFloat(RefNbtTagFloat delegate) {
@@ -18,8 +18,8 @@ public final class NbtFloat extends NbtNumeric<RefNbtTagFloat> implements NbtFlo
 
     public static NbtFloat valueOf(float value) {
         return value == 0.0F ? ZERO : new NbtFloat(OF_SUPPORTED
-                ? RefNbtTagFloat.of(value)
-                : new RefNbtTagFloat(value));
+            ? RefNbtTagFloat.of(value)
+            : new RefNbtTagFloat(value));
     }
 
     static NbtFloat fromNmsImpl(RefNbtTagFloat delegate) {

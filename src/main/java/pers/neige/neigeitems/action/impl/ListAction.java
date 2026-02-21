@@ -16,8 +16,8 @@ public class ListAction extends Action {
     private final @NonNull List<Action> actions;
 
     public ListAction(
-            @NonNull BaseActionManager manager,
-            @NonNull List<?> action
+        @NonNull BaseActionManager manager,
+        @NonNull List<?> action
     ) {
         super(manager);
         actions = new ArrayList<>();
@@ -28,9 +28,9 @@ public class ListAction extends Action {
     }
 
     private ListAction(
-            @NonNull ListAction action,
-            int fromIndex,
-            int toIndex
+        @NonNull ListAction action,
+        int fromIndex,
+        int toIndex
     ) {
         super(action.manager);
         actions = action.actions.subList(fromIndex, toIndex);
@@ -56,8 +56,8 @@ public class ListAction extends Action {
      */
     @Override
     public @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }
@@ -68,9 +68,9 @@ public class ListAction extends Action {
      * @param fromIndex 从这个索引对应的位置开始执行
      */
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context,
-            int fromIndex
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context,
+        int fromIndex
     ) {
         return manager.runAction(this, context, fromIndex);
     }

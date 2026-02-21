@@ -16,8 +16,8 @@ public class ConditionAction extends Action {
     private final @NonNull Action deny;
 
     public ConditionAction(
-            @NonNull BaseActionManager manager,
-            @NonNull ConfigReader action
+        @NonNull BaseActionManager manager,
+        @NonNull ConfigReader action
     ) {
         super(manager);
         condition = new Condition(manager, action.getString("condition"));
@@ -42,8 +42,8 @@ public class ConditionAction extends Action {
      */
     @Override
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }

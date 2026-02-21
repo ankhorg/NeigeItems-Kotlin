@@ -24,33 +24,33 @@ public class StringAction extends Action {
     private final @NonNull ThreadSafeLazy<BiFunction<ActionContext, String, CompletableFuture<ActionResult>>> handler;
 
     public StringAction(
-            @NonNull BaseActionManager manager,
-            @NonNull String action
+        @NonNull BaseActionManager manager,
+        @NonNull String action
     ) {
         this(manager, action, action.split(": ", 2));
     }
 
     private StringAction(
-            @NonNull BaseActionManager manager,
-            @NonNull String action,
-            @NonNull String[] keyAndContent
+        @NonNull BaseActionManager manager,
+        @NonNull String action,
+        @NonNull String[] keyAndContent
     ) {
         this(manager, action, keyAndContent[0].toLowerCase(Locale.ROOT), keyAndContent.length > 1 ? keyAndContent[1] : "");
     }
 
     public StringAction(
-            @NonNull BaseActionManager manager,
-            @NonNull String key,
-            @NonNull String content
+        @NonNull BaseActionManager manager,
+        @NonNull String key,
+        @NonNull String content
     ) {
         this(manager, key + ": " + content, key, content);
     }
 
     public StringAction(
-            @NonNull BaseActionManager manager,
-            @NonNull String action,
-            @NonNull String key,
-            @NonNull String content
+        @NonNull BaseActionManager manager,
+        @NonNull String action,
+        @NonNull String key,
+        @NonNull String content
     ) {
         super(manager);
         this.action = action;
@@ -75,8 +75,8 @@ public class StringAction extends Action {
      */
     @Override
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         try {
             return manager.runAction(this, context);

@@ -11,7 +11,7 @@ public abstract class UnquotedStringSelector<T> {
     protected final @NonNull String text;
 
     public UnquotedStringSelector(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) {
         this.text = CommandUtils.readUnquotedString(reader);
     }

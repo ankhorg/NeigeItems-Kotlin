@@ -30,45 +30,45 @@ public class ActionContext implements Cloneable {
     }
 
     public ActionContext(
-            @Nullable Player player
+        @Nullable Player player
     ) {
         this(player, null);
     }
 
     public ActionContext(
-            @Nullable Player player,
-            @Nullable Map<String, Object> params
+        @Nullable Player player,
+        @Nullable Map<String, Object> params
     ) {
         this(player, null, params);
     }
 
     public ActionContext(
-            @Nullable Player player,
-            @Nullable Map<String, Object> global,
-            @Nullable Map<String, Object> params
+        @Nullable Player player,
+        @Nullable Map<String, Object> global,
+        @Nullable Map<String, Object> params
     ) {
         this(player, global, params, null, null, null, null);
     }
 
     public ActionContext(
-            @Nullable Player player,
-            @Nullable Map<String, Object> global,
-            @Nullable Map<String, Object> params,
-            @Nullable ItemStack itemStack,
-            @Nullable NbtCompound nbt,
-            @Nullable Map<String, String> data
+        @Nullable Player player,
+        @Nullable Map<String, Object> global,
+        @Nullable Map<String, Object> params,
+        @Nullable ItemStack itemStack,
+        @Nullable NbtCompound nbt,
+        @Nullable Map<String, String> data
     ) {
         this(player, global, params, itemStack, nbt, data, null);
     }
 
     public ActionContext(
-            @Nullable Player player,
-            @Nullable Map<String, Object> global,
-            @Nullable Map<String, Object> params,
-            @Nullable ItemStack itemStack,
-            @Nullable NbtCompound nbt,
-            @Nullable Map<String, String> data,
-            @Nullable Event event
+        @Nullable Player player,
+        @Nullable Map<String, Object> global,
+        @Nullable Map<String, Object> params,
+        @Nullable ItemStack itemStack,
+        @Nullable NbtCompound nbt,
+        @Nullable Map<String, String> data,
+        @Nullable Event event
     ) {
         this.player = player;
         if (global == null) {

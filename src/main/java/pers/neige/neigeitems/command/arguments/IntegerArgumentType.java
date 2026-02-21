@@ -75,8 +75,8 @@ public class IntegerArgumentType implements ArgumentType<Integer> {
     }
 
     public static int getInteger(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, Integer.TYPE);
     }
@@ -97,7 +97,7 @@ public class IntegerArgumentType implements ArgumentType<Integer> {
 
     @Override
     public @NonNull Integer parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) throws CommandSyntaxException {
         val result = CommandUtils.readInteger(reader);
         return Math.min(Math.max(result, minimum), maximum);

@@ -23,8 +23,8 @@ public class KeyAction extends Action {
     private final @NonNull Map<String, Action> actions = new HashMap<>();
 
     public KeyAction(
-            @NonNull BaseActionManager manager,
-            @NonNull ConfigReader config
+        @NonNull BaseActionManager manager,
+        @NonNull ConfigReader config
     ) {
         super(manager);
         this.globalId = config.getString("global-id", "key");
@@ -60,8 +60,8 @@ public class KeyAction extends Action {
      */
     @Override
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }

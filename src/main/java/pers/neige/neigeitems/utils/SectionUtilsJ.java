@@ -10,11 +10,11 @@ import java.util.function.Function;
 
 public class SectionUtilsJ {
     static @NonNull String parse(
-            @NonNull String text,
-            char head,
-            char tail,
-            char escape,
-            Function<String, @Nullable String> transform
+        @NonNull String text,
+        char head,
+        char tail,
+        char escape,
+        Function<String, @Nullable String> transform
     ) {
         // 缓存待解析节点
         val stringBuilders = new ArrayDeque<StringBuilder>();

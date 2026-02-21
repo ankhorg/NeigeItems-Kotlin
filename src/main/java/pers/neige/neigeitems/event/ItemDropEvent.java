@@ -33,9 +33,9 @@ public final class ItemDropEvent extends CancellableEvent {
      * @param location  掉落位置
      */
     public ItemDropEvent(
-            @NonNull String id,
-            @NonNull ItemStack itemStack,
-            @NonNull Location location
+        @NonNull String id,
+        @NonNull ItemStack itemStack,
+        @NonNull Location location
     ) {
         this.id = id;
         this.itemStack = itemStack;
@@ -53,10 +53,10 @@ public final class ItemDropEvent extends CancellableEvent {
      * @param location  掉落位置
      */
     public ItemDropEvent(
-            @NonNull String id,
-            @NonNull ItemStack itemStack,
-            int amount,
-            @NonNull Location location
+        @NonNull String id,
+        @NonNull ItemStack itemStack,
+        int amount,
+        @NonNull Location location
     ) {
         this.id = id;
         this.itemStack = itemStack;
@@ -73,11 +73,11 @@ public final class ItemDropEvent extends CancellableEvent {
      * @param parser    物品解析对象
      */
     public ItemDropEvent(
-            @NonNull String id,
-            @NonNull ItemStack itemStack,
-            int amount,
-            @NonNull Location location,
-            @Nullable OfflinePlayer parser
+        @NonNull String id,
+        @NonNull ItemStack itemStack,
+        int amount,
+        @NonNull Location location,
+        @Nullable OfflinePlayer parser
     ) {
         this.id = id;
         this.itemStack = itemStack;
@@ -110,7 +110,7 @@ public final class ItemDropEvent extends CancellableEvent {
      * @param itemStack 待掉落物品
      */
     public void setItemStack(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         this.itemStack = itemStack;
     }
@@ -144,7 +144,7 @@ public final class ItemDropEvent extends CancellableEvent {
      * @param location 掉落位置
      */
     public void setLocation(
-            @NonNull Location location
+        @NonNull Location location
     ) {
         this.location = location;
     }

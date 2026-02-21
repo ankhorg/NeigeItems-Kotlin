@@ -103,7 +103,7 @@ public class SpawnerBuilder {
      * @return SpawnerBuilder 本身.
      */
     public SpawnerBuilder setSpawnedType(
-            @NonNull EntityType creatureType
+        @NonNull EntityType creatureType
     ) {
         blockState.setSpawnedType(creatureType);
         return this;
@@ -116,7 +116,7 @@ public class SpawnerBuilder {
      * @return SpawnerBuilder 本身.
      */
     public SpawnerBuilder setCreatureTypeByName(
-            @NonNull String creatureType
+        @NonNull String creatureType
     ) {
         blockState.setCreatureTypeByName(creatureType);
         return this;
@@ -147,7 +147,7 @@ public class SpawnerBuilder {
      * @return SpawnerBuilder 本身.
      */
     public SpawnerBuilder setMinSpawnDelay(
-            int delay
+        int delay
     ) {
         blockState.setMinSpawnDelay(Math.max(delay, 0));
         return this;
@@ -169,7 +169,7 @@ public class SpawnerBuilder {
      * @return SpawnerBuilder 本身.
      */
     public SpawnerBuilder setMaxSpawnDelay(
-            int delay
+        int delay
     ) {
         blockState.setMaxSpawnDelay(Math.max(delay, blockState.getMinSpawnDelay()));
         return this;
@@ -191,7 +191,7 @@ public class SpawnerBuilder {
      * @return SpawnerBuilder 本身.
      */
     public SpawnerBuilder setSpawnCount(
-            int spawnCount
+        int spawnCount
     ) {
         blockState.setSpawnCount(spawnCount);
         return this;
@@ -213,7 +213,7 @@ public class SpawnerBuilder {
      * @return SpawnerBuilder 本身.
      */
     public SpawnerBuilder setMaxNearbyEntities(
-            int maxNearbyEntities
+        int maxNearbyEntities
     ) {
         blockState.setMaxNearbyEntities(maxNearbyEntities);
         return this;
@@ -237,7 +237,7 @@ public class SpawnerBuilder {
      * @return SpawnerBuilder 本身.
      */
     public SpawnerBuilder setRequiredPlayerRange(
-            int requiredPlayerRange
+        int requiredPlayerRange
     ) {
         blockState.setRequiredPlayerRange(requiredPlayerRange);
         return this;
@@ -261,7 +261,7 @@ public class SpawnerBuilder {
      * @return SpawnerBuilder 本身.
      */
     public SpawnerBuilder setSpawnRange(
-            int spawnRange
+        int spawnRange
     ) {
         blockState.setSpawnRange(spawnRange);
         return this;

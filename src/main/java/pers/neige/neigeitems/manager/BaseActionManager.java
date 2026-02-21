@@ -14,7 +14,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
-import pers.neige.neigeitems.action.*;
+import pers.neige.neigeitems.action.Action;
+import pers.neige.neigeitems.action.ActionContext;
+import pers.neige.neigeitems.action.ActionResult;
+import pers.neige.neigeitems.action.ScriptWithSource;
 import pers.neige.neigeitems.action.catcher.ChatCatcher;
 import pers.neige.neigeitems.action.catcher.SignCatcher;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
@@ -72,7 +75,7 @@ public abstract class BaseActionManager {
     private final @NonNull ConcurrentHashMap<String, CompiledScript> actionScripts = new ConcurrentHashMap<>();
 
     public BaseActionManager(
-            @NonNull Plugin plugin
+        @NonNull Plugin plugin
     ) {
         this.plugin = plugin;
         engine.put("plugin", plugin);
@@ -107,23 +110,23 @@ public abstract class BaseActionManager {
     }
 
     public @NonNull Action compile(
-            @Nullable Object action,
-            @NonNull Action def
+        @Nullable Object action,
+        @NonNull Action def
     ) {
         if (action == null) return def;
         return compile(action);
     }
 
     public @NonNull Action compile(
-            @Nullable Object action,
-            @Nullable Object def
+        @Nullable Object action,
+        @Nullable Object def
     ) {
         if (action == null) return compile(def);
         return compile(action);
     }
 
     public @NonNull Action compile(
-            @Nullable Object action
+        @Nullable Object action
     ) {
         if (action == null) return NULL_ACTION;
         if (action instanceof Action) return (Action) action;
@@ -214,7 +217,7 @@ public abstract class BaseActionManager {
     @Deprecated
     @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
     public @NonNull ActionResult runAction(
-            @NonNull Action action
+        @NonNull Action action
     ) {
         action.eval(ActionContext.empty());
         return Results.SUCCESS;
@@ -229,7 +232,7 @@ public abstract class BaseActionManager {
     @Deprecated
     @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
     public @NonNull CompletableFuture<ActionResult> runActionWithResult(
-            @NonNull Action action
+        @NonNull Action action
     ) {
         return action.eval(ActionContext.empty());
     }
@@ -244,8 +247,8 @@ public abstract class BaseActionManager {
     @Deprecated
     @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
     public @NonNull ActionResult runAction(
-            @NonNull Action action,
-            @NonNull ActionContext context
+        @NonNull Action action,
+        @NonNull ActionContext context
     ) {
         action.eval(context);
         return Results.SUCCESS;
@@ -261,8 +264,8 @@ public abstract class BaseActionManager {
     @Deprecated
     @kotlin.Deprecated(message = "使用Action.eval(ActionContext)方法代替")
     public @NonNull CompletableFuture<ActionResult> runActionWithResult(
-            @NonNull Action action,
-            @NonNull ActionContext context
+        @NonNull Action action,
+        @NonNull ActionContext context
     ) {
         return action.eval(context);
     }
@@ -275,8 +278,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull RawStringAction action,
-            @NonNull ActionContext context
+        @NonNull RawStringAction action,
+        @NonNull ActionContext context
     ) {
         val handler = action.getHandler();
         if (handler == null) return CompletableFuture.completedFuture(Results.SUCCESS);
@@ -291,17 +294,17 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull StringAction action,
-            @NonNull ActionContext context
+        @NonNull StringAction action,
+        @NonNull ActionContext context
     ) {
         val handler = action.getHandler();
         if (handler == null) return CompletableFuture.completedFuture(Results.SUCCESS);
         // 对动作内容进行节点解析
         val content = SectionUtils.parseSection(
-                action.getContent(),
-                (Map<String, String>) (Object) context.getGlobal(),
-                context.getPlayer(),
-                getSectionConfig(context)
+            action.getContent(),
+            (Map<String, String>) (Object) context.getGlobal(),
+            context.getPlayer(),
+            getSectionConfig(context)
         );
         return handler.apply(context, content);
     }
@@ -324,8 +327,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull JsAction action,
-            @NonNull ActionContext context
+        @NonNull JsAction action,
+        @NonNull ActionContext context
     ) {
         Object result;
         try {
@@ -362,8 +365,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull ListAction action,
-            @NonNull ActionContext context
+        @NonNull ListAction action,
+        @NonNull ActionContext context
     ) {
         return runAction(action, context, 0);
     }
@@ -377,9 +380,9 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull ListAction action,
-            @NonNull ActionContext context,
-            int fromIndex
+        @NonNull ListAction action,
+        @NonNull ActionContext context,
+        int fromIndex
     ) {
         val actions = action.getActions();
         if (fromIndex >= actions.size()) return CompletableFuture.completedFuture(Results.SUCCESS);
@@ -399,8 +402,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull ConditionAction action,
-            @NonNull ActionContext context
+        @NonNull ConditionAction action,
+        @NonNull ActionContext context
     ) {
         // 如果条件通过
         if (action.getCondition().easyCheck(context)) {
@@ -423,8 +426,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull LabelAction action,
-            @NonNull ActionContext context
+        @NonNull LabelAction action,
+        @NonNull ActionContext context
     ) {
         return action.getActions().evalAsyncSafe(this, context).thenApply((result) -> {
             if (result instanceof StopResult && action.getLabel().equals(((StopResult) result).getLabel())) {
@@ -442,8 +445,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull WeightAction action,
-            @NonNull ActionContext context
+        @NonNull WeightAction action,
+        @NonNull ActionContext context
     ) {
         if (action.getTotalWeight() <= 0 || action.getActions().isEmpty())
             return CompletableFuture.completedFuture(Results.SUCCESS);
@@ -499,8 +502,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull ConditionWeightAction action,
-            @NonNull ActionContext context
+        @NonNull ConditionWeightAction action,
+        @NonNull ActionContext context
     ) {
         val actions = action.getActions(context);
         if (actions.isEmpty()) return CompletableFuture.completedFuture(Results.SUCCESS);
@@ -551,8 +554,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull WhileAction action,
-            @NonNull ActionContext context
+        @NonNull WhileAction action,
+        @NonNull ActionContext context
     ) {
         // while循环判断条件
         if (action.getCondition().easyCheck(context)) {
@@ -580,8 +583,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull KeyAction action,
-            @NonNull ActionContext context
+        @NonNull KeyAction action,
+        @NonNull ActionContext context
     ) {
         val key = action.getKey().get(context);
         context.getGlobal().put(action.getGlobalId(), key);
@@ -609,8 +612,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull ContainsAction action,
-            @NonNull ActionContext context
+        @NonNull ContainsAction action,
+        @NonNull ActionContext context
     ) {
         val key = action.getKey().get(context);
         context.getGlobal().put(action.getGlobalId(), key);
@@ -629,8 +632,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull <T extends Comparable<?>> CompletableFuture<ActionResult> runAction(
-            @NonNull TreeAction<T> action,
-            @NonNull ActionContext context
+        @NonNull TreeAction<T> action,
+        @NonNull ActionContext context
     ) {
         val key = action.getKey().get(context);
         context.getGlobal().put(action.getGlobalId(), key);
@@ -673,8 +676,8 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            @NonNull RepeatAction action,
-            @NonNull ActionContext context
+        @NonNull RepeatAction action,
+        @NonNull ActionContext context
     ) {
         final int repeat = action.getRepeat().getOrDefault(context, 0);
         if (repeat <= 0) return CompletableFuture.completedFuture(Results.SUCCESS);
@@ -689,10 +692,10 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull CompletableFuture<ActionResult> runAction(
-            final @NonNull RepeatAction action,
-            final @NonNull ActionContext context,
-            final int repeat,
-            final int count
+        final @NonNull RepeatAction action,
+        final @NonNull ActionContext context,
+        final int repeat,
+        final int count
     ) {
         context.getGlobal().put(action.getGlobalId(), count);
         return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
@@ -717,16 +720,16 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull ActionResult parseCondition(
-            @Nullable String condition,
-            @NonNull ActionContext context
+        @Nullable String condition,
+        @NonNull ActionContext context
     ) {
         if (condition == null) {
             return Results.SUCCESS;
         }
         return parseCondition(
-                condition,
-                conditionScripts.computeIfAbsent(condition, (key) -> HookerManager.INSTANCE.getNashornHooker().compile(engine, key)),
-                context
+            condition,
+            conditionScripts.computeIfAbsent(condition, (key) -> HookerManager.INSTANCE.getNashornHooker().compile(engine, key)),
+            context
         );
     }
 
@@ -738,16 +741,16 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull ActionResult parseCondition(
-            @Nullable ScriptWithSource condition,
-            @NonNull ActionContext context
+        @Nullable ScriptWithSource condition,
+        @NonNull ActionContext context
     ) {
         if (condition == null) {
             return Results.SUCCESS;
         }
         return parseCondition(
-                condition.getSource(),
-                condition,
-                context
+            condition.getSource(),
+            condition,
+            context
         );
     }
 
@@ -760,9 +763,9 @@ public abstract class BaseActionManager {
      * @return 执行结果
      */
     public @NonNull ActionResult parseCondition(
-            @Nullable String conditionString,
-            @Nullable CompiledScript condition,
-            @NonNull ActionContext context
+        @Nullable String conditionString,
+        @Nullable CompiledScript condition,
+        @NonNull ActionContext context
     ) {
         if (condition == null) {
             return Results.SUCCESS;
@@ -803,8 +806,8 @@ public abstract class BaseActionManager {
      * @param function 动作执行函数
      */
     public void addFunction(
-            @NonNull Collection<String> ids,
-            @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
+        @NonNull Collection<String> ids,
+        @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
         if (function == null) return;
         for (val id : ids) {
@@ -820,9 +823,9 @@ public abstract class BaseActionManager {
      * @param function  动作执行函数
      */
     public void addFunction(
-            @NonNull Collection<String> ids,
-            boolean asyncSafe,
-            @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
+        @NonNull Collection<String> ids,
+        boolean asyncSafe,
+        @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
         if (function == null) return;
         for (val id : ids) {
@@ -837,8 +840,8 @@ public abstract class BaseActionManager {
      * @param function 动作执行函数
      */
     public void addFunction(
-            @NonNull String id,
-            @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
+        @NonNull String id,
+        @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
         addFunction(id, true, function);
     }
@@ -851,9 +854,9 @@ public abstract class BaseActionManager {
      * @param function  动作执行函数
      */
     public void addFunction(
-            @NonNull String id,
-            boolean asyncSafe,
-            @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
+        @NonNull String id,
+        boolean asyncSafe,
+        @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> function
     ) {
         if (function == null) return;
         BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler;
@@ -880,8 +883,8 @@ public abstract class BaseActionManager {
      * @param consumer 动作执行函数
      */
     public void addConsumer(
-            @NonNull Collection<String> ids,
-            @Nullable BiConsumer<ActionContext, String> consumer
+        @NonNull Collection<String> ids,
+        @Nullable BiConsumer<ActionContext, String> consumer
     ) {
         if (consumer == null) return;
         for (val id : ids) {
@@ -897,9 +900,9 @@ public abstract class BaseActionManager {
      * @param consumer  动作执行函数
      */
     public void addConsumer(
-            @NonNull Collection<String> ids,
-            boolean asyncSafe,
-            @Nullable BiConsumer<ActionContext, String> consumer
+        @NonNull Collection<String> ids,
+        boolean asyncSafe,
+        @Nullable BiConsumer<ActionContext, String> consumer
     ) {
         if (consumer == null) return;
         for (val id : ids) {
@@ -914,8 +917,8 @@ public abstract class BaseActionManager {
      * @param consumer 动作执行函数
      */
     public void addConsumer(
-            @NonNull String id,
-            @Nullable BiConsumer<ActionContext, String> consumer
+        @NonNull String id,
+        @Nullable BiConsumer<ActionContext, String> consumer
     ) {
         addConsumer(id, true, consumer);
     }
@@ -928,9 +931,9 @@ public abstract class BaseActionManager {
      * @param consumer  动作执行函数
      */
     public void addConsumer(
-            @NonNull String id,
-            boolean asyncSafe,
-            @Nullable BiConsumer<ActionContext, String> consumer
+        @NonNull String id,
+        boolean asyncSafe,
+        @Nullable BiConsumer<ActionContext, String> consumer
     ) {
         if (consumer == null) return;
         BiFunction<ActionContext, String, CompletableFuture<ActionResult>> handler;
@@ -962,8 +965,8 @@ public abstract class BaseActionManager {
      * @param resourceName 资源文件名
      */
     public void loadJSLib(
-            @NonNull String pluginName,
-            @NonNull String resourceName
+        @NonNull String pluginName,
+        @NonNull String resourceName
     ) {
         val plugin = Bukkit.getPluginManager().getPlugin(pluginName);
         if (plugin == null) return;
@@ -977,8 +980,8 @@ public abstract class BaseActionManager {
      * @param resourceName 资源文件名
      */
     public void loadJSLib(
-            @NonNull Plugin plugin,
-            @NonNull String resourceName
+        @NonNull Plugin plugin,
+        @NonNull String resourceName
     ) {
         try (val input = plugin.getResource(resourceName)) {
             if (input != null) {

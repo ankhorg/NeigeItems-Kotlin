@@ -31,30 +31,30 @@ public class ItemPackArgumentType implements ArgumentType<ItemPackSelector> {
     }
 
     public static @Nullable ItemPack getPack(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return getItemPackSelector(context, name).select(context);
     }
 
     public static @NonNull ItemPackSelector getItemPackSelector(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, ItemPackSelector.class);
     }
 
     @Override
     public @NonNull ItemPackSelector parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) {
         return new ItemPackSelector(reader);
     }
 
     @Override
     public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
-            @NonNull CommandContext<S> context,
-            @NonNull SuggestionsBuilder builder
+        @NonNull CommandContext<S> context,
+        @NonNull SuggestionsBuilder builder
     ) {
         val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ItemPackManager.INSTANCE.getItemPacks().keySet().forEach((id) -> {

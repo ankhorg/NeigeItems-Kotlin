@@ -15,8 +15,8 @@ public class InventoryUtils {
      * @param title     待设置标题
      */
     public static void setTitle(
-            @NonNull Inventory inventory,
-            @NonNull String title
+        @NonNull Inventory inventory,
+        @NonNull String title
     ) throws IllegalAccessException {
         if (USE_PAPER) {
             PaperInventoryUtils.setTitle(inventory, title);
@@ -33,8 +33,8 @@ public class InventoryUtils {
      * @param title     JSON格式待设置标题
      */
     public static void setJsonTitle(
-            @NonNull Inventory inventory,
-            @NonNull String title
+        @NonNull Inventory inventory,
+        @NonNull String title
     ) throws IllegalAccessException {
         if (USE_PAPER) {
             PaperInventoryUtils.setJsonTitle(inventory, title);

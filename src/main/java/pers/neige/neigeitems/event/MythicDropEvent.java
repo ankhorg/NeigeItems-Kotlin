@@ -51,15 +51,15 @@ public final class MythicDropEvent {
          * @param angleType     NeigeItems.FancyDrop.offset.angle.type(可能在后续被物品包配置覆盖)
          */
         public ConfigLoaded(
-                @NonNull String internalName,
-                @NonNull LivingEntity entity,
-                @Nullable LivingEntity killer,
-                @Nullable List<String> drops,
-                @Nullable List<String> fishDrops,
-                @Nullable List<String> dropPacks,
-                @Nullable String offsetXString,
-                @Nullable String offsetYString,
-                @Nullable String angleType
+            @NonNull String internalName,
+            @NonNull LivingEntity entity,
+            @Nullable LivingEntity killer,
+            @Nullable List<String> drops,
+            @Nullable List<String> fishDrops,
+            @Nullable List<String> dropPacks,
+            @Nullable String offsetXString,
+            @Nullable String offsetYString,
+            @Nullable String angleType
         ) {
             this.internalName = internalName;
             this.entity = entity;
@@ -110,7 +110,7 @@ public final class MythicDropEvent {
          * @param drops NeigeItems.Drop.
          */
         public void setDrops(
-                @Nullable List<String> drops
+            @Nullable List<String> drops
         ) {
             this.drops = drops;
         }
@@ -128,7 +128,7 @@ public final class MythicDropEvent {
          * @param fishDrops NeigeItems.FishDrop.
          */
         public void setFishDrops(
-                @Nullable List<String> fishDrops
+            @Nullable List<String> fishDrops
         ) {
             this.fishDrops = fishDrops;
         }
@@ -146,7 +146,7 @@ public final class MythicDropEvent {
          * @param dropPacks NeigeItems.DropPacks.
          */
         public void setDropPacks(
-                @Nullable List<String> dropPacks
+            @Nullable List<String> dropPacks
         ) {
             this.dropPacks = dropPacks;
         }
@@ -164,7 +164,7 @@ public final class MythicDropEvent {
          * @param offsetXString NeigeItems.FancyDrop.offset.x.
          */
         public void setOffsetXString(
-                @Nullable String offsetXString
+            @Nullable String offsetXString
         ) {
             this.offsetXString = offsetXString;
         }
@@ -182,7 +182,7 @@ public final class MythicDropEvent {
          * @param offsetYString NeigeItems.FancyDrop.offset.y.
          */
         public void setOffsetYString(
-                @Nullable String offsetYString
+            @Nullable String offsetYString
         ) {
             this.offsetYString = offsetYString;
         }
@@ -200,7 +200,7 @@ public final class MythicDropEvent {
          * @param angleType NeigeItems.FancyDrop.offset.angle.type.
          */
         public void setAngleType(
-                @Nullable String angleType
+            @Nullable String angleType
         ) {
             this.angleType = angleType;
         }
@@ -246,14 +246,14 @@ public final class MythicDropEvent {
          * @param angleType     多彩掉落喷射模式
          */
         public Drop(
-                @NonNull String internalName,
-                @NonNull LivingEntity entity,
-                @Nullable Player player,
-                @NonNull List<ItemStack> dropItems,
-                @Nullable List<ItemStack> fishDropItems,
-                @Nullable String offsetXString,
-                @Nullable String offsetYString,
-                @Nullable String angleType
+            @NonNull String internalName,
+            @NonNull LivingEntity entity,
+            @Nullable Player player,
+            @NonNull List<ItemStack> dropItems,
+            @Nullable List<ItemStack> fishDropItems,
+            @Nullable String offsetXString,
+            @Nullable String offsetYString,
+            @Nullable String angleType
         ) {
             this.internalName = internalName;
             this.entity = entity;
@@ -303,7 +303,7 @@ public final class MythicDropEvent {
          * @param dropItems 待掉落物品
          */
         public void setDropItems(
-                @NonNull List<ItemStack> dropItems
+            @NonNull List<ItemStack> dropItems
         ) {
             this.dropItems = dropItems;
         }
@@ -321,7 +321,7 @@ public final class MythicDropEvent {
          * @param fishDropItems 拟渔获掉落物品
          */
         public void setFishDropItems(
-                @Nullable List<ItemStack> fishDropItems
+            @Nullable List<ItemStack> fishDropItems
         ) {
             this.fishDropItems = fishDropItems;
         }
@@ -339,7 +339,7 @@ public final class MythicDropEvent {
          * @param offsetXString 多彩掉落横向偏移
          */
         public void setOffsetXString(
-                @Nullable String offsetXString
+            @Nullable String offsetXString
         ) {
             this.offsetXString = offsetXString;
         }
@@ -357,7 +357,7 @@ public final class MythicDropEvent {
          * @param offsetYString 多彩掉落纵向偏移
          */
         public void setOffsetYString(
-                @Nullable String offsetYString
+            @Nullable String offsetYString
         ) {
             this.offsetYString = offsetYString;
         }
@@ -375,7 +375,7 @@ public final class MythicDropEvent {
          * @param angleType 多彩掉落喷射模式
          */
         public void setAngleType(
-                @Nullable String angleType
+            @Nullable String angleType
         ) {
             this.angleType = angleType;
         }

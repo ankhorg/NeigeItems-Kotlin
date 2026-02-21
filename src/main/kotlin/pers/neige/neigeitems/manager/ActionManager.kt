@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.action.ActionResult
-import pers.neige.neigeitems.action.ResultType
 import pers.neige.neigeitems.action.impl.StringAction
 import pers.neige.neigeitems.action.result.Results
 import pers.neige.neigeitems.event.ItemActionEvent

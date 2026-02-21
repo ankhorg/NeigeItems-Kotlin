@@ -55,7 +55,7 @@ public class EntityUtils {
      * @return 包含实体信息的 NBT.
      */
     public static @Nullable NbtCompound save(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             RefNbtTagCompound nbt = new RefNbtTagCompound();
@@ -72,8 +72,8 @@ public class EntityUtils {
      * @param nbt    待加载 NBT.
      */
     public static void load(
-            @NonNull Entity entity,
-            @NonNull NbtCompound nbt
+        @NonNull Entity entity,
+        @NonNull NbtCompound nbt
     ) {
         if (entity instanceof RefCraftEntity) {
             ((RefCraftEntity) entity).getHandle().load(NeigeItemsUtils.toNms(nbt));
@@ -91,11 +91,11 @@ public class EntityUtils {
      * @return 寻路是否成功.
      */
     public static boolean tryToMoveTo(
-            @NonNull LivingEntity entity,
-            double x,
-            double y,
-            double z,
-            double speed
+        @NonNull LivingEntity entity,
+        double x,
+        double y,
+        double z,
+        double speed
     ) {
         if (entity instanceof RefCraftLivingEntity) {
             RefEntityLiving living = ((RefCraftLivingEntity) entity).getHandle();
@@ -115,9 +115,9 @@ public class EntityUtils {
      * @return 寻路是否成功.
      */
     public static boolean tryToMoveTo(
-            @NonNull LivingEntity entity,
-            Entity target,
-            double speed
+        @NonNull LivingEntity entity,
+        Entity target,
+        double speed
     ) {
         if (entity instanceof RefCraftLivingEntity && target instanceof RefCraftEntity) {
             RefEntityLiving living = ((RefCraftLivingEntity) entity).getHandle();
@@ -225,10 +225,10 @@ public class EntityUtils {
      * @param z      移动方向 z 轴分量.
      */
     public static void move(
-            @NonNull Entity entity,
-            double x,
-            double y,
-            double z
+        @NonNull Entity entity,
+        double x,
+        double y,
+        double z
     ) {
         if (entity instanceof RefCraftEntity) {
             if (VEC3_MOVE_SUPPORT) {
@@ -246,7 +246,7 @@ public class EntityUtils {
      * @return 实体俯仰角.
      */
     public static float getPitch(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             return getPitchByNms(((RefCraftEntity) entity).getHandle());
@@ -261,7 +261,7 @@ public class EntityUtils {
      * @return 实体偏航角.
      */
     public static float getYaw(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             return getYawByNms(((RefCraftEntity) entity).getHandle());
@@ -277,9 +277,9 @@ public class EntityUtils {
      * @param pitch  实体俯仰角.
      */
     public static void setRotation(
-            @NonNull Entity entity,
-            float yaw,
-            float pitch
+        @NonNull Entity entity,
+        float yaw,
+        float pitch
     ) {
         if (SET_ROTATION_SUPPORT) {
             entity.setRotation(yaw, pitch);
@@ -300,7 +300,7 @@ public class EntityUtils {
     }
 
     public static float getHeadRotation(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -310,8 +310,8 @@ public class EntityUtils {
     }
 
     public static void setHeadRotation(
-            @NonNull Entity entity,
-            float headRotation
+        @NonNull Entity entity,
+        float headRotation
     ) {
         if (entity instanceof RefCraftEntity) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -320,12 +320,12 @@ public class EntityUtils {
     }
 
     public static void absMoveTo(
-            @NonNull Entity entity,
-            double x,
-            double y,
-            double z,
-            float yaw,
-            float pitch
+        @NonNull Entity entity,
+        double x,
+        double y,
+        double z,
+        float yaw,
+        float pitch
     ) {
         if (entity instanceof RefCraftEntity) {
             ((RefCraftEntity) entity).getHandle().absMoveTo(x, y, z, yaw, pitch);
@@ -333,12 +333,12 @@ public class EntityUtils {
     }
 
     public static void moveTo(
-            @NonNull Entity entity,
-            double x,
-            double y,
-            double z,
-            float yaw,
-            float pitch
+        @NonNull Entity entity,
+        double x,
+        double y,
+        double z,
+        float yaw,
+        float pitch
     ) {
         if (entity instanceof RefCraftEntity) {
             ((RefCraftEntity) entity).getHandle().moveTo(x, y, z, yaw, pitch);
@@ -352,8 +352,8 @@ public class EntityUtils {
      * @param target 目标坐标.
      */
     public static void lookAt(
-            @NonNull Entity entity,
-            @NonNull Location target
+        @NonNull Entity entity,
+        @NonNull Location target
     ) {
         lookAt(entity, target.getX(), target.getY(), target.getZ());
     }
@@ -367,10 +367,10 @@ public class EntityUtils {
      * @param z      目标 z 坐标.
      */
     public static void lookAt(
-            @NonNull Entity entity,
-            double x,
-            double y,
-            double z
+        @NonNull Entity entity,
+        double x,
+        double y,
+        double z
     ) {
         if (entity instanceof RefCraftEntity) {
             if (LOOK_AT_SUPPORT) {
@@ -382,10 +382,10 @@ public class EntityUtils {
     }
 
     protected static void lookAtByNms(
-            @NonNull Entity entity,
-            double x,
-            double y,
-            double z
+        @NonNull Entity entity,
+        double x,
+        double y,
+        double z
     ) {
         RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
         Location location = entity.getLocation();
@@ -407,8 +407,8 @@ public class EntityUtils {
      * @param target 目标坐标.
      */
     public static void lookAt(
-            @NonNull LivingEntity entity,
-            @NonNull Location target
+        @NonNull LivingEntity entity,
+        @NonNull Location target
     ) {
         lookAt(entity, target.getX(), target.getY(), target.getZ());
     }
@@ -422,10 +422,10 @@ public class EntityUtils {
      * @param z      目标 z 坐标.
      */
     public static void lookAt(
-            @NonNull LivingEntity entity,
-            double x,
-            double y,
-            double z
+        @NonNull LivingEntity entity,
+        double x,
+        double y,
+        double z
     ) {
         if (entity instanceof RefCraftLivingEntity) {
             if (LOOK_AT_SUPPORT) {
@@ -443,8 +443,8 @@ public class EntityUtils {
      * @param name   自定义名称.
      */
     public static void setCustomName(
-            @NonNull Entity entity,
-            @NonNull BaseComponent name
+        @NonNull Entity entity,
+        @NonNull BaseComponent name
     ) {
         if (COMPONENT_NAME_SUPPORT && entity instanceof RefCraftEntity) {
             ((RefCraftEntity) entity).getHandle().setCustomName(toNms(name));
@@ -458,7 +458,7 @@ public class EntityUtils {
      * @return 实体ID.
      */
     public static int getId(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             return ((RefCraftEntity) entity).getHandle().getId();
@@ -473,8 +473,8 @@ public class EntityUtils {
      * @param invisible 是否隐身.
      */
     public static void setInvisible(
-            @NonNull Entity entity,
-            boolean invisible
+        @NonNull Entity entity,
+        boolean invisible
     ) {
         if (entity instanceof RefCraftEntity) {
             ((RefCraftEntity) entity).getHandle().setInvisible(invisible);
@@ -487,7 +487,7 @@ public class EntityUtils {
      * @param trackedEntity 待操作实体.
      */
     public static @NonNull Entity getEntityFromTrackedEntity(
-            @NonNull Object trackedEntity
+        @NonNull Object trackedEntity
     ) {
         if (!(trackedEntity instanceof RefTrackedEntity)) {
             throw new IllegalArgumentException("trackedEntity must be of type RefTrackedEntity");
@@ -501,7 +501,7 @@ public class EntityUtils {
      * @param hook 待获取鱼钩实体.
      */
     public static int getTimeUntilLured(
-            @NonNull FishHook hook
+        @NonNull FishHook hook
     ) {
         if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
@@ -516,8 +516,8 @@ public class EntityUtils {
      * @param timeUntilLured 等待多久后有鱼游过来(tick).
      */
     public static void setTimeUntilLured(
-            @NonNull FishHook hook,
-            int timeUntilLured
+        @NonNull FishHook hook,
+        int timeUntilLured
     ) {
         if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
@@ -531,7 +531,7 @@ public class EntityUtils {
      * @param hook 待获取鱼钩实体.
      */
     public static int getTimeUntilHooked(
-            @NonNull FishHook hook
+        @NonNull FishHook hook
     ) {
         if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
@@ -546,8 +546,8 @@ public class EntityUtils {
      * @param timeUntilHooked 游多久咬钩(tick).
      */
     public static void setTimeUntilHooked(
-            @NonNull FishHook hook,
-            int timeUntilHooked
+        @NonNull FishHook hook,
+        int timeUntilHooked
     ) {
         if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
@@ -561,7 +561,7 @@ public class EntityUtils {
      * @param hook 待获取鱼钩实体.
      */
     public static int getNibble(
-            @NonNull FishHook hook
+        @NonNull FishHook hook
     ) {
         if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
@@ -576,8 +576,8 @@ public class EntityUtils {
      * @param nibble 咬钩多久脱钩(tick).
      */
     public static void setNibble(
-            @NonNull FishHook hook,
-            int nibble
+        @NonNull FishHook hook,
+        int nibble
     ) {
         if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
@@ -591,7 +591,7 @@ public class EntityUtils {
      * @param hook 待获取鱼钩实体.
      */
     public static FishHookState getCurrentState(
-            @NonNull FishHook hook
+        @NonNull FishHook hook
     ) {
         if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
@@ -607,8 +607,8 @@ public class EntityUtils {
      * @param state 鱼钩状态.
      */
     public static void setCurrentState(
-            @NonNull FishHook hook,
-            @NonNull FishHookState state
+        @NonNull FishHook hook,
+        @NonNull FishHookState state
     ) {
         if (!((Object) hook instanceof RefCraftFishHook)) {
             throw new IllegalArgumentException("hook must be of type CraftFishHook");
@@ -629,7 +629,7 @@ public class EntityUtils {
      * @param entity 待获取实体.
      */
     public static @NonNull Random getRandom(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         if (!(entity instanceof RefCraftEntity)) {
             throw new IllegalArgumentException("entity must be of type CraftEntity");
@@ -642,10 +642,10 @@ public class EntityUtils {
     }
 
     protected static void lookAtByNms(
-            @NonNull LivingEntity entity,
-            double x,
-            double y,
-            double z
+        @NonNull LivingEntity entity,
+        double x,
+        double y,
+        double z
     ) {
         RefEntityLiving nmsEntity = ((RefCraftLivingEntity) entity).getHandle();
         lookAtByNms((Entity) entity, x, y, z);
@@ -689,7 +689,7 @@ public class EntityUtils {
     }
 
     private static float getPitchByNms(
-            @NonNull RefEntity entity
+        @NonNull RefEntity entity
     ) {
         if (GET_YAW_SUPPORT) {
             return entity.getPitch();
@@ -699,7 +699,7 @@ public class EntityUtils {
     }
 
     private static float getYawByNms(
-            @NonNull RefEntity entity
+        @NonNull RefEntity entity
     ) {
         if (GET_YAW_SUPPORT) {
             return entity.getYaw();

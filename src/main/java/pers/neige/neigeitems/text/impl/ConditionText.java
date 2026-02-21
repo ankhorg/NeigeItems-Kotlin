@@ -16,8 +16,8 @@ public class ConditionText extends Text {
     private final @NonNull Text deny;
 
     public ConditionText(
-            @NonNull BaseActionManager manager,
-            @NonNull ConfigReader lore
+        @NonNull BaseActionManager manager,
+        @NonNull ConfigReader lore
     ) {
         super(manager);
         condition = new Condition(manager, lore.getString("condition"));
@@ -39,10 +39,10 @@ public class ConditionText extends Text {
 
     @Override
     public <T, R extends List<T>> @NonNull R getText(
-            @NonNull R result,
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context,
-            Function<String, T> converter
+        @NonNull R result,
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context,
+        Function<String, T> converter
     ) {
         if (condition.easyCheck(context)) {
             return text.getText(result, manager, context, converter);

@@ -16,9 +16,9 @@ public class ItemHider {
     public ItemHider() {
         val protocolManager = ProtocolLibrary.getProtocolManager();
         protocolManager.addPacketListener(new PacketAdapter(
-                NeigeItems.getInstance(),
-                ListenerPriority.LOWEST,
-                PacketType.Play.Server.ENTITY_METADATA
+            NeigeItems.getInstance(),
+            ListenerPriority.LOWEST,
+            PacketType.Play.Server.ENTITY_METADATA
         ) {
             @Override
             public void onPacketSending(PacketEvent event) {

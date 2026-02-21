@@ -28,30 +28,30 @@ public class FunctionArgumentType implements ArgumentType<FunctionSelector> {
     }
 
     public static @Nullable Action getFunction(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return getFunctionSelector(context, name).select(context);
     }
 
     public static @NonNull FunctionSelector getFunctionSelector(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, FunctionSelector.class);
     }
 
     @Override
     public @NonNull FunctionSelector parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) {
         return new FunctionSelector(reader);
     }
 
     @Override
     public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
-            @NonNull CommandContext<S> context,
-            @NonNull SuggestionsBuilder builder
+        @NonNull CommandContext<S> context,
+        @NonNull SuggestionsBuilder builder
     ) {
         val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ActionManager.INSTANCE.getFunctions().keySet().forEach((id) -> {

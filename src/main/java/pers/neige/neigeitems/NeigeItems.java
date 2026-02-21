@@ -29,21 +29,21 @@ public class NeigeItems extends JavaPlugin {
         try {
             logger.info("loading ankh-invoke");
             AnkhInvokeBukkit.forBukkit(NeigeItems.class)
-                    .reference()
-                    .appendPackage("pers.neige.neigeitems.ref")
-                    .build()
-                    .inject()
-                    .injector(
-                            new JarTransformInjector.Builder()
-                                    .classLoader(NeigeItems.class.getClassLoader())
-                                    .transformPackage("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.")
-                                    .build()
-                    )
-                    .build()
-                    .referenceRemap()
-                    .setApplyMapRegistry("neigeitems")
-                    .build()
-                    .build();
+                .reference()
+                .appendPackage("pers.neige.neigeitems.ref")
+                .build()
+                .inject()
+                .injector(
+                    new JarTransformInjector.Builder()
+                        .classLoader(NeigeItems.class.getClassLoader())
+                        .transformPackage("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.")
+                        .build()
+                )
+                .build()
+                .referenceRemap()
+                .setApplyMapRegistry("neigeitems")
+                .build()
+                .build();
             logger.info("ankh-invoke loaded");
         } catch (Throwable e) {
             logger.error("failed to load ankh-invoke", e);
@@ -58,10 +58,10 @@ public class NeigeItems extends JavaPlugin {
     }
 
     public NeigeItems(
-            @NonNull JavaPluginLoader loader,
-            @NonNull PluginDescriptionFile description,
-            @NonNull File dataFolder,
-            @NonNull File file
+        @NonNull JavaPluginLoader loader,
+        @NonNull PluginDescriptionFile description,
+        @NonNull File dataFolder,
+        @NonNull File file
     ) {
         super(loader, description, dataFolder, file);
         onInit();

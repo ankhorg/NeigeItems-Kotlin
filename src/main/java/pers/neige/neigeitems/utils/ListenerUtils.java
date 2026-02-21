@@ -25,8 +25,8 @@ public class ListenerUtils {
      * @return 对应的 Listener 对象.
      */
     public static @NonNull <T extends Event> Listener registerListener(
-            @NonNull Class<T> eventClass,
-            @NonNull Consumer<T> eventExecutor
+        @NonNull Class<T> eventClass,
+        @NonNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, EventPriority.NORMAL, NeigeItems.getInstance(), true, eventExecutor);
     }
@@ -42,9 +42,9 @@ public class ListenerUtils {
      * @return 对应的 Listener 对象.
      */
     public static @NonNull <T extends Event> Listener registerListener(
-            @NonNull Class<T> eventClass,
-            @NonNull Plugin plugin,
-            @NonNull Consumer<T> eventExecutor
+        @NonNull Class<T> eventClass,
+        @NonNull Plugin plugin,
+        @NonNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, EventPriority.NORMAL, plugin, true, eventExecutor);
     }
@@ -60,9 +60,9 @@ public class ListenerUtils {
      * @return 对应的 Listener 对象.
      */
     public static @NonNull <T extends Event> Listener registerListener(
-            @NonNull Class<T> eventClass,
-            @NonNull EventPriority eventPriority,
-            @NonNull Consumer<T> eventExecutor
+        @NonNull Class<T> eventClass,
+        @NonNull EventPriority eventPriority,
+        @NonNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, eventPriority, NeigeItems.getInstance(), true, eventExecutor);
     }
@@ -78,10 +78,10 @@ public class ListenerUtils {
      * @return 对应的 Listener 对象.
      */
     public static @NonNull <T extends Event> Listener registerListener(
-            @NonNull Class<T> eventClass,
-            @NonNull EventPriority eventPriority,
-            @NonNull Plugin plugin,
-            @NonNull Consumer<T> eventExecutor
+        @NonNull Class<T> eventClass,
+        @NonNull EventPriority eventPriority,
+        @NonNull Plugin plugin,
+        @NonNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, eventPriority, plugin, true, eventExecutor);
     }
@@ -97,10 +97,10 @@ public class ListenerUtils {
      * @return 对应的 Listener 对象.
      */
     public static @NonNull <T extends Event> Listener registerListener(
-            @NonNull Class<T> eventClass,
-            @NonNull EventPriority eventPriority,
-            boolean ignoreCancelled,
-            @NonNull Consumer<T> eventExecutor
+        @NonNull Class<T> eventClass,
+        @NonNull EventPriority eventPriority,
+        boolean ignoreCancelled,
+        @NonNull Consumer<T> eventExecutor
     ) {
         return registerListener(eventClass, eventPriority, NeigeItems.getInstance(), ignoreCancelled, eventExecutor);
     }
@@ -117,25 +117,25 @@ public class ListenerUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T extends Event> @NonNull Listener registerListener(
-            @NonNull Class<T> eventClass,
-            @NonNull EventPriority eventPriority,
-            @NonNull Plugin plugin,
-            boolean ignoreCancelled,
-            @NonNull Consumer<T> eventExecutor
+        @NonNull Class<T> eventClass,
+        @NonNull EventPriority eventPriority,
+        @NonNull Plugin plugin,
+        boolean ignoreCancelled,
+        @NonNull Consumer<T> eventExecutor
     ) {
         val listener = new Listener() {
         };
         Bukkit.getPluginManager().registerEvent(
-                eventClass,
-                listener,
-                eventPriority,
-                (listener1, event) -> {
-                    if (eventClass.isAssignableFrom(event.getClass())) {
-                        eventExecutor.accept((T) event);
-                    }
-                },
-                plugin,
-                ignoreCancelled
+            eventClass,
+            listener,
+            eventPriority,
+            (listener1, event) -> {
+                if (eventClass.isAssignableFrom(event.getClass())) {
+                    eventExecutor.accept((T) event);
+                }
+            },
+            plugin,
+            ignoreCancelled
         );
         return listener;
     }
@@ -146,7 +146,7 @@ public class ListenerUtils {
      * @param listener 待卸载监听器.
      */
     public static void unregisterListener(
-            @Nullable Listener listener
+        @Nullable Listener listener
     ) {
         if (listener != null) {
             HandlerList.unregisterAll(listener);

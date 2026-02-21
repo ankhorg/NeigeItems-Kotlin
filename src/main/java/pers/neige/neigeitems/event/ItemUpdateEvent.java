@@ -35,10 +35,10 @@ public final class ItemUpdateEvent {
          * @param item    根据旧物品的物品ID获得的NI物品生成器
          */
         public PreGenerate(
-                @Nullable OfflinePlayer player,
-                @NonNull ItemStack oldItem,
-                @NonNull Map<String, String> data,
-                @NonNull ItemGenerator item
+            @Nullable OfflinePlayer player,
+            @NonNull ItemStack oldItem,
+            @NonNull Map<String, String> data,
+            @NonNull ItemGenerator item
         ) {
             this.player = player;
             this.oldItem = oldItem;
@@ -103,9 +103,9 @@ public final class ItemUpdateEvent {
          * @param newItem 待覆盖物品
          */
         public PostGenerate(
-                @Nullable OfflinePlayer player,
-                @NonNull ItemStack oldItem,
-                @NonNull ItemStack newItem
+            @Nullable OfflinePlayer player,
+            @NonNull ItemStack oldItem,
+            @NonNull ItemStack newItem
         ) {
             this.player = player;
             this.oldItem = oldItem;

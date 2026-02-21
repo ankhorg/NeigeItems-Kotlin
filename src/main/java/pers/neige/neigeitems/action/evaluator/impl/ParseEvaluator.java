@@ -31,10 +31,10 @@ public abstract class ParseEvaluator<T> extends Evaluator<T> {
     public @Nullable T getOrDefault(@NonNull ActionContext context, @Nullable T def) {
         if (formula == null) return def;
         val parseResult = SectionUtils.parseSection(
-                formula,
-                (Map<String, String>) (Object) context.getGlobal(),
-                context.getPlayer(),
-                manager.getSectionConfig(context)
+            formula,
+            (Map<String, String>) (Object) context.getGlobal(),
+            context.getPlayer(),
+            manager.getSectionConfig(context)
         );
         val result = cast(parseResult);
         return result == null ? def : result;

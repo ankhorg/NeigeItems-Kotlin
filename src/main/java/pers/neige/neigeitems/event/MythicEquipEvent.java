@@ -27,10 +27,10 @@ public final class MythicEquipEvent extends CancellableEvent {
      * @param itemStack    待掉落物品
      */
     public MythicEquipEvent(
-            @NonNull LivingEntity entity,
-            @NonNull String internalName,
-            @NonNull String slot,
-            @NonNull ItemStack itemStack
+        @NonNull LivingEntity entity,
+        @NonNull String internalName,
+        @NonNull String slot,
+        @NonNull ItemStack itemStack
     ) {
         this.entity = entity;
         this.internalName = internalName;
@@ -76,7 +76,7 @@ public final class MythicEquipEvent extends CancellableEvent {
      * @param itemStack 待掉落物品
      */
     public void setItemStack(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         this.itemStack = itemStack;
     }

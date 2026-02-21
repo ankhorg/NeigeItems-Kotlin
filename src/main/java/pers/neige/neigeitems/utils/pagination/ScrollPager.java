@@ -37,8 +37,8 @@ public abstract class ScrollPager<T> {
      */
     public static <T> @NonNull ScrollPager<T> fromImmutableIterable(@NonNull Iterable<T> handle, int pageSize, @Nullable Predicate<T> filter) {
         val handleClone = StreamSupport.stream(handle.spliterator(), false)
-                .filter(t -> filter == null || filter.test(t))
-                .collect(Collectors.toList());
+            .filter(t -> filter == null || filter.test(t))
+            .collect(Collectors.toList());
         return new ListScrollPager<>(Collections.unmodifiableList(handleClone), pageSize, null);
     }
 

@@ -78,8 +78,8 @@ public class MutableNavSetScrollPager<T> extends ScrollPager<T> {
         val absDelta = Math.abs(delta);
 
         var it = reverse ?
-                handle.headSet(current, false).descendingIterator() :
-                handle.tailSet(current, false).iterator();
+            handle.headSet(current, false).descendingIterator() :
+            handle.tailSet(current, false).iterator();
 
         // 原子更新游标
         for (int i = 0; i < absDelta; i++) {

@@ -73,7 +73,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
                         RefNbtBase value = entry.getValue();
                         // applyToItem 直接把 unhandledTags 丢进去了, 这样是不行的, 必须 clone 一下
                         if (!RefCraftMetaItem.HANDLED_TAGS.contains(key)
-                                && (value instanceof RefNbtTagCompound || value instanceof RefNbtTagList)) {
+                            && (value instanceof RefNbtTagCompound || value instanceof RefNbtTagList)) {
                             tags.put(key, value.rClone());
                         }
                     }
@@ -133,7 +133,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
                         RefNbtBase value = entry.getValue();
                         // applyToItem 直接把 unhandledTags 丢进去了, 这样是不行的, 必须 clone 一下
                         if (!RefCraftMetaItem.HANDLED_TAGS.contains(key)
-                                && (value instanceof RefNbtTagCompound || value instanceof RefNbtTagList)) {
+                            && (value instanceof RefNbtTagCompound || value instanceof RefNbtTagList)) {
                             tags.put(key, value.rClone());
                         }
                     }

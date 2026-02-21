@@ -31,30 +31,30 @@ public class PlayerArgumentType implements ArgumentType<PlayerSelector> {
     }
 
     public static @Nullable Player getPlayer(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return getPlayerSelector(context, name).select(context);
     }
 
     public static @NonNull PlayerSelector getPlayerSelector(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, PlayerSelector.class);
     }
 
     @Override
     public @NonNull PlayerSelector parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) {
         return new PlayerSelector(reader);
     }
 
     @Override
     public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
-            @NonNull CommandContext<S> context,
-            @NonNull SuggestionsBuilder builder
+        @NonNull CommandContext<S> context,
+        @NonNull SuggestionsBuilder builder
     ) {
         val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         if ("me".startsWith(lowerCaseRemaining)) {

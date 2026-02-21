@@ -37,33 +37,33 @@ public class LocationArgumentType implements ArgumentType<Coordinates> {
     }
 
     public static @Nullable Location getLocation(
-            @NonNull World world,
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull World world,
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return getLocation(world, context, name, null);
     }
 
     public static @Nullable Location getLocation(
-            @NonNull World world,
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name,
-            @Nullable Player target
+        @NonNull World world,
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name,
+        @Nullable Player target
     ) {
         return getCoordinates(context, name).getLocation(world, context.getSource(), target);
     }
 
     @Override
     public @NonNull Coordinates parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) throws CommandSyntaxException {
         return Coordinates.parse(reader);
     }
 
     @Override
     public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
-            @NonNull CommandContext<S> context,
-            @NonNull SuggestionsBuilder builder
+        @NonNull CommandContext<S> context,
+        @NonNull SuggestionsBuilder builder
     ) {
         val remaining = builder.getRemaining();
         if (remaining.isEmpty()) {

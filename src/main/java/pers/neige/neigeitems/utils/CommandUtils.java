@@ -65,8 +65,8 @@ public class CommandUtils {
      * @return 对应的 PluginCommand 对象.
      */
     public static @Nullable PluginCommand newPluginCommand(
-            @NonNull String name,
-            @NonNull Plugin owner
+        @NonNull String name,
+        @NonNull Plugin owner
     ) {
         try {
             return constructor.newInstance(name, owner);
@@ -100,7 +100,7 @@ public class CommandUtils {
      * @param command 待卸载指令.
      */
     public static void unregisterCommand(
-            String command
+        String command
     ) {
         getKnownCommands().remove(command);
     }
@@ -111,8 +111,8 @@ public class CommandUtils {
      * @param command 待设置指令.
      */
     public static void setPlugin(
-            PluginCommand command,
-            Plugin plugin
+        PluginCommand command,
+        Plugin plugin
     ) {
         try {
             ownPluginField.set(command, plugin);

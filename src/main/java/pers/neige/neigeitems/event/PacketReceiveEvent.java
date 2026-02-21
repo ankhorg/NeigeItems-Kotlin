@@ -21,8 +21,8 @@ public final class PacketReceiveEvent extends CancellableEvent {
      * @param packet 发送的数据包
      */
     public PacketReceiveEvent(
-            @NonNull UUID uuid,
-            @NonNull Object packet
+        @NonNull UUID uuid,
+        @NonNull Object packet
     ) {
         this.uuid = uuid;
         this.packet = packet;

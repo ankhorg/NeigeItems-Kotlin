@@ -25,8 +25,8 @@ public class NullAction extends Action {
      */
     @Override
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         return CompletableFuture.completedFuture(Results.SUCCESS);
     }

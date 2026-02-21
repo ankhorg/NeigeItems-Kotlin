@@ -22,10 +22,10 @@ public class SignCatcher {
     public final @NonNull CompletableFuture<String[]> future = new CompletableFuture<>();
 
     public SignCatcher(
-            @NonNull BaseActionManager actionManager,
-            @NonNull String messageKey,
-            @NonNull ActionContext context,
-            @NonNull CompletableFuture<ActionResult> result
+        @NonNull BaseActionManager actionManager,
+        @NonNull String messageKey,
+        @NonNull ActionContext context,
+        @NonNull CompletableFuture<ActionResult> result
     ) {
         future.thenAccept((texts) -> {
             if (texts != null) {
@@ -43,23 +43,23 @@ public class SignCatcher {
     public static void registerListener() {
         try {
             ProtocolLibrary.getProtocolManager().addPacketListener(
-                    new PacketAdapter(
-                            NeigeItems.getInstance(),
-                            ListenerPriority.NORMAL,
-                            PacketType.Play.Client.UPDATE_SIGN
-                    ) {
-                        @Override
-                        public void onPacketReceiving(PacketEvent event) {
-                            val player = event.getPlayer();
-                            val user = UserManager.INSTANCE.get(player.getUniqueId());
-                            if (user == null) return;
-                            val catcher = user.pollSignCatcher();
-                            if (catcher == null) return;
-                            val packet = event.getPacket();
-                            val texts = packet.getStringArrays().read(0);
-                            catcher.future.complete(texts);
-                        }
-                    });
+                new PacketAdapter(
+                    NeigeItems.getInstance(),
+                    ListenerPriority.NORMAL,
+                    PacketType.Play.Client.UPDATE_SIGN
+                ) {
+                    @Override
+                    public void onPacketReceiving(PacketEvent event) {
+                        val player = event.getPlayer();
+                        val user = UserManager.INSTANCE.get(player.getUniqueId());
+                        if (user == null) return;
+                        val catcher = user.pollSignCatcher();
+                        if (catcher == null) return;
+                        val packet = event.getPacket();
+                        val texts = packet.getStringArrays().read(0);
+                        catcher.future.complete(texts);
+                    }
+                });
         } catch (Throwable ignored) {
         }
     }

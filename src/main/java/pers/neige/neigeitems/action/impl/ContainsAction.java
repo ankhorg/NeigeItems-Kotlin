@@ -22,8 +22,8 @@ public class ContainsAction extends Action {
     private final @NonNull Set<String> elements;
 
     public ContainsAction(
-            @NonNull BaseActionManager manager,
-            @NonNull ConfigReader config
+        @NonNull BaseActionManager manager,
+        @NonNull ConfigReader config
     ) {
         super(manager);
         this.globalId = config.getString("global-id", "key");
@@ -51,8 +51,8 @@ public class ContainsAction extends Action {
      */
     @Override
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }

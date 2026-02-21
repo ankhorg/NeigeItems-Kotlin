@@ -28,8 +28,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
 
     default Nbt<?> remove(Object key) {
         return (key instanceof String)
-                ? remove((String) key)
-                : null;
+            ? remove((String) key)
+            : null;
     }
 
     default Nbt<?> removeDeep(@NonNull String key) {
@@ -231,8 +231,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Byte getByteOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsByte()
+            : null;
     }
 
     /**
@@ -245,8 +245,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default byte getByte(@NonNull String key, byte def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsByte()
+            : def;
     }
 
     /**
@@ -268,8 +268,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Short getShortOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsShort()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsShort()
+            : null;
     }
 
     /**
@@ -282,8 +282,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default short getShort(@NonNull String key, short def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsShort()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsShort()
+            : def;
     }
 
     /**
@@ -305,8 +305,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Integer getIntOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsInt()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsInt()
+            : null;
     }
 
     /**
@@ -319,8 +319,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default int getInt(@NonNull String key, int def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsInt()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsInt()
+            : def;
     }
 
     /**
@@ -342,8 +342,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Long getLongOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsLong()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsLong()
+            : null;
     }
 
     /**
@@ -356,8 +356,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default long getLong(@NonNull String key, long def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsLong()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsLong()
+            : def;
     }
 
     /**
@@ -400,8 +400,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
             Nbt<?> least = get(key + "Least");
             if (most instanceof NbtNumeric<?> && least instanceof NbtNumeric<?>) {
                 return new UUID(
-                        ((NbtNumeric<?>) most).getAsLong(),
-                        ((NbtNumeric<?>) least).getAsLong()
+                    ((NbtNumeric<?>) most).getAsLong(),
+                    ((NbtNumeric<?>) least).getAsLong()
                 );
             }
         }
@@ -427,8 +427,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Float getFloatOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsFloat()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsFloat()
+            : null;
     }
 
     /**
@@ -441,8 +441,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default float getFloat(@NonNull String key, float def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsFloat()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsFloat()
+            : def;
     }
 
     /**
@@ -464,8 +464,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Double getDoubleOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsDouble()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsDouble()
+            : null;
     }
 
     /**
@@ -478,8 +478,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default double getDouble(@NonNull String key, double def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsDouble()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsDouble()
+            : def;
     }
 
     /**
@@ -513,8 +513,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable String getString(@NonNull String key, @Nullable String def) {
         Nbt<?> value = get(key);
         return (value != null)
-                ? value.getAsString()
-                : def;
+            ? value.getAsString()
+            : def;
     }
 
     /**
@@ -548,8 +548,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default byte @Nullable [] getByteArray(@NonNull String key, byte @Nullable [] def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtByteArray)
-                ? ((NbtByteArray) value).getAsByteArray()
-                : def;
+            ? ((NbtByteArray) value).getAsByteArray()
+            : def;
     }
 
     /**
@@ -583,8 +583,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default int @Nullable [] getIntArray(@NonNull String key, int @Nullable [] def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtIntArray)
-                ? ((NbtIntArray) value).getAsIntArray()
-                : def;
+            ? ((NbtIntArray) value).getAsIntArray()
+            : def;
     }
 
     /**
@@ -618,8 +618,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default long @Nullable [] getLongArray(@NonNull String key, long @Nullable [] def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtLongArray)
-                ? ((NbtLongArray) value).getAsLongArray()
-                : def;
+            ? ((NbtLongArray) value).getAsLongArray()
+            : def;
     }
 
     /**
@@ -653,8 +653,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable NbtCompound getCompound(@NonNull String key, @Nullable NbtCompound def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtCompound)
-                ? (NbtCompound) value
-                : def;
+            ? (NbtCompound) value
+            : def;
     }
 
     /**
@@ -703,8 +703,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable NbtList getList(@NonNull String key, @Nullable NbtList def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtList)
-                ? (NbtList) value
-                : def;
+            ? (NbtList) value
+            : def;
     }
 
     /**
@@ -753,8 +753,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Boolean getBooleanOrNull(@NonNull String key) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte() != 0
-                : null;
+            ? ((NbtNumeric<?>) value).getAsByte() != 0
+            : null;
     }
 
     /**
@@ -767,8 +767,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default boolean getBoolean(@NonNull String key, boolean def) {
         Nbt<?> value = get(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte() != 0
-                : def;
+            ? ((NbtNumeric<?>) value).getAsByte() != 0
+            : def;
     }
 
     /**
@@ -839,8 +839,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Byte getDeepByteOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsByte()
+            : null;
     }
 
     /**
@@ -854,8 +854,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default byte getDeepByte(@NonNull String key, byte def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsByte()
+            : def;
     }
 
     /**
@@ -879,8 +879,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Short getDeepShortOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsShort()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsShort()
+            : null;
     }
 
     /**
@@ -894,8 +894,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default short getDeepShort(@NonNull String key, short def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsShort()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsShort()
+            : def;
     }
 
     /**
@@ -919,8 +919,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Integer getDeepIntOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsInt()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsInt()
+            : null;
     }
 
     /**
@@ -934,8 +934,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default int getDeepInt(@NonNull String key, int def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsInt()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsInt()
+            : def;
     }
 
     /**
@@ -959,8 +959,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Long getDeepLongOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsLong()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsLong()
+            : null;
     }
 
     /**
@@ -974,8 +974,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default long getDeepLong(@NonNull String key, long def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsLong()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsLong()
+            : def;
     }
 
     /**
@@ -1021,8 +1021,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
             Nbt<?> least = getDeep(key + "Least");
             if (most instanceof NbtNumeric<?> && least instanceof NbtNumeric<?>) {
                 return new UUID(
-                        ((NbtNumeric<?>) most).getAsLong(),
-                        ((NbtNumeric<?>) least).getAsLong()
+                    ((NbtNumeric<?>) most).getAsLong(),
+                    ((NbtNumeric<?>) least).getAsLong()
                 );
             }
         }
@@ -1050,8 +1050,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Float getDeepFloatOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsFloat()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsFloat()
+            : null;
     }
 
     /**
@@ -1065,8 +1065,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default float getDeepFloat(@NonNull String key, float def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsFloat()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsFloat()
+            : def;
     }
 
     /**
@@ -1090,8 +1090,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Double getDeepDoubleOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsDouble()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsDouble()
+            : null;
     }
 
     /**
@@ -1105,8 +1105,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default double getDeepDouble(@NonNull String key, double def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsDouble()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsDouble()
+            : def;
     }
 
     /**
@@ -1143,8 +1143,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable String getDeepString(@NonNull String key, @Nullable String def) {
         Nbt<?> value = getDeep(key);
         return (value != null)
-                ? value.getAsString()
-                : def;
+            ? value.getAsString()
+            : def;
     }
 
     /**
@@ -1181,8 +1181,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default byte @Nullable [] getDeepByteArray(@NonNull String key, byte @Nullable [] def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtByteArray)
-                ? ((NbtByteArray) value).getAsByteArray()
-                : def;
+            ? ((NbtByteArray) value).getAsByteArray()
+            : def;
     }
 
     /**
@@ -1219,8 +1219,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default int @Nullable [] getDeepIntArray(@NonNull String key, int @Nullable [] def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtIntArray)
-                ? ((NbtIntArray) value).getAsIntArray()
-                : def;
+            ? ((NbtIntArray) value).getAsIntArray()
+            : def;
     }
 
     /**
@@ -1257,8 +1257,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default long @Nullable [] getDeepLongArray(@NonNull String key, long @Nullable [] def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtLongArray)
-                ? ((NbtLongArray) value).getAsLongArray()
-                : def;
+            ? ((NbtLongArray) value).getAsLongArray()
+            : def;
     }
 
     /**
@@ -1295,8 +1295,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable NbtCompound getDeepCompound(@NonNull String key, @Nullable NbtCompound def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtCompound)
-                ? (NbtCompound) value
-                : def;
+            ? (NbtCompound) value
+            : def;
     }
 
     /**
@@ -1334,8 +1334,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable NbtList getDeepList(@NonNull String key, @Nullable NbtList def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtList)
-                ? (NbtList) value
-                : def;
+            ? (NbtList) value
+            : def;
     }
 
     /**
@@ -1359,8 +1359,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default @Nullable Boolean getDeepBooleanOrNull(@NonNull String key) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte() != 0
-                : null;
+            ? ((NbtNumeric<?>) value).getAsByte() != 0
+            : null;
     }
 
     /**
@@ -1374,8 +1374,8 @@ public interface NbtComponentLike extends NbtLike, Map<String, Nbt<?>> {
     default boolean getDeepBoolean(@NonNull String key, boolean def) {
         Nbt<?> value = getDeep(key);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte() != 0
-                : def;
+            ? ((NbtNumeric<?>) value).getAsByte() != 0
+            : def;
     }
 
     default void putDeep(@NonNull String key, @NonNull Nbt<?> value, boolean force, char separator, char escape) {

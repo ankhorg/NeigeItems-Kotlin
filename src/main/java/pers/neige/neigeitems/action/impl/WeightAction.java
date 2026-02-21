@@ -11,13 +11,8 @@ import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
-import pers.neige.neigeitems.utils.NumberParser;
-import pers.neige.neigeitems.utils.StringUtils;
 import pers.neige.neigeitems.utils.lazy.ThreadSafeLazyBoolean;
 
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,8 +26,8 @@ public class WeightAction extends Action {
     private boolean equalWeight = false;
 
     public WeightAction(
-            @NonNull BaseActionManager manager,
-            @NonNull ConfigReader action
+        @NonNull BaseActionManager manager,
+        @NonNull ConfigReader action
     ) {
         super(manager);
         this.amount = Evaluator.createIntegerEvaluator(manager, action.getString("amount"));
@@ -51,8 +46,8 @@ public class WeightAction extends Action {
     }
 
     public void initActions(
-            @NonNull BaseActionManager manager,
-            @Nullable Object actions
+        @NonNull BaseActionManager manager,
+        @Nullable Object actions
     ) {
         if (!(actions instanceof List<?>)) return;
         val list = (List<?>) actions;

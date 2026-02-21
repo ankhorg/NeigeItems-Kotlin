@@ -26,9 +26,9 @@ public final class ItemGiveEvent extends CancellableEvent {
      * @param itemStack 待给予物品
      */
     public ItemGiveEvent(
-            @NonNull String id,
-            @NonNull Player player,
-            @NonNull ItemStack itemStack
+        @NonNull String id,
+        @NonNull Player player,
+        @NonNull ItemStack itemStack
     ) {
         this.id = id;
         this.player = player;
@@ -43,10 +43,10 @@ public final class ItemGiveEvent extends CancellableEvent {
      * @param amount    给予数量
      */
     public ItemGiveEvent(
-            @NonNull String id,
-            @NonNull Player player,
-            @NonNull ItemStack itemStack,
-            int amount
+        @NonNull String id,
+        @NonNull Player player,
+        @NonNull ItemStack itemStack,
+        int amount
     ) {
         this.id = id;
         this.player = player;
@@ -85,7 +85,7 @@ public final class ItemGiveEvent extends CancellableEvent {
      * @param itemStack 待给予物品
      */
     public void setItemStack(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         this.itemStack = itemStack;
     }
@@ -103,7 +103,7 @@ public final class ItemGiveEvent extends CancellableEvent {
      * @param amount 给予数量
      */
     public void setAmount(
-            int amount
+        int amount
     ) {
         this.amount = amount;
     }

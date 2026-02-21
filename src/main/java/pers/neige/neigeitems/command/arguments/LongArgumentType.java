@@ -75,8 +75,8 @@ public class LongArgumentType implements ArgumentType<Long> {
     }
 
     public static long getLong(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, Long.TYPE);
     }
@@ -97,7 +97,7 @@ public class LongArgumentType implements ArgumentType<Long> {
 
     @Override
     public @NonNull Long parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) throws CommandSyntaxException {
         val result = CommandUtils.readLong(reader);
         return Math.min(Math.max(result, minimum), maximum);

@@ -34,12 +34,12 @@ public final class ItemInfo {
      * @param data         指向数据
      */
     public ItemInfo(
-            @NonNull ItemStack itemStack,
-            @NonNull NbtItemStack nbtItemStack,
-            @NonNull NbtCompound itemTag,
-            @NonNull NbtCompound neigeItems,
-            @NonNull String id,
-            @Nullable HashMap<String, String> data
+        @NonNull ItemStack itemStack,
+        @NonNull NbtItemStack nbtItemStack,
+        @NonNull NbtCompound itemTag,
+        @NonNull NbtCompound neigeItems,
+        @NonNull String id,
+        @Nullable HashMap<String, String> data
     ) {
         this.itemStack = itemStack;
         this.nbtItemStack = nbtItemStack;
@@ -57,9 +57,9 @@ public final class ItemInfo {
     }
 
     private static void toFlatStringMap(
-            @NonNull NbtCompound compound,
-            @NonNull String keyPrefix,
-            @NonNull HashMap<String, String> result
+        @NonNull NbtCompound compound,
+        @NonNull String keyPrefix,
+        @NonNull HashMap<String, String> result
     ) {
         compound.forEach((key, nbt) -> {
             if (nbt instanceof NbtCompound) {

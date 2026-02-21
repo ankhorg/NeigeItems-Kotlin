@@ -31,23 +31,23 @@ public class ActionArgumentType implements ArgumentType<Action> {
     }
 
     public static @NonNull Action getAction(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, Action.class);
     }
 
     @Override
     public @NonNull Action parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) {
         return ActionManager.INSTANCE.compile(readAllString(reader));
     }
 
     @Override
     public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
-            @NonNull CommandContext<S> context,
-            @NonNull SuggestionsBuilder builder
+        @NonNull CommandContext<S> context,
+        @NonNull SuggestionsBuilder builder
     ) {
         val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ActionManager.INSTANCE.getActions().keySet().forEach((key) -> {

@@ -283,64 +283,64 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public byte getByte(@NonNull String key, byte def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asByte()
-                : def;
+            ? ((RefNbtNumber) value).asByte()
+            : def;
     }
 
     @Override
     public @Nullable Byte getByteOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asByte()
-                : null;
+            ? ((RefNbtNumber) value).asByte()
+            : null;
     }
 
     @Override
     public short getShort(@NonNull String key, short def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asShort()
-                : def;
+            ? ((RefNbtNumber) value).asShort()
+            : def;
     }
 
     @Override
     public @Nullable Short getShortOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asShort()
-                : null;
+            ? ((RefNbtNumber) value).asShort()
+            : null;
     }
 
     @Override
     public int getInt(@NonNull String key, int def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asInt()
-                : def;
+            ? ((RefNbtNumber) value).asInt()
+            : def;
     }
 
     @Override
     public @Nullable Integer getIntOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asInt()
-                : null;
+            ? ((RefNbtNumber) value).asInt()
+            : null;
     }
 
     @Override
     public long getLong(@NonNull String key, long def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asLong()
-                : def;
+            ? ((RefNbtNumber) value).asLong()
+            : def;
     }
 
     @Override
     public @Nullable Long getLongOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asLong()
-                : null;
+            ? ((RefNbtNumber) value).asLong()
+            : null;
     }
 
     @Override
@@ -357,8 +357,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
             RefNbtBase least = delegate.get(key + "Least");
             if (most instanceof RefNbtNumber && least instanceof RefNbtNumber) {
                 return new UUID(
-                        ((RefNbtNumber) most).asLong(),
-                        ((RefNbtNumber) least).asLong()
+                    ((RefNbtNumber) most).asLong(),
+                    ((RefNbtNumber) least).asLong()
                 );
             }
         }
@@ -369,32 +369,32 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public float getFloat(@NonNull String key, float def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asFloat()
-                : def;
+            ? ((RefNbtNumber) value).asFloat()
+            : def;
     }
 
     @Override
     public @Nullable Float getFloatOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asFloat()
-                : null;
+            ? ((RefNbtNumber) value).asFloat()
+            : null;
     }
 
     @Override
     public double getDouble(@NonNull String key, double def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asDouble()
-                : def;
+            ? ((RefNbtNumber) value).asDouble()
+            : def;
     }
 
     @Override
     public @Nullable Double getDoubleOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asDouble()
-                : null;
+            ? ((RefNbtNumber) value).asDouble()
+            : null;
     }
 
     @Override
@@ -402,8 +402,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public byte @Nullable [] getByteArray(@NonNull String key, byte @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagByteArray)
-                ? ((RefNbtTagByteArray) value).getBytes()
-                : def;
+            ? ((RefNbtTagByteArray) value).getBytes()
+            : def;
     }
 
     @Override
@@ -411,8 +411,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public int @Nullable [] getIntArray(@NonNull String key, int @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagIntArray)
-                ? ((RefNbtTagIntArray) value).getInts()
-                : def;
+            ? ((RefNbtTagIntArray) value).getInts()
+            : def;
     }
 
     @Override
@@ -420,8 +420,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public long @Nullable [] getLongArray(@NonNull String key, long @Nullable [] def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagLongArray)
-                ? (LONG_ARRAY_SUPPORT ? ((RefNbtTagLongArray) value).getLongs() : ((RefNbtTagLongArray) value).longs)
-                : def;
+            ? (LONG_ARRAY_SUPPORT ? ((RefNbtTagLongArray) value).getLongs() : ((RefNbtTagLongArray) value).longs)
+            : def;
     }
 
     @Override
@@ -429,8 +429,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public @Nullable NbtCompound getCompound(@NonNull String key, @Nullable NbtCompound def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagCompound)
-                ? new NbtCompound((RefNbtTagCompound) value)
-                : def;
+            ? new NbtCompound((RefNbtTagCompound) value)
+            : def;
     }
 
     @Override
@@ -453,8 +453,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public @Nullable NbtList getList(@NonNull String key, @Nullable NbtList def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtTagList)
-                ? new NbtList((RefNbtTagList) value)
-                : def;
+            ? new NbtList((RefNbtTagList) value)
+            : def;
     }
 
     @Override
@@ -471,16 +471,16 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public boolean getBoolean(@NonNull String key, boolean def) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asByte() != 0
-                : def;
+            ? ((RefNbtNumber) value).asByte() != 0
+            : def;
     }
 
     @Override
     public @Nullable Boolean getBooleanOrNull(@NonNull String key) {
         RefNbtBase value = delegate.get(key);
         return (value instanceof RefNbtNumber)
-                ? ((RefNbtNumber) value).asByte() != 0
-                : null;
+            ? ((RefNbtNumber) value).asByte() != 0
+            : null;
     }
 
     @Override
@@ -537,64 +537,64 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public byte getDeepByte(@NonNull String key, byte def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asByte()
-                : def;
+            ? ((RefNbtNumber) value).asByte()
+            : def;
     }
 
     @Override
     public @Nullable Byte getDeepByteOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asByte()
-                : null;
+            ? ((RefNbtNumber) value).asByte()
+            : null;
     }
 
     @Override
     public short getDeepShort(@NonNull String key, short def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asShort()
-                : def;
+            ? ((RefNbtNumber) value).asShort()
+            : def;
     }
 
     @Override
     public @Nullable Short getDeepShortOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asShort()
-                : null;
+            ? ((RefNbtNumber) value).asShort()
+            : null;
     }
 
     @Override
     public int getDeepInt(@NonNull String key, int def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asInt()
-                : def;
+            ? ((RefNbtNumber) value).asInt()
+            : def;
     }
 
     @Override
     public @Nullable Integer getDeepIntOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asInt()
-                : null;
+            ? ((RefNbtNumber) value).asInt()
+            : null;
     }
 
     @Override
     public long getDeepLong(@NonNull String key, long def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asLong()
-                : def;
+            ? ((RefNbtNumber) value).asLong()
+            : def;
     }
 
     @Override
     public @Nullable Long getDeepLongOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asLong()
-                : null;
+            ? ((RefNbtNumber) value).asLong()
+            : null;
     }
 
     @Override
@@ -611,8 +611,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
             RefNbtBase least = getDeepRefNbt(key + "Least");
             if (most instanceof RefNbtNumber && least instanceof RefNbtNumber) {
                 return new UUID(
-                        ((RefNbtNumber) most).asLong(),
-                        ((RefNbtNumber) least).asLong()
+                    ((RefNbtNumber) most).asLong(),
+                    ((RefNbtNumber) least).asLong()
                 );
             }
         }
@@ -623,32 +623,32 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public float getDeepFloat(@NonNull String key, float def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asFloat()
-                : def;
+            ? ((RefNbtNumber) value).asFloat()
+            : def;
     }
 
     @Override
     public @Nullable Float getDeepFloatOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asFloat()
-                : null;
+            ? ((RefNbtNumber) value).asFloat()
+            : null;
     }
 
     @Override
     public double getDeepDouble(@NonNull String key, double def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asDouble()
-                : def;
+            ? ((RefNbtNumber) value).asDouble()
+            : def;
     }
 
     @Override
     public @Nullable Double getDeepDoubleOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asDouble()
-                : null;
+            ? ((RefNbtNumber) value).asDouble()
+            : null;
     }
 
     @Override
@@ -656,8 +656,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public byte @Nullable [] getDeepByteArray(@NonNull String key, byte @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagByteArray
-                ? ((RefNbtTagByteArray) value).getBytes()
-                : def;
+            ? ((RefNbtTagByteArray) value).getBytes()
+            : def;
     }
 
     @Override
@@ -665,8 +665,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public int @Nullable [] getDeepIntArray(@NonNull String key, int @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagIntArray
-                ? ((RefNbtTagIntArray) value).getInts()
-                : def;
+            ? ((RefNbtTagIntArray) value).getInts()
+            : def;
     }
 
     @Override
@@ -674,8 +674,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public long @Nullable [] getDeepLongArray(@NonNull String key, long @Nullable [] def) {
         RefNbtBase value = getDeepRefNbt(key);
         return (value instanceof RefNbtTagLongArray)
-                ? (LONG_ARRAY_SUPPORT ? ((RefNbtTagLongArray) value).getLongs() : ((RefNbtTagLongArray) value).longs)
-                : def;
+            ? (LONG_ARRAY_SUPPORT ? ((RefNbtTagLongArray) value).getLongs() : ((RefNbtTagLongArray) value).longs)
+            : def;
     }
 
     @Override
@@ -683,8 +683,8 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public @Nullable NbtCompound getDeepCompound(@NonNull String key, @Nullable NbtCompound def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagCompound
-                ? new NbtCompound((RefNbtTagCompound) value)
-                : def;
+            ? new NbtCompound((RefNbtTagCompound) value)
+            : def;
     }
 
     @Override
@@ -692,24 +692,24 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
     public @Nullable NbtList getDeepList(@NonNull String key, @Nullable NbtList def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtTagList
-                ? new NbtList((RefNbtTagList) value)
-                : def;
+            ? new NbtList((RefNbtTagList) value)
+            : def;
     }
 
     @Override
     public boolean getDeepBoolean(@NonNull String key, boolean def) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asByte() != 0
-                : def;
+            ? ((RefNbtNumber) value).asByte() != 0
+            : def;
     }
 
     @Override
     public @Nullable Boolean getDeepBooleanOrNull(@NonNull String key) {
         RefNbtBase value = getDeepRefNbt(key);
         return value instanceof RefNbtNumber
-                ? ((RefNbtNumber) value).asByte() != 0
-                : null;
+            ? ((RefNbtNumber) value).asByte() != 0
+            : null;
     }
 
     private void putDeepRefNbt(@NonNull String key, @NonNull RefNbtBase value, boolean force, char separator, char escape) {

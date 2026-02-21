@@ -31,11 +31,11 @@ public final class ItemActionEvent extends CancellableEvent {
      * @param itemInfo  物品信息
      */
     public ItemActionEvent(
-            @NonNull Player player,
-            @NonNull ItemStack itemStack,
-            @NonNull ItemInfo itemInfo,
-            @NonNull ItemActionType type,
-            @NonNull ActionTrigger trigger
+        @NonNull Player player,
+        @NonNull ItemStack itemStack,
+        @NonNull ItemInfo itemInfo,
+        @NonNull ItemActionType type,
+        @NonNull ActionTrigger trigger
     ) {
         this.player = player;
         this.itemStack = itemStack;

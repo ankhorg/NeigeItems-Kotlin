@@ -15,8 +15,8 @@ public class StringText extends Text {
     private final @NonNull String lore;
 
     public StringText(
-            @NonNull BaseActionManager manager,
-            @NonNull String lore
+        @NonNull BaseActionManager manager,
+        @NonNull String lore
     ) {
         super(manager);
         this.lore = lore;
@@ -25,10 +25,10 @@ public class StringText extends Text {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends List<T>> @NonNull R getText(
-            @NonNull R result,
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context,
-            Function<String, T> converter
+        @NonNull R result,
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context,
+        Function<String, T> converter
     ) {
         val text = SectionUtils.parseSection(this.lore, (Map<String, String>) (Object) context.getGlobal(), context.getPlayer(), null);
         val lore = converter.apply(text);

@@ -18,8 +18,8 @@ public class RepeatAction extends Action {
     private final @NonNull Action actions;
 
     public RepeatAction(
-            @NonNull BaseActionManager manager,
-            @NonNull ConfigReader config
+        @NonNull BaseActionManager manager,
+        @NonNull ConfigReader config
     ) {
         super(manager);
         this.globalId = config.getString("global-id", "i");
@@ -38,8 +38,8 @@ public class RepeatAction extends Action {
      */
     @Override
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }

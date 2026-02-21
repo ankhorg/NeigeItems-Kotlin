@@ -290,8 +290,8 @@ public class NMSHooker {
     }
 
     public @Nullable Entity getEntityFromID1(
-            @NonNull World world,
-            int entityId
+        @NonNull World world,
+        int entityId
     ) {
         return WorldUtils.getEntityFromID1(world, entityId);
     }

@@ -75,8 +75,8 @@ public class MutableNavMapScrollPager<K, V> extends ScrollPager<Map.Entry<K, V>>
         val absDelta = Math.abs(delta);
 
         var it = reverse ?
-                handle.headMap(current, false).descendingKeySet().iterator() :
-                handle.tailMap(current, false).navigableKeySet().iterator();
+            handle.headMap(current, false).descendingKeySet().iterator() :
+            handle.tailMap(current, false).navigableKeySet().iterator();
 
         // 原子更新游标
         for (int i = 0; i < absDelta; i++) {

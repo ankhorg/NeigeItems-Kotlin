@@ -632,8 +632,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default @Nullable Byte getByteOrNull(int index) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsByte()
+            : null;
     }
 
     /**
@@ -646,8 +646,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default byte getByte(int index, byte def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsByte()
+            : def;
     }
 
     /**
@@ -669,8 +669,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default @Nullable Short getShortOrNull(int index) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsShort()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsShort()
+            : null;
     }
 
     /**
@@ -683,8 +683,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default short getShort(int index, short def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsShort()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsShort()
+            : def;
     }
 
     /**
@@ -706,8 +706,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default @Nullable Integer getIntOrNull(int index) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsInt()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsInt()
+            : null;
     }
 
     /**
@@ -720,8 +720,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default int getInt(int index, int def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsInt()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsInt()
+            : def;
     }
 
     /**
@@ -743,8 +743,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default @Nullable Long getLongOrNull(int index) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsLong()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsLong()
+            : null;
     }
 
     /**
@@ -757,8 +757,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default long getLong(int index, long def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsLong()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsLong()
+            : def;
     }
 
     /**
@@ -780,8 +780,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default @Nullable Float getFloatOrNull(int index) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsFloat()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsFloat()
+            : null;
     }
 
     /**
@@ -794,8 +794,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default float getFloat(int index, float def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsFloat()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsFloat()
+            : def;
     }
 
     /**
@@ -817,8 +817,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default @Nullable Double getDoubleOrNull(int index) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsDouble()
-                : null;
+            ? ((NbtNumeric<?>) value).getAsDouble()
+            : null;
     }
 
     /**
@@ -831,8 +831,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default double getDouble(int index, double def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsDouble()
-                : def;
+            ? ((NbtNumeric<?>) value).getAsDouble()
+            : def;
     }
 
     /**
@@ -866,8 +866,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default @Nullable String getString(int index, @Nullable String def) {
         Nbt<?> value = get(index);
         return (value != null)
-                ? value.getAsString()
-                : def;
+            ? value.getAsString()
+            : def;
     }
 
     /**
@@ -901,8 +901,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default byte @Nullable [] getByteArray(int index, byte @Nullable [] def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtByteArray)
-                ? ((NbtByteArray) value).getAsByteArray()
-                : def;
+            ? ((NbtByteArray) value).getAsByteArray()
+            : def;
     }
 
     /**
@@ -936,8 +936,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default int @Nullable [] getIntArray(int index, int @Nullable [] def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtIntArray)
-                ? ((NbtIntArray) value).getAsIntArray()
-                : def;
+            ? ((NbtIntArray) value).getAsIntArray()
+            : def;
     }
 
     /**
@@ -971,8 +971,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default long @Nullable [] getLongArray(int index, long @Nullable [] def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtLongArray)
-                ? ((NbtLongArray) value).getAsLongArray()
-                : def;
+            ? ((NbtLongArray) value).getAsLongArray()
+            : def;
     }
 
     /**
@@ -1006,8 +1006,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default @Nullable NbtCompound getCompound(int index, @Nullable NbtCompound def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtCompound)
-                ? (NbtCompound) value
-                : def;
+            ? (NbtCompound) value
+            : def;
     }
 
     /**
@@ -1056,8 +1056,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default @Nullable NbtList getList(int index, @Nullable NbtList def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtList)
-                ? (NbtList) value
-                : def;
+            ? (NbtList) value
+            : def;
     }
 
     /**
@@ -1094,8 +1094,8 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default @Nullable Boolean getBooleanOrNull(int index) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte() != 0
-                : null;
+            ? ((NbtNumeric<?>) value).getAsByte() != 0
+            : null;
     }
 
     /**
@@ -1108,7 +1108,7 @@ public interface NbtListLike extends NbtCollectionLike<Nbt<?>> {
     default boolean getBoolean(int index, boolean def) {
         Nbt<?> value = get(index);
         return (value instanceof NbtNumeric<?>)
-                ? ((NbtNumeric<?>) value).getAsByte() != 0
-                : def;
+            ? ((NbtNumeric<?>) value).getAsByte() != 0
+            : def;
     }
 }

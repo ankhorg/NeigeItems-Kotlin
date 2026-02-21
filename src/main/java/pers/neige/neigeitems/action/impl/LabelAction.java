@@ -16,8 +16,8 @@ public class LabelAction extends Action {
     private final @NonNull Action actions;
 
     public LabelAction(
-            @NonNull BaseActionManager manager,
-            @NonNull ConfigReader action
+        @NonNull BaseActionManager manager,
+        @NonNull ConfigReader action
     ) {
         super(manager);
         if (action.containsKey("label")) {
@@ -39,8 +39,8 @@ public class LabelAction extends Action {
      */
     @Override
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }

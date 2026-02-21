@@ -17,8 +17,8 @@ public class JsAction extends Action {
     private final @NonNull CompiledScript script;
 
     public JsAction(
-            @NonNull BaseActionManager manager,
-            @NonNull String scriptString
+        @NonNull BaseActionManager manager,
+        @NonNull String scriptString
     ) {
         super(manager);
         this.scriptString = scriptString;
@@ -39,8 +39,8 @@ public class JsAction extends Action {
      */
     @Override
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }

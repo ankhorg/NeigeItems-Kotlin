@@ -21,8 +21,8 @@ public final class ItemPacketEvent extends BasicEvent {
      * @param itemStack 发送的物品
      */
     public ItemPacketEvent(
-            @NonNull Player player,
-            @NonNull ItemStack itemStack
+        @NonNull Player player,
+        @NonNull ItemStack itemStack
     ) {
         this.player = player;
         this.itemStack = itemStack;

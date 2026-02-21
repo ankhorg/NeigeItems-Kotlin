@@ -17,18 +17,18 @@ public final class NbtLong extends NbtNumeric<RefNbtTagLong> implements NbtLongL
         NbtLong[] result = new NbtLong[1153];
         for (int i = 0; i < result.length; i++) {
             result[i] = new NbtLong(OF_SUPPORTED
-                    ? RefNbtTagLong.of(i - 128)
-                    : new RefNbtTagLong(i - 128));
+                ? RefNbtTagLong.of(i - 128)
+                : new RefNbtTagLong(i - 128));
         }
         return result;
     }
 
     public static NbtLong valueOf(long value) {
         return (value >= -128 && value <= 1024)
-                ? instanceCache[(int) value + 128]
-                : new NbtLong(OF_SUPPORTED
-                ? RefNbtTagLong.of(value)
-                : new RefNbtTagLong(value));
+            ? instanceCache[(int) value + 128]
+            : new NbtLong(OF_SUPPORTED
+            ? RefNbtTagLong.of(value)
+            : new RefNbtTagLong(value));
     }
 
     static NbtLong fromNmsImpl(RefNbtTagLong delegate) {

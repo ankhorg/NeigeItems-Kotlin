@@ -19,8 +19,8 @@ public final class NbtByte extends NbtNumeric<RefNbtTagByte> implements NbtByteL
         NbtByte[] result = new NbtByte[256];
         for (int i = 0; i < result.length; i++) {
             result[i] = OF_SUPPORTED
-                    ? new NbtByte(RefNbtTagByte.of((byte) (i - 128)))
-                    : new NbtByte(new RefNbtTagByte((byte) (i - 128)));
+                ? new NbtByte(RefNbtTagByte.of((byte) (i - 128)))
+                : new NbtByte(new RefNbtTagByte((byte) (i - 128)));
         }
         return result;
     }

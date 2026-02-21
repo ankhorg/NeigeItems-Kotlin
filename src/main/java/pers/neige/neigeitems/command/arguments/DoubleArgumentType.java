@@ -61,8 +61,8 @@ public class DoubleArgumentType implements ArgumentType<Double> {
     }
 
     public static double getDouble(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, Double.TYPE);
     }
@@ -83,7 +83,7 @@ public class DoubleArgumentType implements ArgumentType<Double> {
 
     @Override
     public @NonNull Double parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) throws CommandSyntaxException {
         val result = CommandUtils.readDouble(reader);
         return Math.min(Math.max(result, minimum), maximum);

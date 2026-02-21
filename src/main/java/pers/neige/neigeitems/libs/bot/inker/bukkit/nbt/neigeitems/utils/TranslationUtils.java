@@ -73,7 +73,7 @@ public class TranslationUtils {
      * @return 显示名或翻译名.
      */
     public static @NonNull String getDisplayOrTranslationName(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         String displayName = getDisplayName(itemStack);
         return displayName == null ? TranslationUtils.getTranslationName(itemStack) : displayName;
@@ -86,7 +86,7 @@ public class TranslationUtils {
      * @return 显示名或翻译键.
      */
     public static @NonNull BaseComponent getDisplayOrTranslationComponent(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         String displayName = getDisplayName(itemStack);
         return displayName == null ? TranslationUtils.getTranslationComponent(itemStack) : new TextComponent(displayName);
@@ -99,7 +99,7 @@ public class TranslationUtils {
      * @return 显示名.
      */
     public static @Nullable String getDisplayName(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         if (itemStack instanceof RefCraftItemStack) {
             return getDisplayNameFromCraftItemStack(itemStack);
@@ -151,7 +151,7 @@ public class TranslationUtils {
      * @return 传统文本.
      */
     public static @NonNull String toLegacyText(
-            @NonNull String json
+        @NonNull String json
     ) {
         if (V12) {
             return json;
@@ -171,7 +171,7 @@ public class TranslationUtils {
      * @return 传统文本.
      */
     public static @NonNull String toJsonText(
-            @NonNull String json
+        @NonNull String json
     ) {
         if (CbVersion.v1_16_R3.isSupport()) {
             return fromStringToJSON(json);
@@ -187,7 +187,7 @@ public class TranslationUtils {
      * @return 传统文本.
      */
     public static @Nullable String fromJSONComponent(
-            @Nullable String jsonMessage
+        @Nullable String jsonMessage
     ) {
         if (jsonMessage == null) return null;
         if (CbVersion.v1_16_R3.isSupport())
@@ -230,7 +230,7 @@ public class TranslationUtils {
      * @return 是否包含自定义显示名.
      */
     public static boolean hasDisplayName(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         if (itemStack instanceof RefCraftItemStack) {
             if (itemStack.getType() != Material.AIR) {
@@ -257,7 +257,7 @@ public class TranslationUtils {
      * @return 翻译名.
      */
     public static @NonNull String getTranslationName(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         RefNmsItemStack nmsItemStack;
         if (itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
@@ -281,9 +281,9 @@ public class TranslationUtils {
                 }
             } else if (
                 // 1.13+ 肯定是玩家头颅, 1.12.2 需要检测损伤值
-                    (V13_OR_ABOVE || itemStack.getDurability() == 3)
-                            // NBT 检测
-                            && nmsItemStack.hasTag()
+                (V13_OR_ABOVE || itemStack.getDurability() == 3)
+                    // NBT 检测
+                    && nmsItemStack.hasTag()
             ) {
                 RefNbtTagCompound tag = nmsItemStack.getTag();
                 RefNbtBase skullOwnerTag = tag.get("SkullOwner");
@@ -389,7 +389,7 @@ public class TranslationUtils {
      * @return 包含翻译键的 BaseComponent.
      */
     public static @NonNull BaseComponent getTranslationComponent(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         RefNmsItemStack nmsItemStack;
         if (itemStack instanceof RefCraftItemStack && itemStack.getType() != Material.AIR) {
@@ -413,9 +413,9 @@ public class TranslationUtils {
                 }
             } else if (
                 // 1.13+ 肯定是玩家头颅, 1.12.2 需要检测损伤值
-                    (V13_OR_ABOVE || itemStack.getDurability() == 3)
-                            // NBT 检测
-                            && nmsItemStack.hasTag()
+                (V13_OR_ABOVE || itemStack.getDurability() == 3)
+                    // NBT 检测
+                    && nmsItemStack.hasTag()
             ) {
                 RefNbtTagCompound tag = nmsItemStack.getTag();
                 RefNbtBase skullOwnerTag = tag.get("SkullOwner");
@@ -521,7 +521,7 @@ public class TranslationUtils {
      * @return 显示名或翻译名.
      */
     public static @NonNull String getDisplayOrTranslationName(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         String name = entity.getCustomName();
         if (name != null) {
@@ -537,7 +537,7 @@ public class TranslationUtils {
      * @return 显示名或翻译键.
      */
     public static @NonNull BaseComponent getDisplayOrTranslationComponent(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         String name = entity.getCustomName();
         if (name != null) {
@@ -553,7 +553,7 @@ public class TranslationUtils {
      * @return 翻译名.
      */
     public static @NonNull String getTranslationName(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         String descriptionId = getDescriptionId(entity);
         if (descriptionId != null) {
@@ -570,7 +570,7 @@ public class TranslationUtils {
      * @return 翻译键.
      */
     public static @NonNull BaseComponent getTranslationComponent(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         String descriptionId = getDescriptionId(entity);
         if (descriptionId != null) {
@@ -587,7 +587,7 @@ public class TranslationUtils {
      * @return DescriptionId.
      */
     public static @Nullable String getDescriptionId(
-            @NonNull Entity entity
+        @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
@@ -608,7 +608,7 @@ public class TranslationUtils {
      * @return DescriptionId.
      */
     public static @Nullable String getDescriptionId(
-            @NonNull Material material
+        @NonNull Material material
     ) {
         RefItem item = RefCraftMagicNumbers.getItem(material);
         if (item == null) return null;

@@ -8,8 +8,8 @@ public class Coordinate {
     private final double value;
 
     public Coordinate(
-            @NonNull LocationType type,
-            @Nullable Double value
+        @NonNull LocationType type,
+        @Nullable Double value
     ) {
         this.type = type;
         this.value = value == null ? 0 : value;

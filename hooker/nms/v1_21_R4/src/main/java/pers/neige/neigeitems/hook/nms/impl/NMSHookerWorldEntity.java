@@ -20,8 +20,8 @@ import java.util.Map;
 public class NMSHookerWorldEntity extends NMSHookerItemStack {
     @Override
     public @Nullable Entity getEntityFromID1(
-            @NonNull World world,
-            int entityId
+        @NonNull World world,
+        int entityId
     ) {
         val trackedEntity = ((Map<Integer, ChunkMap.TrackedEntity>) (Object) ((CraftWorld) world).getHandle().getChunkSource().chunkMap.entityMap).get(entityId);
         if (trackedEntity == null) return null;

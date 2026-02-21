@@ -38,12 +38,12 @@ public final class ItemGenerateEvent extends BasicEvent {
      * @param sections      节点配置
      */
     public ItemGenerateEvent(
-            @NonNull String id,
-            @Nullable OfflinePlayer player,
-            @NonNull ItemStack itemStack,
-            @NonNull Map<String, String> cache,
-            @NonNull ConfigReader configSection,
-            @Nullable ConfigurationSection sections
+        @NonNull String id,
+        @Nullable OfflinePlayer player,
+        @NonNull ItemStack itemStack,
+        @NonNull Map<String, String> cache,
+        @NonNull ConfigReader configSection,
+        @Nullable ConfigurationSection sections
     ) {
         this.id = id;
         this.player = player;
@@ -84,7 +84,7 @@ public final class ItemGenerateEvent extends BasicEvent {
      * @param itemStack 生成的物品
      */
     public void setItemStack(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         this.itemStack = itemStack;
     }

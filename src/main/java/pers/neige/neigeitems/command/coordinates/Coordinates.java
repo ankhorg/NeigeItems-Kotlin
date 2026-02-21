@@ -82,8 +82,8 @@ public class Coordinates {
                 val up = left.clone().crossProduct(forward).normalize();
 
                 val position = forward.multiply(forwards)
-                        .add(up.multiply(-upwards))
-                        .add(left.multiply(leftwards));
+                    .add(up.multiply(-upwards))
+                    .add(left.multiply(leftwards));
 
                 position.add(anchor);
 

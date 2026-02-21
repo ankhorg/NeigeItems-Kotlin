@@ -89,9 +89,9 @@ public class PacketUtils {
      * @param name         显示名.
      */
     public static void setFakeCustomName(
-            @NonNull World world,
-            @NonNull Object packetObject,
-            @NonNull BaseComponent name
+        @NonNull World world,
+        @NonNull Object packetObject,
+        @NonNull BaseComponent name
     ) {
         if (packetObject instanceof RefPacketPlayOutEntityMetadata) {
             RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
@@ -171,9 +171,9 @@ public class PacketUtils {
      * @param itemStack    实体对应的物品.
      */
     public static void setFakeItem(
-            @NonNull World world,
-            @NonNull Object packetObject,
-            @NonNull ItemStack itemStack
+        @NonNull World world,
+        @NonNull Object packetObject,
+        @NonNull ItemStack itemStack
     ) {
         RefNmsItemStack nmsItemStack;
         if (itemStack instanceof RefCraftItemStack) {

@@ -14,8 +14,8 @@ public class WhileAction extends Action {
     private final @NonNull Action _finally;
 
     public WhileAction(
-            @NonNull BaseActionManager manager,
-            @NonNull ConfigReader action
+        @NonNull BaseActionManager manager,
+        @NonNull ConfigReader action
     ) {
         super(manager);
         condition = new Condition(manager, action.getString("while"));
@@ -38,8 +38,8 @@ public class WhileAction extends Action {
      */
     @Override
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }

@@ -31,10 +31,10 @@ public final class ItemPackDropEvent extends CancellableEvent {
      * @param parser     物品解析对象
      */
     public ItemPackDropEvent(
-            @NonNull String id,
-            @NonNull List<ItemStack> itemStacks,
-            @NonNull Location location,
-            @Nullable OfflinePlayer parser
+        @NonNull String id,
+        @NonNull List<ItemStack> itemStacks,
+        @NonNull Location location,
+        @Nullable OfflinePlayer parser
     ) {
         this.id = id;
         this.itemStacks = itemStacks;
@@ -66,7 +66,7 @@ public final class ItemPackDropEvent extends CancellableEvent {
      * @param itemStacks 待掉落物品
      */
     public void setItemStacks(
-            @NonNull List<ItemStack> itemStacks
+        @NonNull List<ItemStack> itemStacks
     ) {
         this.itemStacks = itemStacks;
     }
@@ -84,7 +84,7 @@ public final class ItemPackDropEvent extends CancellableEvent {
      * @param location 掉落位置
      */
     public void setLocation(
-            @NonNull Location location
+        @NonNull Location location
     ) {
         this.location = location;
     }

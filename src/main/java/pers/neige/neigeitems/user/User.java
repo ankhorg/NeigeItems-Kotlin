@@ -24,7 +24,7 @@ public class User {
     private final @NonNull StackableCooldownManager stackableCooldownManager = new StackableCooldownManager();
 
     public User(
-            @NonNull UUID uuid
+        @NonNull UUID uuid
     ) {
         this.uuid = uuid;
     }

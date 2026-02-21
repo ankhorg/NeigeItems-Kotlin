@@ -31,30 +31,30 @@ public class ItemArgumentType implements ArgumentType<ItemSelector> {
     }
 
     public static @Nullable ItemGenerator getItem(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return getItemSelector(context, name).select(context);
     }
 
     public static @NonNull ItemSelector getItemSelector(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, ItemSelector.class);
     }
 
     @Override
     public @NonNull ItemSelector parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) {
         return new ItemSelector(reader);
     }
 
     @Override
     public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
-            @NonNull CommandContext<S> context,
-            @NonNull SuggestionsBuilder builder
+        @NonNull CommandContext<S> context,
+        @NonNull SuggestionsBuilder builder
     ) {
         val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         ItemManager.INSTANCE.getItems().keySet().forEach((id) -> {

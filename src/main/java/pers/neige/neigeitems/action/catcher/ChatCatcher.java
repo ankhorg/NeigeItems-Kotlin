@@ -14,11 +14,11 @@ public class ChatCatcher {
     public final boolean cancel;
 
     public ChatCatcher(
-            @NonNull BaseActionManager actionManager,
-            @NonNull String messageKey,
-            boolean cancel,
-            @NonNull ActionContext context,
-            @NonNull CompletableFuture<ActionResult> result
+        @NonNull BaseActionManager actionManager,
+        @NonNull String messageKey,
+        boolean cancel,
+        @NonNull ActionContext context,
+        @NonNull CompletableFuture<ActionResult> result
     ) {
         this.cancel = cancel;
         future.thenAccept((message) -> {

@@ -77,14 +77,14 @@ public class MutableNavMapCircularPager<K, V> extends CircularPager<Map.Entry<K,
         val absDelta = Math.abs(delta);
 
         var it = reverse ?
-                handle.headMap(current, false).descendingKeySet().iterator() :
-                handle.tailMap(current, false).navigableKeySet().iterator();
+            handle.headMap(current, false).descendingKeySet().iterator() :
+            handle.tailMap(current, false).navigableKeySet().iterator();
 
         // 原子更新游标
         for (int i = 0; i < absDelta; i++) {
             if (!it.hasNext()) it = reverse ?
-                    handle.navigableKeySet().descendingIterator() :
-                    handle.navigableKeySet().iterator();
+                handle.navigableKeySet().descendingIterator() :
+                handle.navigableKeySet().iterator();
             current = it.next();
         }
         cursorKey.set(current);

@@ -31,30 +31,30 @@ public class WorldArgumentType implements ArgumentType<WorldSelector> {
     }
 
     public static @Nullable World getWorld(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return getWorldSelector(context, name).select(context);
     }
 
     public static @NonNull WorldSelector getWorldSelector(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, WorldSelector.class);
     }
 
     @Override
     public @NonNull WorldSelector parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) {
         return new WorldSelector(reader);
     }
 
     @Override
     public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
-            @NonNull CommandContext<S> context,
-            @NonNull SuggestionsBuilder builder
+        @NonNull CommandContext<S> context,
+        @NonNull SuggestionsBuilder builder
     ) {
         val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         Bukkit.getWorlds().forEach((world) -> {

@@ -25,9 +25,9 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
     private final @NonNull TreeMap<T, Action> actions = new TreeMap<>();
 
     public TreeAction(
-            @NonNull BaseActionManager manager,
-            @NonNull ConfigReader config,
-            @NonNull Class<T> keyType
+        @NonNull BaseActionManager manager,
+        @NonNull ConfigReader config,
+        @NonNull Class<T> keyType
     ) {
         super(manager);
         this.keyType = keyType;
@@ -113,8 +113,8 @@ public abstract class TreeAction<T extends Comparable<?>> extends Action {
      */
     @Override
     protected @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         return manager.runAction(this, context);
     }

@@ -107,7 +107,7 @@ public enum ItemActionType {
     }
 
     public static @Nullable ItemActionType matchType(
-            @Nullable String type
+        @Nullable String type
     ) {
         return typeToEnum.get(type);
     }

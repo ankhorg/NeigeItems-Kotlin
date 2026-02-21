@@ -5,13 +5,13 @@ import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
 
 public class NeigeItemsUtils {
     public static @NonNull NbtCompound fromNms(
-            @NonNull RefNbtTagCompound nbt
+        @NonNull RefNbtTagCompound nbt
     ) {
         return new NbtCompound(nbt);
     }
 
     public static @NonNull RefNbtTagCompound toNms(
-            @NonNull NbtCompound nbt
+        @NonNull NbtCompound nbt
     ) {
         return nbt.delegate;
     }

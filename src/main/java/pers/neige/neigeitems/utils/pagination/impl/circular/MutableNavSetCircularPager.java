@@ -80,14 +80,14 @@ public class MutableNavSetCircularPager<T> extends CircularPager<T> {
         val absDelta = Math.abs(delta);
 
         var it = reverse ?
-                handle.headSet(current, false).descendingIterator() :
-                handle.tailSet(current, false).iterator();
+            handle.headSet(current, false).descendingIterator() :
+            handle.tailSet(current, false).iterator();
 
         // 原子更新游标
         for (int i = 0; i < absDelta; i++) {
             if (!it.hasNext()) it = reverse ?
-                    handle.descendingIterator() :
-                    handle.iterator();
+                handle.descendingIterator() :
+                handle.iterator();
             current = it.next();
         }
         cursor.set(current);

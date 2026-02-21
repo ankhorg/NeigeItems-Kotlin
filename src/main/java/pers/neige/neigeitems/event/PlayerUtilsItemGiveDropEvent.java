@@ -22,8 +22,8 @@ public final class PlayerUtilsItemGiveDropEvent extends CancellableEvent {
      * @param itemStack 待掉落物品
      */
     public PlayerUtilsItemGiveDropEvent(
-            @NonNull Player player,
-            @NonNull ItemStack itemStack
+        @NonNull Player player,
+        @NonNull ItemStack itemStack
     ) {
         this.player = player;
         this.itemStack = itemStack;
@@ -53,7 +53,7 @@ public final class PlayerUtilsItemGiveDropEvent extends CancellableEvent {
      * @param itemStack 待掉落物品
      */
     public void setItemStack(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         this.itemStack = itemStack;
     }

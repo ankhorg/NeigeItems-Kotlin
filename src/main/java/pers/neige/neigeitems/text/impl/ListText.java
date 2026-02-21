@@ -14,8 +14,8 @@ public class ListText extends Text {
     private final @NonNull List<Text> text;
 
     public ListText(
-            @NonNull BaseActionManager manager,
-            @NonNull List<?> lore
+        @NonNull BaseActionManager manager,
+        @NonNull List<?> lore
     ) {
         super(manager);
         this.text = new ArrayList<>();
@@ -30,10 +30,10 @@ public class ListText extends Text {
 
     @Override
     public <T, R extends List<T>> @NonNull R getText(
-            @NonNull R result,
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context,
-            Function<String, T> converter
+        @NonNull R result,
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context,
+        Function<String, T> converter
     ) {
         for (val value : text) {
             value.getText(result, manager, context, converter);

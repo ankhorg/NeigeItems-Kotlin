@@ -15,16 +15,16 @@ import pers.neige.neigeitems.ref.entity.RefMobType;
 public class SuperDamageEnchantment extends RefEnchantment {
     public SuperDamageEnchantment() {
         super(
-                RefRarity.COMMON,
-                RefEnchantmentCategory.WEAPON,
-                new RefEquipmentSlot[]{
-                        RefEquipmentSlot.MAINHAND,
-                        RefEquipmentSlot.OFFHAND,
-                        RefEquipmentSlot.FEET,
-                        RefEquipmentSlot.LEGS,
-                        RefEquipmentSlot.CHEST,
-                        RefEquipmentSlot.HEAD,
-                }
+            RefRarity.COMMON,
+            RefEnchantmentCategory.WEAPON,
+            new RefEquipmentSlot[]{
+                RefEquipmentSlot.MAINHAND,
+                RefEquipmentSlot.OFFHAND,
+                RefEquipmentSlot.FEET,
+                RefEquipmentSlot.LEGS,
+                RefEquipmentSlot.CHEST,
+                RefEquipmentSlot.HEAD,
+            }
         );
     }
 

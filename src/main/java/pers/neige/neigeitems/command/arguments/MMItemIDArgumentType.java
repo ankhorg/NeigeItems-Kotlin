@@ -29,23 +29,23 @@ public class MMItemIDArgumentType implements ArgumentType<String> {
     }
 
     public static @NonNull String getMMItemID(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, String.class);
     }
 
     @Override
     public @NonNull String parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) {
         return CommandUtils.readUnquotedString(reader);
     }
 
     @Override
     public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
-            @NonNull CommandContext<S> context,
-            @NonNull SuggestionsBuilder builder
+        @NonNull CommandContext<S> context,
+        @NonNull SuggestionsBuilder builder
     ) {
         val hooker = HookerManager.INSTANCE.getMythicMobsHooker();
         if (hooker != null) {

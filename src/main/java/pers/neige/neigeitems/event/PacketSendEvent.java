@@ -21,8 +21,8 @@ public final class PacketSendEvent extends CancellableEvent {
      * @param packet 发送的数据包
      */
     public PacketSendEvent(
-            @NonNull UUID uuid,
-            @NonNull Object packet
+        @NonNull UUID uuid,
+        @NonNull Object packet
     ) {
         this.uuid = uuid;
         this.packet = packet;

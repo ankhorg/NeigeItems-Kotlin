@@ -302,7 +302,7 @@ public class NbtUtils {
      * 把物品保存成 NbtCompound.
      */
     public static @NonNull NbtCompound save(
-            @Nullable ItemStack itemStack
+        @Nullable ItemStack itemStack
     ) {
         RefNbtTagCompound nmsNbt = new RefNbtTagCompound();
         RefNmsItemStack nmsItemStack;
@@ -319,7 +319,7 @@ public class NbtUtils {
      * 根据 NbtCompound 掏一个物品出来.
      */
     public static @NonNull ItemStack of(
-            @Nullable NbtCompound nbt
+        @Nullable NbtCompound nbt
     ) {
         if (nbt == null) return new ItemStack(Material.AIR);
         if (CbVersion.v1_13_R1.isSupport()) {
@@ -665,8 +665,8 @@ public class NbtUtils {
         if (itemStack1 == null) return itemStack2 == null;
         if (itemStack2 == null) return false;
         if (MOJANG_MOTHER_DEAD
-                || itemStack1 instanceof RefCraftItemStack
-                || itemStack2 instanceof RefCraftItemStack
+            || itemStack1 instanceof RefCraftItemStack
+            || itemStack2 instanceof RefCraftItemStack
         ) return itemStack1.isSimilar(itemStack2);
         if (itemStack1.getType() != itemStack2.getType()) return false;
         if (LEGACY && ItemUtils.getDamage(itemStack1) != ItemUtils.getDamage(itemStack2)) return false;

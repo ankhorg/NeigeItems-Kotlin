@@ -35,12 +35,12 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
     protected boolean notNullConfig = true;
 
     public AbstractConfigManager(
-            @NonNull JavaPlugin plugin,
-            @NonNull String elementName,
-            @NonNull String directory,
-            @NonNull BiFunction<ConfigurationSection, String, R> configGetter,
-            @NonNull Function<String, K> keyConverter,
-            @NonNull BiFunction<K, R, V> converter
+        @NonNull JavaPlugin plugin,
+        @NonNull String elementName,
+        @NonNull String directory,
+        @NonNull BiFunction<ConfigurationSection, String, R> configGetter,
+        @NonNull Function<String, K> keyConverter,
+        @NonNull BiFunction<K, R, V> converter
     ) {
         this.plugin = plugin;
         this.pluginName = plugin.getName();
@@ -53,13 +53,13 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
     }
 
     public AbstractConfigManager(
-            @NonNull String pluginName,
-            @NonNull Logger logger,
-            @NonNull String elementName,
-            @NonNull String directory,
-            @NonNull BiFunction<ConfigurationSection, String, R> configGetter,
-            @NonNull Function<String, K> keyConverter,
-            @NonNull BiFunction<K, R, V> converter
+        @NonNull String pluginName,
+        @NonNull Logger logger,
+        @NonNull String elementName,
+        @NonNull String directory,
+        @NonNull BiFunction<ConfigurationSection, String, R> configGetter,
+        @NonNull Function<String, K> keyConverter,
+        @NonNull BiFunction<K, R, V> converter
     ) {
         this.plugin = null;
         this.pluginName = pluginName;
@@ -72,13 +72,13 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
     }
 
     public AbstractConfigManager(
-            @NonNull String pluginName,
-            @NonNull org.slf4j.Logger logger,
-            @NonNull String elementName,
-            @NonNull String directory,
-            @NonNull BiFunction<ConfigurationSection, String, R> configGetter,
-            @NonNull Function<String, K> keyConverter,
-            @NonNull BiFunction<K, R, V> converter
+        @NonNull String pluginName,
+        @NonNull org.slf4j.Logger logger,
+        @NonNull String elementName,
+        @NonNull String directory,
+        @NonNull BiFunction<ConfigurationSection, String, R> configGetter,
+        @NonNull Function<String, K> keyConverter,
+        @NonNull BiFunction<K, R, V> converter
     ) {
         this.plugin = null;
         this.pluginName = pluginName;

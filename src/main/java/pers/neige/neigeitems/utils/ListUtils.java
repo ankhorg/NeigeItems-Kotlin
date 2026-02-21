@@ -9,16 +9,16 @@ import java.util.function.Function;
 
 public class ListUtils {
     public static @Nullable <T> T getOrNull(
-            @NonNull List<T> list,
-            int index
+        @NonNull List<T> list,
+        int index
     ) {
         return index >= 0 && index <= (list.size() - 1) ? list.get(index) : null;
     }
 
     public static @NonNull <T> T getOrDefault(
-            @NonNull List<T> list,
-            int index,
-            @NonNull T def
+        @NonNull List<T> list,
+        int index,
+        @NonNull T def
     ) {
         T value = null;
         if (index >= 0 && index <= (list.size() - 1)) {
@@ -28,10 +28,10 @@ public class ListUtils {
     }
 
     public static @NonNull <T, V> V getAndApply(
-            @NonNull List<T> list,
-            int index,
-            @NonNull V def,
-            @NonNull Function<T, V> handler
+        @NonNull List<T> list,
+        int index,
+        @NonNull V def,
+        @NonNull Function<T, V> handler
     ) {
         T value = null;
         if (index >= 0 && index <= (list.size() - 1)) {
@@ -47,16 +47,16 @@ public class ListUtils {
     }
 
     public static @Nullable <T> T getOrNull(
-            T @NonNull [] list,
-            int index
+        T @NonNull [] list,
+        int index
     ) {
         return index >= 0 && index <= (list.length - 1) ? list[index] : null;
     }
 
     public static @NonNull <T> T getOrDefault(
-            T @NonNull [] list,
-            int index,
-            @NonNull T def
+        T @NonNull [] list,
+        int index,
+        @NonNull T def
     ) {
         T value = null;
         if (index >= 0 && index <= (list.length - 1)) {
@@ -66,10 +66,10 @@ public class ListUtils {
     }
 
     public static @NonNull <T, V> V getAndApply(
-            T @NonNull [] list,
-            int index,
-            @NonNull V def,
-            @NonNull Function<T, V> handler
+        T @NonNull [] list,
+        int index,
+        @NonNull V def,
+        @NonNull Function<T, V> handler
     ) {
         T value = null;
         if (index >= 0 && index <= (list.length - 1)) {

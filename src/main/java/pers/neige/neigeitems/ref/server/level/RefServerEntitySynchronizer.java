@@ -1,16 +1,9 @@
 package pers.neige.neigeitems.ref.server.level;
 
 import org.inksnow.ankhinvoke.comments.HandleBy;
-import pers.neige.neigeitems.ref.entity.RefEntity;
 import pers.neige.neigeitems.ref.entity.RefEntityPlayer;
 import pers.neige.neigeitems.ref.network.RefPacket;
-import pers.neige.neigeitems.ref.network.RefPlayerConnection;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @HandleBy(reference = "net/minecraft/server/level/ServerEntity$Synchronizer", predicates = "craftbukkit_version:[v1_21_R6,)")

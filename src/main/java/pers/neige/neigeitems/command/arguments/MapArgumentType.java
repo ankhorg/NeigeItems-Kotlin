@@ -38,15 +38,15 @@ public class MapArgumentType<T> implements ArgumentType<T> {
     }
 
     public static @NonNull <V> V getValue(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return (V) context.getArgument(name, Object.class);
     }
 
     @Override
     public @NonNull T parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) throws CommandSyntaxException {
         val key = CommandUtils.readUnquotedString(reader);
         T result = mapGetter.get().get(key);
@@ -58,8 +58,8 @@ public class MapArgumentType<T> implements ArgumentType<T> {
 
     @Override
     public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
-            @NonNull CommandContext<S> context,
-            @NonNull SuggestionsBuilder builder
+        @NonNull CommandContext<S> context,
+        @NonNull SuggestionsBuilder builder
     ) {
         val lowerCaseRemaining = builder.getRemaining().toLowerCase();
         mapGetter.get().keySet().forEach((id) -> {

@@ -67,8 +67,8 @@ public class PaperInventoryUtils {
      * @param title     待设置标题
      */
     public static void setTitle(
-            @NonNull Inventory inventory,
-            @NonNull String title
+        @NonNull Inventory inventory,
+        @NonNull String title
     ) throws IllegalAccessException {
         if (inventory instanceof RefCraftInventory) {
             RefContainer container = ((RefCraftInventory) inventory).getInventory();
@@ -93,8 +93,8 @@ public class PaperInventoryUtils {
      * @param title     JSON格式待设置标题
      */
     public static void setJsonTitle(
-            @NonNull Inventory inventory,
-            @NonNull String title
+        @NonNull Inventory inventory,
+        @NonNull String title
     ) throws IllegalAccessException {
         if (inventory instanceof RefCraftInventory) {
             RefContainer container = ((RefCraftInventory) inventory).getInventory();
@@ -119,8 +119,8 @@ public class PaperInventoryUtils {
      * @param title     待设置标题
      */
     public static void setTitle(
-            @NonNull Inventory inventory,
-            @NonNull Component title
+        @NonNull Inventory inventory,
+        @NonNull Component title
     ) throws IllegalAccessException {
         if (inventory instanceof RefCraftInventory) {
             RefContainer container = ((RefCraftInventory) inventory).getInventory();

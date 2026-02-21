@@ -24,13 +24,13 @@ public abstract class Action {
     }
 
     protected abstract @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     );
 
     public @NonNull CompletableFuture<ActionResult> evalAsyncSafe(
-            @NonNull BaseActionManager manager,
-            @NonNull ActionContext context
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
     ) {
         if (canRunInOtherThread()) {
             // 如果线程状态不一致, 回归原始线程
@@ -69,13 +69,13 @@ public abstract class Action {
     }
 
     public @NonNull CompletableFuture<ActionResult> evalAsyncSafe(
-            @NonNull ActionContext context
+        @NonNull ActionContext context
     ) {
         return evalAsyncSafe(manager, context);
     }
 
     public @NonNull CompletableFuture<ActionResult> eval(
-            @NonNull ActionContext context
+        @NonNull ActionContext context
     ) {
         return evalAsyncSafe(manager, context.clone());
     }

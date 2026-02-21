@@ -50,15 +50,15 @@ public class FileNameArgumentType implements ArgumentType<String> {
     }
 
     public static @NonNull String getFileName(
-            @NonNull CommandContext<CommandSender> context,
-            @NonNull String name
+        @NonNull CommandContext<CommandSender> context,
+        @NonNull String name
     ) {
         return context.getArgument(name, String.class);
     }
 
     @Override
     public @NonNull String parse(
-            @NonNull StringReader reader
+        @NonNull StringReader reader
     ) {
         if (greedy) {
             return CommandUtils.readAllString(reader);
@@ -69,8 +69,8 @@ public class FileNameArgumentType implements ArgumentType<String> {
 
     @Override
     public <S> @NonNull CompletableFuture<Suggestions> listSuggestions(
-            @NonNull CommandContext<S> context,
-            @NonNull SuggestionsBuilder builder
+        @NonNull CommandContext<S> context,
+        @NonNull SuggestionsBuilder builder
     ) {
         val files = ConfigUtils.getAllFiles(directory);
         val lowerCaseRemaining = builder.getRemaining().toLowerCase();

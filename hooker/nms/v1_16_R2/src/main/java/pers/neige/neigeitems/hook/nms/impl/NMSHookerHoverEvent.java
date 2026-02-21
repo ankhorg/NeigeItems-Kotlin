@@ -15,17 +15,17 @@ import pers.neige.neigeitems.utils.ItemUtils;
 public class NMSHookerHoverEvent extends NMSHooker {
     @Override
     public @NonNull HoverEvent hoverText(
-            @NonNull String text
+        @NonNull String text
     ) {
         return new HoverEvent(
-                HoverEvent.Action.SHOW_TEXT,
-                new TextComponent[]{new TextComponent(text)}
+            HoverEvent.Action.SHOW_TEXT,
+            new TextComponent[]{new TextComponent(text)}
         );
     }
 
     @Override
     public @NonNull HoverEvent hoverItem(
-            @NonNull ItemStack itemStack
+        @NonNull ItemStack itemStack
     ) {
         String nbtString;
         if (itemStack.getType() == Material.AIR) {
@@ -34,8 +34,8 @@ public class NMSHookerHoverEvent extends NMSHooker {
             nbtString = ItemUtils.getNbt(itemStack).toString();
         }
         return new HoverEvent(
-                HoverEvent.Action.SHOW_ITEM,
-                new ComponentBuilder("{id:\"" + getNamespacedKey(itemStack.getType()).getKey() + "\",Count:" + itemStack.getAmount() + "b,tag:" + nbtString + "}").create()
+            HoverEvent.Action.SHOW_ITEM,
+            new ComponentBuilder("{id:\"" + getNamespacedKey(itemStack.getType()).getKey() + "\",Count:" + itemStack.getAmount() + "b,tag:" + nbtString + "}").create()
         );
     }
 }

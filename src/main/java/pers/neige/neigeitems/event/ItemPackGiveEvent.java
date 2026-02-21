@@ -26,9 +26,9 @@ public final class ItemPackGiveEvent extends CancellableEvent {
      * @param itemStacks 待给予物品
      */
     public ItemPackGiveEvent(
-            @NonNull String id,
-            @NonNull Player player,
-            @NonNull List<ItemStack> itemStacks
+        @NonNull String id,
+        @NonNull Player player,
+        @NonNull List<ItemStack> itemStacks
     ) {
         this.id = id;
         this.player = player;
@@ -66,7 +66,7 @@ public final class ItemPackGiveEvent extends CancellableEvent {
      * @param itemStacks 待给予物品
      */
     public void setItemStacks(
-            @NonNull List<ItemStack> itemStacks
+        @NonNull List<ItemStack> itemStacks
     ) {
         this.itemStacks = itemStacks;
     }

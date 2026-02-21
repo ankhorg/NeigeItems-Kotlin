@@ -31,8 +31,8 @@ public abstract class Text {
     }
 
     public static Text compile(
-            @NonNull BaseActionManager manager,
-            @Nullable Object action
+        @NonNull BaseActionManager manager,
+        @Nullable Object action
     ) {
         if (action instanceof String) {
             return new StringText(manager, (String) action);

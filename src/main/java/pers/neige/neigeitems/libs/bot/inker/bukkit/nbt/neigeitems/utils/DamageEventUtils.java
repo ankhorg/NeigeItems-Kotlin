@@ -17,7 +17,7 @@ public class DamageEventUtils {
      * @param event 待检测事件.
      */
     public static boolean isCritical(
-            @NonNull EntityDamageByEntityEvent event
+        @NonNull EntityDamageByEntityEvent event
     ) {
         // 检测玩家攻击情况
         if (event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return false;
@@ -29,20 +29,20 @@ public class DamageEventUtils {
         RefEntityPlayer entityPlayer = ((RefCraftPlayer) attacker).getHandle();
         // 蓄力大于90%
         return EntityPlayerUtils.getAttackCooldown(player) > 0.9f
-                // 正在下落
-                && player.getFallDistance() > 0.0f
-                // 腿没着地
-                && !player.isOnGround()
-                // 脚没蹬梯子/藤蔓上
-                && !entityPlayer.onClimbable()
-                // 没淌水里
-                && !entityPlayer.isInWater()
-                // 没瞎
-                && !player.hasPotionEffect(PotionEffectType.BLINDNESS)
-                // 没骑东西
-                && !entityPlayer.isPassenger()
-                // 对方是个活的
-                && event.getEntity() instanceof LivingEntity;
+            // 正在下落
+            && player.getFallDistance() > 0.0f
+            // 腿没着地
+            && !player.isOnGround()
+            // 脚没蹬梯子/藤蔓上
+            && !entityPlayer.onClimbable()
+            // 没淌水里
+            && !entityPlayer.isInWater()
+            // 没瞎
+            && !player.hasPotionEffect(PotionEffectType.BLINDNESS)
+            // 没骑东西
+            && !entityPlayer.isPassenger()
+            // 对方是个活的
+            && event.getEntity() instanceof LivingEntity;
     }
 
     /**
@@ -51,7 +51,7 @@ public class DamageEventUtils {
      * @param event 待检测事件.
      */
     public static boolean isBlocking(
-            @NonNull EntityDamageEvent event
+        @NonNull EntityDamageEvent event
     ) {
         // 获取受击者
         Entity entity = event.getEntity();

@@ -65,32 +65,32 @@ public class ItemBuilder {
     }
 
     public ItemBuilder(
-            @Nullable Material material
+        @Nullable Material material
     ) {
         this.material = material;
     }
 
     public ItemBuilder(
-            @Nullable ItemStack itemStack
+        @Nullable ItemStack itemStack
     ) {
         this.itemStack = itemStack == null ? null : NbtUtils.asCraftCopy(itemStack);
     }
 
     public ItemBuilder(
-            @Nullable ConfigReader config
+        @Nullable ConfigReader config
     ) {
         load(config);
     }
 
     public void load(
-            @Nullable ConfigurationSection config
+        @Nullable ConfigurationSection config
     ) {
         if (config == null) return;
         load(ConfigReader.parse(config));
     }
 
     public void load(
-            @Nullable ConfigReader config
+        @Nullable ConfigReader config
     ) {
         if (config == null) return;
         for (val key : config.keySet()) {

@@ -18,9 +18,9 @@ public class ActionContainer {
     private final @NonNull String id;
 
     public ActionContainer(
-            @NonNull BaseActionManager actionManager,
-            @NonNull String id,
-            @Nullable ConfigurationSection config
+        @NonNull BaseActionManager actionManager,
+        @NonNull String id,
+        @Nullable ConfigurationSection config
     ) {
         this.id = id;
         if (config != null) {
@@ -38,8 +38,8 @@ public class ActionContainer {
     }
 
     public CompletableFuture<ActionResult> run(
-            @Nullable String triggerId,
-            @NonNull ActionContext context
+        @Nullable String triggerId,
+        @NonNull ActionContext context
     ) {
         if (triggerId != null) {
             val trigger = triggers.get(triggerId.toLowerCase());

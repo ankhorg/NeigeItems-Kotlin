@@ -18,9 +18,9 @@ public class ActionTrigger {
     private @NonNull Action sync;
 
     public ActionTrigger(
-            @NonNull BaseActionManager actionManager,
-            @NonNull String type,
-            @NonNull ConfigurationSection config
+        @NonNull BaseActionManager actionManager,
+        @NonNull String type,
+        @NonNull ConfigurationSection config
     ) {
         this.actionManager = actionManager;
         this.type = type;
@@ -30,9 +30,9 @@ public class ActionTrigger {
     }
 
     public ActionTrigger(
-            @NonNull BaseActionManager actionManager,
-            @NonNull String type,
-            @NonNull Action actions
+        @NonNull BaseActionManager actionManager,
+        @NonNull String type,
+        @NonNull Action actions
     ) {
         this.actionManager = actionManager;
         this.type = type;
@@ -74,7 +74,7 @@ public class ActionTrigger {
     }
 
     public @NonNull CompletableFuture<ActionResult> run(
-            @NonNull ActionContext context
+        @NonNull ActionContext context
     ) {
         async(context);
         sync(context);
@@ -82,7 +82,7 @@ public class ActionTrigger {
     }
 
     public void async(
-            @NonNull ActionContext context
+        @NonNull ActionContext context
     ) {
         SchedulerUtils.async(actionManager.getPlugin(), () -> {
             async.eval(context.clone());
@@ -90,7 +90,7 @@ public class ActionTrigger {
     }
 
     public void sync(
-            @NonNull ActionContext context
+        @NonNull ActionContext context
     ) {
         SchedulerUtils.sync(actionManager.getPlugin(), () -> {
             sync.eval(context.clone());

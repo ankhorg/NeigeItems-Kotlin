@@ -9,8 +9,8 @@ import pers.neige.neigeitems.ref.nbt.RefNbtTagString;
 public final class NbtString extends Nbt<RefNbtTagString> implements NbtStringLike {
     private static final boolean OF_SUPPORTED = CbVersion.v1_15_R1.isSupport();
     private static final NbtString EMPTY = new NbtString(OF_SUPPORTED
-            ? RefNbtTagString.of("")
-            : new RefNbtTagString(""));
+        ? RefNbtTagString.of("")
+        : new RefNbtTagString(""));
 
     NbtString(RefNbtTagString delegate) {
         super(delegate);
@@ -18,10 +18,10 @@ public final class NbtString extends Nbt<RefNbtTagString> implements NbtStringLi
 
     public static NbtString valueOf(String value) {
         return value.isEmpty()
-                ? EMPTY
-                : new NbtString(OF_SUPPORTED
-                ? RefNbtTagString.of(value)
-                : new RefNbtTagString(value));
+            ? EMPTY
+            : new NbtString(OF_SUPPORTED
+            ? RefNbtTagString.of(value)
+            : new RefNbtTagString(value));
     }
 
     static NbtString fromNmsImpl(RefNbtTagString delegate) {

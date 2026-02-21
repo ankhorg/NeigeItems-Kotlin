@@ -59,27 +59,27 @@ public class NewItemBuilder extends ItemBuilder {
     }
 
     public NewItemBuilder(
-            @Nullable Material material
+        @Nullable Material material
     ) {
         this.material = material;
     }
 
     public NewItemBuilder(
-            @Nullable ItemStack itemStack
+        @Nullable ItemStack itemStack
     ) {
         this.itemStack = itemStack == null ? null : NbtUtils.asCraftCopy(itemStack);
     }
 
     public NewItemBuilder(
-            @Nullable ConfigReader config
+        @Nullable ConfigReader config
     ) {
         load(config);
     }
 
     public static <T> void loadComponent(
-            @NonNull DataComponentPatch.Builder builder,
-            @NonNull DataComponentType<T> type,
-            @NonNull Object value
+        @NonNull DataComponentPatch.Builder builder,
+        @NonNull DataComponentType<T> type,
+        @NonNull Object value
     ) throws IllegalStateException {
         Tag tag = (Tag) Nbt.Unsafe.getDelegate(ItemUtils.toNbt(value));
         DataResult<T> result = type.codecOrThrow().parse(registryOps, tag);
@@ -88,7 +88,7 @@ public class NewItemBuilder extends ItemBuilder {
 
     @Override
     public void load(
-            @Nullable ConfigReader config
+        @Nullable ConfigReader config
     ) {
         if (config == null) return;
         for (String key : config.keySet()) {

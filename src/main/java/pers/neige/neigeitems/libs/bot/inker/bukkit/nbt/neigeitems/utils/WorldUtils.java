@@ -63,7 +63,7 @@ public class WorldUtils {
      * @return 世界中掉落物实体的最大存活时长(tick).
      */
     public static int getDespawnRate(
-            World world
+        World world
     ) {
         return ((RefCraftWorld) (Object) world).getHandle().spigotConfig.itemDespawnRate;
     }
@@ -78,19 +78,19 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull Item dropItem(
-            @NonNull World world,
-            @NonNull Location location,
-            @NonNull ItemStack itemStack,
-            @Nullable Consumer<Item> function
+        @NonNull World world,
+        @NonNull Location location,
+        @NonNull ItemStack itemStack,
+        @Nullable Consumer<Item> function
     ) {
         RefWorldServer worldServer = ((RefCraftWorld) (Object) world).getHandle();
 
         RefEntityItem entity = new RefEntityItem(
-                worldServer,
-                location.getX(),
-                location.getY(),
-                location.getZ(),
-                RefCraftItemStack.asNMSCopy(itemStack)
+            worldServer,
+            location.getX(),
+            location.getY(),
+            location.getZ(),
+            RefCraftItemStack.asNMSCopy(itemStack)
         );
         Item itemEntity = (Item) entity.getBukkitEntity();
         entity.pickupDelay = 10;
@@ -112,19 +112,19 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull Item dropItem(
-            @NonNull World world,
-            @NonNull Location location,
-            @NonNull ItemStack itemStack,
-            @NonNull Vector velocity
+        @NonNull World world,
+        @NonNull Location location,
+        @NonNull ItemStack itemStack,
+        @NonNull Vector velocity
     ) {
         RefWorldServer worldServer = ((RefCraftWorld) (Object) world).getHandle();
 
         RefEntityItem entity = new RefEntityItem(
-                worldServer,
-                location.getX(),
-                location.getY(),
-                location.getZ(),
-                RefCraftItemStack.asNMSCopy(itemStack)
+            worldServer,
+            location.getX(),
+            location.getY(),
+            location.getZ(),
+            RefCraftItemStack.asNMSCopy(itemStack)
         );
         Item itemEntity = (Item) entity.getBukkitEntity();
         entity.pickupDelay = 10;
@@ -145,11 +145,11 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull List<Entity> getNearbyEntities(
-            @NonNull Entity entity,
-            double x,
-            double y,
-            double z,
-            @Nullable Predicate<? super Entity> filter
+        @NonNull Entity entity,
+        double x,
+        double y,
+        double z,
+        @Nullable Predicate<? super Entity> filter
     ) {
         return getNearbyEntities(entity, x, y, z, Integer.MAX_VALUE, filter);
     }
@@ -165,11 +165,11 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull List<Entity> getNearbyEntities(
-            @NonNull Entity entity,
-            double x,
-            double y,
-            double z,
-            int limit
+        @NonNull Entity entity,
+        double x,
+        double y,
+        double z,
+        int limit
     ) {
         return getNearbyEntities(entity, x, y, z, limit, null);
     }
@@ -186,12 +186,12 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull List<Entity> getNearbyEntities(
-            @NonNull Entity entity,
-            double x,
-            double y,
-            double z,
-            int limit,
-            @Nullable Predicate<? super Entity> filter
+        @NonNull Entity entity,
+        double x,
+        double y,
+        double z,
+        int limit,
+        @Nullable Predicate<? super Entity> filter
     ) {
         Location location = entity.getLocation();
         return getEntities(entity, entity.getWorld(), location.getX() - x, location.getY() - y, location.getZ() - z, location.getX() + x, location.getY() + y, location.getZ() + z, limit, filter);
@@ -209,12 +209,12 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull List<Entity> getNearbyEntities(
-            @NonNull World world,
-            @NonNull Location location,
-            double x,
-            double y,
-            double z,
-            @Nullable Predicate<? super Entity> filter
+        @NonNull World world,
+        @NonNull Location location,
+        double x,
+        double y,
+        double z,
+        @Nullable Predicate<? super Entity> filter
     ) {
         return getNearbyEntities(world, location, x, y, z, Integer.MAX_VALUE, filter);
     }
@@ -231,12 +231,12 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull List<Entity> getNearbyEntities(
-            @NonNull World world,
-            @NonNull Location location,
-            double x,
-            double y,
-            double z,
-            int limit
+        @NonNull World world,
+        @NonNull Location location,
+        double x,
+        double y,
+        double z,
+        int limit
     ) {
         return getNearbyEntities(world, location, x, y, z, limit, null);
     }
@@ -254,13 +254,13 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull List<Entity> getNearbyEntities(
-            @NonNull World world,
-            @NonNull Location location,
-            double x,
-            double y,
-            double z,
-            int limit,
-            @Nullable Predicate<? super Entity> filter
+        @NonNull World world,
+        @NonNull Location location,
+        double x,
+        double y,
+        double z,
+        int limit,
+        @Nullable Predicate<? super Entity> filter
     ) {
         return getEntities(null, world, location.getX() - x, location.getY() - y, location.getZ() - z, location.getX() + x, location.getY() + y, location.getZ() + z, limit, filter);
     }
@@ -279,14 +279,14 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull List<Entity> getEntities(
-            @NonNull World world,
-            double minX,
-            double minY,
-            double minZ,
-            double maxX,
-            double maxY,
-            double maxZ,
-            @Nullable Predicate<? super Entity> filter
+        @NonNull World world,
+        double minX,
+        double minY,
+        double minZ,
+        double maxX,
+        double maxY,
+        double maxZ,
+        @Nullable Predicate<? super Entity> filter
     ) {
         return getEntities(null, world, minX, minY, minZ, maxX, maxY, maxZ, Integer.MAX_VALUE, filter);
     }
@@ -305,14 +305,14 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull List<Entity> getEntities(
-            @NonNull World world,
-            double minX,
-            double minY,
-            double minZ,
-            double maxX,
-            double maxY,
-            double maxZ,
-            int limit
+        @NonNull World world,
+        double minX,
+        double minY,
+        double minZ,
+        double maxX,
+        double maxY,
+        double maxZ,
+        int limit
     ) {
         return getEntities(null, world, minX, minY, minZ, maxX, maxY, maxZ, limit, null);
     }
@@ -332,15 +332,15 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull List<Entity> getEntities(
-            @NonNull World world,
-            double minX,
-            double minY,
-            double minZ,
-            double maxX,
-            double maxY,
-            double maxZ,
-            int limit,
-            @Nullable Predicate<? super Entity> filter
+        @NonNull World world,
+        double minX,
+        double minY,
+        double minZ,
+        double maxX,
+        double maxY,
+        double maxZ,
+        int limit,
+        @Nullable Predicate<? super Entity> filter
     ) {
         return getEntities(null, world, minX, minY, minZ, maxX, maxY, maxZ, limit, filter);
     }
@@ -361,16 +361,16 @@ public class WorldUtils {
      * @return 生成的掉落物.
      */
     public static @NonNull List<Entity> getEntities(
-            @Nullable Entity except,
-            @NonNull World world,
-            double minX,
-            double minY,
-            double minZ,
-            double maxX,
-            double maxY,
-            double maxZ,
-            int limit,
-            @Nullable Predicate<? super Entity> filter
+        @Nullable Entity except,
+        @NonNull World world,
+        double minX,
+        double minY,
+        double minZ,
+        double maxX,
+        double maxY,
+        double maxZ,
+        int limit,
+        @Nullable Predicate<? super Entity> filter
     ) {
         RefEntity realExcept = null;
         if (except instanceof RefCraftEntity) {
@@ -413,8 +413,8 @@ public class WorldUtils {
      * @return 生成的实体.
      */
     public static @Nullable Entity createEntity(
-            @NonNull Location location,
-            @NonNull EntityType type
+        @NonNull Location location,
+        @NonNull EntityType type
     ) {
         return createEntity(location, type, true);
     }
@@ -428,9 +428,9 @@ public class WorldUtils {
      * @return 生成的实体.
      */
     public static @Nullable Entity createEntity(
-            @NonNull Location location,
-            @NonNull EntityType type,
-            boolean randomizeData
+        @NonNull Location location,
+        @NonNull EntityType type,
+        boolean randomizeData
     ) {
         RefEntity entity = createNmsEntity(location, type, randomizeData);
         return entity == null ? null : entity.getBukkitEntity();
@@ -445,9 +445,9 @@ public class WorldUtils {
      * @return 生成的实体.
      */
     public static @Nullable Entity spawnEntity(
-            @NonNull Location location,
-            @NonNull EntityType type,
-            @Nullable Consumer<Entity> function
+        @NonNull Location location,
+        @NonNull EntityType type,
+        @Nullable Consumer<Entity> function
     ) {
         return spawnEntity(location, type, true, function, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
@@ -462,10 +462,10 @@ public class WorldUtils {
      * @return 生成的实体.
      */
     public static @Nullable Entity spawnEntity(
-            @NonNull Location location,
-            @NonNull EntityType type,
-            boolean randomizeData,
-            @Nullable Consumer<Entity> function
+        @NonNull Location location,
+        @NonNull EntityType type,
+        boolean randomizeData,
+        @Nullable Consumer<Entity> function
     ) {
         return spawnEntity(location, type, randomizeData, function, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
@@ -481,11 +481,11 @@ public class WorldUtils {
      * @return 生成的实体.
      */
     public static @Nullable Entity spawnEntity(
-            @NonNull Location location,
-            @NonNull EntityType type,
-            boolean randomizeData,
-            @Nullable Consumer<Entity> function,
-            @Nullable CreatureSpawnEvent.SpawnReason spawnReason
+        @NonNull Location location,
+        @NonNull EntityType type,
+        boolean randomizeData,
+        @Nullable Consumer<Entity> function,
+        @Nullable CreatureSpawnEvent.SpawnReason spawnReason
     ) {
         World world = location.getWorld();
         if (world == null) return null;
@@ -527,8 +527,8 @@ public class WorldUtils {
      * @return 对应的实体.
      */
     public static @Nullable Entity getEntityFromID(
-            @NonNull World world,
-            int entityId
+        @NonNull World world,
+        int entityId
     ) {
         if ((Object) world instanceof RefCraftWorld) {
             RefEntity entity = ((RefCraftWorld) (Object) world).getHandle().getEntity(entityId);
@@ -547,8 +547,8 @@ public class WorldUtils {
      * @return 对应的实体.
      */
     public static @NonNull CompletableFuture<Entity> getEntityFromIDAsync(
-            @NonNull World world,
-            int entityId
+        @NonNull World world,
+        int entityId
     ) {
         if (Bukkit.isPrimaryThread()) {
             return CompletableFuture.completedFuture(getEntityFromID(world, entityId));
@@ -569,8 +569,8 @@ public class WorldUtils {
      * @return 对应的实体.
      */
     public static @Nullable Entity getEntityFromID1(
-            @NonNull World world,
-            int entityId
+        @NonNull World world,
+        int entityId
     ) {
         if ((Object) world instanceof RefCraftWorld) {
             RefEntity entity = getEntityFromIDByNms1(((RefCraftWorld) (Object) world).getHandle(), entityId);
@@ -583,8 +583,8 @@ public class WorldUtils {
 
     @SuppressWarnings("unchecked")
     protected static @Nullable RefEntity getEntityFromIDByNms1(
-            @NonNull RefWorldServer world,
-            int entityId
+        @NonNull RefWorldServer world,
+        int entityId
     ) {
         RefServerEntity serverEntity = null;
         if (REMOVED_TRACKER) {
@@ -609,8 +609,8 @@ public class WorldUtils {
      * @return 生成的实体.
      */
     protected static @Nullable RefEntity createNmsEntity(
-            @NonNull Location location,
-            @NonNull EntityType type
+        @NonNull Location location,
+        @NonNull EntityType type
     ) {
         return createNmsEntity(location, type, true);
     }
@@ -624,9 +624,9 @@ public class WorldUtils {
      * @return 生成的实体.
      */
     protected static @Nullable RefEntity createNmsEntity(
-            @NonNull Location location,
-            @NonNull EntityType type,
-            boolean randomizeData
+        @NonNull Location location,
+        @NonNull EntityType type,
+        boolean randomizeData
     ) {
         World world = location.getWorld();
         if (world == null) return null;
@@ -642,7 +642,7 @@ public class WorldUtils {
     }
 
     public static Entity getEntityFromServerEntity(
-            @NonNull Object serverEntity
+        @NonNull Object serverEntity
     ) {
         if (serverEntity instanceof RefServerEntity) {
             return ((RefServerEntity) serverEntity).entity.getBukkitEntity();
