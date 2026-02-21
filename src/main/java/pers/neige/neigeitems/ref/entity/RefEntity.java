@@ -8,6 +8,7 @@ import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
 import pers.neige.neigeitems.ref.network.RefPacket;
 import pers.neige.neigeitems.ref.network.syncher.RefEntityDataAccessor;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData;
+import pers.neige.neigeitems.ref.server.level.RefServerEntity;
 import pers.neige.neigeitems.ref.world.RefAABB;
 import pers.neige.neigeitems.ref.world.RefVec3;
 import pers.neige.neigeitems.ref.world.RefWorld;
@@ -190,11 +191,14 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;getDataWatcher()Lnet/minecraft/server/v1_12_R1/DataWatcher;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native RefSynchedEntityData getEntityData();
 
-    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getAddEntityPacket()Lnet/minecraft/network/protocol/Packet;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getAddEntityPacket()Lnet/minecraft/network/protocol/Packet;", predicates = "craftbukkit_version:[v1_17_R1,v1_21_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/Entity;P()Lnet/minecraft/server/v1_15_R1/Packet;", predicates = "craftbukkit_version:[v1_16_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_15_R1/Entity;L()Lnet/minecraft/server/v1_15_R1/Packet;", predicates = "craftbukkit_version:[v1_15_R1,v1_16_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/Entity;N()Lnet/minecraft/server/v1_14_R1/Packet;", predicates = "craftbukkit_version:[v1_14_R1,v1_15_R1)")
     public native RefPacket<?> getAddEntityPacket();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getAddEntityPacket(Lnet/minecraft/server/level/ServerEntity;)Lnet/minecraft/network/protocol/Packet;", predicates = "craftbukkit_version:[v1_21_R1,)")
+    public native RefPacket<?> getAddEntityPacket(RefServerEntity serverEntity);
 
     @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;getId()I", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;getId()I", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")

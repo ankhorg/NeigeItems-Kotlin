@@ -17,4 +17,13 @@ public class RefEntityType<T extends RefEntity> {
     @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/EntityTypes;f()Ljava/lang/String;", predicates = "craftbukkit_version:[v1_14_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/EntityTypes;d()Ljava/lang/String;", predicates = "craftbukkit_version:[v1_13_R1,v1_14_R1)")
     public native String getDescriptionId();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/EntityType;updateInterval()I", predicates = "craftbukkit_version:[v1_21_R1,)")
+    public native int updateInterval();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/EntityType;trackDeltas()Z", predicates = "craftbukkit_version:[v1_21_R1,)")
+    public native boolean trackDeltas();
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/EntityType;clientTrackingRange()I", predicates = "craftbukkit_version:[v1_21_R1,)")
+    public native int clientTrackingRange();
 }

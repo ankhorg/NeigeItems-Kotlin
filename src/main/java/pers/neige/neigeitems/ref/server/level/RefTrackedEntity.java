@@ -15,4 +15,9 @@ public class RefTrackedEntity {
     public final RefEntity entity = null;
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/EntityTracker;trackedEntities:Lnet/minecraft/server/v1_12_R1/IntHashMap;", predicates = "craftbukkit_version:[v1_12_R1,v1_14_R1)")
     public final RefIntHashMap<RefServerEntity> trackedEntities = null;
+
+    @HandleBy(reference = "Lnet/minecraft/server/level/ChunkMap$TrackedEntity;<init>(Lnet/minecraft/server/level/ChunkMap;Lnet/minecraft/world/entity/Entity;IIZ)V", predicates = "craftbukkit_version:[v1_21_R1,)")
+    public RefTrackedEntity(RefChunkMap chunkMap, RefEntity entity, final int range, final int updateInterval, final boolean trackDelta) {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -14,6 +14,7 @@ import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.EnumHand;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.animation.AnimationType;
 import pers.neige.neigeitems.ref.argument.RefAnchor;
@@ -29,8 +30,11 @@ import pers.neige.neigeitems.ref.network.*;
 import pers.neige.neigeitems.ref.network.syncher.RefEntityDataAccessor;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData;
 import pers.neige.neigeitems.ref.network.syncher.RefSynchedEntityData$DataValue;
+import pers.neige.neigeitems.ref.server.level.RefChunkMap;
 import pers.neige.neigeitems.ref.server.level.RefServerEntity;
+import pers.neige.neigeitems.ref.server.level.RefTrackedEntity;
 import pers.neige.neigeitems.ref.server.level.RefWorldServer;
+import pers.neige.neigeitems.ref.spigot.RefTrackingRange;
 import pers.neige.neigeitems.ref.world.RefCraftWorld;
 import pers.neige.neigeitems.ref.world.RefVec3;
 import pers.neige.neigeitems.ref.world.inventory.RefCraftContainer;
@@ -95,6 +99,18 @@ public class EntityPlayerUtils {
      * 1.14+ 版本起, Entity 类添加 addEntityPacket 方法, 返回对应的添加实体数据包.
      */
     private static final boolean ADD_ENTITY_PACKET_SUPPORT = CbVersion.v1_14_R1.isSupport();
+    /**
+     * 1.21+ 版本起, Entity 类 addEntityPacket 方法添加 ServerEntity 参数.
+     */
+    private static final boolean DIFFERENT_ADD_ENTITY_PACKET = CbVersion.v1_21_R1.isSupport();
+    /**
+     * 1.21.5+ 版本起, ServerEntity 类构造函数里出现了两个 Consumer.
+     */
+    private static final boolean TWO_CONSUMER_SERVER_ENTITY = CbVersion.v1_21_R4.isSupport();
+    /**
+     * 1.21.10+ 版本起, ServerEntity 类构造函数里出现了 synchronizer.
+     */
+    private static final boolean SYNCHRONIZER_SERVER_ENTITY = CbVersion.v1_21_R6.isSupport();
     /**
      * 1.19.4+ 版本起, SynchedEntityData 下 set 方法添加 boolean 类型 force 参数, 用于强制设置.
      */
@@ -635,7 +651,11 @@ public class EntityPlayerUtils {
         if (player instanceof RefCraftPlayer) {
             RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
-            if (ADD_ENTITY_PACKET_SUPPORT) {
+            if (DIFFERENT_ADD_ENTITY_PACKET) {
+                int trackRange = RefTrackingRange.getEntityTrackingRange(entity, entity.getType().clientTrackingRange() * 16);
+                RefTrackedEntity trackedEntity = InvokeUtil.newTrackedEntity(entity, Math.max(1, trackRange), entity.getType().updateInterval(), entity.getType().trackDeltas());
+                nmsPlayer.playerConnection.sendPacket(entity.getAddEntityPacket(trackedEntity.serverEntity));
+            } else if (ADD_ENTITY_PACKET_SUPPORT) {
                 nmsPlayer.playerConnection.sendPacket(entity.getAddEntityPacket());
             } else {
                 RefServerEntity serverEntity = new RefServerEntity(entity, 0, 0, 0, false);
@@ -664,7 +684,11 @@ public class EntityPlayerUtils {
             RefEntity nmsEntity = ((RefCraftEntity) entity).getHandle();
             RefEntityPlayer nmsPlayer = ((RefCraftPlayer) player).getHandle();
 
-            if (ADD_ENTITY_PACKET_SUPPORT) {
+            if (DIFFERENT_ADD_ENTITY_PACKET) {
+                int trackRange = RefTrackingRange.getEntityTrackingRange(nmsEntity, nmsEntity.getType().clientTrackingRange() * 16);
+                RefTrackedEntity trackedEntity = InvokeUtil.newTrackedEntity(nmsEntity, Math.max(1, trackRange), nmsEntity.getType().updateInterval(), nmsEntity.getType().trackDeltas());
+                nmsPlayer.playerConnection.sendPacket(nmsEntity.getAddEntityPacket(trackedEntity.serverEntity));
+            } else if (ADD_ENTITY_PACKET_SUPPORT) {
                 nmsPlayer.playerConnection.sendPacket(nmsEntity.getAddEntityPacket());
             } else {
                 RefServerEntity serverEntity = new RefServerEntity(nmsEntity, 0, 0, 0, false);
