@@ -1,6 +1,7 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
 $dokka.location:pers.neige.neigeitems.action.impl/TreeAction.TreeActionType///PointingToDeclaration/pers/neige/neigeitems/action/impl/TreeAction.TreeActionType.html
+$dokka.location:pers.neige.neigeitems.action/ActionContext.Builder///PointingToDeclaration/pers/neige/neigeitems/action/ActionContext.Builder.html
 $dokka.location:pers.neige.neigeitems.annotation/Awake.LifeCycle///PointingToDeclaration/pers/neige/neigeitems/annotation/Awake.LifeCycle.html
 $dokka.location:pers.neige.neigeitems.colonel.argument.command/FunctionArgument.FunctionContainer///PointingToDeclaration/pers/neige/neigeitems/colonel/argument/command/FunctionArgument.FunctionContainer.html
 $dokka.location:pers.neige.neigeitems.colonel.argument.command/ItemArgument.ItemContainer///PointingToDeclaration/pers/neige/neigeitems/colonel/argument/command/ItemArgument.ItemContainer.html
