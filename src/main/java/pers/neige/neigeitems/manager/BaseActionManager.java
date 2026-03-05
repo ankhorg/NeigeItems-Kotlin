@@ -3,6 +3,7 @@ package pers.neige.neigeitems.manager;
 import com.google.common.io.ByteStreams;
 import kotlin.text.StringsKt;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.val;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,6 +51,7 @@ import java.util.logging.Level;
 import static pers.neige.neigeitems.utils.ListUtils.*;
 
 @SuppressWarnings("unchecked")
+@ToString(of = "plugin")
 public abstract class BaseActionManager {
     public final @NonNull Action NULL_ACTION = new NullAction(this);
     public final @NonNull Text NULL_TEXT = new NullText(this);
@@ -1144,7 +1146,7 @@ public abstract class BaseActionManager {
             if (player == null) return;
             val hooker = HookerManager.INSTANCE.getVaultHooker();
             if (hooker == null) return;
-            hooker.giveMoney(player, StringUtils.parseDouble(content, 0.0));
+            hooker.giveMoney(player, NumberParser.parseDouble(content, 0.0));
         });
         // 扣除玩家金钱
         addConsumer(Arrays.asList("take-money", "takeMoney"), (context, content) -> {
@@ -1152,100 +1154,100 @@ public abstract class BaseActionManager {
             if (player == null) return;
             val hooker = HookerManager.INSTANCE.getVaultHooker();
             if (hooker == null) return;
-            hooker.takeMoney(player, StringUtils.parseDouble(content, 0.0));
+            hooker.takeMoney(player, NumberParser.parseDouble(content, 0.0));
         });
         // 给予玩家经验
         addConsumer(Arrays.asList("give-exp", "giveExp"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.parseInteger(content, 0));
+            HookerManager.INSTANCE.getNmsHooker().giveExp(player, NumberParser.parseInteger(content, 0));
         });
         // 扣除玩家经验
         addConsumer(Arrays.asList("take-exp", "takeExp"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.parseInteger(content, 0) * -1);
+            HookerManager.INSTANCE.getNmsHooker().giveExp(player, NumberParser.parseInteger(content, 0) * -1);
         });
         // 设置玩家经验
         addConsumer(Arrays.asList("set-exp", "setExp"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            HookerManager.INSTANCE.getNmsHooker().giveExp(player, StringUtils.parseInteger(content, 0) - player.getTotalExperience());
+            HookerManager.INSTANCE.getNmsHooker().giveExp(player, NumberParser.parseInteger(content, 0) - player.getTotalExperience());
         });
         // 给予玩家经验等级
         addConsumer(Arrays.asList("give-level", "giveLevel"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            player.giveExpLevels(StringUtils.parseInteger(content, 0));
+            player.giveExpLevels(NumberParser.parseInteger(content, 0));
         });
         // 扣除玩家经验等级
         addConsumer(Arrays.asList("take-level", "takeLevel"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            player.giveExpLevels(StringUtils.parseInteger(content, 0) * -1);
+            player.giveExpLevels(NumberParser.parseInteger(content, 0) * -1);
         });
         // 设置玩家经验等级
         addConsumer(Arrays.asList("set-level", "setLevel"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            player.setLevel(StringUtils.parseInteger(content, 0));
+            player.setLevel(NumberParser.parseInteger(content, 0));
         });
         // 给予玩家饱食度
         addConsumer(Arrays.asList("give-food", "giveFood"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, StringUtils.parseInteger(content, 0))));
+            player.setFoodLevel(player.getFoodLevel() + Math.max(0, Math.min(20, NumberParser.parseInteger(content, 0))));
         });
         // 扣除玩家饱食度
         addConsumer(Arrays.asList("take-food", "takeFood"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, StringUtils.parseInteger(content, 0))));
+            player.setFoodLevel(player.getFoodLevel() - Math.max(0, Math.min(20, NumberParser.parseInteger(content, 0))));
         });
         // 设置玩家饱食度
         addConsumer(Arrays.asList("set-food", "setFood"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            player.setFoodLevel(Math.max(0, Math.min(20, StringUtils.parseInteger(content, 0))));
+            player.setFoodLevel(Math.max(0, Math.min(20, NumberParser.parseInteger(content, 0))));
         });
         // 给予玩家饱和度
         addConsumer(Arrays.asList("give-saturation", "giveSaturation"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + StringUtils.parseFloat(content, 0))));
+            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() + NumberParser.parseFloat(content, 0))));
         });
         // 扣除玩家饱和度
         addConsumer(Arrays.asList("take-saturation", "takeSaturation"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - StringUtils.parseFloat(content, 0))));
+            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), player.getSaturation() - NumberParser.parseFloat(content, 0))));
         });
         // 设置玩家饱和度
         addConsumer(Arrays.asList("set-saturation", "setSaturation"), false, (context, content) -> {
             val player = context.getPlayer();
             if (player == null) return;
-            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), StringUtils.parseFloat(content, 0))));
+            player.setSaturation(Math.max(0, Math.min(player.getFoodLevel(), NumberParser.parseFloat(content, 0))));
         });
         // 给予玩家生命
         addConsumer(Arrays.asList("give-health", "giveHealth"), false, (context, content) -> {
             val caster = context.getCaster();
             if (!(caster instanceof LivingEntity)) return;
             val entity = (LivingEntity) caster;
-            entity.setHealth(Math.max(0, Math.min(Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), entity.getHealth() + StringUtils.parseDouble(content, 0))));
+            entity.setHealth(Math.max(0, Math.min(Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), entity.getHealth() + NumberParser.parseDouble(content, 0))));
         });
         // 扣除玩家生命
         addConsumer(Arrays.asList("take-health", "takeHealth"), false, (context, content) -> {
             val caster = context.getCaster();
             if (!(caster instanceof LivingEntity)) return;
             val entity = (LivingEntity) caster;
-            entity.setHealth(Math.max(0, Math.min(Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), entity.getHealth() - StringUtils.parseDouble(content, 0))));
+            entity.setHealth(Math.max(0, Math.min(Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), entity.getHealth() - NumberParser.parseDouble(content, 0))));
         });
         // 设置玩家生命
         addConsumer(Arrays.asList("set-health", "setHealth"), false, (context, content) -> {
             val caster = context.getCaster();
             if (!(caster instanceof LivingEntity)) return;
             val entity = (LivingEntity) caster;
-            entity.setHealth(Math.max(0, Math.min(Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), StringUtils.parseDouble(content, 0))));
+            entity.setHealth(Math.max(0, Math.min(Objects.requireNonNull(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue(), NumberParser.parseDouble(content, 0))));
         });
         // 释放MM技能
         addConsumer(Arrays.asList("cast-skill", "castSkill"), (context, content) -> {
@@ -1296,8 +1298,8 @@ public abstract class BaseActionManager {
             val args = content.split(" ", 3);
             if (args.length < 3) return;
             val type = PotionEffectType.getByName(args[0].toUpperCase(Locale.ROOT));
-            val amplifier = StringUtils.parseInteger(args[1]);
-            val duration = StringUtils.parseInteger(args[2]);
+            val amplifier = NumberParser.parseInteger(args[1]);
+            val duration = NumberParser.parseInteger(args[2]);
             if (type == null || duration == null || amplifier == null) return;
             entity.addPotionEffect(new PotionEffect(type, duration * 20, amplifier - 1), true);
         });
@@ -1313,7 +1315,7 @@ public abstract class BaseActionManager {
         // 延迟(单位是tick)
         addFunction("delay", (context, content) -> {
             val result = new CompletableFuture<ActionResult>();
-            SchedulerUtils.runLater(plugin, StringUtils.parseInteger(content, 0), () -> {
+            SchedulerUtils.runLater(plugin, NumberParser.parseInteger(content, 0), () -> {
                 result.complete(Results.SUCCESS);
             });
             return result;
@@ -1370,7 +1372,7 @@ public abstract class BaseActionManager {
             val args = content.split(" ", 2);
             if (args.length < 2) return;
             val itemId = args[0];
-            int amount = StringUtils.parseInteger(args[1], 0);
+            int amount = NumberParser.parseInteger(args[1], 0);
             val contents = player.getInventory().getContents();
             for (val itemStack : contents) {
                 val currentItemId = ItemUtils.getItemId(itemStack);

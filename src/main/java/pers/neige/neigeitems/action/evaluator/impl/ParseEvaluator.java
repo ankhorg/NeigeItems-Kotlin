@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.action.evaluator.impl;
 
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -11,6 +12,7 @@ import pers.neige.neigeitems.utils.SectionUtils;
 
 import java.util.Map;
 
+@ToString(callSuper = true)
 public abstract class ParseEvaluator<T> extends Evaluator<T> {
     protected final @Nullable String formula;
 

@@ -1,6 +1,7 @@
 package pers.neige.neigeitems.action.impl;
 
 import lombok.NonNull;
+import lombok.val;
 import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
@@ -21,8 +22,8 @@ public class ListAction extends Action {
     ) {
         super(manager);
         actions = new ArrayList<>();
-        for (Object it : action) {
-            actions.add(manager.compile(it));
+        for (val element : action) {
+            actions.add(manager.compile(element));
         }
         checkAsyncSafe();
     }

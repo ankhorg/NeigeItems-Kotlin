@@ -14,6 +14,9 @@ import java.util.function.UnaryOperator;
 @HandleBy(reference = "net/minecraft/world/item/ItemStack", predicates = "craftbukkit_version:[v1_17_R1,)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/ItemStack", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public final class RefNmsItemStack {
+    @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/ItemStack;d:I", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_13_R1)")
+    public int animationsToGo;
+
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;components:Lnet/minecraft/core/component/PatchedDataComponentMap;", useAccessor = true, predicates = "craftbukkit_version:[v1_20_R4,)")
     public RefPatchedDataComponentMap components;
 

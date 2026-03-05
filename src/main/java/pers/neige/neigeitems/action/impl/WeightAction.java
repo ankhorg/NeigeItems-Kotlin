@@ -30,7 +30,7 @@ public class WeightAction extends Action {
         @NonNull ConfigReader action
     ) {
         super(manager);
-        this.amount = Evaluator.createIntegerEvaluator(manager, action.getString("amount"));
+        this.amount = Evaluator.createIntegerEvaluator(manager, action.get("amount"));
         this.order = action.getBoolean("order", false);
         initActions(manager, action.get("actions"));
         checkAsyncSafe();

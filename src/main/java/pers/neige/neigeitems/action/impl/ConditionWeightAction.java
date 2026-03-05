@@ -21,7 +21,7 @@ public class ConditionWeightAction extends Action {
 
     public ConditionWeightAction(@NonNull BaseActionManager manager, @NonNull ConfigReader action) {
         super(manager);
-        this.amount = Evaluator.createIntegerEvaluator(manager, action.getString("amount"));
+        this.amount = Evaluator.createIntegerEvaluator(manager, action.get("amount"));
         this.order = action.getBoolean("order", false);
         initActions(manager, action.get("actions"));
         checkAsyncSafe();
@@ -42,10 +42,9 @@ public class ConditionWeightAction extends Action {
         for (val rawAction : list) {
             val config = ConfigReader.parse(rawAction);
             if (config == null) continue;
-            val rawWeight = config.getString("weight", "1");
             val condition = new Condition(manager, config.getString("condition"));
             val action = manager.compile(config.get("actions"));
-            this.actions.add(new Pair<>(new Pair<>(condition, action), Evaluator.createDoubleEvaluator(manager, rawWeight)));
+            this.actions.add(new Pair<>(new Pair<>(condition, action), Evaluator.createDoubleEvaluator(manager, config.get("weight"))));
         }
     }
 
@@ -67,7 +66,7 @@ public class ConditionWeightAction extends Action {
         for (val action : this.actions) {
             val info = action.getFirst();
             if (info.getFirst().easyCheck(context)) {
-                val weight = action.getSecond().getOrDefault(context, 0D);
+                val weight = action.getSecond().getOrDefault(context, 1D);
                 if (weight <= 0) continue;
                 result.add(new Pair<>(info.getSecond(), weight));
             }

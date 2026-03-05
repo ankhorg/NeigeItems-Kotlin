@@ -296,17 +296,15 @@ public class ActionContext implements Cloneable {
             return this;
         }
 
-        @SuppressWarnings("unchecked")
-        private <T> ActionContext build0() {
+        public ActionContext build() {
             ActionContext context = new ActionContext(caster, global, params);
             values.forEach((key, value) -> {
-                context.set((ContextKey<T>) key, (T) value);
+                context.values.put(key, value);
+                key.getNames().forEach((alias) -> {
+                    context.bindings.put(alias, value);
+                });
             });
             return context;
-        }
-
-        public ActionContext build() {
-            return build0();
         }
     }
 }

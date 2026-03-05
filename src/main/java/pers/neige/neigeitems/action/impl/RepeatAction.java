@@ -23,7 +23,7 @@ public class RepeatAction extends Action {
     ) {
         super(manager);
         this.globalId = config.getString("global-id", "i");
-        this.repeat = Evaluator.createIntegerEvaluator(manager, config.getString("repeat"));
+        this.repeat = Evaluator.createIntegerEvaluator(manager, config.get("repeat"));
         this.actions = manager.compile(config.get("actions"));
         this.canRunInOtherThread = new ThreadSafeLazyBoolean(actions::canRunInOtherThread);
     }

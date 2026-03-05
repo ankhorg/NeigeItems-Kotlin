@@ -1,0 +1,19 @@
+package pers.neige.neigeitems.action.evaluator.impl.i64;
+
+import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
+import pers.neige.neigeitems.action.evaluator.Evaluator;
+import pers.neige.neigeitems.action.evaluator.impl.DoubleTreeEvaluator;
+import pers.neige.neigeitems.config.ConfigReader;
+import pers.neige.neigeitems.manager.BaseActionManager;
+
+public class DoubleTreeLongEvaluator extends DoubleTreeEvaluator<Long> {
+    public DoubleTreeLongEvaluator(@NonNull BaseActionManager manager, @NonNull ConfigReader config) {
+        super(manager, Long.class, config);
+    }
+
+    @Override
+    protected @NonNull Evaluator<Long> parseEvaluator(@Nullable Object input) {
+        return Evaluator.createLongEvaluator(manager, input);
+    }
+}

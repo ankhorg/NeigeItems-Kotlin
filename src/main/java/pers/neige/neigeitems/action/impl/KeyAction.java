@@ -28,7 +28,7 @@ public class KeyAction extends Action {
     ) {
         super(manager);
         this.globalId = config.getString("global-id", "key");
-        this.key = Evaluator.createStringEvaluator(manager, config.getString("key"));
+        this.key = Evaluator.createStringEvaluator(manager, config.get("key"));
         this.defaultAction = manager.compile(config.get("default-action"));
         this.matchAction = manager.compile(config.get("match-action"));
         val actionsConfig = config.getConfig("actions");

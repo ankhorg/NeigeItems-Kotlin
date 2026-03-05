@@ -13,7 +13,7 @@ public class DoubleTreeAction extends TreeAction<Double> {
 
     public DoubleTreeAction(@NonNull BaseActionManager manager, @NonNull ConfigReader config) {
         super(manager, config, Double.class);
-        this.key = Evaluator.createDoubleEvaluator(manager, config.getString("key"));
+        this.key = Evaluator.createDoubleEvaluator(manager, config.get("key"));
     }
 
     @Override

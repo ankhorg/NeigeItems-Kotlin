@@ -27,7 +27,7 @@ public class ContainsAction extends Action {
     ) {
         super(manager);
         this.globalId = config.getString("global-id", "key");
-        this.key = Evaluator.createStringEvaluator(manager, config.getString("key"));
+        this.key = Evaluator.createStringEvaluator(manager, config.get("key"));
         this.defaultAction = manager.compile(config.get("default-action"));
         this.containsAction = manager.compile(config.get("contains-action"));
         this.elements = new HashSet<>(config.getStringList("elements"));

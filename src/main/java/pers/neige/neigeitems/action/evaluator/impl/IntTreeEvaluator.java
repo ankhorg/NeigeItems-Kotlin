@@ -1,25 +1,27 @@
-package pers.neige.neigeitems.action.impl;
+package pers.neige.neigeitems.action.evaluator.impl;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.val;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.action.ActionType;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.NumberParser;
 
-public class IntTreeAction extends TreeAction<Integer> {
-    private final @NonNull Evaluator<Integer> key;
+@Getter
+@ToString(callSuper = true)
+public abstract class IntTreeEvaluator<T> extends TreeEvaluator<Integer, T> {
+    private final @NonNull Evaluator<Integer> value;
 
-    public IntTreeAction(@NonNull BaseActionManager manager, @NonNull ConfigReader config) {
-        super(manager, config, Integer.class);
-        this.key = Evaluator.createIntegerEvaluator(manager, config.get("key"));
-    }
-
-    @Override
-    public @NonNull ActionType getType() {
-        return ActionType.INT_TREE;
+    public IntTreeEvaluator(
+        @NonNull BaseActionManager manager,
+        @NonNull Class<T> type,
+        @NonNull ConfigReader config
+    ) {
+        super(manager, type, config, Integer.class);
+        this.value = Evaluator.createIntegerEvaluator(manager, config.get("value"));
     }
 
     @Override
@@ -29,10 +31,5 @@ public class IntTreeAction extends TreeAction<Integer> {
         val doubleParseResult = NumberParser.parseDouble(result.toString());
         if (doubleParseResult != null) return doubleParseResult.intValue();
         return null;
-    }
-
-    @Override
-    public @NonNull Evaluator<Integer> getKey() {
-        return key;
     }
 }

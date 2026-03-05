@@ -1,6 +1,8 @@
 package pers.neige.neigeitems.action.evaluator.impl;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +16,8 @@ import javax.script.Compilable;
 import javax.script.ScriptException;
 import java.util.logging.Level;
 
+@Getter
+@ToString(callSuper = true)
 public class JsEvaluator<T> extends Evaluator<T> {
     protected final @Nullable ScriptWithSource script;
 
@@ -24,10 +28,6 @@ public class JsEvaluator<T> extends Evaluator<T> {
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public @Nullable ScriptWithSource getScript() {
-        return script;
     }
 
     public @Nullable T cast(@NonNull Object result) {
