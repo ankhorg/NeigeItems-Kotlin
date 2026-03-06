@@ -153,6 +153,7 @@ public class ActionContext implements Cloneable {
         }
         values.forEach((key, value) -> {
             key.getNames().forEach((alias) -> {
+                if (key.isPutInGlobal()) global.put(alias, value);
                 bindings.put(alias, value);
             });
         });
@@ -213,6 +214,7 @@ public class ActionContext implements Cloneable {
     public <T> void set(@NonNull ContextKey<T> key, @Nullable T value) {
         values.put(key, value);
         key.getNames().forEach((alias) -> {
+            if (key.isPutInGlobal()) global.put(alias, value);
             bindings.put(alias, value);
         });
     }
@@ -224,7 +226,10 @@ public class ActionContext implements Cloneable {
 
     @SuppressWarnings("unchecked")
     public <T> @Nullable T remove(@NonNull ContextKey<T> key) {
-        key.getNames().forEach(bindings::remove);
+        key.getNames().forEach((alias) -> {
+            if (key.isPutInGlobal()) global.remove(alias);
+            bindings.remove(alias);
+        });
         return (T) values.remove(key);
     }
 
@@ -301,6 +306,7 @@ public class ActionContext implements Cloneable {
             values.forEach((key, value) -> {
                 context.values.put(key, value);
                 key.getNames().forEach((alias) -> {
+                    if (key.isPutInGlobal()) context.global.put(alias, value);
                     context.bindings.put(alias, value);
                 });
             });

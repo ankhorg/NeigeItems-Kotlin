@@ -13,7 +13,7 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.Translat
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.text.impl.ConditionText;
 import pers.neige.neigeitems.text.impl.ListText;
-import pers.neige.neigeitems.text.impl.StringText;
+import pers.neige.neigeitems.text.impl.OtherText;
 
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -34,14 +34,20 @@ public abstract class Text {
         @NonNull BaseActionManager manager,
         @Nullable Object action
     ) {
+        if (action == null) return manager.NULL_TEXT;
         if (action instanceof String) {
-            return new StringText(manager, (String) action);
+            return new OtherText(manager, action);
         } else if (action instanceof List<?>) {
             return new ListText(manager, (List<?>) action);
         }
         val config = ConfigReader.parse(action);
-        if (config == null) return manager.NULL_TEXT;
-        return new ConditionText(manager, config);
+        if (config == null) {
+            return new OtherText(manager, action.toString());
+        }
+        if (config.containsKey("condition")) {
+            return new ConditionText(manager, config);
+        }
+        return new OtherText(manager, config);
     }
 
     public @NonNull <T, R extends List<T>> R getText(@NonNull R result, @NonNull BaseActionManager manager, @NonNull ActionContext context, Function<String, T> converter) {
@@ -50,7 +56,7 @@ public abstract class Text {
 
     public @NonNull NbtList getLoreNbt(@NonNull BaseActionManager manager, @NonNull ActionContext context) {
         if (CbVersion.v1_20_R4.isSupport()) {
-            throw new InvalidParameterException("1.20.5+版本, 你拿你妈了个逼的NBT形式Lore啊? 你Lore是NBT形式吗你就拿?");
+            throw new InvalidParameterException("1.20.5+版本Lore不以NBT形式存储");
         } else if (CbVersion.current() == CbVersion.v1_12_R1) {
             return getText(new NbtList(), manager, context, converterV12);
         } else if (CbVersion.v1_16_R3.isSupport()) {

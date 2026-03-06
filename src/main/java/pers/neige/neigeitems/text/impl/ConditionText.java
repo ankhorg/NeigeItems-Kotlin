@@ -20,9 +20,9 @@ public class ConditionText extends Text {
         @NonNull ConfigReader lore
     ) {
         super(manager);
-        condition = new Condition(manager, lore.getString("condition"));
+        this.condition = new Condition(manager, lore.getString("condition"));
         this.text = Text.compile(manager, lore.get("text"));
-        deny = Text.compile(manager, lore.get("deny"));
+        this.deny = Text.compile(manager, lore.get("deny"));
     }
 
     public @NonNull Condition getCondition() {
