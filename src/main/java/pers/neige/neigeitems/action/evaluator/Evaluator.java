@@ -96,7 +96,7 @@ public class Evaluator<T> {
                 return new RawStringEvaluator(manager, content);
             }
         }
-        return manager.NULL_STRING_EVALUATOR;
+        return createStringEvaluator(manager, input.toString());
     }
 
     public static @NonNull Evaluator<Integer> createIntegerEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
@@ -171,7 +171,7 @@ public class Evaluator<T> {
                 return new RawIntegerEvaluator(manager, content);
             }
         }
-        return manager.NULL_INTEGER_EVALUATOR;
+        return createIntegerEvaluator(manager, input.toString());
     }
 
     public static @NonNull Evaluator<Long> createLongEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
@@ -246,7 +246,7 @@ public class Evaluator<T> {
                 return new RawLongEvaluator(manager, content);
             }
         }
-        return manager.NULL_LONG_EVALUATOR;
+        return createLongEvaluator(manager, input.toString());
     }
 
     public static @NonNull Evaluator<Double> createDoubleEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
@@ -321,7 +321,7 @@ public class Evaluator<T> {
                 return new RawDoubleEvaluator(manager, content);
             }
         }
-        return manager.NULL_DOUBLE_EVALUATOR;
+        return createDoubleEvaluator(manager, input.toString());
     }
 
     public static @NonNull Evaluator<Boolean> createBooleanEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
@@ -396,7 +396,7 @@ public class Evaluator<T> {
                 return new RawBooleanEvaluator(manager, content);
             }
         }
-        return manager.NULL_BOOLEAN_EVALUATOR;
+        return createBooleanEvaluator(manager, input.toString());
     }
 
     @Contract("_, !null -> !null")
