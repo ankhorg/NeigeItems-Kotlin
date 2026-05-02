@@ -161,6 +161,34 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
+                    <a href="../pers/neige/neigeitems/utils/IdAllocator.html">IdAllocator</a>
+                
+                </span> - class in pers.neige.neigeitems.utils
+                
+
+            </dt>
+            <dd>通用 ID 分配器  用于高效地分配和回收整数 ID。支持正向优先分配，正向耗尽后自动切换到负向。 使用区间合并算法来高效管理空闲 ID 区间，确保 O(log n) 的分配和释放操作。 <ul><li>正向优先分配</li><li>正向耗尽后自动使用负向</li><li>支持 ID 释放和区间合并</li><li>线程安全（所有公共方法使用 synchronized）</li><li>O(log n) 时间复杂度的分配和释放操作</li></ul><pre><code>
+// 从已用 ID 集合初始化
+Set&lt;Integer&gt; usedIds = new HashSet&lt;&gt;(Arrays.asList(1, 2, 5, 6, 7));
+IdAllocator allocator = new IdAllocator(usedIds);
+
+// 分配 ID（返回 3，因为 1,2 已用，3 是第一个空洞）
+int id1 = allocator.acquire(); // 3
+int id2 = allocator.acquire(); // 4
+int id3 = allocator.acquire(); // 8
+
+// 释放 ID
+allocator.release(3);
+allocator.release(4);
+// 下次分配会优先使用刚释放的 ID
+int id4 = allocator.acquire(); // 3
+</code></pre></dd>
+
+        
+            <dt>
+                
+                <span class="memberNameLink">
+                
                     <a href="../pers/neige/neigeitems/item/ItemDurability.html#igniteTNT(org.bukkit.entity.Player,org.bukkit.inventory.ItemStack,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound,org.bukkit.event.player.PlayerInteractEvent)">igniteTNT(org.bukkit.entity.Player,org.bukkit.inventory.ItemStack,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound,pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound,org.bukkit.event.player.PlayerInteractEvent)</a>
                 
                 </span> - function in pers.neige.neigeitems.item.<a href=../pers/neige/neigeitems/item/ItemDurability.html>ItemDurability</a>
@@ -252,7 +280,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtIntArray.html#indexOf(Object)">indexOf(Object)</a>
+                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtByteArray.html#indexOf(Object)">indexOf(Object)</a>
                 
                 </span> - function in java.util.<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>
                 
@@ -291,7 +319,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtIntArray.html#indexOf(Object)">indexOf(Object)</a>
+                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtByteArray.html#indexOf(Object)">indexOf(Object)</a>
                 
                 </span> - function in pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.<a href=../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtCollection.html>NbtCollection</a>
                 
@@ -304,7 +332,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtIntArray.html#indexOf(Object)">indexOf(Object)</a>
+                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtByteArray.html#indexOf(Object)">indexOf(Object)</a>
                 
                 </span> - function in pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.<a href=../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtCollection.html>NbtCollection</a>
                 
@@ -408,7 +436,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/action/impl/ContainsAction.html#insertAfter(Object)">insertAfter(Object)</a>
+                    <a href="../pers/neige/neigeitems/action/Action.html#insertAfter(Object)">insertAfter(Object)</a>
                 
                 </span> - function in pers.neige.neigeitems.action.<a href=../pers/neige/neigeitems/action/Action.html>Action</a>
                 
@@ -421,7 +449,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/action/impl/ContainsAction.html#insertAfter(Object)">insertAfter(Object)</a>
+                    <a href="../pers/neige/neigeitems/action/Action.html#insertAfter(Object)">insertAfter(Object)</a>
                 
                 </span> - function in pers.neige.neigeitems.action.<a href=../pers/neige/neigeitems/action/Action.html>Action</a>
                 
@@ -434,7 +462,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/action/impl/ContainsAction.html#insertBefore(Object)">insertBefore(Object)</a>
+                    <a href="../pers/neige/neigeitems/action/Action.html#insertBefore(Object)">insertBefore(Object)</a>
                 
                 </span> - function in pers.neige.neigeitems.action.<a href=../pers/neige/neigeitems/action/Action.html>Action</a>
                 
@@ -447,7 +475,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/action/impl/ContainsAction.html#insertBefore(Object)">insertBefore(Object)</a>
+                    <a href="../pers/neige/neigeitems/action/Action.html#insertBefore(Object)">insertBefore(Object)</a>
                 
                 </span> - function in pers.neige.neigeitems.action.<a href=../pers/neige/neigeitems/action/Action.html>Action</a>
                 
@@ -889,7 +917,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/event/PacketReceiveEvent.html#isAsynchronous()">isAsynchronous()</a>
+                    <a href="../pers/neige/neigeitems/event/ItemPacketEvent.html#isAsynchronous()">isAsynchronous()</a>
                 
                 </span> - function in org.bukkit.event.<a href=>Event</a>
                 
@@ -941,7 +969,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/event/PacketReceiveEvent.html#isCancelled()">isCancelled()</a>
+                    <a href="../pers/neige/neigeitems/event/MythicDropEvent.Drop.html#isCancelled()">isCancelled()</a>
                 
                 </span> - function in org.bukkit.event.<a href=>Cancellable</a>
                 
@@ -954,7 +982,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/event/PacketReceiveEvent.html#isCancelled()">isCancelled()</a>
+                    <a href="../pers/neige/neigeitems/event/MythicDropEvent.Drop.html#isCancelled()">isCancelled()</a>
                 
                 </span> - function in pers.neige.neigeitems.event.<a href=../pers/neige/neigeitems/event/CancellableEvent.html>CancellableEvent</a>
                 
@@ -967,7 +995,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/event/PacketReceiveEvent.html#isCancelled()">isCancelled()</a>
+                    <a href="../pers/neige/neigeitems/event/MythicDropEvent.Drop.html#isCancelled()">isCancelled()</a>
                 
                 </span> - function in pers.neige.neigeitems.event.<a href=../pers/neige/neigeitems/event/CancellableEvent.html>CancellableEvent</a>
                 
@@ -1214,7 +1242,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtIntArray.html#isEmpty()">isEmpty()</a>
+                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtByteArray.html#isEmpty()">isEmpty()</a>
                 
                 </span> - function in java.util.<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>
                 
@@ -1279,7 +1307,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/manager/ConfigStringListManager.html#isEmpty()">isEmpty()</a>
+                    <a href="../pers/neige/neigeitems/manager/AbstractConfigManager.html#isEmpty()">isEmpty()</a>
                 
                 </span> - function in java.util.concurrent.<a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ConcurrentHashMap.html>ConcurrentHashMap</a>
                 
@@ -1305,7 +1333,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtIntArray.html#isEmpty()">isEmpty()</a>
+                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtByteArray.html#isEmpty()">isEmpty()</a>
                 
                 </span> - function in pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.<a href=../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtCollection.html>NbtCollection</a>
                 
@@ -1318,7 +1346,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtIntArray.html#isEmpty()">isEmpty()</a>
+                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtByteArray.html#isEmpty()">isEmpty()</a>
                 
                 </span> - function in pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.<a href=../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtCollection.html>NbtCollection</a>
                 
@@ -1435,7 +1463,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/ref/entity/RefMob.html#isFallFlying()">isFallFlying()</a>
+                    <a href="../pers/neige/neigeitems/ref/entity/RefEntityPlayer.html#isFallFlying()">isFallFlying()</a>
                 
                 </span> - function in pers.neige.neigeitems.ref.entity.<a href=../pers/neige/neigeitems/ref/entity/RefEntityLiving.html>RefEntityLiving</a>
                 
@@ -1448,7 +1476,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/ref/entity/RefMob.html#isFallFlying()">isFallFlying()</a>
+                    <a href="../pers/neige/neigeitems/ref/entity/RefEntityPlayer.html#isFallFlying()">isFallFlying()</a>
                 
                 </span> - function in pers.neige.neigeitems.ref.entity.<a href=../pers/neige/neigeitems/ref/entity/RefEntityLiving.html>RefEntityLiving</a>
                 
@@ -1877,7 +1905,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/colonel/argument/command/MaybeItemIdArgument.html#isReadAll()">isReadAll()</a>
+                    <a href="../pers/neige/neigeitems/colonel/argument/command/MaybeEditorIdArgument.html#isReadAll()">isReadAll()</a>
                 
                 </span> - function in pers.neige.colonel.arguments.impl.<a href=>StringArgument</a>
                 
@@ -1929,7 +1957,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/action/result/StopResult.html#isStop()">isStop()</a>
+                    <a href="../pers/neige/neigeitems/action/result/SuccessResult.html#isStop()">isStop()</a>
                 
                 </span> - function in pers.neige.neigeitems.action.<a href=../pers/neige/neigeitems/action/ActionResult.html>ActionResult</a>
                 
@@ -1942,7 +1970,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/action/result/StopResult.html#isStop()">isStop()</a>
+                    <a href="../pers/neige/neigeitems/action/result/SuccessResult.html#isStop()">isStop()</a>
                 
                 </span> - function in pers.neige.neigeitems.action.<a href=../pers/neige/neigeitems/action/ActionResult.html>ActionResult</a>
                 
@@ -2066,6 +2094,19 @@ var pathtoroot = "../";
 
             </dt>
             <dd>&nbsp;</dd>
+
+        
+            <dt>
+                
+                <span class="memberNameLink">
+                
+                    <a href="../pers/neige/neigeitems/utils/IdAllocator.html#isUsed(int)">isUsed(int)</a>
+                
+                </span> - function in pers.neige.neigeitems.utils.<a href=../pers/neige/neigeitems/utils/IdAllocator.html>IdAllocator</a>
+                
+
+            </dt>
+            <dd>检查指定 ID 是否已被使用</dd>
 
         
             <dt>
@@ -2709,7 +2750,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/internal/loader/LazyLoadEntrySet.html#iterator()">iterator()</a>
+                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/internal/loader/DelegateAbstractList.html#iterator()">iterator()</a>
                 
                 </span> - function in java.lang.<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html>Iterable</a>
                 
@@ -2761,7 +2802,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtIntArray.html#iterator()">iterator()</a>
+                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtByteArray.html#iterator()">iterator()</a>
                 
                 </span> - function in java.util.<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>
                 
@@ -2800,7 +2841,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtIntArray.html#iterator()">iterator()</a>
+                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtByteArray.html#iterator()">iterator()</a>
                 
                 </span> - function in pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.<a href=../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtCollection.html>NbtCollection</a>
                 
@@ -2813,7 +2854,7 @@ var pathtoroot = "../";
                 
                 <span class="memberNameLink">
                 
-                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtIntArray.html#iterator()">iterator()</a>
+                    <a href="../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtByteArray.html#iterator()">iterator()</a>
                 
                 </span> - function in pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.<a href=../pers/neige/neigeitems/libs/bot/inker/bukkit/nbt/NbtCollection.html>NbtCollection</a>
                 

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>MapConfigReader 1.21.143 API </title>
+    <title>IdAllocator 1.21.143 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -88,8 +88,8 @@ var pathtoroot = "../../../../";
 
 <main role="main">
     <div class="header">
-        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems.config</a></div>
-        <h2 title="Class MapConfigReader" class="title">Class MapConfigReader</h2>
+        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">pers.neige.neigeitems.utils</a></div>
+        <h2 title="Class IdAllocator" class="title">Class IdAllocator</h2>
     </div>
     <div class="contentContainer">
         <!-- <ul class="inheritance">
@@ -108,19 +108,31 @@ var pathtoroot = "../../../../";
                         <dt>All Implemented Interfaces:</dt>
                         <dd>
                             
-                            <code>pers.neige.neigeitems.config.ConfigReader</code>
-                            
-                            
                         </dd>
                     </dl>
                     
                     <hr>
                     <pre class="wrap-overflow">
 
-public class <span class="typeNameLabel"><a href=MapConfigReader.html>MapConfigReader</a></span>
- implements <a href=ConfigReader.html>ConfigReader</a>
+public class <span class="typeNameLabel"><a href=IdAllocator.html>IdAllocator</a></span>
+
                     </pre>
-                    <div class="block"></div>
+                    <div class="block"><p>通用 ID 分配器 </p><p> 用于高效地分配和回收整数 ID。支持正向优先分配，正向耗尽后自动切换到负向。 使用区间合并算法来高效管理空闲 ID 区间，确保 O(log n) 的分配和释放操作。 </p><ul><li>正向优先分配</li><li>正向耗尽后自动使用负向</li><li>支持 ID 释放和区间合并</li><li>线程安全（所有公共方法使用 synchronized）</li><li>O(log n) 时间复杂度的分配和释放操作</li></ul><pre><code>
+// 从已用 ID 集合初始化
+Set&lt;Integer&gt; usedIds = new HashSet&lt;&gt;(Arrays.asList(1, 2, 5, 6, 7));
+IdAllocator allocator = new IdAllocator(usedIds);
+
+// 分配 ID（返回 3，因为 1,2 已用，3 是第一个空洞）
+int id1 = allocator.acquire(); // 3
+int id2 = allocator.acquire(); // 4
+int id3 = allocator.acquire(); // 8
+
+// 释放 ID
+allocator.release(3);
+allocator.release(4);
+// 下次分配会优先使用刚释放的 ID
+int id4 = allocator.acquire(); // 3
+</code></pre></div>
 
                     <dl>
 
@@ -201,8 +213,14 @@ public class <span class="typeNameLabel"><a href=MapConfigReader.html>MapConfigR
                                         
                                             <tr class="altColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#MapConfigReader(java.util.Map)">MapConfigReader</a></span>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>, out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; map)</code></th>
-                                                <td class="colLast"></td>
+                                                        href="#IdAllocator()">IdAllocator</a></span>()</code></th>
+                                                <td class="colLast">创建一个空的 ID 分配器</td>
+                                            </tr>
+                                        
+                                            <tr class="rowColor">
+                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
+                                                        href="#IdAllocator(java.util.Set)">IdAllocator</a></span>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; usedIds)</code></th>
+                                                <td class="colLast">根据已用 ID 集合创建 ID 分配器</td>
                                             </tr>
                                         
 
@@ -255,145 +273,105 @@ public class <span class="typeNameLabel"><a href=MapConfigReader.html>MapConfigR
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>, out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;</code>
+                                            <td class="colFirst"><code>synchronized int</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getHandle()>getHandle</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#acquire()>acquire</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">获取一个可用的 ID  分配策略： <ul><li>优先分配最小的正向空洞 ID</li><li>如果正向耗尽，进行负向分配 ID</li></ul></td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
-                                            <td class="colFirst"><code>int</code>
+                                            <td class="colFirst"><code>synchronized boolean</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#size()>size</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#release(int)>release</a>(int id) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">释放一个 ID，使其可被重新分配  释放策略： <ul><li>从已用集合中移除该 ID</li><li>尝试与相邻空洞区间合并</li></ul></td>
                                         </tr>
                                         
                                         <tr id="i2" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt;</code>
+                                            <td class="colFirst"><code>synchronized boolean</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#keySet()>keySet</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#isUsed(int)>isUsed</a>(int id) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">检查指定 ID 是否已被使用</td>
                                         </tr>
                                         
                                         <tr id="i3" class="rowColor">
-                                            <td class="colFirst"><code>boolean</code>
+                                            <td class="colFirst"><code>synchronized int</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#containsKey(java.lang.String)>containsKey</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#getUsedCount()>getUsedCount</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">获取当前已使用的 ID 数量</td>
                                         </tr>
                                         
                                         <tr id="i4" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a></code>
+                                            <td class="colFirst"><code>synchronized int</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#get(java.lang.String)>get</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#getHoleCount()>getHoleCount</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">获取当前空洞区间的数量  可用于监控碎片化程度。区间数量越多，碎片化越严重。 </td>
                                         </tr>
                                         
                                         <tr id="i5" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>synchronized <a href=https://docs.oracle.com/javase/8/docs/api/java/util/NavigableMap.html>NavigableMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getString(java.lang.String)>getString</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#getHolesView()>getHolesView</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">获取空洞区间的不可变包装  返回的 Map 是当前空洞区间的不可变包装，无法修改。 </td>
                                         </tr>
                                         
                                         <tr id="i6" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
+                                            <td class="colFirst"><code>synchronized <a href=https://docs.oracle.com/javase/8/docs/api/java/util/NavigableMap.html>NavigableMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getString(java.lang.String,java.lang.String)>getString</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> def) </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#getHolesSnapshot()>getHolesSnapshot</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">获取空洞区间的快照  返回的 Map 是当前空洞区间的副本，修改不会影响分配器状态。 </td>
                                         </tr>
                                         
                                         <tr id="i7" class="rowColor">
-                                            <td class="colFirst"><code>int</code>
+                                            <td class="colFirst"><code>synchronized <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getInt(java.lang.String)>getInt</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#getUsedIdsView()>getUsedIdsView</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">获取已用 ID 的不可变包装</td>
                                         </tr>
                                         
                                         <tr id="i8" class="altColor">
-                                            <td class="colFirst"><code>int</code>
+                                            <td class="colFirst"><code>synchronized <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getInt(java.lang.String,int)>getInt</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, int def) </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#getUsedIdsSnapshot()>getUsedIdsSnapshot</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">获取已用 ID 的快照</td>
                                         </tr>
                                         
                                         <tr id="i9" class="rowColor">
-                                            <td class="colFirst"><code>long</code>
+                                            <td class="colFirst"><code>synchronized int</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getLong(java.lang.String)>getLong</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#peekNextId()>peekNextId</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">获取下一个将被分配的 ID（不实际分配）  如果没有可用的 ID（正负42亿个ID全部占用，你是个人物），直接报错。 </td>
                                         </tr>
                                         
                                         <tr id="i10" class="altColor">
-                                            <td class="colFirst"><code>long</code>
+                                            <td class="colFirst"><code>synchronized void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getLong(java.lang.String,long)>getLong</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, long def) </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#reset()>reset</a>() </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">重置分配器状态  清空所有已用 ID 和空洞区间，重新初始化。 </td>
                                         </tr>
                                         
                                         <tr id="i11" class="rowColor">
-                                            <td class="colFirst"><code>double</code>
+                                            <td class="colFirst"><code>synchronized void</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getDouble(java.lang.String)>getDouble</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#reinitialize(java.util.Set)>reinitialize</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; newUsedIds) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">根据新的已用 ID 集合重新初始化分配器</td>
                                         </tr>
                                         
                                         <tr id="i12" class="altColor">
-                                            <td class="colFirst"><code>double</code>
+                                            <td class="colFirst"><code>synchronized <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getDouble(java.lang.String,double)>getDouble</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, double def) </code>
-                                            </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr id="i13" class="rowColor">
-                                            <td class="colFirst"><code>boolean</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getBoolean(java.lang.String)>getBoolean</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
-                                            </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr id="i14" class="altColor">
-                                            <td class="colFirst"><code>boolean</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getBoolean(java.lang.String,boolean)>getBoolean</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, boolean def) </code>
-                                            </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr id="i15" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt;</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getStringList(java.lang.String)>getStringList</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
-                                            </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr id="i16" class="altColor">
-                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>, out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt;</code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getMapList(java.lang.String)>getMapList</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
-                                            </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr id="i17" class="rowColor">
-                                            <td class="colFirst"><code><a href=ConfigReader.html>ConfigReader</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=MapConfigReader.html#getConfig(java.lang.String)>getConfig</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key) </code>
+                                            <th class="colSecond" scope="row"><code><a href=IdAllocator.html#toString()>toString</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -403,12 +381,6 @@ public class <span class="typeNameLabel"><a href=MapConfigReader.html>MapConfigR
                                 </div>
                                 <ul class="blockList">
                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.pers.neige.neigeitems.config.ConfigReader">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;pers.neige.neigeitems.config.ConfigReader</h3>
-                                            <code>parse, parse, parse, parse</code></li>
-                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
                                     </a>
@@ -435,12 +407,31 @@ public class <span class="typeNameLabel"><a href=MapConfigReader.html>MapConfigR
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="MapConfigReader(java.util.Map)"></a>
+                                <a name="IdAllocator()"></a>
                                 <ul class="blockList">
                                     <li class="blockList">
-                                        <h4>MapConfigReader</h4>
-                                        <pre>MapConfigReader(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>, out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; map)</pre>
-                                        <div class="block"></div>
+                                        <h4>IdAllocator</h4>
+                                        <pre>IdAllocator()</pre>
+                                        <div class="block">创建一个空的 ID 分配器</div>
+                                        
+                                    </li>
+                                </ul>
+                                
+                                <a name="IdAllocator(java.util.Set)"></a>
+                                <ul class="blockList">
+                                    <li class="blockList">
+                                        <h4>IdAllocator</h4>
+                                        <pre>IdAllocator(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; usedIds)</pre>
+                                        <div class="block">根据已用 ID 集合创建 ID 分配器</div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>usedIds</code> - 已使用的 ID 集合，不能为 null</dd>
+                                            
+                                            
+                                        </dl>
                                         
                                     </li>
                                 </ul>
@@ -458,16 +449,290 @@ public class <span class="typeNameLabel"><a href=MapConfigReader.html>MapConfigR
                             </a>
                                 <h3>Method Detail</h3>
                                 
-                                <a id="getHandle()">
+                                <a id="acquire()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getHandle</h4>
-                                        <pre class="methodSignature">@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>, out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; <a href=MapConfigReader.html#getHandle()>getHandle</a>()</pre>
-                                        <div class="block"></div>
+                                        <h4>acquire</h4>
+                                        <pre class="methodSignature"> synchronized int <a href=IdAllocator.html#acquire()>acquire</a>()</pre>
+                                        <div class="block"><p>获取一个可用的 ID </p><p> 分配策略： </p><ul><li>优先分配最小的正向空洞 ID</li><li>如果正向耗尽，进行负向分配 ID</li></ul></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>新分配的 ID</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="release(int)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>release</h4>
+                                        <pre class="methodSignature"> synchronized boolean <a href=IdAllocator.html#release(int)>release</a>(int id)</pre>
+                                        <div class="block"><p>释放一个 ID，使其可被重新分配 </p><p> 释放策略： </p><ul><li>从已用集合中移除该 ID</li><li>尝试与相邻空洞区间合并</li></ul></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>id</code> - 要释放的 ID</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>true 如果释放成功，false 如果该 ID 未被使用</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="isUsed(int)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>isUsed</h4>
+                                        <pre class="methodSignature"> synchronized boolean <a href=IdAllocator.html#isUsed(int)>isUsed</a>(int id)</pre>
+                                        <div class="block"><p>检查指定 ID 是否已被使用</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>id</code> - 要检查的 ID</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>true 如果 ID 已被使用</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getUsedCount()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getUsedCount</h4>
+                                        <pre class="methodSignature"> synchronized int <a href=IdAllocator.html#getUsedCount()>getUsedCount</a>()</pre>
+                                        <div class="block"><p>获取当前已使用的 ID 数量</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>已使用 ID 的数量</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getHoleCount()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getHoleCount</h4>
+                                        <pre class="methodSignature"> synchronized int <a href=IdAllocator.html#getHoleCount()>getHoleCount</a>()</pre>
+                                        <div class="block"><p>获取当前空洞区间的数量 </p><p> 可用于监控碎片化程度。区间数量越多，碎片化越严重。 </p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>空洞区间的数量</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getHolesView()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getHolesView</h4>
+                                        <pre class="methodSignature">@NonNull() synchronized <a href=https://docs.oracle.com/javase/8/docs/api/java/util/NavigableMap.html>NavigableMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; <a href=IdAllocator.html#getHolesView()>getHolesView</a>()</pre>
+                                        <div class="block"><p>获取空洞区间的不可变包装 </p><p> 返回的 Map 是当前空洞区间的不可变包装，无法修改。 </p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>空洞区间的不可变包装</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getHolesSnapshot()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getHolesSnapshot</h4>
+                                        <pre class="methodSignature">@NonNull() synchronized <a href=https://docs.oracle.com/javase/8/docs/api/java/util/NavigableMap.html>NavigableMap</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; <a href=IdAllocator.html#getHolesSnapshot()>getHolesSnapshot</a>()</pre>
+                                        <div class="block"><p>获取空洞区间的快照 </p><p> 返回的 Map 是当前空洞区间的副本，修改不会影响分配器状态。 </p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>空洞区间的不可修改副本</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getUsedIdsView()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getUsedIdsView</h4>
+                                        <pre class="methodSignature">@NonNull() synchronized <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; <a href=IdAllocator.html#getUsedIdsView()>getUsedIdsView</a>()</pre>
+                                        <div class="block"><p>获取已用 ID 的不可变包装</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>已用 ID 集合的不可变包装</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getUsedIdsSnapshot()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getUsedIdsSnapshot</h4>
+                                        <pre class="methodSignature">@NonNull() synchronized <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; <a href=IdAllocator.html#getUsedIdsSnapshot()>getUsedIdsSnapshot</a>()</pre>
+                                        <div class="block"><p>获取已用 ID 的快照</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>已用 ID 集合的不可修改副本</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="peekNextId()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>peekNextId</h4>
+                                        <pre class="methodSignature"> synchronized int <a href=IdAllocator.html#peekNextId()>peekNextId</a>()</pre>
+                                        <div class="block"><p>获取下一个将被分配的 ID（不实际分配） </p><p> 如果没有可用的 ID（正负42亿个ID全部占用，你是个人物），直接报错。 </p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>下一个将被分配的 ID</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="reset()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>reset</h4>
+                                        <pre class="methodSignature"> synchronized void <a href=IdAllocator.html#reset()>reset</a>()</pre>
+                                        <div class="block"><p>重置分配器状态 </p><p> 清空所有已用 ID 和空洞区间，重新初始化。 </p></div>
 
                                         <dl>
 
@@ -481,19 +746,26 @@ public class <span class="typeNameLabel"><a href=MapConfigReader.html>MapConfigR
                                     </li>
                                 </ul>
                                 
-                                <a id="size()">
+                                <a id="reinitialize(java.util.Set)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>size</h4>
-                                        <pre class="methodSignature"> int <a href=MapConfigReader.html#size()>size</a>()</pre>
-                                        <div class="block"></div>
+                                        <h4>reinitialize</h4>
+                                        <pre class="methodSignature"> synchronized void <a href=IdAllocator.html#reinitialize(java.util.Set)>reinitialize</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; newUsedIds)</pre>
+                                        <div class="block"><p>根据新的已用 ID 集合重新初始化分配器</p></div>
 
                                         <dl>
 
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>newUsedIds</code> - 新的已用 ID 集合</dd>
+                                            
+                                            
                                         
 
                                         
@@ -504,360 +776,15 @@ public class <span class="typeNameLabel"><a href=MapConfigReader.html>MapConfigR
                                     </li>
                                 </ul>
                                 
-                                <a id="keySet()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>keySet</h4>
-                                        <pre class="methodSignature">@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; <a href=MapConfigReader.html#keySet()>keySet</a>()</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="containsKey(java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>containsKey</h4>
-                                        <pre class="methodSignature"> boolean <a href=MapConfigReader.html#containsKey(java.lang.String)>containsKey</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="get(java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>get</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> <a href=MapConfigReader.html#get(java.lang.String)>get</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getString(java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getString</h4>
-                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=MapConfigReader.html#getString(java.lang.String)>getString</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getString(java.lang.String,java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getString</h4>
-                                        <pre class="methodSignature">@Contract(value = &quot;_, !null -&gt; !null&quot;)@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=MapConfigReader.html#getString(java.lang.String,java.lang.String)>getString</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> def)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getInt(java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getInt</h4>
-                                        <pre class="methodSignature"> int <a href=MapConfigReader.html#getInt(java.lang.String)>getInt</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getInt(java.lang.String,int)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getInt</h4>
-                                        <pre class="methodSignature"> int <a href=MapConfigReader.html#getInt(java.lang.String,int)>getInt</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, int def)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getLong(java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getLong</h4>
-                                        <pre class="methodSignature"> long <a href=MapConfigReader.html#getLong(java.lang.String)>getLong</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getLong(java.lang.String,long)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getLong</h4>
-                                        <pre class="methodSignature"> long <a href=MapConfigReader.html#getLong(java.lang.String,long)>getLong</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, long def)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getDouble(java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getDouble</h4>
-                                        <pre class="methodSignature"> double <a href=MapConfigReader.html#getDouble(java.lang.String)>getDouble</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getDouble(java.lang.String,double)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getDouble</h4>
-                                        <pre class="methodSignature"> double <a href=MapConfigReader.html#getDouble(java.lang.String,double)>getDouble</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, double def)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getBoolean(java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getBoolean</h4>
-                                        <pre class="methodSignature"> boolean <a href=MapConfigReader.html#getBoolean(java.lang.String)>getBoolean</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getBoolean(java.lang.String,boolean)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getBoolean</h4>
-                                        <pre class="methodSignature"> boolean <a href=MapConfigReader.html#getBoolean(java.lang.String,boolean)>getBoolean</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key, boolean def)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getStringList(java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getStringList</h4>
-                                        <pre class="methodSignature">@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; <a href=MapConfigReader.html#getStringList(java.lang.String)>getStringList</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getMapList(java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>getMapList</h4>
-                                        <pre class="methodSignature">@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>, out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt; <a href=MapConfigReader.html#getMapList(java.lang.String)>getMapList</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="getConfig(java.lang.String)">
+                                <a id="toString()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>getConfig</h4>
-                                        <pre class="methodSignature">@Nullable() <a href=ConfigReader.html>ConfigReader</a> <a href=MapConfigReader.html#getConfig(java.lang.String)>getConfig</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> key)</pre>
+                                        <h4>toString</h4>
+                                        <pre class="methodSignature">@NonNull() synchronized <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> <a href=IdAllocator.html#toString()>toString</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>

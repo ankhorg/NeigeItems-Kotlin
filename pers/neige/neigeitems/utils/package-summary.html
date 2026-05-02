@@ -115,23 +115,40 @@ var pathtoroot = "../../../../";
 </tr>
 <tbody>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=SchedulerUtils.html>SchedulerUtils</a></th><td class="colLast"></td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=SectionUtilsJ.html>SectionUtilsJ</a></th><td class="colLast"></td></tr>
-
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=NumberParser.html>NumberParser</a></th><td class="colLast"></td></tr>
-
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ListUtils.html>ListUtils</a></th><td class="colLast"></td></tr>
-
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=CommandUtils.html>CommandUtils</a></th><td class="colLast"></td></tr>
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ListenerUtils.html>ListenerUtils</a></th><td class="colLast"></td></tr>
 
     <tr class="rowColor"><th class="colFirst" scope="row"><a href=UUIDUtils.html>UUIDUtils</a></th><td class="colLast"></td></tr>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=ListenerUtils.html>ListenerUtils</a></th><td class="colLast"></td></tr>
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=ColorUtils.html>ColorUtils</a></th><td class="colLast"></td></tr>
 
-    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ColorUtils.html>ColorUtils</a></th><td class="colLast"></td></tr>
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=ListUtils.html>ListUtils</a></th><td class="colLast"></td></tr>
 
-    <tr class="altColor"><th class="colFirst" scope="row"><a href=SamplingUtils.SamplingResult.html>SamplingResult</a></th><td class="colLast"></td></tr>
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=NumberParser.html>NumberParser</a></th><td class="colLast"></td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=IdAllocator.html>IdAllocator</a></th><td class="colLast">通用 ID 分配器  用于高效地分配和回收整数 ID。支持正向优先分配，正向耗尽后自动切换到负向。 使用区间合并算法来高效管理空闲 ID 区间，确保 O(log n) 的分配和释放操作。 <ul><li>正向优先分配</li><li>正向耗尽后自动使用负向</li><li>支持 ID 释放和区间合并</li><li>线程安全（所有公共方法使用 synchronized）</li><li>O(log n) 时间复杂度的分配和释放操作</li></ul><pre><code>
+// 从已用 ID 集合初始化
+Set&lt;Integer&gt; usedIds = new HashSet&lt;&gt;(Arrays.asList(1, 2, 5, 6, 7));
+IdAllocator allocator = new IdAllocator(usedIds);
+
+// 分配 ID（返回 3，因为 1,2 已用，3 是第一个空洞）
+int id1 = allocator.acquire(); // 3
+int id2 = allocator.acquire(); // 4
+int id3 = allocator.acquire(); // 8
+
+// 释放 ID
+allocator.release(3);
+allocator.release(4);
+// 下次分配会优先使用刚释放的 ID
+int id4 = allocator.acquire(); // 3
+</code></pre></td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=SchedulerUtils.html>SchedulerUtils</a></th><td class="colLast"></td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=CommandUtils.html>CommandUtils</a></th><td class="colLast"></td></tr>
+
+    <tr class="altColor"><th class="colFirst" scope="row"><a href=SectionUtilsJ.html>SectionUtilsJ</a></th><td class="colLast"></td></tr>
+
+    <tr class="rowColor"><th class="colFirst" scope="row"><a href=SamplingUtils.SamplingResult.html>SamplingResult</a></th><td class="colLast"></td></tr>
 </tbody>
 </table>
 
