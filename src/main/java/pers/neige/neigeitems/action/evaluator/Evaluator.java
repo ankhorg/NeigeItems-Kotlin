@@ -55,7 +55,7 @@ public class Evaluator<T> {
             return new ListStringEvaluator(manager, (List<?>) input);
         }
         val config = ConfigReader.parse(input);
-        if (config == null) return manager.NULL_STRING_EVALUATOR;
+        if (config == null) return createStringEvaluator(manager, input.toString());
         val type = config.getString("type", "").toLowerCase();
         switch (type) {
             case "condition": {
@@ -96,7 +96,7 @@ public class Evaluator<T> {
                 return new RawStringEvaluator(manager, content);
             }
         }
-        return createStringEvaluator(manager, input.toString());
+        return manager.NULL_STRING_EVALUATOR;
     }
 
     public static @NonNull Evaluator<Integer> createIntegerEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
@@ -130,7 +130,7 @@ public class Evaluator<T> {
             return new ListIntegerEvaluator(manager, (List<?>) input);
         }
         val config = ConfigReader.parse(input);
-        if (config == null) return manager.NULL_INTEGER_EVALUATOR;
+        if (config == null) return createIntegerEvaluator(manager, input.toString());
         val type = config.getString("type", "").toLowerCase();
         switch (type) {
             case "condition": {
@@ -171,7 +171,7 @@ public class Evaluator<T> {
                 return new RawIntegerEvaluator(manager, content);
             }
         }
-        return createIntegerEvaluator(manager, input.toString());
+        return manager.NULL_INTEGER_EVALUATOR;
     }
 
     public static @NonNull Evaluator<Long> createLongEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
@@ -205,7 +205,7 @@ public class Evaluator<T> {
             return new ListLongEvaluator(manager, (List<?>) input);
         }
         val config = ConfigReader.parse(input);
-        if (config == null) return manager.NULL_LONG_EVALUATOR;
+        if (config == null) return createLongEvaluator(manager, input.toString());
         val type = config.getString("type", "").toLowerCase();
         switch (type) {
             case "condition": {
@@ -246,7 +246,7 @@ public class Evaluator<T> {
                 return new RawLongEvaluator(manager, content);
             }
         }
-        return createLongEvaluator(manager, input.toString());
+        return manager.NULL_LONG_EVALUATOR;
     }
 
     public static @NonNull Evaluator<Double> createDoubleEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
@@ -280,7 +280,7 @@ public class Evaluator<T> {
             return new ListDoubleEvaluator(manager, (List<?>) input);
         }
         val config = ConfigReader.parse(input);
-        if (config == null) return manager.NULL_DOUBLE_EVALUATOR;
+        if (config == null) return createDoubleEvaluator(manager, input.toString());
         val type = config.getString("type", "").toLowerCase();
         switch (type) {
             case "condition": {
@@ -321,7 +321,7 @@ public class Evaluator<T> {
                 return new RawDoubleEvaluator(manager, content);
             }
         }
-        return createDoubleEvaluator(manager, input.toString());
+        return manager.NULL_DOUBLE_EVALUATOR;
     }
 
     public static @NonNull Evaluator<Boolean> createBooleanEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
@@ -355,7 +355,7 @@ public class Evaluator<T> {
             return new ListBooleanEvaluator(manager, (List<?>) input);
         }
         val config = ConfigReader.parse(input);
-        if (config == null) return manager.NULL_BOOLEAN_EVALUATOR;
+        if (config == null) return createBooleanEvaluator(manager, input.toString());
         val type = config.getString("type", "").toLowerCase();
         switch (type) {
             case "condition": {
@@ -396,7 +396,7 @@ public class Evaluator<T> {
                 return new RawBooleanEvaluator(manager, content);
             }
         }
-        return createBooleanEvaluator(manager, input.toString());
+        return manager.NULL_BOOLEAN_EVALUATOR;
     }
 
     @Contract("_, !null -> !null")
