@@ -3,6 +3,7 @@ package pers.neige.neigeitems.listener
 import org.bukkit.Material
 import org.bukkit.entity.Damageable
 import org.bukkit.entity.Player
+import org.bukkit.entity.Projectile
 import org.bukkit.event.EventPriority
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
@@ -92,15 +93,26 @@ object EntityDamageByEntityListener {
     @JvmStatic
     @Listener(eventPriority = EventPriority.MONITOR)
     private fun kill(event: EntityDamageByEntityEvent) {
-        // 获取攻击者
-        val attacker = event.damager
         // 获取受击者
         val defender = event.entity
-        // 检测攻击类型 && 攻击者是否为玩家 && 受击者是否存在血量概念
-        if (event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK
-            || attacker !is Player
-            || defender !is Damageable
-        ) return
+        // 检测受击者是否存在血量概念
+        if (defender !is Damageable) return
+        // 获取攻击者
+        // 检测攻击类型 && 攻击者是否为玩家
+        val attacker = when (event.cause) {
+            EntityDamageEvent.DamageCause.ENTITY_ATTACK -> {
+                if (event.damager !is Player) return
+                event.damager as Player
+            }
+
+            EntityDamageEvent.DamageCause.PROJECTILE -> {
+                val projectile = event.damager
+                if (projectile !is Projectile || projectile.shooter !is Player) return
+                projectile.shooter as Player
+            }
+
+            else -> return
+        }
         // 检测事件伤害是否大于受击者当前生命值
         if (event.finalDamage < defender.health) return
         // 执行动作
