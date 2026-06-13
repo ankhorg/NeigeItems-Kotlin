@@ -6,6 +6,10 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
 import org.slf4j.LoggerFactory
+import pers.neige.neigeitems.action.ActionContext
+import pers.neige.neigeitems.action.ContextKeys
+import pers.neige.neigeitems.config.ConfigReader
+import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.manager.ConfigManager.debug
 import pers.neige.neigeitems.manager.HookerManager.getHookedItem
 import pers.neige.neigeitems.manager.ItemManager
@@ -14,7 +18,6 @@ import pers.neige.neigeitems.utils.ConfigUtils.loadGlobalSections
 import pers.neige.neigeitems.utils.ConfigUtils.saveToString
 import pers.neige.neigeitems.utils.ItemUtils.getItems
 import pers.neige.neigeitems.utils.SamplingUtils.weight
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.splitOnce
 import java.util.concurrent.ThreadLocalRandom
 
@@ -131,7 +134,12 @@ class ItemPack(
         // 获取私有节点配置
         val sections = this.sections
         // 对文本化配置进行全局节点解析
-        val configString = configString.parseSection(cache, player, sections)
+        val context = ActionContext.builder()
+            .caster(player)
+            .with(ContextKeys.SECTIONS, ConfigReader.parse(sections))
+            .with(ContextKeys.SECTION_CACHE, cache as Map<String, Any?>?)
+            .build()
+        val configString = ActionManager.parseNode(configString, context)
         // Debug信息
         if (debug) {
             logger.info(configString)

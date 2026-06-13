@@ -13,15 +13,14 @@ import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
 import org.slf4j.LoggerFactory
 import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.action.ActionContext
+import pers.neige.neigeitems.action.ContextKeys
 import pers.neige.neigeitems.event.MobInfoReloadedEvent
 import pers.neige.neigeitems.event.MythicDropEvent
 import pers.neige.neigeitems.event.MythicEquipEvent
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
-import pers.neige.neigeitems.manager.ConfigManager
-import pers.neige.neigeitems.manager.HookerManager
+import pers.neige.neigeitems.manager.*
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
-import pers.neige.neigeitems.manager.ItemManager
-import pers.neige.neigeitems.manager.ItemPackManager
 import pers.neige.neigeitems.utils.ConfigUtils
 import pers.neige.neigeitems.utils.ItemUtils
 import pers.neige.neigeitems.utils.ItemUtils.copy
@@ -34,7 +33,6 @@ import pers.neige.neigeitems.utils.ItemUtils.saveToSafe
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SchedulerUtils.async
 import pers.neige.neigeitems.utils.SchedulerUtils.sync
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.io.File
 import java.text.DecimalFormat
 import java.util.*
@@ -224,9 +222,13 @@ abstract class MythicMobsHooker {
         // 构建怪物参数
         val params = getMobParams(entity, internalName, mobLevel)
 
+        val context = ActionContext.builder()
+            .with(ContextKeys.SECTION_CACHE, params as Map<String, Any?>?)
+            .build()
+
         // 获取死亡后相应NI物品掉落几率
         for (value in dropEquipment) {
-            val string = value.parseSection(params)
+            val string = ActionManager.parseNode(value, context)
             var id = string.lowercase(Locale.getDefault())
             var chance = 1.toDouble()
             if (string.contains(" ")) {
@@ -237,9 +239,9 @@ abstract class MythicMobsHooker {
             dropChance[id] = chance
         }
 
-        // 获取出生附带装备信息
+        // 获取出生附带装备信息f
         for (value in equipment) {
-            val string = value.parseSection(params)
+            val string = ActionManager.parseNode(value, context)
             if (!string.contains(": ")) continue
             val index = string.indexOf(": ")
             val slot = string.substring(0, index).lowercase(Locale.getDefault())
@@ -353,10 +355,14 @@ abstract class MythicMobsHooker {
 
         // 预定掉落物列表
         val dropItems = ArrayList<ItemStack>()
+        val context = ActionContext.builder()
+            .caster(player)
+            .with(ContextKeys.SECTION_CACHE, params as Map<String, Any?>?)
+            .build()
         // 加载物品包掉落
         configLoadedEvent.dropPacks?.forEach { info ->
             // 物品包ID 数量 概率 指向数据
-            val args = info.parseSection(params, player).split(" ", limit = 4)
+            val args = ActionManager.parseNode(info, context).split(" ", limit = 4)
             // 物品包ID
             val id = args[0]
             // 物品包数量

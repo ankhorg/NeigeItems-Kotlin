@@ -27,6 +27,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("应使用新方法替代", replaceWith = ReplaceWith("BaseActionManager#parseNode"))
     fun String.parseSection(
         cache: MutableMap<String, String>? = null, player: OfflinePlayer? = null, sections: ConfigurationSection? = null
     ): String {
@@ -41,6 +42,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("应使用新方法替代", replaceWith = ReplaceWith("BaseActionManager#parseNode"))
     fun String.parseSection(): String {
         return this.parseSection(null, null, null)
     }
@@ -52,6 +54,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("应使用新方法替代", replaceWith = ReplaceWith("BaseActionManager#parseNode"))
     fun String.parseSection(cache: MutableMap<String, String>?): String {
         return this.parseSection(cache, null, null)
     }
@@ -63,6 +66,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("应使用新方法替代", replaceWith = ReplaceWith("BaseActionManager#parseNode"))
     fun String.parseSection(player: OfflinePlayer?): String {
         return this.parseSection(null, player, null)
     }
@@ -75,6 +79,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("应使用新方法替代", replaceWith = ReplaceWith("BaseActionManager#parseNode"))
     fun String.parseSection(cache: MutableMap<String, String>?, sections: ConfigurationSection?): String {
         return this.parseSection(cache, null, sections)
     }
@@ -96,6 +101,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("应使用新方法替代", replaceWith = ReplaceWith("BaseActionManager#parseNode"))
     fun String.parseSection(
         parse: Boolean,
         cache: MutableMap<String, String>? = null,
@@ -169,6 +175,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("应使用新方法替代", replaceWith = ReplaceWith("BaseActionManager#parseNode"))
     fun String.parseItemSection(
         itemStack: ItemStack, itemTag: NbtCompound, player: OfflinePlayer?
     ): String {
@@ -201,6 +208,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("应使用新方法替代", replaceWith = ReplaceWith("BaseActionManager#parseNode"))
     fun String.parseItemSection(
         itemStack: ItemStack, itemInfo: ItemInfo, player: OfflinePlayer?
     ): String {
@@ -218,6 +226,7 @@ object SectionUtils {
      * @return 解析值
      */
     @JvmStatic
+    @Deprecated("应使用新方法替代", replaceWith = ReplaceWith("BaseActionManager#parseNode"))
     fun String.parseItemSection(
         itemStack: ItemStack,
         itemInfo: ItemInfo,

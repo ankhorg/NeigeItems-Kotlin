@@ -96,6 +96,64 @@ object StringUtils {
     }
 
     /**
+     * 对文本进行分割
+     *
+     * @param separator 分隔符
+     * @param escape 转义符
+     * @param limit 结果列表的最大元素数量
+     * @return 解析值
+     */
+    @JvmStatic
+    fun String.split(separator: Char, escape: Char, limit: Int): ArrayList<String> {
+        if (limit <= 0) return split(separator, escape)
+        if (limit == 1) return arrayListOf(this)
+        // 参数文本
+        val chars = this.toCharArray()
+        // 所有参数
+        val args = ArrayList<String>()
+        // 缓存当前参数
+        val arg = StringBuilder()
+
+        // 表示前一个字符是不是转义符(即反斜杠)
+        var lastIsEscape = false
+        // 长度判断时用于检查的长度
+        val checkLength = limit - 1
+        // 遍历
+        for (char in chars) {
+            // 当前字符是不是转义符
+            val isEscape = char == escape
+            // 当前字符是不是分隔符
+            val isSeparator = char == separator
+            // 如果当前字符是分隔符且上一个字符不是转义符且尚未到达数量上限
+            if (isSeparator && !lastIsEscape && args.size < checkLength) {
+                // 参数怼回去
+                args.add(arg.toString())
+                arg.setLength(0)
+            } else {
+                // 如果前一字符为转义符, 理应判断当前字符是否需要转义
+                // 需要转义则吞掉转义符, 不需转义则将转义符视作普通反斜杠处理
+                if (!isEscape && !isSeparator && lastIsEscape) {
+                    arg.append(escape)
+                }
+                // 如果当前字符不为转义符, 直接填入字符
+                if (!isEscape || lastIsEscape) {
+                    arg.append(char)
+                }
+            }
+            // 进行转义符记录
+            lastIsEscape = isEscape && !lastIsEscape
+        }
+        // 处理最后一个参数
+        // 如果最后一个字符是转义符, 应将其视作普通反斜杠处理
+        if (lastIsEscape) {
+            args.add("$arg$escape")
+        } else {
+            args.add(arg.toString())
+        }
+        return args
+    }
+
+    /**
      * 将文本分为两段
      *
      * @param separator 分隔符

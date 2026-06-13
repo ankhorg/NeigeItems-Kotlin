@@ -35,7 +35,6 @@ import pers.neige.neigeitems.utils.ConfigUtils.getMap
 import pers.neige.neigeitems.utils.PlayerUtils.getMetadataEZ
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SectionUtils.parseItemSection
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.io.File
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
@@ -79,22 +78,9 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
     override fun runAction(
         action: StringAction, context: ActionContext
     ): CompletableFuture<ActionResult> {
-        // 解析物品变量
+        // 解析动作内容
+        val content = parseNode(action.content, context)
         val itemStack = context.itemStack
-        val content = let {
-            val nbt = context.nbt
-            val cache = (context.params?.get("cache") ?: context.global) as? MutableMap<String, String>
-            val sections = context.params?.get("sections") as? ConfigurationSection
-            if (itemStack != null && nbt != null) {
-                action.content.parseItemSection(
-                    itemStack, nbt, context.data, context.player, cache, sections
-                )
-            } else {
-                action.content.parseSection(
-                    cache, context.player, sections
-                )
-            }
-        }
         // 尝试加载物品动作, 返回执行结果
         action.handler?.let { handler ->
             return handler.apply(context, content)
@@ -293,6 +279,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             .global(global)
             .params(null)
             .with(ContextKeys.ITEM_STACK, itemStack)
+            .with(ContextKeys.ITEM_INFO, itemInfo)
             .with(ContextKeys.NBT, itemTag)
             .with(ContextKeys.DATA, data)
             .with(ContextKeys.EVENT, event)
@@ -548,6 +535,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
             .global(global)
             .params(null)
             .with(ContextKeys.ITEM_STACK, itemStack)
+            .with(ContextKeys.ITEM_INFO, itemInfo)
             .with(ContextKeys.NBT, itemTag)
             .with(ContextKeys.DATA, data)
             .with(ContextKeys.EVENT, event)
@@ -601,7 +589,14 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
         val itemTag = itemInfo.itemTag
 
         // 检测冷却
-        val tick = trigger.tick?.parseItemSection(itemStack, itemInfo, player)?.toLongOrNull() ?: 10
+        val tick = trigger.tick.getOrDefault(
+            ActionContext.builder()
+                .caster(player)
+                .with(ContextKeys.ITEM_STACK, itemStack)
+                .with(ContextKeys.ITEM_INFO, itemInfo)
+                .build(),
+            10
+        )!!
         // 如果冷却存在且大于0
         if (tick > 0) {
             // 获取上次使用时间
@@ -625,6 +620,7 @@ object ActionManager : BaseActionManager(NeigeItems.getInstance()) {
                 .global(HashMap())
                 .params(null)
                 .with(ContextKeys.ITEM_STACK, itemStack)
+                .with(ContextKeys.ITEM_INFO, itemInfo)
                 .with(ContextKeys.NBT, itemTag)
                 .with(ContextKeys.DATA, itemInfo.data)
                 .build()

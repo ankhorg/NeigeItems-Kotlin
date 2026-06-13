@@ -30,7 +30,6 @@ import pers.neige.neigeitems.utils.ItemUtils.copy
 import pers.neige.neigeitems.utils.ItemUtils.getNbtOrNull
 import pers.neige.neigeitems.utils.ItemUtils.isCraftItem
 import pers.neige.neigeitems.utils.LangUtils.sendLang
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.util.*
 
 /**
@@ -344,7 +343,12 @@ class ItemGenerator(val itemConfig: ItemConfig) {
         // 获取私有节点配置
         val sections = this.sections
         // 对文本化配置进行全局节点解析
-        val configString = configStringNoSection.parseSection(cache, player, sections)
+        val context = ActionContext.builder()
+            .caster(player)
+            .with(ContextKeys.SECTIONS, ConfigReader.parse(sections))
+            .with(ContextKeys.SECTION_CACHE, cache as Map<String, Any?>?)
+            .build()
+        val configString = ActionManager.parseNode(configStringNoSection, context)
         // Debug信息
         if (debug) {
             logger.info(configString)

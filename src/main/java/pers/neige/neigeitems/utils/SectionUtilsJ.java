@@ -9,7 +9,7 @@ import java.util.ArrayDeque;
 import java.util.function.Function;
 
 public class SectionUtilsJ {
-    static @NonNull String parse(
+    public static @NonNull String parse(
         @NonNull String text,
         char head,
         char tail,

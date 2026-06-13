@@ -9,6 +9,8 @@ import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.Vector
+import pers.neige.neigeitems.action.ActionContext
+import pers.neige.neigeitems.action.ContextKeys
 import pers.neige.neigeitems.config.ConfigReader
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.*
@@ -16,13 +18,13 @@ import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.WorldUtils
+import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.manager.HookerManager.getHookedItem
 import pers.neige.neigeitems.manager.HookerManager.mythicMobsHooker
 import pers.neige.neigeitems.manager.ItemManager
 import pers.neige.neigeitems.utils.ItemUtils.dropItems
 import pers.neige.neigeitems.utils.PlayerUtils.setMetadataEZ
 import pers.neige.neigeitems.utils.SchedulerUtils.callSyncMethod
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import pers.neige.neigeitems.utils.StringUtils.split
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ThreadLocalRandom
@@ -694,10 +696,15 @@ object ItemUtils {
         sections: ConfigurationSection? = null,
         parse: Boolean
     ) {
+        val context = ActionContext.builder()
+            .caster(player)
+            .with(ContextKeys.SECTIONS, ConfigReader.parse(sections))
+            .with(ContextKeys.SECTION_CACHE, cache as Map<String, Any?>?)
+            .build()
         for (rawInfo in itemInfos) {
             // 先解析, 解析完根据换行符分割, 分割完遍历随机
             val infos = if (parse) {
-                rawInfo.parseSection(cache, player, sections).split("\n")
+                ActionManager.parseNode(rawInfo, context).split("\n")
             } else {
                 rawInfo.split("\n")
             }

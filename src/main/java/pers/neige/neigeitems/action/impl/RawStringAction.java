@@ -56,8 +56,8 @@ public class RawStringAction extends Action {
         this.action = action;
         this.key = key;
         this.content = content;
-        val maybeHandler = manager.getActions().get(this.key);
-        this.handler = maybeHandler == null ? new ThreadSafeLazy<>(() -> manager.getActions().get(this.key)) : new ThreadSafeLazy<>(maybeHandler);
+        val maybeHandler = manager.getAction(this.key);
+        this.handler = maybeHandler == null ? new ThreadSafeLazy<>(() -> manager.getAction(this.key)) : new ThreadSafeLazy<>(maybeHandler);
         checkAsyncSafe();
     }
 

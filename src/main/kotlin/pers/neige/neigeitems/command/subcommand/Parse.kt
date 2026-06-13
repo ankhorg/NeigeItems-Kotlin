@@ -4,8 +4,10 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import pers.neige.colonel.arguments.impl.StringArgument
 import pers.neige.colonel.node.impl.LiteralNode
+import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.annotation.CustomField
 import pers.neige.neigeitems.colonel.argument.command.PlayerArgument
+import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 /**
@@ -21,6 +23,6 @@ object Parse {
             val sender = context.source ?: return@setNullExecutor
             val player = context.getArgument<Player>("player")
             val sections = context.getArgument<String>("sections")
-            sender.sendMessage(sections.parseSection(player))
+            sender.sendMessage(ActionManager.parseNode(sections, ActionContext(player)))
         }
 }

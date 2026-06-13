@@ -8,9 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.manager.BaseActionManager;
-import pers.neige.neigeitems.utils.SectionUtils;
-
-import java.util.Map;
 
 @ToString(callSuper = true)
 public abstract class ParseEvaluator<T> extends Evaluator<T> {
@@ -29,15 +26,9 @@ public abstract class ParseEvaluator<T> extends Evaluator<T> {
 
     @Override
     @Contract("_, !null -> !null")
-    @SuppressWarnings("unchecked")
     public @Nullable T getOrDefault(@NonNull ActionContext context, @Nullable T def) {
         if (formula == null) return def;
-        val parseResult = SectionUtils.parseSection(
-            formula,
-            (Map<String, String>) (Object) context.getGlobal(),
-            context.getPlayer(),
-            manager.getSectionConfig(context)
-        );
+        val parseResult = manager.parseNode(formula, context);
         val result = cast(parseResult);
         return result == null ? def : result;
     }

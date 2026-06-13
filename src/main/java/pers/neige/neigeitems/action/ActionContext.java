@@ -211,8 +211,12 @@ public class ActionContext implements Cloneable {
         return params;
     }
 
+    public boolean has(@NonNull ContextKey<?> key) {
+        return values.containsKey(key);
+    }
+
     public <T> void set(@NonNull ContextKey<T> key, @Nullable T value) {
-        values.put(key, value);
+        if (values.put(key, value) == value) return;
         key.getNames().forEach((alias) -> {
             if (key.isPutInGlobal()) global.put(alias, value);
             bindings.put(alias, value);
@@ -226,11 +230,13 @@ public class ActionContext implements Cloneable {
 
     @SuppressWarnings("unchecked")
     public <T> @Nullable T remove(@NonNull ContextKey<T> key) {
+        val value = values.remove(key);
+        if (value == null) return null;
         key.getNames().forEach((alias) -> {
             if (key.isPutInGlobal()) global.remove(alias);
             bindings.remove(alias);
         });
-        return (T) values.remove(key);
+        return (T) value;
     }
 
     /**
@@ -259,6 +265,11 @@ public class ActionContext implements Cloneable {
      */
     public @Nullable Event getEvent() {
         return get(ContextKeys.EVENT);
+    }
+
+    public @NonNull Map<String, Object> getSectionCache() {
+        val cache = get(ContextKeys.SECTION_CACHE);
+        return cache == null ? this.global : cache;
     }
 
     /**

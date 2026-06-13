@@ -49,6 +49,7 @@ object ScriptUtils {
     /**
      * 根据文本转换获取取整模式
      */
+    @JvmStatic
     fun String?.toRoundingMode(): RoundingMode {
         return when (this) {
             null -> RoundingMode.HALF_UP

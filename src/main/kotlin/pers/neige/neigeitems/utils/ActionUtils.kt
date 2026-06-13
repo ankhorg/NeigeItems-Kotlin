@@ -2,6 +2,7 @@ package pers.neige.neigeitems.utils
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.item.ItemInfo
 import pers.neige.neigeitems.item.action.ActionTrigger
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound
@@ -27,7 +28,7 @@ object ActionUtils {
      */
     @JvmStatic
     fun ActionTrigger.isCoolDown(player: Player): Boolean {
-        val cd = cooldown?.parseSection(player)?.toLongOrNull() ?: 1000
+        val cd = cooldown.getOrDefault(ActionContext(player), 1000)!!
         return this.isCoolDown(player, cd)
     }
 
@@ -45,7 +46,7 @@ object ActionUtils {
         itemStack: ItemStack,
         itemInfo: ItemInfo
     ): Boolean {
-        val cd = cooldown?.parseItemSection(itemStack, itemInfo, player)?.toLongOrNull() ?: 1000
+        val cd = cooldown.getOrDefault(ActionContext(player), 1000)!!
         return this.isCoolDown(player, cd)
     }
 

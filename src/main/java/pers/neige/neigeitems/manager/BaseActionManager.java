@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.val;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -18,24 +19,26 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.NeigeItems;
-import pers.neige.neigeitems.action.Action;
-import pers.neige.neigeitems.action.ActionContext;
-import pers.neige.neigeitems.action.ActionResult;
-import pers.neige.neigeitems.action.ScriptWithSource;
+import pers.neige.neigeitems.action.*;
 import pers.neige.neigeitems.action.catcher.ChatCatcher;
 import pers.neige.neigeitems.action.catcher.SignCatcher;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.action.handler.SyncActionHandler;
 import pers.neige.neigeitems.action.impl.*;
+import pers.neige.neigeitems.action.node.NodeParser;
+import pers.neige.neigeitems.action.node.impl.*;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.action.result.StopResult;
+import pers.neige.neigeitems.config.BukkitConfigReader;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.hook.placeholderapi.PapiHooker;
 import pers.neige.neigeitems.item.action.ComboInfo;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.EntityPlayerUtils;
+import pers.neige.neigeitems.section.Section;
 import pers.neige.neigeitems.text.Text;
 import pers.neige.neigeitems.text.impl.NullText;
 import pers.neige.neigeitems.utils.*;
+import pers.neige.neigeitems.utils.NumberParser;
 
 import javax.script.CompiledScript;
 import javax.script.ScriptEngine;
@@ -67,6 +70,10 @@ public abstract class BaseActionManager {
      */
     private final @NonNull HashMap<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>> actions = new HashMap<>();
     /**
+     * 所有插件的物品动作实现函数
+     */
+    private static final @NonNull Map<String, Map<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>>> allActions = new ConcurrentHashMap<>();
+    /**
      * 用于编译condition的脚本引擎
      */
     private final @NonNull ScriptEngine engine = HookerManager.INSTANCE.getNashornHooker().getGlobalEngine();
@@ -78,6 +85,14 @@ public abstract class BaseActionManager {
      * 缓存的已编译action脚本
      */
     private final @NonNull ConcurrentHashMap<String, CompiledScript> actionScripts = new ConcurrentHashMap<>();
+    /**
+     * 获取所有节点解析器
+     */
+    private final @NonNull ConcurrentHashMap<String, NodeParser> nodeParsers = new ConcurrentHashMap<>();
+    /**
+     * 所有插件的节点解析器
+     */
+    private static final @NonNull Map<String, Map<String, NodeParser>> allNodeParsers = new ConcurrentHashMap<>();
 
     public BaseActionManager(
         @NonNull Plugin plugin
@@ -87,6 +102,8 @@ public abstract class BaseActionManager {
         engine.put("manager", this);
         // 加载基础动作
         loadBasicActions();
+        // 加载基础节点解析器
+        loadBasicParsers();
     }
 
     public @NonNull Plugin getPlugin() {
@@ -112,6 +129,31 @@ public abstract class BaseActionManager {
     public void reload() {
         conditionScripts.clear();
         actionScripts.clear();
+    }
+
+    public @Nullable BiFunction<ActionContext, String, CompletableFuture<ActionResult>> getAction(@NonNull String actionId) {
+        val maybe = this.actions.get(actionId);
+        if (maybe != null) return maybe;
+        val index = actionId.indexOf(".");
+        if (index == -1) return null;
+        val pluginName = actionId.substring(0, index).toLowerCase(Locale.ROOT);
+        val actions = allActions.get(pluginName);
+        if (actions == null) return null;
+        val realActionId = actionId.substring(index + 1);
+        return actions.get(realActionId);
+    }
+
+    public @Nullable NodeParser getNodeParser(@Nullable String parserId) {
+        if (parserId == null) return null;
+        val maybe = this.nodeParsers.get(parserId);
+        if (maybe != null) return maybe;
+        val index = parserId.indexOf(".");
+        if (index == -1) return null;
+        val pluginName = parserId.substring(0, index).toLowerCase(Locale.ROOT);
+        val parsers = allNodeParsers.get(pluginName);
+        if (parsers == null) return null;
+        val realParserId = parserId.substring(index + 1).toLowerCase(Locale.ROOT);
+        return parsers.get(realParserId);
     }
 
     public @NonNull Action compile(
@@ -305,12 +347,7 @@ public abstract class BaseActionManager {
         val handler = action.getHandler();
         if (handler == null) return CompletableFuture.completedFuture(Results.SUCCESS);
         // 对动作内容进行节点解析
-        val content = SectionUtils.parseSection(
-            action.getContent(),
-            (Map<String, String>) (Object) context.getGlobal(),
-            context.getPlayer(),
-            getSectionConfig(context)
-        );
+        val content = parseNode(action.getContent(), context);
         return handler.apply(context, content);
     }
 
@@ -348,7 +385,7 @@ public abstract class BaseActionManager {
                 val contentLine = lines[i];
                 plugin.getLogger().warning((i + 1) + ". " + contentLine);
             }
-            error.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, error, () -> "报错内容如下: ");
             return CompletableFuture.completedFuture(Results.STOP);
         }
         if (result instanceof ActionResult) {
@@ -802,7 +839,7 @@ public abstract class BaseActionManager {
             } else {
                 plugin.getLogger().warning("条件解析异常, 条件内容未知");
             }
-            error.printStackTrace();
+            plugin.getLogger().log(Level.WARNING, error, () -> "报错内容如下: ");
             return Results.STOP;
         }
         if (result instanceof ActionResult) {
@@ -811,6 +848,122 @@ public abstract class BaseActionManager {
             return Results.fromBoolean((Boolean) result);
         } else {
             return Results.STOP;
+        }
+    }
+
+    /**
+     * 对文本进行节点解析
+     *
+     * @param text    待解析文本
+     * @param context 上下文
+     * @return 解析值
+     */
+    public @NonNull String parseNode(@NonNull String text, @NonNull ActionContext context) {
+        return SectionUtilsJ.parse(text, '<', '>', '\\', (spec) ->
+            parseNodeSpec(spec, context)
+        );
+    }
+
+    /**
+     * 对文本进行节点解析
+     *
+     * @param text    待解析文本
+     * @param context 上下文
+     * @return 解析值
+     */
+    public @Nullable String parseNullableNode(@Nullable String text, @NonNull ActionContext context) {
+        return text == null ? null : parseNode(text, context);
+    }
+
+    /**
+     * 解析节点内容
+     *
+     * @param spec    待解析节点内容
+     * @param context 上下文
+     * @return 解析值
+     */
+    public @Nullable String parseNodeSpec(@NonNull String spec, @NonNull ActionContext context) {
+        val index = spec.indexOf("::");
+        // 私有节点调用
+        if (index == -1) {
+            val cache = context.getSectionCache();
+            // 尝试读取缓存
+            if (cache.containsKey(spec)) {
+                // 直接返回对应节点值
+                return cache.get(spec).toString();
+                // 读取失败, 尝试主动解析
+            } else {
+                val sections = context.get(ContextKeys.SECTIONS);
+                // 尝试解析并返回对应节点值
+                if (sections != null && sections.containsKey(spec)) {
+                    // 获取节点ConfigReader
+                    val section = sections.getConfig(spec);
+                    // 简单节点
+                    if (section == null) {
+                        val text = sections.getString(spec);
+                        String result;
+                        if (text == null) {
+                            result = null;
+                        } else {
+                            result = parseNode(text, context);
+                            cache.put(spec, result);
+                        }
+                        return result;
+                    }
+                    // 加载节点
+                    val type = section.getString("type");
+                    val parser = getNodeParser(type);
+                    if (parser == null) {
+                        // 旧API兼容
+                        if (!(sections instanceof BukkitConfigReader)) return null;
+                        val player = context.getCaster();
+                        val bukkitSection = ((BukkitConfigReader) sections).getHandle().getConfigurationSection(spec);
+                        if (bukkitSection == null) return null;
+                        return new Section(
+                            bukkitSection,
+                            spec
+                        ).load(
+                            (Map<String, String>) (Object) cache,
+                            player instanceof OfflinePlayer ? (OfflinePlayer) player : null,
+                            bukkitSection
+                        );
+                    }
+                    val result = parser.parse(context, section);
+                    if (result != null) {
+                        cache.put(spec, result);
+                    }
+                    return result;
+                }
+                if (spec.startsWith("#")) {
+                    try {
+                        val rgb = Integer.parseInt(spec.substring(1), 16);
+                        return ColorUtils.toHexColorPrefix(rgb);
+                    } catch (NumberFormatException ignored) {
+                    }
+                }
+            }
+            return null;
+            // 即时声明节点解析
+        } else {
+            // 获取节点类型
+            val type = spec.substring(0, index);
+            val parser = getNodeParser(type);
+            val params = spec.substring(index + 2);
+            if (parser == null) {
+                // 旧API兼容
+                val legacyParser = SectionManager.INSTANCE.getSectionParsers().get(type);
+                if (legacyParser == null) return null;
+                val cache = context.getSectionCache();
+                val sections = context.get(ContextKeys.SECTIONS);
+                val player = context.getCaster();
+                return legacyParser.onRequest(
+                    StringUtils.split(params, '_', '\\'),
+                    (Map<String, String>) (Object) cache,
+                    player instanceof OfflinePlayer ? (OfflinePlayer) player : null,
+                    sections instanceof BukkitConfigReader ? ((BukkitConfigReader) sections).getHandle() : null
+                );
+            }
+            return params.isEmpty() ? parser.parse(context) : parser.parse(context, params);
         }
     }
 
@@ -889,6 +1042,7 @@ public abstract class BaseActionManager {
             };
         }
         actions.put(id.toLowerCase(Locale.ROOT), handler);
+        allActions.computeIfAbsent(plugin.getName().toLowerCase(Locale.ROOT), (k) -> new ConcurrentHashMap<>()).put(id.toLowerCase(Locale.ROOT), handler);
     }
 
     /**
@@ -964,6 +1118,17 @@ public abstract class BaseActionManager {
             };
         }
         actions.put(id.toLowerCase(Locale.ROOT), handler);
+        allActions.computeIfAbsent(plugin.getName().toLowerCase(Locale.ROOT), (k) -> new ConcurrentHashMap<>()).put(id.toLowerCase(Locale.ROOT), handler);
+    }
+
+    /**
+     * 添加节点解析器
+     *
+     * @param nodeParser 节点解析器
+     */
+    public void addNodeParser(@NonNull NodeParser nodeParser) {
+        this.nodeParsers.put(nodeParser.getId(), nodeParser);
+        allNodeParsers.computeIfAbsent(plugin.getName().toLowerCase(Locale.ROOT), (k) -> new ConcurrentHashMap<>()).put(nodeParser.getId(), nodeParser);
     }
 
     /**
@@ -1513,5 +1678,28 @@ public abstract class BaseActionManager {
             location.setPitch(pitch);
             entity.teleport(location);
         });
+    }
+
+    protected void loadBasicParsers() {
+        addNodeParser(new AmountParser(this));
+        addNodeParser(new CalculationParser(this));
+        addNodeParser(new ChanceParser(this));
+        addNodeParser(new CheckParser(this));
+        addNodeParser(new DamageParser(this));
+        addNodeParser(new DataParser(this));
+        addNodeParser(new DefaultParser(this));
+        addNodeParser(new FastCalcParser(this));
+        addNodeParser(new FormatParser(this));
+        addNodeParser(new GaussianParser(this));
+        addNodeParser(new GradientParser(this));
+        addNodeParser(new InheritParser(this));
+        addNodeParser(new JavascriptParser(this));
+        addNodeParser(new NameParser(this));
+        addNodeParser(new NbtParser(this));
+        addNodeParser(new pers.neige.neigeitems.action.node.impl.NumberParser(this));
+        addNodeParser(new PapiParser(this));
+        addNodeParser(new StringsParser(this));
+        addNodeParser(new TypeParser(this));
+        addNodeParser(new WeightParser(this));
     }
 }

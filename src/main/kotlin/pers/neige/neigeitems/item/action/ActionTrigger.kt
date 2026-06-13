@@ -3,6 +3,7 @@ package pers.neige.neigeitems.item.action
 import org.bukkit.configuration.ConfigurationSection
 import pers.neige.neigeitems.action.Action
 import pers.neige.neigeitems.action.ActionContext
+import pers.neige.neigeitems.action.evaluator.Evaluator
 import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.utils.SchedulerUtils
 
@@ -17,12 +18,12 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
     /**
      * 获取物品使用冷却
      */
-    val cooldown = config.getString("cooldown", "1000")
+    val cooldown = Evaluator.createLongEvaluator(ActionManager, config.get("cooldown", "1000"))
 
     /**
      * 获取tick型触发器触发间隔
      */
-    val tick = config.getString("tick", "10")
+    val tick = Evaluator.createLongEvaluator(ActionManager, config.get("tick", "10"))
 
     /**
      * 获取物品冷却组ID

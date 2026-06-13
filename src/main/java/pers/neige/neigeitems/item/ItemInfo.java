@@ -108,10 +108,14 @@ public final class ItemInfo {
     }
 
     public @Nullable String getDataValue(@NonNull String dataKey) {
+        return getDataValue(dataKey, null);
+    }
+
+    public @Nullable String getDataValue(@NonNull String dataKey, @Nullable String def) {
         if (this.dataNbt instanceof NbtCompound) {
-            return ((NbtCompound) dataNbt).getDeepString(dataKey);
+            return ((NbtCompound) dataNbt).getDeepString(dataKey, def);
         } else {
-            return getData().get(dataKey);
+            return getData().getOrDefault(dataKey, def);
         }
     }
 }

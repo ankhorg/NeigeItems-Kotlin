@@ -4,15 +4,17 @@ import com.alibaba.fastjson2.parseObject
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import pers.neige.neigeitems.NeigeItems
+import pers.neige.neigeitems.action.ActionContext
+import pers.neige.neigeitems.action.ContextKeys
 import pers.neige.neigeitems.annotation.Awake
 import pers.neige.neigeitems.hook.placeholderapi.PlaceholderExpansion
+import pers.neige.neigeitems.manager.ActionManager
 import pers.neige.neigeitems.manager.ConfigManager
 import pers.neige.neigeitems.manager.HookerManager
 import pers.neige.neigeitems.manager.HookerManager.papiHooker
 import pers.neige.neigeitems.utils.ItemUtils.getItemId
 import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.io.InputStreamReader
 import java.util.concurrent.ConcurrentHashMap
 import javax.script.CompiledScript
@@ -39,10 +41,14 @@ object PapiExpansion {
             val params = param.split("_", limit = 2)
             when (val key = params[0].lowercase()) {
                 "parse" -> {
-                    val cache = HashMap<String, String>()
-                    cache["papi-environment"] = ""
-                    return@newPlaceholderExpansion params.getOrNull(1)?.parseSection(cache, player, null) ?: ""
+                    return@newPlaceholderExpansion ActionManager.parseNode(
+                        params.getOrNull(1) ?: return@newPlaceholderExpansion "", ActionContext.builder()
+                            .caster(player)
+                            .with(ContextKeys.PAPI_ENVIRONMENT, null)
+                            .build()
+                    )
                 }
+
                 "data", "nbt" -> {
                     // 玩家在线且当前PAPI变量输入了参数
                     if (player is Player && params.size == 2) {

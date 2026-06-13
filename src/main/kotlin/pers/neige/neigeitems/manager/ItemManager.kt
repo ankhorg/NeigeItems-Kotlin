@@ -7,6 +7,9 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.slf4j.LoggerFactory
+import pers.neige.neigeitems.action.ActionContext
+import pers.neige.neigeitems.action.ContextKeys
+import pers.neige.neigeitems.config.ConfigReader
 import pers.neige.neigeitems.event.ItemUpdateEvent
 import pers.neige.neigeitems.item.ItemConfig
 import pers.neige.neigeitems.item.ItemGenerator
@@ -26,7 +29,6 @@ import pers.neige.neigeitems.utils.ItemUtils.getNbt
 import pers.neige.neigeitems.utils.ItemUtils.isNiItem
 import pers.neige.neigeitems.utils.ItemUtils.setDamage
 import pers.neige.neigeitems.utils.LangUtils.sendLang
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -627,16 +629,21 @@ object ItemManager : ItemConfigManager() {
         // 检测hashCode匹配情况, 匹配代表不需要更新
         if (neigeItems.getInt("hashCode", item.hashCode) == item.hashCode && !forceUpdate) return
         val data = itemInfo.data
+        val context = ActionContext.builder()
+            .caster(player)
+            .with(ContextKeys.SECTIONS, ConfigReader.parse(item.sections))
+            .with(ContextKeys.SECTION_CACHE, data as Map<String, Any?>?)
+            .build()
         // 获取待重构节点
         val rebuild = hashMapOf<String, String>().also {
             item.rebuildData?.forEach { (key, value) ->
-                it[key.parseSection(data, player, item.sections)] = value.parseSection(data, player, item.sections)
+                it[ActionManager.parseNode(key, context)] = ActionManager.parseNode(value, context)
             }
         }
         // 获取待刷新节点
         val refresh = arrayListOf<String>().also {
             item.refreshData.forEach { key ->
-                it.add(key.parseSection(data, player, item.sections))
+                it.add(ActionManager.parseNode(key, context))
             }
         }
         // 进行待重构节点覆盖
