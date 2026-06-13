@@ -50,6 +50,8 @@ pers.neige.neigeitems.action.evaluator.impl.i64
 pers.neige.neigeitems.action.evaluator.impl.string
 pers.neige.neigeitems.action.handler
 pers.neige.neigeitems.action.impl
+pers.neige.neigeitems.action.node
+pers.neige.neigeitems.action.node.impl
 pers.neige.neigeitems.action.result
 pers.neige.neigeitems.annotation
 pers.neige.neigeitems.calculate
