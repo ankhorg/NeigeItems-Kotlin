@@ -8,7 +8,6 @@ import pers.neige.neigeitems.action.ActionContext
 import pers.neige.neigeitems.annotation.CustomField
 import pers.neige.neigeitems.colonel.argument.command.PlayerArgument
 import pers.neige.neigeitems.manager.ActionManager
-import pers.neige.neigeitems.utils.SectionUtils.parseSection
 
 /**
  * ni parse指令

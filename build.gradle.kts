@@ -105,7 +105,7 @@ dependencies {
     // openjdk-nashorn
     implementation(fileTree("libs/relocated-nashorn-15.4.jar"))
     // fastjson2
-    implementation("com.alibaba.fastjson2:fastjson2-kotlin:2.0.53")
+    implementation("com.alibaba.fastjson2:fastjson2-kotlin:2.0.62")
     // multiple-string-searcher
     implementation("org.neosearch.stringsearcher:multiple-string-searcher:0.1.1")
     // maven-model
