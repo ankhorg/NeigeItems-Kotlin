@@ -1,0 +1,651 @@
+<!DOCTYPE HTML>
+<!-- NewPage -->
+<html lang="en"><head>
+    <title>OffsetJSONReader 1.21.147 API </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="dc.created" content="2020-03-25">
+    <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+    <link rel="stylesheet" type="text/css" href="../../../dokka-javadoc-stylesheet.css" title="Style">
+    <link rel="stylesheet" type="text/css" href="../../../jquery/jquery-ui.css" title="Style">
+    <script type="text/javascript" src="../../../jquery/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="../../../jquery/jquery-migrate-3.4.0.min.js"></script>
+    <script type="text/javascript" src="../../../jquery/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="../../../search.js"></script>
+    <script async type="text/javascript" src="../../../module-search-index.js"></script>
+    <script async type="text/javascript" src="../../../package-search-index.js"></script>
+    <script async type="text/javascript" src="../../../type-search-index.js"></script>
+    <script async type="text/javascript" src="../../../member-search-index.js"></script>
+    <script async type="text/javascript" src="../../../tag-search-index.js"></script>
+</head><body>
+<script type="text/javascript">
+var pathtoroot = "../../../";
+</script>
+<noscript>
+    <div>JavaScript is disabled on your browser.</div>
+</noscript><header role="banner">
+    <nav role="navigation">
+        <div class="fixedNav">
+            <!-- ========= START OF TOP NAVBAR ======= -->
+            <div class="topNav"><a id="navbar.top">
+                <!--   -->
+            </a>
+                <div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a>
+                </div>
+                <a id="navbar.top.firstrow">
+                    <!--   -->
+                </a>
+                <ul class="navList" title="Navigation">
+    <li><a href="../../../index.html">Overview</a></li>
+    
+    <li><a href="package-summary.html">Package</a></li>
+    
+    <li class="navBarCell1Rev">Class</li>
+    
+    <li><a href="package-tree.html">Tree</a></li>
+    
+    <li><a href="../../../deprecated.html">Deprecated</a></li>
+    <li><a href="../../../index-files/index-1.html">Index</a></li>
+    <li>Help</li>
+</ul></div>
+            <div class="subNav">
+<ul class="navList" id="allclasses_navbar_top" style="display: block;">
+    <li><a href="../../../allclasses.html">All&nbsp;Classes</a></li>
+</ul>
+
+<ul class="navListSearch">
+<li><label for="search">SEARCH:</label>
+<input type="text" id="search" value="search" class="ui-autocomplete-input" autocomplete="off" placeholder="Search">
+<input type="reset" id="reset" value="reset">
+</li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+</div>
+<a id="skip.navbar.top">
+<!--   -->
+</a></div><!-- ========= END OF TOP NAVBAR ========= -->
+        </div>
+        <div class="navPadding">&nbsp;</div>
+        <script type="text/javascript"><!--
+        $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
+        //-->
+        </script>
+    </nav>
+</header>
+
+<main role="main">
+    <div class="header">
+        <div class="subTitle"><span class="packageLabelInType">Package</span>&nbsp;<a href="package-summary.html">com.alibaba.fastjson2</a></div>
+        <h2 title="Class OffsetJSONReader" class="title">Class OffsetJSONReader</h2>
+    </div>
+    <div class="contentContainer">
+        <!-- <ul class="inheritance">
+            <li>java.lang.Object</li>
+            <li>
+                <ul class="inheritance">
+                    <li>adaptation.Adaptation</li>
+                </ul>
+            </li>
+        </ul> TODO inheritance tree -->
+        <div class="description">
+            <ul class="blockList">
+                <li class="blockList">
+                    
+                    <dl>
+                        <dt>All Implemented Interfaces:</dt>
+                        <dd>
+                            
+                            <code>java.io.Closeable</code>
+                            
+                            ,
+                            
+                            
+                            <code>java.lang.AutoCloseable</code>
+                            
+                            
+                        </dd>
+                    </dl>
+                    
+                    <hr>
+                    <pre class="wrap-overflow">
+
+public class <span class="typeNameLabel"><a href=OffsetJSONReader.html>OffsetJSONReader</a></span>
+extends JSONReaderUTF8
+                    </pre>
+                    <div class="block"><p>A JSONReader that extends JSONReaderUTF8 to track the exact byte offset where a parsed JSON object ends. Designed for non-greedy parsing: when the input contains trailing non-JSON content after a valid object, this reader captures the precise boundary. </p><p>This class lives in the <code>com.alibaba.fastjson2</code> package because <code>JSONReaderUTF8</code> is package-private. It does not modify any existing source files.</p><p>Supported features (passed through to the underlying reader):</p><ul><li>AllowUnQuotedFieldNames — unquoted keys like <code>{key:&quot;val&quot;}</code></li><li>IgnoreCheckClose — no-op on the readObject() path; trailing content is naturally ignored</li><li>NonStringKeyAsString — numeric keys are handled as unquoted names when AllowUnQuotedFieldNames is set</li></ul><pre><code><pre><code>
+OffsetResult r = OffsetJSONReader.parseObject(
+    &quot;{\&quot;test\&quot;:\&quot;111\&quot;} trailing garbage&quot;,
+    Feature.AllowUnQuotedFieldNames,
+    Feature.IgnoreCheckClose,
+    Feature.NonStringKeyAsString
+);
+Map&lt;String, Object&gt; map = r.object;  // {&quot;test&quot;:&quot;111&quot;}
+int endOffset = r.endOffset;         // byte position right after '</code></pre>'
+}</code></pre></div>
+
+                    <dl>
+
+                    
+
+                    
+
+                    </dl>
+                </li>
+            </ul>
+        </div>
+        <div class="summary">
+            <ul class="blockList">
+                <li class="blockList">
+                <!-- ======== NESTED CLASS SUMMARY ======== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="nested.class.summary">
+                                <!--   -->
+                            </a>
+                                <h3>Nested Class Summary</h3>
+                                <div class="memberSummary">
+                                    <table>
+                                        <caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+                                        <tr>
+                                            <th class="colFirst" scope="col">Modifier and Type</th>
+                                            <th class="colSecond" scope="col">Class</th>
+                                            <th class="colLast" scope="col">Description</th>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public class</code></td>
+                                            <th class="colSecond" scope="row"><code><a href="OffsetJSONReader.OffsetResult.html">OffsetJSONReader.OffsetResult</a></span></code>
+                                            </th>
+                                            <td class="colLast"><p>Holds the result of a non-greedy JSON object parse.</p></td>
+                                        </tr>
+                                        
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <!-- =========== FIELD SUMMARY =========== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="field.summary">
+                                <!--   -->
+                            </a>
+                                <h3>Field Summary</h3>
+                                <div class="memberSummary">
+                                    <table>
+                                        <caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+                                        <tr>
+                                            <th class="colFirst" scope="col">Modifier and Type</th>
+                                            <th class="colSecond" scope="col">Field</th>
+                                            <th class="colLast" scope="col">Description</th>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public  int</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=OffsetJSONReader.html#jsonEndOffset>jsonEndOffset</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>public final boolean</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=OffsetJSONReader.html#jsonb>jsonb</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public final boolean</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=OffsetJSONReader.html#utf8>utf8</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <!-- ======== CONSTRUCTOR SUMMARY ======== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="constructor.summary">
+                                <!--   -->
+                            </a>
+                                <h3>Constructor Summary</h3>
+                                <div class="memberSummary">
+                                    <table>
+                                        <caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
+                                        <tbody>
+                                        <tr>
+                                            <th class="colFirst" scope="col">Constructor</th>
+                                            <th class="colLast" scope="col">Description</th>
+                                        </tr>
+
+                                        
+                                            <tr class="altColor">
+                                                <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
+                                                        href="#OffsetJSONReader(com.alibaba.fastjson2.JSONReader.Context,kotlin.Array,int,int)">OffsetJSONReader</a></span>(JSONReader.Context ctx, <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; bytes, int offset, int length)</code></th>
+                                                <td class="colLast">Constructs an OffsetJSONReader over a byte range.</td>
+                                            </tr>
+                                        
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <!-- =========== ENUM CONSTANT SUMMARY =========== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="enum.constant.summary">
+                                <!--   -->
+                            </a>
+                                <h3>Enum Constant Summary</h3>
+                                <table class="memberSummary">
+                                    <caption><span>Enum Constants</span><span class="tabEnd">&nbsp;</span></caption>
+                                    <tr>
+                                        <th class="colFirst" scope="col">Enum Constant</th>
+                                        <th class="colLast" scope="col">Description</th>
+                                    </tr>
+                                    
+                                </table>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <!-- ========== METHOD SUMMARY =========== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="method.summary">
+                                <!--   -->
+                            </a>
+                                <h3>Method Summary</h3>
+                                <div class="memberSummary">
+                                    <div role="tablist" aria-orientation="horizontal">
+                                        <button role="tab" aria-selected="true" aria-controls="memberSummary_tabpanel" tabindex="0" onkeydown="switchTab(event)" id="t0" class="activeTableTab">All Methods</button>
+                                        <!-- TODO: Instance and Concrete Methods #1118 -->
+                                    </div>
+                                    <div id="memberSummary_tabpanel" role="tabpanel">
+                                    <table aria-labelledby="t0">
+                                        <tr>
+                                            <th class="colFirst" scope="col">Modifier and Type</th>
+                                            <th class="colSecond" scope="col">Method</th>
+                                            <th class="colLast" scope="col">Description</th>
+                                        </tr>
+                                        
+                                        <tr id="i0" class="altColor">
+                                            <td class="colFirst"><code>int</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=OffsetJSONReader.html#getJsonEndOffset()>getJsonEndOffset</a>() </code>
+                                            </th>
+                                            <td class="colLast">Returns the byte offset immediately after the closing '}' of the most recently parsed top-level JSON object, or -1 if no object has been parsed yet.</td>
+                                        </tr>
+                                        
+                                        <tr id="i1" class="rowColor">
+                                            <td class="colFirst"><code>void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=OffsetJSONReader.html#next()>next</a>() </code>
+                                            </th>
+                                            <td class="colLast">Intercepts next to capture the byte offset at the exact moment a JSON object's closing '}' is detected.</td>
+                                        </tr>
+                                        
+                                        <tr id="i2" class="altColor">
+                                            <td class="colFirst"><code>static <a href=OffsetJSONReader.OffsetResult.html>OffsetJSONReader.OffsetResult</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=OffsetJSONReader.html#parseObject(kotlin.Array,kotlin.Array)>parseObject</a>(<a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; utf8Bytes, <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;JSONReader.Feature&gt; features) </code>
+                                            </th>
+                                            <td class="colLast">Non-greedy JSON object parse over the full byte array.</td>
+                                        </tr>
+                                        
+                                        <tr id="i3" class="rowColor">
+                                            <td class="colFirst"><code>static <a href=OffsetJSONReader.OffsetResult.html>OffsetJSONReader.OffsetResult</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=OffsetJSONReader.html#parseObject(kotlin.Array,int,int,kotlin.Array)>parseObject</a>(<a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; utf8Bytes, int off, int len, <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;JSONReader.Feature&gt; features) </code>
+                                            </th>
+                                            <td class="colLast">Non-greedy JSON object parse over a byte range.</td>
+                                        </tr>
+                                        
+                                        <tr id="i4" class="altColor">
+                                            <td class="colFirst"><code>static <a href=OffsetJSONReader.OffsetResult.html>OffsetJSONReader.OffsetResult</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=OffsetJSONReader.html#parseObject(java.lang.String,kotlin.Array)>parseObject</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> json, <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;JSONReader.Feature&gt; features) </code>
+                                            </th>
+                                            <td class="colLast">Non-greedy JSON object parse from a String.</td>
+                                        </tr>
+                                        
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <ul class="blockList">
+                                
+                                    <li class="blockList"><a id="methods.inherited.from.class.com.alibaba.fastjson2.JSONReaderUTF8">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;com.alibaba.fastjson2.JSONReaderUTF8</h3>
+                                            <code>close, getFieldName, getNameHashCodeLCase, getRawInt, getRawLong, getString, getStringLength, info, isNull, isReference, next, nextIfArrayEnd, nextIfArrayStart, nextIfComma, nextIfInfinity, nextIfMatch, nextIfMatchIdent, nextIfName4Match10, nextIfName4Match11, nextIfName4Match12, nextIfName4Match13, nextIfName4Match14, nextIfName4Match15, nextIfName4Match16, nextIfName4Match17, nextIfName4Match18, nextIfName4Match19, nextIfName4Match2, nextIfName4Match20, nextIfName4Match21, nextIfName4Match22, nextIfName4Match23, nextIfName4Match24, nextIfName4Match25, nextIfName4Match26, nextIfName4Match27, nextIfName4Match28, nextIfName4Match29, nextIfName4Match3, nextIfName4Match30, nextIfName4Match31, nextIfName4Match32, nextIfName4Match33, nextIfName4Match34, nextIfName4Match35, nextIfName4Match36, nextIfName4Match37, nextIfName4Match38, nextIfName4Match39, nextIfName4Match4, nextIfName4Match40, nextIfName4Match41, nextIfName4Match42, nextIfName4Match43, nextIfName4Match5, nextIfName4Match6, nextIfName4Match7, nextIfName4Match8, nextIfName4Match9, nextIfName8Match0, nextIfName8Match1, nextIfName8Match2, nextIfNull, nextIfNullOrEmptyString, nextIfObjectEnd, nextIfObjectStart, nextIfSet, nextIfValue4Match10, nextIfValue4Match11, nextIfValue4Match2, nextIfValue4Match3, nextIfValue4Match4, nextIfValue4Match5, nextIfValue4Match6, nextIfValue4Match7, nextIfValue4Match8, nextIfValue4Match9, nextWithoutComment, of, readBase64, readBigDecimal, readBoolValue, readDoubleValue, readFieldName, readFieldNameHashCode, readFieldNameHashCodeE, readFieldNameHashCodeUnquote, readFloatValue, readHex, readIfNull, readInt32, readInt32Value, readInt64, readInt64Value, readLocalDate, readLocalDate10, readLocalDate8, readLocalDate9, readMillis19, readNaN, readNull, readNullOrNewDate, readNumber, readNumber0, readOffsetDateTime, readOffsetTime, readPattern, readReference, readString, readString, readUUID, readValueHashCode, skipComment, skipName, skipValue</code></li>
+                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.com.alibaba.fastjson2.JSONReader">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;com.alibaba.fastjson2.JSONReader</h3>
+                                            <code>addResolveTask, autoTypeFilter, checkAutoType, current, endArray, errorOnNoneSerializable, features, getBigDecimal, getBigInteger, getContext, getDoubleValue, getFloatValue, getInt32Value, getInt64Value, getLocale, getNumber, getObjectReader, getObjectReaderAutoType, getOffset, getType, getZoneId, handleResolveTasks, hasAutoTypeBeforeHandler, hasComma, isArray, isBinary, isBool, isDate, isEnabled, isEnd, isIgnoreNoneSerializable, isInitStringFieldAsEmpty, isInt, isJSONB, isNumber, isObject, isString, isSupportAutoType, isSupportAutoTypeOrHandler, isSupportBeanArray, isSupportSmartMatch, isTypeRedirect, mark, nextIfMatchTypedAny, of, ofJSONB, read, read, readAny, readArray, readArray, readArray, readBigInteger, readBinary, readBool, readCalendar, readCharValue, readCharacter, readDate, readDouble, readFieldNameUnquote, readFloat, readInstant, readInt16, readInt16Value, readInt32ValueArray, readInt64ValueArray, readInt8, readInt8Value, readJSONArray, readJSONObject, readList, readLocalDateTime, readLocalTime, readMillisFromString, readNumber, readObject, readObject, readReference, readStringArray, readTypeHashCode, readZonedDateTime, reset, setTypeRedirect, startArray, wasNull</code></li>
+                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
+                                        <!--   -->
+                                    </a>
+                                        <h3>Methods inherited from class&nbsp;java.lang.Object</h3>
+                                        <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString,
+                                            wait, wait, wait</code></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+                    
+                </li>
+            </ul>
+        </div>
+        <div class="details">
+            <ul class="blockList">
+                <li class="blockList">
+                    <!-- ========= CONSTRUCTOR DETAIL ======== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="constructor.detail">
+                                <!--   -->
+                            </a>
+                                <h3>Constructor Detail</h3>
+                                
+                                <a name="OffsetJSONReader(com.alibaba.fastjson2.JSONReader.Context,kotlin.Array,int,int)"></a>
+                                <ul class="blockList">
+                                    <li class="blockList">
+                                        <h4>OffsetJSONReader</h4>
+                                        <pre>OffsetJSONReader(JSONReader.Context ctx, <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; bytes, int offset, int length)</pre>
+                                        <div class="block">Constructs an OffsetJSONReader over a byte range.</div>
+                                        
+                                        <dl>
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>ctx</code> - the reader context (features, provider, etc.</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>bytes</code> - the UTF-8 encoded input</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>offset</code> - start offset in the array</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>length</code> - number of bytes to read</dd>
+                                            
+                                            
+                                        </dl>
+                                        
+                                    </li>
+                                </ul>
+                                
+                            </li>
+                        </ul>
+                    </section>
+                    
+                    <!-- ============ METHOD DETAIL ========== -->
+                    
+                    <section role="region">
+                        <ul class="blockList">
+                            <li class="blockList"><a id="method.detail">
+                                <!--   -->
+                            </a>
+                                <h3>Method Detail</h3>
+                                
+                                <a id="getJsonEndOffset()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getJsonEndOffset</h4>
+                                        <pre class="methodSignature"> int <a href=OffsetJSONReader.html#getJsonEndOffset()>getJsonEndOffset</a>()</pre>
+                                        <div class="block"><p>Returns the byte offset immediately after the closing '}' of the most recently parsed top-level JSON object, or -1 if no object has been parsed yet.</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="next()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>next</h4>
+                                        <pre class="methodSignature"> void <a href=OffsetJSONReader.html#next()>next</a>()</pre>
+                                        <div class="block"><p>Intercepts next to capture the byte offset at the exact moment a JSON object's closing '}' is detected. </p><p>The core insight: in <code>JSONReader.readObject()</code> (line 3719), when <code>ch == '</code>'} the reader calls <code>next()</code> to advance past the brace. At that instant <code>this.offset</code> points to the byte immediately following '}' — the precise JSON end boundary. We save this value before <code>super.next()</code> overwrites it with the lookahead position.</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="parseObject(kotlin.Array,kotlin.Array)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>parseObject</h4>
+                                        <pre class="methodSignature"> static <a href=OffsetJSONReader.OffsetResult.html>OffsetJSONReader.OffsetResult</a> <a href=OffsetJSONReader.html#parseObject(kotlin.Array,kotlin.Array)>parseObject</a>(<a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; utf8Bytes, <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;JSONReader.Feature&gt; features)</pre>
+                                        <div class="block"><p>Non-greedy JSON object parse over the full byte array.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>utf8Bytes</code> - UTF-8 encoded JSON text (trailing content allowed)</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>features</code> - optional reader features</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>the parsed map and the byte offset where JSON ended</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="parseObject(kotlin.Array,int,int,kotlin.Array)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>parseObject</h4>
+                                        <pre class="methodSignature"> static <a href=OffsetJSONReader.OffsetResult.html>OffsetJSONReader.OffsetResult</a> <a href=OffsetJSONReader.html#parseObject(kotlin.Array,int,int,kotlin.Array)>parseObject</a>(<a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;byte&gt; utf8Bytes, int off, int len, <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;JSONReader.Feature&gt; features)</pre>
+                                        <div class="block"><p>Non-greedy JSON object parse over a byte range.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>utf8Bytes</code> - UTF-8 encoded JSON text (trailing content allowed)</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>off</code> - start offset</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>len</code> - number of bytes to read</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>features</code> - optional reader features</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>the parsed map and the byte offset where JSON ended</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="parseObject(java.lang.String,kotlin.Array)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>parseObject</h4>
+                                        <pre class="methodSignature"> static <a href=OffsetJSONReader.OffsetResult.html>OffsetJSONReader.OffsetResult</a> <a href=OffsetJSONReader.html#parseObject(java.lang.String,kotlin.Array)>parseObject</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> json, <a href=https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html>Array</a>&lt;JSONReader.Feature&gt; features)</pre>
+                                        <div class="block"><p>Non-greedy JSON object parse from a String. The string is converted to UTF-8 bytes internally; the returned <code>endOffset</code> is a byte offset within that UTF-8 representation.</p></div>
+
+                                        <dl>
+
+                                        
+                                            <dt><span class="paramLabel">Parameters:</span></dt>
+                                            
+                                            
+                                            <dd><code>json</code> - the JSON string (trailing content allowed)</dd>
+                                            
+                                            
+                                            
+                                            <dd><code>features</code> - optional reader features</dd>
+                                            
+                                            
+                                        
+
+                                        
+                                            <dt><span class="returnLabel">Returns:</span></dt>
+                                            <dd><p>the parsed map and the byte offset where JSON ended</p></dd>
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                            </li>
+                        </ul>
+                    </section>
+                    
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+<footer role="contentinfo">
+    <nav role="navigation">
+        <!-- ======= START OF BOTTOM NAVBAR ====== -->
+        <div class="bottomNav"><a id="navbar.bottom">
+            <!--   -->
+        </a>
+            <div class="skipNav"><a href="#skip.navbar.bottom" title="Skip navigation links">Skip navigation links</a>
+            </div>
+            <a id="navbar.bottom.firstrow">
+                <!--   -->
+            </a>
+            <ul class="navList" title="Navigation">
+    <li><a href="../../../index.html">Overview</a></li>
+    
+    <li><a href="package-summary.html">Package</a></li>
+    
+    <li class="navBarCell1Rev">Class</li>
+    
+    <li><a href="package-tree.html">Tree</a></li>
+    
+    <li><a href="../../../deprecated.html">Deprecated</a></li>
+    <li><a href="../../../index-files/index-1.html">Index</a></li>
+    <li>Help</li>
+</ul></div>
+        <a id="skip.navbar.bottom">
+            <!--   -->
+        </a>
+        <div class="subNav">
+<ul class="navList" id="allclasses_navbar_top" style="display: block;">
+    <li><a href="../../../allclasses.html">All&nbsp;Classes</a></li>
+</ul>
+<div>
+<script type="text/javascript"><!--
+  allClassesLink = document.getElementById("allclasses_navbar_top");
+  if(window==top) {
+    allClassesLink.style.display = "block";
+  }
+  else {
+    allClassesLink.style.display = "none";
+  }
+  //-->
+</script>
+<noscript>
+<div>JavaScript is disabled on your browser.</div>
+</noscript>
+</div>
+<a id="skip.navbar.top">
+<!--   -->
+</a></div><!-- ======== END OF BOTTOM NAVBAR ======= -->
+    </nav>
+</footer><ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content" id="ui-id-1" tabindex="0"
+    style="display: none;"></ul>
+<span role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></span>
+</body>
+</html>

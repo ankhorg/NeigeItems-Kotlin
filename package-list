@@ -1,5 +1,6 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
+$dokka.location:com.alibaba.fastjson2/OffsetJSONReader.OffsetResult///PointingToDeclaration/com/alibaba/fastjson2/OffsetJSONReader.OffsetResult.html
 $dokka.location:pers.neige.neigeitems.action.impl/TreeAction.TreeActionType///PointingToDeclaration/pers/neige/neigeitems/action/impl/TreeAction.TreeActionType.html
 $dokka.location:pers.neige.neigeitems.action/ActionContext.Builder///PointingToDeclaration/pers/neige/neigeitems/action/ActionContext.Builder.html
 $dokka.location:pers.neige.neigeitems.annotation/Awake.LifeCycle///PointingToDeclaration/pers/neige/neigeitems/annotation/Awake.LifeCycle.html
@@ -37,6 +38,7 @@ $dokka.location:pers.neige.neigeitems.utils.cooldown/StackableCooldown.Config///
 $dokka.location:pers.neige.neigeitems.utils.cooldown/StackableCooldown.ConsumeResult///PointingToDeclaration/pers/neige/neigeitems/utils/cooldown/StackableCooldown.ConsumeResult.html
 $dokka.location:pers.neige.neigeitems.utils.cooldown/StackableCooldown.Status///PointingToDeclaration/pers/neige/neigeitems/utils/cooldown/StackableCooldown.Status.html
 $dokka.location:pers.neige.neigeitems.utils/SamplingUtils.SamplingResult///PointingToDeclaration/pers/neige/neigeitems/utils/SamplingUtils.SamplingResult.html
+com.alibaba.fastjson2
 pers.neige.neigeitems
 pers.neige.neigeitems.action
 pers.neige.neigeitems.action.catcher
