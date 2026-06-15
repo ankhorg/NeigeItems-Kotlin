@@ -917,7 +917,8 @@ public abstract class BaseActionManager {
                         // 旧API兼容
                         if (!(sections instanceof BukkitConfigReader)) return null;
                         val player = context.getCaster();
-                        val bukkitSection = ((BukkitConfigReader) sections).getHandle().getConfigurationSection(spec);
+                        val bukkitSections = ((BukkitConfigReader) sections).getHandle();
+                        val bukkitSection = bukkitSections.getConfigurationSection(spec);
                         if (bukkitSection == null) return null;
                         return new Section(
                             bukkitSection,
@@ -925,7 +926,7 @@ public abstract class BaseActionManager {
                         ).load(
                             (Map<String, String>) (Object) cache,
                             player instanceof OfflinePlayer ? (OfflinePlayer) player : null,
-                            bukkitSection
+                            bukkitSections
                         );
                     }
                     val result = parser.parse(context, section);
