@@ -216,7 +216,6 @@ abstract class MythicMobsHooker {
         // 掉落装备概率
         val dropEquipment = config.getStringList("NeigeItems.DropEquipment")
 
-        val entityEquipment = entity.equipment
         val dropChance = HashMap<String, Double>()
 
         // 构建怪物参数
@@ -239,7 +238,7 @@ abstract class MythicMobsHooker {
             dropChance[id] = chance
         }
 
-        // 获取出生附带装备信息f
+        // 获取出生附带装备信息
         for (value in equipment) {
             val string = ActionManager.parseNode(value, context)
             if (!string.contains(": ")) continue
@@ -267,29 +266,41 @@ abstract class MythicMobsHooker {
                 }
                 val event = MythicEquipEvent(entity, internalName, slot, itemStack)
                 if (!event.call()) continue
-                when (slot) {
-                    "helmet" -> {
-                        entityEquipment?.helmet = event.itemStack
-                    }
+                sync {
+                    if (entity.isDead) return@sync
+                    try {
+                        when (slot) {
+                            "helmet" -> {
+                                entity.equipment?.helmet = event.itemStack
+                            }
 
-                    "chestplate" -> {
-                        entityEquipment?.chestplate = event.itemStack
-                    }
+                            "chestplate" -> {
+                                entity.equipment?.chestplate = event.itemStack
+                            }
 
-                    "leggings" -> {
-                        entityEquipment?.leggings = event.itemStack
-                    }
+                            "leggings" -> {
+                                entity.equipment?.leggings = event.itemStack
+                            }
 
-                    "boots" -> {
-                        entityEquipment?.boots = event.itemStack
-                    }
+                            "boots" -> {
+                                entity.equipment?.boots = event.itemStack
+                            }
 
-                    "mainhand" -> {
-                        entityEquipment?.setItemInMainHand(event.itemStack)
-                    }
+                            "mainhand" -> {
+                                entity.equipment?.setItemInMainHand(event.itemStack)
+                            }
 
-                    "offhand" -> {
-                        entityEquipment?.setItemInOffHand(event.itemStack)
+                            "offhand" -> {
+                                entity.equipment?.setItemInOffHand(event.itemStack)
+                            }
+                        }
+                    } catch (error: Throwable) {
+                        ConfigManager.config.getString("Messages.equipFailed")?.let { message ->
+                            logger.info(
+                                message.replace("{mobID}", internalName).replace("{itemID}", args[0])
+                            )
+                        }
+                        error.printStackTrace()
                     }
                 }
             } catch (error: Throwable) {
