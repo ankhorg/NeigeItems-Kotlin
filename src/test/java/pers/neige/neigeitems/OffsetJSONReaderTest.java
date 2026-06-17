@@ -2,6 +2,7 @@ package pers.neige.neigeitems;
 
 import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.OffsetJSONReader;
+import lombok.val;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -15,7 +16,7 @@ public class OffsetJSONReaderTest {
 
     @Test
     public void testSimpleNoTrailing() {
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(
+        val r = OffsetJSONReader.parseObject(
                 "{\"test\":\"111\"}"
         );
         assertEquals("111", r.object.get("test"));
@@ -30,7 +31,7 @@ public class OffsetJSONReaderTest {
         String json = "{\"test\":\"111\"} fcwefsefrwe";
         byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
 
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(bytes);
+        val r = OffsetJSONReader.parseObject(bytes);
 
         assertEquals("111", r.object.get("test"));
         // The trailing text should start at endOffset
@@ -40,7 +41,7 @@ public class OffsetJSONReaderTest {
 
     @Test
     public void testTrailingComma() {
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(
+        val r = OffsetJSONReader.parseObject(
                 "{\"a\":1}    , extra stuff"
         );
         assertEquals(1, r.object.get("a"));
@@ -51,7 +52,7 @@ public class OffsetJSONReaderTest {
 
     @Test
     public void testEmpty() {
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject("{}");
+        val r = OffsetJSONReader.parseObject("{}");
         assertTrue(r.object.isEmpty());
         byte[] bytes = "{}".getBytes(StandardCharsets.UTF_8);
         assertEquals(bytes.length, r.endOffset);
@@ -62,7 +63,7 @@ public class OffsetJSONReaderTest {
         String json = "{\"outer\":{\"inner\":\"val\"}} garbage";
         byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
 
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(bytes);
+        val r = OffsetJSONReader.parseObject(bytes);
 
         assertInstanceOf(Map.class, r.object.get("outer"));
         Map<?, ?> inner = (Map<?, ?>) r.object.get("outer");
@@ -78,7 +79,7 @@ public class OffsetJSONReaderTest {
         String json = "{\"arr\":[1,2,3]} trailing";
         byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
 
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(bytes);
+        val r = OffsetJSONReader.parseObject(bytes);
 
         assertInstanceOf(List.class, r.object.get("arr"));
         String trailing = new String(bytes, r.endOffset, bytes.length - r.endOffset, StandardCharsets.UTF_8);
@@ -89,7 +90,7 @@ public class OffsetJSONReaderTest {
 
     @Test
     public void testAllowUnQuotedFieldNames() {
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(
+        val r = OffsetJSONReader.parseObject(
                 "{test:\"111\"}",
                 JSONReader.Feature.AllowUnQuotedFieldNames
         );
@@ -98,7 +99,7 @@ public class OffsetJSONReaderTest {
 
     @Test
     public void testUnquotedNumericKey() {
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(
+        val r = OffsetJSONReader.parseObject(
                 "{1:\"test\",2:\"val\"} trailing",
                 JSONReader.Feature.AllowUnQuotedFieldNames
         );
@@ -108,7 +109,7 @@ public class OffsetJSONReaderTest {
 
     @Test
     public void testAllThreeFeatures() {
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(
+        val r = OffsetJSONReader.parseObject(
                 "{code:1,msg:\"Hello world\"} trailing garbage",
                 JSONReader.Feature.AllowUnQuotedFieldNames,
                 JSONReader.Feature.IgnoreCheckClose,
@@ -121,7 +122,7 @@ public class OffsetJSONReaderTest {
 
     @Test
     public void testStringInput() {
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(
+        val r = OffsetJSONReader.parseObject(
                 "{\"key\":\"value\"} extra",
                 JSONReader.Feature.AllowUnQuotedFieldNames,
                 JSONReader.Feature.IgnoreCheckClose,
@@ -135,7 +136,7 @@ public class OffsetJSONReaderTest {
     @Test
     public void testMultipleValues() {
         // JSON with number and boolean
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(
+        val r = OffsetJSONReader.parseObject(
                 "{\"num\":42,\"flag\":true,\"str\":\"hello\"}  extra"
         );
         assertEquals(42, r.object.get("num"));
@@ -145,7 +146,7 @@ public class OffsetJSONReaderTest {
 
     @Test
     public void testNullValue() {
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(
+        val r = OffsetJSONReader.parseObject(
                 "{\"val\":null} trailing"
         );
         assertNull(r.object.get("val"));
@@ -153,7 +154,7 @@ public class OffsetJSONReaderTest {
 
     @Test
     public void testSingleCharKeyValue() {
-        OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(
+        val r = OffsetJSONReader.parseObject(
                 "{\"a\":\"b\"} trailing"
         );
         assertEquals("b", r.object.get("a"));
@@ -166,7 +167,7 @@ public class OffsetJSONReaderTest {
         byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
 
         for (int i = 0; i < 5; i++) {
-            OffsetJSONReader.OffsetResult r = OffsetJSONReader.parseObject(bytes);
+            val r = OffsetJSONReader.parseObject(bytes);
             assertEquals(1, r.object.get("x"));
             assertEquals(7, r.endOffset); // bytes: { " x " : 1 } = 7 bytes
         }

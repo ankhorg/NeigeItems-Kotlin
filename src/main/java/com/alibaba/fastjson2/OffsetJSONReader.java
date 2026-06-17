@@ -1,5 +1,7 @@
 package com.alibaba.fastjson2;
 
+import lombok.AllArgsConstructor;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -137,6 +139,7 @@ public class OffsetJSONReader extends JSONReaderUTF8 {
     /**
      * Holds the result of a non-greedy JSON object parse.
      */
+    @AllArgsConstructor
     public static class OffsetResult {
         /**
          * The parsed JSON object as a Map.
@@ -148,10 +151,5 @@ public class OffsetJSONReader extends JSONReaderUTF8 {
          * The remaining input (if any) starts at this offset.
          */
         public final int endOffset;
-
-        public OffsetResult(Map<String, Object> object, int endOffset) {
-            this.object = object;
-            this.endOffset = endOffset;
-        }
     }
 }
