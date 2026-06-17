@@ -58,9 +58,15 @@ object ScriptUtils {
             "DOWN" -> RoundingMode.DOWN
             "CEILING" -> RoundingMode.CEILING
             "FLOOR" -> RoundingMode.FLOOR
-            "HALF_UP" -> RoundingMode.HALF_UP
-            "HALF_DOWN" -> RoundingMode.HALF_DOWN
-            "HALF_EVEN" -> RoundingMode.HALF_EVEN
+            "HALF_UP",
+            // 适配老解析器写法
+            "HALF\\_UP" -> RoundingMode.HALF_UP
+            "HALF_DOWN",
+            // 适配老解析器写法
+            "HALF\\_DOWN" -> RoundingMode.HALF_DOWN
+            "HALF_EVEN",
+            // 适配老解析器写法
+            "HALF\\_EVEN" -> RoundingMode.HALF_EVEN
             else -> {
                 Bukkit.getConsoleSender().sendLang(
                     "Messages.invalidRoundingMode", mapOf(
