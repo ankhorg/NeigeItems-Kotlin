@@ -42,6 +42,12 @@ public class BukkitConfigReader implements ConfigReader {
     }
 
     @Override
+    @Contract("_, !null -> !null")
+    public @Nullable Object getOrDefault(@NonNull String key, @Nullable Object def) {
+        return handle.get(key, def);
+    }
+
+    @Override
     public String getString(@NonNull String key) {
         return handle.getString(key);
     }

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
+import pers.neige.neigeitems.action.evaluator.EvaluatorParser;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
@@ -16,7 +17,7 @@ import java.util.Set;
 
 @Getter
 @ToString(callSuper = true)
-public abstract class ContainsEvaluator<T> extends Evaluator<T> {
+public class ContainsEvaluator<T> extends Evaluator<T> {
     private final @NonNull String globalId;
     private final @NonNull Evaluator<String> key;
     private final @NonNull Evaluator<T> defaultEvaluator;
@@ -26,17 +27,16 @@ public abstract class ContainsEvaluator<T> extends Evaluator<T> {
     public ContainsEvaluator(
         @NonNull BaseActionManager manager,
         @NonNull Class<T> type,
-        @NonNull ConfigReader config
+        @NonNull ConfigReader config,
+        @NonNull EvaluatorParser<T> parser
     ) {
         super(manager, type);
         this.globalId = config.getString("global-id", "key");
         this.key = Evaluator.createStringEvaluator(manager, config.get("key"));
-        this.defaultEvaluator = parseEvaluator(config.get("default-evaluator"));
-        this.containsEvaluator = parseEvaluator(config.get("contains-evaluator"));
+        this.defaultEvaluator = parser.parse(config.get("default-evaluator"));
+        this.containsEvaluator = parser.parse(config.get("contains-evaluator"));
         this.elements = new HashSet<>(config.getStringList("elements"));
     }
-
-    protected abstract @NonNull Evaluator<T> parseEvaluator(@Nullable Object input);
 
     @Override
     @Contract("_, !null -> !null")

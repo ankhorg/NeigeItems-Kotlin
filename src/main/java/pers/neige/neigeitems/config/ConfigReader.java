@@ -46,6 +46,9 @@ public interface ConfigReader {
 
     @Nullable Object get(@NonNull String key);
 
+    @Contract("_, !null -> !null")
+    @Nullable Object getOrDefault(@NonNull String key, @Nullable Object def);
+
     @Nullable String getString(@NonNull String key);
 
     @Contract("_, !null -> !null")

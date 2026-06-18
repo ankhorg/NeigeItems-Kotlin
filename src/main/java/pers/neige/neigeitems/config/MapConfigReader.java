@@ -64,6 +64,13 @@ public class MapConfigReader implements ConfigReader {
     }
 
     @Override
+    @Contract("_, !null -> !null")
+    public @Nullable Object getOrDefault(@NonNull String key, @Nullable Object def) {
+        val value = get(key);
+        return value == null ? def : value;
+    }
+
+    @Override
     public String getString(@NonNull String key) {
         return getString(key, null);
     }

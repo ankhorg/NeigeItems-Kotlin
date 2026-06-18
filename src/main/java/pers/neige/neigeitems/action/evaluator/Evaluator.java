@@ -1,16 +1,15 @@
 package pers.neige.neigeitems.action.evaluator;
 
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
-import pers.neige.neigeitems.action.evaluator.impl.bool.*;
-import pers.neige.neigeitems.action.evaluator.impl.dbl.*;
-import pers.neige.neigeitems.action.evaluator.impl.i32.*;
-import pers.neige.neigeitems.action.evaluator.impl.i64.*;
-import pers.neige.neigeitems.action.evaluator.impl.string.*;
+import pers.neige.neigeitems.action.evaluator.impl.*;
+import pers.neige.neigeitems.action.evaluator.impl.converter.*;
+import pers.neige.neigeitems.action.evaluator.impl.list.*;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
@@ -18,385 +17,257 @@ import java.util.List;
 import java.util.Locale;
 
 @ToString
+@AllArgsConstructor
 public class Evaluator<T> {
     protected final @NonNull BaseActionManager manager;
     protected final @NonNull Class<T> type;
 
-    public Evaluator(@NonNull BaseActionManager manager, @NonNull Class<T> type) {
-        this.manager = manager;
-        this.type = type;
-    }
-
     public static @NonNull Evaluator<String> createStringEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
-        if (input == null) return manager.NULL_STRING_EVALUATOR;
-        val info = input.split(": ", 2);
-        val key = info[0].toLowerCase(Locale.ROOT);
-        val content = info.length > 1 ? info[1] : null;
-        switch (key) {
-            case "js":
-                return new JsStringEvaluator(manager, content);
-            case "raw":
-                return new RawStringEvaluator(manager, content);
-            default:
-                if (input.contains("<") && input.contains(">")) {
-                    return new ParseStringEvaluator(manager, input);
-                } else {
-                    return new RawStringEvaluator(manager, input);
-                }
-        }
+        return createEvaluator(manager, String.class, input, StringConverter.INSTANCE);
     }
 
     public static @NonNull Evaluator<String> createStringEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
-        if (input == null) return manager.NULL_STRING_EVALUATOR;
-        if (input instanceof Evaluator) return (Evaluator<String>) input;
-        if (input instanceof String) {
-            return createStringEvaluator(manager, (String) input);
-        } else if (input instanceof List<?>) {
-            return new ListStringEvaluator(manager, (List<?>) input);
-        }
-        val config = ConfigReader.parse(input);
-        if (config == null) return createStringEvaluator(manager, input.toString());
-        val type = config.getString("type", "").toLowerCase();
-        switch (type) {
-            case "condition": {
-                return new ConditionStringEvaluator(manager, config);
-            }
-            case "condition-weight": {
-                return new ConditionWeightStringEvaluator(manager, config);
-            }
-            case "contains": {
-                return new ContainsStringEvaluator(manager, config);
-            }
-            case "double-tree": {
-                return new DoubleTreeStringEvaluator(manager, config);
-            }
-            case "int-tree": {
-                return new IntTreeStringEvaluator(manager, config);
-            }
-            case "key": {
-                return new KeyStringEvaluator(manager, config);
-            }
-            case "weight": {
-                return new WeightStringEvaluator(manager, config);
-            }
-        }
-        if (config.containsKey("condition")) {
-            return new ConditionStringEvaluator(manager, config);
-        } else {
-            // 处理有人连引号都能忘的情况('js: Math.random()'写成了js: Math.random(), 也就是字符串写成了长度为1的map)
-            val keySet = config.keySet();
-            if (keySet.size() != 1) return manager.NULL_STRING_EVALUATOR;
-            val key = keySet.iterator().next();
-            val value = config.get(key);
-            if (!(value instanceof String)) return manager.NULL_STRING_EVALUATOR;
-            String content = (String) value;
-            if ("js".equals(key)) {
-                return new JsStringEvaluator(manager, content);
-            } else if ("raw".equals(key)) {
-                return new RawStringEvaluator(manager, content);
-            }
-        }
-        return manager.NULL_STRING_EVALUATOR;
+        return createEvaluator(manager, String.class, input, StringConverter.INSTANCE);
     }
 
     public static @NonNull Evaluator<Integer> createIntegerEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
-        if (input == null) return manager.NULL_INTEGER_EVALUATOR;
-        val info = input.split(": ", 2);
-        val key = info[0].toLowerCase(Locale.ROOT);
-        val content = info.length > 1 ? info[1] : null;
-        switch (key) {
-            case "js":
-                return new JsIntegerEvaluator(manager, content);
-            case "raw":
-                return new RawIntegerEvaluator(manager, content);
-            default:
-                val maybeRaw = new RawIntegerEvaluator(manager, input);
-                if (maybeRaw.getValue() == null) {
-                    return new ParseIntegerEvaluator(manager, input);
-                } else {
-                    return maybeRaw;
-                }
-        }
+        return createEvaluator(manager, Integer.class, input, IntegerConverter.INSTANCE);
     }
 
     public static @NonNull Evaluator<Integer> createIntegerEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
-        if (input == null) return manager.NULL_INTEGER_EVALUATOR;
-        if (input instanceof Evaluator) return (Evaluator<Integer>) input;
-        if (input instanceof String) {
-            return createIntegerEvaluator(manager, (String) input);
-        } else if (input instanceof Number) {
-            return new RawIntegerEvaluator(manager, ((Number) input).intValue());
-        } else if (input instanceof List<?>) {
-            return new ListIntegerEvaluator(manager, (List<?>) input);
-        }
-        val config = ConfigReader.parse(input);
-        if (config == null) return createIntegerEvaluator(manager, input.toString());
-        val type = config.getString("type", "").toLowerCase();
-        switch (type) {
-            case "condition": {
-                return new ConditionIntegerEvaluator(manager, config);
-            }
-            case "condition-weight": {
-                return new ConditionWeightIntegerEvaluator(manager, config);
-            }
-            case "contains": {
-                return new ContainsIntegerEvaluator(manager, config);
-            }
-            case "double-tree": {
-                return new DoubleTreeIntegerEvaluator(manager, config);
-            }
-            case "int-tree": {
-                return new IntTreeIntegerEvaluator(manager, config);
-            }
-            case "key": {
-                return new KeyIntegerEvaluator(manager, config);
-            }
-            case "weight": {
-                return new WeightIntegerEvaluator(manager, config);
-            }
-        }
-        if (config.containsKey("condition")) {
-            return new ConditionIntegerEvaluator(manager, config);
-        } else {
-            // 处理有人连引号都能忘的情况('js: Math.random()'写成了js: Math.random(), 也就是字符串写成了长度为1的map)
-            val keySet = config.keySet();
-            if (keySet.size() != 1) return manager.NULL_INTEGER_EVALUATOR;
-            val key = keySet.iterator().next();
-            val value = config.get(key);
-            if (!(value instanceof String)) return manager.NULL_INTEGER_EVALUATOR;
-            String content = (String) value;
-            if ("js".equals(key)) {
-                return new JsIntegerEvaluator(manager, content);
-            } else if ("raw".equals(key)) {
-                return new RawIntegerEvaluator(manager, content);
-            }
-        }
-        return manager.NULL_INTEGER_EVALUATOR;
+        return createEvaluator(manager, Integer.class, input, IntegerConverter.INSTANCE);
     }
 
     public static @NonNull Evaluator<Long> createLongEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
-        if (input == null) return manager.NULL_LONG_EVALUATOR;
-        val info = input.split(": ", 2);
-        val key = info[0].toLowerCase(Locale.ROOT);
-        val content = info.length > 1 ? info[1] : null;
-        switch (key) {
-            case "js":
-                return new JsLongEvaluator(manager, content);
-            case "raw":
-                return new RawLongEvaluator(manager, content);
-            default:
-                val maybeRaw = new RawLongEvaluator(manager, input);
-                if (maybeRaw.getValue() == null) {
-                    return new ParseLongEvaluator(manager, input);
-                } else {
-                    return maybeRaw;
-                }
-        }
+        return createEvaluator(manager, Long.class, input, LongConverter.INSTANCE);
     }
 
     public static @NonNull Evaluator<Long> createLongEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
-        if (input == null) return manager.NULL_LONG_EVALUATOR;
-        if (input instanceof Evaluator) return (Evaluator<Long>) input;
-        if (input instanceof String) {
-            return createLongEvaluator(manager, (String) input);
-        } else if (input instanceof Number) {
-            return new RawLongEvaluator(manager, ((Number) input).longValue());
-        } else if (input instanceof List<?>) {
-            return new ListLongEvaluator(manager, (List<?>) input);
-        }
-        val config = ConfigReader.parse(input);
-        if (config == null) return createLongEvaluator(manager, input.toString());
-        val type = config.getString("type", "").toLowerCase();
-        switch (type) {
-            case "condition": {
-                return new ConditionLongEvaluator(manager, config);
-            }
-            case "condition-weight": {
-                return new ConditionWeightLongEvaluator(manager, config);
-            }
-            case "contains": {
-                return new ContainsLongEvaluator(manager, config);
-            }
-            case "double-tree": {
-                return new DoubleTreeLongEvaluator(manager, config);
-            }
-            case "int-tree": {
-                return new IntTreeLongEvaluator(manager, config);
-            }
-            case "key": {
-                return new KeyLongEvaluator(manager, config);
-            }
-            case "weight": {
-                return new WeightLongEvaluator(manager, config);
-            }
-        }
-        if (config.containsKey("condition")) {
-            return new ConditionLongEvaluator(manager, config);
-        } else {
-            // 处理有人连引号都能忘的情况('js: Math.random()'写成了js: Math.random(), 也就是字符串写成了长度为1的map)
-            val keySet = config.keySet();
-            if (keySet.size() != 1) return manager.NULL_LONG_EVALUATOR;
-            val key = keySet.iterator().next();
-            val value = config.get(key);
-            if (!(value instanceof String)) return manager.NULL_LONG_EVALUATOR;
-            String content = (String) value;
-            if ("js".equals(key)) {
-                return new JsLongEvaluator(manager, content);
-            } else if ("raw".equals(key)) {
-                return new RawLongEvaluator(manager, content);
-            }
-        }
-        return manager.NULL_LONG_EVALUATOR;
+        return createEvaluator(manager, Long.class, input, LongConverter.INSTANCE);
     }
 
     public static @NonNull Evaluator<Double> createDoubleEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
-        if (input == null) return manager.NULL_DOUBLE_EVALUATOR;
-        val info = input.split(": ", 2);
-        val key = info[0].toLowerCase(Locale.ROOT);
-        val content = info.length > 1 ? info[1] : null;
-        switch (key) {
-            case "js":
-                return new JsDoubleEvaluator(manager, content);
-            case "raw":
-                return new RawDoubleEvaluator(manager, content);
-            default:
-                val maybeRaw = new RawDoubleEvaluator(manager, input);
-                if (maybeRaw.getValue() == null) {
-                    return new ParseDoubleEvaluator(manager, input);
-                } else {
-                    return maybeRaw;
-                }
-        }
+        return createEvaluator(manager, Double.class, input, DoubleConverter.INSTANCE);
     }
 
     public static @NonNull Evaluator<Double> createDoubleEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
-        if (input == null) return manager.NULL_DOUBLE_EVALUATOR;
-        if (input instanceof Evaluator) return (Evaluator<Double>) input;
-        if (input instanceof String) {
-            return createDoubleEvaluator(manager, (String) input);
-        } else if (input instanceof Number) {
-            return new RawDoubleEvaluator(manager, ((Number) input).doubleValue());
-        } else if (input instanceof List<?>) {
-            return new ListDoubleEvaluator(manager, (List<?>) input);
-        }
-        val config = ConfigReader.parse(input);
-        if (config == null) return createDoubleEvaluator(manager, input.toString());
-        val type = config.getString("type", "").toLowerCase();
-        switch (type) {
-            case "condition": {
-                return new ConditionDoubleEvaluator(manager, config);
-            }
-            case "condition-weight": {
-                return new ConditionWeightDoubleEvaluator(manager, config);
-            }
-            case "contains": {
-                return new ContainsDoubleEvaluator(manager, config);
-            }
-            case "double-tree": {
-                return new DoubleTreeDoubleEvaluator(manager, config);
-            }
-            case "int-tree": {
-                return new IntTreeDoubleEvaluator(manager, config);
-            }
-            case "key": {
-                return new KeyDoubleEvaluator(manager, config);
-            }
-            case "weight": {
-                return new WeightDoubleEvaluator(manager, config);
-            }
-        }
-        if (config.containsKey("condition")) {
-            return new ConditionDoubleEvaluator(manager, config);
-        } else {
-            // 处理有人连引号都能忘的情况('js: Math.random()'写成了js: Math.random(), 也就是字符串写成了长度为1的map)
-            val keySet = config.keySet();
-            if (keySet.size() != 1) return manager.NULL_DOUBLE_EVALUATOR;
-            val key = keySet.iterator().next();
-            val value = config.get(key);
-            if (!(value instanceof String)) return manager.NULL_DOUBLE_EVALUATOR;
-            String content = (String) value;
-            if ("js".equals(key)) {
-                return new JsDoubleEvaluator(manager, content);
-            } else if ("raw".equals(key)) {
-                return new RawDoubleEvaluator(manager, content);
-            }
-        }
-        return manager.NULL_DOUBLE_EVALUATOR;
+        return createEvaluator(manager, Double.class, input, DoubleConverter.INSTANCE);
     }
 
     public static @NonNull Evaluator<Boolean> createBooleanEvaluator(@NonNull BaseActionManager manager, @Nullable String input) {
-        if (input == null) return manager.NULL_BOOLEAN_EVALUATOR;
+        return createEvaluator(manager, Boolean.class, input, BooleanConverter.INSTANCE);
+    }
+
+    public static @NonNull Evaluator<Boolean> createBooleanEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
+        return createEvaluator(manager, Boolean.class, input, BooleanConverter.INSTANCE);
+    }
+
+    public static <T> @NonNull Evaluator<T> createEvaluator(
+        @NonNull BaseActionManager manager,
+        @NonNull Class<T> type,
+        @Nullable Object input
+    ) {
+        return createEvaluator(manager, type, input, new EvaluatorConverter<>(type));
+    }
+
+    public static <T> @NonNull Evaluator<T> createEvaluator(
+        @NonNull BaseActionManager manager,
+        @NonNull Class<T> type,
+        @Nullable String input,
+        @NonNull EvaluatorConverter<T> converter
+    ) {
+        if (input == null) return manager.getNullEvaluator(type);
         val info = input.split(": ", 2);
         val key = info[0].toLowerCase(Locale.ROOT);
         val content = info.length > 1 ? info[1] : null;
         switch (key) {
             case "js":
-                return new JsBooleanEvaluator(manager, content);
+                return new JsEvaluator<>(manager, type, content, converter);
             case "raw":
-                return new RawBooleanEvaluator(manager, content);
+                return new RawEvaluator<>(manager, type, content, converter);
             default:
-                val maybeRaw = new RawBooleanEvaluator(manager, input);
-                if (maybeRaw.getValue() == null) {
-                    return new ParseBooleanEvaluator(manager, input);
-                } else {
-                    return maybeRaw;
+                val maybe = converter.parseStaticValue(input);
+                if (maybe != null) {
+                    return new RawEvaluator<>(manager, type, maybe);
                 }
+                return new ParseEvaluator<>(manager, type, input, converter);
         }
     }
 
-    public static @NonNull Evaluator<Boolean> createBooleanEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
-        if (input == null) return manager.NULL_BOOLEAN_EVALUATOR;
-        if (input instanceof Evaluator) return (Evaluator<Boolean>) input;
+    @SuppressWarnings("unchecked")
+    public static <T> @NonNull Evaluator<T> createEvaluator(
+        @NonNull BaseActionManager manager,
+        @NonNull Class<T> type,
+        @Nullable Object input,
+        @NonNull EvaluatorConverter<T> converter
+    ) {
+        if (input == null) return manager.getNullEvaluator(type);
+        if (input instanceof Evaluator) {
+            val evaluator = (Evaluator<T>) input;
+            if (type.isAssignableFrom(evaluator.type)) {
+                return evaluator;
+            } else {
+                return manager.getNullEvaluator(type);
+            }
+        }
+        T maybe;
         if (input instanceof String) {
-            return createBooleanEvaluator(manager, (String) input);
-        } else if (input instanceof Boolean) {
-            return new RawBooleanEvaluator(manager, (Boolean) input);
+            return createEvaluator(manager, type, (String) input, converter);
+        } else if ((maybe = converter.convert(input)) != null) {
+            return new RawEvaluator<>(manager, type, maybe);
         } else if (input instanceof List<?>) {
-            return new ListBooleanEvaluator(manager, (List<?>) input);
+            return new ListEvaluator<>(manager, type, (List<?>) input, (element) -> createEvaluator(manager, type, element, converter));
         }
         val config = ConfigReader.parse(input);
-        if (config == null) return createBooleanEvaluator(manager, input.toString());
-        val type = config.getString("type", "").toLowerCase();
-        switch (type) {
+        if (config == null) {
+            return createEvaluator(manager, type, input.toString(), converter);
+        }
+        val configType = config.getString("type", "").toLowerCase(Locale.ROOT);
+        switch (configType) {
             case "condition": {
-                return new ConditionBooleanEvaluator(manager, config);
+                return new ConditionEvaluator<>(manager, type, config, (element) -> createEvaluator(manager, type, element, converter));
             }
             case "condition-weight": {
-                return new ConditionWeightBooleanEvaluator(manager, config);
+                return new ConditionWeightEvaluator<>(manager, type, config, (element) -> createEvaluator(manager, type, element, converter));
             }
             case "contains": {
-                return new ContainsBooleanEvaluator(manager, config);
+                return new ContainsEvaluator<>(manager, type, config, (element) -> createEvaluator(manager, type, element, converter));
             }
             case "double-tree": {
-                return new DoubleTreeBooleanEvaluator(manager, config);
+                return new DoubleTreeEvaluator<>(manager, type, config, (element) -> createEvaluator(manager, type, element, converter));
             }
             case "int-tree": {
-                return new IntTreeBooleanEvaluator(manager, config);
+                return new IntTreeEvaluator<>(manager, type, config, (element) -> createEvaluator(manager, type, element, converter));
             }
             case "key": {
-                return new KeyBooleanEvaluator(manager, config);
+                return new KeyEvaluator<>(manager, type, config, (element) -> createEvaluator(manager, type, element, converter));
             }
             case "weight": {
-                return new WeightBooleanEvaluator(manager, config);
+                return new WeightEvaluator<>(manager, type, config, (element) -> createEvaluator(manager, type, element, converter));
             }
         }
         if (config.containsKey("condition")) {
-            return new ConditionBooleanEvaluator(manager, config);
+            return new ConditionEvaluator<>(manager, type, config, (element) -> createEvaluator(manager, type, element, converter));
         } else {
             // 处理有人连引号都能忘的情况('js: Math.random()'写成了js: Math.random(), 也就是字符串写成了长度为1的map)
             val keySet = config.keySet();
-            if (keySet.size() != 1) return manager.NULL_BOOLEAN_EVALUATOR;
+            if (keySet.size() != 1) return manager.getNullEvaluator(type);
             val key = keySet.iterator().next();
             val value = config.get(key);
-            if (!(value instanceof String)) return manager.NULL_BOOLEAN_EVALUATOR;
-            String content = (String) value;
+            if (value == null) return manager.getNullEvaluator(type);
+            val content = value.toString();
             if ("js".equals(key)) {
-                return new JsBooleanEvaluator(manager, content);
+                return new JsEvaluator<>(manager, type, content, converter);
             } else if ("raw".equals(key)) {
-                return new RawBooleanEvaluator(manager, content);
+                return new RawEvaluator<>(manager, type, content, converter);
             }
         }
-        return manager.NULL_BOOLEAN_EVALUATOR;
+        return manager.getNullEvaluator(type);
+    }
+
+    public static @NonNull Evaluator<List<String>> createStringListEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
+        return createListEvaluator(manager, String.class, input, StringConverter.INSTANCE);
+    }
+
+    public static @NonNull Evaluator<List<Integer>> createIntegerListEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
+        return createListEvaluator(manager, Integer.class, input, IntegerConverter.INSTANCE);
+    }
+
+    public static @NonNull Evaluator<List<Long>> createLongListEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
+        return createListEvaluator(manager, Long.class, input, LongConverter.INSTANCE);
+    }
+
+    public static @NonNull Evaluator<List<Double>> createDoubleListEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
+        return createListEvaluator(manager, Double.class, input, DoubleConverter.INSTANCE);
+    }
+
+    public static @NonNull Evaluator<List<Boolean>> createBooleanListEvaluator(@NonNull BaseActionManager manager, @Nullable Object input) {
+        return createListEvaluator(manager, Boolean.class, input, BooleanConverter.INSTANCE);
+    }
+
+    public static <T> @NonNull Evaluator<List<T>> createListEvaluator(
+        @NonNull BaseActionManager manager,
+        @NonNull Class<T> elementType,
+        @Nullable Object input
+    ) {
+        return createListEvaluator(
+            manager,
+            elementType,
+            input,
+            new EvaluatorConverter<>(elementType)
+        );
+    }
+
+    public static <T> @NonNull Evaluator<List<T>> createListEvaluator(
+        @NonNull BaseActionManager manager,
+        @NonNull Class<T> elementType,
+        @Nullable Object input,
+        @NonNull EvaluatorConverter<T> converter
+    ) {
+        return createListEvaluator(
+            manager,
+            input,
+            (element) -> createEvaluator(manager, elementType, element, converter),
+            (element) -> createListEvaluator(manager, elementType, element, converter)
+        );
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <E> @NonNull Evaluator<List<E>> createListEvaluator(
+        @NonNull BaseActionManager manager,
+        @Nullable Object input,
+        @NonNull EvaluatorParser<E> scalarFactory,
+        @NonNull EvaluatorParser<List<E>> listFactory
+    ) {
+        val listType = Evaluator.<E>listType();
+        if (input == null) return new Evaluator<>(manager, listType);
+        if (input instanceof Evaluator) {
+            val evaluator = (Evaluator<?>) input;
+            if (List.class.equals(evaluator.getType())) return (Evaluator<List<E>>) input;
+            return new ListWrappedEvaluator<>(manager, listType, (Evaluator<E>) input);
+        }
+        if (input instanceof List<?>) return new ListValueEvaluator<>(manager, listType, (List<?>) input, listFactory);
+        if (input instanceof String) return new ListWrappedEvaluator<>(manager, listType, scalarFactory.parse(input));
+        val config = ConfigReader.parse(input);
+        if (config == null) return new ListWrappedEvaluator<>(manager, listType, scalarFactory.parse(input));
+        val rawType = config.get("type");
+        val hasType = config.containsKey("type");
+        if (hasType && (rawType == null || "null".equalsIgnoreCase(rawType.toString()))) {
+            return new NullListElementEvaluator<>(manager, listType);
+        }
+        val type = rawType == null ? "" : rawType.toString().toLowerCase(Locale.ROOT);
+        switch (type) {
+            case "condition": {
+                return new ConditionListEvaluator<>(manager, listType, config, listFactory);
+            }
+            case "condition-weight": {
+                return new ConditionWeightListEvaluator<>(manager, listType, config, listFactory);
+            }
+            case "contains": {
+                return new ContainsListEvaluator<>(manager, listType, config, listFactory);
+            }
+            case "double-tree": {
+                return new DoubleTreeListEvaluator<>(manager, listType, config, listFactory);
+            }
+            case "int-tree": {
+                return new IntTreeListEvaluator<>(manager, listType, config, listFactory);
+            }
+            case "key": {
+                return new KeyListEvaluator<>(manager, listType, config, listFactory);
+            }
+            case "weight": {
+                return new WeightListEvaluator<>(manager, listType, config, listFactory);
+            }
+        }
+        if (config.containsKey("condition")) {
+            return new ConditionListEvaluator<>(manager, listType, config, listFactory);
+        }
+        return new ListWrappedEvaluator<>(manager, listType, scalarFactory.parse(input));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <E> @NonNull Class<List<E>> listType() {
+        return (Class<List<E>>) (Class<?>) List.class;
     }
 
     @Contract("_, !null -> !null")

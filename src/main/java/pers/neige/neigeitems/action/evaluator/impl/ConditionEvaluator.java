@@ -8,12 +8,13 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.Condition;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
+import pers.neige.neigeitems.action.evaluator.EvaluatorParser;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
 @Getter
 @ToString(callSuper = true)
-public abstract class ConditionEvaluator<T> extends Evaluator<T> {
+public class ConditionEvaluator<T> extends Evaluator<T> {
     protected final @NonNull Condition condition;
     protected final @NonNull Evaluator<T> thenEvaluator;
     protected final @NonNull Evaluator<T> elseEvaluator;
@@ -21,15 +22,14 @@ public abstract class ConditionEvaluator<T> extends Evaluator<T> {
     public ConditionEvaluator(
         @NonNull BaseActionManager manager,
         @NonNull Class<T> type,
-        @NonNull ConfigReader config
+        @NonNull ConfigReader config,
+        @NonNull EvaluatorParser<T> parser
     ) {
         super(manager, type);
         this.condition = new Condition(manager, config.getString("condition"));
-        this.thenEvaluator = parseEvaluator(config.get("then"));
-        this.elseEvaluator = parseEvaluator(config.get("else"));
+        this.thenEvaluator = parser.parse(config.get("then"));
+        this.elseEvaluator = parser.parse(config.get("else"));
     }
-
-    protected abstract @NonNull Evaluator<T> parseEvaluator(@Nullable Object input);
 
     @Override
     @Contract("_, !null -> !null")

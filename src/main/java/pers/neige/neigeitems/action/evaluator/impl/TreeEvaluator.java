@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
+import pers.neige.neigeitems.action.evaluator.EvaluatorParser;
 import pers.neige.neigeitems.action.impl.TreeAction;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
@@ -18,7 +19,7 @@ import java.util.TreeMap;
 
 @Getter
 @ToString(callSuper = true)
-public abstract class TreeEvaluator<K extends Comparable<?>, T> extends Evaluator<T> {
+public class TreeEvaluator<K extends Comparable<?>, T> extends Evaluator<T> {
     protected final @NonNull Class<K> keyType;
     private final @NonNull TreeAction.TreeActionType actionType;
     private final @NonNull String globalId;
@@ -29,7 +30,8 @@ public abstract class TreeEvaluator<K extends Comparable<?>, T> extends Evaluato
         @NonNull BaseActionManager manager,
         @NonNull Class<T> type,
         @NonNull ConfigReader config,
-        @NonNull Class<K> keyType
+        @NonNull Class<K> keyType,
+        @NonNull EvaluatorParser<T> parser
     ) {
         super(manager, type);
         this.keyType = keyType;
@@ -49,7 +51,7 @@ public abstract class TreeEvaluator<K extends Comparable<?>, T> extends Evaluato
         }
         this.actionType = actionType;
         this.globalId = config.getString("global-id", "key");
-        this.defaultEvaluator = parseEvaluator(config.get("default-evaluator"));
+        this.defaultEvaluator = parser.parse(config.get("default-evaluator"));
         val evaluatorsConfig = config.getConfig("evaluators");
         if (evaluatorsConfig != null) {
             for (val stringKey : evaluatorsConfig.keySet()) {
@@ -58,7 +60,7 @@ public abstract class TreeEvaluator<K extends Comparable<?>, T> extends Evaluato
                     manager.getPlugin().getLogger().warning(stringKey + " is not a valid tree action key.");
                     continue;
                 }
-                this.evaluators.put(key, parseEvaluator(evaluatorsConfig.get(stringKey)));
+                this.evaluators.put(key, parser.parse(evaluatorsConfig.get(stringKey)));
             }
         }
     }
@@ -67,9 +69,9 @@ public abstract class TreeEvaluator<K extends Comparable<?>, T> extends Evaluato
         return keyType.isInstance(result) ? keyType.cast(result) : null;
     }
 
-    protected abstract @NonNull Evaluator<T> parseEvaluator(@Nullable Object input);
-
-    public abstract @NonNull Evaluator<K> getValue();
+    public @NonNull Evaluator<K> getValue() {
+        return new Evaluator<>(manager, keyType);
+    }
 
     @Override
     @Contract("_, !null -> !null")

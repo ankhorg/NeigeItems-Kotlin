@@ -122,6 +122,7 @@ dependencies {
     implementation("pers.neige.colonel:colonel-bukkit:+")
 
     // junit
+    testImplementation("org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.14.+")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.14.+")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.14.+")

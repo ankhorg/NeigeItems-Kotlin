@@ -1,6 +1,5 @@
-package pers.neige.neigeitems.action.evaluator.impl;
+package pers.neige.neigeitems.action.evaluator.impl.list;
 
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
@@ -12,18 +11,18 @@ import pers.neige.neigeitems.action.evaluator.EvaluatorParser;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-@Getter
 @ToString(callSuper = true)
-public class ListEvaluator<T> extends Evaluator<T> {
-    private final @NonNull List<Evaluator<T>> evaluators = new ArrayList<>();
+public class ListValueEvaluator<T> extends Evaluator<List<T>> {
+    private final @NonNull List<Evaluator<List<T>>> evaluators = new ArrayList<>();
 
-    public ListEvaluator(
+    public ListValueEvaluator(
         @NonNull BaseActionManager manager,
-        @NonNull Class<T> type,
+        @NonNull Class<List<T>> type,
         @NonNull List<?> list,
-        @NonNull EvaluatorParser<T> parser
+        @NonNull EvaluatorParser<List<T>> parser
     ) {
         super(manager, type);
         for (val element : list) {
@@ -33,11 +32,13 @@ public class ListEvaluator<T> extends Evaluator<T> {
 
     @Override
     @Contract("_, !null -> !null")
-    public @Nullable T getOrDefault(@NonNull ActionContext context, @Nullable T def) {
+    public @Nullable List<T> getOrDefault(@NonNull ActionContext context, @Nullable List<T> def) {
+        val result = new ArrayList<T>();
         for (val evaluator : evaluators) {
-            val result = evaluator.get(context);
-            if (result != null) return result;
+            val value = evaluator.get(context);
+            if (value == null) continue;
+            result.addAll(value);
         }
-        return def;
+        return Collections.unmodifiableList(result);
     }
 }

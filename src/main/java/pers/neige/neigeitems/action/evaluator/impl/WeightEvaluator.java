@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
+import pers.neige.neigeitems.action.evaluator.EvaluatorParser;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SamplingUtils;
@@ -20,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
 @ToString(callSuper = true)
-public abstract class WeightEvaluator<T> extends Evaluator<T> {
+public class WeightEvaluator<T> extends Evaluator<T> {
     private final @NonNull List<Pair<Evaluator<T>, Double>> evaluators = new ArrayList<>();
     private double totalWeight = 0;
     private boolean equalWeight = false;
@@ -28,7 +29,8 @@ public abstract class WeightEvaluator<T> extends Evaluator<T> {
     public WeightEvaluator(
         @NonNull BaseActionManager manager,
         @NonNull Class<T> type,
-        @NonNull ConfigReader config
+        @NonNull ConfigReader config,
+        @NonNull EvaluatorParser<T> parser
     ) {
         super(manager, type);
         val evaluators = config.get("evaluators");
@@ -40,7 +42,7 @@ public abstract class WeightEvaluator<T> extends Evaluator<T> {
             if (evaluatorConfig == null) continue;
             val weight = evaluatorConfig.getDouble("weight", 1);
             if (weight <= 0) continue;
-            val evaluator = parseEvaluator(evaluatorConfig.get("evaluator"));
+            val evaluator = parser.parse(evaluatorConfig.get("evaluator"));
             this.evaluators.add(new Pair<>(evaluator, weight));
             total += weight;
         }
@@ -52,8 +54,6 @@ public abstract class WeightEvaluator<T> extends Evaluator<T> {
             this.equalWeight = true;
         }
     }
-
-    protected abstract @NonNull Evaluator<T> parseEvaluator(@Nullable Object input);
 
     @Override
     @Contract("_, !null -> !null")

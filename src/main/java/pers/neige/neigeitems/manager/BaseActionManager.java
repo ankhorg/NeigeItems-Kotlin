@@ -23,6 +23,7 @@ import pers.neige.neigeitems.action.*;
 import pers.neige.neigeitems.action.catcher.ChatCatcher;
 import pers.neige.neigeitems.action.catcher.SignCatcher;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
+import pers.neige.neigeitems.action.evaluator.EvaluatorConverter;
 import pers.neige.neigeitems.action.handler.SyncActionHandler;
 import pers.neige.neigeitems.action.impl.*;
 import pers.neige.neigeitems.action.node.NodeParser;
@@ -64,6 +65,7 @@ public abstract class BaseActionManager {
     public final @NonNull Evaluator<Long> NULL_LONG_EVALUATOR = new Evaluator<>(this, Long.class);
     public final @NonNull Evaluator<Double> NULL_DOUBLE_EVALUATOR = new Evaluator<>(this, Double.class);
     public final @NonNull Evaluator<Boolean> NULL_BOOLEAN_EVALUATOR = new Evaluator<>(this, Boolean.class);
+    private final @NonNull Map<Class<?>, Evaluator<?>> NULL_EVALUATORS = new ConcurrentHashMap<>();
     private final @NonNull Plugin plugin;
     /**
      * 物品动作实现函数
@@ -104,6 +106,11 @@ public abstract class BaseActionManager {
         loadBasicActions();
         // 加载基础节点解析器
         loadBasicParsers();
+        NULL_EVALUATORS.put(String.class, NULL_STRING_EVALUATOR);
+        NULL_EVALUATORS.put(Integer.class, NULL_INTEGER_EVALUATOR);
+        NULL_EVALUATORS.put(Long.class, NULL_LONG_EVALUATOR);
+        NULL_EVALUATORS.put(Double.class, NULL_DOUBLE_EVALUATOR);
+        NULL_EVALUATORS.put(BaseActionManager.class, NULL_BOOLEAN_EVALUATOR);
     }
 
     public @NonNull Plugin getPlugin() {
@@ -154,6 +161,10 @@ public abstract class BaseActionManager {
         if (parsers == null) return null;
         val realParserId = parserId.substring(index + 1).toLowerCase(Locale.ROOT);
         return parsers.get(realParserId);
+    }
+
+    public <T> @NonNull Evaluator<T> getNullEvaluator(@NonNull Class<T> type) {
+        return (Evaluator<T>) this.NULL_EVALUATORS.computeIfAbsent(type, (clazz) -> new Evaluator<>(this, clazz));
     }
 
     public @NonNull Action compile(
@@ -253,6 +264,104 @@ public abstract class BaseActionManager {
                 return new StringAction(this, key, content);
             }
         }
+    }
+
+    public @NonNull Evaluator<String> createStringEvaluator(@Nullable String input) {
+        return Evaluator.createStringEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<String> createStringEvaluator(@Nullable Object input) {
+        return Evaluator.createStringEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<Integer> createIntegerEvaluator(@Nullable String input) {
+        return Evaluator.createIntegerEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<Integer> createIntegerEvaluator(@Nullable Object input) {
+        return Evaluator.createIntegerEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<Long> createLongEvaluator(@Nullable String input) {
+        return Evaluator.createLongEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<Long> createLongEvaluator(@Nullable Object input) {
+        return Evaluator.createLongEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<Double> createDoubleEvaluator(@Nullable String input) {
+        return Evaluator.createDoubleEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<Double> createDoubleEvaluator(@Nullable Object input) {
+        return Evaluator.createDoubleEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<Boolean> createBooleanEvaluator(@Nullable String input) {
+        return Evaluator.createBooleanEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<Boolean> createBooleanEvaluator(@Nullable Object input) {
+        return Evaluator.createBooleanEvaluator(this, input);
+    }
+
+    public <T> @NonNull Evaluator<T> createEvaluator(
+        @NonNull Class<T> type,
+        @Nullable Object input
+    ) {
+        return Evaluator.createEvaluator(this, type, input);
+    }
+
+    public <T> @NonNull Evaluator<T> createEvaluator(
+        @NonNull Class<T> type,
+        @Nullable String input,
+        @NonNull EvaluatorConverter<T> converter
+    ) {
+        return Evaluator.createEvaluator(this, type, input, converter);
+    }
+
+    public <T> @NonNull Evaluator<T> createEvaluator(
+        @NonNull Class<T> type,
+        @Nullable Object input,
+        @NonNull EvaluatorConverter<T> converter
+    ) {
+        return Evaluator.createEvaluator(this, type, input, converter);
+    }
+
+    public @NonNull Evaluator<List<String>> createStringListEvaluator(@Nullable Object input) {
+        return Evaluator.createStringListEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<List<Integer>> createIntegerListEvaluator(@Nullable Object input) {
+        return Evaluator.createIntegerListEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<List<Long>> createLongListEvaluator(@Nullable Object input) {
+        return Evaluator.createLongListEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<List<Double>> createDoubleListEvaluator(@Nullable Object input) {
+        return Evaluator.createDoubleListEvaluator(this, input);
+    }
+
+    public @NonNull Evaluator<List<Boolean>> createBooleanListEvaluator(@Nullable Object input) {
+        return Evaluator.createBooleanListEvaluator(this, input);
+    }
+
+    public <T> @NonNull Evaluator<List<T>> createListEvaluator(
+        @NonNull Class<T> elementType,
+        @Nullable Object input
+    ) {
+        return Evaluator.createListEvaluator(this, elementType, input);
+    }
+
+    public <T> @NonNull Evaluator<List<T>> createListEvaluator(
+        @NonNull Class<T> elementType,
+        @Nullable Object input,
+        @NonNull EvaluatorConverter<T> converter
+    ) {
+        return Evaluator.createListEvaluator(this, elementType, input, converter);
     }
 
     /**

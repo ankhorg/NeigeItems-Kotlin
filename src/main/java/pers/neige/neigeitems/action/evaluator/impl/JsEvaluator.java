@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ScriptWithSource;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
+import pers.neige.neigeitems.action.evaluator.EvaluatorConverter;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.StringUtils;
 
@@ -19,19 +20,30 @@ import java.util.logging.Level;
 @Getter
 @ToString(callSuper = true)
 public class JsEvaluator<T> extends Evaluator<T> {
-    protected final @Nullable ScriptWithSource script;
+    private final @Nullable ScriptWithSource script;
+    private final @NonNull EvaluatorConverter<T> converter;
 
     public JsEvaluator(@NonNull BaseActionManager manager, @NonNull Class<T> type, @Nullable String script) {
+        this(manager, type, script, new EvaluatorConverter<>(type));
+    }
+
+    public JsEvaluator(
+        @NonNull BaseActionManager manager,
+        @NonNull Class<T> type,
+        @Nullable String script,
+        @NonNull EvaluatorConverter<T> converter
+    ) {
         super(manager, type);
         try {
             this.script = ScriptWithSource.compile((Compilable) manager.getEngine(), script);
         } catch (ScriptException e) {
             throw new RuntimeException(e);
         }
+        this.converter = converter;
     }
 
     public @Nullable T cast(@NonNull Object result) {
-        return type.isInstance(result) ? type.cast(result) : null;
+        return converter.convert(result);
     }
 
     @Override

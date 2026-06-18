@@ -6,21 +6,23 @@ import lombok.ToString;
 import lombok.val;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
+import pers.neige.neigeitems.action.evaluator.EvaluatorParser;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.NumberParser;
 
 @Getter
 @ToString(callSuper = true)
-public abstract class IntTreeEvaluator<T> extends TreeEvaluator<Integer, T> {
+public class IntTreeEvaluator<T> extends TreeEvaluator<Integer, T> {
     private final @NonNull Evaluator<Integer> value;
 
     public IntTreeEvaluator(
         @NonNull BaseActionManager manager,
         @NonNull Class<T> type,
-        @NonNull ConfigReader config
+        @NonNull ConfigReader config,
+        @NonNull EvaluatorParser<T> parser
     ) {
-        super(manager, type, config, Integer.class);
+        super(manager, type, config, Integer.class, parser);
         this.value = Evaluator.createIntegerEvaluator(manager, config.get("value"));
     }
 

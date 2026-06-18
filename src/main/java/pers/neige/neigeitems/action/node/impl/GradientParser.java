@@ -3,7 +3,6 @@ package pers.neige.neigeitems.action.node.impl;
 import kotlin.text.StringsKt;
 import lombok.NonNull;
 import lombok.val;
-import lombok.var;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.node.NodeParser;
@@ -86,9 +85,9 @@ public class GradientParser extends NodeParser {
         val chars = text.toCharArray();
         val result = new StringBuilder();
 
-        var redCurrent = ColorUtils.getRed(colorStart);
-        var greenCurrent = ColorUtils.getGreen(colorStart);
-        var blueCurrent = ColorUtils.getBlue(colorStart);
+        int redCurrent = ColorUtils.getRed(colorStart);
+        int greenCurrent = ColorUtils.getGreen(colorStart);
+        int blueCurrent = ColorUtils.getBlue(colorStart);
 
         if (step == 1) {
             val redStep = (ColorUtils.getRed(colorEnd) - redCurrent) / (chars.length - 1);
@@ -107,7 +106,7 @@ public class GradientParser extends NodeParser {
             val greenStep = (ColorUtils.getGreen(colorEnd) - greenCurrent) * step / (chars.length - 1);
             val blueStep = (ColorUtils.getBlue(colorEnd) - blueCurrent) * step / (chars.length - 1);
 
-            var current = 1;
+            int current = 1;
 
             for (val c : chars) {
                 if (current == 1) {

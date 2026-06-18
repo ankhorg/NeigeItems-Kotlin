@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.Condition;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
+import pers.neige.neigeitems.action.evaluator.EvaluatorParser;
 import pers.neige.neigeitems.config.ConfigReader;
 import pers.neige.neigeitems.manager.BaseActionManager;
 import pers.neige.neigeitems.utils.SamplingUtils;
@@ -16,13 +17,14 @@ import java.util.List;
 
 @Getter
 @ToString(callSuper = true)
-public abstract class ConditionWeightEvaluator<T> extends Evaluator<T> {
+public class ConditionWeightEvaluator<T> extends Evaluator<T> {
     private final @NonNull List<ConditionalWeightedEvaluator<T>> evaluators = new ArrayList<>();
 
     public ConditionWeightEvaluator(
         @NonNull BaseActionManager manager,
         @NonNull Class<T> type,
-        @NonNull ConfigReader config
+        @NonNull ConfigReader config,
+        @NonNull EvaluatorParser<T> parser
     ) {
         super(manager, type);
         val evaluators = config.get("evaluators");
@@ -31,7 +33,7 @@ public abstract class ConditionWeightEvaluator<T> extends Evaluator<T> {
         for (val rawEvaluator : list) {
             val evaluatorConfig = ConfigReader.parse(rawEvaluator);
             if (evaluatorConfig == null) continue;
-            val evaluator = parseEvaluator(evaluatorConfig.get("evaluator"));
+            val evaluator = parser.parse(evaluatorConfig.get("evaluator"));
             val condition = new Condition(manager, config.getString("condition"));
             this.evaluators.add(
                 new ConditionalWeightedEvaluator<>(
@@ -42,8 +44,6 @@ public abstract class ConditionWeightEvaluator<T> extends Evaluator<T> {
             );
         }
     }
-
-    protected abstract @NonNull Evaluator<T> parseEvaluator(@Nullable Object input);
 
     @Override
     @Contract("_, !null -> !null")
