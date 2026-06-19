@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>BaseActionManager 1.21.150 API </title>
+    <title>BaseActionManager 1.21.151 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
@@ -388,9 +388,9 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                         </tr>
                                         
                                         <tr id="i8" class="altColor">
-                                            <td class="colFirst"><code><a href=../action/Action.html>Action</a></code>
+                                            <td class="colFirst"><code>&lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=BaseActionManager.html#getNullEvaluator(java.lang.Class)>T</a>&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#compile(Object,pers.neige.neigeitems.action.Action)>compile</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> action, @NonNull() <a href=../action/Action.html>Action</a> def) </code>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#getNullEvaluator(java.lang.Class)>getNullEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#getNullEvaluator(java.lang.Class)>T</a>&gt; type) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -398,7 +398,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                         <tr id="i9" class="rowColor">
                                             <td class="colFirst"><code><a href=../action/Action.html>Action</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#compile(Object,Object)>compile</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> action, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> def) </code>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#compile(Object,pers.neige.neigeitems.action.Action)>compile</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> action, @NonNull() <a href=../action/Action.html>Action</a> def) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -406,12 +406,180 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                         <tr id="i10" class="altColor">
                                             <td class="colFirst"><code><a href=../action/Action.html>Action</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#compile(Object)>compile</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> action) </code>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#compile(Object,Object)>compile</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> action, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> def) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i11" class="rowColor">
+                                            <td class="colFirst"><code><a href=../action/Action.html>Action</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#compile(Object)>compile</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> action) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i12" class="altColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createStringEvaluator(java.lang.String)>createStringEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i13" class="rowColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createStringEvaluator(Object)>createStringEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i14" class="altColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createIntegerEvaluator(java.lang.String)>createIntegerEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i15" class="rowColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createIntegerEvaluator(Object)>createIntegerEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i16" class="altColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html>Long</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createLongEvaluator(java.lang.String)>createLongEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i17" class="rowColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html>Long</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createLongEvaluator(Object)>createLongEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i18" class="altColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createDoubleEvaluator(java.lang.String)>createDoubleEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i19" class="rowColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createDoubleEvaluator(Object)>createDoubleEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i20" class="altColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createBooleanEvaluator(java.lang.String)>createBooleanEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i21" class="rowColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createBooleanEvaluator(Object)>createBooleanEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i22" class="altColor">
+                                            <td class="colFirst"><code>&lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object)>T</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object)>createEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object)>T</a>&gt; type, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i23" class="rowColor">
+                                            <td class="colFirst"><code>&lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,java.lang.String,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createEvaluator(java.lang.Class,java.lang.String,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>createEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,java.lang.String,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; type, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input, @NonNull() <a href=../action/evaluator/EvaluatorConverter.html>EvaluatorConverter</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,java.lang.String,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; converter) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i24" class="altColor">
+                                            <td class="colFirst"><code>&lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>createEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; type, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input, @NonNull() <a href=../action/evaluator/EvaluatorConverter.html>EvaluatorConverter</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; converter) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i25" class="rowColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createStringListEvaluator(Object)>createStringListEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i26" class="altColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createIntegerListEvaluator(Object)>createIntegerListEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i27" class="rowColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html>Long</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createLongListEvaluator(Object)>createLongListEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i28" class="altColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createDoubleListEvaluator(Object)>createDoubleListEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i29" class="rowColor">
+                                            <td class="colFirst"><code><a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createBooleanListEvaluator(Object)>createBooleanListEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i30" class="altColor">
+                                            <td class="colFirst"><code>&lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object)>T</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object)>createListEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object)>T</a>&gt; elementType, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i31" class="rowColor">
+                                            <td class="colFirst"><code>&lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>createListEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; elementType, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input, @NonNull() <a href=../action/evaluator/EvaluatorConverter.html>EvaluatorConverter</a>&lt;<a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; converter) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i32" class="altColor">
                                             <td class="colFirst"><code><a href=../action/ActionResult.html>ActionResult</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.Action)>runAction</a>(@NonNull() <a href=../action/Action.html>Action</a> action) </code>
@@ -419,7 +587,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i12" class="altColor">
+                                        <tr id="i33" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runActionWithResult(pers.neige.neigeitems.action.Action)>runActionWithResult</a>(@NonNull() <a href=../action/Action.html>Action</a> action) </code>
@@ -427,7 +595,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i13" class="rowColor">
+                                        <tr id="i34" class="altColor">
                                             <td class="colFirst"><code><a href=../action/ActionResult.html>ActionResult</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.Action,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/Action.html>Action</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -435,7 +603,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i14" class="altColor">
+                                        <tr id="i35" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runActionWithResult(pers.neige.neigeitems.action.Action,pers.neige.neigeitems.action.ActionContext)>runActionWithResult</a>(@NonNull() <a href=../action/Action.html>Action</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -443,7 +611,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i15" class="rowColor">
+                                        <tr id="i36" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.RawStringAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/RawStringAction.html>RawStringAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -451,7 +619,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i16" class="altColor">
+                                        <tr id="i37" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.StringAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/StringAction.html>StringAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -459,7 +627,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i17" class="rowColor">
+                                        <tr id="i38" class="altColor">
                                             <td class="colFirst"><code>ConfigurationSection</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#getSectionConfig(pers.neige.neigeitems.action.ActionContext)>getSectionConfig</a>(@NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -467,7 +635,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行 StringAction 进行节点解析的时候传入的节点配置</td>
                                         </tr>
                                         
-                                        <tr id="i18" class="altColor">
+                                        <tr id="i39" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.JsAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/JsAction.html>JsAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -475,7 +643,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i19" class="rowColor">
+                                        <tr id="i40" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.ListAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/ListAction.html>ListAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -483,7 +651,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i20" class="altColor">
+                                        <tr id="i41" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.ListAction,pers.neige.neigeitems.action.ActionContext,int)>runAction</a>(@NonNull() <a href=../action/impl/ListAction.html>ListAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context, int fromIndex) </code>
@@ -491,7 +659,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i21" class="rowColor">
+                                        <tr id="i42" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.ConditionAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/ConditionAction.html>ConditionAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -499,7 +667,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i22" class="altColor">
+                                        <tr id="i43" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.LabelAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/LabelAction.html>LabelAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -507,7 +675,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i23" class="rowColor">
+                                        <tr id="i44" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.WeightAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/WeightAction.html>WeightAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -515,7 +683,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i24" class="altColor">
+                                        <tr id="i45" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.ConditionWeightAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/ConditionWeightAction.html>ConditionWeightAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -523,7 +691,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i25" class="rowColor">
+                                        <tr id="i46" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.WhileAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/WhileAction.html>WhileAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -531,7 +699,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i26" class="altColor">
+                                        <tr id="i47" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.KeyAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/KeyAction.html>KeyAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -539,7 +707,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i27" class="rowColor">
+                                        <tr id="i48" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.ContainsAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/ContainsAction.html>ContainsAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -547,7 +715,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i28" class="altColor">
+                                        <tr id="i49" class="rowColor">
                                             <td class="colFirst"><code>&lt;T extends <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Comparable.html>Comparable</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt; <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.TreeAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/TreeAction.html>TreeAction</a>&lt;<a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.TreeAction,pers.neige.neigeitems.action.ActionContext)>T</a>&gt; action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -555,7 +723,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i29" class="rowColor">
+                                        <tr id="i50" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.RepeatAction,pers.neige.neigeitems.action.ActionContext)>runAction</a>(@NonNull() <a href=../action/impl/RepeatAction.html>RepeatAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -563,7 +731,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i30" class="altColor">
+                                        <tr id="i51" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#runAction(pers.neige.neigeitems.action.impl.RepeatAction,pers.neige.neigeitems.action.ActionContext,int,int)>runAction</a>(@NonNull() <a href=../action/impl/RepeatAction.html>RepeatAction</a> action, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context, int repeat, int count) </code>
@@ -571,7 +739,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">执行动作</td>
                                         </tr>
                                         
-                                        <tr id="i31" class="rowColor">
+                                        <tr id="i52" class="altColor">
                                             <td class="colFirst"><code><a href=../action/ActionResult.html>ActionResult</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#parseCondition(java.lang.String,pers.neige.neigeitems.action.ActionContext)>parseCondition</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> condition, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -579,7 +747,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">解析条件</td>
                                         </tr>
                                         
-                                        <tr id="i32" class="altColor">
+                                        <tr id="i53" class="rowColor">
                                             <td class="colFirst"><code><a href=../action/ActionResult.html>ActionResult</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#parseCondition(pers.neige.neigeitems.action.ScriptWithSource,pers.neige.neigeitems.action.ActionContext)>parseCondition</a>(@Nullable() <a href=../action/ScriptWithSource.html>ScriptWithSource</a> condition, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -587,7 +755,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">解析条件</td>
                                         </tr>
                                         
-                                        <tr id="i33" class="rowColor">
+                                        <tr id="i54" class="altColor">
                                             <td class="colFirst"><code><a href=../action/ActionResult.html>ActionResult</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#parseCondition(java.lang.String,javax.script.CompiledScript,pers.neige.neigeitems.action.ActionContext)>parseCondition</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> conditionString, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/javax/script/CompiledScript.html>CompiledScript</a> condition, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -595,7 +763,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">解析条件</td>
                                         </tr>
                                         
-                                        <tr id="i34" class="altColor">
+                                        <tr id="i55" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#parseNode(java.lang.String,pers.neige.neigeitems.action.ActionContext)>parseNode</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -603,7 +771,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">对文本进行节点解析</td>
                                         </tr>
                                         
-                                        <tr id="i35" class="rowColor">
+                                        <tr id="i56" class="altColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#parseNullableNode(java.lang.String,pers.neige.neigeitems.action.ActionContext)>parseNullableNode</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> text, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -611,7 +779,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">对文本进行节点解析</td>
                                         </tr>
                                         
-                                        <tr id="i36" class="altColor">
+                                        <tr id="i57" class="rowColor">
                                             <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#parseNodeSpec(java.lang.String,pers.neige.neigeitems.action.ActionContext)>parseNodeSpec</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> spec, @NonNull() <a href=../action/ActionContext.html>ActionContext</a> context) </code>
@@ -619,7 +787,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">解析节点内容</td>
                                         </tr>
                                         
-                                        <tr id="i37" class="rowColor">
+                                        <tr id="i58" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addFunction(java.util.Collection,java.util.function.BiFunction)>addFunction</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html>Collection</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; ids, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;&gt; function) </code>
@@ -627,7 +795,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">添加物品动作</td>
                                         </tr>
                                         
-                                        <tr id="i38" class="altColor">
+                                        <tr id="i59" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addFunction(java.util.Collection,boolean,java.util.function.BiFunction)>addFunction</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html>Collection</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; ids, boolean asyncSafe, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;&gt; function) </code>
@@ -635,7 +803,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">添加物品动作</td>
                                         </tr>
                                         
-                                        <tr id="i39" class="rowColor">
+                                        <tr id="i60" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addFunction(java.lang.String,java.util.function.BiFunction)>addFunction</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;&gt; function) </code>
@@ -643,7 +811,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">添加物品动作</td>
                                         </tr>
                                         
-                                        <tr id="i40" class="altColor">
+                                        <tr id="i61" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addFunction(java.lang.String,boolean,java.util.function.BiFunction)>addFunction</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, boolean asyncSafe, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiFunction.html>BiFunction</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html>CompletableFuture</a>&lt;<a href=../action/ActionResult.html>ActionResult</a>&gt;&gt; function) </code>
@@ -651,7 +819,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">添加物品动作</td>
                                         </tr>
                                         
-                                        <tr id="i41" class="rowColor">
+                                        <tr id="i62" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addConsumer(java.util.Collection,java.util.function.BiConsumer)>addConsumer</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html>Collection</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; ids, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiConsumer.html>BiConsumer</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; consumer) </code>
@@ -659,7 +827,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">添加物品动作</td>
                                         </tr>
                                         
-                                        <tr id="i42" class="altColor">
+                                        <tr id="i63" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addConsumer(java.util.Collection,boolean,java.util.function.BiConsumer)>addConsumer</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html>Collection</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; ids, boolean asyncSafe, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiConsumer.html>BiConsumer</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; consumer) </code>
@@ -667,7 +835,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">添加物品动作</td>
                                         </tr>
                                         
-                                        <tr id="i43" class="rowColor">
+                                        <tr id="i64" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addConsumer(java.lang.String,java.util.function.BiConsumer)>addConsumer</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiConsumer.html>BiConsumer</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; consumer) </code>
@@ -675,7 +843,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">添加物品动作</td>
                                         </tr>
                                         
-                                        <tr id="i44" class="altColor">
+                                        <tr id="i65" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addConsumer(java.lang.String,boolean,java.util.function.BiConsumer)>addConsumer</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> id, boolean asyncSafe, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/BiConsumer.html>BiConsumer</a>&lt;<a href=../action/ActionContext.html>ActionContext</a>, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; consumer) </code>
@@ -683,7 +851,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">添加物品动作</td>
                                         </tr>
                                         
-                                        <tr id="i45" class="rowColor">
+                                        <tr id="i66" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#addNodeParser(pers.neige.neigeitems.action.node.NodeParser)>addNodeParser</a>(@NonNull() <a href=../action/node/NodeParser.html>NodeParser</a> nodeParser) </code>
@@ -691,7 +859,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">添加节点解析器</td>
                                         </tr>
                                         
-                                        <tr id="i46" class="altColor">
+                                        <tr id="i67" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#loadJSLib()>loadJSLib</a>() </code>
@@ -699,7 +867,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">将当前BaseActionManager所属插件的&quot;JavaScriptLib/lib.</td>
                                         </tr>
                                         
-                                        <tr id="i47" class="rowColor">
+                                        <tr id="i68" class="altColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#loadJSLib(java.lang.String,java.lang.String)>loadJSLib</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> pluginName, @NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> resourceName) </code>
@@ -707,7 +875,7 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                             <td class="colLast">将其他插件的资源文件加载至JS引擎</td>
                                         </tr>
                                         
-                                        <tr id="i48" class="altColor">
+                                        <tr id="i69" class="rowColor">
                                             <td class="colFirst"><code>void</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=BaseActionManager.html#loadJSLib(org.bukkit.plugin.Plugin,java.lang.String)>loadJSLib</a>(@NonNull() Plugin plugin, @NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> resourceName) </code>
@@ -953,6 +1121,29 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                     </li>
                                 </ul>
                                 
+                                <a id="getNullEvaluator(java.lang.Class)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getNullEvaluator</h4>
+                                        <pre class="methodSignature"> &lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=BaseActionManager.html#getNullEvaluator(java.lang.Class)>T</a>&gt; <a href=BaseActionManager.html#getNullEvaluator(java.lang.Class)>getNullEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#getNullEvaluator(java.lang.Class)>T</a>&gt; type)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
                                 <a id="compile(Object,pers.neige.neigeitems.action.Action)">
                                     <!--   -->
                                 </a>
@@ -1008,6 +1199,466 @@ public abstract class <span class="typeNameLabel"><a href=BaseActionManager.html
                                     <li class="blockList">
                                         <h4>compile</h4>
                                         <pre class="methodSignature">@NonNull() <a href=../action/Action.html>Action</a> <a href=BaseActionManager.html#compile(Object)>compile</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> action)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createStringEvaluator(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createStringEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; <a href=BaseActionManager.html#createStringEvaluator(java.lang.String)>createStringEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createStringEvaluator(Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createStringEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt; <a href=BaseActionManager.html#createStringEvaluator(Object)>createStringEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createIntegerEvaluator(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createIntegerEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; <a href=BaseActionManager.html#createIntegerEvaluator(java.lang.String)>createIntegerEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createIntegerEvaluator(Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createIntegerEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt; <a href=BaseActionManager.html#createIntegerEvaluator(Object)>createIntegerEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createLongEvaluator(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createLongEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html>Long</a>&gt; <a href=BaseActionManager.html#createLongEvaluator(java.lang.String)>createLongEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createLongEvaluator(Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createLongEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html>Long</a>&gt; <a href=BaseActionManager.html#createLongEvaluator(Object)>createLongEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createDoubleEvaluator(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createDoubleEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt; <a href=BaseActionManager.html#createDoubleEvaluator(java.lang.String)>createDoubleEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createDoubleEvaluator(Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createDoubleEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt; <a href=BaseActionManager.html#createDoubleEvaluator(Object)>createDoubleEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createBooleanEvaluator(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createBooleanEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a>&gt; <a href=BaseActionManager.html#createBooleanEvaluator(java.lang.String)>createBooleanEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createBooleanEvaluator(Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createBooleanEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a>&gt; <a href=BaseActionManager.html#createBooleanEvaluator(Object)>createBooleanEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createEvaluator(java.lang.Class,Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createEvaluator</h4>
+                                        <pre class="methodSignature"> &lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object)>T</a>&gt; <a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object)>createEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object)>T</a>&gt; type, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createEvaluator(java.lang.Class,java.lang.String,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createEvaluator</h4>
+                                        <pre class="methodSignature"> &lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,java.lang.String,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; <a href=BaseActionManager.html#createEvaluator(java.lang.Class,java.lang.String,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>createEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,java.lang.String,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; type, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> input, @NonNull() <a href=../action/evaluator/EvaluatorConverter.html>EvaluatorConverter</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,java.lang.String,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; converter)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createEvaluator</h4>
+                                        <pre class="methodSignature"> &lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; <a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>createEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; type, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input, @NonNull() <a href=../action/evaluator/EvaluatorConverter.html>EvaluatorConverter</a>&lt;<a href=BaseActionManager.html#createEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; converter)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createStringListEvaluator(Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createStringListEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>&gt;&gt; <a href=BaseActionManager.html#createStringListEvaluator(Object)>createStringListEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createIntegerListEvaluator(Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createIntegerListEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a>&gt;&gt; <a href=BaseActionManager.html#createIntegerListEvaluator(Object)>createIntegerListEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createLongListEvaluator(Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createLongListEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html>Long</a>&gt;&gt; <a href=BaseActionManager.html#createLongListEvaluator(Object)>createLongListEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createDoubleListEvaluator(Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createDoubleListEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html>Double</a>&gt;&gt; <a href=BaseActionManager.html#createDoubleListEvaluator(Object)>createDoubleListEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createBooleanListEvaluator(Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createBooleanListEvaluator</h4>
+                                        <pre class="methodSignature">@NonNull() <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a>&gt;&gt; <a href=BaseActionManager.html#createBooleanListEvaluator(Object)>createBooleanListEvaluator</a>(@Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createListEvaluator(java.lang.Class,Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createListEvaluator</h4>
+                                        <pre class="methodSignature"> &lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object)>T</a>&gt;&gt; <a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object)>createListEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object)>T</a>&gt; elementType, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="createListEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>createListEvaluator</h4>
+                                        <pre class="methodSignature"> &lt;T&gt; <a href=../action/evaluator/Evaluator.html>Evaluator</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt;&gt; <a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>createListEvaluator</a>(@NonNull() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;<a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; elementType, @Nullable() <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> input, @NonNull() <a href=../action/evaluator/EvaluatorConverter.html>EvaluatorConverter</a>&lt;<a href=BaseActionManager.html#createListEvaluator(java.lang.Class,Object,pers.neige.neigeitems.action.evaluator.EvaluatorConverter)>T</a>&gt; converter)</pre>
                                         <div class="block"></div>
 
                                         <dl>
