@@ -62,6 +62,7 @@ public class WeightParser extends NodeParser {
             } else {
                 // 有权重, 根据权重大小进行记录
                 val weight = NumberParser.parseBigDecimal(value.substring(0, index), BigDecimal.ONE);
+                if (weight.compareTo(BigDecimal.ZERO) <= 0) continue;
                 val string = value.substring(index + 2);
                 info.put(string, info.getOrDefault(string, BigDecimal.ZERO).add(weight));
                 total = total.add(weight);

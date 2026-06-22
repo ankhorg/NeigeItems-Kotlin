@@ -118,6 +118,7 @@ object WeightJoinParser : SectionParser() {
                     // 有权重, 根据权重大小进行记录
                     else -> {
                         val weight = value.substring(0, index).toDoubleOrNull() ?: 1.0
+                        if (weight <= 0) return@forEachIndexed
                         val string = value.substring(index + 2, value.length)
                         info[string] = info.getOrDefault(string, 0.0) + weight
                         // 索引记录

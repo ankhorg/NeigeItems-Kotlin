@@ -675,6 +675,48 @@ object ConfigUtils {
     }
 
     /**
+     * 用于生成或补全插件指定配置文件.
+     * 当不存在指定配置文件时, 将生成默认配置文件.
+     * 当存在指定配置文件且默认配置文件中的某个key不存在于当前配置文件时, 默认值将补入当前配置文件.
+     *
+     * @param resourcePath 文件路径
+     * @return 指定配置文件
+     */
+    @JvmStatic
+    fun JavaPlugin.loadConfig(resourcePath: String): YamlConfiguration {
+        return this.loadConfig(resourcePath, true)
+    }
+
+    /**
+     * 用于生成或补全插件指定配置文件.
+     * 当不存在指定配置文件时, 将生成默认配置文件.
+     * 当 fixConfig 为 true 时, 如果存在指定配置文件且默认配置文件中的某个key不存在于当前配置文件时, 默认值将补入当前配置文件.
+     * 当 fixConfig 为 false 时, 将直接加载指定配置文件.
+     *
+     * @param resourcePath 文件路径
+     * @param fix 是否根据默认config进行补全
+     * @return 指定配置文件
+     */
+    @JvmStatic
+    fun JavaPlugin.loadConfig(resourcePath: String, fix: Boolean): YamlConfiguration {
+        val origin: FileConfiguration = getResource(resourcePath)?.use { input ->
+            InputStreamReader(input, StandardCharsets.UTF_8).use { reader ->
+                YamlConfiguration.loadConfiguration(reader)
+            }
+        } ?: YamlConfiguration()
+        val configFile = getFileOrNull(this, resourcePath)
+        if (configFile == null) {
+            saveResourceNotWarn(resourcePath)
+        } else if (fix) {
+            val config = configFile.loadConfiguration()
+            if (mergeIfAbsent(config, origin)) {
+                config.save(configFile)
+            }
+        }
+        return getFileOrCreate(this, resourcePath).loadConfiguration()
+    }
+
+    /**
      * 全局节点加载
      *
      * @param configSection
