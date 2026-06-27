@@ -92,13 +92,13 @@ public class GaussianParser extends NodeParser {
 
         double result = baseValue * (1 + random);
 
-        if (min != null) {
+        if (min != null && !min.isEmpty()) {
             val minValue = parse(min, 0D, NumberParser::parseDouble, "{0} 并非数字, 无法用作最小值");
             if (minValue == null) return null;
             result = Math.max(result, minValue);
         }
 
-        if (max != null) {
+        if (max != null && !max.isEmpty()) {
             val maxValue = parse(max, 0D, NumberParser::parseDouble, "{0} 并非数字, 无法用作最大值");
             if (maxValue == null) return null;
             result = Math.min(result, maxValue);

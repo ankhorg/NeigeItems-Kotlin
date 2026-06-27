@@ -80,13 +80,13 @@ public class ChanceParser extends NodeParser {
             }
         }
 
-        if (min != null) {
+        if (min != null && !min.isEmpty()) {
             val minValue = parse(min, 0, NumberParser::parseInteger, "{0} 并非整数, 无法用作最小值");
             if (minValue == null) return null;
             result = Math.max(result, minValue);
         }
 
-        if (max != null) {
+        if (max != null && !max.isEmpty()) {
             val maxValue = parse(max, 0, NumberParser::parseInteger, "{0} 并非整数, 无法用作最大值");
             if (maxValue == null) return null;
             result = Math.min(result, maxValue);

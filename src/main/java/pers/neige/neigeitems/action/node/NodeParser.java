@@ -58,7 +58,7 @@ public abstract class NodeParser {
     }
 
     protected <T> T parse(@Nullable String input, @NonNull T def, @NonNull Function<String, T> parser, @NonNull String errorMsg) {
-        if (input == null) return def;
+        if (input == null || input.isEmpty()) return def;
         val maybeResult = parser.apply(input);
         if (maybeResult != null) {
             return maybeResult;
