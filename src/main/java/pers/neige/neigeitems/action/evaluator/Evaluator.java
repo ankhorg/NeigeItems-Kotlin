@@ -110,16 +110,17 @@ public class Evaluator<T> {
                 return manager.getNullEvaluator(type);
             }
         }
-        T maybe;
         if (input instanceof String) {
             return createEvaluator(manager, type, (String) input, converter);
-        } else if ((maybe = converter.convert(input)) != null) {
-            return new RawEvaluator<>(manager, type, maybe);
         } else if (input instanceof List<?>) {
             return new ListEvaluator<>(manager, type, (List<?>) input, (element) -> createEvaluator(manager, type, element, converter));
         }
         val config = ConfigReader.parse(input);
+        T maybe;
         if (config == null) {
+            if ((maybe = converter.convert(input)) != null) {
+                return new RawEvaluator<>(manager, type, maybe);
+            }
             return createEvaluator(manager, type, input.toString(), converter);
         }
         val configType = config.getString("type", "").toLowerCase(Locale.ROOT);
@@ -161,6 +162,9 @@ public class Evaluator<T> {
             } else if ("raw".equals(key)) {
                 return new RawEvaluator<>(manager, type, content, converter);
             }
+        }
+        if ((maybe = converter.convert(input)) != null) {
+            return new RawEvaluator<>(manager, type, maybe);
         }
         return manager.getNullEvaluator(type);
     }

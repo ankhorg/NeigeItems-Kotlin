@@ -235,7 +235,7 @@ public class EvaluatorListTest {
                 converter
             ).get(context());
 
-            assertEquals(Arrays.asList("bad", "list:a,b"), result);
+            assertEquals(Arrays.asList("a", "b"), result);
         }
     }
 }
