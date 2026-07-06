@@ -9,7 +9,7 @@ import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString(callSuper = true)
@@ -29,6 +29,18 @@ public class ListWrappedEvaluator<T> extends Evaluator<List<T>> {
     @Contract("_, !null -> !null")
     public @Nullable List<T> getOrDefault(@NonNull ActionContext context, @Nullable List<T> def) {
         val result = evaluator.get(context);
-        return result == null ? def : Collections.singletonList(result);
+        if (result == null) return def;
+        val list = new ArrayList<T>();
+        list.add(result);
+        return list;
+    }
+
+    @Override
+    public @Nullable List<T> get(@NonNull ActionContext context) {
+        val result = evaluator.get(context);
+        if (result == null) return new ArrayList<>();
+        val list = new ArrayList<T>();
+        list.add(result);
+        return list;
     }
 }

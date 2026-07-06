@@ -125,6 +125,9 @@ public class NeigeItems extends JavaPlugin {
         boolean safe = checkMagicUtils("DamageEventUtils");
 
         if (!checkMagicUtils("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt", "NbtUtils")) safe = false;
+        if (!checkMagicUtils("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt", "NeigeItemsUtils")) safe = false;
+        if (!checkMagicUtils("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt", "NbtCraftItemComponent")) safe = false;
+        if (!checkMagicUtils("pers.neige.neigeitems.libs.bot.inker.bukkit.nbt", "NbtBukkitItemComponent")) safe = false;
         if (!checkMagicUtils("EnchantmentUtils")) safe = false;
         if (!checkMagicUtils("EntityItemUtils")) safe = false;
         if (!checkMagicUtils("EntityPlayerUtils")) safe = false;

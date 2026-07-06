@@ -11,7 +11,6 @@ import pers.neige.neigeitems.action.evaluator.EvaluatorParser;
 import pers.neige.neigeitems.manager.BaseActionManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @ToString(callSuper = true)
@@ -39,6 +38,6 @@ public class ListValueEvaluator<T> extends Evaluator<List<T>> {
             if (value == null) continue;
             result.addAll(value);
         }
-        return Collections.unmodifiableList(result);
+        return result;
     }
 }

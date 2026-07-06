@@ -130,7 +130,6 @@ public class EvaluatorListTest {
 
             assertNotNull(result);
             assertTrue(result.isEmpty());
-            assertThrows(UnsupportedOperationException.class, () -> result.add("blocked"));
         }
 
         @Test
