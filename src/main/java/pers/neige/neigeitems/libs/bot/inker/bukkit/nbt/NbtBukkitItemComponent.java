@@ -7,6 +7,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.api.NbtComponentLike;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.loader.DelegateAbstractMap;
 import pers.neige.neigeitems.ref.nbt.RefCraftMetaItem;
@@ -17,7 +18,7 @@ import java.util.*;
 public class NbtBukkitItemComponent implements NbtComponentLike {
     private static final Logger logger = LoggerFactory.getLogger(NbtBukkitItemComponent.class.getSimpleName());
 
-    private static final Set<String> HANDLED_TAGS = ImmutableSet.copyOf(RefCraftMetaItem.HANDLED_TAGS);
+    private static final Set<String> HANDLED_TAGS = CbVersion.v1_20_R4.isSupport() ? new HashSet<>() : ImmutableSet.copyOf(RefCraftMetaItem.HANDLED_TAGS);
 
     private final Map<String, Nbt<?>> delegateMap;
     private final ItemStack itemStack;
