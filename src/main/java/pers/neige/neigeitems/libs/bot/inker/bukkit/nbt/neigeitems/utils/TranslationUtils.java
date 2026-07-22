@@ -46,6 +46,7 @@ public class TranslationUtils {
     private final static boolean V13_OR_ABOVE = CbVersion.v1_13_R1.isSupport();
     private final static boolean V12 = CbVersion.current() == CbVersion.v1_12_R1;
     private static final boolean NBT_FORMAT_CHANGE = CbVersion.v1_21_R4.isSupport();
+    private static final boolean JSON_TEXT = CbVersion.v1_16_R3.isSupport();
 
     static {
         CHAT_COLORS.put("BLACK", RefChatFormatting.BLACK);
@@ -173,7 +174,7 @@ public class TranslationUtils {
     public static @NonNull String toJsonText(
         @NonNull String json
     ) {
-        if (CbVersion.v1_16_R3.isSupport()) {
+        if (JSON_TEXT) {
             return fromStringToJSON(json);
         } else {
             return json;
@@ -190,7 +191,7 @@ public class TranslationUtils {
         @Nullable String jsonMessage
     ) {
         if (jsonMessage == null) return null;
-        if (CbVersion.v1_16_R3.isSupport())
+        if (JSON_TEXT)
             return RefCraftChatMessage.fromJSONComponent(jsonMessage);
         return null;
     }
@@ -204,7 +205,7 @@ public class TranslationUtils {
      */
     public static String fromStringToJSON(String message) {
         if (message == null) return null;
-        if (CbVersion.v1_16_R3.isSupport())
+        if (JSON_TEXT)
             return RefCraftChatMessage.fromStringToJSON(message);
         return null;
     }
@@ -218,7 +219,7 @@ public class TranslationUtils {
      */
     public static String fromStringToJSON(String message, boolean keepNewlines) {
         if (message == null) return null;
-        if (CbVersion.v1_16_R3.isSupport())
+        if (JSON_TEXT)
             return RefCraftChatMessage.fromStringToJSON(message, keepNewlines);
         return null;
     }

@@ -132,6 +132,16 @@ const papi = function (text) {
  * @param text String 待解析文本
  * @return String 解析后文本
  */
+const node = function (text) {
+    return manager.parseNode(text, context)
+}
+
+/**
+ * 解析文本中的即时声明节点
+ *
+ * @param text String 待解析文本
+ * @return String 解析后文本
+ */
 const parse = function (text) {
     const c = typeof cache === "undefined" ? null : cache
     const s = typeof sections === "undefined" ? null : sections

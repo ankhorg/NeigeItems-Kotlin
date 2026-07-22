@@ -29,6 +29,7 @@ object ConfigManager {
     var forceSync = config.getBoolean("ItemDurability.forceSync", false)
     var checkInventory = config.getBoolean("ItemCheck.checkInventory", true)
     var enableJsPapi = config.getBoolean("Papi.enableJs", false)
+    var enableRegexPapi = config.getBoolean("Papi.enableRegex", false)
     var resetCooldownWhenPlayerQuit = config.getBoolean("ItemAction.resetCooldownWhenPlayerQuit", true)
 
     /**

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.item.ItemPlaceholder;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.invoke.InvokeUtil;
+import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils.TranslationUtils;
 import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.ref.RefMinecraftKey;
 import pers.neige.neigeitems.ref.adventure.RefPaperAdventure;
@@ -54,6 +55,7 @@ public class NbtUtils {
      * 1.20.5+ 版本起, Mojang献祭了自己的亲妈, 换来了物品格式的改动.
      */
     private final static boolean MOJANG_MOTHER_DEAD = CbVersion.v1_20_R4.isSupport();
+    private static final boolean JSON_TEXT = CbVersion.v1_16_R3.isSupport();
 
     static {
         if (MOJANG_MOTHER_DEAD) {
@@ -675,5 +677,54 @@ public class NbtUtils {
         if (meta1 == null) return meta2 == null;
         if (meta2 == null) return false;
         return Bukkit.getItemFactory().equals(meta1, meta2);
+    }
+
+    public static @Nullable List<String> getLore(@Nullable ItemStack itemStack) {
+        if (itemStack == null) return null;
+        if (MOJANG_MOTHER_DEAD) {
+            val meta = itemStack.getItemMeta();
+            if (meta == null) return null;
+            return meta.getLore();
+        }
+        if (isCraftItemStack(itemStack)) {
+            val nbt = ItemUtils.getNbtOrNull(itemStack);
+            if (nbt == null) return null;
+            val display = nbt.getCompoundOrNull("display");
+            if (display == null) return null;
+            val lore = display.getListOrNull("Lore");
+            if (lore == null) return null;
+            if (JSON_TEXT) {
+                return lore.stream().map(Nbt::getAsString).collect(Collectors.toList());
+            } else {
+                return lore.stream().map(Nbt::getAsString).map(TranslationUtils::fromJSONComponent).collect(Collectors.toList());
+            }
+        } else {
+            val meta = getItemMeta(itemStack);
+            if (meta == null) return null;
+            return meta.getLore();
+        }
+    }
+
+    public static int getLoreSize(@Nullable ItemStack itemStack) {
+        if (itemStack == null) return 0;
+        if (MOJANG_MOTHER_DEAD) {
+            val meta = itemStack.getItemMeta();
+            if (meta == null) return 0;
+            val lore = meta.getLore();
+            return lore == null ? 0 : lore.size();
+        }
+        if (isCraftItemStack(itemStack)) {
+            val nbt = ItemUtils.getNbtOrNull(itemStack);
+            if (nbt == null) return 0;
+            val display = nbt.getCompoundOrNull("display");
+            if (display == null) return 0;
+            val lore = display.getListOrNull("Lore");
+            return lore == null ? 0 : lore.size();
+        } else {
+            val meta = getItemMeta(itemStack);
+            if (meta == null) return 0;
+            val lore = meta.getLore();
+            return lore == null ? 0 : lore.size();
+        }
     }
 }

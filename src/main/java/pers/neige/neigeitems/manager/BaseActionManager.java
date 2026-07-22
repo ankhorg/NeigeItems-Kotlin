@@ -1803,13 +1803,22 @@ public abstract class BaseActionManager {
         addNodeParser(new GaussianParser(this));
         addNodeParser(new GradientParser(this));
         addNodeParser(new InheritParser(this));
+        addNodeParser(new ItemIdParser(this));
         addNodeParser(new JavascriptParser(this));
+        addNodeParser(new JoinParser(this));
+        addNodeParser(new LoreParser(this));
+        addNodeParser(new LoreSizeParser(this));
         addNodeParser(new NameParser(this));
         addNodeParser(new NbtParser(this));
         addNodeParser(new pers.neige.neigeitems.action.node.impl.NumberParser(this));
         addNodeParser(new PapiParser(this));
+        addNodeParser(new RegexParser(this));
+        addNodeParser(new RepeatParser(this));
+        addNodeParser(new StringParser(this));
         addNodeParser(new StringsParser(this));
         addNodeParser(new TypeParser(this));
         addNodeParser(new WeightParser(this));
+        addNodeParser(new WhenParser(this));
+        addNodeParser(new WholeLoreParser(this));
     }
 }

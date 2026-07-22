@@ -227,3 +227,5 @@ ItemCheck:
 Papi:
   # 是否开启papi变量中有关js解析的部分
   enableJs: false
+  # 是否开启papi变量中有关正则解析的部分
+  enableRegex: false

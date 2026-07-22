@@ -156,12 +156,12 @@ object ExpansionManager {
     private fun serverEnable() {
         async {
             permanentExpansion.forEach { (scriptName, scriptExpansion) ->
-                scriptExpansion.run("enable", scriptName)
                 scriptExpansion.run("serverEnable", scriptName)
+                scriptExpansion.run("enable", scriptName)
             }
             expansions.forEach { (scriptName, scriptExpansion) ->
-                scriptExpansion.run("enable", scriptName)
                 scriptExpansion.run("serverEnable", scriptName)
+                scriptExpansion.run("enable", scriptName)
             }
         }
     }

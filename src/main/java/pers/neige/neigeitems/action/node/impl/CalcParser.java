@@ -13,7 +13,6 @@ import pers.neige.neigeitems.utils.ScriptUtils;
 import pers.neige.neigeitems.utils.StringUtils;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 
 public abstract class CalcParser extends NodeParser {
     public CalcParser(@NonNull BaseActionManager manager) {
