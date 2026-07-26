@@ -54,8 +54,8 @@ public class StringParserTest {
     void shouldSupportContainsStartsAndEnds() {
         assertEquals("true", parse("mode", "contains", "value", "abc", "arg", "b"));
         assertEquals("false", parse("mode", "contains", "value", "abc", "arg", "z"));
-        assertEquals("true", parse("mode", "starts-with", "value", "abc", "arg", "ab"));
-        assertEquals("true", parse("mode", "ends-with", "value", "abc", "arg", "bc"));
+        assertEquals("true", parse("mode", "starts", "value", "abc", "arg", "ab"));
+        assertEquals("true", parse("mode", "ends", "value", "abc", "arg", "bc"));
     }
 
     @Test
@@ -63,14 +63,14 @@ public class StringParserTest {
         assertEquals("ell", parse("mode", "substring", "value", "hello", "start", "1", "end", "4"));
         assertEquals("ello", parse("mode", "substring", "value", "hello", "start", "1"));
         assertEquals("fallback", parse("mode", "substring", "value", "hello", "start", "9", "default", "fallback"));
-        assertEquals("xby", parse("mode", "replace-literal", "value", "xay", "target", "a", "replacement", "b"));
+        assertEquals("xby", parse("mode", "replace", "value", "xay", "target", "a", "replacement", "b"));
     }
 
     @Test
     void shouldParseInlineAndRejectInvalidInput() {
         assertEquals("abc", parser.parse(context, "lower_AbC"));
-        assertEquals("true", parser.parse(context, "contains_a\\_b_a\\_"));
-        assertEquals("xby", parser.parse(context, "replace-literal_xay_a_b"));
+        assertEquals("true", parser.parse(context, "contains_a\\__a\\_b"));
+        assertEquals("xby", parser.parse(context, "replace_a_b_xay"));
         assertNull(parser.parse(context, "unknown_a"));
         assertNull(parser.parse(context, "lower"));
         assertNull(parse("mode", "substring", "value", "hello", "start", "x"));

@@ -60,33 +60,33 @@ public class StringParser extends NodeParser {
                 if (isInvalidSize(paramsList, 2, 2)) return null;
                 return handle(mode, paramsList.get(1), null, null, null, null, null, null);
             case "contains":
-            case "starts-with":
-            case "ends-with":
+            case "starts":
+            case "ends":
                 if (isInvalidSize(paramsList, 3, 3)) return null;
-                return handle(mode, paramsList.get(1), paramsList.get(2), null, null, null, null, null);
+                return handle(mode, paramsList.get(2), paramsList.get(1), null, null, null, null, null);
             case "substring":
                 if (isInvalidSize(paramsList, 3, 5)) return null;
                 return handle(
                     mode,
-                    paramsList.get(1),
+                    paramsList.get(4),
                     null,
-                    paramsList.get(2),
+                    paramsList.get(1),
+                    ListUtils.getOrNull(paramsList, 2),
                     ListUtils.getOrNull(paramsList, 3),
-                    ListUtils.getOrNull(paramsList, 4),
                     null,
                     null
                 );
-            case "replace-literal":
+            case "replace":
                 if (isInvalidSize(paramsList, 4, 4)) return null;
                 return handle(
                     mode,
+                    paramsList.get(3),
+                    null,
+                    null,
+                    null,
+                    null,
                     paramsList.get(1),
-                    null,
-                    null,
-                    null,
-                    null,
-                    paramsList.get(2),
-                    paramsList.get(3)
+                    paramsList.get(2)
                 );
             default:
                 warning("未知模式: " + mode);
@@ -133,13 +133,13 @@ public class StringParser extends NodeParser {
                     return null;
                 }
                 return Boolean.toString(value.contains(arg));
-            case "starts-with":
+            case "starts":
                 if (arg == null) {
                     warning("缺少 arg 参数");
                     return null;
                 }
                 return Boolean.toString(value.startsWith(arg));
-            case "ends-with":
+            case "ends":
                 if (arg == null) {
                     warning("缺少 arg 参数");
                     return null;
@@ -147,7 +147,7 @@ public class StringParser extends NodeParser {
                 return Boolean.toString(value.endsWith(arg));
             case "substring":
                 return substring(value, start, end, def);
-            case "replace-literal":
+            case "replace":
                 if (target == null) {
                     warning("缺少 target 参数");
                     return null;

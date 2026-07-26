@@ -8,8 +8,6 @@ import pers.neige.neigeitems.action.ContextKeys;
 import pers.neige.neigeitems.action.node.NodeParser;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtUtils;
 import pers.neige.neigeitems.manager.BaseActionManager;
-import pers.neige.neigeitems.utils.ListUtils;
-import pers.neige.neigeitems.utils.NumberParser;
 import pers.neige.neigeitems.utils.StringUtils;
 
 public class WholeLoreParser extends NodeParser {
@@ -27,12 +25,8 @@ public class WholeLoreParser extends NodeParser {
         @NonNull ActionContext context,
         @NonNull String params
     ) {
-        val args = StringUtils.split(params, '_', '\\', 2);
-        val index = parse(args.get(0), 0, NumberParser::parseInteger, "{0} 并非数字, 无法用作lore行数索引");
-        if (index == null) return null;
         val itemStack = context.get(ContextKeys.ITEM_STACK);
         val lore = NbtUtils.getLore(itemStack);
-        val def = ListUtils.getOrDefault(args, 1, "");
-        return lore == null ? def : StringUtils.joinToString(lore, "\n", index);
+        return lore == null ? "" : StringUtils.joinToString(lore, "\n", 0);
     }
 }
