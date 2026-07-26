@@ -27,21 +27,23 @@ public class NbtParser extends NodeParser {
         @NonNull String params
     ) {
         val args = StringUtils.split(params, '_', '\\', 2);
+        val key = args.get(0);
+        val def = ListUtils.getOrDefault(args, 1, "");
         if (context.has(ContextKeys.NBT)) {
             val nbt = context.get(ContextKeys.NBT);
-            return nbt == null ? null : nbt.getDeepString(args.get(0), ListUtils.getOrNull(args, 1));
+            return nbt == null ? def : nbt.getDeepString(key, def);
         }
         if (context.has(ContextKeys.ITEM_INFO)) {
             val itemInfo = context.get(ContextKeys.ITEM_INFO);
             val nbt = itemInfo == null ? null : itemInfo.getItemTag();
             context.set(ContextKeys.NBT, nbt);
-            return nbt == null ? null : nbt.getDeepString(args.get(0), ListUtils.getOrNull(args, 1));
+            return nbt == null ? def : nbt.getDeepString(key, def);
         }
         if (context.has(ContextKeys.ITEM_STACK)) {
             val itemStack = context.get(ContextKeys.ITEM_STACK);
             val nbt = ItemUtils.getNbtOrNull(itemStack);
             context.set(ContextKeys.NBT, nbt);
-            return nbt == null ? null : nbt.getDeepString(args.get(0), ListUtils.getOrNull(args, 1));
+            return nbt == null ? def : nbt.getDeepString(key, def);
         }
         return null;
     }

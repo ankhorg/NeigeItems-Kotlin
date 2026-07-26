@@ -694,9 +694,9 @@ public class NbtUtils {
             val lore = display.getListOrNull("Lore");
             if (lore == null) return null;
             if (JSON_TEXT) {
-                return lore.stream().map(Nbt::getAsString).collect(Collectors.toList());
-            } else {
                 return lore.stream().map(Nbt::getAsString).map(TranslationUtils::fromJSONComponent).collect(Collectors.toList());
+            } else {
+                return lore.stream().map(Nbt::getAsString).collect(Collectors.toList());
             }
         } else {
             val meta = getItemMeta(itemStack);

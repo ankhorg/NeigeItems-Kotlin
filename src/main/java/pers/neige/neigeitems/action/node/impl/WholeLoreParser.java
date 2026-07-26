@@ -22,8 +22,7 @@ public class WholeLoreParser extends NodeParser {
 
     @Override
     public @Nullable String parse(
-        @NonNull ActionContext context,
-        @NonNull String params
+        @NonNull ActionContext context
     ) {
         val itemStack = context.get(ContextKeys.ITEM_STACK);
         val lore = NbtUtils.getLore(itemStack);
