@@ -74,7 +74,7 @@ public class RepeatParser extends NodeParser {
         );
     }
 
-    private @Nullable String handle(
+    private @NonNull String handle(
         @NonNull ActionContext context,
         @Nullable String content,
         @Nullable String repeatText,

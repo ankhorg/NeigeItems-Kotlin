@@ -53,6 +53,7 @@ const SuccessResult = Packages.pers.neige.neigeitems.action.result.SuccessResult
 const StopResult = Packages.pers.neige.neigeitems.action.result.StopResult
 const DelayResult = Packages.pers.neige.neigeitems.action.result.DelayResult
 const Results = Packages.pers.neige.neigeitems.action.result.Results
+const BukkitConfigReader = Packages.pers.neige.neigeitems.config.BukkitConfigReader
 
 const ActionManager = Packages.pers.neige.neigeitems.manager.ActionManager.INSTANCE
 const ConfigManager = Packages.pers.neige.neigeitems.manager.ConfigManager.INSTANCE
@@ -144,7 +145,10 @@ const node = function (text) {
  */
 const parse = function (text) {
     const c = typeof cache === "undefined" ? null : cache
-    const s = typeof sections === "undefined" ? null : sections
+    let s = typeof sections === "undefined" ? null : sections
+    if (s instanceof BukkitConfigReader) {
+        s = s.getHandle()
+    }
     return SectionUtils.parseSection(text, c, player, s)
 }
 
