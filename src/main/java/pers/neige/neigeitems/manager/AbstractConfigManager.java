@@ -6,32 +6,18 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
-import pers.neige.neigeitems.NeigeItems;
-import pers.neige.neigeitems.manager.logger.ILogger;
-import pers.neige.neigeitems.manager.logger.JavaLogger;
-import pers.neige.neigeitems.manager.logger.Slf4jLogger;
 import pers.neige.neigeitems.utils.ConfigUtils;
 
 import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
-public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K, V> {
-    protected final @Nullable JavaPlugin plugin;
-    protected final @NonNull String pluginName;
-    protected final @NonNull ILogger logger;
+public abstract class AbstractConfigManager<K, V, R> extends AbstractFileManager<K, V, AbstractConfigManager.RawConfig<R>, AbstractConfigManager.FileConfig> {
     protected final @NonNull BiFunction<ConfigurationSection, String, R> configGetter;
     protected final @NonNull Function<String, K> keyConverter;
     protected final @NonNull BiFunction<K, R, V> converter;
-    protected final @NonNull String elementName;
-    protected final @NonNull String directory;
-    protected final @NonNull ConcurrentHashMap<String, FileConfig> fileConfigs = new ConcurrentHashMap<>();
-    protected final @NonNull ConcurrentHashMap<K, RawConfig<R>> rawConfigs = new ConcurrentHashMap<>();
     protected boolean notNullConfig = true;
 
     public AbstractConfigManager(
@@ -42,11 +28,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
         @NonNull Function<String, K> keyConverter,
         @NonNull BiFunction<K, R, V> converter
     ) {
-        this.plugin = plugin;
-        this.pluginName = plugin.getName();
-        this.logger = new JavaLogger(plugin.getLogger());
-        this.elementName = elementName;
-        this.directory = directory;
+        super(plugin, elementName, directory);
         this.configGetter = configGetter;
         this.keyConverter = keyConverter;
         this.converter = converter;
@@ -61,11 +43,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
         @NonNull Function<String, K> keyConverter,
         @NonNull BiFunction<K, R, V> converter
     ) {
-        this.plugin = null;
-        this.pluginName = pluginName;
-        this.logger = new JavaLogger(logger);
-        this.elementName = elementName;
-        this.directory = directory;
+        super(pluginName, logger, elementName, directory);
         this.configGetter = configGetter;
         this.keyConverter = keyConverter;
         this.converter = converter;
@@ -80,76 +58,28 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
         @NonNull Function<String, K> keyConverter,
         @NonNull BiFunction<K, R, V> converter
     ) {
-        this.plugin = null;
-        this.pluginName = pluginName;
-        this.logger = new Slf4jLogger(logger);
-        this.elementName = elementName;
-        this.directory = directory;
+        super(pluginName, logger, elementName, directory);
         this.configGetter = configGetter;
         this.keyConverter = keyConverter;
         this.converter = converter;
     }
 
-    public @NonNull ConcurrentHashMap<String, FileConfig> getFileConfigs() {
-        return fileConfigs;
+    @Override
+    protected @NonNull FileConfig createFileConfig(@NonNull String path, @NonNull File file) {
+        return new FileConfig(path, file);
     }
 
-    public @NonNull ConcurrentHashMap<K, RawConfig<R>> getRawConfigs() {
-        return rawConfigs;
-    }
-
-    /**
-     * 通过给定的路径加载所有文件对象
-     */
-    protected @NonNull List<File> getFiles() {
-        val file = new File(new File(NeigeItems.getInstance().getDataFolder().getParentFile(), pluginName), directory);
-        if (file.isDirectory()) {
-            return ConfigUtils.getAllFiles(file);
-        } else {
-            return Collections.singletonList(file);
-        }
-    }
-
-    /**
-     * 根据 getFiles 方法获取所有文件对象, 解析相对路径, 并进行yml解析, 存储至 fileConfigs 字段
-     */
-    protected void loadConfigs() {
-        fileConfigs.clear();
-        val prefix = "plugins" + File.separator + pluginName + File.separator + directory + File.separator;
-        for (val file : getFiles()) {
-            if (!file.getName().endsWith(".yml")) continue;
-            try {
-                String path = file.getPath();
-                if (path.startsWith(prefix)) {
-                    path = path.substring(prefix.length());
-                }
-                val fileConfig = new FileConfig(path, file);
-                fileConfigs.put(path, fileConfig);
-            } catch (Throwable throwable) {
-                logger.warn("error occurred while loading " + elementName + " file: " + file.getPath(), throwable);
-            }
-        }
-    }
-
-    /**
-     * 根据 loadConfigs 方法加载所有yml配置文件, 而后通过 loadRawConfig 方法逐个对配置文件进行部件拆分
-     */
-    protected void loadRawConfigs() {
-        loadConfigs();
-        rawConfigs.clear();
-        fileConfigs.values().forEach((fileConfig) -> {
-            try {
-                loadRawConfig(fileConfig);
-            } catch (Throwable throwable) {
-                logger.warn("error occurred while loading " + elementName + " raw config from file: " + fileConfig.path, throwable);
-            }
-        });
+    @Override
+    protected void loadFile(@NonNull File file) {
+        if (!file.getName().endsWith(".yml")) return;
+        super.loadFile(file);
     }
 
     /**
      * 解析配置文件获取配置组件
      * 默认逻辑: 通过 getKeys(false) 获取当前配置文件的所有顶级键, 然后通过 configGetter 获取对应内容, 通过 keyConverter 转换键类型
      */
+    @Override
     protected void loadRawConfig(@NonNull FileConfig fileConfig) {
         String currentKey = "";
         try {
@@ -167,7 +97,7 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
                 }
             }
         } catch (Throwable throwable) {
-            logger.warn("error occurred while loading " + elementName + " raw config, current key: " + currentKey + ", current file: " + fileConfig.path + ", config content: \n" + fileConfig.config.saveToString(), throwable);
+            logger.warn("error occurred while loading " + elementName + " raw config, current key: " + currentKey + ", current file: " + fileConfig.getPath() + ", config content: \n" + fileConfig.config.saveToString(), throwable);
         }
     }
 
@@ -201,28 +131,17 @@ public abstract class AbstractConfigManager<K, V, R> extends ConcurrentHashMap<K
                 if (result == null) return;
                 put(id, result);
             } catch (Throwable throwable) {
-                logger.warn("error occurred while loading " + elementName + ", current id: " + id + ", current path: " + rawConfig.fileConfig.path, throwable);
+                logger.warn("error occurred while loading " + elementName + ", current id: " + id + ", current path: " + rawConfig.fileConfig.getPath(), throwable);
             }
         });
     }
 
-    public static class FileConfig {
-        private final @NonNull String path;
-        private final @NonNull File file;
+    public static class FileConfig extends AbstractFileManager.FileConfig {
         private final @NonNull YamlConfiguration config;
 
         public FileConfig(@NonNull String path, @NonNull File file) {
-            this.path = path;
-            this.file = file;
+            super(path, file);
             this.config = YamlConfiguration.loadConfiguration(file);
-        }
-
-        public @NonNull String getPath() {
-            return path;
-        }
-
-        public @NonNull File getFile() {
-            return file;
         }
 
         public @NonNull YamlConfiguration getConfig() {

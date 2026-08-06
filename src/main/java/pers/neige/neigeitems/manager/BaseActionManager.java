@@ -58,6 +58,14 @@ import static pers.neige.neigeitems.utils.ListUtils.*;
 @SuppressWarnings("unchecked")
 @ToString(of = "plugin")
 public abstract class BaseActionManager {
+    /**
+     * 所有插件的物品动作实现函数
+     */
+    private static final @NonNull Map<String, Map<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>>> allActions = new ConcurrentHashMap<>();
+    /**
+     * 所有插件的节点解析器
+     */
+    private static final @NonNull Map<String, Map<String, NodeParser>> allNodeParsers = new ConcurrentHashMap<>();
     public final @NonNull Action NULL_ACTION = new NullAction(this);
     public final @NonNull Text NULL_TEXT = new NullText(this);
     public final @NonNull Evaluator<String> NULL_STRING_EVALUATOR = new Evaluator<>(this, String.class);
@@ -71,10 +79,6 @@ public abstract class BaseActionManager {
      * 物品动作实现函数
      */
     private final @NonNull HashMap<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>> actions = new HashMap<>();
-    /**
-     * 所有插件的物品动作实现函数
-     */
-    private static final @NonNull Map<String, Map<String, BiFunction<ActionContext, String, CompletableFuture<ActionResult>>>> allActions = new ConcurrentHashMap<>();
     /**
      * 用于编译condition的脚本引擎
      */
@@ -91,10 +95,6 @@ public abstract class BaseActionManager {
      * 获取所有节点解析器
      */
     private final @NonNull ConcurrentHashMap<String, NodeParser> nodeParsers = new ConcurrentHashMap<>();
-    /**
-     * 所有插件的节点解析器
-     */
-    private static final @NonNull Map<String, Map<String, NodeParser>> allNodeParsers = new ConcurrentHashMap<>();
 
     public BaseActionManager(
         @NonNull Plugin plugin
