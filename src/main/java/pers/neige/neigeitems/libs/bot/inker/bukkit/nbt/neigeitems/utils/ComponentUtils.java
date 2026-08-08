@@ -3,6 +3,7 @@ package pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.neigeitems.utils;
 import lombok.NonNull;
 import org.bukkit.inventory.ItemStack;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.internal.annotation.CbVersion;
+import pers.neige.neigeitems.manager.HookerManager;
 import pers.neige.neigeitems.ref.RefMinecraftKey;
 import pers.neige.neigeitems.ref.core.component.RefDataComponentType;
 import pers.neige.neigeitems.ref.core.component.RefPatchedDataComponentMap;
@@ -68,7 +69,7 @@ public class ComponentUtils {
         RefPatchedDataComponentMap receiverComponentMap = receiverNms.components;
         RefPatchedDataComponentMap providerComponentMap = providerNms.components;
         components.forEach(componentId -> {
-            RefDataComponentType<?> componentType = getDataComponentType0(componentId);
+            RefDataComponentType<?> componentType = (RefDataComponentType<?>) HookerManager.INSTANCE.getNmsHooker().getDataComponentType(componentId);
             if (componentType == null) return;
             Object receiverComponent = receiverComponentMap.get(componentType);
             Object providerComponent = providerComponentMap.get(componentType);

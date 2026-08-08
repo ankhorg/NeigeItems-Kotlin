@@ -6,6 +6,7 @@ import org.inksnow.ankhinvoke.comments.HandleBy;
 @HandleBy(reference = "net/minecraft/resources/ResourceLocation", predicates = "craftbukkit_version:[v1_17_R1,v1_21_R7)")
 @HandleBy(reference = "net/minecraft/server/v1_12_R1/MinecraftKey", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
 public final class RefMinecraftKey {
-    @HandleBy(reference = "Lnet/minecraft/resources/ResourceLocation;parse(Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;", predicates = "craftbukkit_version:[v1_20_R4,)")
+    @HandleBy(reference = "Lnet/minecraft/resources/Identifier;parse(Ljava/lang/String;)Lnet/minecraft/resources/Identifier;", predicates = "craftbukkit_version:[v1_21_R7,)")
+    @HandleBy(reference = "Lnet/minecraft/resources/ResourceLocation;parse(Ljava/lang/String;)Lnet/minecraft/resources/ResourceLocation;", predicates = "craftbukkit_version:[v1_20_R4,v1_21_R7)")
     public static native RefMinecraftKey parse(String id);
 }
