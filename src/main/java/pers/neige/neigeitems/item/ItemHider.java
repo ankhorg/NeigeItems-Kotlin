@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.injector.server.TemporaryPlayer;
 import lombok.val;
 import org.bukkit.entity.Item;
 import pers.neige.neigeitems.NeigeItems;
@@ -23,6 +24,7 @@ public class ItemHider {
             @Override
             public void onPacketSending(PacketEvent event) {
                 val player = event.getPlayer();
+                if (player instanceof TemporaryPlayer) return;
                 val packet = event.getPacket().getHandle();
                 val id = PacketUtils.getEntityIdFromPacketPlayOutEntityMetadata(packet);
                 if (id < 0) return;
