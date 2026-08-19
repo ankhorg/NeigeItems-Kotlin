@@ -15,7 +15,13 @@ import pers.neige.neigeitems.utils.PlayerUtils;
 
 public class ItemHider {
     public ItemHider() {
+        boolean compat = false;
+        try {
+            Class.forName("com.comphenix.protocol.injector.server.TemporaryPlayer");
+            compat = true;
+        } catch (Throwable ignored) {}
         val protocolManager = ProtocolLibrary.getProtocolManager();
+        val finalCompat = compat;
         protocolManager.addPacketListener(new PacketAdapter(
             NeigeItems.getInstance(),
             ListenerPriority.LOWEST,
@@ -24,7 +30,7 @@ public class ItemHider {
             @Override
             public void onPacketSending(PacketEvent event) {
                 val player = event.getPlayer();
-                if (player instanceof TemporaryPlayer) return;
+                if (finalCompat && player instanceof TemporaryPlayer) return;
                 val packet = event.getPacket().getHandle();
                 val id = PacketUtils.getEntityIdFromPacketPlayOutEntityMetadata(packet);
                 if (id < 0) return;
