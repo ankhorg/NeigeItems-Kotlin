@@ -289,6 +289,7 @@ public class NMSHooker {
         return result;
     }
 
+    @Deprecated
     public @Nullable Entity getEntityFromID1(
         @NonNull World world,
         int entityId
@@ -302,6 +303,7 @@ public class NMSHooker {
      * @param key 可解析为 ResourceLocation 的文本.
      * @return DataComponentType.
      */
+    @Deprecated
     public Object getDataComponentType(String key) {
         return ComponentUtils.getDataComponentType(key);
     }
@@ -312,6 +314,7 @@ public class NMSHooker {
      * @param type DataComponentType.
      * @return ResourceLocation.
      */
+    @Deprecated
     public Object getKeyByType(Object type) {
         return ComponentUtils.getKeyByType(type);
     }

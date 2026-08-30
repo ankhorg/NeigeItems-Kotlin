@@ -10,6 +10,12 @@ import java.util.function.Predicate;
 
 @HandleBy(reference = "net/minecraft/core/component/DataComponentPatch", predicates = "craftbukkit_version:[v1_20_R4,)")
 public class RefDataComponentPatch {
+    @HandleBy(reference = "Lnet/minecraft/core/component/DataComponentPatch;EMPTY:Lnet/minecraft/core/component/DataComponentPatch;", predicates = "craftbukkit_version:[v1_20_R4,)")
+    public static final RefDataComponentPatch EMPTY = null;
+
+    @HandleBy(reference = "Lnet/minecraft/core/component/DataComponentPatch;builder()Lnet/minecraft/core/component/DataComponentPatch$Builder;", predicates = "craftbukkit_version:[v1_20_R4,)")
+    public static native RefDataComponentPatch$Builder builder();
+
     @HandleBy(reference = "Lnet/minecraft/core/component/DataComponentPatch;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/util/Optional;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public native <T> @Nullable Optional<? extends T> get(RefDataComponentType<? extends T> type);
 
@@ -24,4 +30,7 @@ public class RefDataComponentPatch {
 
     @HandleBy(reference = "Lnet/minecraft/core/component/DataComponentPatch;isEmpty()Z", predicates = "craftbukkit_version:[v1_20_R4,)")
     public native boolean isEmpty();
+
+    @HandleBy(reference = "Lnet/minecraft/core/component/DataComponentPatch;split()Lnet/minecraft/core/component/DataComponentPatch$SplitResult;", predicates = "craftbukkit_version:[v1_20_R4,)")
+    public native RefDataComponentPatch$SplitResult split();
 }

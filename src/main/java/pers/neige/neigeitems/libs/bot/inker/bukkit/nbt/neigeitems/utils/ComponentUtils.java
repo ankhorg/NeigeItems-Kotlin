@@ -69,7 +69,7 @@ public class ComponentUtils {
         RefPatchedDataComponentMap receiverComponentMap = receiverNms.components;
         RefPatchedDataComponentMap providerComponentMap = providerNms.components;
         components.forEach(componentId -> {
-            RefDataComponentType<?> componentType = (RefDataComponentType<?>) HookerManager.INSTANCE.getNmsHooker().getDataComponentType(componentId);
+            RefDataComponentType<?> componentType = getDataComponentType0(componentId);
             if (componentType == null) return;
             Object receiverComponent = receiverComponentMap.get(componentType);
             Object providerComponent = providerComponentMap.get(componentType);

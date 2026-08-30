@@ -97,7 +97,7 @@ public class PacketUtils {
             RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
 
             int entityId = packet.id;
-            Entity bukkitEntity = HookerManager.INSTANCE.getNmsHooker().getEntityFromID1(world, entityId);
+            Entity bukkitEntity = WorldUtils.getEntityFromID1(world, entityId);
             if (!(bukkitEntity instanceof RefCraftEntity)) return;
             RefEntity entity = ((RefCraftEntity) bukkitEntity).getHandle();
 
@@ -185,7 +185,7 @@ public class PacketUtils {
             RefPacketPlayOutEntityMetadata packet = (RefPacketPlayOutEntityMetadata) packetObject;
 
             int entityId = packet.id;
-            Entity bukkitEntity = HookerManager.INSTANCE.getNmsHooker().getEntityFromID1(world, entityId);
+            Entity bukkitEntity = WorldUtils.getEntityFromID1(world, entityId);
             if (!(bukkitEntity instanceof RefCraftEntity)) return;
             RefEntity entity = ((RefCraftEntity) bukkitEntity).getHandle();
             if (!(entity instanceof RefEntityItem)) return;
