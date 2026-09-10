@@ -14,15 +14,18 @@ public final class RefCraftChatMessage {
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_16_R3/util/CraftChatMessage;fromJSONComponent(Ljava/lang/String;)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_16_R3,)")
     public static native String fromJSONComponent(String jsonMessage);
 
-    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_16_R3/util/CraftChatMessage;fromStringToJSON(Ljava/lang/String;)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_16_R3,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_16_R3/util/CraftChatMessage;fromStringToJSON(Ljava/lang/String;)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_16_R3,v1_20_R4)")
     public static native String fromStringToJSON(String message);
 
-    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_16_R3/util/CraftChatMessage;fromStringToJSON(Ljava/lang/String;Z)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_16_R3,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_16_R3/util/CraftChatMessage;fromStringToJSON(Ljava/lang/String;Z)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_16_R3,v1_20_R4)")
     public static native String fromStringToJSON(String message, boolean keepNewlines);
 
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/util/CraftChatMessage;fromString(Ljava/lang/String;)[Lnet/minecraft/network/chat/Component;", predicates = "craftbukkit_version:[v1_17_R1,)")
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/util/CraftChatMessage;fromString(Ljava/lang/String;)[Lnet/minecraft/server/v1_12_R1/IChatBaseComponent;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public static native RefComponent[] fromString(String message);
+
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/util/CraftChatMessage;fromString(Ljava/lang/String;Z)[Lnet/minecraft/network/chat/Component;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    public static native RefComponent[] fromString(String message, boolean keepNewlines);
 
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_20_R4/util/CraftChatMessage;toJSON(Lnet/minecraft/network/chat/Component;)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public static native String toJSON(RefComponent component);

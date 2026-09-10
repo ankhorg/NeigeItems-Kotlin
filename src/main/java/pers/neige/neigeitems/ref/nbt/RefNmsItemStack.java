@@ -80,8 +80,11 @@ public final class RefNmsItemStack {
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;getDisplayName()Lnet/minecraft/network/chat/Component;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public native RefComponent getDisplayName();
 
-//    @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;applyComponents(Lnet/minecraft/core/component/DataComponentPatch;)V", predicates = "craftbukkit_version:[v1_20_R4,)")
-//    public native void applyComponents(DataComponentPatch changes);
+    @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;setDamageValue(I)V", predicates = "craftbukkit_version:[v1_20_R4,)")
+    public native void setDamageValue(int damage);
+
+    @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;applyComponents(Lnet/minecraft/core/component/DataComponentPatch;)V", predicates = "craftbukkit_version:[v1_20_R4,)")
+    public native void applyComponents(RefDataComponentPatch changes);
 
     @HandleBy(reference = "Lnet/minecraft/world/item/ItemStack;getComponentsPatch()Lnet/minecraft/core/component/DataComponentPatch;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public native RefDataComponentPatch getComponentsPatch();

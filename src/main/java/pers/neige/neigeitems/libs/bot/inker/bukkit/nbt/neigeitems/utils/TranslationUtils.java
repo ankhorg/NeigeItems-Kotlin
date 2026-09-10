@@ -205,8 +205,12 @@ public class TranslationUtils {
      */
     public static String fromStringToJSON(String message) {
         if (message == null) return null;
-        if (JSON_TEXT)
-            return RefCraftChatMessage.fromStringToJSON(message);
+        if (JSON_TEXT) {
+            if (MOJANG_MOTHER_DEAD) {
+                return RefCraftChatMessage.toJSON(RefCraftChatMessage.fromString(message)[0]);
+            }
+            return LegacyTextSerializer.fromStringToJSON(message);
+        }
         return null;
     }
 
@@ -219,8 +223,12 @@ public class TranslationUtils {
      */
     public static String fromStringToJSON(String message, boolean keepNewlines) {
         if (message == null) return null;
-        if (JSON_TEXT)
-            return RefCraftChatMessage.fromStringToJSON(message, keepNewlines);
+        if (JSON_TEXT) {
+            if (MOJANG_MOTHER_DEAD) {
+                return RefCraftChatMessage.toJSON(RefCraftChatMessage.fromString(message, keepNewlines)[0]);
+            }
+            return LegacyTextSerializer.fromStringToJSON(message, keepNewlines);
+        }
         return null;
     }
 
