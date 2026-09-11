@@ -43,7 +43,7 @@ public final class RefNbtTagCompound extends RefNbtBase {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;setLong(Ljava/lang/String;J)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native void setLong(String key, long value);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;putUUID(Ljava/lang/String;Ljava/util/UUID;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;putUUID(Ljava/lang/String;Ljava/util/UUID;)V", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;a(Ljava/lang/String;Ljava/util/UUID;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native void setUUID(String key, UUID uuid);
 
@@ -90,7 +90,7 @@ public final class RefNbtTagCompound extends RefNbtBase {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;get(Ljava/lang/String;)Lnet/minecraft/server/v1_12_R1/NBTBase;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native RefNbtBase get(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getTagType(Ljava/lang/String;)B", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getTagType(Ljava/lang/String;)B", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/NBTTagCompound;d(Ljava/lang/String;)B", predicates = "craftbukkit_version:[v1_16_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;e(Ljava/lang/String;)B", predicates = "craftbukkit_version:[v1_15_R1,v1_16_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;d(Ljava/lang/String;)B", predicates = "craftbukkit_version:[v1_12_R1,v1_15_R1)")
@@ -100,64 +100,64 @@ public final class RefNbtTagCompound extends RefNbtBase {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;hasKey(Ljava/lang/String;)Z", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native boolean hasKey(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;contains(Ljava/lang/String;I)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;contains(Ljava/lang/String;I)Z", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;hasKeyOfType(Ljava/lang/String;I)Z", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native boolean hasKeyOfType(String key, int type);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getByte(Ljava/lang/String;)B", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getByte(Ljava/lang/String;)B", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getByte(Ljava/lang/String;)B", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native byte getByte(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getShort(Ljava/lang/String;)S", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getShort(Ljava/lang/String;)S", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getShort(Ljava/lang/String;)S", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native short getShort(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getInt(Ljava/lang/String;)I", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getInt(Ljava/lang/String;)I", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getInt(Ljava/lang/String;)I", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native int getInt(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getLong(Ljava/lang/String;)J", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getLong(Ljava/lang/String;)J", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getLong(Ljava/lang/String;)J", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native long getLong(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getUUID(Ljava/lang/String;)Ljava/util/UUID;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getUUID(Ljava/lang/String;)Ljava/util/UUID;", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;a(Ljava/lang/String;)Ljava/util/UUID;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native UUID getUUID(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getFloat(Ljava/lang/String;)F", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getFloat(Ljava/lang/String;)F", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getFloat(Ljava/lang/String;)F", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native float getFloat(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getDouble(Ljava/lang/String;)D", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getDouble(Ljava/lang/String;)D", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getDouble(Ljava/lang/String;)D", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native double getDouble(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getString(Ljava/lang/String;)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getString(Ljava/lang/String;)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getString(Ljava/lang/String;)Ljava/lang/String;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native String getString(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getByteArray(Ljava/lang/String;)[B", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getByteArray(Ljava/lang/String;)[B", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getByteArray(Ljava/lang/String;)[B", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native byte[] getByteArray(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getIntArray(Ljava/lang/String;)[I", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getIntArray(Ljava/lang/String;)[I", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getIntArray(Ljava/lang/String;)[I", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native int[] getIntArray(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getLongArray(Ljava/lang/String;)[J", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getLongArray(Ljava/lang/String;)[J", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/NBTTagCompound;getLongArray(Ljava/lang/String;)[J", predicates = "craftbukkit_version:[v1_14_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_13_R1/NBTTagCompound;o(Ljava/lang/String;)[J", predicates = "craftbukkit_version:[v1_13_R1,v1_14_R1)")
     public native long[] getLongArray(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getCompound(Ljava/lang/String;)Lnet/minecraft/nbt/CompoundTag;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getCompound(Ljava/lang/String;)Lnet/minecraft/nbt/CompoundTag;", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getCompound(Ljava/lang/String;)Lnet/minecraft/server/v1_12_R1/NBTTagCompound;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native RefNbtTagCompound getCompound(String key);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getList(Ljava/lang/String;I)Lnet/minecraft/server/v1_12_R1/NBTTagList;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native RefNbtTagList getList(String key, int var1);
 
-    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getBoolean(Ljava/lang/String;)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/nbt/CompoundTag;getBoolean(Ljava/lang/String;)Z", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/NBTTagCompound;getBoolean(Ljava/lang/String;)Z", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native boolean getBoolean(String key);
 

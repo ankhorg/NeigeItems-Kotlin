@@ -11,7 +11,7 @@ plugins {
     kotlin("plugin.lombok") version "2.1.20"
     id("org.jetbrains.dokka") version "2.0.0"
     id("com.gradleup.shadow") version "8.3.5"
-    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.25-SNAPSHOT"
+    id("org.inksnow.ankh-invoke-gradle-plugin") version "1.0.26-SNAPSHOT"
 }
 
 val realVersion = version
@@ -94,7 +94,7 @@ dependencies {
 
     // ankh-invoke
     implementation("org.inksnow.cputil:logger:1.15")
-    implementation("org.inksnow:ankh-invoke-bukkit:1.0.25-SNAPSHOT")
+    implementation("org.inksnow:ankh-invoke-bukkit:1.0.26-SNAPSHOT")
 
     // bstats
     implementation("org.bstats:bstats-bukkit:3.0.2")
@@ -282,6 +282,7 @@ tasks.create<ApplyReferenceTask>("apply-reference") {
 
     ankhInvokePackage = "${rootProject.group}.libs.org.inksnow.ankhinvoke"
     appendReferencePackage("${rootProject.group}.ref")
+    paperweightMappingsNamespace = "mojang"
     inputJars = tasks.getByName("shadowJar").outputs.files
     outputJar = layout.buildDirectory.file("libs/NeigeItems-$version-shaded.jar").get().asFile
 }

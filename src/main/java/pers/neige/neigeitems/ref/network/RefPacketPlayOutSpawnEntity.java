@@ -4,6 +4,7 @@ import org.inksnow.ankhinvoke.comments.HandleBy;
 import pers.neige.neigeitems.ref.block.RefBlockPos;
 import pers.neige.neigeitems.ref.entity.RefEntity;
 import pers.neige.neigeitems.ref.entity.RefEntityType;
+import pers.neige.neigeitems.ref.server.level.RefServerEntity;
 import pers.neige.neigeitems.ref.world.RefVec3;
 
 import java.util.UUID;
@@ -54,7 +55,7 @@ public class RefPacketPlayOutSpawnEntity implements RefPacket<RefPacketListenerP
     public final int data = 0;
 
     // 参数2在1.12-1.13代表type, 在1.14+代表data
-    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;<init>(Lnet/minecraft/world/entity/Entity;I)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;<init>(Lnet/minecraft/world/entity/Entity;I)V", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/PacketPlayOutSpawnEntity;<init>(Lnet/minecraft/server/v1_12_R1/Entity;I)V", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public RefPacketPlayOutSpawnEntity(RefEntity entity, int typeOrData) {
         throw new UnsupportedOperationException();
@@ -86,15 +87,25 @@ public class RefPacketPlayOutSpawnEntity implements RefPacket<RefPacketListenerP
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;<init>(Lnet/minecraft/world/entity/Entity;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;<init>(Lnet/minecraft/world/entity/Entity;)V", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/PacketPlayOutSpawnEntity;<init>(Lnet/minecraft/server/v1_14_R1/Entity;)V", predicates = "craftbukkit_version:[v1_14_R1,v1_17_R1)")
     public RefPacketPlayOutSpawnEntity(RefEntity entity) {
         throw new UnsupportedOperationException();
     }
 
-    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;<init>(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/EntityType;ILnet/minecraft/core/BlockPos;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;<init>(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/EntityType;ILnet/minecraft/core/BlockPos;)V", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_14_R1/PacketPlayOutSpawnEntity;<init>(Lnet/minecraft/server/v1_14_R1/Entity;Lnet/minecraft/server/v1_14_R1/EntityTypes;ILnet/minecraft/server/v1_14_R1/BlockPosition;)V", predicates = "craftbukkit_version:[v1_14_R1,v1_17_R1)")
     public RefPacketPlayOutSpawnEntity(RefEntity entity, RefEntityType<?> type, int data, RefBlockPos velocity) {
+        throw new UnsupportedOperationException();
+    }
+
+    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;<init>(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/server/level/ServerEntity;)V", predicates = "craftbukkit_version:[v26_1,)")
+    public RefPacketPlayOutSpawnEntity(RefEntity entity, RefServerEntity serverEntity) {
+        throw new UnsupportedOperationException();
+    }
+
+    @HandleBy(reference = "Lnet/minecraft/network/protocol/game/ClientboundAddEntityPacket;<init>(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/server/level/ServerEntity;I)V", predicates = "craftbukkit_version:[v26_1,)")
+    public RefPacketPlayOutSpawnEntity(RefEntity entity, RefServerEntity serverEntity, int data) {
         throw new UnsupportedOperationException();
     }
 }

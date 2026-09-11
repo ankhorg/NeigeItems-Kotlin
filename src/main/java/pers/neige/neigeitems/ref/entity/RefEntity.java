@@ -12,6 +12,8 @@ import pers.neige.neigeitems.ref.server.level.RefServerEntity;
 import pers.neige.neigeitems.ref.world.RefAABB;
 import pers.neige.neigeitems.ref.world.RefVec3;
 import pers.neige.neigeitems.ref.world.RefWorld;
+import pers.neige.neigeitems.ref.world.level.storage.RefValueInput;
+import pers.neige.neigeitems.ref.world.level.storage.RefValueOutput;
 
 import java.util.Optional;
 import java.util.Random;
@@ -75,23 +77,29 @@ public abstract class RefEntity {
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;getBukkitEntity()Lorg/bukkit/craftbukkit/v1_12_R1/entity/CraftEntity;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native Entity getBukkitEntity();
 
-    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;saveAsPassenger(Lnet/minecraft/nbt/CompoundTag;)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;saveAsPassenger(Lnet/minecraft/nbt/CompoundTag;)Z", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/Entity;a_(Lnet/minecraft/server/v1_16_R1/NBTTagCompound;)Z", predicates = "craftbukkit_version:[v1_16_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;c(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)Z", predicates = "craftbukkit_version:[v1_12_R1,v1_16_R1)")
     public native boolean saveAsPassenger(RefNbtTagCompound nbt);
 
-    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;save(Lnet/minecraft/nbt/CompoundTag;)Z", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;save(Lnet/minecraft/nbt/CompoundTag;)Z", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;d(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)Z", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native boolean save(RefNbtTagCompound nbt);
 
-    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;save(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)Lnet/minecraft/server/v1_12_R1/NBTTagCompound;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native RefNbtTagCompound saveWithoutId(RefNbtTagCompound nbt);
 
-    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;load(Lnet/minecraft/nbt/CompoundTag;)V", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;load(Lnet/minecraft/nbt/CompoundTag;)V", predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_16_R1/Entity;load(Lnet/minecraft/server/v1_16_R1/NBTTagCompound;)V", predicates = "craftbukkit_version:[v1_16_R1,v1_17_R1)")
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;f(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V", predicates = "craftbukkit_version:[v1_12_R1,v1_16_R1)")
     public native void load(RefNbtTagCompound nbt);
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;save(Lnet/minecraft/world/level/storage/ValueOutput;)Z", predicates = "craftbukkit_version:[v26_1,)")
+    public native boolean save(RefValueOutput output);
+
+    @HandleBy(reference = "Lnet/minecraft/world/entity/Entity;load(Lnet/minecraft/world/level/storage/ValueInput;)V", predicates = "craftbukkit_version:[v26_1,)")
+    public native void load(RefValueInput input);
 
     @HandleBy(reference = "Lnet/minecraft/server/v1_12_R1/Entity;move(Lnet/minecraft/server/v1_12_R1/EnumMoveType;DDD)V", predicates = "craftbukkit_version:[v1_12_R1,v1_14_R1)")
     public native void move(RefMoverType movementType, double d0, double d1, double d2);

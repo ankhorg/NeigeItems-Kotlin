@@ -30,7 +30,8 @@ public class NeigeItems extends JavaPlugin {
         try {
             logger.info("loading ankh-invoke");
             boolean useMojangRuntimeNames =
-                CbVersion.v1_21_R1.isSupport() && PaperEnvironment.hasPaperMapping();
+                CbVersion.v26_1.isSupport()
+                    || CbVersion.v1_21_R1.isSupport() && PaperEnvironment.hasPaperMapping();
             val ankhInvokeBuilder = AnkhInvokeBukkit.forBukkit(
                 NeigeItems.class,
                 !useMojangRuntimeNames

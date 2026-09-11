@@ -18,7 +18,12 @@ import pers.neige.neigeitems.ref.chat.RefComponent;
 import pers.neige.neigeitems.ref.entity.*;
 import pers.neige.neigeitems.ref.nbt.RefNbtTagCompound;
 import pers.neige.neigeitems.ref.server.level.RefTrackedEntity;
+import pers.neige.neigeitems.ref.server.RefMinecraftServer;
+import pers.neige.neigeitems.ref.util.RefProblemReporter;
 import pers.neige.neigeitems.ref.world.RefVec3;
+import pers.neige.neigeitems.ref.world.level.storage.RefTagValueInput;
+import pers.neige.neigeitems.ref.world.level.storage.RefTagValueOutput;
+import pers.neige.neigeitems.ref.world.level.storage.RefValueInput;
 
 import java.util.Random;
 
@@ -58,6 +63,11 @@ public class EntityUtils {
         @NonNull Entity entity
     ) {
         if (entity instanceof RefCraftEntity) {
+            if (CbVersion.v26_1.isSupport()) {
+                RefTagValueOutput output = RefTagValueOutput.createWithoutContext(RefProblemReporter.DISCARDING);
+                ((RefCraftEntity) entity).getHandle().save(output);
+                return NeigeItemsUtils.fromNms(output.buildResult());
+            }
             RefNbtTagCompound nbt = new RefNbtTagCompound();
             ((RefCraftEntity) entity).getHandle().save(nbt);
             return NeigeItemsUtils.fromNms(nbt);
@@ -76,6 +86,15 @@ public class EntityUtils {
         @NonNull NbtCompound nbt
     ) {
         if (entity instanceof RefCraftEntity) {
+            if (CbVersion.v26_1.isSupport()) {
+                RefValueInput input = RefTagValueInput.create(
+                    RefProblemReporter.DISCARDING,
+                    RefMinecraftServer.getServer().registryAccess(),
+                    NeigeItemsUtils.toNms(nbt)
+                );
+                ((RefCraftEntity) entity).getHandle().load(input);
+                return;
+            }
             ((RefCraftEntity) entity).getHandle().load(NeigeItemsUtils.toNms(nbt));
         }
     }

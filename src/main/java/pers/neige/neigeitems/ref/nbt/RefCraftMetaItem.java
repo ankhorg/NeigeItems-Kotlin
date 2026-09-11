@@ -86,7 +86,7 @@ public final class RefCraftMetaItem {
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftMetaItem;unhandledTags:Ljava/util/Map;", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_20_R4)")
     public Map<String, RefNbtBase> unhandledTags;
 
-    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftMetaItem;applyToItem(Lnet/minecraft/nbt/CompoundTag;)V", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftMetaItem;applyToItem(Lnet/minecraft/nbt/CompoundTag;)V", useAccessor = true, predicates = "craftbukkit_version:[v1_17_R1,v26_1)")
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftMetaItem;applyToItem(Lnet/minecraft/server/v1_12_R1/NBTTagCompound;)V", useAccessor = true, predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public native void applyToItem(RefNbtTagCompound itemTag);
 }

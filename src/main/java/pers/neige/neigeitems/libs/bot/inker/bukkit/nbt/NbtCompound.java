@@ -200,6 +200,17 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public void putUUID(String key, UUID value) {
+        if (NBT_FORMAT_CHANGE) {
+            long mostSignificantBits = value.getMostSignificantBits();
+            long leastSignificantBits = value.getLeastSignificantBits();
+            delegate.setIntArray(key, new int[]{
+                (int) (mostSignificantBits >> 32),
+                (int) mostSignificantBits,
+                (int) (leastSignificantBits >> 32),
+                (int) leastSignificantBits
+            });
+            return;
+        }
         delegate.setUUID(key, value);
     }
 
@@ -271,11 +282,22 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public byte getTagType(String key) {
+        if (NBT_FORMAT_CHANGE) {
+            RefNbtBase value = delegate.get(key);
+            return value == null ? NbtType.TAG_END : value.getTypeId();
+        }
         return delegate.getType(key);
     }
 
     @Override
     public boolean contains(String key, int value) {
+        if (NBT_FORMAT_CHANGE) {
+            RefNbtBase nbt = delegate.get(key);
+            if (nbt == null) return false;
+            return value == NbtType.TAG_ANY_NUMBER
+                ? nbt instanceof RefNbtNumber
+                : nbt.getTypeId() == value;
+        }
         return delegate.hasKeyOfType(key, value);
     }
 
@@ -445,6 +467,17 @@ public class NbtCompound extends Nbt<RefNbtTagCompound> implements NbtComponentL
 
     @Override
     public NbtList getList(String key, int elementType) {
+        if (NBT_FORMAT_CHANGE) {
+            RefNbtBase value = delegate.get(key);
+            if (!(value instanceof RefNbtTagList)) return new NbtList();
+            RefNbtTagList list = (RefNbtTagList) value;
+            if (elementType != NbtType.TAG_END
+                && list.size() > 0
+                && list.get(0).getTypeId() != elementType) {
+                return new NbtList();
+            }
+            return new NbtList(list);
+        }
         return new NbtList(delegate.getList(key, elementType));
     }
 

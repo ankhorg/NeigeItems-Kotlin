@@ -7,6 +7,7 @@ import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.lang.LocaleI18n;
@@ -241,6 +242,10 @@ public class TranslationUtils {
     public static boolean hasDisplayName(
         @NonNull ItemStack itemStack
     ) {
+        if (MOJANG_MOTHER_DEAD) {
+            ItemMeta itemMeta = NbtUtils.getItemMeta(itemStack);
+            return itemMeta != null && itemMeta.hasDisplayName();
+        }
         if (itemStack instanceof RefCraftItemStack) {
             if (itemStack.getType() != Material.AIR) {
                 RefNbtTagCompound tag = ((RefCraftItemStack) itemStack).handle.getTag();
@@ -319,11 +324,18 @@ public class TranslationUtils {
             }
             // 成书
         } else if (item instanceof RefItemWrittenBook) {
-            RefNbtTagCompound tag = nmsItemStack.getTag();
-            if (tag != null) {
-                RefNbtBase title = tag.get("title");
-                if (title instanceof RefNbtTagString) {
-                    result = getAsString(title);
+            if (MOJANG_MOTHER_DEAD) {
+                ItemMeta itemMeta = NbtUtils.getItemMeta(itemStack);
+                if (itemMeta instanceof BookMeta) {
+                    result = ((BookMeta) itemMeta).getTitle();
+                }
+            } else {
+                RefNbtTagCompound tag = nmsItemStack.getTag();
+                if (tag != null) {
+                    RefNbtBase title = tag.get("title");
+                    if (title instanceof RefNbtTagString) {
+                        result = getAsString(title);
+                    }
                 }
             }
         }
@@ -449,11 +461,21 @@ public class TranslationUtils {
             }
             // 成书
         } else if (item instanceof RefItemWrittenBook) {
-            RefNbtTagCompound tag = nmsItemStack.getTag();
-            if (tag != null) {
-                RefNbtBase title = tag.get("title");
-                if (title instanceof RefNbtTagString) {
-                    result = new TextComponent(getAsString(title));
+            if (MOJANG_MOTHER_DEAD) {
+                ItemMeta itemMeta = NbtUtils.getItemMeta(itemStack);
+                if (itemMeta instanceof BookMeta) {
+                    String title = ((BookMeta) itemMeta).getTitle();
+                    if (title != null) {
+                        result = new TextComponent(title);
+                    }
+                }
+            } else {
+                RefNbtTagCompound tag = nmsItemStack.getTag();
+                if (tag != null) {
+                    RefNbtBase title = tag.get("title");
+                    if (title instanceof RefNbtTagString) {
+                        result = new TextComponent(getAsString(title));
+                    }
                 }
             }
         }

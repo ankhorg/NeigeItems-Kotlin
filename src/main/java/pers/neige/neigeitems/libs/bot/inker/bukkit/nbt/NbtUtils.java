@@ -24,6 +24,8 @@ import pers.neige.neigeitems.ref.core.component.*;
 import pers.neige.neigeitems.ref.nbt.*;
 import pers.neige.neigeitems.ref.resources.RefRegistryOps;
 import pers.neige.neigeitems.ref.server.RefMinecraftServer;
+import pers.neige.neigeitems.ref.serialization.RefDynamicOps;
+import pers.neige.neigeitems.ref.world.item.component.RefCustomData;
 import pers.neige.neigeitems.utils.ItemUtils;
 
 import java.io.*;
@@ -73,6 +75,15 @@ public class NbtUtils {
      * @return 物品NBT.
      */
     public static @NonNull RefNbtTagCompound getOrCreateTag(@NonNull RefNmsItemStack itemStack) {
+        if (MOJANG_MOTHER_DEAD) {
+            RefDataComponentHolder holder = (RefDataComponentHolder) (Object) itemStack;
+            RefCustomData customData = holder.get(RefDataComponents.CUSTOM_DATA);
+            if (customData == null) {
+                customData = RefCustomData.of(new RefNbtTagCompound());
+                itemStack.set(RefDataComponents.CUSTOM_DATA, customData);
+            }
+            return customData.getUnsafe();
+        }
         if (itemStack.getTag() == null) {
             itemStack.setTag(new RefNbtTagCompound());
         }
@@ -213,6 +224,9 @@ public class NbtUtils {
      * 从压缩文件中读取 NbtCompound.
      */
     public static NbtCompound readCompressed(File file) throws IOException {
+        if (CbVersion.v26_1.isSupport()) {
+            return new NbtCompound(RefNbtIo.readCompressed(file.toPath(), RefNbtAccounter.unlimitedHeap()));
+        }
         if (READ_COMPRESSED_FROM_FILE_SUPPORT) {
             return new NbtCompound(RefNbtIo.readCompressed(file));
         } else {
@@ -226,6 +240,9 @@ public class NbtUtils {
      * 从压缩文件中读取 NbtCompound.
      */
     public static NbtCompound readCompressed(InputStream stream) throws IOException {
+        if (CbVersion.v26_1.isSupport()) {
+            return new NbtCompound(RefNbtIo.readCompressed(stream, RefNbtAccounter.unlimitedHeap()));
+        }
         return new NbtCompound(RefNbtIo.readCompressed(stream));
     }
 
@@ -233,6 +250,10 @@ public class NbtUtils {
      * 向压缩文件写入 NbtCompound.
      */
     public static void writeCompressed(NbtCompound compound, File file) throws IOException {
+        if (CbVersion.v26_1.isSupport()) {
+            RefNbtIo.writeCompressed(compound.delegate, file.toPath());
+            return;
+        }
         if (READ_COMPRESSED_FROM_FILE_SUPPORT) {
             RefNbtIo.writeCompressed(compound.delegate, file);
         } else {
@@ -253,7 +274,10 @@ public class NbtUtils {
      * 从未压缩文件中读取 NbtCompound.
      */
     public static NbtCompound read(File file) throws IOException {
-        if (READ_COMPRESSED_FROM_FILE_SUPPORT) {
+        if (CbVersion.v26_1.isSupport()) {
+            return new NbtCompound(RefNbtIo.read(file.toPath()));
+        }
+        if (READ_FROM_FILE_SUPPORT) {
             return new NbtCompound(RefNbtIo.read(file));
         } else {
             try (FileInputStream fileInputStream = new FileInputStream(file)) {
@@ -283,6 +307,10 @@ public class NbtUtils {
      * 向未压缩文件写入 NbtCompound.
      */
     public static void write(NbtCompound compound, File file) throws IOException {
+        if (CbVersion.v26_1.isSupport()) {
+            RefNbtIo.write(compound.delegate, file.toPath());
+            return;
+        }
         if (READ_FROM_FILE_SUPPORT) {
             RefNbtIo.write(compound.delegate, file);
         } else {
@@ -304,16 +332,23 @@ public class NbtUtils {
     /**
      * 把物品保存成 NbtCompound.
      */
+    @SuppressWarnings("unchecked")
     public static @NonNull NbtCompound save(
         @Nullable ItemStack itemStack
     ) {
-        RefNbtTagCompound nmsNbt = new RefNbtTagCompound();
         RefNmsItemStack nmsItemStack;
         if (itemStack instanceof RefCraftItemStack) {
             nmsItemStack = ((RefCraftItemStack) itemStack).handle;
         } else {
             nmsItemStack = RefCraftItemStack.asNMSCopy(itemStack);
         }
+        if (MOJANG_MOTHER_DEAD) {
+            RefNbtTagCompound nmsNbt = (RefNbtTagCompound) RefNmsItemStack.CODEC
+                .encodeStart((RefDynamicOps<RefNbtBase>) registryOps, nmsItemStack)
+                .getOrThrow();
+            return new NbtCompound(nmsNbt);
+        }
+        RefNbtTagCompound nmsNbt = new RefNbtTagCompound();
         nmsItemStack.save(nmsNbt);
         return new NbtCompound(nmsNbt);
     }
@@ -321,10 +356,17 @@ public class NbtUtils {
     /**
      * 根据 NbtCompound 掏一个物品出来.
      */
+    @SuppressWarnings("unchecked")
     public static @NonNull ItemStack of(
         @Nullable NbtCompound nbt
     ) {
         if (nbt == null) return new ItemStack(Material.AIR);
+        if (MOJANG_MOTHER_DEAD) {
+            RefNmsItemStack nmsItemStack = RefNmsItemStack.CODEC
+                .parse((RefDynamicOps<RefNbtBase>) registryOps, nbt.delegate)
+                .getOrThrow();
+            return RefCraftItemStack.asCraftMirror(nmsItemStack);
+        }
         if (CbVersion.v1_13_R1.isSupport()) {
             return RefCraftItemStack.asCraftMirror(RefNmsItemStack.of(nbt.delegate));
         } else {

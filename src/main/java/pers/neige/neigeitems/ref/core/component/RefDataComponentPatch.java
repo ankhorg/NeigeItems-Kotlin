@@ -16,8 +16,11 @@ public class RefDataComponentPatch {
     @HandleBy(reference = "Lnet/minecraft/core/component/DataComponentPatch;builder()Lnet/minecraft/core/component/DataComponentPatch$Builder;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public static native RefDataComponentPatch$Builder builder();
 
-    @HandleBy(reference = "Lnet/minecraft/core/component/DataComponentPatch;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/util/Optional;", predicates = "craftbukkit_version:[v1_20_R4,)")
+    @HandleBy(reference = "Lnet/minecraft/core/component/DataComponentPatch;get(Lnet/minecraft/core/component/DataComponentType;)Ljava/util/Optional;", predicates = "craftbukkit_version:[v1_20_R4,v26_1)")
     public native <T> @Nullable Optional<? extends T> get(RefDataComponentType<? extends T> type);
+
+    @HandleBy(reference = "Lnet/minecraft/core/component/DataComponentPatch;get(Lnet/minecraft/core/component/DataComponentGetter;Lnet/minecraft/core/component/DataComponentType;)Ljava/lang/Object;", predicates = "craftbukkit_version:[v26_1,)")
+    public native <T> @Nullable T get(RefDataComponentGetter getter, RefDataComponentType<? extends T> type);
 
     @HandleBy(reference = "Lnet/minecraft/core/component/DataComponentPatch;entrySet()Ljava/util/Set;", predicates = "craftbukkit_version:[v1_20_R4,)")
     public native Set<Map.Entry<RefDataComponentType<?>, Optional<?>>> entrySet();
