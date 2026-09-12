@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>RefPatchedDataComponentMap 1.21.168 API </title>
+    <title>RefPatchedDataComponentMap 1.21.171 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
@@ -108,6 +108,11 @@ var pathtoroot = "../../../../../../";
                         <dt>All Implemented Interfaces:</dt>
                         <dd>
                             
+                            <code>java.lang.Iterable</code>
+                            
+                            ,
+                            
+                            
                             <code>pers.neige.neigeitems.ref.core.component.RefDataComponentMap</code>
                             
                             
@@ -175,6 +180,12 @@ public class <span class="typeNameLabel"><a href=RefPatchedDataComponentMap.html
                                             <th class="colLast" scope="col">Description</th>
                                         </tr>
                                         
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>public final static <a href=RefDataComponentMap.html>RefDataComponentMap</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#EMPTY>EMPTY</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
                                     </table>
                                 </div>
                             </li>
@@ -201,7 +212,7 @@ public class <span class="typeNameLabel"><a href=RefPatchedDataComponentMap.html
                                         
                                             <tr class="altColor">
                                                 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a
-                                                        href="#RefPatchedDataComponentMap()">RefPatchedDataComponentMap</a></span>()</code></th>
+                                                        href="#RefPatchedDataComponentMap(pers.neige.neigeitems.ref.core.component.RefDataComponentMap)">RefPatchedDataComponentMap</a></span>(<a href=RefDataComponentMap.html>RefDataComponentMap</a> prototype)</code></th>
                                                 <td class="colLast"></td>
                                             </tr>
                                         
@@ -255,6 +266,14 @@ public class <span class="typeNameLabel"><a href=RefPatchedDataComponentMap.html
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
+                                            <td class="colFirst"><code>static <a href=RefPatchedDataComponentMap.html>RefPatchedDataComponentMap</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#fromPatch(pers.neige.neigeitems.ref.core.component.RefDataComponentMap,pers.neige.neigeitems.ref.core.component.RefDataComponentPatch)>fromPatch</a>(<a href=RefDataComponentMap.html>RefDataComponentMap</a> prototype, <a href=RefDataComponentPatch.html>RefDataComponentPatch</a> patch) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i1" class="rowColor">
                                             <td class="colFirst"><code>native &lt;T&gt; <a href=RefPatchedDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>get</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=RefPatchedDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt; type) </code>
@@ -262,7 +281,15 @@ public class <span class="typeNameLabel"><a href=RefPatchedDataComponentMap.html
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i1" class="rowColor">
+                                        <tr id="i2" class="altColor">
+                                            <td class="colFirst"><code>native boolean</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#hasNonDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>hasNonDefault</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; type) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i3" class="rowColor">
                                             <td class="colFirst"><code>native &lt;T&gt; <a href=RefPatchedDataComponentMap.html#set(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>T</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#set(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>set</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;in <a href=RefPatchedDataComponentMap.html#set(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>T</a>&gt; type, @Nullable() <a href=RefPatchedDataComponentMap.html#set(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>T</a> value) </code>
@@ -270,10 +297,74 @@ public class <span class="typeNameLabel"><a href=RefPatchedDataComponentMap.html
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i2" class="altColor">
+                                        <tr id="i4" class="altColor">
+                                            <td class="colFirst"><code>native &lt;T&gt; <a href=RefPatchedDataComponentMap.html#set(pers.neige.neigeitems.ref.core.component.RefTypedDataComponent)>T</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#set(pers.neige.neigeitems.ref.core.component.RefTypedDataComponent)>set</a>(<a href=RefTypedDataComponent.html>RefTypedDataComponent</a>&lt;<a href=RefPatchedDataComponentMap.html#set(pers.neige.neigeitems.ref.core.component.RefTypedDataComponent)>T</a>&gt; component) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i5" class="rowColor">
                                             <td class="colFirst"><code>native &lt;T&gt; <a href=RefPatchedDataComponentMap.html#remove(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#remove(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>remove</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=RefPatchedDataComponentMap.html#remove(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt; type) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i6" class="altColor">
+                                            <td class="colFirst"><code>native void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#applyPatch(pers.neige.neigeitems.ref.core.component.RefDataComponentPatch)>applyPatch</a>(<a href=RefDataComponentPatch.html>RefDataComponentPatch</a> patch) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i7" class="rowColor">
+                                            <td class="colFirst"><code>native void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#restorePatch(pers.neige.neigeitems.ref.core.component.RefDataComponentPatch)>restorePatch</a>(<a href=RefDataComponentPatch.html>RefDataComponentPatch</a> patch) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i8" class="altColor">
+                                            <td class="colFirst"><code>native void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#clearPatch()>clearPatch</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i9" class="rowColor">
+                                            <td class="colFirst"><code>native void</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#setAll(pers.neige.neigeitems.ref.core.component.RefDataComponentMap)>setAll</a>(<a href=RefDataComponentMap.html>RefDataComponentMap</a> map) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i10" class="altColor">
+                                            <td class="colFirst"><code>native <a href=RefDataComponentPatch.html>RefDataComponentPatch</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#asPatch()>asPatch</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i11" class="rowColor">
+                                            <td class="colFirst"><code>native <a href=RefPatchedDataComponentMap.html>RefPatchedDataComponentMap</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#copy()>copy</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i12" class="altColor">
+                                            <td class="colFirst"><code>native <a href=RefDataComponentMap.html>RefDataComponentMap</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#toImmutableMap()>toImmutableMap</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -287,7 +378,13 @@ public class <span class="typeNameLabel"><a href=RefPatchedDataComponentMap.html
                                             <!--   -->
                                         </a>
                                             <h3>Methods inherited from class&nbsp;pers.neige.neigeitems.ref.core.component.RefDataComponentMap</h3>
-                                            <code>getOrDefault, has</code></li>
+                                            <code>builder, composite, filter, getOrDefault, getTyped, has, isEmpty, iterator, keySet, size, stream</code></li>
+                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.java.lang.Iterable">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;java.lang.Iterable</h3>
+                                            <code>forEach, iterator, spliterator</code></li>
                                  
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
@@ -315,11 +412,11 @@ public class <span class="typeNameLabel"><a href=RefPatchedDataComponentMap.html
                             </a>
                                 <h3>Constructor Detail</h3>
                                 
-                                <a name="RefPatchedDataComponentMap()"></a>
+                                <a name="RefPatchedDataComponentMap(pers.neige.neigeitems.ref.core.component.RefDataComponentMap)"></a>
                                 <ul class="blockList">
                                     <li class="blockList">
                                         <h4>RefPatchedDataComponentMap</h4>
-                                        <pre>RefPatchedDataComponentMap()</pre>
+                                        <pre>RefPatchedDataComponentMap(<a href=RefDataComponentMap.html>RefDataComponentMap</a> prototype)</pre>
                                         <div class="block"></div>
                                         
                                     </li>
@@ -338,6 +435,29 @@ public class <span class="typeNameLabel"><a href=RefPatchedDataComponentMap.html
                             </a>
                                 <h3>Method Detail</h3>
                                 
+                                <a id="fromPatch(pers.neige.neigeitems.ref.core.component.RefDataComponentMap,pers.neige.neigeitems.ref.core.component.RefDataComponentPatch)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>fromPatch</h4>
+                                        <pre class="methodSignature"> static <a href=RefPatchedDataComponentMap.html>RefPatchedDataComponentMap</a> <a href=RefPatchedDataComponentMap.html#fromPatch(pers.neige.neigeitems.ref.core.component.RefDataComponentMap,pers.neige.neigeitems.ref.core.component.RefDataComponentPatch)>fromPatch</a>(<a href=RefDataComponentMap.html>RefDataComponentMap</a> prototype, <a href=RefDataComponentPatch.html>RefDataComponentPatch</a> patch)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
                                 <a id="get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)">
                                     <!--   -->
                                 </a>
@@ -347,6 +467,29 @@ public class <span class="typeNameLabel"><a href=RefPatchedDataComponentMap.html
                                     <li class="blockList">
                                         <h4>get</h4>
                                         <pre class="methodSignature"> native &lt;T&gt; <a href=RefPatchedDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a> <a href=RefPatchedDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>get</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=RefPatchedDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt; type)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="hasNonDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>hasNonDefault</h4>
+                                        <pre class="methodSignature"> native boolean <a href=RefPatchedDataComponentMap.html#hasNonDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>hasNonDefault</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; type)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -384,15 +527,199 @@ public class <span class="typeNameLabel"><a href=RefPatchedDataComponentMap.html
                                     </li>
                                 </ul>
                                 
+                                <a id="set(pers.neige.neigeitems.ref.core.component.RefTypedDataComponent)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>set</h4>
+                                        <pre class="methodSignature"> native &lt;T&gt; <a href=RefPatchedDataComponentMap.html#set(pers.neige.neigeitems.ref.core.component.RefTypedDataComponent)>T</a> <a href=RefPatchedDataComponentMap.html#set(pers.neige.neigeitems.ref.core.component.RefTypedDataComponent)>set</a>(<a href=RefTypedDataComponent.html>RefTypedDataComponent</a>&lt;<a href=RefPatchedDataComponentMap.html#set(pers.neige.neigeitems.ref.core.component.RefTypedDataComponent)>T</a>&gt; component)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
                                 <a id="remove(pers.neige.neigeitems.ref.core.component.RefDataComponentType)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>remove</h4>
+                                        <pre class="methodSignature"> native &lt;T&gt; <a href=RefPatchedDataComponentMap.html#remove(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a> <a href=RefPatchedDataComponentMap.html#remove(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>remove</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=RefPatchedDataComponentMap.html#remove(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt; type)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="applyPatch(pers.neige.neigeitems.ref.core.component.RefDataComponentPatch)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>applyPatch</h4>
+                                        <pre class="methodSignature"> native void <a href=RefPatchedDataComponentMap.html#applyPatch(pers.neige.neigeitems.ref.core.component.RefDataComponentPatch)>applyPatch</a>(<a href=RefDataComponentPatch.html>RefDataComponentPatch</a> patch)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="restorePatch(pers.neige.neigeitems.ref.core.component.RefDataComponentPatch)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>restorePatch</h4>
+                                        <pre class="methodSignature"> native void <a href=RefPatchedDataComponentMap.html#restorePatch(pers.neige.neigeitems.ref.core.component.RefDataComponentPatch)>restorePatch</a>(<a href=RefDataComponentPatch.html>RefDataComponentPatch</a> patch)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="clearPatch()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>clearPatch</h4>
+                                        <pre class="methodSignature"> native void <a href=RefPatchedDataComponentMap.html#clearPatch()>clearPatch</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="setAll(pers.neige.neigeitems.ref.core.component.RefDataComponentMap)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>setAll</h4>
+                                        <pre class="methodSignature"> native void <a href=RefPatchedDataComponentMap.html#setAll(pers.neige.neigeitems.ref.core.component.RefDataComponentMap)>setAll</a>(<a href=RefDataComponentMap.html>RefDataComponentMap</a> map)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="asPatch()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>asPatch</h4>
+                                        <pre class="methodSignature"> native <a href=RefDataComponentPatch.html>RefDataComponentPatch</a> <a href=RefPatchedDataComponentMap.html#asPatch()>asPatch</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="copy()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>copy</h4>
+                                        <pre class="methodSignature"> native <a href=RefPatchedDataComponentMap.html>RefPatchedDataComponentMap</a> <a href=RefPatchedDataComponentMap.html#copy()>copy</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="toImmutableMap()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockListLast"
                                           >
                                     <li class="blockList">
-                                        <h4>remove</h4>
-                                        <pre class="methodSignature"> native &lt;T&gt; <a href=RefPatchedDataComponentMap.html#remove(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a> <a href=RefPatchedDataComponentMap.html#remove(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>remove</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=RefPatchedDataComponentMap.html#remove(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt; type)</pre>
+                                        <h4>toImmutableMap</h4>
+                                        <pre class="methodSignature"> native <a href=RefDataComponentMap.html>RefDataComponentMap</a> <a href=RefPatchedDataComponentMap.html#toImmutableMap()>toImmutableMap</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>RefDataComponentMap 1.21.168 API </title>
+    <title>RefDataComponentMap 1.21.171 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
@@ -108,6 +108,9 @@ var pathtoroot = "../../../../../../";
                         <dt>All Implemented Interfaces:</dt>
                         <dd>
                             
+                            <code>java.lang.Iterable</code>
+                            
+                            
                         </dd>
                     </dl>
                     
@@ -115,7 +118,7 @@ var pathtoroot = "../../../../../../";
                     <pre class="wrap-overflow">
 
 public interface <span class="typeNameLabel"><a href=RefDataComponentMap.html>RefDataComponentMap</a></span>
-
+ implements <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html>Iterable</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html>T</a>&gt;
                     </pre>
                     <div class="block"></div>
 
@@ -246,6 +249,22 @@ public interface <span class="typeNameLabel"><a href=RefDataComponentMap.html>Re
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
+                                            <td class="colFirst"><code>static <a href=RefDataComponentMap.html>RefDataComponentMap</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#composite(pers.neige.neigeitems.ref.core.component.RefDataComponentMap,pers.neige.neigeitems.ref.core.component.RefDataComponentMap)>composite</a>(<a href=RefDataComponentMap.html>RefDataComponentMap</a> base, <a href=RefDataComponentMap.html>RefDataComponentMap</a> overrides) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i1" class="rowColor">
+                                            <td class="colFirst"><code>static <a href=RefDataComponentMap$Builder.html>RefDataComponentMap$Builder</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#builder()>builder</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i2" class="altColor">
                                             <td class="colFirst"><code>abstract &lt;T&gt; <a href=RefDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=RefDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>get</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=RefDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt; type) </code>
@@ -253,7 +272,15 @@ public interface <span class="typeNameLabel"><a href=RefDataComponentMap.html>Re
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i1" class="rowColor">
+                                        <tr id="i3" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#keySet()>keySet</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i4" class="altColor">
                                             <td class="colFirst"><code>boolean</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#has(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>has</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt; type) </code>
@@ -261,10 +288,58 @@ public interface <span class="typeNameLabel"><a href=RefDataComponentMap.html>Re
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i2" class="altColor">
+                                        <tr id="i5" class="rowColor">
                                             <td class="colFirst"><code>&lt;T&gt; <a href=RefPatchedDataComponentMap.html#getOrDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>T</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#getOrDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>getOrDefault</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=RefPatchedDataComponentMap.html#getOrDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>T</a>&gt; type, <a href=RefPatchedDataComponentMap.html#getOrDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>T</a> fallback) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i6" class="altColor">
+                                            <td class="colFirst"><code>&lt;T&gt; <a href=RefTypedDataComponent.html>RefTypedDataComponent</a>&lt;<a href=RefPatchedDataComponentMap.html#getTyped(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#getTyped(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>getTyped</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;<a href=RefPatchedDataComponentMap.html#getTyped(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt; type) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i7" class="rowColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html>Iterator</a>&lt;<a href=RefTypedDataComponent.html>RefTypedDataComponent</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#iterator()>iterator</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i8" class="altColor">
+                                            <td class="colFirst"><code><a href=https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html>Stream</a>&lt;<a href=RefTypedDataComponent.html>RefTypedDataComponent</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#stream()>stream</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i9" class="rowColor">
+                                            <td class="colFirst"><code>int</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#size()>size</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i10" class="altColor">
+                                            <td class="colFirst"><code>boolean</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#isEmpty()>isEmpty</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i11" class="rowColor">
+                                            <td class="colFirst"><code><a href=RefDataComponentMap.html>RefDataComponentMap</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=RefPatchedDataComponentMap.html#filter(java.util.function.Predicate)>filter</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt; predicate) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -274,6 +349,12 @@ public interface <span class="typeNameLabel"><a href=RefDataComponentMap.html>Re
                                 </div>
                                 <ul class="blockList">
                                 
+                                    <li class="blockList"><a id="methods.inherited.from.class.java.lang.Iterable">
+                                            <!--   -->
+                                        </a>
+                                            <h3>Methods inherited from class&nbsp;java.lang.Iterable</h3>
+                                            <code>forEach, spliterator</code></li>
+                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
                                     </a>
@@ -313,6 +394,52 @@ public interface <span class="typeNameLabel"><a href=RefDataComponentMap.html>Re
                             </a>
                                 <h3>Method Detail</h3>
                                 
+                                <a id="composite(pers.neige.neigeitems.ref.core.component.RefDataComponentMap,pers.neige.neigeitems.ref.core.component.RefDataComponentMap)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>composite</h4>
+                                        <pre class="methodSignature"> static <a href=RefDataComponentMap.html>RefDataComponentMap</a> <a href=RefPatchedDataComponentMap.html#composite(pers.neige.neigeitems.ref.core.component.RefDataComponentMap,pers.neige.neigeitems.ref.core.component.RefDataComponentMap)>composite</a>(<a href=RefDataComponentMap.html>RefDataComponentMap</a> base, <a href=RefDataComponentMap.html>RefDataComponentMap</a> overrides)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="builder()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>builder</h4>
+                                        <pre class="methodSignature"> static <a href=RefDataComponentMap$Builder.html>RefDataComponentMap$Builder</a> <a href=RefPatchedDataComponentMap.html#builder()>builder</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
                                 <a id="get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)">
                                     <!--   -->
                                 </a>
@@ -322,6 +449,29 @@ public interface <span class="typeNameLabel"><a href=RefDataComponentMap.html>Re
                                     <li class="blockList">
                                         <h4>get</h4>
                                         <pre class="methodSignature"> abstract &lt;T&gt; <a href=RefDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a> <a href=RefDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>get</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=RefDataComponentMap.html#get(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt; type)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="keySet()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>keySet</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Set.html>Set</a>&lt;<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt; <a href=RefPatchedDataComponentMap.html#keySet()>keySet</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -363,11 +513,149 @@ public interface <span class="typeNameLabel"><a href=RefDataComponentMap.html>Re
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>getOrDefault</h4>
                                         <pre class="methodSignature"> &lt;T&gt; <a href=RefPatchedDataComponentMap.html#getOrDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>T</a> <a href=RefPatchedDataComponentMap.html#getOrDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>getOrDefault</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=RefPatchedDataComponentMap.html#getOrDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>T</a>&gt; type, <a href=RefPatchedDataComponentMap.html#getOrDefault(pers.neige.neigeitems.ref.core.component.RefDataComponentType,T)>T</a> fallback)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getTyped(pers.neige.neigeitems.ref.core.component.RefDataComponentType)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getTyped</h4>
+                                        <pre class="methodSignature"> &lt;T&gt; <a href=RefTypedDataComponent.html>RefTypedDataComponent</a>&lt;<a href=RefPatchedDataComponentMap.html#getTyped(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt; <a href=RefPatchedDataComponentMap.html#getTyped(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>getTyped</a>(<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;<a href=RefPatchedDataComponentMap.html#getTyped(pers.neige.neigeitems.ref.core.component.RefDataComponentType)>T</a>&gt; type)</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="iterator()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>iterator</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html>Iterator</a>&lt;<a href=RefTypedDataComponent.html>RefTypedDataComponent</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt; <a href=RefPatchedDataComponentMap.html#iterator()>iterator</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="stream()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>stream</h4>
+                                        <pre class="methodSignature"> <a href=https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html>Stream</a>&lt;<a href=RefTypedDataComponent.html>RefTypedDataComponent</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt; <a href=RefPatchedDataComponentMap.html#stream()>stream</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="size()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>size</h4>
+                                        <pre class="methodSignature"> int <a href=RefPatchedDataComponentMap.html#size()>size</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="isEmpty()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>isEmpty</h4>
+                                        <pre class="methodSignature"> boolean <a href=RefPatchedDataComponentMap.html#isEmpty()>isEmpty</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="filter(java.util.function.Predicate)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>filter</h4>
+                                        <pre class="methodSignature"> <a href=RefDataComponentMap.html>RefDataComponentMap</a> <a href=RefPatchedDataComponentMap.html#filter(java.util.function.Predicate)>filter</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/util/function/Predicate.html>Predicate</a>&lt;<a href=RefDataComponentType.html>RefDataComponentType</a>&lt;out <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a>&gt;&gt; predicate)</pre>
                                         <div class="block"></div>
 
                                         <dl>
