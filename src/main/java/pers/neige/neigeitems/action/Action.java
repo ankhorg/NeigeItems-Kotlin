@@ -36,9 +36,11 @@ public abstract class Action {
             // 如果线程状态不一致, 回归原始线程
             if (context.isSync() != Bukkit.isPrimaryThread()) {
                 val result = new CompletableFuture<ActionResult>();
-                SchedulerUtils.run(manager.getPlugin(), context.isSync(), () -> {
-                    eval(manager, context).thenAccept(result::complete);
-                });
+                try {
+                    SchedulerUtils.run(manager.getPlugin(), context.isSync(), () -> evalAndForward(result, manager, context));
+                } catch (Throwable error) {
+                    completeExceptionally(result, error);
+                }
                 return result;
             }
             // 非主线程运行非线程安全动作, 进行线程切换
@@ -46,13 +48,48 @@ public abstract class Action {
             if (!Bukkit.isPrimaryThread()) {
                 val result = new CompletableFuture<ActionResult>();
                 // 转主线程
-                Bukkit.getScheduler().runTask(manager.getPlugin(), () -> {
-                    eval(manager, context).thenAccept(result::complete);
-                });
+                try {
+                    Bukkit.getScheduler().runTask(manager.getPlugin(), () -> evalAndForward(result, manager, context));
+                } catch (Throwable error) {
+                    completeExceptionally(result, error);
+                }
                 return result;
             }
         }
-        return eval(manager, context);
+        val result = new CompletableFuture<ActionResult>();
+        evalAndForward(result, manager, context);
+        return result;
+    }
+
+    private void evalAndForward(
+        @NonNull CompletableFuture<ActionResult> result,
+        @NonNull BaseActionManager manager,
+        @NonNull ActionContext context
+    ) {
+        try {
+            val evaluated = eval(manager, context);
+            if (evaluated == null) {
+                throw new NullPointerException("Action.eval() returned null");
+            }
+            evaluated.whenComplete((value, error) -> {
+                if (error == null) {
+                    result.complete(value);
+                } else if (evaluated.isCancelled()) {
+                    result.cancel(false);
+                } else {
+                    completeExceptionally(result, error);
+                }
+            });
+        } catch (Throwable error) {
+            completeExceptionally(result, error);
+        }
+    }
+
+    private static void completeExceptionally(
+        @NonNull CompletableFuture<?> result,
+        @NonNull Throwable error
+    ) {
+        result.completeExceptionally(error);
     }
 
     /**

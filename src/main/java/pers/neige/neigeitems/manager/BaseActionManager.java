@@ -536,14 +536,7 @@ public abstract class BaseActionManager {
         @NonNull ActionContext context,
         int fromIndex
     ) {
-        val actions = action.getActions();
-        if (fromIndex >= actions.size()) return CompletableFuture.completedFuture(Results.SUCCESS);
-        return actions.get(fromIndex).evalAsyncSafe(this, context).thenCompose((result) -> {
-            if (result.isStop()) {
-                return CompletableFuture.completedFuture(result);
-            }
-            return runAction(action, context, fromIndex + 1);
-        });
+        return new ListExecution(action, context, fromIndex).start();
     }
 
     /**
@@ -719,22 +712,7 @@ public abstract class BaseActionManager {
         @NonNull WhileAction action,
         @NonNull ActionContext context
     ) {
-        // while循环判断条件
-        if (action.getCondition().easyCheck(context)) {
-            return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
-                // 执行中止
-                if (result.isStop()) {
-                    // 执行finally块
-                    return action.getFinally().evalAsyncSafe(this, context);
-                } else {
-                    // 继续执行
-                    return runAction(action, context);
-                }
-            });
-        } else {
-            // 执行finally块
-            return action.getFinally().evalAsyncSafe(this, context);
-        }
+        return new WhileExecution(action, context).start();
     }
 
     /**
@@ -842,7 +820,6 @@ public abstract class BaseActionManager {
         @NonNull ActionContext context
     ) {
         final int repeat = action.getRepeat().getOrDefault(context, 0);
-        if (repeat <= 0) return CompletableFuture.completedFuture(Results.SUCCESS);
         return runAction(action, context, repeat, 0);
     }
 
@@ -859,19 +836,192 @@ public abstract class BaseActionManager {
         final int repeat,
         final int count
     ) {
-        context.getGlobal().put(action.getGlobalId(), count);
-        return action.getActions().evalAsyncSafe(this, context).thenCompose((result) -> {
-            if (result.isStop()) {
-                return CompletableFuture.completedFuture(result);
-            } else {
-                val newCount = count + 1;
-                if (newCount < repeat) {
-                    return runAction(action, context, repeat, newCount);
-                } else {
-                    return CompletableFuture.completedFuture(result);
+        return new RepeatExecution(action, context, repeat, count).start();
+    }
+
+    private abstract class IterativeActionExecution {
+        protected final @NonNull ActionContext context;
+        protected final @NonNull CompletableFuture<ActionResult> result = new CompletableFuture<>();
+        private boolean running;
+        private boolean requested;
+        private boolean waiting;
+
+        private IterativeActionExecution(@NonNull ActionContext context) {
+            this.context = context;
+        }
+
+        protected final @NonNull CompletableFuture<ActionResult> start() {
+            requestAdvance();
+            return result;
+        }
+
+        protected abstract void advance();
+
+        protected final void awaitAction(
+            @NonNull Action action,
+            @NonNull java.util.function.Consumer<ActionResult> continuation
+        ) {
+            if (waiting || result.isDone()) return;
+            waiting = true;
+            CompletableFuture<ActionResult> future;
+            try {
+                future = action.evalAsyncSafe(BaseActionManager.this, context);
+                if (future == null) throw new NullPointerException("Action.evalAsyncSafe() returned null");
+                future.whenComplete((value, error) -> {
+                    if (result.isDone()) return;
+                    waiting = false;
+                    if (error != null) {
+                        if (future.isCancelled()) {
+                            result.cancel(false);
+                        } else {
+                            completeExceptionally(error);
+                        }
+                        return;
+                    }
+                    try {
+                        continuation.accept(value);
+                    } catch (Throwable continuationError) {
+                        completeExceptionally(continuationError);
+                        return;
+                    }
+                    requestAdvance();
+                });
+            } catch (Throwable error) {
+                waiting = false;
+                completeExceptionally(error);
+            }
+        }
+
+        protected final void complete(@NonNull ActionResult value) {
+            result.complete(value);
+        }
+
+        protected final void completeExceptionally(@NonNull Throwable error) {
+            result.completeExceptionally(error);
+        }
+
+        private void requestAdvance() {
+            synchronized (this) {
+                if (result.isDone()) return;
+                if (running) {
+                    requested = true;
+                    return;
+                }
+                running = true;
+            }
+            while (true) {
+                synchronized (this) {
+                    requested = false;
+                }
+                try {
+                    advance();
+                } catch (Throwable error) {
+                    completeExceptionally(error);
+                }
+                synchronized (this) {
+                    if (result.isDone() || !requested) {
+                        running = false;
+                        return;
+                    }
                 }
             }
-        });
+        }
+    }
+
+    private final class ListExecution extends IterativeActionExecution {
+        private final @NonNull List<Action> actions;
+        private int index;
+
+        private ListExecution(@NonNull ListAction action, @NonNull ActionContext context, int fromIndex) {
+            super(context);
+            actions = action.getActions();
+            index = fromIndex;
+        }
+
+        @Override
+        protected void advance() {
+            if (index >= actions.size()) {
+                complete(Results.SUCCESS);
+                return;
+            }
+            awaitAction(actions.get(index), (value) -> {
+                if (value.isStop()) {
+                    complete(value);
+                } else {
+                    index++;
+                }
+            });
+        }
+    }
+
+    private final class RepeatExecution extends IterativeActionExecution {
+        private final @NonNull RepeatAction action;
+        private final int repeat;
+        private int count;
+
+        private RepeatExecution(@NonNull RepeatAction action, @NonNull ActionContext context, int repeat) {
+            this(action, context, repeat, 0);
+        }
+
+        private RepeatExecution(
+            @NonNull RepeatAction action,
+            @NonNull ActionContext context,
+            int repeat,
+            int count
+        ) {
+            super(context);
+            this.action = action;
+            this.repeat = repeat;
+            this.count = count;
+        }
+
+        @Override
+        protected void advance() {
+            if (repeat <= 0) {
+                complete(Results.SUCCESS);
+                return;
+            }
+            context.getGlobal().put(action.getGlobalId(), count);
+            awaitAction(action.getActions(), (value) -> {
+                if (value.isStop()) {
+                    complete(value);
+                    return;
+                }
+                count++;
+                if (count >= repeat) {
+                    complete(value);
+                }
+            });
+        }
+    }
+
+    private final class WhileExecution extends IterativeActionExecution {
+        private final @NonNull WhileAction action;
+        private boolean finishing;
+
+        private WhileExecution(@NonNull WhileAction action, @NonNull ActionContext context) {
+            super(context);
+            this.action = action;
+        }
+
+        @Override
+        protected void advance() {
+            if (finishing) return;
+            if (action.getCondition().easyCheck(context)) {
+                awaitAction(action.getActions(), (value) -> {
+                    if (value.isStop()) {
+                        runFinally();
+                    }
+                });
+            } else {
+                runFinally();
+            }
+        }
+
+        private void runFinally() {
+            finishing = true;
+            awaitAction(action.getFinally(), this::complete);
+        }
     }
 
     /**

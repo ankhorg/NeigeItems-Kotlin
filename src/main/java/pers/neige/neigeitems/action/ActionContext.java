@@ -15,11 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ActionContext implements Cloneable {
-    private final @NonNull Bindings bindings;
+    private @NonNull Bindings bindings;
     private final @Nullable Object caster;
     private final @NonNull Map<String, Object> global;
     private final @Nullable Map<String, Object> params;
-    private final Map<ContextKey<?>, Object> values = new HashMap<>();
+    private Map<ContextKey<?>, Object> values = new HashMap<>();
     private boolean sync = Bukkit.isPrimaryThread();
 
     public ActionContext() {
@@ -126,11 +126,19 @@ public class ActionContext implements Cloneable {
         return new Builder();
     }
 
+    /**
+     * 创建动作上下文的浅拷贝：Bindings 和局部 values 容器独立，global、params 及其中对象仍共享引用，
+     * context 绑定到副本，sync 按克隆时的当前线程重新初始化。该方法不保证嵌套对象或全局数据的线程安全。
+     */
     @Override
     public ActionContext clone() {
         try {
             val result = (ActionContext) super.clone();
+            result.bindings = new SimpleBindings();
+            result.bindings.putAll(bindings);
+            result.values = new HashMap<>(values);
             result.setSync(Bukkit.isPrimaryThread());
+            result.bindings.put("context", result);
             return result;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
@@ -230,8 +238,8 @@ public class ActionContext implements Cloneable {
 
     @SuppressWarnings("unchecked")
     public <T> @Nullable T remove(@NonNull ContextKey<T> key) {
+        if (!values.containsKey(key)) return null;
         val value = values.remove(key);
-        if (value == null) return null;
         key.getNames().forEach((alias) -> {
             if (key.isPutInGlobal()) global.remove(alias);
             bindings.remove(alias);
