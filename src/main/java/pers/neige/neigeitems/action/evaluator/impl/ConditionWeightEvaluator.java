@@ -34,7 +34,7 @@ public class ConditionWeightEvaluator<T> extends Evaluator<T> {
             val evaluatorConfig = ConfigReader.parse(rawEvaluator);
             if (evaluatorConfig == null) continue;
             val evaluator = parser.parse(evaluatorConfig.get("evaluator"));
-            val condition = new Condition(manager, config.getString("condition"));
+            val condition = new Condition(manager, evaluatorConfig.getString("condition"));
             this.evaluators.add(
                 new ConditionalWeightedEvaluator<>(
                     condition,
