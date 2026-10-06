@@ -118,9 +118,9 @@ public class EvaluatorTest {
     private static Map<String, Object> conditionWeightConfig(String condition, Object evaluator, Object weight) {
         return config(
             "type", "condition-weight",
-            "condition", condition,
             "evaluators", Collections.singletonList(config(
                 "weight", weight,
+                "condition", condition,
                 "evaluator", evaluator
             ))
         );
@@ -686,13 +686,13 @@ public class EvaluatorTest {
         }
 
         @Test
-        public void conditionWeightEvaluatorUsesTopLevelConditionForEntries() {
+        public void conditionWeightEvaluatorUsesEntryConditionForEntries() {
             val manager = mockManager();
             val context = context();
             val entry = config(
                 "condition", "false",
                 "weight", 1,
-                "evaluator", "id:entry-condition-is-ignored"
+                "evaluator", "id:entry-condition-is-used"
             );
             val config = config(
                 "type", "condition-weight",
@@ -700,7 +700,7 @@ public class EvaluatorTest {
                 "evaluators", Collections.singletonList(entry)
             );
 
-            assertEquals(new Token("entry-condition-is-ignored"), Evaluator.createEvaluator(manager, Token.class, config, TOKEN_CONVERTER).get(context));
+            assertEquals(new Token("fallback"), Evaluator.createEvaluator(manager, Token.class, config, TOKEN_CONVERTER).getOrDefault(context, new Token("fallback")));
         }
     }
 }
