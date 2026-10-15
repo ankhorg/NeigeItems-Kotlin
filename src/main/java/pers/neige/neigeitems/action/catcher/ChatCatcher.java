@@ -25,7 +25,7 @@ public class ChatCatcher {
             if (message != null) {
                 context.getGlobal().put(messageKey, message);
             }
-            SchedulerUtils.run(actionManager.getPlugin(), context.isSync(), () -> result.complete(Results.SUCCESS));
+            SchedulerUtils.run(actionManager.getPlugin(), context, context.isSync(), () -> result.complete(Results.SUCCESS));
         });
     }
 

@@ -84,7 +84,7 @@ class ActionTrigger(val id: String, val type: String, val config: ConfigurationS
     fun sync(
         context: ActionContext
     ) {
-        SchedulerUtils.sync {
+        SchedulerUtils.sync(ActionManager.getPlugin(), context) {
             sync.eval(context)
         }
     }

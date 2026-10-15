@@ -92,7 +92,7 @@ public class ActionTrigger {
     public void sync(
         @NonNull ActionContext context
     ) {
-        SchedulerUtils.sync(actionManager.getPlugin(), () -> {
+        SchedulerUtils.sync(actionManager.getPlugin(), context, () -> {
             sync.eval(context.clone());
         });
     }

@@ -8,6 +8,7 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import pers.neige.neigeitems.libs.bot.inker.bukkit.nbt.NbtCompound;
+import pers.neige.neigeitems.utils.SchedulerUtils;
 
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
@@ -20,7 +21,7 @@ public class ActionContext implements Cloneable {
     private final @NonNull Map<String, Object> global;
     private final @Nullable Map<String, Object> params;
     private Map<ContextKey<?>, Object> values = new HashMap<>();
-    private boolean sync = Bukkit.isPrimaryThread();
+    private boolean sync = SchedulerUtils.isFoliaServer() || Bukkit.isPrimaryThread();
 
     public ActionContext() {
         this(null);
@@ -128,7 +129,7 @@ public class ActionContext implements Cloneable {
 
     /**
      * 创建动作上下文的浅拷贝：Bindings 和局部 values 容器独立，global、params 及其中对象仍共享引用，
-     * context 绑定到副本，sync 按克隆时的当前线程重新初始化。该方法不保证嵌套对象或全局数据的线程安全。
+     * context 绑定到副本，sync 状态随上下文复制。该方法不保证嵌套对象或全局数据的线程安全。
      */
     @Override
     public ActionContext clone() {
@@ -137,7 +138,9 @@ public class ActionContext implements Cloneable {
             result.bindings = new SimpleBindings();
             result.bindings.putAll(bindings);
             result.values = new HashMap<>(values);
-            result.setSync(Bukkit.isPrimaryThread());
+            if (!SchedulerUtils.isFoliaServer()) {
+                result.setSync(Bukkit.isPrimaryThread());
+            }
             result.bindings.put("context", result);
             return result;
         } catch (CloneNotSupportedException e) {

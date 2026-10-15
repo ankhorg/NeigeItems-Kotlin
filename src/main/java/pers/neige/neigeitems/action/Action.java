@@ -28,16 +28,40 @@ public abstract class Action {
         @NonNull ActionContext context
     );
 
+    /**
+     * Whether this action must run on Folia's global region thread.
+     */
+    protected boolean requiresGlobalThread() {
+        return false;
+    }
+
     public @NonNull CompletableFuture<ActionResult> evalAsyncSafe(
         @NonNull BaseActionManager manager,
         @NonNull ActionContext context
     ) {
-        if (canRunInOtherThread()) {
-            // 如果线程状态不一致, 回归原始线程
-            if (context.isSync() != Bukkit.isPrimaryThread()) {
+        if (requiresGlobalThread()) {
+            if (!SchedulerUtils.isOnGlobalRegionThread()) {
                 val result = new CompletableFuture<ActionResult>();
                 try {
-                    SchedulerUtils.run(manager.getPlugin(), context.isSync(), () -> evalAndForward(result, manager, context));
+                    SchedulerUtils.sync(manager.getPlugin(), () -> evalAndForward(result, manager, context));
+                } catch (Throwable error) {
+                    completeExceptionally(result, error);
+                }
+                return result;
+            }
+        } else if (canRunInOtherThread()) {
+            // 如果线程状态不一致, 回归原始线程
+            boolean threadMismatch = SchedulerUtils.isFoliaServer()
+                ? context.isSync() && !SchedulerUtils.isOnSyncThread(context)
+                : context.isSync() != Bukkit.isPrimaryThread();
+            if (threadMismatch) {
+                val result = new CompletableFuture<ActionResult>();
+                try {
+                    if (SchedulerUtils.isFoliaServer()) {
+                        SchedulerUtils.run(manager.getPlugin(), context, true, () -> evalAndForward(result, manager, context));
+                    } else {
+                        SchedulerUtils.run(manager.getPlugin(), context.isSync(), () -> evalAndForward(result, manager, context));
+                    }
                 } catch (Throwable error) {
                     completeExceptionally(result, error);
                 }
@@ -45,11 +69,11 @@ public abstract class Action {
             }
             // 非主线程运行非线程安全动作, 进行线程切换
         } else {
-            if (!Bukkit.isPrimaryThread()) {
+            if (!SchedulerUtils.isOnSyncThread(context)) {
                 val result = new CompletableFuture<ActionResult>();
-                // 转主线程
+                // 转到上下文所属的实体区域或全局区域
                 try {
-                    Bukkit.getScheduler().runTask(manager.getPlugin(), () -> evalAndForward(result, manager, context));
+                    SchedulerUtils.sync(manager.getPlugin(), context, () -> evalAndForward(result, manager, context));
                 } catch (Throwable error) {
                     completeExceptionally(result, error);
                 }

@@ -5,6 +5,7 @@ import lombok.var;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
+import pers.neige.neigeitems.utils.SchedulerUtils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,6 +54,8 @@ public class ItemColor {
      * @param player 待操作玩家
      */
     public static void initTeam(@NonNull Player player) {
+        // Folia 26.2 暂未实现 Bukkit 全局计分板 Team API，不能在进服阶段调用。
+        if (SchedulerUtils.isFoliaServer()) return;
         if (!checkedScoreboard.contains(player.getScoreboard())) {
             colors.forEach((id, color) -> {
                 // 注册Team

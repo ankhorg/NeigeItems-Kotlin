@@ -24,6 +24,7 @@ import pers.neige.neigeitems.action.catcher.ChatCatcher;
 import pers.neige.neigeitems.action.catcher.SignCatcher;
 import pers.neige.neigeitems.action.evaluator.Evaluator;
 import pers.neige.neigeitems.action.evaluator.EvaluatorConverter;
+import pers.neige.neigeitems.action.handler.GlobalActionHandler;
 import pers.neige.neigeitems.action.handler.SyncActionHandler;
 import pers.neige.neigeitems.action.impl.*;
 import pers.neige.neigeitems.action.node.NodeParser;
@@ -553,7 +554,7 @@ public abstract class BaseActionManager {
         // 如果条件通过
         if (action.getCondition().easyCheck(context)) {
             // 执行动作
-            SchedulerUtils.sync(plugin, () -> action.getSync().evalAsyncSafe(this, context));
+            SchedulerUtils.sync(plugin, context, () -> action.getSync().evalAsyncSafe(this, context));
             SchedulerUtils.async(plugin, () -> action.getAsync().evalAsyncSafe(this, context));
             return action.getActions().evalAsyncSafe(this, context);
             // 条件未通过
@@ -1383,6 +1384,41 @@ public abstract class BaseActionManager {
     }
 
     /**
+     * 添加必须在 Folia 全局区域线程执行的物品动作。
+     *
+     * @param ids      动作ID
+     * @param consumer 动作执行函数
+     */
+    public void addGlobalConsumer(
+        @NonNull Collection<String> ids,
+        @Nullable BiConsumer<ActionContext, String> consumer
+    ) {
+        if (consumer == null) return;
+        for (val id : ids) {
+            addGlobalConsumer(id, consumer);
+        }
+    }
+
+    /**
+     * 添加必须在 Folia 全局区域线程执行的物品动作。
+     *
+     * @param id       动作ID
+     * @param consumer 动作执行函数
+     */
+    public void addGlobalConsumer(
+        @NonNull String id,
+        @Nullable BiConsumer<ActionContext, String> consumer
+    ) {
+        if (consumer == null) return;
+        GlobalActionHandler handler = (context, content) -> {
+            consumer.accept(context, content);
+            return CompletableFuture.completedFuture(Results.SUCCESS);
+        };
+        actions.put(id.toLowerCase(Locale.ROOT), handler);
+        allActions.computeIfAbsent(plugin.getName().toLowerCase(Locale.ROOT), (k) -> new ConcurrentHashMap<>()).put(id.toLowerCase(Locale.ROOT), handler);
+    }
+
+    /**
      * 添加节点解析器
      *
      * @param nodeParser 节点解析器
@@ -1492,11 +1528,11 @@ public abstract class BaseActionManager {
             Bukkit.dispatchCommand(player, content);
         });
         // 后台执行指令
-        addConsumer("console", false, (context, content) -> {
+        addGlobalConsumer("console", (context, content) -> {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ChatColor.translateAlternateColorCodes('&', content));
         });
         // 后台执行指令(不将&解析为颜色符号)
-        addConsumer(Arrays.asList("console-no-color", "consoleNoColor"), false, (context, content) -> {
+        addGlobalConsumer(Arrays.asList("console-no-color", "consoleNoColor"), (context, content) -> {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), content);
         });
         // 公告
@@ -1756,7 +1792,7 @@ public abstract class BaseActionManager {
         // 延迟(单位是tick)
         addFunction("delay", (context, content) -> {
             val result = new CompletableFuture<ActionResult>();
-            SchedulerUtils.runLater(plugin, NumberParser.parseInteger(content, 0), () -> {
+            SchedulerUtils.runLater(plugin, context, NumberParser.parseInteger(content, 0), () -> {
                 result.complete(Results.SUCCESS);
             });
             return result;
@@ -1839,21 +1875,21 @@ public abstract class BaseActionManager {
         // 切换至主线程
         addFunction("sync", (context, content) -> {
             context.setSync(true);
-            if (Bukkit.isPrimaryThread()) {
+            if (SchedulerUtils.isOnSyncThread(context)) {
                 return CompletableFuture.completedFuture(Results.SUCCESS);
             }
             val result = new CompletableFuture<ActionResult>();
-            Bukkit.getScheduler().runTask(plugin, () -> result.complete(Results.SUCCESS));
+            SchedulerUtils.sync(plugin, context, () -> result.complete(Results.SUCCESS));
             return result;
         });
         // 切换至异步线程
         addFunction("async", (context, content) -> {
             context.setSync(false);
-            if (!Bukkit.isPrimaryThread()) {
+            if (!SchedulerUtils.isOnSyncThread(context)) {
                 return CompletableFuture.completedFuture(Results.SUCCESS);
             }
             val result = new CompletableFuture<ActionResult>();
-            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> result.complete(Results.SUCCESS));
+            SchedulerUtils.async(plugin, () -> result.complete(Results.SUCCESS));
             return result;
         });
         // 聊天捕获器

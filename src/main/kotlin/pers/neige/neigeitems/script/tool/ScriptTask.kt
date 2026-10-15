@@ -1,13 +1,9 @@
 package pers.neige.neigeitems.script.tool
 
-import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
-import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.scheduler.BukkitTask
 import pers.neige.neigeitems.NeigeItems
 import pers.neige.neigeitems.manager.ExpansionManager
-import pers.neige.neigeitems.utils.SchedulerUtils.sync
-import pers.neige.neigeitems.utils.SchedulerUtils.syncAndGet
+import pers.neige.neigeitems.utils.SchedulerUtils
 
 /**
  * Bukkit 任务
@@ -23,7 +19,7 @@ class ScriptTask {
 
     private var delay: Long = -1
 
-    private var bukkitTask: BukkitTask? = null
+    private var taskHandle: SchedulerUtils.TaskHandle? = null
 
     private var plugin: Plugin = NeigeItems.getInstance()
 
@@ -88,41 +84,10 @@ class ScriptTask {
      * @return ScriptTask 本身
      */
     fun register(): ScriptTask {
-        val bukkitRunnable = object : BukkitRunnable() {
-            override fun run() {
-                task?.run()
-            }
-        }
-        // 我没研究过能不能异步注册, 所以直接同步, 稳妥一点
-        bukkitTask = syncAndGet {
-            // 如果之前注册过了就先移除并卸载
-            unregister()
-            // 注册任务
-            when {
-                async && period > 0 -> {
-                    bukkitRunnable.runTaskTimerAsynchronously(plugin, delay.coerceAtLeast(0), period)
-                }
-
-                async && delay > 0 -> {
-                    bukkitRunnable.runTaskLaterAsynchronously(plugin, delay)
-                }
-
-                async -> {
-                    bukkitRunnable.runTaskAsynchronously(plugin)
-                }
-
-                period > 0 -> {
-                    bukkitRunnable.runTaskTimer(plugin, delay.coerceAtLeast(0), period)
-                }
-
-                delay > 0 -> {
-                    bukkitRunnable.runTaskLater(plugin, delay)
-                }
-
-                else -> {
-                    bukkitRunnable.runTask(plugin)
-                }
-            }
+        // 调度器本身是线程安全的, 不再通过 BukkitRunnable 强制切换到不存在的 Folia 主线程
+        unregister()
+        taskHandle = SchedulerUtils.schedule(plugin, async, delay, period) {
+            task?.run()
         }
         // 存入ExpansionManager, 插件重载时自动取消注册
         ExpansionManager.tasks.add(this)
@@ -136,11 +101,8 @@ class ScriptTask {
      */
     fun unregister(): ScriptTask {
         // 注册了就取消任务
-        sync {
-            bukkitTask?.also {
-                Bukkit.getScheduler().cancelTask(it.taskId)
-            }
-        }
+        taskHandle?.cancel()
+        taskHandle = null
         return this
     }
 }

@@ -573,9 +573,14 @@ public class WorldUtils {
         int entityId
     ) {
         if ((Object) world instanceof RefCraftWorld) {
-            RefEntity entity = getEntityFromIDByNms1(((RefCraftWorld) (Object) world).getHandle(), entityId);
-            if (entity != null) {
-                return entity.getBukkitEntity();
+            try {
+                RefEntity entity = getEntityFromIDByNms1(((RefCraftWorld) (Object) world).getHandle(), entityId);
+                if (entity != null) {
+                    return entity.getBukkitEntity();
+                }
+            } catch (LinkageError ignored) {
+                // 新版服务端可能移除或重命名 ChunkMap.entityMap，回退到 World#getEntity。
+                return getEntityFromID(world, entityId);
             }
         }
         return null;

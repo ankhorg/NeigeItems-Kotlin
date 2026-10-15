@@ -7,6 +7,7 @@ import pers.neige.neigeitems.action.Action;
 import pers.neige.neigeitems.action.ActionContext;
 import pers.neige.neigeitems.action.ActionResult;
 import pers.neige.neigeitems.action.ActionType;
+import pers.neige.neigeitems.action.handler.GlobalActionHandler;
 import pers.neige.neigeitems.action.handler.SyncActionHandler;
 import pers.neige.neigeitems.action.result.Results;
 import pers.neige.neigeitems.manager.BaseActionManager;
@@ -63,6 +64,11 @@ public class RawStringAction extends Action {
 
     private void checkAsyncSafe() {
         this.canRunInOtherThread = new ThreadSafeLazyBoolean(() -> !(this.handler.get() instanceof SyncActionHandler));
+    }
+
+    @Override
+    protected boolean requiresGlobalThread() {
+        return this.handler.get() instanceof GlobalActionHandler;
     }
 
     @Override

@@ -9,6 +9,7 @@ import pers.neige.neigeitems.annotation.Awake.LifeCycle
 import pers.neige.neigeitems.annotation.Awake.LifeCycle.*
 import pers.neige.neigeitems.utils.ListenerUtils
 import pers.neige.neigeitems.utils.SchedulerUtils.asyncTimer
+import pers.neige.neigeitems.utils.SchedulerUtils.sync
 import pers.neige.neigeitems.utils.SchedulerUtils.syncTimer
 import java.lang.reflect.Field
 import java.lang.reflect.Method
@@ -86,7 +87,7 @@ class ClassScanner {
             }
         }
         runAwakeTask(ENABLE)
-        Bukkit.getScheduler().runTask(plugin, Runnable {
+        sync(plugin, Runnable {
             runAwakeTask(ACTIVE)
         })
         scheduleMethods.forEach { easyMethod ->

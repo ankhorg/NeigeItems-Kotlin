@@ -35,7 +35,7 @@ public class SignCatcher {
                     context.getGlobal().put(messageKey + "." + index, text);
                 }
             }
-            SchedulerUtils.run(actionManager.getPlugin(), context.isSync(), () -> result.complete(Results.SUCCESS));
+            SchedulerUtils.run(actionManager.getPlugin(), context, context.isSync(), () -> result.complete(Results.SUCCESS));
         });
     }
 
