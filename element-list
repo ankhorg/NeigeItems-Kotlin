@@ -39,6 +39,7 @@ $dokka.location:pers.neige.neigeitems.utils.cooldown/StackableCooldown.Config///
 $dokka.location:pers.neige.neigeitems.utils.cooldown/StackableCooldown.ConsumeResult///PointingToDeclaration/pers/neige/neigeitems/utils/cooldown/StackableCooldown.ConsumeResult.html
 $dokka.location:pers.neige.neigeitems.utils.cooldown/StackableCooldown.Status///PointingToDeclaration/pers/neige/neigeitems/utils/cooldown/StackableCooldown.Status.html
 $dokka.location:pers.neige.neigeitems.utils/SamplingUtils.SamplingResult///PointingToDeclaration/pers/neige/neigeitems/utils/SamplingUtils.SamplingResult.html
+$dokka.location:pers.neige.neigeitems.utils/SchedulerUtils.TaskHandle///PointingToDeclaration/pers/neige/neigeitems/utils/SchedulerUtils.TaskHandle.html
 com.alibaba.fastjson2
 pers.neige.neigeitems
 pers.neige.neigeitems.action
