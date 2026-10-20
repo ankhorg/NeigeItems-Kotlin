@@ -25,6 +25,19 @@ jobs:
         with:
           distribution: adopt
           java-version: 21.0
+      - name: checkout ankh-invoke
+        uses: actions/checkout@v4
+        with:
+          repository: ankhorg/ankh-invoke
+          path: ankh-invoke
+      - name: install ankh-invoke Maven modules
+        working-directory: ankh-invoke
+        run: mvn -B install -DskipTests
+      - name: publish ankh-invoke Gradle plugin to Maven local
+        working-directory: ankh-invoke/ankh-invoke-gradle-plugin
+        run: |-
+          chmod +x gradlew
+          ./gradlew publishToMavenLocal --no-daemon
       # 编译出静态页面
       - name: Build
         run: |-
@@ -57,6 +70,19 @@ jobs:
         with:
           distribution: adopt
           java-version: 21.0
+      - name: checkout ankh-invoke
+        uses: actions/checkout@v4
+        with:
+          repository: ankhorg/ankh-invoke
+          path: ankh-invoke
+      - name: install ankh-invoke Maven modules
+        working-directory: ankh-invoke
+        run: mvn -B install -DskipTests
+      - name: publish ankh-invoke Gradle plugin to Maven local
+        working-directory: ankh-invoke/ankh-invoke-gradle-plugin
+        run: |-
+          chmod +x gradlew
+          ./gradlew publishToMavenLocal --no-daemon
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       # 构建项目成品

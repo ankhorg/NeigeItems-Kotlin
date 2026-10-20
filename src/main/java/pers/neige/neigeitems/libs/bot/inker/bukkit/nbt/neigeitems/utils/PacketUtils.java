@@ -246,7 +246,7 @@ public class PacketUtils {
     public static @Nullable List<ItemStack> getItemsFromPacketPlayOutWindowItems(@NonNull Object packetObject) {
         if (packetObject instanceof RefPacketPlayOutWindowItems) {
             RefPacketPlayOutWindowItems packet = (RefPacketPlayOutWindowItems) packetObject;
-            return packet.items.stream().map(RefCraftItemStack::asCraftMirror).collect(Collectors.toList());
+            return packet.items.stream().map(item -> RefCraftItemStack.asCraftMirror(item)).collect(Collectors.toList());
         }
         return null;
     }

@@ -213,7 +213,7 @@ public class NbtUtils {
      * @return CraftItemStack 形式的物品克隆.
      */
     public static @NonNull ItemStack asCraftCopy(@NonNull ItemStack itemStack) {
-        if (itemStack instanceof RefCraftItemStack) {
+        if (itemStack instanceof RefCraftItemStack || CbVersion.v26_3.isSupport()) {
             return itemStack.clone();
         } else {
             return RefCraftItemStack.asCraftCopy(itemStack);

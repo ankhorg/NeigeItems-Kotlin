@@ -13,7 +13,6 @@ import pers.neige.neigeitems.event.PacketSendEvent;
 import pers.neige.neigeitems.utils.SchedulerUtils;
 
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.RejectedExecutionException;
 
 public class ChannelHandler extends ChannelDuplexHandler {
@@ -21,15 +20,6 @@ public class ChannelHandler extends ChannelDuplexHandler {
 
     public ChannelHandler(@NonNull UUID uuid) {
         this.uuid = uuid;
-    }
-
-    private boolean onPlayerRegion(@NonNull Callable<Boolean> task) throws Exception {
-        if (!SchedulerUtils.isFoliaServer()) return task.call();
-        Player player = Bukkit.getPlayer(uuid);
-        // 登录早期可能还没有 Player 对象，此时不触发同步 Bukkit 事件，直接放行数据包。
-        if (player == null) return true;
-        val result = SchedulerUtils.callOnEntity(NeigeItems.getInstance(), player, task);
-        return result == null || result;
     }
 
     private boolean handleSend(@NonNull Object packet) {
@@ -110,10 +100,56 @@ public class ChannelHandler extends ChannelDuplexHandler {
         }
     }
 
+    private void continueRead(@NonNull ChannelHandlerContext context, @NonNull Object packet, boolean allowed) {
+        if (!allowed) return;
+        try {
+            context.fireChannelRead(packet);
+        } catch (Throwable error) {
+            context.fireExceptionCaught(error);
+        }
+    }
+
     @Override
     public void channelRead(ChannelHandlerContext context, Object packet) throws Exception {
+        if (SchedulerUtils.isFoliaServer()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null) {
+                super.channelRead(context, packet);
+                return;
+            }
+            try {
+                SchedulerUtils.executeOnEntity(
+                    NeigeItems.getInstance(),
+                    player,
+                    () -> {
+                        boolean allowed = true;
+                        try {
+                            allowed = handleReceive(packet);
+                        } catch (Throwable error) {
+                            error.printStackTrace();
+                        }
+                        boolean result = allowed;
+                        try {
+                            context.executor().execute(() -> continueRead(context, packet, result));
+                        } catch (Throwable error) {
+                            context.fireExceptionCaught(error);
+                        }
+                    },
+                    () -> {
+                        try {
+                            context.executor().execute(() -> continueRead(context, packet, true));
+                        } catch (Throwable error) {
+                            context.fireExceptionCaught(error);
+                        }
+                    }
+                );
+            } catch (Throwable error) {
+                context.fireExceptionCaught(error);
+            }
+            return;
+        }
         try {
-            if (!onPlayerRegion(() -> handleReceive(packet))) return;
+            if (!handleReceive(packet)) return;
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }

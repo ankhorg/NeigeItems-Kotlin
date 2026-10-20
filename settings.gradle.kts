@@ -2,6 +2,7 @@ rootProject.name = "NeigeItems"
 
 pluginManagement {
     repositories {
+        mavenLocal()
         gradlePluginPortal()
         maven("https://s0.blobs.irepo.space/maven/") {
             content { includeGroupByRegex("^org\\.inksnow(\\..+|)\$") }

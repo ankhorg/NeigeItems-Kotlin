@@ -94,7 +94,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
     public void setTag(@NonNull NbtCompound compound) {
         if (craftItemStack == null) {
             InvokeUtil.setItemMeta(itemStack, null);
-            RefCraftItemStack craftItemStack = RefCraftItemStack.asCraftCopy(itemStack);
+            RefCraftItemStack craftItemStack = (RefCraftItemStack) NbtUtils.asCraftCopy(itemStack);
             if (MOJANG_MOTHER_DEAD) {
                 craftItemStack.handle.set(RefDataComponents.CUSTOM_DATA, RefCustomData.of(compound.delegate));
             } else {
@@ -164,7 +164,7 @@ public final class NbtItemStack implements Comparable<NbtItemStack> {
 
     public @NonNull ItemStack asCraftCopy() {
         if (craftItemStack == null) {
-            return RefCraftItemStack.asCraftCopy(itemStack);
+            return NbtUtils.asCraftCopy(itemStack);
         } else {
             return itemStack.clone();
         }

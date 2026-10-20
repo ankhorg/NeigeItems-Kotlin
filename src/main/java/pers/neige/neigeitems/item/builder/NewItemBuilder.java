@@ -364,7 +364,7 @@ public class NewItemBuilder extends ItemBuilder {
         if (this.itemStack != null) {
             result = this.itemStack instanceof RefCraftItemStack
                 ? (RefCraftItemStack) this.itemStack
-                : RefCraftItemStack.asCraftCopy(this.itemStack);
+                : (RefCraftItemStack) NbtUtils.asCraftCopy(this.itemStack);
             if (this.material != null) {
                 result.setType(this.material);
             }
@@ -373,7 +373,7 @@ public class NewItemBuilder extends ItemBuilder {
             }
         } else {
             if (this.material != null) {
-                result = RefCraftItemStack.asCraftCopy(new ItemStack(this.material));
+                result = (RefCraftItemStack) NbtUtils.asCraftCopy(new ItemStack(this.material));
                 if (postItemInit != null) {
                     postItemInit.accept(result);
                 }

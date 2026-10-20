@@ -22,15 +22,19 @@ public final class RefCraftItemStack extends ItemStack {
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;copyNMSStack(Lnet/minecraft/server/v1_12_R1/ItemStack;I)Lnet/minecraft/server/v1_12_R1/ItemStack;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public static native RefNmsItemStack copyNMSStack(RefNmsItemStack original, int amount);
 
-    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;asBukkitCopy(Lnet/minecraft/world/item/ItemStack;)Lorg/bukkit/inventory/ItemStack;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/inventory/CraftItemStack;asBukkitCopy(Lnet/minecraft/world/item/ItemInstance;)Lorg/bukkit/inventory/ItemStack;", predicates = "craftbukkit_version:[v26_3,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;asBukkitCopy(Lnet/minecraft/world/item/ItemStack;)Lorg/bukkit/inventory/ItemStack;", predicates = "craftbukkit_version:[v1_17_R1,v26_3)")
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;asBukkitCopy(Lnet/minecraft/server/v1_12_R1/ItemStack;)Lorg/bukkit/inventory/ItemStack;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public static native ItemStack asBukkitCopy(RefNmsItemStack original);
 
-    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;asCraftMirror(Lnet/minecraft/world/item/ItemStack;)Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;", predicates = "craftbukkit_version:[v1_17_R1,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/inventory/CraftItemStack;asBukkitMirror(Lnet/minecraft/world/item/ItemStack;)Lorg/bukkit/inventory/ItemStack;", predicates = "craftbukkit_version:[v26_3,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;asCraftMirror(Lnet/minecraft/world/item/ItemStack;)Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;", predicates = "craftbukkit_version:[v1_17_R1,v26_3)")
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;asCraftMirror(Lnet/minecraft/server/v1_12_R1/ItemStack;)Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
-    public static native RefCraftItemStack asCraftMirror(RefNmsItemStack original);
+    public static native ItemStack asCraftMirror(RefNmsItemStack original);
 
-    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;asCraftCopy(Lorg/bukkit/inventory/ItemStack;)Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;", predicates = "craftbukkit_version:[v1_12_R1,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/inventory/CraftItemStack;getCraftStack(Lorg/bukkit/inventory/ItemStack;)Lorg/bukkit/craftbukkit/inventory/CraftItemStack;", predicates = "craftbukkit_version:[v26_3,)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;asCraftCopy(Lorg/bukkit/inventory/ItemStack;)Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;", predicates = "craftbukkit_version:[v1_17_R1,v26_3)")
+    @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;asCraftCopy(Lorg/bukkit/inventory/ItemStack;)Lorg/bukkit/craftbukkit/v1_12_R1/inventory/CraftItemStack;", predicates = "craftbukkit_version:[v1_12_R1,v1_17_R1)")
     public static native RefCraftItemStack asCraftCopy(ItemStack original);
 
     @HandleBy(reference = "Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;asNewCraftStack(Lnet/minecraft/world/item/Item;)Lorg/bukkit/craftbukkit/v1_17_R1/inventory/CraftItemStack;", predicates = "craftbukkit_version:[v1_17_R1,)")
