@@ -31,7 +31,7 @@ public final class MythicDropEvent {
         private static final HandlerList handlers = new HandlerList();
         private final @NonNull String internalName;
         private final @NonNull LivingEntity entity;
-        private final @Nullable LivingEntity killer;
+        private @Nullable LivingEntity killer;
         private @Nullable List<String> drops;
         private @Nullable List<String> fishDrops;
         private @Nullable List<String> dropPacks;
@@ -95,6 +95,15 @@ public final class MythicDropEvent {
          */
         public @Nullable LivingEntity getKiller() {
             return killer;
+        }
+
+        /**
+         * 设置怪物击杀者.
+         *
+         * @param killer 怪物击杀者
+         */
+        public void setKiller(@Nullable LivingEntity killer) {
+            this.killer = killer;
         }
 
         /**

@@ -351,11 +351,12 @@ abstract class MythicMobsHooker {
         )
         configLoadedEvent.call()
         if (configLoadedEvent.isCancelled) return
+        val effectiveKiller = configLoadedEvent.killer
 
         // 判断玩家击杀
-        if (killer !is Player && configSection.getBoolean("NeigeItems.PlayerOnly", true)) return
+        if (effectiveKiller !is Player && configSection.getBoolean("NeigeItems.PlayerOnly", true)) return
 
-        val player = killer as? Player
+        val player = effectiveKiller as? Player
 
         offsetXString = configLoadedEvent.offsetXString
         offsetYString = configLoadedEvent.offsetYString
@@ -422,7 +423,7 @@ abstract class MythicMobsHooker {
         // 预定拟渔获掉落物列表
         val fishDropItems: ArrayList<ItemStack>? =
             // 存在击杀者, 载入fishDropItems
-            if (killer != null) {
+            if (effectiveKiller != null) {
                 ArrayList<ItemStack>().also {
                     configLoadedEvent.fishDrops?.let { fishDrops ->
                         loadItems(
@@ -451,14 +452,14 @@ abstract class MythicMobsHooker {
         ItemUtils.dropItems(
             dropEvent.dropItems,
             entity.location,
-            killer,
+            effectiveKiller,
             dropEvent.offsetXString,
             dropEvent.offsetYString,
             dropEvent.angleType
         )
-        if (killer != null) {
+        if (effectiveKiller != null) {
             // 拟渔获向量计算
-            val caughtVelocity = getCaughtVelocity(entity.location, killer.location)
+            val caughtVelocity = getCaughtVelocity(entity.location, effectiveKiller.location)
             // 拟渔获掉落
             sync {
                 dropEvent.fishDropItems?.forEach { itemStack ->
